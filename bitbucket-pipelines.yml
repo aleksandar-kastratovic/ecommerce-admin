@@ -1,0 +1,38 @@
+image: node:14.15.3
+
+pipelines:
+  branches:
+
+    master:
+
+      - step:
+          name: Docker build and push
+          services:
+            - docker
+          caches:
+            - docker
+          script:
+            - export IMAGE_NAME=65479696/ecommerce-admin
+            - printf "App\n    API $EC_API_URL\nDocker\n    user $EC_DOCKER_USERNAME\n    image $IMAGE_NAME\n"
+
+            - npm run docker:build
+
+            - docker login --username $EC_DOCKER_USERNAME --password $EC_DOCKER_PASSWORD
+            - docker push $IMAGE_NAME:latest
+
+      - step:
+          name: Deploy to server
+          script:
+            - printf "App\n    port $EC_PORT\nDocker\n    user $EC_DOCKER_USERNAME\nServer\n    IP $EC_SERVER_IP\n    port $EC_SERVER_PORT\n    user $EC_SERVER_USER\n"
+
+            - scp -q -o StrictHostKeyChecking=no -P $EC_SERVER_PORT deploy/run.sh $EC_SERVER_USER@$EC_SERVER_IP:.
+            - ssh -q -o StrictHostKeyChecking=no -p $EC_SERVER_PORT               $EC_SERVER_USER@$EC_SERVER_IP "
+                EC_PORT=$EC_PORT
+                EC_DOCKER_USERNAME=$EC_DOCKER_USERNAME
+                EC_DOCKER_PASSWORD=$EC_DOCKER_PASSWORD
+                ./run.sh; rm run.sh"
+
+definitions:
+  services:
+    docker:
+      memory: 3072
