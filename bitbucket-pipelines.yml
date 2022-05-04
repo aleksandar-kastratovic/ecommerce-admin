@@ -26,7 +26,7 @@ pipelines:
             - export RUN="run-$RANDOM.sh"
             - printf "App\n    port $EC_PORT\nDocker\n    user $EC_DOCKER_USERNAME\nServer\n    IP $EC_SERVER_IP\n    port $EC_SERVER_PORT\n    user $EC_SERVER_USER\n    file $FILE"
 
-            - scp -q -o StrictHostKeyChecking=no -P $EC_SERVER_PORT deploy/run.sh $EC_SERVER_USER@$EC_SERVER_IP:$RUN"
+            - scp -q -o StrictHostKeyChecking=no -P $EC_SERVER_PORT deploy/run.sh $EC_SERVER_USER@$EC_SERVER_IP:$RUN
             - ssh -q -o StrictHostKeyChecking=no -p $EC_SERVER_PORT               $EC_SERVER_USER@$EC_SERVER_IP "
                     EC_PORT=$EC_PORT
                     EC_DOCKER_USERNAME=$EC_DOCKER_USERNAME
