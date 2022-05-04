@@ -58,7 +58,7 @@ fi
 # Run the new updated image
 echo "### Staring '$IMAGE_NAME' from '$REPO'"
 HASH=$(docker run -d \
-    -p ${EC_PORT:-80}:80 \
+    -p 127.0.0.1:${EC_PORT:-4401}:80 \
     --restart unless-stopped \
     --name $IMAGE_NAME \
     $REPO)
