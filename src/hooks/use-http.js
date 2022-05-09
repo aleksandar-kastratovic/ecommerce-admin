@@ -45,6 +45,7 @@ const useHttp = () => {
         const expirationTime = new Date(new Date().getTime());
         localStorage.setItem('expirationTime', expirationTime);
         changeTokenExpired(null);
+        throw new Error(data.message ?? 'Request failed!');
       } else if (data.is_error) {
         if (data.message !== undefined) {
           throw new Error(data.message);

@@ -1214,6 +1214,36 @@ a[data-toggle="collapse"] {
     white-space: nowrap;
 }
 /*------------------ TABS END ------------------*/
+/*------------------ DETAILS TABS START ----------------*/
+.datails-tab-container {
+    margin: unset;
+    padding: unset;
+    flex-direction: column;
+    .datails-tab-item {
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        background-color: var(--tabs-bg);
+        border: unset;
+        color: var(--sidebar-bg-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .datails-tab-item.active {
+        color: var(--white-side-color);
+        background-color: var(--main-color);
+    }
+}
+.details-wrapper {
+    padding: 2rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--card-divader-color);
+}
+.details-wrapper-spacing {
+    padding: 0 1.5rem 0 3rem;
+}
+
+/*------------------ DATAILS TABS END ------------------*/
 
 /*------------------ MODAL START ------------------*/
 .modal-title {

@@ -16,11 +16,60 @@ import EditVariantModal from "./UI/EditVariantModal";
 import { inventoryOptions } from "../helpers/const";
 import { toast } from "react-toastify";
 import ConfirmModal from "./UI/ConfirmModal";
+import DatailsTabs from "./UI/DatailsTabs";
 
 const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct }) => {
 
     const optionInit = { id: null, data:[], valueIds: [] };
     const variationInit = { variantId : null, mainImg: null, images: [], variant_name: '', price: null, purchase_price: null, sku: '', barcode: '', locations: [], variant_combinations: [] };
+
+    let initTab = [
+        {
+            eventKey: 0,
+            title: "Osnovne informacije:",
+            icon: faFileSignature,
+            order: 1
+        },
+        {
+            eventKey: 1,
+            title: "Galerija:",
+            icon: faImages,
+            order: 2
+        },
+        {
+            eventKey: 2,
+            title: "Cena:",
+            icon: faMoneyBill,
+            order: 3
+        },
+        {
+            eventKey: 3,
+            title: "Inventar:",
+            icon: faBoxes,
+            order: 4
+        },
+        {
+            eventKey: 4,
+            title: "Opcije:",
+            icon: faLayerGroup,
+            order: 5
+        },
+        {
+            eventKey: 5,
+            title: "Varijacije:",
+            icon: faRandom,
+            order: 6
+        },
+        {
+            eventKey: 6,
+            title: "SEO optimizacija:",
+            icon: faBullhorn,
+            order: 7
+        }
+    ];
+    
+    const [tabsList, setTabsList] = useState(initTab);
+    const [activeTab, setActiveTab] = useState(initTab[0].eventKey);
 
     const { isLoading, sendRequest: categoryListRequest } = useHttp();
     const { isLoading2, sendRequest: productAttributeListRequest } = useHttp();
@@ -824,11 +873,17 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                 </button>
             </div>
             <div className="row">
-                <div className="col-xl-6">
-                    <Accordion defaultActiveKey="0">
-                        <Accordion.Item eventKey="0">
-                            <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faFileSignature} />Osnovne informacije:</Accordion.Header>
-                            <Accordion.Body>
+                <div className="col-3">
+                    <DatailsTabs
+                        tabsData={tabsList}
+                        activeTabKey={activeTab}
+                        onTabChange={ (activeTabKey) => { setActiveTab(activeTabKey) }}
+                    />
+                </div>
+                { activeTab === initTab[0].eventKey && (
+                    <div className="col-9 details-wrapper-spacing">
+                        <div className="row">
+                            <div className="col-xl-12 details-wrapper">
                                 <Input
                                     inputValue={nameValue}
                                     onInputChange={nameChangeHandler}
@@ -908,15 +963,15 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                                     text="Jedinica mere"
                                     text_class="m-0"
                                 />
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
-                    { variationsList.length < 1 && (
-                    <Accordion defaultActiveKey="1">
-                        <Accordion.Item eventKey="1">
-                            <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faMoneyBill} />Cena:</Accordion.Header>
-                            <Accordion.Body>
+                { activeTab === initTab[2].eventKey && variationsList.length < 1 && (
+                    <div className="col-9 details-wrapper-spacing">
+                        <div className="row">
+                            <div className="col-xl-12 details-wrapper">
                                 <Input
                                     inputValue={priceValue}
                                     onInputChange={priceChangeHandler}
@@ -935,15 +990,27 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                                     class={"form-control input-style form-control-lg"}
                                     text="Nabavna cena"
                                 />
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
-                    )}
+                            </div>
+                        </div>
+                    </div>
+                )}
 
-                    <Accordion defaultActiveKey="1">
-                        <Accordion.Item eventKey="1">
-                            <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faBullhorn} />SEO optimizacija:</Accordion.Header>
-                            <Accordion.Body>
+            { activeTab === initTab[2].eventKey && variationsList.length > 0 && (
+                    <div className="col-9 details-wrapper-spacing">
+                        <div className="row">
+                            <div className="col-xl-12 details-wrapper">
+                                <div className="products-list-holder">
+                                    <p className="seo-text">Cene možete videti u varijacijama.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                { activeTab === initTab[6].eventKey && (
+                    <div className="col-9 details-wrapper-spacing">
+                        <div className="row">
+                            <div className="col-xl-12 details-wrapper">
                                 <p className="seo-text">Popunite polja za SEO optimizaciju da bi se Vaš proizvod bolje pozicionirao na Google pretrazi.</p>
                                 <hr className="form-fields-separation"></hr>
                                 <Input
@@ -997,16 +1064,15 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                                     class={"form-control input-style form-control-lg"}
                                     text="URL ključ"
                                 />
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
-                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
-                <div className="col-xl-6">
-                    <Accordion defaultActiveKey="1">
-                        <Accordion.Item eventKey="1">
-                            <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faImages} />Galerija:</Accordion.Header>
-                            <Accordion.Body>
+                { activeTab === initTab[1].eventKey && (
+                    <div className="col-9 details-wrapper-spacing">
+                        <div className="row">
+                            <div className="col-xl-12 details-wrapper">
                                 <div className="galley-container">
                                     {gallery && ( gallery.map(function(object, index) {
                                         return (
@@ -1039,17 +1105,17 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                                         imageCroped={(imgData) => { setCropedImg(imgData);}}
                                         imgForCrooping={dataForCrop}
                                     />
-                                    
-                                </div>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
 
-                    { variationsList.length < 1 && (
-                    <Accordion defaultActiveKey="1">
-                        <Accordion.Item eventKey="1">
-                            <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faBoxes} />Inventar:</Accordion.Header>
-                            <Accordion.Body>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                { activeTab === initTab[3].eventKey && variationsList.length < 1 && (
+                    <div className="col-9 details-wrapper-spacing">
+                        <div className="row">
+                            <div className="col-xl-12 details-wrapper">
                                 <Input
                                     value={selectedInventoryOptions}
                                     isMulti={false}
@@ -1134,15 +1200,27 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                                         <hr className="form-field-separation"></hr>
                                     </div>
                                 )}
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
-                    )}
+                            </div>
+                        </div>
+                    </div>
+                )}
 
-                    <Accordion defaultActiveKey="1">
-                        <Accordion.Item eventKey="1">
-                            <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faLayerGroup} />Opcije:</Accordion.Header>
-                            <Accordion.Body>
+                { activeTab === initTab[3].eventKey && variationsList.length > 0 && (
+                    <div className="col-9 details-wrapper-spacing">
+                        <div className="row">
+                            <div className="col-xl-12 details-wrapper">
+                                <div className="products-list-holder">
+                                    <p className="seo-text">Inventar možete videti u varijacijama.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+
+                { activeTab === initTab[4].eventKey && (
+                    <div className="col-9 details-wrapper-spacing">
+                        <div className="row">
+                            <div className="col-xl-12 details-wrapper">
                                 {selectedProductAttributes.map(function(object, index) {
                                     return (
                                         <div key={index} className="row row-m0">
@@ -1184,15 +1262,15 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                                     className="btn-control save-btn"
                                     onClick={ () => setSelectedProductAttributes([...selectedProductAttributes, optionInit])}
                                 >Dodajte opciju</button>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
-                    { variationsList.length > 0 && (
-                        <Accordion defaultActiveKey="1">
-                            <Accordion.Item eventKey="1">
-                                <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faRandom} />Varijacije:</Accordion.Header>
-                                <Accordion.Body>
+                { activeTab === initTab[5].eventKey && variationsList.length > 0 && (
+                    <div className="col-9 details-wrapper-spacing">
+                        <div className="row">
+                            <div className="col-xl-12 details-wrapper">
                                 <div className="products-list-holder">
                                     {variationsList.map(function(object, index) {
                                         return (
@@ -1236,13 +1314,22 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                                         className="btn-control save-btn"
                                         onClick={ () => addNewVariation()}
                                     >Dodajte varijaciju</button>
-                                    </div>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
-                    )}
-
-                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                { activeTab === initTab[5].eventKey && variationsList.length < 1 && (
+                    <div className="col-9 details-wrapper-spacing">
+                        <div className="row">
+                            <div className="col-xl-12 details-wrapper">
+                                <div className="products-list-holder">
+                                    <p className="seo-text">Odaberite opcije da bi ste imali varijacije.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
             {(isLoading || isLoading2) &&  (
                 <Loader />

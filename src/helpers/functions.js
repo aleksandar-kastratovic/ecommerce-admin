@@ -12,6 +12,8 @@ export const addTabName = (tabsList, tabData) => {
                     data[elem].title = tabData.name;
                 } else if (tabData.attribute_name) {
                     data[elem].title = tabData.attribute_name;
+                } else if (tabData.company_name) {
+                    data[elem].title = tabData.company_name;
                 }
                 data[elem].order = tabsList[tabsList.length -1].order + 1;
             };

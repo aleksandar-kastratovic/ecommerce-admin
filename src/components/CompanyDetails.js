@@ -8,8 +8,39 @@ import AuthContext from "../store/auth-contex";
 import useInput from "../hooks/use-input";
 import { toast } from "react-toastify";
 import ConfirmModal from "./UI/ConfirmModal";
+import DatailsTabs from "./UI/DatailsTabs";
 
 const CompanyDetails = ({ companyData, saveCompany, removeCompany }) => {
+
+  let initTab = [
+    {
+      eventKey: 0,
+      title: "Podaci o kompaniji:",
+      icon: faCity,
+      order: 1
+    },
+    {
+      eventKey: 1,
+      title: "Podaci o naplati:",
+      icon: faMoneyCheckAlt,
+      order: 2
+    },
+    {
+      eventKey: 2,
+      title: "Podaci o dostavi:",
+      icon: faTruck,
+      order: 3
+    },
+    {
+      eventKey: 3,
+      title: "Podaci o plaćanju:",
+      icon: faFileInvoiceDollar,
+      order: 4
+    }
+  ];
+
+  const [tabsList, setTabsList] = useState(initTab);
+  const [activeTab, setActiveTab] = useState(initTab[0].eventKey);
 
   const { referenceData } = useContext(AuthContext);
   const [selectedCompanyId, setSelectedCompanyId] = useState(null);
@@ -365,11 +396,17 @@ let {
         </button>
       </div>
       <div className="row">
-        <div className="col-xl-6">
-          <Accordion defaultActiveKey="0">
-            <Accordion.Item eventKey="0">
-              <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faCity} />Podaci o kompaniji:</Accordion.Header>
-              <Accordion.Body>
+        <div className="col-3">
+          <DatailsTabs
+            tabsData={tabsList}
+            activeTabKey={activeTab}
+            onTabChange={ (activeTabKey) => { setActiveTab(activeTabKey) }}
+          />
+        </div>
+        { activeTab === initTab[0].eventKey && (
+          <div className="col-9 details-wrapper-spacing">
+            <div className="row">
+              <div className="col-xl-12 details-wrapper">
                 <Input
                   inputValue={companyValue}
                   onInputChange={companyChangeHandler}
@@ -479,82 +516,14 @@ let {
                   text_class="m-0 required"
                   inputErrorText="je obavezan!"
                 />
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
-          <Accordion defaultActiveKey="0">
-            <Accordion.Item eventKey="0">
-                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faFileInvoiceDollar} />Podaci o plaćanju:</Accordion.Header>
-                <Accordion.Body>
-                  <Input
-                    value={statusValue}
-                    isMulti={false}
-                    handleChange={statusChanged}
-                    disabled={false}
-                    data={referenceData.customer_status ?? []}
-                    inputType="select-react"
-                    type="text"
-                    class="form-control input-style form-control-lg select-style"
-                    text="Status kupca"
-                  />
-                  <Input
-                    value={priceListValue}
-                    isMulti={false}
-                    handleChange={priceListChanged}
-                    disabled={false}
-                    data={referenceData.customer_price_list ?? []}
-                    inputType="select-react"
-                    type="text"
-                    class="form-control input-style form-control-lg select-style"
-                    text="Cenovnik"
-                  />
-                  <Input
-                    value={transportValue}
-                    isMulti={false}
-                    handleChange={transportChanged}
-                    disabled={false}
-                    data={referenceData.customer_transport ?? []}
-                    inputType="select-react"
-                    type="text"
-                    class="form-control input-style form-control-lg select-style"
-                    text="Transport"
-                  />
-                  <Input
-                    inputValue={rabatValue}
-                    onInputChange={rabatChangeHandler}
-                    disabled={false}
-                    inputType="input"
-                    type="number"
-                    class="form-control input-style form-control-lg "
-                    text="Rabat"
-                  />
-                  <Input
-                    inputValue={nonInvoiceRabatValue}
-                    onInputChange={nonInvoiceRabatChangeHandler}
-                    disabled={false}
-                    inputType="input"
-                    type="number"
-                    class="form-control input-style form-control-lg "
-                    text="Vanfakturni rabati"
-                  />
-                  <Input
-                    inputValue={expectedDelayValue}
-                    onInputChange={expectedDelayChangeHandler}
-                    disabled={false}
-                    inputType="input"
-                    type="number"
-                    class="form-control input-style form-control-lg "
-                    text="Očekivano kašnjenje u plaćanju"
-                  />
-                </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
-        </div>
-        <div className="col-xl-6">
-          <Accordion defaultActiveKey="0">
-            <Accordion.Item eventKey="0">
-              <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faMoneyCheckAlt} />Podaci o naplati:</Accordion.Header>
-              <Accordion.Body>
+              </div>
+            </div>
+          </div>
+        )}
+        { activeTab === initTab[1].eventKey && (
+          <div className="col-9 details-wrapper-spacing">
+            <div className="row">
+              <div className="col-xl-12 details-wrapper">
                 <Input
                   inputValue={billingAddressValue}
                   onInputChange={billingAddressChangeHandler}
@@ -620,25 +589,26 @@ let {
                   text_class="m-0 required"
                   inputErrorText="je obavezna!"
                 />
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
-          <Accordion defaultActiveKey="0">
-            <Accordion.Item eventKey="0">
-              <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faTruck} />Podaci o dostavi:</Accordion.Header>
-              <Accordion.Body>
+              </div>
+            </div>
+          </div>
+        )}
+        { activeTab === initTab[2].eventKey && (
+          <div className="col-9 details-wrapper-spacing">
+            <div className="row">
+              <div className="col-xl-12 details-wrapper">
                 <Input
-                    inputValue={shippingAddressValue}
-                    onInputChange={shippingAddressChangeHandler}
-                    onInputBlur={shippingAddressBlurHandler}
-                    hasInputError={shippingAddressHasError}
-                    disabled={false}
-                    inputType="input"
-                    type="text"
-                    class={"form-control input-style form-control-lg " + (shippingAddressHasError ? 'invalid' : '')}
-                    text="Adresa dostave"
-                    text_class="m-0 required"
-                    inputErrorText="je obavezna!"
+                  inputValue={shippingAddressValue}
+                  onInputChange={shippingAddressChangeHandler}
+                  onInputBlur={shippingAddressBlurHandler}
+                  hasInputError={shippingAddressHasError}
+                  disabled={false}
+                  inputType="input"
+                  type="text"
+                  class={"form-control input-style form-control-lg " + (shippingAddressHasError ? 'invalid' : '')}
+                  text="Adresa dostave"
+                  text_class="m-0 required"
+                  inputErrorText="je obavezna!"
                 />
                 <Input
                   inputValue={shippingCityValue}
@@ -692,10 +662,78 @@ let {
                   text_class="m-0 required"
                   inputErrorText="je obavezna!"
                 />
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
-        </div>
+              </div>
+            </div>
+          </div>
+        )}
+        { activeTab === initTab[3].eventKey && (
+          <div className="col-9 details-wrapper-spacing">
+            <div className="row">
+              <div className="col-xl-12 details-wrapper">
+                <Input
+                  value={statusValue}
+                  isMulti={false}
+                  handleChange={statusChanged}
+                  disabled={false}
+                  data={referenceData.customer_status ?? []}
+                  inputType="select-react"
+                  type="text"
+                  class="form-control input-style form-control-lg select-style"
+                  text="Status kupca"
+                />
+                <Input
+                  value={priceListValue}
+                  isMulti={false}
+                  handleChange={priceListChanged}
+                  disabled={false}
+                  data={referenceData.customer_price_list ?? []}
+                  inputType="select-react"
+                  type="text"
+                  class="form-control input-style form-control-lg select-style"
+                  text="Cenovnik"
+                />
+                <Input
+                  value={transportValue}
+                  isMulti={false}
+                  handleChange={transportChanged}
+                  disabled={false}
+                  data={referenceData.customer_transport ?? []}
+                  inputType="select-react"
+                  type="text"
+                  class="form-control input-style form-control-lg select-style"
+                  text="Transport"
+                />
+                <Input
+                  inputValue={rabatValue}
+                  onInputChange={rabatChangeHandler}
+                  disabled={false}
+                  inputType="input"
+                  type="number"
+                  class="form-control input-style form-control-lg "
+                  text="Rabat"
+                />
+                <Input
+                  inputValue={nonInvoiceRabatValue}
+                  onInputChange={nonInvoiceRabatChangeHandler}
+                  disabled={false}
+                  inputType="input"
+                  type="number"
+                  class="form-control input-style form-control-lg "
+                  text="Vanfakturni rabati"
+                />
+                <Input
+                  inputValue={expectedDelayValue}
+                  onInputChange={expectedDelayChangeHandler}
+                  disabled={false}
+                  inputType="input"
+                  type="number"
+                  class="form-control input-style form-control-lg "
+                  text="Očekivano kašnjenje u plaćanju"
+                />
+              </div>
+            </div>
+          </div>
+        )}
       </div>
       <ConfirmModal confirmWhat={confirmWhat} confirm={confirm} />
     </div>
