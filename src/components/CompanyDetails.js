@@ -632,9 +632,9 @@ let {
                   inputType="input"
                   type="text"
                   class={"form-control input-style form-control-lg " + (shippingStateHasError ? 'invalid' : '')}
-                  text="Stanje dostave"
+                  text="Region dostave"
                   text_class="m-0 required"
-                  inputErrorText="je obavezno!"
+                  inputErrorText="je obavezan!"
                 />
                 <Input
                   inputValue={shippingZipValue}
