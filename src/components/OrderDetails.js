@@ -28,9 +28,6 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
 
   const statusChanged = (ev) => {
     const valueInput = {target: {value : (ev && ev.id !== null) ? ev.id : ev}};
-    if (ev?.id) {
-      setStatusAvailableData(ev.id);
-    }
     statusChangeHandler(valueInput);
   };
 
@@ -65,11 +62,11 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
   }
 
   return (
-    <div className="add-role-modal">
+    <div className="add-role-modal order-details-page">
         <div className="row">
-            <div className="col-xl-6">
+            <div className="col-xl-12">
                 <div className="row">
-                    <div className="col-xl-12">
+                    <div className="col-xl-6">
                         <Accordion defaultActiveKey="0">
                             <Accordion.Item eventKey="0">
                                 <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faUserTag} />Podaci partnera:</Accordion.Header>
@@ -77,22 +74,20 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                                     <div className="row order-data-accordion">
                                     <div className="col-xl-6">
                                         <ul>
-                                            <li>Kompanija:<span>{orderData.company_name}</span></li>
-                                            <li>Matični broj:<span>{orderData.registry_number}</span></li>
-                                            <li>PIB:<span>{orderData.tin}</span></li>
-                                            <li>Ulica:<span>{orderData.billing_address}</span></li>
-                                            <li>Grad:<span>{orderData.billing_city}</span></li>
-                                            <li>Poštanski broj:<span>{orderData.billing_zip}</span></li>
+                                          <li>Kompanija:<span>{orderData.company_name}</span></li>
+                                          <li>Matični broj:<span>{orderData.registry_number}</span></li>
+                                          <li>PIB:<span>{orderData.tin}</span></li>
+                                          <li>Ulica:<span>{orderData.billing_address}</span></li>
+                                          <li>Grad:<span>{orderData.billing_city}</span></li>
                                         </ul>
                                     </div>
                                     <div className="col-xl-6">
                                         <ul>
-                                            <li>Država:<span>{orderData.billing_country}</span></li>
-                                            <li>Telefon:<span>{orderData.phone}</span></li>
-                                            <li>Mobilni telefon:<span>{orderData.mobile_phone}</span></li>
-                                            <li>Kontakt osoba:<span>{orderData.full_name}</span></li>
-                                            <li>E-mail:<span>{orderData.email}</span></li>
-                                            <li>Napomena:<span>{orderData.note}</span></li>
+                                          <li>Poštanski broj:<span>{orderData.billing_zip}</span></li>
+                                          <li>Država:<span>{orderData.billing_country}</span></li>
+                                          <li>Telefon:<span>{orderData.phone}</span></li>
+                                          <li>Mobilni telefon:<span>{orderData.mobile_phone}</span></li>
+                                          <li>E-mail:<span>{orderData.email}</span></li>
                                         </ul>
                                     </div>
                                     </div>
@@ -100,65 +95,30 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                             </Accordion.Item>
                         </Accordion>
                     </div>
-                    <div className="col-xl-12">
-                        <Accordion defaultActiveKey="0">
+                    <div className="col-xl-6">
+                      <Accordion defaultActiveKey="0">
                             <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faArchive} />Proizvodi u porudžbini:</Accordion.Header>
+                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faTruck} />Dodatne informacije:</Accordion.Header>
                                 <Accordion.Body>
-                                    <div className="row order-items-accordion">
-                                    <div className="col-xl-12">
-                                        {orderData && orderData?.order_items && orderData?.order_items.map(function(object) {
-                                        return (
-                                            <div className="product-thumb" key={object.id}>
-                                                <div className="row">
-                                                    <div className="col-xl-9 align-self-center text">
-                                                    <h1>{object.name}</h1>
-                                                    <ul className="product-info">
-                                                        <li>Šifra:<span>{object.code}</span></li>
-                                                        <li>Boja:<span>???</span></li>
-                                                        <li>Veličina:<span>???</span></li>
-                                                    </ul>
-                                                    </div>
-                                                    <div className="col-xl-3 product-thumb-buttons">
-                                                    {/* <a data-toggle="modal" data-target="#storage-chose-modal" class="btn btn-success storage" href="#"><i class="fa fa-home" aria-hidden="true"></i></a> */}
-                                                    <a
-                                                        href={window.location.origin + "/products/" + object.id}
-                                                        className="btn-control btn btn-show-details"
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                    >
-                                                        <FontAwesomeIcon icon={faEye} />
-                                                    </a>
-                                                    
-                                                    {/* <a className="btn btn-danger delete" href="#"><i class="fa fa-trash-o" aria-hidden="true"></i></a> */}
-                                                    </div>
-                                                </div>
-                                                <div className="row mt-3">
-                                                    <div className="col-xl-2 pricing">
-                                                    <p>Količina:</p>
-                                                    <div className="quantity">??</div>
-                                                    </div>
-                                                    <div className="col-xl-2 no-padd pricing">
-                                                    <p>J.C. bez PDV:</p>
-                                                    <div className="single-price">{currencyFormat(object.price_with_tax)}</div>
-                                                    </div>
-                                                    <div className="col-xl-2 no-padd pricing">
-                                                    <p>PDV (%):</p>
-                                                    <div className="tax">??</div>
-                                                    </div>
-                                                    <div className="col-xl-2 no-padd pricing">
-                                                    <p>Rabat (%):</p>
-                                                    <div className="discount">??</div>
-                                                    </div>
-                                                    <div className="col-xl-2 pricing">
-                                                    <p>Ukupno:</p>
-                                                    <div className="total-price">{currencyFormat(object.total_price)}</div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        );
-                                        })}
-                                    </div>
+                                    <div className="row order-data-accordion">
+                                        <div className="col-xl-6">
+                                            <ul>
+                                              <li>Adresa:<span>{orderData.shipping_address}</span></li>
+                                              <li>Grad:<span>{orderData.shipping_city}</span></li>
+                                              <li>Poštanski broj:<span>{orderData.shipping_zip}</span></li>
+                                              <li>Država:<span>{orderData.shipping_country}</span></li>
+                                            </ul>
+                                        </div>
+                                        <div className="col-xl-6">
+                                            <ul>
+                                              <li>Način plaćanja:<span>???</span></li>
+                                              <li>Način dostave:<span>???</span></li>
+                                              <li>Poručilac:<span>{orderData.full_name}</span></li>
+                                            </ul>
+                                        </div>
+                                        <div className="col-xl-12">
+                                          <li>Napomena:<span>{orderData.note}</span></li>
+                                        </div>
                                     </div>
                                 </Accordion.Body>
                             </Accordion.Item>
@@ -166,67 +126,14 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                     </div>
                 </div>
             </div>
-            <div className="col-xl-6">
+            <div className="col-xl-12">
                 <div className="row">
-                    <div className="col-xl-12">
-                        <Accordion defaultActiveKey="0">
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faTruck} />Podaci za dostavu:</Accordion.Header>
-                                <Accordion.Body>
-                                    <div className="row order-data-accordion">
-                                        <div className="col-xl-6">
-                                            <ul>
-                                                <li>Kompanija:<span>{orderData.company_name}</span></li>
-                                                <li>Ime:<span>{orderData.first_name}</span></li>
-                                                <li>Prezime:<span>{orderData.last_name}</span></li>
-                                                <li>Ulica:<span>{orderData.shipping_address}</span></li>
-                                                <li>Grad:<span>{orderData.shipping_city}</span></li>
-                                            </ul>
-                                        </div>
-                                        <div className="col-xl-6">
-                                            <ul>
-                                                <li>Poštanski broj:<span>{orderData.shipping_zip}</span></li>
-                                                <li>Država:<span>{orderData.shipping_country}</span></li>
-                                                <li>Telefon:<span>{orderData.phone}</span></li>
-                                                <li>Mobilni telefon:<span>{orderData.mobile_phone}</span></li>
-                                                <li>Napomena:<span>{orderData.note}</span></li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
-                    </div>
-                    <div className="col-xl-12">
-                        <Accordion defaultActiveKey="0">
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faFileAlt} />Porudžbina:</Accordion.Header>
-                                <Accordion.Body>
-                                    <div className="row order-details-accordion">
-                                        <div className="col-12">
-                                            <h5>Porudžbina: {orderData.order_name}</h5>
-                                            <hr/>
-                                            <p>Vreme kreiranja:<span>{orderData.order_date}</span></p>
-                                            <p>Način plaćanja:<span>???</span></p>
-                                            <p>Način dostave:<span>???</span></p>
-                                            <p>Osnovica:<span>{currencyFormat(orderData.base_total_price) + " RSD"}</span></p>
-                                            <p>PDV:<span>{currencyFormat(orderData.vat_amount) + " RSD"}</span></p>
-                                            <p>Rabat:<span>- {currencyFormat(orderData.rebate_amount) + " RSD"}</span></p>
-                                            <p>Troškovi dostave:<span>???</span></p>
-                                            <hr/>
-                                            <h5>Ukupno za uplatu:<span>{currencyFormat(orderData.total_price) + " RSD"}</span></h5>
-                                        </div>
-                                    </div>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
-                    </div>
-                    <div className="col-xl-12">
-                      <Accordion defaultActiveKey="0">
+                    <div className="col-xl-6">
+                    <Accordion defaultActiveKey="0">
                         <Accordion.Item eventKey="0">
                             <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faFlag} />Status porudžbine:</Accordion.Header>
-                            <Accordion.Body>
-                              <div className="row order-status-accordion">
+                            <Accordion.Body className=" accordion-p-0">
+                              <div className="row order-status-accordion accordion-p-0-body">
                                 <div className="col-12">
                                   <div className="row">
                                     <div className="col-6 order-status-select">
@@ -273,32 +180,30 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                                   />
                                 </div>
                               </div>
+                              <div className="col-12 order-status-buttons">
+                                <button onClick={() => saveStatus()} className="btn-control save-btn">Pošaljite poruku</button>
+                                <button className="btn-control button-add">Istorija poruka</button>
+                              </div>
                             </Accordion.Body>
-                            <div className="col-12 order-status-buttons">
-                              <button onClick={() => saveStatus()} className="btn-control save-btn">Pošaljite poruku</button>
-                              <button className="btn-control button-add">Istorija poruka</button>
-                            </div>
                         </Accordion.Item>
                       </Accordion>
                     </div>
-                    <div className="col-xl-12">
+                    <div className="col-xl-6">
                       <Accordion defaultActiveKey="0">
                           <Accordion.Item eventKey="0">
                               <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faInfoCircle} />Napomene:</Accordion.Header>
-                              <Accordion.Body>
-                                <div className="row">
+                              <Accordion.Body className="accordion-p-0">
+                                <div className="row accordion-p-0-body">
                                   <div className="col-6">
-                                    <div className="order-note-select">
-                                      <Input
-                                        isMulti={false}
-                                        disabled={false}
-                                        data={referenceData?.order_statuses ?? []}
-                                        inputType="select-react"
-                                        type="text"
-                                        class="form-control input-style form-control-lg select-style"
-                                        text="Odaberite status:"
-                                      />
-                                    </div>
+                                    <Input
+                                      isMulti={false}
+                                      disabled={false}
+                                      data={referenceData?.order_statuses ?? []}
+                                      inputType="select-react"
+                                      type="text"
+                                      class="form-control input-style form-control-lg select-style"
+                                      text="Odaberite status:"
+                                    />
                                     <Input
                                       // inputValue={descriptionValue}
                                       // onInputChange={descriptionChangeHandler}
@@ -321,16 +226,129 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                                     </ul>
                                   </div>
                                 </div>
-                              </Accordion.Body>
-                              <div className="col-12 order-status-buttons">
-                                <button className="btn-control save-btn">Sačuvajte</button>
-                                <button className="btn-control button-add">Istorija napomena</button>
+                                <div className="col-12 order-status-buttons">
+                                  <button className="btn-control save-btn">Sačuvajte</button>
+                                  <button className="btn-control button-add">Istorija napomena</button>
                               </div>
+                              </Accordion.Body>
                           </Accordion.Item>
                       </Accordion>
                     </div>
                 </div>
             </div>
+            <div className="col-xl-12">
+                        <Accordion defaultActiveKey="0">
+                            <Accordion.Item eventKey="0">
+                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faArchive} />Proizvodi u porudžbini:</Accordion.Header>
+                                <Accordion.Body>
+                                    <div className="order-items-accordion">
+                                      <div className="order-items-header-accordion">
+                                        <div className="row">
+                                          <div className="col-3">
+                                            <p>Proizvod:</p>
+                                          </div>
+                                          <div className="col-1">
+                                            <p>Šifra:</p>
+                                          </div>
+                                          <div className="col-1">
+                                            <p>Količina:</p>
+                                          </div>
+                                          <div className="col-1">
+                                            <p>J.C. bez PDV:</p>
+                                          </div>
+                                          <div className="col-1">
+                                            <p>PDV (%):</p>
+                                          </div>
+                                          <div className="col-1">
+                                            <p>Iznos PDV:</p>
+                                          </div>
+                                          <div className="col-1">
+                                            <p>Rabat (%):</p>
+                                          </div>
+                                          <div className="col-1">
+                                            <p>Iznos rabata:</p>
+                                          </div>
+                                          <div className="col-1">
+                                            <p>Ukupno:</p>
+                                          </div>
+                                          <div className="col-1">
+                                          </div>
+                                        </div>
+                                      </div>
+                                      {orderData && orderData?.order_items && orderData?.order_items.map(function(object) {
+                                        return (
+                                          <div key={object.id} className="table-for-products">
+                                            <div className="row">
+                                              <div className="col-3">
+                                                <p>{object.name}</p>
+                                              </div>
+                                              <div className="col-1">
+                                                <p>{object.code}</p>
+                                              </div>
+                                              <div className="col-1">
+                                                <p>{object.quantity}</p>
+                                              </div>
+                                              <div className="col-1">
+                                                <p>{currencyFormat(object.price_with_tax)}</p>
+                                              </div>
+                                              <div className="col-1">
+                                                <p>???</p>
+                                              </div>
+                                              <div className="col-1">
+                                                <p>???</p>
+                                              </div>
+                                              <div className="col-1">
+                                                <p>???</p>
+                                              </div>
+                                              <div className="col-1">
+                                                <p>???</p>
+                                              </div>
+                                              <div className="col-1">
+                                                <p>{currencyFormat(object.total_price)}</p>
+                                              </div>
+                                              <div className="col-1 buttons-col">
+                                                <a
+                                                  href={window.location.origin + "/products/" + object.id}
+                                                  className="btn-control btn btn-show-details"
+                                                  target="_blank"
+                                                  rel="noopener noreferrer"
+                                                >
+                                                  <FontAwesomeIcon icon={faEye} />
+                                                </a>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        );
+                                      })}
+                                    </div>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
+                    </div>
+                    <div className="col-xl-12">
+                        <Accordion defaultActiveKey="0">
+                            <Accordion.Item eventKey="0">
+                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faFileAlt} />Porudžbina:</Accordion.Header>
+                                <Accordion.Body>
+                                    <div className="row order-details-accordion">
+                                        <div className="col-12">
+                                            <h5>Porudžbina: {orderData.order_name}</h5>
+                                            <hr/>
+                                            <p>Vreme kreiranja:<span>{orderData.order_date}</span></p>
+                                            <p>Iznos:<span>{currencyFormat(orderData.base_total_price) + " RSD"}</span></p>
+                                            <p>Rabat:<span>{"- " + orderData.rebate + "%"}</span></p>
+                                            <p>Iznos rabata:<span>- {currencyFormat(orderData.rebate_amount) + " RSD"}</span></p>
+                                            <p>Osnovica:<span>{currencyFormat(orderData.price_discounted) + " RSD"}</span></p>
+                                            <p>PDV:<span>{currencyFormat(orderData.vat_amount) + " RSD"}</span></p>
+                                            {/* <p>Troškovi dostave:<span>???</span></p> */}
+                                            <hr/>
+                                            <h5>Ukupno za uplatu:<span>{currencyFormat(orderData.total_price) + " RSD"}</span></h5>
+                                        </div>
+                                    </div>
+                                </Accordion.Body>
+                            </Accordion.Item>
+                        </Accordion>
+                    </div>
         </div>
     </div>
   );

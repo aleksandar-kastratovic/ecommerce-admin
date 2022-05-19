@@ -1974,118 +1974,46 @@ a[data-toggle="collapse"] {
     }
 }
 .order-items-accordion {
-    .product-thumb {
-        margin-bottom: 1rem;
+    .order-items-header-accordion {
         border-bottom: 1px solid var(--card-divader-color);
-        padding-bottom: 1rem;
-    }
-    
-    .product-thumb .text p {
-        font-size: 0.9375rem;
-        margin-bottom: 0;
-    }
-    
-    .product-thumb .text .product-info {
-        padding-left: 0;
-        margin-bottom: 0;
-    }
-    
-    .product-thumb .text .product-info li {
-        list-style: none;
-        display: inline-block;
-        font-size: 0.8125rem;
-        padding-right: 0.25rem;
-        color: var(--third-color);
-    }
-    
-    .product-thumb .text .product-info li span {
-        font-weight: 600;
-        padding-left: 0.25rem;
-    }
-    
-    .product-thumb .pricing p {
-        font-size: 0.8125rem;
-        margin-bottom: 0;
-        color: var(--third-color);
-    }
-    
-    .product-thumb .pricing .quantity {
-        font-weight: 600;
-        font-size: 0.8125rem;
-        margin-bottom: 0;
-        color: var(--third-color);
-    }
-    
-    .product-thumb .pricing .single-price {
-        font-weight: 600;
-        font-size: 0.8125rem;
-        margin-bottom: 0;
-        color: var(--third-color);
-    }
-    .product-thumb .product-thumb-buttons {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-    }
-
-    .product-thumb .btn-control.btn.btn-show-details {
-        width: 36px;
-        height: 36px;
-        border-radius: 0.25rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    
-    .product-thumb .pricing .tax {
-        font-weight: 600;
-        font-size: 0.8125rem;
-        margin-bottom: 0;
-        color: var(--third-color);
-    }
-    
-    .product-thumb .pricing .discount {
-        font-weight: 600;
-        font-size: 0.8125rem;
-        margin-bottom: 0;
-        color: var(--third-color);
-    }
-    
-    .product-thumb .pricing .total-price {
-        font-weight: 600;
-        font-size: 0.8125rem;
-        margin-bottom: 0;
-        color: var(--third-color);
-    }
-    .product-thumb h1 {
-        font-size: 1rem;
-        font-weight: 600;
-        margin-bottom: 0;
-        color: var(--third-color);
-    }
-}
-.order-status-accordion {
-    label {
-        font-size: 0.875rem;
-        margin-bottom: 0;
-        color: var(--third-color);
-    }
-    .order-status-checkboxs {
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-end;
-        .form-check {
+        padding-bottom: 0.5rem;
+        p {
+            color: var(--third-color);
+            font-size: .8125rem;
             margin-bottom: unset;
         }
     }
-    .order-status-select {
-        padding-bottom: 0.25rem;
-        .error-text {
-            display: none;
+    .table-for-products {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--card-divader-color);
+        .row {
+            align-items: center;
+            p {
+                color: var(--third-color);
+                font-size: .8125rem;
+                font-weight: 600;
+                margin: unset;
+            }
+        }
+        .buttons-col a {
+            align-items: center;
+            border-radius: .25rem;
+            display: flex;
+            height: 36px;
+            justify-content: center;
+            width: 36px;
         }
     }
-    .order-status-textarea {
-        padding-top: 1rem;
+}
+.accordion-p-0 {
+    padding: unset;
+}
+.accordion-p-0-body {
+    padding: 1rem 1.25rem;
+}
+.order-details-page {
+    ul {
+        margin: unset;
     }
 }
 .order-status-buttons {
