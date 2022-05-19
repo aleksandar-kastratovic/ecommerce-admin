@@ -109,7 +109,9 @@ const CompaniesPage = () => {
 
             const getCompany = async () => {
                 const data = await getCompanyService({id: activeTab}, companyRequest);
-                setCompanyData(data);
+                if (data) {
+                    setCompanyData(data);
+                }
             };
           
             getCompany();

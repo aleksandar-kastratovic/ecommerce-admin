@@ -8,7 +8,8 @@ export const screensData = {
     USERS: {id: 7, screen_code: 'USERS', screen: 'Users'},
     ACTON: {id: 8, screen_code: 'ACTON', screen: 'Actions'},
     CUSTM: {id: 9, screen_code: 'CUSTM', screen: 'Customers'},
-    LOCAT: {id: 10, screen_code: 'LOCAT', screen: 'Locations'}
+    LOCAT: {id: 10, screen_code: 'LOCAT', screen: 'Locations'},
+    SETNG: {id: 11, screen_code: "SETNG", screen: "Settings"}
 };
 
 export const inventoryOptions = [{ id: 1, name: 'Više lokacija'}, { id: null, name: 'Jedna lokacija'}];

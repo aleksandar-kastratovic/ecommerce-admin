@@ -108,7 +108,9 @@ const ProductAttributesPage = () => {
 
             const getProductAttributes = async () => {
                 const data = await getProductAttributeService({id: activeTab}, httpRequest);
-                setProductAttributeData(data);
+                if (data) {
+                    setProductAttributeData(data);
+                }
             };
           
             getProductAttributes ();

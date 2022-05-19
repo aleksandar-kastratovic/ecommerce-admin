@@ -739,3 +739,53 @@ export const removeCompanyService = async (requestData, removeCompanyRequest) =>
     return data;
 };
 
+export const ordersListService = async (ordersListRequest) => {
+    let data;
+
+    const ordersListResponse = (ordersData) => {
+        data = ordersData;
+    };
+
+    await ordersListRequest(
+        {
+            url: api() + 'order/list',
+            method: 'PUT'
+        }, ordersListResponse
+    );
+    return data;
+};
+
+export const getOrderService = async (getData, getOrderRequest) => {
+    let data;
+
+    const getOrderResponse = (orderData) => {
+        data = orderData;
+    };
+
+    await getOrderRequest(
+        {
+            url: api() + 'order/get',
+            method: 'PUT',
+            body: getData
+        }, getOrderResponse
+    );
+    return data;
+};
+
+export const saveOrderStatusService = async (getData, getOrderRequest) => {
+    let data;
+
+    const getOrderResponse = (orderData) => {
+        data = orderData;
+    };
+
+    await getOrderRequest(
+        {
+            url: api() + 'order/status/update',
+            method: 'PUT',
+            body: getData
+        }, getOrderResponse
+    );
+    return data;
+};
+

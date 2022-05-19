@@ -102,7 +102,9 @@ const UsersPage = () => {
       
             const getUser = async () => {
                 const data = await getUserService({id: activeTab}, getUserRequest);
-                setUserData(data);
+                if (data) {
+                    setUserData(data);
+                }
             };
           
             getUser();

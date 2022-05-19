@@ -21,7 +21,8 @@ import LocationsPage from "./pages/LocationsPage";
 import B2BCustomersPage from "./pages/B2BCustomersPage";
 import CompaniesPage from "./pages/CompaniesPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
-
+import SettingsPage from "./pages/SettingsPage";
+import OrdersPage from "./pages/OrdersPage";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -181,6 +182,15 @@ function App() {
                   return  <Route key={object.id}  path='/companies' element={<CompaniesPage routeData={screensData.ACTON} />} >
                             <Route path=":comId" element={<CompaniesPage />} />
                           </Route>
+                }
+                if (object.id === screensData.ORDER.id) {
+                  return  <Route key={object.id}  path='/orders' element={<OrdersPage routeData={screensData.ORDER} />} >
+                            <Route path=":ordId" element={<OrdersPage />} />
+                          </Route>
+                }
+                // TODO: Change screensData item
+                if (object.id === screensData.SETNG.id) {
+                  return  <Route key={object.id}  path='/settings' element={<SettingsPage routeData={screensData.SETNG} />} />
                 }
               }))}
             </>

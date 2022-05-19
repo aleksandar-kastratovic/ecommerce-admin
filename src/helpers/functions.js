@@ -55,3 +55,15 @@ export const imageForId = (gallery, id) => {
     return url;
 }
 
+/**
+ * Format number in currency.
+ *
+ * @author Predrag Lević <predrag.levic@croonus.com>
+ * @param {Number} num
+ * @returns {String}
+*/
+export const currencyFormat = (num) => {
+    return new Intl.NumberFormat('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(num);
+}
+
+

@@ -121,7 +121,9 @@ const B2BCustomersPage = () => {
 
             const getCustomer = async () => {
                 const data = await getCustomerService({id: activeTab}, customersRequest);
-                setCustomerData(data);
+                if (data) {
+                    setCustomerData(data);
+                }
             };
           
             getCustomer();

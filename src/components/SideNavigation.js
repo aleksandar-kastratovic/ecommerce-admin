@@ -2,7 +2,7 @@ import sideNavLogoDark from "./../assets/images/croonus-sidebar-logo-dark.svg";
 import sideNavLogoLight from "./../assets/images/croonus-sidebar-logo-light.svg";
 import sideNavIcon from "./../assets/images/croonus-sidebar-icon.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileAlt, faCity, faPercentage, faUserTag ,faSitemap, faArchive, faSearchLocation, faHome, faBell, faUsers, faPeopleArrows, faLayerGroup } from '@fortawesome/free-solid-svg-icons'
+import { faFileAlt, faCity, faPercentage, faCog, faUserTag ,faSitemap, faArchive, faSearchLocation, faHome, faBell, faUsers, faPeopleArrows, faLayerGroup } from '@fortawesome/free-solid-svg-icons'
 import { NavLink } from "react-router-dom";
 import { useContext } from "react";
 import AuthContext from "../store/auth-contex";
@@ -132,12 +132,21 @@ const SideNavigation = ({ activeTheme, userName }) => {
                                     </NavLink>
                                 </li>
                     }
+
+                    if (object.id === screensData.SETNG.id) {
+                        return  <li key={object.id} style={ { order: 11 }}>
+                                    <NavLink to='/settings' className={navData => navData.isActive ? 'active' : '' }>
+                                        <FontAwesomeIcon icon={faCog} />
+                                        Podešavanja
+                                    </NavLink>
+                                </li>
+                    }
                 }))}
 
-                <li style={ { order: 11 }} className="sidebar-categories">
+                <li style={ { order: 12 }} className="sidebar-categories">
                     <p>Ostalo</p>
                 </li>
-                <li style={ { order: 12 }}>
+                <li style={ { order: 13 }}>
                     <NavLink to='/notification' className={navData => navData.isActive ? 'active' : '' }>
                         <FontAwesomeIcon icon={faBell} />
                         Obaveštenja

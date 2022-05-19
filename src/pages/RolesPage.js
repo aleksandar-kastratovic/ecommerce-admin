@@ -110,7 +110,9 @@ const RolesPage = () => {
 
             const getRoles = async () => {
                 const data = await getRoleService({id: activeTab}, getRoleRequest);
-                setRoleData(data);
+                if (data) {
+                    setRoleData(data);
+                }
             };
           
             getRoles();

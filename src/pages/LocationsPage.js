@@ -109,7 +109,9 @@ const LocationsPage = () => {
 
             const getLocations = async () => {
                 const data = await getLocationService({id: activeTab}, locationsRequest);
-                setLocationData(data);
+                if (data) {
+                    setLocationData(data);
+                }
             };
           
             getLocations();
