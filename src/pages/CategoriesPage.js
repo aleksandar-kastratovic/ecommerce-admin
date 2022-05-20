@@ -4,7 +4,7 @@ import CategoriesList from "../components/CategoriesList";
 import CategoryDetails from "../components/CategoryDetails";
 import Loader from "../components/UI/Loader";
 import Tabs from "../components/UI/Tabs";
-import { categoryListService, getCategoryService, removeCategoryService, saveCategoryImageService, saveCategoryService } from "../helpers/services";
+import { categoriesSynchroListService, categoryListService, getCategoryService, removeCategoryService, saveCategoryImageService, saveCategoryService } from "../helpers/services";
 import useHttp from "../hooks/use-http";
 
 const CategoriesPage = () => {
@@ -12,14 +12,9 @@ const CategoriesPage = () => {
     const initTab = [
         {
             eventKey: 0,
-            title: "Lista Korisnika",
+            title: "Detalji kategorije",
             order: 1
         }
-        // {
-        //     eventKey: -1,
-        //     title: "Specifikacija",
-        //     order: 2
-        // }
     ];
 
     const { catId } = useParams();
@@ -30,14 +25,20 @@ const CategoriesPage = () => {
     const { isLoading, sendRequest: categoryListRequest } = useHttp();
 
     const [categoryList, setCategoryList] = useState([]);
+    const [categorySynchroList, setCategorySynchroList] = useState([]);
 
     const [categoryDetailsData, setCategoryDetailsData] = useState({});
 
     const [categoryNew, setCategoryNew] = useState(false);
+    const [categoryListLoaded, setCategoryListLoaded] = useState(false);
+    const [categorySynchroListLoaded, setCategorySynchroListLoaded] = useState(false);
 
     const getCategories = async () => {
         const data = await categoryListService(categoryListRequest);
-        setCategoryList(data);
+        if (data) {
+            setCategoryList(data);
+            setCategoryListLoaded(true);
+        }
     };
 
     useEffect(() => {
@@ -59,6 +60,7 @@ const CategoriesPage = () => {
             id: saveData.id,
             name: saveData.name,
             parent_id: saveData.parent_id,
+            category_import_ids: saveData.category_import_ids,
             seo_word: saveData.seo_word,
             seo_description: saveData.seo_description
         }, categoryListRequest);
@@ -112,14 +114,29 @@ const CategoriesPage = () => {
 
     const getCategory = async (categoryId) => {
         const data = await getCategoryService(categoryId, categoryListRequest);
-        setCategoryDetailsData(data);
+        if (data) {
+            setCategoryDetailsData(data);
+        }
     }
 
     useEffect(() => {
-        if (+catId > 0) {
+        if (+catId > 0 && categoryListLoaded, categorySynchroListLoaded) {
             getCategory({id: +catId});
         }
-    }, []);
+    }, [categoryListLoaded, categorySynchroListLoaded]);
+
+    useEffect(() => {
+
+        const getSynchroCategories = async () => {
+            const data = await categoriesSynchroListService(categoryListRequest);
+            if (data) {
+                setCategorySynchroList(data);
+                setCategorySynchroListLoaded(true);
+            }
+        };
+
+        getSynchroCategories();
+    }, [categoryListRequest]);
 
     const addCategory = () => {
         setCategoryNew(!categoryNew)
@@ -141,7 +158,7 @@ const CategoriesPage = () => {
                 <CategoriesList
                     saveCategoryParent={ (data) => { saveCategorieParentService(data) }}
                     categoryListData={categoryList}
-                    categorySelected={ (categoryId) => { getCategory(categoryId) }}
+                    categorySelected={ (categoryId) => { addCategory(); getCategory(categoryId); }}
                     addNewCategory={ () => { addCategory() }}
                 />
                 <section id="category-page" className="card col-xl-7">
@@ -154,6 +171,7 @@ const CategoriesPage = () => {
                     </div>
                     <CategoryDetails
                         categoryListData={categoryList}
+                        categorySynchroListData={categorySynchroList}
                         saveCategory={ (data) => { saveCategoryDetailsService(data) }}
                         categoryData={categoryDetailsData}
                         addCategory={categoryNew}

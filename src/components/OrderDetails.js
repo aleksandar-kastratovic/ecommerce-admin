@@ -154,14 +154,12 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                                         <Form.Check
                                           type="checkbox"
                                           label="Pošaljite poruku kupcu"
-                                          disabled={true}
                                         />
                                       </Form.Group>
                                       <Form.Group className="remember-checkbox remember-checkbox-details">
                                         <Form.Check
                                           type="checkbox"
                                           label="Pošaljite definisanu statusnu poruku"
-                                          disabled={true}
                                         />
                                       </Form.Group>
                                     </div>

@@ -772,20 +772,35 @@ export const getOrderService = async (getData, getOrderRequest) => {
     return data;
 };
 
-export const saveOrderStatusService = async (getData, getOrderRequest) => {
+export const saveOrderStatusService = async (getData, saveOrderRequest) => {
     let data;
 
-    const getOrderResponse = (orderData) => {
+    const saveOrderResponse = (orderData) => {
         data = orderData;
     };
 
-    await getOrderRequest(
+    await saveOrderRequest(
         {
             url: api() + 'order/status/update',
             method: 'PUT',
             body: getData
-        }, getOrderResponse
+        }, saveOrderResponse
     );
     return data;
 };
 
+export const categoriesSynchroListService = async (categoriesSynchroRequest) => {
+    let data;
+
+    const categoriesSynchroResponse = (categoriesSynchroData) => {
+        data = categoriesSynchroData;
+    };
+
+    await categoriesSynchroRequest(
+        {
+            url: api() + 'category/import/list',
+            method: 'PUT'
+        }, categoriesSynchroResponse
+    );
+    return data;
+};

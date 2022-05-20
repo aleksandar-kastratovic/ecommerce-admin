@@ -12,7 +12,7 @@ import { remappingCategories } from "../helpers/functions";
 import noImage from "./../assets/images/no-image.png";
 import ConfirmModal from "./UI/ConfirmModal";
 
-const CategoryDetails = ({ categoryListData, saveCategory, removeCategory, categoryData, addCategory }) => {
+const CategoryDetails = ({ categoryListData, categorySynchroListData, saveCategory, removeCategory, categoryData, addCategory }) => {
 
     const {
         value: nameValue,
@@ -43,6 +43,10 @@ const CategoryDetails = ({ categoryListData, saveCategory, removeCategory, categ
     const [categoryFocus, setCategoryFocus] = useState(false);
     let [categoryList, setCategoryList] = useState([]);
     const [selectedScreenId, setSelectedScreenId] = useState(null);
+    let [categorySynchroList, setCategorySynchroList] = useState([]);
+    const [categorySynchroListCopy, setCategorySynchroListCopy] = useState([]);
+    const [categorySynchroFocus, setCategorySynchroFocus] = useState(false);
+    const [categorySynchroIds, setCategorySynchroIds] = useState([]);
 
     const [confirmWhat, confirm] = useState();
     const [dataForCrop, setDataForCrop] = useState(null);
@@ -67,12 +71,18 @@ const CategoryDetails = ({ categoryListData, saveCategory, removeCategory, categ
         if (parentIdValue > 0) {
             onChangeParentCategory({value : (parentIdValue) });
         }
+        setCategorySynchroIds([]);
+        setCategorySynchroList(JSON.parse(JSON.stringify(categorySynchroListCopy)));
         resetSeoKey();
         resetSeoDecription();
     };
 
     useEffect(() => {
         setSelectedScreenId(categoryData?.id ?? null);
+        setCategorySynchroIds(categoryData?.category_import_ids ? JSON.parse(JSON.stringify(categoryData.category_import_ids)) : []);
+        categoryData?.category_import_ids?.map(id => {
+            onChangeSynchroCategoryGet({value : id });
+        });
         nameChangeHandler({target: {value : (categoryData?.name ?? '') }});
         if (categoryData?.name) {
             nameBlurHandler(null);
@@ -85,9 +95,16 @@ const CategoryDetails = ({ categoryListData, saveCategory, removeCategory, categ
         }
         seoKeyChangeHandler({target: {value : (categoryData?.seo_word ?? '') }});
         seoDecriptionChangeHandler({target: {value : (categoryData?.seo_description ?? '') }});
-        setSelectedImage(categoryData?.image_url ?? null);
-        setSelectedIcon(categoryData?.icon_url ?? null);
+        setSelectedImage(categoryData?.image ?? null);
+        setSelectedIcon(categoryData?.icon ?? null);
     }, [categoryData]);
+
+    useEffect(() => {
+        let data = [...categorySynchroListData];
+        data = remappingCategories(data);
+        setCategorySynchroList(JSON.parse(JSON.stringify(data)));
+        setCategorySynchroListCopy(JSON.parse(JSON.stringify(data)));
+    }, [categorySynchroListData]);
 
     useEffect(() => {
         let data = [...categoryListData];
@@ -108,6 +125,7 @@ const CategoryDetails = ({ categoryListData, saveCategory, removeCategory, categ
             name: nameValue,
             parent_id: parentIdValue,
             seo_word: seoKeyValue,
+            category_import_ids: categorySynchroIds,
             seo_description: seoDecriptionValue,
             image: selectedImageFile,
             icon: selectedIconFile
@@ -136,6 +154,31 @@ const CategoryDetails = ({ categoryListData, saveCategory, removeCategory, categ
                 } else if (node.checked) {
                     node.checked = false;
                     returnData.removed = true;
+                }
+                node.children && stack.push(...node.children)
+            }
+        }
+        return null
+    }
+
+    const searchSynchro = (tree, value, key = 'id', reverse = false) => {
+        let returnData = {
+            node: {},
+            removed: false
+        }
+        for (const elem in tree) {
+            let stack = [ tree[elem] ]
+            while (stack.length) {
+                const node = stack[reverse ? 'pop' : 'shift']()
+                if (node[key] === value)  {
+                    if (node.checked) {
+                        node.checked = false;
+                        returnData.removed = true;
+                    } else {
+                        node.checked = true;
+                    }
+                    returnData.node = node; 
+                    return returnData
                 }
                 node.children && stack.push(...node.children)
             }
@@ -177,6 +220,47 @@ const CategoryDetails = ({ categoryListData, saveCategory, removeCategory, categ
 
     const onNodeBlur = (currentNode) => {
         setCategoryFocus(false);
+    }
+
+    const onChangeSynchroCategory = (currentNode) => {
+        if (categorySynchroList.length > 0) {
+            const nodeData = searchSynchro(categorySynchroList, currentNode?.value, 'value');
+            checkCategory(nodeData?.node.value);
+        }
+        
+        setCategoryFocus(false);
+    }
+
+    const onChangeSynchroCategoryGet = (currentNode) => {
+        if (categorySynchroList.length > 0) {
+            const nodeData = searchSynchro(categorySynchroList, currentNode?.value, 'value');
+        }
+        
+        setCategoryFocus(false);
+    }
+
+    const checkCategory = (id) => {
+        let idExsist = false;
+        for (var i = 0; i < categorySynchroIds.length; i++) {
+            if (categorySynchroIds[i] === id) {
+            let data = [...categorySynchroIds];
+            data.splice(i, 1);
+            setCategorySynchroIds(data);
+            idExsist = true;
+            }
+        }
+        if (!idExsist) {
+            setCategorySynchroIds([...categorySynchroIds, id]);
+        }
+        debugger
+    }
+
+    const onNodeSynchroFocus = (currentNode) => {
+        setCategorySynchroFocus(true);
+    }
+
+    const onNodeSynchroBlur = (currentNode) => {
+        setCategorySynchroFocus(false);
     }
 
     function readFile(file) {
@@ -295,6 +379,26 @@ const CategoryDetails = ({ categoryListData, saveCategory, removeCategory, categ
                                             onChange={onChangeParentCategory}
                                             onBlur={onNodeBlur}
                                             onFocus={onNodeFocus}
+                                            keepTreeOnSearch
+                                        />
+                                        <p className="error-text"></p>
+                                    </div>
+                                    <div className="col-12">
+                                        <p htmlFor="dropdownTreeSelectCategory" className="m-0 form-control-label required">ERP sinhronizacija</p>
+                                        <DropdownTreeSelect
+                                            className={
+                                                "form-control input-style form-control-lg select-style dropdown-tree-multiselect-style dropdown-tree-style "
+                                                + (categorySynchroIds.length > 0 ? ' dropdown-tree-selected' : '')
+                                                + (categorySynchroFocus ? ' dropdown-tree-focus' : '')
+                                            }
+                                            id="dropdownTreeSelectCategory"
+                                            data={categorySynchroList}
+                                            mode="hierarchical"
+                                            texts={{ placeholder: ' ' }}
+                                            onChange={onChangeSynchroCategory}
+                                            onBlur={onNodeSynchroBlur}
+                                            onFocus={onNodeSynchroFocus}
+                                            clearSearchOnChange={true}
                                             keepTreeOnSearch
                                         />
                                         <p className="error-text"></p>

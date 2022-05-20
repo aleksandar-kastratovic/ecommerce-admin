@@ -2005,6 +2005,20 @@ a[data-toggle="collapse"] {
         }
     }
 }
+.order-status-checkboxs {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-bottom: 0.3125rem;
+    .form-check {
+        padding-bottom: 0.5rem;
+        p {
+            color: var(--third-color);
+            font-size: .8125rem;
+            margin-bottom: unset;
+        }
+    }
+}
 .accordion-p-0 {
     padding: unset;
 }

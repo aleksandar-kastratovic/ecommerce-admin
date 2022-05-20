@@ -204,7 +204,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
             unitChangeHandler({target: {value : (productData?.unit ?? '') }});
             setCategoryIds(productData.category_ids ? JSON.parse(JSON.stringify(productData.category_ids)) : []);
             productData.category_ids.map(id => {
-                onChangeParentCategory({value : id });
+                onChangeParentCategoryGet({value : id });
             });
             setIsView(productData?.is_view ?? 1);
             skuChangeHandler({target: {value : (productData?.sku ?? '') }});
@@ -445,11 +445,13 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
         
         setCategoryFocus(false);
     }
-
-    const setCategories = (currentNode) => {
+    
+    const onChangeParentCategoryGet = (currentNode) => {
         if (categoryList.length > 0) {
-            search(categoryList, currentNode?.value, 'value');
+            const nodeData = search(categoryList, currentNode?.value, 'value');
         }
+        
+        setCategoryFocus(false);
     }
 
     const checkCategory = (id) => {
