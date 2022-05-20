@@ -252,7 +252,6 @@ const CategoryDetails = ({ categoryListData, categorySynchroListData, saveCatego
         if (!idExsist) {
             setCategorySynchroIds([...categorySynchroIds, id]);
         }
-        debugger
     }
 
     const onNodeSynchroFocus = (currentNode) => {

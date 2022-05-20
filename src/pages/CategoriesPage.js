@@ -120,7 +120,7 @@ const CategoriesPage = () => {
     }
 
     useEffect(() => {
-        if (+catId > 0 && categoryListLoaded, categorySynchroListLoaded) {
+        if (+catId > 0 && categoryListLoaded && categorySynchroListLoaded) {
             getCategory({id: +catId});
         }
     }, [categoryListLoaded, categorySynchroListLoaded]);

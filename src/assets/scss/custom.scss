@@ -442,6 +442,7 @@ a {
     .dropdown-content {
         width: 100%;
         padding: 4px 0;
+        z-index: 2;
         background-color: var(--forms-bg);
         color: var(--third-color);
         .node.tree {
