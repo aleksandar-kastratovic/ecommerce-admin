@@ -7,6 +7,7 @@ import Loader from "./UI/Loader";
 import noImage from "./../assets/images/no-image.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { currencyFormat } from "../helpers/functions";
 
 const ProductsList = ({ productSelected }) => {
 
@@ -56,6 +57,12 @@ const ProductsList = ({ productSelected }) => {
       );
     }
 
+    function priceFormatter(cell) {
+      return (
+        <span>{currencyFormat(cell) + " RSD"}</span>
+      );
+    }
+
     const rowEvents = {
       onClick: (e, row) => {
         productSelected(row.id);
@@ -86,7 +93,8 @@ const ProductsList = ({ productSelected }) => {
       },
       {
         dataField: "price",
-        text: "Cena"
+        text: "Cena",
+        formatter: priceFormatter
       },
       {
         dataField: "code",
