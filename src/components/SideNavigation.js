@@ -31,18 +31,24 @@ const SideNavigation = ({ activeTheme, userName }) => {
                 <p>{userName}</p>
             </div>
             <ul className="list-unstyled components mb-5 scroll-view">
-                <li>
+                {/* <li>
                     <NavLink to='/' className={navData => navData.isActive ? 'active' : '' }>
                         <FontAwesomeIcon icon={faHome} />
                         Početna
                     </NavLink>
-                </li>
+                </li> */}
                 <li className="sidebar-categories">
-                    <p>B2B Administracija</p>
+                    <p>Katalog</p>
+                </li>
+                <li className="sidebar-categories" style={ { order: 4 }}>
+                    <p>B2B</p>
+                </li>
+                <li className="sidebar-categories" style={ { order: 8 }}>
+                    <p>Podešavanja</p>
                 </li>
                 { (userScreens !== undefined) && ( userScreens.map(function(object) {
                     if (object.id === screensData.ORDER.id) {
-                        return  <li key={object.id} style={ { order: 1 }}>
+                        return  <li key={object.id} style={ { order: 5 }}>
                                     <NavLink to='/orders' className={navData => navData.isActive ? 'active' : '' }>
                                         <FontAwesomeIcon icon={faFileAlt} />
                                          Porudžbine
@@ -59,7 +65,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                     }
                     // TODO: Change screen
                     if (object.id === screensData.BANNR.id) {
-                        return  <li key={object.id} style={ { order: 3 }}>
+                        return  <li key={object.id} style={ { order: 13 }}>
                                     <NavLink to='/product-attributes' className={navData => navData.isActive ? 'active' : '' }>
                                         <FontAwesomeIcon icon={faLayerGroup} />
                                         Atributi proizvoda
@@ -67,7 +73,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                                 </li>
                     }
                     if (object.id === screensData.PRODU.id) {
-                        return  <li key={object.id} style={ { order: 4 }}>
+                        return  <li key={object.id} style={ { order: 1 }}>
                                     <NavLink to='/products' className={navData => navData.isActive ? 'active' : '' }>
                                         <FontAwesomeIcon icon={faArchive} />
                                         Proizvodi
@@ -75,7 +81,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                                 </li>
                     }
                     if (object.id === screensData.LOCAT.id) {
-                        return  <li key={object.id} style={ { order: 5 }}>
+                        return  <li key={object.id} style={ { order: 15 }}>
                                     <NavLink to='/locations' className={navData => navData.isActive ? 'active' : '' }>
                                         <FontAwesomeIcon icon={faSearchLocation} />
                                         Lokacije
@@ -83,7 +89,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                                 </li>
                     }
                     // if (object.id === screensData.ACTON.id) {
-                    //     return  <li key={object.id} style={ { order: 6 }}>
+                    //     return  <li key={object.id} style={ { order: 16 }}>
                     //                 <NavLink to='/actions' className={navData => navData.isActive ? 'active' : '' }>
                     //                     <FontAwesomeIcon icon={faPercentage} />
                     //                     Akcije
@@ -92,7 +98,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                     // }
                     // TODO: Change screen
                     // if (object.id === screensData.NEEWS.id) {
-                    //     return  <li key={object.id} style={ { order: 5 }}>
+                    //     return  <li key={object.id} style={ { order: 15 }}>
                     //                 <NavLink to='/partners' className={navData => navData.isActive ? 'active' : '' }>
                     //                     <FontAwesomeIcon icon={faBriefcase} />
                     //                     Partneri
@@ -109,7 +115,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                                 </li>
                     }
                     if (object.id === screensData.ACTON.id) {
-                        return  <li key={object.id} style={ { order: 8 }}>
+                        return  <li key={object.id} style={ { order: 6 }}>
                                     <NavLink to='/companies' className={navData => navData.isActive ? 'active' : '' }>
                                         <FontAwesomeIcon icon={faCity} />
                                         Kompanije
@@ -117,7 +123,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                                 </li>
                     }
                     if (object.id === screensData.USERS.id) {
-                        return  <li key={object.id} style={ { order: 9 }}>
+                        return  <li key={object.id} style={ { order: 19 }}>
                                     <NavLink to='/users' className={navData => navData.isActive ? 'active' : '' }>
                                         <FontAwesomeIcon icon={faUsers} />
                                         Korisnici
@@ -125,7 +131,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                                 </li>
                     }
                     if (object.id === screensData.ROLES.id) {
-                        return  <li key={object.id} style={ { order: 10 }}>
+                        return  <li key={object.id} style={ { order: 110 }}>
                                     <NavLink to='/roles' className={navData => navData.isActive ? 'active' : '' }>
                                         <FontAwesomeIcon icon={faPeopleArrows} />
                                         Uloge
@@ -134,7 +140,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                     }
 
                     if (object.id === screensData.SETNG.id) {
-                        return  <li key={object.id} style={ { order: 11 }}>
+                        return  <li key={object.id} style={ { order: 111 }}>
                                     <NavLink to='/settings' className={navData => navData.isActive ? 'active' : '' }>
                                         <FontAwesomeIcon icon={faCog} />
                                         Podešavanja
@@ -143,15 +149,15 @@ const SideNavigation = ({ activeTheme, userName }) => {
                     }
                 }))}
 
-                <li style={ { order: 12 }} className="sidebar-categories">
+                {/* <li style={ { order: 112 }} className="sidebar-categories">
                     <p>Ostalo</p>
                 </li>
-                <li style={ { order: 13 }}>
+                <li style={ { order: 113 }}>
                     <NavLink to='/notification' className={navData => navData.isActive ? 'active' : '' }>
                         <FontAwesomeIcon icon={faBell} />
                         Obaveštenja
                     </NavLink>
-                </li>
+                </li> */}
             </ul>
         </nav>
     );
