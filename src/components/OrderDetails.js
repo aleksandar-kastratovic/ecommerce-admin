@@ -135,8 +135,8 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                             <Accordion.Body className=" accordion-p-0">
                               <div className="row order-status-accordion accordion-p-0-body">
                                 <div className="col-12">
-                                  <div className="row">
-                                    <div className="col-6 order-status-select">
+                                  {/* <div className="row">
+                                    <div className="col-6 order-status-select"> */}
                                       <Input
                                         value={statusValue}
                                         isMulti={false}
@@ -148,7 +148,7 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                                         class="form-control input-style form-control-lg select-style"
                                         text="Status narudžbenice:"
                                       />
-                                    </div>
+                                    {/* </div>
                                     <div className="col-6 order-status-checkboxs">
                                       <Form.Group className="remember-checkbox remember-checkbox-details">
                                         <Form.Check
@@ -163,9 +163,9 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                                         />
                                       </Form.Group>
                                     </div>
-                                  </div>
+                                  </div> */}
                                 </div>
-                                <div className="col-12 order-status-textarea">
+                                {/* <div className="col-12 order-status-textarea">
                                   <Input
                                     // inputValue={descriptionValue}
                                     // onInputChange={descriptionChangeHandler}
@@ -176,17 +176,17 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                                     text="Poruka za kupca:"
                                     text_class="m-0"
                                   />
-                                </div>
+                                </div> */}
                               </div>
                               <div className="col-12 order-status-buttons">
-                                <button onClick={() => saveStatus()} className="btn-control save-btn">Pošaljite poruku</button>
-                                <button className="btn-control button-add">Istorija poruka</button>
+                                <button onClick={() => saveStatus()} className="btn-control save-btn">Sačuvajte</button>
+                                {/* <button className="btn-control button-add">Istorija poruka</button> */}
                               </div>
                             </Accordion.Body>
                         </Accordion.Item>
                       </Accordion>
                     </div>
-                    <div className="col-xl-6">
+                    {/* <div className="col-xl-6">
                       <Accordion defaultActiveKey="0">
                           <Accordion.Item eventKey="0">
                               <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faInfoCircle} />Napomene:</Accordion.Header>
@@ -231,7 +231,7 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                               </Accordion.Body>
                           </Accordion.Item>
                       </Accordion>
-                    </div>
+                    </div> */}
                 </div>
             </div>
             <div className="col-xl-12">

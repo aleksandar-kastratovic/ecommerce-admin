@@ -60,12 +60,12 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
             icon: faRandom,
             order: 6
         },
-        {
-            eventKey: 6,
-            title: "SEO optimizacija:",
-            icon: faBullhorn,
-            order: 7
-        }
+        // {
+        //     eventKey: 6,
+        //     title: "SEO optimizacija:",
+        //     icon: faBullhorn,
+        //     order: 7
+        // }
     ];
     
     const [tabsList, setTabsList] = useState(initTab);
@@ -1047,7 +1047,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                     </div>
                 )}
 
-                { activeTab === initTab[6].eventKey && (
+                { activeTab === initTab[6]?.eventKey && (
                     <div className="col-9 details-wrapper-spacing">
                         <div className="row">
                             <div className="col-xl-12 details-wrapper">

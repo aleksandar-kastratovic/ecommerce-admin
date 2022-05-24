@@ -559,7 +559,7 @@ let {
                   inputType="input"
                   type="text"
                   class={"form-control input-style form-control-lg " + (billingStateHasError ? 'invalid' : '')}
-                  text="Stanje naplate"
+                  text="Region naplate"
                   text_class="m-0 required"
                   inputErrorText="je obavezno!"
                 />
