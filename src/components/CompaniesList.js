@@ -77,7 +77,7 @@ const CompaniesList = ({ addTab }) => {
           data={companiesList}
           columns={columns}
           rowEvents={ rowEvents }
-          pagination={paginationFactory({ sizePerPage: 10 })}
+          pagination={paginationFactory({ sizePerPage: 10, paginationSize: 14 })}
           noDataIndication="Nema kompanija!"
         />
       </div>

@@ -134,7 +134,8 @@ function App() {
           {authCtx.isLoggedIn && (
             <>
               {/* <Route path='/' exact element={<Navigate replace to='/home' />} /> */}
-              <Route path='' element={<HomePage />} />
+              {/* <Route path='' element={<HomePage />} /> */}
+              <Route path='' exact element={<Navigate replace to='/orders' />} />
               { (authCtx.userScreens !== undefined) && ( authCtx.userScreens.map(function(object) {
                 if (object.id === screensData.ROLES.id) {
                   return  <Route key={object.id} path='/roles' element={<RolesPage routeData={screensData.ROLES} />} >

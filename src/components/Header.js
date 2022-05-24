@@ -34,13 +34,13 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
                 <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                    <div className="row w-100">
+                    <div className="row w-100 navbar-sections-container">
                         <div className="col-xl-1 no-padd-right align-self-center">
                             <div id="sidebarCollapse">
                                 <FontAwesomeIcon icon={faBars} onClick={openSidenav}/>
                             </div>
                         </div>
-                        <div className="col-xl-4 no-padd-left align-self-center navbar-search">
+                        <div className="col-xl-4 no-padd-left align-self-center navbar-search hidden-for-next-version">
                             <div className="rounded rounded-pill">
                                 <div className="input-group">
                                     <input type="search" placeholder="Pretražite administraciju..." className="form-control rounded-pill border-0" />
@@ -59,16 +59,16 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
                                         <div className="handle"></div>
                                     </span>
                                 </li>
-                                <li className="nav-item">
+                                <li className="nav-item hidden-for-next-version">
                                     <a className="nav-link" href="#"><FontAwesomeIcon icon={faEnvelope} /><span className="badge-circle-red"></span></a>
                                 </li>
-                                <li className="nav-item">
+                                <li className="nav-item hidden-for-next-version">
                                     <a className="nav-link" href="#"><FontAwesomeIcon icon={faBell} /><span className="badge-circle-green"></span></a>
                                 </li>
-                                <li className="nav-item">
+                                <li className="nav-item hidden-for-next-version">
                                     <a className="nav-link" href="#"><FontAwesomeIcon icon={faExternalLinkAlt} /></a>
                                 </li>
-                                <li className="nav-item">
+                                <li className="nav-item hidden-for-next-version">
                                     <a className="nav-link" href="#"><FontAwesomeIcon icon={faWindowMaximize} /></a>
                                 </li>
                                 {/* <li className="nav-item user-icon">
@@ -80,7 +80,6 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>
-                                        <Dropdown.Item href="#/action-1">Profil</Dropdown.Item>
                                         <Dropdown.Item href="#" onClick={(e) => { logoutHandler(e) }}>Odjavite se</Dropdown.Item>
                                     </Dropdown.Menu>
                                 </Dropdown>
