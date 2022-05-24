@@ -62,6 +62,7 @@ const ProductsPage = () => {
       additional_name: saveData.additional_name,
       code: saveData.code,
       unit: saveData.unit,
+      is_promoted: saveData.is_promoted,
       is_view: saveData.is_view,
       description: saveData.description,
       category_ids: saveData.category_ids,
@@ -77,7 +78,14 @@ const ProductsPage = () => {
       addProduct();
       if (saveData.images) {
         saveData.images.append("product_id", data.id);
-        saveData.images.append("remove_ids[]", saveData.removeImgIds);
+        for (let item of saveData.removeImgIds) {
+          saveData.images.append("remove_ids[]", item);
+        }
+        if (saveData.main_image === null) {
+          saveData.images.append("main_image", '');
+        } else if (saveData.main_image) {
+          saveData.images.append("main_image", saveData.main_image.file, saveData.main_image.name);
+        }
         saveProductImageDetailsService(saveData.images);
       } else {
         setProductDetailsData(data);

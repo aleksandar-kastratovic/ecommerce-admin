@@ -1,7 +1,7 @@
 import { faBullhorn, faImages, faFileSignature, faLayerGroup, faMoneyBill, faRandom, faTimes, faBoxes, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { faSave, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Form } from "react-bootstrap";
 import Input from "./UI/Input";
 import useInput from "../hooks/use-input";
 import DropdownTreeSelect from "react-dropdown-tree-select";
@@ -138,6 +138,8 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
     const [locationsLoaded, setLocationsLoaded] = useState(false);
     const [productId, setProductId] = useState(null);
     const [categoryIds, setCategoryIds] = useState([]);
+    const [mainImg, setMainImg] = useState(null);
+    const [mainImgFile, setMainImgFile] = useState(undefined);
     const [gallery, setGallery] = useState([]);
     const [galleryIds, setGalleryIds] = useState([]);
     const [galleryFile, setGalleryFile] = useState([]);
@@ -156,6 +158,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
     const [locationsQuantityList, setLocationsQuantityList] = useState({location_id: null, quantity: 0});
     const [selectedInventoryOptions, setSelectedInventoryOptions] = useState(inventoryOptions[1].id ?? null);
     const [selectedVariationForEdit, setSelectedVariationForEdit] = useState({});
+    const [isPromoted, setIsPromoted] = useState(0);
 
     const [selectedProductAttributes, setSelectedProductAttributes] = useState([optionInit]);
 
@@ -206,6 +209,8 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
             productData.category_ids.map(id => {
                 onChangeParentCategoryGet({value : id });
             });
+            setIsPromoted(productData?.is_promoted ?? 0);
+            setMainImg(productData?.main_image ?? null);
             setIsView(productData?.is_view ?? 1);
             skuChangeHandler({target: {value : (productData?.sku ?? '') }});
             barcodeChangeHandler({target: {value : (productData?.barcode ?? '') }});
@@ -273,6 +278,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
         setCategoryIds([]);
         setCategoryList(JSON.parse(JSON.stringify(categoryListCopy)));
         resetName();
+        setIsPromoted(0);
         resetAdditionalName();
         resetDescription();
         resetCode();
@@ -291,6 +297,8 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
         setIsView(1);
         setLocationsQuantityList({location_id: null, quantity: 0});
         setLocationsMultiQuantityList(JSON.parse(JSON.stringify(locationsMultiQuantityInitList)));
+        setMainImg(null);
+        setMainImgFile(undefined);
     };
 
     const createLocationsFromGet = (locations) => {
@@ -364,7 +372,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
     };
 
     const addImg = async (img) => {
-        setGalleryFile([...galleryFile, img]);
+        setMainImgFile(img);
         const imageDataUrl = await readFile(img);
         setDataForCrop(
             {
@@ -379,13 +387,15 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
 
     const removeImg = (index) => {
         let data = [...gallery];
+        let dataFile = [...galleryFile];
+        if ((index - (gallery.length - galleryFile.length)) > -1) {
+            dataFile.splice(index - (gallery.length - galleryFile.length), 1);
+            setGalleryFile(dataFile);
+        }
         data.splice(index, 1);
         setGallery(data);
-        let dataFile = [...galleryFile];
-        dataFile.splice(index, 1);
-        setGalleryFile(dataFile);
         let dataIds = [...galleryIds];
-        if (galleryIds[index].image_url == gallery[index]) {
+        if (galleryIds[index]?.image_url == gallery[index]) {
             setGalleryRemoveIds([...galleryRemoveIds, galleryIds[index].id]);
             dataIds.splice(index, 1);
             setGalleryIds(dataIds);
@@ -401,14 +411,30 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
     };
 
     const setCropedImg = (imgData) => {
-        setGallery([...gallery, imgData.img]);
+        setMainImg(imgData.img);
         const iconFile = {
             file: imgData.imgFile,
-            name: galleryFile[galleryFile.length -1].name
+            name: mainImgFile.name
         }
+        setMainImgFile(iconFile);
+        setDataForCrop(null);
+    }
+
+    const setMulitiImg = async(imgData) => {
+        // setGallery([...gallery, imgData.img]);
+        // const iconFile = {
+        //     file: imgData.imgFile,
+        //     name: galleryFile[galleryFile.length -1].name
+        // }
         let data = [...galleryFile];
-        data[data.length - 1] = iconFile;
+        let dataGallery = [...gallery];
+        for (let item of imgData) {
+            const imageDataUrl = await readFile(item);
+            data.push(item);
+            dataGallery.push(imageDataUrl);
+        }
         setGalleryFile(data);
+        setGallery(dataGallery);
         setDataForCrop(null);
     };
 
@@ -618,7 +644,9 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
             unit: unitValue,
             is_view: isView,
             category_ids: categoryIds,
+            is_promoted: isPromoted,
             images: prepareImages(),
+            main_image: mainImgFile,
             removeImgIds: galleryRemoveIds,
             options: optionsForSave,
             variants: variantsForSave
@@ -630,7 +658,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
         if (galleryFile.length > 0) {
             dataForSave = new FormData();
             galleryFile.map((item, index) => {
-                dataForSave.append("images[]", item.file, item.name);   
+                dataForSave.append("images[]", item, item.name);   
             });
         } else {
             dataForSave = new FormData();
@@ -690,6 +718,8 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                 barcode: barcodeValue,
                 locations: prepareLocations(),
                 images: prepareImages(),
+                main_image: mainImgFile,
+                is_promoted: isPromoted,
                 removeImgIds: galleryRemoveIds
             });
         }
@@ -965,6 +995,14 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                                     text="Jedinica mere"
                                     text_class="m-0"
                                 />
+                                <Form.Group className="remember-checkbox remember-checkbox-details">
+                                    <Form.Check
+                                        type="checkbox"
+                                        label="Istaknut proizvod"
+                                        checked={isPromoted}
+                                        onChange={() => setIsPromoted(isPromoted ? 0 : 1)}
+                                    />
+                                </Form.Group>
                             </div>
                         </div>
                     </div>
@@ -1074,40 +1112,70 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                 { activeTab === initTab[1].eventKey && (
                     <div className="col-9 details-wrapper-spacing">
                         <div className="row">
-                            <div className="col-xl-12 details-wrapper">
-                                <div className="galley-container">
-                                    {gallery && ( gallery.map(function(object, index) {
-                                        return (
-                                            <div className="selected-img-container" key={index}>
-                                                <img alt={object} src={object} />
-                                                <button onClick={()=> { removeImg(index) }}><FontAwesomeIcon icon={faTimes} /></button>
+                            <div className="col-xl-12 details-wrapper row">
+                                <div className="col-xl-4">
+                                    <div className="gallery-wrapper">
+                                        {mainImg && (
+                                            <div className="selected-img-container">
+                                                <img alt={mainImg} src={mainImg} />
+                                                <button onClick={()=> { setMainImg(null); setMainImgFile(null); }}><FontAwesomeIcon icon={faTimes} /></button>
                                             </div>
-                                        );
-                                    }))}
-                                    
-                                    <div className={"no-img-container " + (gallery?.length > 0 ? "add-more-img-container" : "")}>
-                                        <p className="no-img-text">Click here to add image.</p>
-                                        <div className="add-more-img-wrapper">
-                                            <img src={noImage} alt={noImage} />
+                                        )}
+                                        
+                                        {!mainImg && (
+                                        <div className={"no-img-container " + (gallery?.length > 0 ? "add-more-img-container" : "")}>
+                                            <p className="no-img-text">Click here to add main image.</p>
+                                            <div className="add-more-img-wrapper">
+                                                <img src={noImage} alt={noImage} />
+                                            </div>
+                                            <input
+                                                className="img-input"
+                                                type="file"
+                                                name="myImage"
+                                                accept="image/*"
+                                                onChange={(event) => addImg(event.target.files[0])}
+                                                onClick={e => (e.target.value = null)}
+                                            />
                                         </div>
-                                        <input
-                                            className="img-input"
-                                            type="file"
-                                            // multiple
-                                            name="myImage"
-                                            accept="image/*"
-                                            onChange={(event) => addImg(event.target.files[0])}
-                                            onClick={e => (e.target.value = null)}
+                                        )}
+
+                                        <ImageCrop
+                                            openModal={show}
+                                            handleClose={() => {setShow(false)}}
+                                            imageCroped={(imgData) => { setCropedImg(imgData);}}
+                                            imgForCrooping={dataForCrop}
                                         />
                                     </div>
-
-                                    <ImageCrop
-                                        openModal={show}
-                                        handleClose={() => {setShow(false)}}
-                                        imageCroped={(imgData) => { setCropedImg(imgData);}}
-                                        imgForCrooping={dataForCrop}
-                                    />
-
+                                </div>
+                                <div className="col-xl-8">
+                                    <div className="gallery-wrapper">
+                                        <div className="galley-container">
+                                            {gallery && ( gallery.map(function(object, index) {
+                                                return (
+                                                    <div className="selected-img-container" key={index}>
+                                                        <img alt={object} src={object} />
+                                                        <button onClick={()=> { removeImg(index) }}><FontAwesomeIcon icon={faTimes} /></button>
+                                                    </div>
+                                                );
+                                            }))}
+                                        
+                                            <div className={"no-img-container " + (gallery?.length > 0 ? "add-more-img-container" : "")}>
+                                                <p className="no-img-text">Click here to add images.</p>
+                                                <div className="add-more-img-wrapper">
+                                                    <img src={noImage} alt={noImage} />
+                                                </div>
+                                                <input
+                                                    className="img-input"
+                                                    type="file"
+                                                    multiple
+                                                    name="myImage"
+                                                    accept="image/*"
+                                                    onChange={(event) => setMulitiImg(event.target.files)}
+                                                    onClick={e => (e.target.value = null)}
+                                                />
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
