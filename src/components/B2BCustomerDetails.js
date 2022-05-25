@@ -64,6 +64,24 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
     reset: resetEmail
   } = useInput((value) => value.trim() !== '');
 
+  const {
+    value: passwordValue,
+    isValid: passwordIsValid,
+    hasError: passwordHasError,
+    valueChangeHandler: passwordChangeHandler,
+    inputBlurHandler: passwordBlurHandler,
+    reset: resetPassword
+  } = useInput((value) => value.length > 5 || value.trim() === '');
+
+  const {
+    value: passwordConfirmValue,
+    isValid: passwordConfirmIsValid,
+    hasError: passwordConfirmHasError,
+    valueChangeHandler: passwordConfirmChangeHandler,
+    inputBlurHandler: passwordConfirmBlurHandler,
+    reset: resetPasswordConfirm
+  } = useInput((value) => value === passwordValue);
+
   useEffect(() => {
     firstNameChangeHandler({target: {value : (customerData?.first_name ?? '') }});
     lastNameChangeHandler({target: {value : (customerData?.last_name ?? '') }});
@@ -77,6 +95,7 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
   const submitHandler = () => {
     if (
       !firstNameIsValid || !lastNameIsValid || !companyIsValid || !emailIsValid || !phoneIsValid
+      || !passwordIsValid || !passwordConfirmIsValid
     ) {
       toast.warning("Forma nije validna!");
       return;
@@ -89,6 +108,8 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
       company_id: companyValue,
       email: emailValue,
       phone: phoneValue,
+      password: passwordValue,
+      password_confirmation: passwordConfirmValue,
       mobile_phone: mobilePhoneValue
     });
 
@@ -102,6 +123,8 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
     resetEmail();
     resetPhone();
     resetMobilePhone();
+    resetPassword();
+    resetPasswordConfirm();
     setSelectedCustomerId(null);
   }
 
@@ -120,6 +143,7 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
         <button
           disabled={
             !firstNameIsValid || !lastNameIsValid || !companyIsValid || !emailIsValid || !phoneIsValid
+            || !passwordIsValid || !passwordConfirmIsValid
           }
           onClick={submitHandler}
           type="button"
@@ -230,6 +254,36 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
                       type="number"
                       class="form-control input-style form-control-lg "
                       text="Mobilni telefon"
+                    />
+                  </div>
+                  <div className="col-6">
+                    <Input
+                      inputValue={passwordValue}
+                      onInputChange={passwordChangeHandler}
+                      onInputBlur={passwordBlurHandler}
+                      hasInputError={passwordHasError}
+                      disabled={false}
+                      inputType="input"
+                      type="password"
+                      class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}
+                      text="Lozinka"
+                      text_class="m-0"
+                      inputErrorText="mora da ima minimalno 6 karaktera!"
+                    />
+                  </div>
+                  <div className="col-6">
+                    <Input
+                      inputValue={passwordConfirmValue}
+                      onInputChange={passwordConfirmChangeHandler}
+                      onInputBlur={passwordConfirmBlurHandler}
+                      hasInputError={passwordConfirmHasError}
+                      disabled={false}
+                      inputType="input"
+                      type="password"
+                      class={"form-control input-style form-control-lg " + (passwordConfirmHasError ? 'invalid' : '')}
+                      text="Potvrdite lozinku"
+                      text_class="m-0"
+                      inputErrorText="mora da se poklapa sa lozinkom!"
                     />
                   </div>
                 </div>
