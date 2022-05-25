@@ -48,18 +48,18 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
             icon: faBoxes,
             order: 4
         },
-        {
-            eventKey: 4,
-            title: "Opcije:",
-            icon: faLayerGroup,
-            order: 5
-        },
-        {
-            eventKey: 5,
-            title: "Varijacije:",
-            icon: faRandom,
-            order: 6
-        },
+        // {
+        //     eventKey: 4,
+        //     title: "Opcije:",
+        //     icon: faLayerGroup,
+        //     order: 5
+        // },
+        // {
+        //     eventKey: 5,
+        //     title: "Varijacije:",
+        //     icon: faRandom,
+        //     order: 6
+        // },
         // {
         //     eventKey: 6,
         //     title: "SEO optimizacija:",
@@ -188,13 +188,13 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
 
     useEffect(() => {
 
-        const setLocations = async () => {
-            const data = await locationsListService(productAttributeListRequest);
-            createLocationInit(data);
+        // const setLocations = async () => {
+        //     const data = await locationsListService(productAttributeListRequest);
+        //     createLocationInit(data);
             setLocationsLoaded(true);
-        };
+        // };
     
-        setLocations();
+        // setLocations();
     }, [productAttributeListRequest]);
 
     useEffect(() => {
@@ -1186,7 +1186,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                     <div className="col-9 details-wrapper-spacing">
                         <div className="row">
                             <div className="col-xl-12 details-wrapper">
-                                <Input
+                                {/* <Input
                                     value={selectedInventoryOptions}
                                     isMulti={false}
                                     handleChange={(ev) => setSelectedInventoryOptions(ev.id)}
@@ -1196,7 +1196,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                                     type="text"
                                     class={"form-control input-style form-control-lg select-style form-control-4"}
                                     text="Tip skladištenja"
-                                />
+                                /> */}
                                 <div className="row row-m0">
                                     <div className="col-6 ps-0">
                                         <Input
@@ -1221,7 +1221,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                                         />
                                     </div>
                                 </div>
-                                <hr className="form-fields-separation"></hr>
+                                {/* <hr className="form-fields-separation"></hr>
                                 <div className="row row-m0">
                                     <div className="col-6 ps-0">
                                         <p className="m-0 form-control-label">Naziv lokacije</p>
@@ -1269,7 +1269,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                                         </div>
                                         <hr className="form-field-separation"></hr>
                                     </div>
-                                )}
+                                )} */}
                             </div>
                         </div>
                     </div>
@@ -1287,7 +1287,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                     </div>
                 )}
 
-                { activeTab === initTab[4].eventKey && (
+                { activeTab === initTab[4]?.eventKey && (
                     <div className="col-9 details-wrapper-spacing">
                         <div className="row">
                             <div className="col-xl-12 details-wrapper">
@@ -1337,7 +1337,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                     </div>
                 )}
 
-                { activeTab === initTab[5].eventKey && variationsList.length > 0 && (
+                { activeTab === initTab[5]?.eventKey && variationsList.length > 0 && (
                     <div className="col-9 details-wrapper-spacing">
                         <div className="row">
                             <div className="col-xl-12 details-wrapper">
@@ -1389,7 +1389,7 @@ const ProductDetails = ({ saveProduct, productData, addProduct, removeProduct })
                         </div>
                     </div>
                 )}
-                { activeTab === initTab[5].eventKey && variationsList.length < 1 && (
+                { activeTab === initTab[5]?.eventKey && variationsList.length < 1 && (
                     <div className="col-9 details-wrapper-spacing">
                         <div className="row">
                             <div className="col-xl-12 details-wrapper">

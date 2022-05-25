@@ -216,7 +216,7 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
                       inputType="input"
                       type="number"
                       class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
-                      text="Fiksni telefon"
+                      text="Telefon"
                       text_class="m-0 required"
                       inputErrorText="je obavezan!"
                     />

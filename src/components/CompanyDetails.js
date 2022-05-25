@@ -31,12 +31,12 @@ const CompanyDetails = ({ companyData, saveCompany, removeCompany }) => {
       icon: faTruck,
       order: 3
     },
-    {
-      eventKey: 3,
-      title: "Podaci o plaćanju:",
-      icon: faFileInvoiceDollar,
-      order: 4
-    }
+    // {
+    //   eventKey: 3,
+    //   title: "Podaci o plaćanju:",
+    //   icon: faFileInvoiceDollar,
+    //   order: 4
+    // }
   ];
 
   const [tabsList, setTabsList] = useState(initTab);
@@ -105,109 +105,103 @@ let {
 
   let {
     value: dayPeymentValue,
-    isValid: dayPeymentIsValid,
-    hasError: dayPeymentHasError,
     valueChangeHandler: dayPeymentChangeHandler,
-    inputBlurHandler: dayPeymentBlurHandler,
     reset: resetDayPeyment
   } = useInput((value) => value.trim() !== '');
 
   let {
     value: creditLimitValue,
-    isValid: creditLimitIsValid,
-    hasError: creditLimitHasError,
     valueChangeHandler: creditLimitChangeHandler,
-    inputBlurHandler: creditLimitBlurHandler,
     reset: resetCreditLimit
   } = useInput((value) => value > 0);
 
   let {
     value: billingAddressValue,
-    isValid: billingAddressIsValid,
-    hasError: billingAddressHasError,
+    // isValid: billingAddressIsValid,
+    // hasError: billingAddressHasError,
     valueChangeHandler: billingAddressChangeHandler,
-    inputBlurHandler: billingAddressBlurHandler,
+    // inputBlurHandler: billingAddressBlurHandler,
     reset: resetBillingAddress
   } = useInput((value) => value.trim() !== '');
 
   let {
     value: billingCityValue,
-    isValid: billingCityIsValid,
-    hasError: billingCityHasError,
+    // isValid: billingCityIsValid,
+    // hasError: billingCityHasError,
     valueChangeHandler: billingCityChangeHandler,
-    inputBlurHandler: billingCityBlurHandler,
+    // inputBlurHandler: billingCityBlurHandler,
     reset: resetBillingCity
   } = useInput((value) => value.trim() !== '');
 
   let {
     value: billingStateValue,
-    isValid: billingStateIsValid,
-    hasError: billingStateHasError,
+    // isValid: billingStateIsValid,
+    // hasError: billingStateHasError,
     valueChangeHandler: billingStateChangeHandler,
-    inputBlurHandler: billingStateBlurHandler,
+    // inputBlurHandler: billingStateBlurHandler,
     reset: resetBillingState
   } = useInput((value) => value.trim() !== '');
 
   let {
     value: billingZipValue,
-    isValid: billingZipIsValid,
-    hasError: billingZipHasError,
+    // isValid: billingZipIsValid,
+    // hasError: billingZipHasError,
     valueChangeHandler: billingZipChangeHandler,
-    inputBlurHandler: billingZipBlurHandler,
+    // inputBlurHandler: billingZipBlurHandler,
     reset: resetBillingZip
   } = useInput((value) => value.trim() !== '');
 
   let {
     value: billingCountryValue,
-    isValid: billingCountryIsValid,
-    hasError: billingCountryHasError,
+    // isValid: billingCountryIsValid,
+    // hasError: billingCountryHasError,
     valueChangeHandler: billingCountryChangeHandler,
-    inputBlurHandler: billingCountryBlurHandler,
+    // inputBlurHandler: billingCountryBlurHandler,
     reset: resetBillingCountry
   } = useInput((value) => value.trim() !== '');
 
   let {
     value: shippingAddressValue,
-    isValid: shippingAddressIsValid,
-    hasError: shippingAddressHasError,
+    // isValid: shippingAddressIsValid,
+    // hasError: shippingAddressHasError,
     valueChangeHandler: shippingAddressChangeHandler,
-    inputBlurHandler: shippingAddressBlurHandler,
+    // inputBlurHandler: shippingAddressBlurHandler,
     reset: resetShippingAddress
   } = useInput((value) => value.trim() !== '');
 
   let {
     value: shippingCityValue,
-    isValid: shippingCityIsValid,
-    hasError: shippingCityHasError,
+    // isValid: shippingCityIsValid,
+    // hasError: shippingCityHasError,
     valueChangeHandler: shippingCityChangeHandler,
-    inputBlurHandler: shippingCityBlurHandler,
+    // inputBlurHandler: shippingCityBlurHandler,
     reset: resetShippingCity
   } = useInput((value) => value.trim() !== '');
 
   let {
     value: shippingStateValue,
-    isValid: shippingStateIsValid,
-    hasError: shippingStateHasError,
+    // isValid: shippingStateIsValid,
+    // hasError: shippingStateHasError,
     valueChangeHandler: shippingStateChangeHandler,
-    inputBlurHandler: shippingStateBlurHandler,
+    // inputBlurHandler: shippingStateBlurHandler,
     reset: resetShippingState
   } = useInput((value) => value.trim() !== '');
 
   let {
     value: shippingZipValue,
-    isValid: shippingZipIsValid,
-    hasError: shippingZipHasError,
+    // isValid: shippingZipIsValid,
+    // hasError: shippingZipHasError,
     valueChangeHandler: shippingZipChangeHandler,
-    inputBlurHandler: shippingZipBlurHandler,
+    // inputBlurHandler: shippingZipBlurHandler,
     reset: resetShippingZip
   } = useInput((value) => value.trim() !== '');
 
   let {
     value: shippingCountryValue,
-    isValid: shippingCountryIsValid,
-    hasError: shippingCountryHasError,
+    // isValid: shippingCountryIsValid,
+    // hasError: shippingCountryHasError,
     valueChangeHandler: shippingCountryChangeHandler,
-    inputBlurHandler: shippingCountryBlurHandler,
+    // inputBlurHandler: shippingCountryBlurHandler,
     reset: resetShippingCountry
   } = useInput((value) => value.trim() !== '');
 
@@ -278,11 +272,7 @@ let {
 
   const submitHandler = () => {
     if (
-      !companyIsValid || !tinIsValid || !shippingStateIsValid || !shippingZipIsValid
-      || !registryNumberIsValid || !emailIsValid || !phoneIsValid || !dayPeymentIsValid
-      || !creditLimitIsValid || !billingAddressIsValid || !billingCityIsValid
-      || !billingCountryIsValid || !billingStateIsValid || !billingZipIsValid
-      || !shippingAddressIsValid || !shippingCityIsValid|| !shippingCountryIsValid
+      !companyIsValid || !tinIsValid || !registryNumberIsValid || !emailIsValid || !phoneIsValid
     ) {
       toast.warning("Forma nije validna!");
       return;
@@ -373,11 +363,7 @@ let {
       <div className="btn-group mb-4" role="group" aria-label="Basic example">
         <button
           disabled={
-            !companyIsValid || !tinIsValid || !shippingStateIsValid || !shippingZipIsValid
-            || !registryNumberIsValid || !emailIsValid || !phoneIsValid || !dayPeymentIsValid
-            || !creditLimitIsValid || !billingAddressIsValid || !billingCityIsValid
-            || !billingCountryIsValid || !billingStateIsValid || !billingZipIsValid
-            || !shippingAddressIsValid || !shippingCityIsValid|| !shippingCountryIsValid
+            !companyIsValid || !tinIsValid || !registryNumberIsValid || !emailIsValid || !phoneIsValid
           }
           onClick={submitHandler}
           type="button"
@@ -467,8 +453,8 @@ let {
                   disabled={false}
                   inputType="input"
                   type="number"
-                  class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
-                  text="Fiksni telefon"
+                  class={"form-control input-style form-control-lg " + (phoneHasError ? 'invalid' : '')}
+                  text="Telefon"
                   text_class="m-0 required"
                   inputErrorText="je obavezan!"
                 />
@@ -493,28 +479,22 @@ let {
                 <Input
                   inputValue={dayPeymentValue}
                   onInputChange={dayPeymentChangeHandler}
-                  onInputBlur={dayPeymentBlurHandler}
-                  hasInputError={dayPeymentHasError}
                   disabled={false}
                   inputType="input"
                   type="number"
-                  class={"form-control input-style form-control-lg " + (dayPeymentHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg"}
                   text="Broj dana za plaćanje"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezan!"
+                  text_class="m-0"
                 />
                 <Input
                   inputValue={creditLimitValue}
                   onInputChange={creditLimitChangeHandler}
-                  onInputBlur={creditLimitBlurHandler}
-                  hasInputError={creditLimitHasError}
                   disabled={false}
                   inputType="input"
                   type="number"
-                  class={"form-control input-style form-control-lg " + (creditLimitHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg"}
                   text="Kreditni limit"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezan!"
+                  text_class="m-0"
                 />
               </div>
             </div>
@@ -527,67 +507,52 @@ let {
                 <Input
                   inputValue={billingAddressValue}
                   onInputChange={billingAddressChangeHandler}
-                  onInputBlur={billingAddressBlurHandler}
-                  hasInputError={billingAddressHasError}
                   disabled={false}
                   inputType="input"
                   type="text"
-                  class={"form-control input-style form-control-lg " + (billingAddressHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg"}
                   text="Adresa naplate"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezna!"
+                  text_class="m-0"
                 />
                 <Input
                   inputValue={billingCityValue}
                   onInputChange={billingCityChangeHandler}
-                  onInputBlur={billingCityBlurHandler}
-                  hasInputError={billingCityHasError}
                   disabled={false}
                   inputType="input"
                   type="text"
-                  class={"form-control input-style form-control-lg " + (billingCityHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg"}
                   text="Grad naplate"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezan!"
+                  text_class="m-0"
                 />
                 <Input
                   inputValue={billingStateValue}
                   onInputChange={billingStateChangeHandler}
-                  onInputBlur={billingStateBlurHandler}
-                  hasInputError={billingStateHasError}
                   disabled={false}
                   inputType="input"
                   type="text"
-                  class={"form-control input-style form-control-lg " + (billingStateHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg "}
                   text="Region naplate"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezno!"
+                  text_class="m-0"
                 />
                 <Input
                   inputValue={billingZipValue}
                   onInputChange={billingZipChangeHandler}
-                  onInputBlur={billingZipBlurHandler}
-                  hasInputError={billingZipHasError}
                   disabled={false}
                   inputType="input"
                   type="number"
-                  class={"form-control input-style form-control-lg " + (billingZipHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg"}
                   text="ZIP naplate"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezan!"
+                  text_class="m-0"
                 />
                 <Input
                   inputValue={billingCountryValue}
                   onInputChange={billingCountryChangeHandler}
-                  onInputBlur={billingCountryBlurHandler}
-                  hasInputError={billingCountryHasError}
                   disabled={false}
                   inputType="input"
                   type="text"
-                  class={"form-control input-style form-control-lg " + (billingCountryHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg"}
                   text="Zemlja naplate"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezna!"
+                  text_class="m-0"
                 />
               </div>
             </div>
@@ -600,73 +565,58 @@ let {
                 <Input
                   inputValue={shippingAddressValue}
                   onInputChange={shippingAddressChangeHandler}
-                  onInputBlur={shippingAddressBlurHandler}
-                  hasInputError={shippingAddressHasError}
                   disabled={false}
                   inputType="input"
                   type="text"
-                  class={"form-control input-style form-control-lg " + (shippingAddressHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg"}
                   text="Adresa dostave"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezna!"
+                  text_class="m-0"
                 />
                 <Input
                   inputValue={shippingCityValue}
                   onInputChange={shippingCityChangeHandler}
-                  onInputBlur={shippingCityBlurHandler}
-                  hasInputError={shippingCityHasError}
                   disabled={false}
                   inputType="input"
                   type="text"
-                  class={"form-control input-style form-control-lg " + (shippingCityHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg"}
                   text="Grad dostave"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezan!"
+                  text_class="m-0"
                 />
                 <Input
                   inputValue={shippingStateValue}
                   onInputChange={shippingStateChangeHandler}
-                  onInputBlur={shippingStateBlurHandler}
-                  hasInputError={shippingStateHasError}
                   disabled={false}
                   inputType="input"
                   type="text"
-                  class={"form-control input-style form-control-lg " + (shippingStateHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg"}
                   text="Region dostave"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezan!"
+                  text_class="m-0"
                 />
                 <Input
                   inputValue={shippingZipValue}
                   onInputChange={shippingZipChangeHandler}
-                  onInputBlur={shippingZipBlurHandler}
-                  hasInputError={shippingZipHasError}
                   disabled={false}
                   inputType="input"
                   type="number"
-                  class={"form-control input-style form-control-lg " + (shippingZipHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg"}
                   text="ZIP dostave"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezan!"
+                  text_class="m-0"
                 />
                 <Input
                   inputValue={shippingCountryValue}
                   onInputChange={shippingCountryChangeHandler}
-                  onInputBlur={shippingCountryBlurHandler}
-                  hasInputError={shippingCountryHasError}
                   disabled={false}
                   inputType="input"
                   type="text"
-                  class={"form-control input-style form-control-lg " + (shippingCountryHasError ? 'invalid' : '')}
+                  class={"form-control input-style form-control-lg"}
                   text="Zemlja dostave"
-                  text_class="m-0 required"
-                  inputErrorText="je obavezna!"
+                  text_class="m-0"
                 />
               </div>
             </div>
           </div>
         )}
-        { activeTab === initTab[3].eventKey && (
+        { activeTab === initTab[3]?.eventKey && (
           <div className="col-9 details-wrapper-spacing">
             <div className="row">
               <div className="col-xl-12 details-wrapper">
