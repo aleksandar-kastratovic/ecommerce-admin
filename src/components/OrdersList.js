@@ -62,7 +62,7 @@ const OrdersList = ({ addTab }) => {
       formatter: priceFormatter
     },
     {
-      dataField: "status",
+      dataField: "status_name",
       text: "Status",
     },
     {
