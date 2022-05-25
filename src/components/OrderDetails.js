@@ -287,19 +287,19 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                                                 <p>{object.quantity}</p>
                                               </div>
                                               <div className="col-1">
-                                                <p>{currencyFormat(object.price_with_tax)}</p>
+                                                <p>{currencyFormat(object.price)}</p>
                                               </div>
                                               <div className="col-1">
-                                                <p>???</p>
+                                                <p>{object.vat}</p>
                                               </div>
                                               <div className="col-1">
-                                                <p>???</p>
+                                                <p>{currencyFormat(object.vat_amount)}</p>
                                               </div>
                                               <div className="col-1">
-                                                <p>???</p>
+                                                <p>{object.rebate}</p>
                                               </div>
                                               <div className="col-1">
-                                                <p>???</p>
+                                                <p>{currencyFormat(object.rebate_amount)}</p>
                                               </div>
                                               <div className="col-1">
                                                 <p>{currencyFormat(object.total_price)}</p>
@@ -334,9 +334,9 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                                             <hr/>
                                             <p>Vreme kreiranja:<span>{orderData.order_date}</span></p>
                                             <p>Iznos:<span>{currencyFormat(orderData.base_total_price) + " RSD"}</span></p>
-                                            <p>Rabat:<span>{"- " + orderData.rebate + "%"}</span></p>
+                                            {/* <p>Rabat:<span>{"- " + orderData.rebate + "%"}</span></p> */}
                                             <p>Iznos rabata:<span>- {currencyFormat(orderData.rebate_amount) + " RSD"}</span></p>
-                                            <p>Osnovica:<span>{currencyFormat(orderData.price_discounted) + " RSD"}</span></p>
+                                            {/* <p>Osnovica:<span>{currencyFormat(orderData.price_discounted) + " RSD"}</span></p> */}
                                             <p>PDV:<span>{currencyFormat(orderData.vat_amount) + " RSD"}</span></p>
                                             {/* <p>Troškovi dostave:<span>???</span></p> */}
                                             <hr/>
