@@ -129,6 +129,7 @@ function App() {
               <Route path='/reset-password' element={<ResetPasswordPage />} >
                 <Route path=":token" element={<ResetPasswordPage />} />
               </Route>
+              <Route path='*'element={<Navigate replace to='/login' />} />
             </>
           )}
           {authCtx.isLoggedIn && (
