@@ -71,7 +71,7 @@ const ProductsList = ({ productSelected }) => {
         
     const columns = [
       {
-        dataField: "image_url",
+        dataField: "main_image",
         text: "Slika",
         formatter: imgFormatter,
         headerStyle: () => {
@@ -94,6 +94,7 @@ const ProductsList = ({ productSelected }) => {
       {
         dataField: "price",
         text: "Cena",
+        sort: true,
         formatter: priceFormatter
       },
       {
@@ -103,6 +104,7 @@ const ProductsList = ({ productSelected }) => {
       {
         dataField: "is_view",
         text: "Status",
+        sort: true,
         formatter: statusFormatter,
       }
     ];
