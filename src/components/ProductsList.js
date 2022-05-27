@@ -14,14 +14,15 @@ const ProductsList = ({ productSelected }) => {
     const { isLoading, sendRequest: productsListRequest } = useHttp();
 
     const [productsList, setProductsList] = useState([]);
+
+    const [search, setSearch] = useState('');
+
+    const setProducts = async () => {
+      const data = await productsListService({search: search}, productsListRequest);
+      setProductsList(data);
+    };
   
     useEffect(() => {
-  
-      const setProducts = async () => {
-        const data = await productsListService(productsListRequest);
-        setProductsList(data);
-      };
-  
       setProducts();
     }, [productsListRequest]);
 
@@ -108,10 +109,34 @@ const ProductsList = ({ productSelected }) => {
         formatter: statusFormatter,
       }
     ];
+
+    useEffect(() => {
+      const timeOutId = setTimeout(() => setProducts(), 500);
+      return () => clearTimeout(timeOutId);
+    }, [search]);
   
     return (
       <>
         <div className="App dropdown-common-style products-table table-row-hover">
+          <div className="statistics-box-holder">
+            <h4>Pretraga</h4>
+            <div className="filters-box-holder">
+              <div className="row">
+                <div className="col-xl-3">
+                  <div className="form-group">
+                    <input
+                      onChange={ (e) => { setSearch(e.target.value) }}
+                      type="text"
+                      className="form-control"
+                      id="searchInput"
+                      aria-describedby="search"
+                      placeholder="Pretražite proizvode..."
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
           <BootstrapTable
             bootstrap4
             hover

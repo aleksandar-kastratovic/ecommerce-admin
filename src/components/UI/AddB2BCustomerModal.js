@@ -58,9 +58,28 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
         reset: resetEmail
     } = useInput((value) => value.trim() !== '');
 
+    const {
+        value: passwordValue,
+        isValid: passwordIsValid,
+        hasError: passwordHasError,
+        valueChangeHandler: passwordChangeHandler,
+        inputBlurHandler: passwordBlurHandler,
+        reset: resetPassword
+    } = useInput((value) => value.length > 5 || value.trim() !== '');
+    
+    const {
+        value: passwordConfirmValue,
+        isValid: passwordConfirmIsValid,
+        hasError: passwordConfirmHasError,
+        valueChangeHandler: passwordConfirmChangeHandler,
+        inputBlurHandler: passwordConfirmBlurHandler,
+        reset: resetPasswordConfirm
+    } = useInput((value) => value === passwordValue);
+
     const submitHandler = () => {
         if (
             !firstNameIsValid || !lastNameIsValid || !companyIsValid || !emailIsValid || !phoneIsValid
+            || !passwordIsValid || !passwordConfirmIsValid
         ) {
             toast.warning("Forma nije validna!");
             return;
@@ -72,6 +91,8 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
             email: emailValue,
             phone: phoneValue,
             mobile_phone: mobilePhoneValue,
+            password: passwordValue,
+            password_confirmation: passwordConfirmValue
         });
         handleClose();
         resetForm();
@@ -84,6 +105,8 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
         resetEmail();
         resetPhone();
         resetMobilePhone();
+        resetPassword();
+        resetPasswordConfirm();
     }
 
     const companyChanged = (ev) => {
@@ -185,7 +208,7 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
                                                 inputType="input"
                                                 type="number"
                                                 class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
-                                                text="Fiksni telefon"
+                                                text="Telefon"
                                                 text_class="m-0 required"
                                                 inputErrorText="je obavezan!"
                                             />
@@ -201,6 +224,36 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
                                                 text="Mobilni telefon"
                                             />
                                         </div>
+                                        <div className="col-6">
+                                            <Input
+                                            inputValue={passwordValue}
+                                            onInputChange={passwordChangeHandler}
+                                            onInputBlur={passwordBlurHandler}
+                                            hasInputError={passwordHasError}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="password"
+                                            class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}
+                                            text="Lozinka"
+                                            text_class="m-0 required"
+                                            inputErrorText="mora da ima minimalno 6 karaktera!"
+                                            />
+                                        </div>
+                                        <div className="col-6">
+                                            <Input
+                                                inputValue={passwordConfirmValue}
+                                                onInputChange={passwordConfirmChangeHandler}
+                                                onInputBlur={passwordConfirmBlurHandler}
+                                                hasInputError={passwordConfirmHasError}
+                                                disabled={false}
+                                                inputType="input"
+                                                type="password"
+                                                class={"form-control input-style form-control-lg " + (passwordConfirmHasError ? 'invalid' : '')}
+                                                text="Potvrdite lozinku"
+                                                text_class="m-0 required"
+                                                inputErrorText="mora da se poklapa sa lozinkom!"
+                                            />
+                                        </div>
                                     </div>
                                 </Accordion.Body>
                             </Accordion.Item>
@@ -213,6 +266,7 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
                 <button
                     disabled={
                         !firstNameIsValid || !lastNameIsValid || !companyIsValid || !emailIsValid || !phoneIsValid
+                        || !passwordIsValid || !passwordConfirmIsValid
                     }
                     type="button"
                     className="btn-control save-btn"

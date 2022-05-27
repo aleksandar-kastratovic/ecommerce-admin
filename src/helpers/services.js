@@ -538,7 +538,7 @@ export const getProductService = async (getData, getProductRequest) => {
     return data;
 };
 
-export const productsListService = async (productsListRequest) => {
+export const productsListService = async (getData, productsListRequest) => {
     let data;
 
     const productsListResponse = (productsData) => {
@@ -548,7 +548,8 @@ export const productsListService = async (productsListRequest) => {
     await productsListRequest(
         {
             url: api() + 'products/list',
-            method: 'PUT'
+            method: 'PUT',
+            body: getData
         }, productsListResponse
     );
     return data;

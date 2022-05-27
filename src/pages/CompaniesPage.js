@@ -138,7 +138,7 @@ const CompaniesPage = () => {
                         onTabChange={ (activeTabKey) => { setActiveTab(activeTabKey); navigate(`/companies/`+ activeTabKey); }}
                         removeTab={ (tabEventKey) => { removeTabData(tabEventKey) }}
                     />
-                    <button type="button" className="btn-control button-add" onClick={() => {setShow(true)}}>Nova komapnija</button>
+                    <button type="button" className="btn-control button-add" onClick={() => {setShow(true)}}>Nova kompanija</button>
                 </div>
                 <AddCompanyModal
                     openModal={show}

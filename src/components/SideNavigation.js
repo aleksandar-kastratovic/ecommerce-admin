@@ -37,7 +37,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                         Početna
                     </NavLink>
                 </li> */}
-                <li className="sidebar-categories">
+                <li className="sidebar-categories" style={ { order: 1 }}>
                     <p>Katalog</p>
                 </li>
                 <li className="sidebar-categories" style={ { order: 4 }}>
@@ -51,8 +51,8 @@ const SideNavigation = ({ activeTheme, userName }) => {
                         return  <li key={object.id} style={ { order: 5 }}>
                                     <NavLink to='/orders' className={navData => navData.isActive ? 'active' : '' }>
                                         <FontAwesomeIcon icon={faFileAlt} />
-                                         Porudžbine
-                                    </NavLink> 
+                                        Porudžbine
+                                    </NavLink>
                                 </li>
                     }
                     if (object.id === screensData.CATEG.id) {
@@ -73,7 +73,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                                 </li>
                     }
                     if (object.id === screensData.PRODU.id) {
-                        return  <li key={object.id} style={ { order: 1 }}>
+                        return  <li key={object.id} style={ { order: 3 }}>
                                     <NavLink to='/products' className={navData => navData.isActive ? 'active' : '' }>
                                         <FontAwesomeIcon icon={faArchive} />
                                         Proizvodi
