@@ -98,7 +98,7 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                     <div className="col-xl-6">
                       <Accordion defaultActiveKey="0">
                             <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faTruck} />Dodatne informacije:</Accordion.Header>
+                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faTruck} />Adresa za dostavu:</Accordion.Header>
                                 <Accordion.Body>
                                     <div className="row order-data-accordion">
                                         <div className="col-xl-6">

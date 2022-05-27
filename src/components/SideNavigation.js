@@ -27,7 +27,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                 />
             </NavLink>
             <div className="sidebar-welcome">
-                <h5>Dobrodošao</h5>
+                <h5>Dobrodošli</h5>
                 <p>{userName}</p>
             </div>
             <ul className="list-unstyled components mb-5 scroll-view">
