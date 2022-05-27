@@ -78,7 +78,6 @@ const RolesList = ({ addTab }) => {
     <>
       <div className="row row-m0">
         <h4>Uloge</h4>
-        <p className="text-muted">Role determines which screens the user can see.</p>
       </div>
       <div className="App dropdown-common-style table-row-hover">
         <BootstrapTable

@@ -67,7 +67,6 @@ const UsersList = ({addTab}) => {
     <>
       <div className="row row-m0">
         <h4>Korisnici</h4>
-        <p className="text-muted">Users represent admin panel users.</p>
       </div>
       <div className="App dropdown-common-style table-row-hover">
         <BootstrapTable
