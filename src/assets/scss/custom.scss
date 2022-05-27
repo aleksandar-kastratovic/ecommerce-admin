@@ -913,6 +913,14 @@ a[data-toggle="collapse"] {
 .nav-item.user-icon {
     width: 2.5rem;
     margin-left: 1rem;
+    h5 {
+        border-radius: 50%;
+        background-color: var(--sidebar-bg-color);
+        color: var(--white-side-color);
+        padding: 0.5rem;
+        margin: unset;
+        font-size: 1.125rem;
+    }
 }
 
 .nav-item.user-icon .nav-link {
