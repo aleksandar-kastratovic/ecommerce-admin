@@ -14,7 +14,6 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
     const { logout,user } = useContext(AuthContext);
     let navigate = useNavigate();
     const { isLoading, sendRequest: logoutRequest } = useHttp();
-    console.log(user);
 
     const logoutResponse = (response) => {
         logout();
@@ -77,7 +76,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
                                 <Dropdown className="nav-item user-icon dropdown-common-style">
                                     <Dropdown.Toggle variant="success" id="dropdown-basic" className="nav-link">
                                         {/* <img alt='' className="img-fluid rounded-pill" src={Avatar} /> */}
-                                        <h5>{user?.user?.first_name.charAt(0) + user?.user?.last_name.charAt(0)}</h5>
+                                        <h5>{user?.user?.first_name?.charAt(0) + user?.user?.last_name?.charAt(0)}</h5>
                                     </Dropdown.Toggle>
 
                                     <Dropdown.Menu>

@@ -114,7 +114,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
                                     </NavLink>
                                 </li>
                     }
-                    if (object.id === screensData.ACTON.id) {
+                    if (object.id === screensData.COMPN.id) {
                         return  <li key={object.id} style={ { order: 6 }}>
                                     <NavLink to='/companies' className={navData => navData.isActive ? 'active' : '' }>
                                         <FontAwesomeIcon icon={faCity} />

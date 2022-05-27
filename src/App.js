@@ -180,8 +180,8 @@ function App() {
                           </Route>
                 }
                 // TODO: Change screensData item
-                if (object.id === screensData.ACTON.id) {
-                  return  <Route key={object.id}  path='/companies' element={<CompaniesPage routeData={screensData.ACTON} />} >
+                if (object.id === screensData.COMPN.id) {
+                  return  <Route key={object.id}  path='/companies' element={<CompaniesPage routeData={screensData.COMPN} />} >
                             <Route path=":comId" element={<CompaniesPage />} />
                           </Route>
                 }
