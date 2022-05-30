@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { currencyFormat } from "../helpers/functions";
 
-const ProductsList = ({ productSelected }) => {
+const ProductsList = ({ productSelected, changeActivePage , activePage }) => {
 
     const { isLoading, sendRequest: productsListRequest } = useHttp();
 
@@ -144,7 +144,7 @@ const ProductsList = ({ productSelected }) => {
             data={productsList}
             columns={columns}
             rowEvents={ rowEvents }
-            pagination={paginationFactory({ sizePerPage: 10, paginationSize: 14 })}
+            pagination={paginationFactory({ page: activePage, custom: productsList.length > 0 ? false : true, sizePerPage: 10, paginationSize: 14, onPageChange: changeActivePage })}
             noDataIndication="Nema proizvoda!"
           />
         </div>

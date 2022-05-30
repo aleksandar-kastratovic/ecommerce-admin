@@ -35,6 +35,7 @@ const ProductsPage = () => {
 
   const [tabsList, setTabsList] = useState(initTab);
   const [activeTab, setActiveTab] = useState(initTab[0].eventKey);
+  const [activePage, setActivePage] = useState(1);
 
   const getProduct = async (productId) => {
     const data = await getProductService(productId, productRequest);
@@ -139,7 +140,11 @@ const ProductsPage = () => {
           <button type="button" className="btn-control button-add" onClick={() => {addProduct()}}>Novi proizvod</button>
         </div>
         { activeTab === tabsList[0].eventKey && (
-          <ProductsList productSelected={ (productId) => { setSelectedProduct(productId) }} />
+          <ProductsList
+            productSelected={ (productId) => { setSelectedProduct(productId) }}
+            activePage={activePage}
+            changeActivePage={(e) => setActivePage(e)}
+          />
         )}
         { activeTab === tabsList[1].eventKey && (
           <ProductDetails
