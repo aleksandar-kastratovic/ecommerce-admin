@@ -11,15 +11,12 @@ const CompaniesList = ({ addTab }) => {
 
   const [companiesList, setCompaniesList] = useState([]);
 
-  useEffect(() => {
+  const [search, setSearch] = useState('');
 
-    const setCompanies = async () => {
-      const data = await companyListService(companiesRequest);
-      setCompaniesList(data ?? []);
-    };
-
-    setCompanies();
-  }, [companiesRequest]);
+  const setCompanies = async () => {
+    const data = await companyListService({search: search}, companiesRequest);
+    setCompaniesList(data ?? []);
+  };
 
   const rowEvents = {
     onClick: (e, row) => {
@@ -63,13 +60,33 @@ const CompaniesList = ({ addTab }) => {
     }
   ];
 
+  useEffect(() => {
+    const timeOutId = setTimeout(() => setCompanies(), 500);
+    return () => clearTimeout(timeOutId);
+  }, [search]);
+
   return (
     <>
-      <div className="row row-m0">
-        <h4>Kompanije</h4>
-        <p className="text-muted">Companies represent Ecommerce buyers company.</p>
-      </div>
       <div className="App dropdown-common-style table-row-hover">
+        <div className="statistics-box-holder">
+          <h4>Pretraga</h4>
+          <div className="filters-box-holder">
+            <div className="row">
+              <div className="col-xl-3">
+                <div className="form-group">
+                  <input
+                    onChange={ (e) => { setSearch(e.target.value) }}
+                    type="text"
+                    className="form-control"
+                    id="searchInput"
+                    aria-describedby="search"
+                    placeholder="Pretražite kompanije..."
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <BootstrapTable
           bootstrap4
           hover

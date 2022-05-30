@@ -606,7 +606,7 @@ export const removeLocationsService = async (requestData, removeLocationsRequest
     return data;
 };
 
-export const customersListService = async (customersListRequest) => {
+export const customersListService = async (getData, customersListRequest) => {
     let data;
 
     const customersListResponse = (customersData) => {
@@ -616,7 +616,8 @@ export const customersListService = async (customersListRequest) => {
     await customersListRequest(
         {
             url: api() + 'customer/b2b/list',
-            method: 'PUT'
+            method: 'PUT',
+            body: getData
         }, customersListResponse
     );
     return data;
@@ -673,7 +674,7 @@ export const removeCustomerService = async (requestData, removeCustomerRequest) 
     return data;
 };
 
-export const companyListService = async (companyListRequest) => {
+export const companyListService = async (getData, companyListRequest) => {
     let data;
 
     const companyListResponse = (companiesData) => {
@@ -683,7 +684,8 @@ export const companyListService = async (companyListRequest) => {
     await companyListRequest(
         {
             url: api() + 'customer/companies/list',
-            method: 'PUT'
+            method: 'PUT',
+            body: getData
         }, companyListResponse
     );
     return data;
@@ -740,7 +742,7 @@ export const removeCompanyService = async (requestData, removeCompanyRequest) =>
     return data;
 };
 
-export const ordersListService = async (ordersListRequest) => {
+export const ordersListService = async (getData, ordersListRequest) => {
     let data;
 
     const ordersListResponse = (ordersData) => {
@@ -750,7 +752,8 @@ export const ordersListService = async (ordersListRequest) => {
     await ordersListRequest(
         {
             url: api() + 'order/list',
-            method: 'PUT'
+            method: 'PUT',
+            body: getData
         }, ordersListResponse
     );
     return data;

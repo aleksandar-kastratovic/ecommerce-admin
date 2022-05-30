@@ -36,7 +36,7 @@ const B2BCustomersPage = () => {
     const [customerDetailsData, setCustomerDetailsData] = useState({});
 
     const getCompanies = async () => {
-        const data = await companyListService(customersRequest);
+        const data = await companyListService(null, customersRequest);
         setCompanyList(data);
     };
 

@@ -336,7 +336,7 @@ const OrderDetails = ({ orderData, saveOrderStatus }) => {
                                             <p>Iznos:<span>{currencyFormat(orderData.base_total_price) + " RSD"}</span></p>
                                             {/* <p>Rabat:<span>{"- " + orderData.rebate + "%"}</span></p> */}
                                             <p>Iznos rabata:<span>- {currencyFormat(orderData.rebate_amount) + " RSD"}</span></p>
-                                            {/* <p>Osnovica:<span>{currencyFormat(orderData.price_discounted) + " RSD"}</span></p> */}
+                                            <p>Ukupna osnovica::<span>{currencyFormat(orderData.price_discounted) + " RSD"}</span></p>
                                             <p>PDV:<span>{currencyFormat(orderData.vat_amount) + " RSD"}</span></p>
                                             {/* <p>Troškovi dostave:<span>???</span></p> */}
                                             <hr/>

@@ -2,15 +2,33 @@ import sideNavLogoDark from "./../assets/images/croonus-sidebar-logo-dark.svg";
 import sideNavLogoLight from "./../assets/images/croonus-sidebar-logo-light.svg";
 import sideNavIcon from "./../assets/images/croonus-sidebar-icon.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFileAlt, faCity, faPercentage, faCog, faUserTag ,faSitemap, faArchive, faSearchLocation, faHome, faBell, faUsers, faPeopleArrows, faLayerGroup } from '@fortawesome/free-solid-svg-icons'
 import { NavLink } from "react-router-dom";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import AuthContext from "../store/auth-contex";
-import { screensData } from "./../helpers/const"
+import { easyScreensData } from "./../helpers/const"
 
 const SideNavigation = ({ activeTheme, userName }) => {
 
     const { userScreens } = useContext(AuthContext);
+
+    // Populate the menu
+    let menu= [];
+    for(const allowedScreen of userScreens) { 
+
+        // Check for local screen definetion
+        const screen = easyScreensData.find(screen => screen.screen_code === allowedScreen.screen_code);
+        if(screen) {
+
+            // Init
+            menu[screen.group.order] = menu[screen.group.order] ?? {
+                name: screen.group.name,
+                items: []
+            }
+
+            // Add item
+            menu[screen.group.order].items.push(screen);
+        }
+    }
 
     return (
         <nav id="sidebar">
@@ -37,122 +55,34 @@ const SideNavigation = ({ activeTheme, userName }) => {
                         Početna
                     </NavLink>
                 </li> */}
-                <li className="sidebar-categories" style={ { order: 1 }}>
-                    <p>Katalog</p>
-                </li>
-                <li className="sidebar-categories" style={ { order: 4 }}>
-                    <p>B2B</p>
-                </li>
-                <li className="sidebar-categories" style={ { order: 8 }}>
-                    <p>Podešavanja</p>
-                </li>
-                { (userScreens !== undefined) && ( userScreens.map(function(object) {
-                    if (object.id === screensData.ORDER.id) {
-                        return  <li key={object.id} style={ { order: 5 }}>
-                                    <NavLink to='/orders' className={navData => navData.isActive ? 'active' : '' }>
-                                        <FontAwesomeIcon icon={faFileAlt} />
-                                        Porudžbine
-                                    </NavLink>
-                                </li>
-                    }
-                    if (object.id === screensData.CATEG.id) {
-                        return  <li key={object.id} style={ { order: 2 }}>
-                                    <NavLink to='/categories' className={navData => navData.isActive ? 'active' : '' }>
-                                        <FontAwesomeIcon icon={faSitemap} />
-                                        Kategorije
-                                    </NavLink>
-                                </li>
-                    }
-                    // TODO: Change screen
-                    if (object.id === screensData.BANNR.id) {
-                        return  <li key={object.id} style={ { order: 13 }}>
-                                    <NavLink to='/product-attributes' className={navData => navData.isActive ? 'active' : '' }>
-                                        <FontAwesomeIcon icon={faLayerGroup} />
-                                        Atributi proizvoda
-                                    </NavLink>
-                                </li>
-                    }
-                    if (object.id === screensData.PRODU.id) {
-                        return  <li key={object.id} style={ { order: 3 }}>
-                                    <NavLink to='/products' className={navData => navData.isActive ? 'active' : '' }>
-                                        <FontAwesomeIcon icon={faArchive} />
-                                        Proizvodi
-                                    </NavLink>
-                                </li>
-                    }
-                    if (object.id === screensData.LOCAT.id) {
-                        return  <li key={object.id} style={ { order: 15 }}>
-                                    <NavLink to='/locations' className={navData => navData.isActive ? 'active' : '' }>
-                                        <FontAwesomeIcon icon={faSearchLocation} />
-                                        Lokacije
-                                    </NavLink>
-                                </li>
-                    }
-                    // if (object.id === screensData.ACTON.id) {
-                    //     return  <li key={object.id} style={ { order: 16 }}>
-                    //                 <NavLink to='/actions' className={navData => navData.isActive ? 'active' : '' }>
-                    //                     <FontAwesomeIcon icon={faPercentage} />
-                    //                     Akcije
-                    //                 </NavLink>
-                    //             </li>
-                    // }
-                    // TODO: Change screen
-                    // if (object.id === screensData.NEEWS.id) {
-                    //     return  <li key={object.id} style={ { order: 15 }}>
-                    //                 <NavLink to='/partners' className={navData => navData.isActive ? 'active' : '' }>
-                    //                     <FontAwesomeIcon icon={faBriefcase} />
-                    //                     Partneri
-                    //                 </NavLink>
-                    //             </li>
-                    // }
-                    // TODO: Change screen
-                    if (object.id === screensData.CUSTM.id) {
-                        return  <li key={object.id} style={ { order: 7 }}>
-                                    <NavLink to='/b2b-customers' className={navData => navData.isActive ? 'active' : '' }>
-                                        <FontAwesomeIcon icon={faUserTag} />
-                                        B2B kupci
-                                    </NavLink>
-                                </li>
-                    }
-                    if (object.id === screensData.COMPN.id) {
-                        return  <li key={object.id} style={ { order: 6 }}>
-                                    <NavLink to='/companies' className={navData => navData.isActive ? 'active' : '' }>
-                                        <FontAwesomeIcon icon={faCity} />
-                                        Kompanije
-                                    </NavLink>
-                                </li>
-                    }
-                    if (object.id === screensData.USERS.id) {
-                        return  <li key={object.id} style={ { order: 19 }}>
-                                    <NavLink to='/users' className={navData => navData.isActive ? 'active' : '' }>
-                                        <FontAwesomeIcon icon={faUsers} />
-                                        Korisnici
-                                    </NavLink>
-                                </li>
-                    }
-                    if (object.id === screensData.ROLES.id) {
-                        return  <li key={object.id} style={ { order: 110 }}>
-                                    <NavLink to='/roles' className={navData => navData.isActive ? 'active' : '' }>
-                                        <FontAwesomeIcon icon={faPeopleArrows} />
-                                        Uloge
-                                    </NavLink>
-                                </li>
-                    }
 
-                    if (object.id === screensData.SETNG.id) {
-                        return  <li key={object.id} style={ { order: 111 }}>
-                                    <NavLink to='/settings' className={navData => navData.isActive ? 'active' : '' }>
-                                        <FontAwesomeIcon icon={faCog} />
-                                        Podešavanja
-                                    </NavLink>
-                                </li>
-                    }
-                }))}
+                {
+                    menu.map(function(menuGroup) {
 
-                {/* <li style={ { order: 112 }} className="sidebar-categories">
+                        return <React.Fragment key={menuGroup.name}>
+                 
+                            <li className="sidebar-categories">
+                                <p>{menuGroup.name}</p>
+                            </li>
+                 
+                            {
+                                menuGroup.items.map(item => (
+                                    <li key={item.id}>
+                                        <NavLink to={item.path} className={navData => navData.isActive ? 'active' : '' }>
+                                            <FontAwesomeIcon icon={item.icon} />
+                                            {item.name}
+                                        </NavLink>
+                                    </li>
+                                ))
+                            }
+                       </React.Fragment>
+                    })
+                }
+
+                {/* <li className="sidebar-categories">
                     <p>Ostalo</p>
                 </li>
-                <li style={ { order: 113 }}>
+                <li>
                     <NavLink to='/notification' className={navData => navData.isActive ? 'active' : '' }>
                         <FontAwesomeIcon icon={faBell} />
                         Obaveštenja

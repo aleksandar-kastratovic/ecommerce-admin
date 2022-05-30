@@ -21,10 +21,6 @@ const ProductsList = ({ productSelected, changeActivePage , activePage }) => {
       const data = await productsListService({search: search}, productsListRequest);
       setProductsList(data);
     };
-  
-    useEffect(() => {
-      setProducts();
-    }, [productsListRequest]);
 
     function imgFormatter(cell) {
       if (cell) {

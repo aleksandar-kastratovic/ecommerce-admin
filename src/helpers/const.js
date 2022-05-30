@@ -1,17 +1,39 @@
-export const screensData = {
-    PRODU: {id: 1, screen_code: 'PRODU', screen: 'Product'},
-    ORDER: {id: 2, screen_code: 'ORDER', screen: 'Orders'},
-    BANNR: {id: 3, screen_code: 'BANNR', screen: 'Banners'},
-    NEEWS: {id: 4, screen_code: 'NEEWS', screen: 'News'},
-    CATEG: {id: 5, screen_code: 'CATEG', screen: 'Categories'},
-    ROLES: {id: 6, screen_code: 'ROLES', screen: 'Roles'},
-    USERS: {id: 7, screen_code: 'USERS', screen: 'Users'},
-    ACTON: {id: 8, screen_code: 'ACTON', screen: 'Actions'},
-    CUSTM: {id: 9, screen_code: 'CUSTM', screen: 'Customers'},
-    LOCAT: {id: 10, screen_code: 'LOCAT', screen: 'Locations'},
-    COMPN: {id: 11, screen_code: "COMPN", screen: "Companies"},
-    SETNG: {id: 12, screen_code: "SETNG", screen: "Settings"}
-};
+import { faFileAlt, faCity, faPercentage, faCog, faUserTag ,faSitemap, faArchive, faSearchLocation, faHome, faBell, faUsers, faPeopleArrows, faLayerGroup } from '@fortawesome/free-solid-svg-icons'
+
+export const MainMenuGroups = {
+    PRODUCT: { order: 0, name: "Katalog"},
+    B2B: { order: 1, name: "B2B"},
+    SETTINGS: { order: 2, name: "Podešavanja"},
+}
+
+const screenDateDef = [
+    [1, 'PRODU', 'Proizvodi', '/products', faArchive, MainMenuGroups.PRODUCT ],
+    [2, 'ORDER', 'Orders', '/orders', faFileAlt, MainMenuGroups.B2B ],
+    [3, 'BANNR', 'Banners', '/', faSitemap, MainMenuGroups.B2B ],
+    [4, 'NEEWS', 'News', '/', faArchive, MainMenuGroups.B2B ],
+    [5, 'CATEG', 'Categories', '/categories', faSitemap, MainMenuGroups.PRODUCT ],
+    [6, 'ROLES', 'Roles', '/roles', faPeopleArrows, MainMenuGroups.SETTINGS ],
+    [7, 'USERS', 'Users', '/users', faUsers, MainMenuGroups.SETTINGS ],
+    [8, 'ACTON', 'Actions', '/', faPercentage, MainMenuGroups.SETTINGS ],
+    [9, 'CUSTM', 'Customers', '/b2b-customers', faUserTag, MainMenuGroups.B2B ],
+    [10, 'LOCAT', 'Locations', '/locations', faSearchLocation, MainMenuGroups.PRODUCT ],
+    [11, 'COMPN', 'Companies', '/companies', faCity, MainMenuGroups.B2B ],
+    [12, 'SETNG', 'Settings', '/', faCog, MainMenuGroups.SETTINGS ],
+];
+
+export const easyScreensData  = screenDateDef.map(item => ({
+    id: item[0],
+    screen_code: item[1],
+    name: item[2],
+    path: item[3],
+    icon: item[4],
+    group: item[5]
+}));
+
+export const screensData = easyScreensData.reduce((acc, screen) => {
+    acc[screen.screen_code] = screen;
+    return acc;
+}, {});
 
 export const inventoryOptions = [{ id: 1, name: 'Više lokacija'}, { id: null, name: 'Jedna lokacija'}];
 
