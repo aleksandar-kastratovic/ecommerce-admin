@@ -1,27 +1,27 @@
-import { faFileAlt, faCity, faPercentage, faCog, faUserTag ,faSitemap, faArchive, faSearchLocation, faHome, faBell, faUsers, faPeopleArrows, faLayerGroup } from '@fortawesome/free-solid-svg-icons'
+import { faFileAlt, faCity, faPercentage, faCog, faUserTag ,faSitemap, faArchive, faSearchLocation, faUsers, faPeopleArrows } from '@fortawesome/free-solid-svg-icons'
 
 export const MainMenuGroups = {
     PRODUCT: { order: 0, name: "Katalog"},
     B2B: { order: 1, name: "B2B"},
-    SETTINGS: { order: 2, name: "Podešavanja"},
+    SETTINGS: { order: 2, name: "Podešavanja"}
 }
 
 const screenDateDef = [
     [1, 'PRODU', 'Proizvodi', '/products', faArchive, MainMenuGroups.PRODUCT ],
-    [2, 'ORDER', 'Orders', '/orders', faFileAlt, MainMenuGroups.B2B ],
-    [3, 'BANNR', 'Banners', '/', faSitemap, MainMenuGroups.B2B ],
-    [4, 'NEEWS', 'News', '/', faArchive, MainMenuGroups.B2B ],
-    [5, 'CATEG', 'Categories', '/categories', faSitemap, MainMenuGroups.PRODUCT ],
-    [6, 'ROLES', 'Roles', '/roles', faPeopleArrows, MainMenuGroups.SETTINGS ],
-    [7, 'USERS', 'Users', '/users', faUsers, MainMenuGroups.SETTINGS ],
-    [8, 'ACTON', 'Actions', '/', faPercentage, MainMenuGroups.SETTINGS ],
-    [9, 'CUSTM', 'Customers', '/b2b-customers', faUserTag, MainMenuGroups.B2B ],
-    [10, 'LOCAT', 'Locations', '/locations', faSearchLocation, MainMenuGroups.PRODUCT ],
-    [11, 'COMPN', 'Companies', '/companies', faCity, MainMenuGroups.B2B ],
-    [12, 'SETNG', 'Settings', '/', faCog, MainMenuGroups.SETTINGS ],
+    [2, 'ORDER', 'Porudžbine', '/orders', faFileAlt, MainMenuGroups.B2B ],
+    [3, 'BANNR', 'Baneri', '/', faSitemap, MainMenuGroups.B2B ],
+    [4, 'NEEWS', 'Novosti', '/', faArchive, MainMenuGroups.B2B ],
+    [5, 'CATEG', 'Kategorije', '/categories', faSitemap, MainMenuGroups.PRODUCT ],
+    [6, 'ROLES', 'Uloge', '/roles', faPeopleArrows, MainMenuGroups.SETTINGS ],
+    [7, 'USERS', 'Korisnici', '/users', faUsers, MainMenuGroups.SETTINGS ],
+    [8, 'ACTON', 'Akcije', '/', faPercentage, MainMenuGroups.SETTINGS ],
+    [9, 'CUSTM', 'Kupci', '/b2b-customers', faUserTag, MainMenuGroups.B2B ],
+    [10, 'LOCAT', 'Lokacije', '/locations', faSearchLocation, MainMenuGroups.PRODUCT ],
+    [11, 'COMPN', 'Kompanije', '/companies', faCity, MainMenuGroups.B2B ],
+    [12, 'SETNG', 'Podešavanja', '/', faCog, MainMenuGroups.SETTINGS ]
 ];
 
-export const easyScreensData  = screenDateDef.map(item => ({
+export const easyScreensData = screenDateDef.map(item => ({
     id: item[0],
     screen_code: item[1],
     name: item[2],
