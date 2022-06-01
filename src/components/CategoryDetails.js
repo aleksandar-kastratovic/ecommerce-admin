@@ -397,7 +397,7 @@ const CategoryDetails = ({ categoryListData, categorySynchroListData, saveCatego
                                         <p className="error-text"></p>
                                     </div>
                                     <div className="col-12">
-                                        <p htmlFor="dropdownTreeSelectCategory" className="m-0 form-control-label required">ERP sinhronizacija</p>
+                                        <p htmlFor="dropdownTreeSelectCategory" className="m-0 form-control-label">ERP sinhronizacija</p>
                                         <DropdownTreeSelect
                                             className={
                                                 "form-control input-style form-control-lg select-style dropdown-tree-multiselect-style dropdown-tree-style "
