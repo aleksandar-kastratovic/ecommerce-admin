@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUser, faTimes } from '@fortawesome/free-solid-svg-icons'
 import { faSave, faTrashAlt  } from "@fortawesome/free-regular-svg-icons";
-import { Accordion } from "react-bootstrap";
+import { Accordion, Form } from "react-bootstrap";
 import Input from "./UI/Input";
 import ImageCrop from "./UI/ImageCrop";
 import useInput from "../hooks/use-input";
@@ -55,6 +55,7 @@ const CategoryDetails = ({ categoryListData, categorySynchroListData, saveCatego
     const [selectedImageFile, setSelectedImageFile] = useState(undefined);
     const [selectedIconFile, setSelectedIconFile] = useState(undefined);
     const [show, setShow] = useState(false);
+    const [isActive, setIsActive] = useState(1);
 
     useEffect(() => {
         resetForm();
@@ -75,6 +76,7 @@ const CategoryDetails = ({ categoryListData, categorySynchroListData, saveCatego
         setCategorySynchroList(JSON.parse(JSON.stringify(categorySynchroListCopy)));
         resetSeoKey();
         resetSeoDecription();
+        setIsActive(1);
     };
 
     useEffect(() => {
@@ -95,6 +97,7 @@ const CategoryDetails = ({ categoryListData, categorySynchroListData, saveCatego
         }
         seoKeyChangeHandler({target: {value : (categoryData?.seo_word ?? '') }});
         seoDecriptionChangeHandler({target: {value : (categoryData?.seo_description ?? '') }});
+        setIsActive(categoryData?.is_active ?? 1);
         setSelectedImage(categoryData?.image ?? null);
         setSelectedIcon(categoryData?.icon ?? null);
     }, [categoryData]);
@@ -122,6 +125,7 @@ const CategoryDetails = ({ categoryListData, categorySynchroListData, saveCatego
         }
         saveCategory({
             id: selectedScreenId,
+            is_active: isActive,
             name: nameValue,
             parent_id: parentIdValue,
             seo_word: seoKeyValue,
@@ -348,6 +352,16 @@ const CategoryDetails = ({ categoryListData, categorySynchroListData, saveCatego
                             <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faUser} />Podaci o kategoriji:</Accordion.Header>
                             <Accordion.Body>
                                 <div className="row">
+                                    <div className="col-12">
+                                        <Form.Group className="remember-checkbox remember-checkbox-details">
+                                            <Form.Check
+                                                type="checkbox"
+                                                label="Aktivna"
+                                                checked={isActive}
+                                                onChange={() => setIsActive(isActive ? 0 : 1)}
+                                            />
+                                        </Form.Group>
+                                    </div>
                                     <div className="col-6">
                                         <Input
                                             inputValue={nameValue}

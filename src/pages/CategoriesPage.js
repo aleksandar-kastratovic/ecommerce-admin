@@ -58,6 +58,7 @@ const CategoriesPage = () => {
     const saveCategoryDetailsService = async (saveData) => {
         const data = await saveCategoryService({   
             id: saveData.id,
+            is_active: saveData.is_active,
             name: saveData.name,
             parent_id: saveData.parent_id,
             category_import_ids: saveData.category_import_ids,
