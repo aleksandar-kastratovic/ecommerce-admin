@@ -206,6 +206,7 @@ const AddUserModal = ({ openModal, handleClose, saveUser }) => {
                                                 disabled={false}
                                                 inputType="input"
                                                 type="password"
+                                                offAutoComplete={true}
                                                 class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}
                                                 text="Lozinka"
                                                 text_class="m-0 required"

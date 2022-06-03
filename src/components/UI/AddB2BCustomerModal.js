@@ -243,6 +243,7 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
                                             hasInputError={passwordHasError}
                                             disabled={false}
                                             inputType="input"
+                                            offAutoComplete={true}
                                             type="password"
                                             class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}
                                             text="Lozinka"

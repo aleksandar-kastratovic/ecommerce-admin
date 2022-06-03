@@ -233,6 +233,7 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
                                             onInputBlur={passwordBlurHandler}
                                             hasInputError={passwordHasError}
                                             disabled={false}
+                                            offAutoComplete={true}
                                             inputType="input"
                                             type="password"
                                             class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}
