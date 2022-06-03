@@ -220,7 +220,7 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
                                             inputErrorVisible={false}
                                             disabled={false}
                                             inputType="input"
-                                            type="number"
+                                            type="text"
                                             class={"form-control input-style form-control-lg "}
                                             text="Telefon"
                                             text_class="m-0"

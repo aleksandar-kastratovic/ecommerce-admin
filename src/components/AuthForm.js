@@ -120,7 +120,7 @@ const AuthForm = () => {
                             <button type="button" className="btn-control auth-transparent-button" onClick={() => {setShow(true)}}>
                                 Zaboravili ste lozinku?
                             </button>
-                            <p className="font-14">Ukoliko nemate nalog, <a href="/">pišite nam</a>.</p>
+                            {/* <p className="font-14">Ukoliko nemate nalog, <a href="/">pišite nam</a>.</p> */}
                         </div>
                         {isLoading && (
                             <Loader />

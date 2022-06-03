@@ -808,3 +808,20 @@ export const categoriesSynchroListService = async (categoriesSynchroRequest) => 
     );
     return data;
 };
+
+export const companiesIdName = async (getData, comapniesRequest) => {
+    let data;
+
+    const comapniesResponse = (comapniesData) => {
+        data = comapniesData;
+    };
+
+    await comapniesRequest(
+        {
+            url: api() + 'customer/companies/all',
+            method: 'PUT',
+            body: getData
+        }, comapniesResponse
+    );
+    return data;
+};

@@ -41,9 +41,9 @@ const Input = (props) => {
                         className={(props.class ? props.class : '') + " basic-single"}
                         classNamePrefix="select"
                         isDisabled={props.disabled}
-                        placeholder=""
+                        placeholder={props.placeHolder ?? ""}
                         isClearable
-                        isSearchable
+                        isSearchable={props.isSearchable ?? true}
                         onInputChange={props.onInputBlur}
                         isMulti={props.isMulti}
                         value={props.data?.filter((obj) => obj.id === props.value || props.values?.includes(obj.id))}

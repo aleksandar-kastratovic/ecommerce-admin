@@ -6,7 +6,7 @@ import AddB2BCustomerModal from "../components/UI/AddB2BCustomerModal";
 import Loader from "../components/UI/Loader";
 import Tabs from "../components/UI/Tabs";
 import { addTabName } from "../helpers/functions";
-import { companyListService, getCustomerService, removeCustomerService, saveCustomerService } from "../helpers/services";
+import { companiesIdName, getCustomerService, removeCustomerService, saveCustomerService } from "../helpers/services";
 import useHttp from "../hooks/use-http";
 
 const B2BCustomersPage = () => {
@@ -35,16 +35,10 @@ const B2BCustomersPage = () => {
     const [tabsList, setTabsList] = useState(initTab);
     const [customerDetailsData, setCustomerDetailsData] = useState({});
 
-    const getCompanies = async () => {
-        const data = await companyListService(null, customersRequest);
+    const getCompanies = async (getData) => {
+        const data = await companiesIdName(getData, customersRequest);
         setCompanyList(data);
     };
-
-    useEffect(() => {
-
-        getCompanies();
-
-    }, [customersRequest]);
 
     const addTabData = (tabData) => {
         for (const elem in tabsList) {
@@ -154,8 +148,9 @@ const B2BCustomersPage = () => {
                 </div>
                 <AddB2BCustomerModal
                     openModal={show}
-                    handleClose={() => {setShow(false)}}
+                    handleClose={() => {setShow(false); setCompanyList([]); }}
                     companyList={companyList}
+                    filterCompanies={(inputValue) => { getCompanies(inputValue)}}
                     saveCustomer={(dataForSave) => { saveCustomer(dataForSave); }}
                 />
                 { activeTab === initTab[0].eventKey && (
@@ -164,9 +159,10 @@ const B2BCustomersPage = () => {
                 { activeTab !== initTab[0].eventKey && (
                     <B2BCustomerDetails
                         companyList={companyList}
+                        filterCompanies={(inputValue) => { getCompanies(inputValue)}}
                         customerData={customerDetailsData}
-                        saveCustomer={(dataForSave) => { saveCustomer(dataForSave); }}
-                        removeCustomer={(id) => { removeCustomer(id); }}
+                        saveCustomer={(dataForSave) => { saveCustomer(dataForSave); setCompanyList([]); }}
+                        removeCustomer={(id) => { removeCustomer(id); setCompanyList([]);}}
                     />
                 )}
             </section>

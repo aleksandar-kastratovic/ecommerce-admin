@@ -8,10 +8,11 @@ import useInput from "../hooks/use-input";
 import { toast } from "react-toastify";
 import ConfirmModal from "./UI/ConfirmModal";
 
-const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, companyList }) => {
+const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, companyList, filterCompanies }) => {
 
   const [selectedCustomerId, setSelectedCustomerId] = useState(null);
   const [confirmWhat, confirm] = useState();
+  const [search, setSearch] = useState('');
 
   let {
     value: firstNameValue,
@@ -86,6 +87,9 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
     firstNameChangeHandler({target: {value : (customerData?.first_name ?? '') }});
     lastNameChangeHandler({target: {value : (customerData?.last_name ?? '') }});
     companyChangeHandler({target: {value : (customerData?.company_id ?? '') }});
+    if (customerData?.company_id && customerData?.company_id > 0) {
+      filterCompanies({id: customerData?.company_id});
+    }
     emailChangeHandler({target: {value : (customerData?.email ?? '') }});
     phoneChangeHandler({target: {value : (customerData?.phone ?? '') }});
     mobilePhoneChangeHandler({target: {value : (customerData?.mobile_phone ?? '') }});
@@ -126,16 +130,22 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
     resetPassword();
     resetPasswordConfirm();
     setSelectedCustomerId(null);
+    setSearch('');
   }
-
-  const removeCustomerHandler = () => {
-    removeCustomer(selectedCustomerId);
-  };
 
   const companyChanged = (ev) => {
     const valueInput = {target: {value : (ev && ev.id !== null) ? ev.id : ev}};
     companyChangeHandler(valueInput);
   };
+
+  const removeCustomerHandler = () => {
+    removeCustomer(selectedCustomerId);
+  };
+
+  useEffect(() => {
+    const timeOutId = setTimeout(() => {if (search.trim().length > 2) {filterCompanies({company_name: search})}}, 700);
+    return () => clearTimeout(timeOutId);
+  }, [search]);
 
   return (
     <div className="add-role-modal">
@@ -203,16 +213,18 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
                       value={companyValue}
                       isMulti={false}
                       handleChange={companyChanged}
-                      onInputBlur={companyBlurHandler}
-                      data={companyList ?? []}
+                      onInputBlur={(e, action) => { setSearch(e); companyBlurHandler}}
                       hasInputError={companyHasError}
+                      placeHolder={"Minimalno 3 karaktera"}
                       disabled={false}
+                      isSearchable
+                      data={companyList ?? []}
                       inputType="select-react"
                       type="text"
                       class={"form-control input-style form-control-lg select-style " + (companyHasError ? 'invalid' : '')}
                       text="Naziv firme"
                       text_class="m-0 required"
-                      inputErrorText="je obavezan!"
+                      inputErrorText="je obavezna!"
                     />
                   </div>
                   <div className="col-6">
@@ -238,8 +250,8 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
                       hasInputError={phoneHasError}
                       disabled={false}
                       inputType="input"
-                      type="number"
-                      class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
+                      type="text"
+                      class={"form-control input-style form-control-lg " + (phoneHasError ? 'invalid' : '')}
                       text="Telefon"
                       text_class="m-0 required"
                       inputErrorText="je obavezan!"
@@ -251,7 +263,7 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
                       onInputChange={mobilePhoneChangeHandler}
                       disabled={false}
                       inputType="input"
-                      type="number"
+                      type="text"
                       class="form-control input-style form-control-lg "
                       text="Mobilni telefon"
                     />
@@ -263,6 +275,7 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
                       onInputBlur={passwordBlurHandler}
                       hasInputError={passwordHasError}
                       disabled={false}
+                      offAutoComplete={true}
                       inputType="input"
                       type="password"
                       class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}

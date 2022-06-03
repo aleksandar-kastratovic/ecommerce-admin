@@ -4,8 +4,9 @@ import Input from "./Input";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUserTag } from '@fortawesome/free-solid-svg-icons'
 import { toast } from 'react-toastify';
+import { useEffect, useState } from "react";
 
-const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList }) => {
+const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList, filterCompanies }) => {
 
     let {
         value: firstNameValue,
@@ -76,6 +77,13 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
         reset: resetPasswordConfirm
     } = useInput((value) => value === passwordValue);
 
+    const [search, setSearch] = useState('');
+
+    useEffect(() => {
+        const timeOutId = setTimeout(() => {if (search.trim().length > 2) {filterCompanies({company_name: search})}}, 700);
+        return () => clearTimeout(timeOutId);
+    }, [search]);
+
     const submitHandler = () => {
         if (
             !firstNameIsValid || !lastNameIsValid || !companyIsValid || !emailIsValid || !phoneIsValid
@@ -107,6 +115,7 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
         resetMobilePhone();
         resetPassword();
         resetPasswordConfirm();
+        setSearch('');
     }
 
     const companyChanged = (ev) => {
@@ -171,16 +180,18 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
                                                 value={companyValue}
                                                 isMulti={false}
                                                 handleChange={companyChanged}
-                                                onInputBlur={companyBlurHandler}
-                                                data={companyList ?? []}
+                                                onInputBlur={(e, action) => { setSearch(e); companyBlurHandler}}
                                                 hasInputError={companyHasError}
+                                                placeHolder={"Minimalno 3 karaktera"}
                                                 disabled={false}
+                                                isSearchable
+                                                data={companyList ?? []}
                                                 inputType="select-react"
                                                 type="text"
                                                 class={"form-control input-style form-control-lg select-style " + (companyHasError ? 'invalid' : '')}
                                                 text="Naziv firme"
                                                 text_class="m-0 required"
-                                                inputErrorText="je obavezan!"
+                                                inputErrorText="je obavezna!"
                                             />
                                         </div>
                                         <div className="col-6">
@@ -206,7 +217,7 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
                                                 hasInputError={phoneHasError}
                                                 disabled={false}
                                                 inputType="input"
-                                                type="number"
+                                                type="text"
                                                 class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
                                                 text="Telefon"
                                                 text_class="m-0 required"
@@ -219,7 +230,7 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
                                                 onInputChange={mobilePhoneChangeHandler}
                                                 disabled={false}
                                                 inputType="input"
-                                                type="number"
+                                                type="text"
                                                 class="form-control input-style form-control-lg "
                                                 text="Mobilni telefon"
                                             />

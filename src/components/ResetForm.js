@@ -131,7 +131,7 @@ const ResetForm = () => {
                             <button type="button" className="btn-control auth-transparent-button" onClick={() => {navigate(`/`);}}>
                                 Prijavite se?
                             </button>
-                            <p className="font-14">Ukoliko nemate nalog, <a href="/">pišite nam</a>.</p>
+                            {/* <p className="font-14">Ukoliko nemate nalog, <a href="/">pišite nam</a>.</p> */}
                         </div>
                         {isLoading && (
                             <Loader />

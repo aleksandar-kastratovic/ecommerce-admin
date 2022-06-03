@@ -347,7 +347,7 @@ const AddCompanyModal = ({ openModal, handleClose, saveCompany }) => {
                                                 hasInputError={phoneHasError}
                                                 disabled={false}
                                                 inputType="input"
-                                                type="number"
+                                                type="text"
                                                 class={"form-control input-style form-control-lg " + (phoneHasError ? 'invalid' : '')}
                                                 text="Telefon"
                                                 text_class="m-0 required"
@@ -360,7 +360,7 @@ const AddCompanyModal = ({ openModal, handleClose, saveCompany }) => {
                                                 onInputChange={mobilePhoneChangeHandler}
                                                 disabled={false}
                                                 inputType="input"
-                                                type="number"
+                                                type="text"
                                                 class="form-control input-style form-control-lg "
                                                 text="Mobilni telefon"
                                             />

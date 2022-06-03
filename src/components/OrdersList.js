@@ -52,11 +52,13 @@ const OrdersList = ({ addTab }) => {
     {
       dataField: "company_name",
       text: "Kupac",
+      sort: true
     },
     {
       dataField: "total_price",
       text: "	Ukupno za naplatu",
-      formatter: priceFormatter
+      formatter: priceFormatter,
+      sort: true
     },
     {
       dataField: "status_name",
@@ -65,6 +67,7 @@ const OrdersList = ({ addTab }) => {
     {
       dataField: "created_at",
       text: "Vreme kreiranja",
+      sort: true
     }
   ];
 
