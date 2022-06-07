@@ -89,8 +89,8 @@ const ProductsList = ({ productSelected, changeActivePage , activePage }) => {
         }
       },
       {
-        dataField: "price",
-        text: "Cena",
+        dataField: "b2b_price",
+        text: "B2B cena",
         sort: true,
         formatter: priceFormatter
       },
@@ -99,8 +99,8 @@ const ProductsList = ({ productSelected, changeActivePage , activePage }) => {
         text: "Šifra"
       },
       {
-        dataField: "is_view",
-        text: "Status",
+        dataField: "b2b_is_visible",
+        text: "B2B",
         sort: true,
         formatter: statusFormatter,
       }
