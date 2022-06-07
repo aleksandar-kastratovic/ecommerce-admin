@@ -21,7 +21,7 @@ The server must be on a Linux OS, with the addition of the following software:
 1. SSH server
 2. Docker
 3. nginx
-4. certbot (optional)
+4. certbot
 
 #### SSH
 Deployment itself is done via SSH, by using [key-based authentication](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server).
@@ -39,7 +39,7 @@ The following example will redirect everything from `admin.staging.croonus.com` 
 ```shell
 server {
     listen 80 default;
-    server_name b2c.staging.croonus.com;
+    server_name api.staging.croonus.com;
     location / {
         proxy_set_header    X-Real-IP       $remote_addr;
         proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -51,5 +51,5 @@ server {
 ```
 
 #### certbot
-Optionally used to automatically fetch new certificates from [letsencrypt.com](letsencrypt.com).
+Used to enable HTTPS by automatically fetching new certificates from [letsencrypt.com](letsencrypt.com).
 More information on how to use `certbot` application can be found [here](https://certbot.eff.org/instructions?ws=nginx&os=leap).

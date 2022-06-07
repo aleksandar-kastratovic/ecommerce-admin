@@ -11,7 +11,7 @@
 
 	"scripts": {
 		"build": "react-scripts build",
-		"start": "react-scripts start",
+		"start": "export PORT=${EC_PORT:-3000}; react-scripts start",
 
 		"docker:prune": "docker system prune -a -f",
 		"docker:build": "docker build . --build-arg EC_API_URL=$EC_API_URL -t $npm_package_docker_account/$npm_package_docker_image:latest",
