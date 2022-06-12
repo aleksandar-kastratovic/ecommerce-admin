@@ -3,6 +3,7 @@
 #                                                        README                                                        #
 #                                                                                                                      #
 # Available env variables:                                                                                             #
+#     PROJECT - The name of the project to use as a prefix                                                             #
 #     PORT - The port to run the app on (default: 6001)                                                                #
 #     SKIP_PULL - If true the latest image will not be pulled (default: false)                                         #
 #                                                                                                                      #
@@ -56,7 +57,7 @@ echo "### Staring '$IMAGE_NAME' from '$REPO'"
 HASH=$(docker run -d \
     -p 127.0.0.1:${PORT:-6001}:80 \
     --restart unless-stopped \
-    --name $IMAGE_NAME \
+    --name {$PROJECT:-default}-$IMAGE_NAME \
     $REPO)
 
 # Done
