@@ -35,17 +35,17 @@ Make sure the SSH user used for deployment has the required [privileges](https:/
 #### nginx
 The nginx server will serve only as a reversed-proxy, that will redirect a (sub)domain to a port of one of the Docker containers.
 
-The following example will redirect everything from `admin.staging.croonus.com` to port `8081`:
+The following example will redirect everything from `b2b.staging.croonus.com` to port `8081`:
 ```shell
 server {
     listen      80 default;
-    server_name b2c.staging.croonus.com;
+    server_name b2b.staging.croonus.com;
     location / {
-        proxy_set_header X-Real-IP       $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host            $host;
+        proxy_set_header X-Real-IP        $remote_addr;
+        proxy_set_header X-Forwarded-For  $proxy_add_x_forwarded_for;
+        proxy_set_header Host             $host;
 
-        proxy_pass http://127.0.0.1:6001/;
+        proxy_pass http://127.0.0.1:6002/;
     }
 }
 ```
