@@ -1,23 +1,23 @@
 #!/bin/bash
 ########################################################################################################################
-#                                                        Readme                                                        #
+#                                                        README                                                        #
 #                                                                                                                      #
-# Available env variables                                                                                              #
-#     EC_DEV - If true the container will read the files from the current working directory (default: false)           #
-#     EC_SKIP_PULL - If true the latest image will not be pulled (default: false)                                      #
-#     EC_PORT - The port to run the app on (default: 80)                                                               #
+# Available env variables:                                                                                             #
+#     PORT - The port to run the app on (default: 6001)                                                                #
+#     SKIP_PULL - If true the latest image will not be pulled (default: false)                                         #
 #                                                                                                                      #
-#     EC_DOCKER_USERNAME - The optional login to use before pulling the Docker image                                   #
-#     EC_DOCKER_PASSWORD - The optional password to use before pulling the Docker image                                #
+#     DOCKER_ACCOUNT - The account to use when connecting to the Docker repository                                     #
+#     DOCKER_IMAGE - The name of the docker image to pull                                                              #
+#     DOCKER_PASSWORD - The optional password to use before pulling the Docker image                                   #
 #                                                                                                                      #
 #                                                                                                                      #
 ########################################################################################################################
 
 # Exit on any command failure
 set -eu
-stput() { [ ${TERM:-dumb} != dumb ] && tput $@ || true; }
+output() { [ ${TERM:-dumb} != dumb ] && tput $@ || true; }
 trap 'LAST_COMMAND=${CURRENT_COMMAND=}; CURRENT_COMMAND=$BASH_COMMAND' DEBUG
-trap 'ERROR_CODE=$?; FAILED_COMMAND=$LAST_COMMAND; stput setaf 9; echo; echo "***"; echo "ERROR: command \"$FAILED_COMMAND\" failed with exit code $ERROR_CODE"; echo "***"; echo; stput sgr0;' ERR INT TERM
+trap 'ERROR_CODE=$?; FAILED_COMMAND=$LAST_COMMAND; output setaf 9; echo; echo "***"; echo "ERROR: command \"$FAILED_COMMAND\" failed with exit code $ERROR_CODE"; echo "***"; echo; output sgr0;' ERR INT TERM
 
 # Validate that the docker is installed
 if [ ! $(which docker) ]; then
@@ -26,21 +26,17 @@ if [ ! $(which docker) ]; then
 fi
 echo "### Run initiated"
 
-# The docker container registry and image name
-REGISTRY=65479696
-IMAGE_NAME=ecommerce-admin
-
 # Define all composite variables that are used multiple times
-REPO=$REGISTRY/$IMAGE_NAME
+REPO=$DOCKER_ACCOUNT/$DOCKER_IMAGE
 SOURCE=$REPO:${IMAGE_TAG:-latest}
 
 # Pull the image
-if [ ! ${EC_SKIP_PULL:-} ]; then
+if [ ! ${SKIP_PULL:-} ]; then
 
     # Log into
-    if [ ${EC_DOCKER_USERNAME:-} ]; then
-        echo "### Logging into docker as $EC_DOCKER_USERNAME" &>/dev/null
-        docker login -u "$EC_DOCKER_USERNAME" -p "$EC_DOCKER_PASSWORD"
+    if [ ${$DOCKER_PASSWORD:-} ]; then
+        echo "### Logging into docker as $DOCKER_ACCOUNT" &>/dev/null
+        docker login -u "$DOCKER_ACCOUNT" -p "$DOCKER_PASSWORD"
     fi
 
     echo "### Pulling image: '$SOURCE'"
@@ -58,11 +54,11 @@ fi
 # Run the new updated image
 echo "### Staring '$IMAGE_NAME' from '$REPO'"
 HASH=$(docker run -d \
-    -p 127.0.0.1:${EC_PORT:-4401}:80 \
+    -p 127.0.0.1:${PORT:-6001}:80 \
     --restart unless-stopped \
     --name $IMAGE_NAME \
     $REPO)
 
 # Done
 echo "### Docker container started: '$HASH'"
-stput setaf 2 && echo && echo -n "### DONE${LOCAL_VOLUME:+" - RUNNING IN DEVELOPMENT MODE"} ###" && echo && stput sgr0
+output setaf 2 && echo && echo -n "### DONE${LOCAL_VOLUME:+" - RUNNING IN DEVELOPMENT MODE"} ###" && echo && output sgr0

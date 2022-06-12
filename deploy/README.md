@@ -1,16 +1,16 @@
 ### Environmental variables
 When using the BitBucket pipelines, the following should be used:
-* App
-  * `EC_API_URL` The base URL that the app will be using for all the API calls
-* Docker container
-  * `EC_PORT` The port on which the docker container will listen
-* Docker repository credentials
-  * `EC_DOCKER_USERNAME`
-  * `EC_DOCKER_PASSWORD`
+* App (set per environment)
+    * `PORT` The port on which the docker container will listen
+    * `API_URL` The base URL that the app will be using for all the API calls
+* Docker
+    * `DOCKER_ACCOUNT` The account from which to fetch the image
+    * `DOCKER_PASSWORD` The password used to authenticate to the Docker repository
+    * `DOCKER_PASSWORD` The name of the Docker image to use
 * Server login
-  * `EC_SERVER_IP`
-  * `EC_SERVER_PORT`
-  * `EC_SERVER_USER`
+    * `SERVER_HOST`
+    * `SERVER_PORT`
+    * `SERVER_USER`
 
 Check here on how to set up and use [BitBucket variables](https://support.atlassian.com/bitbucket-cloud/docs/variables-and-secrets/).
 
@@ -21,7 +21,7 @@ The server must be on a Linux OS, with the addition of the following software:
 1. SSH server
 2. Docker
 3. nginx
-4. certbot
+4. certbot (optional)
 
 #### SSH
 Deployment itself is done via SSH, by using [key-based authentication](https://www.digitalocean.com/community/tutorials/how-to-configure-ssh-key-based-authentication-on-a-linux-server).
@@ -38,18 +38,18 @@ The nginx server will serve only as a reversed-proxy, that will redirect a (sub)
 The following example will redirect everything from `admin.staging.croonus.com` to port `8081`:
 ```shell
 server {
-    listen 80 default;
-    server_name api.staging.croonus.com;
+    listen      80 default;
+    server_name b2c.staging.croonus.com;
     location / {
-        proxy_set_header    X-Real-IP       $remote_addr;
-        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header    Host            $host;
-    
-        proxy_pass http://127.0.0.1:8081/;
+        proxy_set_header X-Real-IP       $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host            $host;
+
+        proxy_pass http://127.0.0.1:6001/;
     }
 }
 ```
 
 #### certbot
-Used to enable HTTPS by automatically fetching new certificates from [letsencrypt.com](letsencrypt.com).
+Optionally used to automatically fetch new certificates from [letsencrypt.com](letsencrypt.com).
 More information on how to use `certbot` application can be found [here](https://certbot.eff.org/instructions?ws=nginx&os=leap).

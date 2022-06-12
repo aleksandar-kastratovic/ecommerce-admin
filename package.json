@@ -6,17 +6,18 @@
 
 	"docker": {
 		"account": "65479696",
-		"image": "ecommerce-admin"
+		"image": "ecommerce-admin",
+		"tag": "latest"
 	},
 
 	"scripts": {
 		"build": "react-scripts build",
-		"start": "export PORT=${EC_PORT:-3000}; react-scripts start",
+		"start": "export PORT=${PORT}; react-scripts start",
 
 		"docker:prune": "docker system prune -a -f",
-		"docker:build": "docker build . --build-arg EC_API_URL=$EC_API_URL -t $npm_package_docker_account/$npm_package_docker_image:latest",
-		"docker:push": "docker push $npm_package_docker_account/$npm_package_docker_image:latest",
-		"docker:run": "EC_DEV=$EC_DEV EC_SKIP_PULL=$EC_SKIP_PULL EC_PORT=$EC_PORT EC_DOCKER_USERNAME=$EC_DOCKER_USERNAME EC_DOCKER_PASSWORD=$EC_DOCKER_USERNAME ./deploy/run.sh"
+		"docker:build": "docker build . --build-arg EC_API_URL=$EC_API_URL -t $npm_package_docker_account/$npm_package_docker_image:$npm_package_docker_tag",
+		"docker:push": "docker push $npm_package_docker_account/$npm_package_docker_image:$npm_package_docker_tag",
+		"docker:run": "SKIP_PULL=$SKIP_PULL PORT=$PORT DOCKER_ACCOUNT=$DOCKER_ACCOUNT DOCKER_IMAGE=$DOCKER_IMAGE DOCKER_PASSWORD=$DOCKER_PASSWORD ./deploy/run.sh"
 	},
 	"author": "Predrag Levic",
 	"license": "ISC",

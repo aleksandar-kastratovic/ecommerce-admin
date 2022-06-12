@@ -3,35 +3,64 @@ image: node:14.15.3
 pipelines:
   branches:
 
+    # Staging
     master:
 
       - step:
-          name: Docker build and push
+          name: Staging
+          deployment: staging
           services:
             - docker
           caches:
             - docker
           script:
-            - export IMAGE_NAME=65479696/ecommerce-admin
-            - printf "App\n    API   $EC_API_URL\nDocker\n    user  $EC_DOCKER_USERNAME\n    image $IMAGE_NAME\n"
+            - export IMAGE=$DOCKER_ACCOUNT/$DOCKER_IMAGE:latest
+            - printf "DEPLOY\n    env  $BITBUCKET_DEPLOYMENT_ENVIRONMENT\n    img  $IMAGE\n\nSERVER\n    host $SERVER_HOST\n    port $SERVER_PORT\n    user $SERVER_USER\n\nAPP\n	port $PORT\n    url  $API_URL\n";
 
-            - npm run docker:build
+            # Build the image
+            - docker build --build-arg API_URL=$API_URL -t $IMAGE .
+            - docker tag $IMAGE
 
-            - docker login --username $EC_DOCKER_USERNAME --password $EC_DOCKER_PASSWORD
-            - docker push $IMAGE_NAME:latest
+            # Push the image
+            - docker login --username $DOCKER_ACCOUNT --password $DOCKER_PASSWORD
+            - docker push $IMAGE
+
+            # Deploy on the server
+            - export DEPLOY="deploy-$DOCKER_IMAGE-$BITBUCKET_DEPLOYMENT_ENVIRONMENT-$RANDOM.sh"
+            - scp -o StrictHostKeyChecking=no deploy/deploy.sh $SERVER_USER@$SERVER_HOST@SERVER_PORT:$DEPLOY
+            - ssh -o StrictHostKeyChecking=no                  $SERVER_USER@$SERVER_HOST@SERVER_PORT "./$DEPLOY && rm $DEPLOY"
+                      DOCKER_ACCOUNT='${DOCKER_ACCOUNT}'
+                      DOCKER_IMAGE='${DOCKER_IMAGE}'
+                      PORT='${PORT}'
+                  ./$DEPLOY &&
+                  rm ./$DEPLOY"
+
+    # Production
+    production-stojic:
 
       - step:
-          name: Deploy to server
+          name: Staging
+          deployment: staging
+          services:
+            - docker
+          caches:
+            - docker
           script:
-            - export RUN="run-$RANDOM.sh"
-            - printf "App\n    port $EC_PORT\nDocker\n    user $EC_DOCKER_USERNAME\nServer\n    IP   $EC_SERVER_IP\n    port $EC_SERVER_PORT\n    user $EC_SERVER_USER\n    file $RUN"
+            - export IMAGE=$DOCKER_ACCOUNT/$DOCKER_IMAGE:$BITBUCKET_COMMIT
+            - printf "DEPLOY\n    env  $BITBUCKET_DEPLOYMENT_ENVIRONMENT\n    img  $IMAGE\n\nSERVER\n    host $SERVER_HOST\n    port $SERVER_PORT\n    user $SERVER_USER\n\nAPP\n	port $PORT\n    url  $API_URL\n";
 
-            - scp -q -o StrictHostKeyChecking=no -P $EC_SERVER_PORT deploy/run.sh $EC_SERVER_USER@$EC_SERVER_IP:$RUN
-            - ssh -q -o StrictHostKeyChecking=no -p $EC_SERVER_PORT               $EC_SERVER_USER@$EC_SERVER_IP "
-                    EC_PORT=$EC_PORT
-                    EC_DOCKER_USERNAME=$EC_DOCKER_USERNAME
-                    EC_DOCKER_PASSWORD=$EC_DOCKER_PASSWORD
-                ./$RUN; rm $RUN"
+            # Build the image
+            - docker build --build-arg API_URL=$API_URL -t $IMAGE .
+            - docker tag $IMAGE
+
+            # Push the image
+            - docker login --username $DOCKER_ACCOUNT --password $DOCKER_PASSWORD
+            - docker push $IMAGE
+
+            # Deploy on the server
+            - export DEPLOY="deploy-$DOCKER_IMAGE-$BITBUCKET_DEPLOYMENT_ENVIRONMENT-$RANDOM.sh"
+            - scp -o StrictHostKeyChecking=no deploy/deploy.sh $SERVER_USER@$SERVER_HOST@SERVER_PORT:$DEPLOY
+            - ssh -o StrictHostKeyChecking=no                  $SERVER_USER@$SERVER_HOST@SERVER_PORT "./$DEPLOY && rm $DEPLOY"
 
 definitions:
   services:
