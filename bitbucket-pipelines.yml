@@ -33,8 +33,7 @@ pipelines:
                       DOCKER_IMAGE='${DOCKER_IMAGE}'
                       PROJECT='${BITBUCKET_DEPLOYMENT_ENVIRONMENT}'
                       PORT='${PORT}'
-                  ./$DEPLOY &&
-                  rm ./$DEPLOY"
+                  ./$DEPLOY"
 
     # Production
     production-stojic:
