@@ -15,7 +15,7 @@
 		"start": "export PORT=${PORT}; react-scripts start",
 
 		"docker:prune": "docker system prune -a -f",
-		"docker:build": "docker build . --build-arg EC_API_URL=$EC_API_URL -t $npm_package_docker_account/$npm_package_docker_image:$npm_package_docker_tag",
+		"docker:build": "docker build . --build-arg API_URL=$API_URL -t $npm_package_docker_account/$npm_package_docker_image:$npm_package_docker_tag",
 		"docker:push": "docker push $npm_package_docker_account/$npm_package_docker_image:$npm_package_docker_tag",
 		"docker:run": "SKIP_PULL=$SKIP_PULL PORT=$PORT DOCKER_ACCOUNT=$DOCKER_ACCOUNT DOCKER_IMAGE=$DOCKER_IMAGE DOCKER_PASSWORD=$DOCKER_PASSWORD ./deploy/run.sh"
 	},

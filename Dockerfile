@@ -19,11 +19,15 @@ ARG API_URL
 # Build the application
 WORKDIR /app
 COPY . /app
-RUN echo "Config:" && \
+RUN echo && \
+    echo "Config:" && \
 	echo "    API_URL: ${API_URL:?Please provide API_URL as a build argument}" && \
     \
+    # Write to environment file
     echo "REACT_APP_URL=$API_URL" > /app/.env.production && \
     echo "NODE_ENV=production" >> /app/.env.production && \
+    \
+    echo && \
     echo "Environment:" && cat /app/.env.production && \
     \
 	npm install --quiet > /dev/null && \
