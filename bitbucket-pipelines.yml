@@ -39,8 +39,8 @@ pipelines:
     production-stojic:
 
       - step:
-          name: Staging
-          deployment: staging
+          name: Production
+          deployment: stojic
           services:
             - docker
           caches:
