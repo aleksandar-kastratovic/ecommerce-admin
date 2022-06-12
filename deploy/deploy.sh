@@ -30,12 +30,13 @@ echo "### Run initiated"
 # Define all composite variables that are used multiple times
 REPO=$DOCKER_ACCOUNT/$DOCKER_IMAGE
 SOURCE=$REPO:${IMAGE_TAG:-latest}
+CONTAINER=${PROJECT:-default}-$DOCKER_IMAGE
 
 # Pull the image
 if [ ! ${SKIP_PULL:-} ]; then
 
     # Log into
-    if [ ${$DOCKER_PASSWORD:-} ]; then
+    if [ ${DOCKER_PASSWORD:-} ]; then
         echo "### Logging into docker as $DOCKER_ACCOUNT" &>/dev/null
         docker login -u "$DOCKER_ACCOUNT" -p "$DOCKER_PASSWORD"
     fi
@@ -45,19 +46,19 @@ if [ ! ${SKIP_PULL:-} ]; then
 fi
 
 # Kill the previous running container with the same image name
-ACTIVE_CONTAINER=$(docker ps -aqf "name=$IMAGE_NAME")
+ACTIVE_CONTAINER=$(docker ps -aqf "name=$CONTAINER")
 if [[ ! -z $ACTIVE_CONTAINER ]]; then
-    echo "### Removing existing: '$IMAGE_NAME' ($ACTIVE_CONTAINER)"
+    echo "### Removing existing: '$CONTAINER' ($ACTIVE_CONTAINER)"
     docker stop $ACTIVE_CONTAINER &>/dev/null
     docker rm $ACTIVE_CONTAINER &>/dev/null
 fi
 
 # Run the new updated image
-echo "### Staring '$IMAGE_NAME' from '$REPO'"
+echo "### Staring '$CONTAINER' from '$REPO' via PORT '${PORT}'"
 HASH=$(docker run -d \
     -p 127.0.0.1:${PORT:-6001}:80 \
     --restart unless-stopped \
-    --name {$PROJECT:-default}-$IMAGE_NAME \
+    --name $CONTAINER \
     $REPO)
 
 # Done
