@@ -3,17 +3,14 @@
 	"version": "1.0.0",
 	"description": "Admin panel for e-commerce",
 	"private": true,
-
 	"docker": {
 		"account": "65479696",
 		"image": "ecommerce-admin",
 		"tag": "latest"
 	},
-
 	"scripts": {
 		"build": "react-scripts build",
 		"start": "export PORT=${PORT}; react-scripts start",
-
 		"docker:prune": "docker system prune -a -f",
 		"docker:build": "docker build . --build-arg API_URL=$API_URL -t $npm_package_docker_account/$npm_package_docker_image:$npm_package_docker_tag",
 		"docker:push": "docker push $npm_package_docker_account/$npm_package_docker_image:$npm_package_docker_tag",
@@ -33,12 +30,18 @@
 		"webpack-cli": "^3.3.10"
 	},
 	"dependencies": {
+		"@emotion/react": "^11.9.3",
+		"@emotion/styled": "^11.9.3",
+		"@fontsource/roboto": "^4.5.7",
 		"@fortawesome/fontawesome-svg-core": "^1.2.36",
 		"@fortawesome/free-regular-svg-icons": "^5.15.4",
 		"@fortawesome/free-solid-svg-icons": "^5.15.4",
 		"@fortawesome/react-fontawesome": "^0.1.16",
+		"@mui/icons-material": "^5.8.4",
+		"@mui/material": "^5.8.4",
 		"bootstrap": "^5.1.3",
 		"deep-rename-keys": "^0.2.1",
+		"lodash": "^4.17.21",
 		"popper.js": "^1.16.1",
 		"react": "^17.0.2",
 		"react-bootstrap": "^2.0.4",

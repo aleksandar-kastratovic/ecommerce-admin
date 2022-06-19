@@ -18,7 +18,8 @@ const screenDateDef = [
     [9, 'CUSTM', 'Kupci', '/b2b-customers', faUserTag, MainMenuGroups.B2B ],
     [10, 'LOCAT', 'Lokacije', '/locations', faSearchLocation, MainMenuGroups.PRODUCT ],
     [11, 'COMPN', 'Kompanije', '/companies', faCity, MainMenuGroups.B2B ],
-    [12, 'SETNG', 'Podešavanja', '/', faCog, MainMenuGroups.SETTINGS ]
+    // [12, 'SETNG', 'Podešavanja', '/', faCog, MainMenuGroups.SETTINGS ],
+    [12, 'B2BCONFIG', 'B2B podešavanja', '/B2B-settings', faPeopleArrows, MainMenuGroups.SETTINGS ]
 ];
 
 export const easyScreensData = screenDateDef.map(item => ({

@@ -1,0 +1,20 @@
+[
+    {
+        "id": 0,
+        "name": "Vizuelna podesavanja portala",
+        "b2b": "b2b",
+        "image_logo": "image_logo"
+    },
+    {
+        "id": 1,
+        "name": "Order id",
+        "b2b": "b2b2 opis",
+        "image_logo": "nesto_logo 2"
+    },
+    {
+        "id": 2,
+        "name": "Search for order",
+        "b2b": "opis 3",
+        "image_logo": "logo3"
+    }
+]

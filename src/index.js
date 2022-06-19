@@ -5,8 +5,8 @@ import { BrowserRouter }       from "react-router-dom";
 import { AuthContextProvider } from "./store/auth-contex";
 
 // Assert sure base URL for the API set
-if (process.env.REACT_APP_URL) {
-	localStorage.setItem("api", (process.env.REACT_APP_URL));
+if (process.env.REACT_APP_URL || 'https://api.staging.croonus.com/api/v1/') {
+	localStorage.setItem("api", (process.env.REACT_APP_URL || 'https://api.staging.croonus.com/api/v1/'));
 
 	ReactDOM.render(
 		<AuthContextProvider>

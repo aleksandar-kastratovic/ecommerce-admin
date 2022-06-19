@@ -23,6 +23,7 @@ import CompaniesPage from "./pages/CompaniesPage";
 import ResetPasswordPage from "./pages/ResetPasswordPage";
 import SettingsPage from "./pages/SettingsPage";
 import OrdersPage from "./pages/OrdersPage";
+import B2Bsettings from "./pages/B2Bsettings/B2Bsettings";
 
 function App() {
   const authCtx = useContext(AuthContext);
@@ -141,6 +142,11 @@ function App() {
                 if (object.id === screensData.ROLES.id) {
                   return  <Route key={object.id} path='/roles' element={<RolesPage routeData={screensData.ROLES} />} >
                             <Route path=":roleId" element={<RolesPage />} />
+                          </Route>
+                }
+                if (object.id === screensData.B2BCONFIG.id) {
+                  return  <Route key={object.id} path='/B2B-settings' element={<B2Bsettings routeData={screensData.B2BCONFIG} />} >
+                            <Route path=":B2BId" element={<B2Bsettings />} />
                           </Route>
                 }
                 if (object.id === screensData.USERS.id) {
