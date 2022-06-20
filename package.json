@@ -11,6 +11,7 @@
 	"scripts": {
 		"build": "react-scripts build",
 		"start": "export PORT=${PORT}; react-scripts start",
+		"test": "react-scripts test --coverage --colors --watchAll=false",
 		"docker:prune": "docker system prune -a -f",
 		"docker:build": "docker build . --build-arg API_URL=$API_URL -t $npm_package_docker_account/$npm_package_docker_image:$npm_package_docker_tag",
 		"docker:push": "docker push $npm_package_docker_account/$npm_package_docker_image:$npm_package_docker_tag",
@@ -24,7 +25,9 @@
 		"@babel/preset-react": "^7.12.11",
 		"babel-loader": "^8.2.2",
 		"css-loader": "^5.0.1",
+		"enzyme-adapter-react-17-updated": "^1.0.2",
 		"file-loader": "^6.2.0",
+		"jest": "^28.1.1",
 		"style-loader": "^1.0.1",
 		"webpack": "^4.41.2",
 		"webpack-cli": "^3.3.10"
@@ -39,6 +42,7 @@
 		"@fortawesome/react-fontawesome": "^0.1.16",
 		"@mui/icons-material": "^5.8.4",
 		"@mui/material": "^5.8.4",
+		"@testing-library/jest-dom": "^5.16.4",
 		"bootstrap": "^5.1.3",
 		"deep-rename-keys": "^0.2.1",
 		"lodash": "^4.17.21",
