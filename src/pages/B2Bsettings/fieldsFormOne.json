@@ -21,7 +21,7 @@
     },
     {
         "fieldName": "Podnaslov",
-        "propName": "b2b",
+        "propName": "subname",
         "inMainTable": true,
         "inDetails": true,
         "editable": true,

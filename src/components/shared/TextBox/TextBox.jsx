@@ -5,6 +5,7 @@ import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
 
 const TextBox = ({
+  name = "",
   label = "",
   value = "",
   required = false,
@@ -12,6 +13,8 @@ const TextBox = ({
   placeholder = "",
   size = "small",
   fontWeight = "normal",
+  error = "",
+  onChange = () => {},
 }) => {
   // reusable component for input fields
   return (
@@ -30,13 +33,17 @@ const TextBox = ({
         {label}
       </FormLabel>
       <TextField
+        name={name}
         size={size}
         value={value}
+        error={!!error}
         placeholder={placeholder}
+        onChange={onChange}
         sx={{
           "& legend": { display: "none" },
           "& fieldset": { top: 0 },
         }}
+        helperText={error.content}
       />
     </FormControl>
   );

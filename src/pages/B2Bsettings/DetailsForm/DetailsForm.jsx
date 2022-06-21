@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // material-ui components
 import Box from "@mui/material/Box";
@@ -13,18 +13,60 @@ import UploadForm from "./UploadForm";
 import styles from "./DetailsForm.module.scss";
 import fieldsFormOne from "../fieldsFormOne.json";
 import fieldsFormTwo from "../fieldsFormTwo.json";
+import { isEmpty } from "lodash";
 
-const DetailsForm = ({ formItemChangeHandler = () => {}, b2bconfig = {} }) => {
+const DetailsForm = ({}) => {
   // TODO should be fully configurable through API whole page not only details just a showcase
   // showColumn will be removed
   // through config you will get an layout and component will behave like you want - see for example CreateForm
   const [fields, setFields] = useState(fieldsFormOne);
+  // new item
+  const [newItem, setNewItem] = useState({ name: "", subname: "" });
   const [showColumn, setShowColumn] = useState(false);
+  // when you receive a backend validation it should be implemented through the same error object
+  // and a context validator avalible on whole app.
+  // const [inputsError, setInputsError] = useValidator(context ? context : {});
+  // In this example is backend validation presented on one field and it can be also presented via toast or popup etc.
+  // useValidator is not a custom hook it is a context that wraps app like auth context now.
+  // Ofc they can be merged, but for sake of simplicity they should stay divided.
+  const [inputsError, setInputsError] = useState({});
+
+  useEffect(() => {
+    setFields(fieldsFormOne);
+  }, []);
+
+  useEffect(() => {
+    const errors = { ...inputsError };
+    Object.keys(errors).forEach((propName) => {
+      if (!isEmpty(newItem[propName])) {
+        delete errors[propName];
+      }
+    });
+    setInputsError(errors);
+  }, [newItem]);
+
+  const onSubmit = () => {
+    const errors = {};
+    Object.keys(newItem).forEach((propName) => {
+      if (isEmpty(newItem[propName])) {
+        if (propName !== "subname") {
+          errors[propName] = {
+            content: "Polje je obavezno, molim vas unesite vrednost.",
+          };
+        }
+      }
+    });
+    isEmpty(errors) ? console.log(newItem) : setInputsError(errors);
+  };
 
   const handleSelectInDetails = (id) => {
     // TODO API call for config
     id === 0 ? setFields(fieldsFormOne) : setFields(fieldsFormTwo);
     setShowColumn(!showColumn);
+  };
+
+  const formItemChangeHandler = ({ target }) => {
+    setNewItem({ ...newItem, [target.name]: target.value });
   };
 
   return (
@@ -48,16 +90,15 @@ const DetailsForm = ({ formItemChangeHandler = () => {}, b2bconfig = {} }) => {
                   onChangeHandler={formItemChangeHandler}
                   item={item}
                   key={index}
-                  // prepared for validations
-                  // error={
-                  //   Array.isArray(item)
-                  //     ? item.map(({ propName }) => inputsError[propName])
-                  //     : inputsError[item.propName]
-                  // }
+                  error={
+                    Array.isArray(item)
+                      ? item.map(({ propName }) => inputsError[propName])
+                      : inputsError[item.propName]
+                  }
                   value={
-                    Array.isArray(item) && b2bconfig
-                      ? b2bconfig[item.propName]
-                      : b2bconfig[item.propName]
+                    Array.isArray(item) && newItem
+                      ? newItem[item.propName]
+                      : newItem[item.propName]
                   }
                 />
               ))}
@@ -72,6 +113,7 @@ const DetailsForm = ({ formItemChangeHandler = () => {}, b2bconfig = {} }) => {
             className={styles.saveButton}
             variant="contained"
             endIcon={<CheckIcon />}
+            onClick={onSubmit}
           >
             Sacuvaj
           </Button>

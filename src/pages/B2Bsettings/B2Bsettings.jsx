@@ -29,10 +29,6 @@ const B2Bsettings = ({ history }) => {
   const [selectedData, setSelectedData] = useState(null);
   const [selectedTab, setSelectedTab] = useState(0);
 
-  const formItemChangeHandler = (event, data) => {
-    console.log(event, data);
-  };
-
   const handleRowClick = (id) => () => {
     setSelectedData(selectedData === id ? null : id);
     handleTabChange(null, 1);
@@ -82,7 +78,6 @@ const B2Bsettings = ({ history }) => {
           details={
             <DetailsForm
               fields={fields.filter(({ inDetails }) => inDetails)}
-              formItemChangeHandler={formItemChangeHandler}
               b2bconfig={b2bconfig}
             />
           }

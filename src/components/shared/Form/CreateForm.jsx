@@ -40,9 +40,12 @@ const CreateForm = ({
         case "input":
           formItem = (
             <TextBox
+              name={item.propName}
               label={item.fieldName}
               required={item.required}
               value={value}
+              error={error}
+              onChange={onChangeHandler}
             />
           );
           break;
