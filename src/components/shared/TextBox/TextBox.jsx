@@ -8,6 +8,7 @@ const TextBox = ({
   name = "",
   label = "",
   value = "",
+  description = "",
   required = false,
   width = "100%",
   placeholder = "",
@@ -43,7 +44,8 @@ const TextBox = ({
           "& legend": { display: "none" },
           "& fieldset": { top: 0 },
         }}
-        helperText={error.content}
+        // helperText={error.content}
+        helperText={error.content ? error.content : description}
       />
     </FormControl>
   );

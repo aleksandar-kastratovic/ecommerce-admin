@@ -1,33 +1,39 @@
 [
     {
-        "fieldName": "Glavni naslov",
+        "fieldName": "Podrazumevani naslov stranice",
         "propName": "name",
         "inMainTable": true,
         "inDetails": true,
         "editable": true,
         "disabled": false,
         "required": true,
-        "description": "255",
+        "description": "Maximum file size: 2MB, Allowed file types: Not all browsers support all these formats!",
         "ui_prop": "xyz",
         "sortable": true,
-        "options": [
-            "niz",
-            "treba da se obezbedi samo ako je dropdown u pitanju",
-            "moze da funkcionise i na poseban async poziv",
-            "kada se klikne na komponentu obavi se poziv",
-            "pogledati mui autocomplite"
-        ],
         "inputType": "input"
     },
     {
-        "fieldName": "Podnaslov",
-        "propName": "subname",
+        "fieldName": "Podrazumevani meta opis",
+        "propName": "b2b",
         "inMainTable": true,
         "inDetails": true,
         "editable": true,
         "disabled": false,
         "required": false,
-        "description": "255",
+        "description": "Maximum file size: 2MB, Allowed file types: Not all browsers support all these formats!",
+        "ui_prop": "xyz",
+        "sortable": false,
+        "inputType": "input"
+    },
+    {
+        "fieldName": "Podrazumevane meta kljucne reci",
+        "propName": "b2b",
+        "inMainTable": true,
+        "inDetails": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "Maximum file size: 2MB, Allowed file types: Not all browsers support all these formats!",
         "ui_prop": "xyz",
         "sortable": false,
         "inputType": "input"

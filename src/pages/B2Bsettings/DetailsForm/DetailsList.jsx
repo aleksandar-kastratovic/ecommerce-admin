@@ -6,9 +6,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import SettingsIcon from "@mui/icons-material/Settings";
-import LoginIcon from "@mui/icons-material/Login";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import Icon from "@mui/material/Icon";
 
 const LeftColum = ({ handleSelectInDetails }) => {
   const [selected, setSelected] = useState(0);
@@ -16,37 +15,58 @@ const LeftColum = ({ handleSelectInDetails }) => {
     setSelected(id);
     handleSelectInDetails(id);
   };
-  // redundant should be through configuration this is just an example
+  // NOTE id id will be from data received from api, this is just for setup
+  // NOTE: Icons are dynamic aligned with material ui icons and google icons just a string.
+  // More info can be find on link
+  // https://fontawesomeicons.com/materialdesign/icons
+  const fields = [
+    {
+      id: 0,
+      fieldName: "Osnovne informacije",
+      propName: "name",
+      inMainTable: true,
+      inDetails: true,
+      editable: true,
+      disabled: false,
+      required: true,
+      description: "255",
+      ui_prop: "settings",
+      sortable: true,
+      inputType: "input",
+    },
+    {
+      id: 1,
+      fieldName: "Strana za prijavu na portal",
+      propName: "name",
+      inMainTable: true,
+      inDetails: true,
+      editable: true,
+      disabled: false,
+      required: true,
+      description: "255",
+      ui_prop: "login",
+      sortable: true,
+      inputType: "input",
+    },
+  ];
   return (
     <List>
-      <ListItem
-        disablePadding
-        selected={selected === 0 ? true : false}
-        onClick={() => handleSelect(0)}
-        id={0}
-      >
-        <ListItemButton>
-          <ListItemIcon>
-            <SettingsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Osnovne informacije" />
-          <ChevronRightIcon />
-        </ListItemButton>
-      </ListItem>
-      <ListItem
-        disablePadding
-        selected={selected === 1 ? true : false}
-        onClick={() => handleSelect(1)}
-        id={1}
-      >
-        <ListItemButton>
-          <ListItemIcon>
-            <LoginIcon />
-          </ListItemIcon>
-          <ListItemText primary="Strana za prijavu na portal" />
-          <ChevronRightIcon />
-        </ListItemButton>
-      </ListItem>
+      {fields.map((item, index) => (
+        <ListItem
+          key={item.id}
+          disablePadding
+          selected={selected === item.id ? true : false}
+          onClick={() => handleSelect(item.id)}
+        >
+          <ListItemButton>
+            <ListItemIcon>
+              <Icon>{item.ui_prop}</Icon>
+            </ListItemIcon>
+            <ListItemText primary={item.fieldName} />
+            <ChevronRightIcon />
+          </ListItemButton>
+        </ListItem>
+      ))}
     </List>
   );
 };

@@ -43,6 +43,7 @@ const CreateForm = ({
               name={item.propName}
               label={item.fieldName}
               required={item.required}
+              description={item.description}
               value={value}
               error={error}
               onChange={onChangeHandler}
