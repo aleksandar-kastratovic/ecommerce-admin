@@ -3,17 +3,14 @@ import React, { useState, useEffect } from "react";
 // material-ui components
 import Box from "@mui/material/Box";
 import CreateForm from "../../../components/shared/Form/CreateForm";
-import LeftColum from "./LeftColum";
-import TwoColumn from "../../../components/shared/Layout/TwoColumn/TwoColumn";
-import Grid from "@mui/material/Grid";
-import Button from "@mui/material/Button";
-import CheckIcon from "@mui/icons-material/Check";
 
+import DetailsList from "./DetailsList";
 import UploadForm from "./UploadForm";
-import styles from "./DetailsForm.module.scss";
 import fieldsFormOne from "../fieldsFormOne.json";
 import fieldsFormTwo from "../fieldsFormTwo.json";
 import { isEmpty } from "lodash";
+import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
+import ThreeColumnDetails from "../../../components/shared/Layout/Details/ThreeColumnDetails/ThreeColumnDetails";
 
 const DetailsForm = ({}) => {
   // TODO should be fully configurable through API whole page not only details just a showcase
@@ -70,20 +67,15 @@ const DetailsForm = ({}) => {
   };
 
   return (
-    <TwoColumn
-      left={<LeftColum handleSelectInDetails={handleSelectInDetails} />}
-      right={
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid
-            container
-            spacing={2}
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Grid item xs={3}>
-              <UploadForm title={showColumn ? "Logo Slika" : "Tab ikonica"} />
-            </Grid>
-            <Grid item xs={6}>
+    <DetailsBasic
+      list={<DetailsList handleSelectInDetails={handleSelectInDetails} />}
+      main={
+        <ThreeColumnDetails
+          left={
+            <UploadForm title={showColumn ? "Logo Slika" : "Tab ikonica"} />
+          }
+          middle={
+            <Box component="form" autoComplete="off">
               {fields.map((item, index) => (
                 <CreateForm
                   data-test-id="B2B-settings-form"
@@ -102,22 +94,12 @@ const DetailsForm = ({}) => {
                   }
                 />
               ))}
-            </Grid>
-            {showColumn && (
-              <Grid item xs={3}>
-                <UploadForm title="Pozadinska slika" />
-              </Grid>
-            )}
-          </Grid>
-          <Button
-            className={styles.saveButton}
-            variant="contained"
-            endIcon={<CheckIcon />}
-            onClick={onSubmit}
-          >
-            Sacuvaj
-          </Button>
-        </Box>
+            </Box>
+          }
+          right={showColumn ? <UploadForm title="Pozadinska slika" /> : <div />}
+          onSubmit={onSubmit}
+          buttonText="Sacuvaj"
+        />
       }
     />
   );

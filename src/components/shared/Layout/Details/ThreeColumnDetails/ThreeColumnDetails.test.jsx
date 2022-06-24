@@ -2,11 +2,11 @@ import React from "react";
 
 import { shallow } from "enzyme";
 
-import TwoColumn from "./TwoColumn";
+import ThreeColumnDetails from "./ThreeColumnDetails";
 
-describe("<TwoColumn />", () => {
+describe("<ThreeColumnDetails />", () => {
   it("should render successfully", async () => {
-    const wrapper = shallow(<TwoColumn />);
+    const wrapper = shallow(<ThreeColumnDetails />);
     expect.assertions(1);
     expect(wrapper).toHaveLength(1);
   });
