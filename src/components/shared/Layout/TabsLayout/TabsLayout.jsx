@@ -11,6 +11,7 @@ import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
 
 import styles from "./TabsLayout.module.scss";
 
+// The old layout type is not used anymore. It is here just because if we decide to go back to this kind of layout.
 const TabsLayout = ({
   listTitle = "",
   detailsTitle = "",

@@ -22,22 +22,22 @@ const ListTableHead = ({
   return (
     <TableHead>
       <TableRow>
-        {fields.map(({ propName, fieldName, sortable }) => (
+        {fields.map(({ prop_name, field_name, sortable }) => (
           <TableCell
             className={styles.headStyle}
-            key={propName}
-            sortDirection={orderBy === propName ? order : false}
+            key={prop_name}
+            sortDirection={orderBy === prop_name ? order : false}
           >
             {sortable ? (
               <TableSortLabel
-                active={orderBy === propName}
-                direction={orderBy === propName ? order : "asc"}
-                onClick={createSortHandler(propName)}
+                active={orderBy === prop_name}
+                direction={orderBy === prop_name ? order : "asc"}
+                onClick={createSortHandler(prop_name)}
               >
-                {fieldName}
+                {field_name}
               </TableSortLabel>
             ) : (
-              <>{fieldName}</>
+              <>{field_name}</>
             )}
           </TableCell>
         ))}

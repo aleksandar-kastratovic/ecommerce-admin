@@ -9,13 +9,23 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-
+import Typography from "@mui/material/Typography";
 import TablePagination from "@mui/material/TablePagination";
+import Button from "@mui/material/Button";
+import AddIcon from "@mui/icons-material/Add";
+import Box from "@mui/material/Box";
 
 import ListTableHead from "./ListTableHead";
 import styles from "./ListTable.module.scss";
 
-const ListTable = ({ fields = [], data = [], handleRowClick = () => {} }) => {
+const ListTable = ({
+  fields = [],
+  data = [],
+  handleEditClick = () => {},
+  handleCreateNew = () => {},
+  title = "",
+  showButton = false,
+}) => {
   // error is for validations backend and frontend
   // Please use destructuring
   // Since on a project is not used strong type(for example typescript or even proptypes - deprecated)
@@ -50,19 +60,19 @@ const ListTable = ({ fields = [], data = [], handleRowClick = () => {} }) => {
     return 0;
   };
 
-  const displayData = (data, propName, inputType) => {
+  const displayData = (data, prop_name, input_type) => {
     let content;
 
-    switch (inputType) {
+    switch (input_type) {
       case "iconButton":
         content = (
-          <IconButton aria-label="edit" onClick={handleRowClick(data.id)}>
+          <IconButton aria-label="edit" onClick={handleEditClick(data.id)}>
             <ModeEditOutlineOutlinedIcon />
           </IconButton>
         );
         break;
       default:
-        content = data[propName];
+        content = data[prop_name];
         break;
     }
     return content;
@@ -70,6 +80,17 @@ const ListTable = ({ fields = [], data = [], handleRowClick = () => {} }) => {
 
   return (
     <>
+      <Box className={styles.toolBarStyle}>
+        <Typography variant="h5" component="div" className={styles.titleStyle}>
+          {title}
+        </Typography>
+        {showButton && (
+          <Button onClick={handleCreateNew} className={styles.tabsBtnCreate}>
+            Kreiraj novi
+            <AddIcon />
+          </Button>
+        )}
+      </Box>
       <TableContainer component={Paper} className={styles.tableStyle}>
         <Table>
           <ListTableHead
@@ -87,9 +108,9 @@ const ListTable = ({ fields = [], data = [], handleRowClick = () => {} }) => {
                   {/* It is not recommended to use index as a key but in this case,
                you never know what could be the key for a data 
                that is received from api call */}
-                  {fields.map(({ propName, inputType }) => (
-                    <TableCell key={propName}>
-                      {displayData(data, propName, inputType)}
+                  {fields.map(({ prop_name, input_type }) => (
+                    <TableCell key={prop_name}>
+                      {displayData(data, prop_name, input_type)}
                     </TableCell>
                   ))}
                 </TableRow>

@@ -1,9 +1,9 @@
 [
     {
-        "fieldName": "Glavni naslov",
-        "propName": "name",
-        "inMainTable": true,
-        "inDetails": true,
+        "field_name": "Glavni naslov",
+        "prop_name": "name",
+        "in_main_table": true,
+        "in_details": true,
         "editable": true,
         "disabled": false,
         "required": true,
@@ -17,19 +17,19 @@
             "kada se klikne na komponentu obavi se poziv",
             "pogledati mui autocomplite"
         ],
-        "inputType": "input"
+        "input_type": "input"
     },
     {
-        "fieldName": "Podnaslov",
-        "propName": "subname",
+        "field_name": "Podnaslov",
+        "prop_name": "subname",
         "inMainTable": true,
-        "inDetails": true,
+        "in_details": true,
         "editable": true,
         "disabled": false,
         "required": false,
         "description": "Maximum file size: 2MB, Allowed file types: Not all browsers support all these formats!",
         "ui_prop": "xyz",
         "sortable": false,
-        "inputType": "input"
+        "input_type": "input"
     }
 ]

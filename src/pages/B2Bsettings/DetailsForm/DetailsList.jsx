@@ -9,60 +9,35 @@ import ListItemText from "@mui/material/ListItemText";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Icon from "@mui/material/Icon";
 
+import fields from "./DetailsListFields.json";
+
 const LeftColum = ({ handleSelectInDetails }) => {
   const [selected, setSelected] = useState(0);
+
+  // Select in list
+  // NOTE id id will be from data received from api, this is just for setup
   const handleSelect = (id) => {
     setSelected(id);
     handleSelectInDetails(id);
   };
-  // NOTE id id will be from data received from api, this is just for setup
   // NOTE: Icons are dynamic aligned with material ui icons and google icons just a string.
   // More info can be find on link
   // https://fontawesomeicons.com/materialdesign/icons
-  const fields = [
-    {
-      id: 0,
-      fieldName: "Osnovne informacije",
-      propName: "name",
-      inMainTable: true,
-      inDetails: true,
-      editable: true,
-      disabled: false,
-      required: true,
-      description: "255",
-      ui_prop: "settings",
-      sortable: true,
-      inputType: "input",
-    },
-    {
-      id: 1,
-      fieldName: "Strana za prijavu na portal",
-      propName: "name",
-      inMainTable: true,
-      inDetails: true,
-      editable: true,
-      disabled: false,
-      required: true,
-      description: "255",
-      ui_prop: "login",
-      sortable: true,
-      inputType: "input",
-    },
-  ];
   return (
     <List>
-      {fields.map((item, index) => (
+      {fields.map(({ id, field_name, disabled, ui_prop }, index) => (
         <ListItem
-          key={item.id}
+          key={id}
           disablePadding
-          selected={selected === item.id ? true : false}
-          onClick={() => handleSelect(item.id)}
+          selected={selected === id ? true : false}
+          onClick={() => handleSelect(id)}
+          disabled={disabled}
         >
           <ListItemButton>
             <ListItemIcon>
-              <Icon>{item.ui_prop}</Icon>
+              <Icon>{ui_prop}</Icon>
             </ListItemIcon>
-            <ListItemText primary={item.fieldName} />
+            <ListItemText primary={field_name} />
             <ChevronRightIcon />
           </ListItemButton>
         </ListItem>

@@ -1,3 +1,30 @@
+@import '../../../variables.scss';
+
+.toolBarStyle {
+    text-align: left;
+}
+
+.titleStyle {
+    margin: 1rem !important;
+    display: inline;
+}
+
+.tabsBtnCreate {
+    right: 0.5rem !important;
+    background-color: $lightBlue  !important;
+    color: $white  !important;
+    display: inline-block;
+    float: right;
+    position: relative;
+}
+
+.tabsBtnCreate:hover {
+    background-color: $lightGrey  !important;
+    color: $black  !important;
+    cursor: pointer !important;
+}
+
+
 .tableStyle {
     margin-top: 1rem;
 }

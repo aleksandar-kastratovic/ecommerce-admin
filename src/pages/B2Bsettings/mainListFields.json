@@ -1,41 +1,41 @@
 [
     {
-        "fieldName": "Naziv modula",
-        "propName": "name",
-        "inMainTable": true,
-        "inDetails": true,
+        "field_name": "Naziv modula",
+        "prop_name": "name",
+        "in_main_table": true,
+        "in_details": true,
         "editable": true,
         "disabled": false,
         "required": true,
         "description": "255",
         "ui_prop": "xyz",
         "sortable": true,
-        "inputType": "input"
+        "input_type": "input"
     },
     {
-        "fieldName": "Opis",
-        "propName": "b2b",
-        "inMainTable": true,
-        "inDetails": true,
+        "field_name": "Opis",
+        "prop_name": "b2b",
+        "in_main_table": true,
+        "in_details": true,
         "editable": true,
         "disabled": false,
         "required": false,
         "description": "255",
         "ui_prop": "xyz",
         "sortable": false,
-        "inputType": "input"
+        "input_type": "input"
     },
     {
-        "fieldName": "Akcije",
-        "propName": "image_logo",
-        "inMainTable": true,
-        "inDetails": true,
+        "field_name": "Akcije",
+        "prop_name": "image_logo",
+        "in_main_table": true,
+        "in_details": true,
         "editable": true,
         "disabled": false,
         "required": true,
         "description": "255",
         "ui_prop": "xyz",
         "sortable": true,
-        "inputType": "iconButton"
+        "input_type": "iconButton"
     }
 ]

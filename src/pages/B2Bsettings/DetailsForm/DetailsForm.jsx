@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 // material-ui components
 import Box from "@mui/material/Box";
@@ -12,13 +13,19 @@ import { isEmpty } from "lodash";
 import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
 import ThreeColumnDetails from "../../../components/shared/Layout/Details/ThreeColumnDetails/ThreeColumnDetails";
 
+import mockData from "../mockData.json";
+
 const DetailsForm = ({}) => {
+  const { B2BId } = useParams();
+  const navigate = useNavigate();
+
+  const data = mockData;
   // TODO should be fully configurable through API whole page not only details just a showcase
   // showColumn will be removed
   // through config you will get an layout and component will behave like you want - see for example CreateForm
   const [fields, setFields] = useState(fieldsFormOne);
   // new item
-  const [newItem, setNewItem] = useState({ name: "", subname: "" });
+  const [newItem, setNewItem] = useState({ name: "", b2b: "", key_word: "" });
   const [showColumn, setShowColumn] = useState(false);
   // when you receive a backend validation it should be implemented through the same error object
   // and a context validator avalible on whole app.
@@ -31,6 +38,16 @@ const DetailsForm = ({}) => {
   useEffect(() => {
     setFields(fieldsFormOne);
   }, []);
+
+  useEffect(() => {
+    // TODO API Get call not mock data
+    if (data) {
+      const findDetails = data.find(
+        (element) => element.id === parseInt(B2BId)
+      );
+      setNewItem(findDetails);
+    }
+  }, [B2BId]);
 
   useEffect(() => {
     const errors = { ...inputsError };
@@ -66,8 +83,13 @@ const DetailsForm = ({}) => {
     setNewItem({ ...newItem, [target.name]: target.value });
   };
 
+  const handleBackToList = () => {
+    navigate(`/B2B-settings`);
+  };
+
   return (
     <DetailsBasic
+      handleBackToList={handleBackToList}
       list={<DetailsList handleSelectInDetails={handleSelectInDetails} />}
       main={
         <ThreeColumnDetails
@@ -84,13 +106,13 @@ const DetailsForm = ({}) => {
                   key={index}
                   error={
                     Array.isArray(item)
-                      ? item.map(({ propName }) => inputsError[propName])
-                      : inputsError[item.propName]
+                      ? item.map(({ prop_name }) => inputsError[prop_name])
+                      : inputsError[item.prop_name]
                   }
                   value={
                     Array.isArray(item) && newItem
-                      ? newItem[item.propName]
-                      : newItem[item.propName]
+                      ? newItem[item.prop_name]
+                      : newItem[item.prop_name]
                   }
                 />
               ))}

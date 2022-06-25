@@ -1,0 +1,16 @@
+@import '../../../../../variables.scss';
+
+.buttonBack {
+    position: absolute !important;
+    right: 0 !important;
+    margin-right: 3rem !important;
+    margin-top: 1rem !important;
+    background-color: $lightGrey  !important;
+    color: $black  !important;
+}
+
+.buttonBack:hover {
+    background-color: $lightGrey  !important;
+    color: $black  !important;
+    cursor: pointer !important;
+}

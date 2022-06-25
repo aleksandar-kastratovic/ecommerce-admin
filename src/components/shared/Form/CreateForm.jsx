@@ -36,12 +36,12 @@ const CreateForm = ({
     );
   } else {
     if (item.editable) {
-      switch (item.inputType) {
+      switch (item.input_type) {
         case "input":
           formItem = (
             <TextBox
-              name={item.propName}
-              label={item.fieldName}
+              name={item.prop_name}
+              label={item.field_name}
               required={item.required}
               description={item.description}
               value={value}
@@ -52,7 +52,7 @@ const CreateForm = ({
           break;
         case "checkbox":
           formItem = (
-            <FormControlLabel control={<Checkbox />} label={item.fieldName} />
+            <FormControlLabel control={<Checkbox />} label={item.field_name} />
           );
           break;
         case "radio":
@@ -60,14 +60,14 @@ const CreateForm = ({
             <FormControlLabel
               value="male"
               control={<Radio />}
-              label={item.fieldName}
+              label={item.field_name}
             />
           );
           break;
         case "dropdown":
           formItem = (
             <FormControl fullWidth>
-              <InputLabel id="select-label">{item.fieldName}</InputLabel>
+              <InputLabel id="select-label">{item.field_name}</InputLabel>
               <Select labelId="select-label" id="simple-select" label="Age">
                 {/* TODO get options through configuration  */}
                 <MenuItem value={10}>Ten</MenuItem>
