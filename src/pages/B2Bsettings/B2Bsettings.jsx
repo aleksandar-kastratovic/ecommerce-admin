@@ -44,6 +44,7 @@ const B2Bsettings = ({}) => {
           data={mockData}
           handleEditClick={handleEditClick}
           handleCreateNew={handleCreateNew}
+          showToolbar={false}
           showButton={false}
         />
       </Paper>

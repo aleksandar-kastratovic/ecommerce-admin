@@ -3,6 +3,8 @@ import React from "react";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import Icon from "@mui/material/Icon";
 
 const TextBox = ({
   name = "",
@@ -15,6 +17,7 @@ const TextBox = ({
   size = "small",
   fontWeight = "normal",
   error = "",
+  ui_prop = "",
   onChange = () => {},
 }) => {
   // reusable component for input fields
@@ -46,6 +49,13 @@ const TextBox = ({
         }}
         // helperText={error.content}
         helperText={error.content ? error.content : description}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="start">
+              <Icon>{ui_prop}</Icon>
+            </InputAdornment>
+          ),
+        }}
       />
     </FormControl>
   );

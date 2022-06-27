@@ -14,6 +14,10 @@ import TablePagination from "@mui/material/TablePagination";
 import Button from "@mui/material/Button";
 import AddIcon from "@mui/icons-material/Add";
 import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import TextBox from "../TextBox/TextBox";
+import BasicDatePicker from "../BasicDatePicker/BasicDatePicker";
+import Icon from "@mui/material/Icon";
 
 import ListTableHead from "./ListTableHead";
 import styles from "./ListTable.module.scss";
@@ -24,6 +28,7 @@ const ListTable = ({
   handleEditClick = () => {},
   handleCreateNew = () => {},
   title = "",
+  showToolbar = false,
   showButton = false,
 }) => {
   // error is for validations backend and frontend
@@ -81,14 +86,41 @@ const ListTable = ({
   return (
     <>
       <Box className={styles.toolBarStyle}>
-        <Typography variant="h5" component="div" className={styles.titleStyle}>
-          {title}
-        </Typography>
-        {showButton && (
-          <Button onClick={handleCreateNew} className={styles.tabsBtnCreate}>
-            Kreiraj novi
-            <AddIcon />
-          </Button>
+        <Box>
+          <Typography
+            variant="h5"
+            component="div"
+            className={styles.titleStyle}
+          >
+            {title}
+          </Typography>
+          {showButton && (
+            <Button onClick={handleCreateNew} className={styles.tabsBtnCreate}>
+              Kreiraj novi
+              <AddIcon />
+            </Button>
+          )}
+        </Box>
+        {showToolbar && (
+          <Toolbar>
+            <TextBox placeholder="Kljucne reci za pretragu" ui_prop="search" />
+            <BasicDatePicker label="datum od" />
+            <BasicDatePicker label="datum do" />
+            <Box className={styles.toolbarButtonsGroup}>
+              <Button
+                className={styles.toolbarButtons}
+                startIcon={<Icon>{"settings"}</Icon>}
+              >
+                Kolone
+              </Button>
+              <Button
+                className={styles.toolbarButtons}
+                startIcon={<Icon>{"tune"}</Icon>}
+              >
+                Filteri
+              </Button>
+            </Box>
+          </Toolbar>
         )}
       </Box>
       <TableContainer component={Paper} className={styles.tableStyle}>
