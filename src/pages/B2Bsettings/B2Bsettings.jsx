@@ -10,6 +10,8 @@ import { flatten } from "lodash";
 import fields from "./mainListFields.json";
 
 import mockData from "./mockData.json";
+import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
+import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar";
 
 const B2Bsettings = ({}) => {
   const init = {
@@ -38,14 +40,18 @@ const B2Bsettings = ({}) => {
   return (
     <>
       <Paper elevation={0} className={styles.paperStyle}>
-        <ListTable
+        <ListTableTitle
           title="B2B eCommerce podesavanje modula"
+          showButton={false}
+          handleCreateNew={handleCreateNew}
+        />
+
+        <ListTableToolbar showToolbar={false} />
+
+        <ListTable
           fields={flatten(fields).filter(({ in_main_table }) => in_main_table)}
           data={mockData}
           handleEditClick={handleEditClick}
-          handleCreateNew={handleCreateNew}
-          showToolbar={false}
-          showButton={false}
         />
       </Paper>
     </>

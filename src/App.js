@@ -171,14 +171,14 @@ function App() {
                       </Route>
                     );
                   }
-                  if (object.id === screensData.B2BCONFIG.id) {
+                  if (object.id === screensData.B2BCFG.id) {
                     return (
                       <Route key={object.id}>
                         <Route
                           key={object.id}
                           path="/B2B-settings"
                           element={
-                            <B2Bsettings routeData={screensData.B2BCONFIG} />
+                            <B2Bsettings routeData={screensData.B2BCFG} />
                           }
                         />
                         <Route

@@ -1,0 +1,21 @@
+@import '../../../variables.scss';
+
+.titleStyle {
+    margin: 1rem !important;
+    display: inline;
+}
+
+.buttonCreate {
+    right: 0.5rem !important;
+    background-color: $lightBlue  !important;
+    color: $white  !important;
+    display: inline-block !important;
+    float: right !important;
+    position: relative !important;
+}
+
+.buttonCreate:hover {
+    background-color: $lightGrey  !important;
+    color: $black  !important;
+    cursor: pointer !important;
+}

@@ -39,7 +39,7 @@ const screenDateDef = [
   // [12, 'SETNG', 'Podešavanja', '/', faCog, MainMenuGroups.SETTINGS ],
   [
     12,
-    "B2BCONFIG",
+    "B2BCFG",
     "B2B podešavanja",
     "/B2B-settings",
     faCog,
