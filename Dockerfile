@@ -35,6 +35,7 @@ RUN echo && \
 
 # Serve the build folder via nginx
 FROM nginx:1.17.8-alpine as nginx
+ENV TZ=Europe/Belgrade
 
 # Copy all files
 COPY deploy/docker /
