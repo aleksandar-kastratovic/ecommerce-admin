@@ -22,7 +22,7 @@ const DetailsBasic = ({
             Nazad
             <KeyboardReturnIcon />
           </Button>
-          <Box>{main}</Box>
+          <Box className={styles.main}>{main}</Box>
         </Box>
       </Box>
     </Paper>

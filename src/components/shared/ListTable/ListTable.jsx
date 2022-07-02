@@ -13,12 +13,18 @@ import TablePagination from "@mui/material/TablePagination";
 import ListTableHead from "./ListTableHead";
 import styles from "./ListTable.module.scss";
 
-const ListTable = ({ fields = [], data = [], handleEditClick = () => {} }) => {
-  // error is for validations backend and frontend
+const ListTable = ({
+  fields = [],
+  listData = [],
+  handleEditClick = () => {},
+}) => {
   // Please use destructuring
   // Since on a project is not used strong type(for example typescript or even proptypes - deprecated)
   // it is recommended for all properties to give an initial value
   // In that way if you don't receive value app will not break and all developers will know what type to expect number, string or object, arr etc.
+
+  const { items, pagination } = listData;
+
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
 
@@ -54,7 +60,10 @@ const ListTable = ({ fields = [], data = [], handleEditClick = () => {} }) => {
     switch (input_type) {
       case "iconButton":
         content = (
-          <IconButton aria-label="edit" onClick={handleEditClick(data.id)}>
+          <IconButton
+            aria-label="edit"
+            onClick={handleEditClick(data["module"])}
+          >
             <ModeEditOutlineOutlinedIcon />
           </IconButton>
         );
@@ -77,34 +86,37 @@ const ListTable = ({ fields = [], data = [], handleEditClick = () => {} }) => {
             onRequestSort={handleSort}
             rowCount={fields.length}
           />
-          <TableBody>
-            {data
-              .sort(getComparator(order, orderBy))
-              .map(({ ...data }, index) => (
-                <TableRow hover key={index}>
-                  {/* It is not recommended to use index as a key but in this case,
+          {/* It is not recommended to use index as a key but in this case,
                you never know what could be the key for a data 
                that is received from api call */}
-                  {fields.map(({ prop_name, input_type }) => (
-                    <TableCell key={prop_name}>
-                      {displayData(data, prop_name, input_type)}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
+          <TableBody>
+            {items &&
+              items
+                .sort(getComparator(order, orderBy))
+                .map(({ ...data }, index) => (
+                  <TableRow hover key={index}>
+                    {fields.map(({ prop_name, input_type }) => (
+                      <TableCell key={prop_name}>
+                        {displayData(data, prop_name, input_type)}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 100]}
-        component="div"
-        count={10}
-        rowsPerPage={10}
-        page={0}
-        labelRowsPerPage="Odaberi broj prikazanih"
-        onPageChange={handleChangePage}
-        // onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      {pagination?.total_pages > 1 && (
+        <TablePagination
+          rowsPerPageOptions={[10, 25, 100]}
+          component="div"
+          count={10}
+          rowsPerPage={10}
+          page={pagination?.selected_page}
+          labelRowsPerPage="Odaberi broj prikazanih"
+          onPageChange={handleChangePage}
+          // onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      )}
     </>
   );
 };

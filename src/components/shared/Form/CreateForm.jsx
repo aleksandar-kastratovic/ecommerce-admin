@@ -8,6 +8,7 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
+import ImageUpload from "../ImageUpload/ImageUpload";
 
 const CreateForm = ({
   item = {},
@@ -26,7 +27,7 @@ const CreateForm = ({
         {item.map((itemUnit, index) => (
           <CreateForm
             item={itemUnit}
-            key={itemUnit.propName}
+            key={itemUnit.prop_name}
             onChangeHandler={onChangeHandler}
             error={error[index]}
             value={value}
@@ -40,7 +41,20 @@ const CreateForm = ({
         case "input":
           formItem = (
             <TextBox
-              name={item.prop_name}
+              name={item.slug}
+              label={item.field_name}
+              required={item.required}
+              description={item.description}
+              value={value}
+              error={error}
+              onChange={onChangeHandler}
+            />
+          );
+          break;
+        case "image_upload":
+          formItem = (
+            <ImageUpload
+              name={item.slug}
               label={item.field_name}
               required={item.required}
               description={item.description}
