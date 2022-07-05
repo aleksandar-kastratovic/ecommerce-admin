@@ -13,6 +13,7 @@ import ImageUpload from "../ImageUpload/ImageUpload";
 const CreateForm = ({
   item = {},
   onChangeHandler = () => {},
+  onImageUpload = () => {},
   value = "",
   error = "",
 }) => {
@@ -41,7 +42,7 @@ const CreateForm = ({
         case "input":
           formItem = (
             <TextBox
-              name={item.slug}
+              name={item.prop_name}
               label={item.field_name}
               required={item.required}
               description={item.description}
@@ -54,13 +55,13 @@ const CreateForm = ({
         case "image_upload":
           formItem = (
             <ImageUpload
-              name={item.slug}
+              name={item.prop_name}
               label={item.field_name}
               required={item.required}
               description={item.description}
               value={value}
               error={error}
-              onChange={onChangeHandler}
+              onImageUpload={onImageUpload}
             />
           );
           break;

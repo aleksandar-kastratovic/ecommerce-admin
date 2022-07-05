@@ -105,7 +105,7 @@ const ListTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      {pagination?.total_pages > 1 && (
+      {pagination?.total_pages > 0 && (
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component="div"

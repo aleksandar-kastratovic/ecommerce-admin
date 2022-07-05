@@ -40,7 +40,7 @@
     },
     {
         "field_name": "Podrazumevana slika",
-        "prop_name": "image_default",
+        "prop_name": "missing",
         "inMainTable": true,
         "in_details": true,
         "editable": true,

@@ -20,7 +20,7 @@ const TwoColumnDetails = ({
         <Grid item xs={6}>
           {middle}
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={5}>
           {right}
         </Grid>
       </Grid>

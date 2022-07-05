@@ -20,7 +20,7 @@ const ImageUpload = ({
   description = "",
   value = "",
   error = "",
-  onChangeHandler = () => {},
+  onImageUpload = () => {},
 }) => {
   // just a component that will behave through properties
   return (
@@ -35,11 +35,13 @@ const ImageUpload = ({
           <br />
           {description}
         </Typography>
-        <label htmlFor="contained-button-file">
+        <label htmlFor={label}>
           <Input
-            accept="image/*"
-            id="contained-button-file"
             multiple
+            name={name}
+            accept="image/*"
+            id={label}
+            onChange={(e) => onImageUpload(e)}
             type="file"
             sx={{ display: "none" }}
           />

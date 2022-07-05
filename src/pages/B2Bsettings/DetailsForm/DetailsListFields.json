@@ -1,7 +1,7 @@
 [
     {
         "field_name": "Osnovne informacije",
-        "slug": "basic",
+        "prop_name": "basic",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
@@ -14,7 +14,7 @@
     },
     {
         "field_name": "Podešavanje login forma za B2B",
-        "slug": "login",
+        "prop_name": "login",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
@@ -27,7 +27,7 @@
     },
     {
         "field_name": "Izgled login forme prilikom share-a",
-        "slug": "share",
+        "prop_name": "share",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
@@ -40,7 +40,7 @@
     },
     {
         "field_name": "Manuelni CSS",
-        "slug": "css",
+        "prop_name": "css",
         "in_main_table": true,
         "in_details": true,
         "editable": true,

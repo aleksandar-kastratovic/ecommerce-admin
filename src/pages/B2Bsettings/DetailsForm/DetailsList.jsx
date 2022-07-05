@@ -43,11 +43,11 @@ const DetailsList = ({
     >
       {!isLoadingList ? (
         <>
-          {fields.map(({ slug, field_name, disabled, ui_prop }, index) => (
+          {fields.map(({ prop_name, field_name, disabled, ui_prop }, index) => (
             <ListItem
-              key={slug}
+              key={prop_name}
               disablePadding
-              selected={selected === slug ? true : false}
+              selected={selected === prop_name ? true : false}
               onClick={() => handleSelect(submodules[index]?.slug)}
               disabled={disabled}
             >

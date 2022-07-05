@@ -18,7 +18,9 @@ import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic
 
 import AuthContext from "../../../store/auth-contex";
 import { useQuery } from "react-query";
-import { getSubmodulesList, getSlug } from "../services";
+import { getSubmodulesList, getSlug, createSlug } from "../services";
+
+import axios from "axios";
 
 const DetailsForm = ({}) => {
   const { B2BId } = useParams();
@@ -50,7 +52,7 @@ const DetailsForm = ({}) => {
 
   const [fields, setFields] = useState(fieldsSlugsBasic);
   // new item
-  const [newItem, setNewItem] = useState({ name: "", b2b: "", key_word: "" });
+  const [newItem, setNewItem] = useState({});
   const [slugs, setSlugs] = useState([]);
   const [detailsList, setDetailsList] = useState([]);
   const [loadingForm, setLoadingForm] = useState(false);
@@ -70,6 +72,12 @@ const DetailsForm = ({}) => {
   useEffect(() => {
     if (responseSlugs) {
       setSlugs(responseSlugs?.data?.payload?.items);
+
+      const repack = responseSlugs?.data?.payload?.items.reduce(
+        (acc, cur) => ({ ...acc, [cur.slug]: cur.value }),
+        {}
+      );
+      setNewItem(repack);
     }
   }, [responseSlugs]);
 
@@ -100,7 +108,12 @@ const DetailsForm = ({}) => {
         }
       }
     });
-    isEmpty(errors) ? console.log(newItem) : setInputsError(errors);
+    isEmpty(errors) ? saveData() : setInputsError(errors);
+  };
+
+  const saveData = () => {
+    createSlug(user.access_token, moduleId.module, moduleId.slug, newItem);
+    handleBackToList();
   };
 
   // TODO imitating the async API call it will be removed after configuration fields are retrieved from backend side
@@ -131,7 +144,6 @@ const DetailsForm = ({}) => {
   const handleSelectInDetails = useCallback(async (module, slug) => {
     setLoadingForm(true);
     changeFields(slug);
-    setFields(fieldsSlugsBasic);
     setModuleId({ ...moduleId, slug: slug });
     setSelected(slug);
   }, []);
@@ -139,6 +151,27 @@ const DetailsForm = ({}) => {
   const formItemChangeHandler = ({ target }) => {
     setNewItem({ ...newItem, [target.name]: target.value });
   };
+
+  const formImageUpload = useCallback((event) => {
+    event.preventDefault();
+    const selectedFile = event.target.files[0];
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setNewItem({ ...newItem, [event.target.name]: reader.result });
+      // const response = axios.post(
+      //   "https://api.staging.croonus.com/api/v1/configuration/b2b/presentation/basic",
+      //   reader.result,
+      //   {
+      //     headers: {
+      //       Authorization: `Bearer ${user.access_token}`,
+      //     },
+      //   }
+      // );
+      // console.log("response", response);
+    };
+    reader.readAsDataURL(selectedFile);
+  });
 
   const handleBackToList = () => {
     navigate(`/B2B-settings`);
@@ -167,15 +200,20 @@ const DetailsForm = ({}) => {
                         <CreateForm
                           data-test-id="B2B-settings-form"
                           onChangeHandler={formItemChangeHandler}
+                          onImageUpload={formImageUpload}
                           item={item}
                           key={index}
                           error={
                             Array.isArray(item)
-                              ? item.map(({ slug }) => inputsError[slug])
-                              : inputsError[item.slug]
+                              ? item.map(
+                                  ({ prop_name }) => inputsError[prop_name]
+                                )
+                              : inputsError[item.prop_name]
                           }
                           value={
-                            !isLoadingSlugs ? slugs[index]?.value : "neko ime"
+                            Array.isArray(item) && newItem
+                              ? newItem[item.prop_name]
+                              : newItem[item.prop_name]
                           }
                         />
                       ))}
