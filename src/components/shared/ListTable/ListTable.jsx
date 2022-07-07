@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import Pagination from '@mui/material/Pagination';
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
@@ -12,6 +13,9 @@ import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutl
 import TablePagination from "@mui/material/TablePagination";
 import ListTableHead from "./ListTableHead";
 import styles from "./ListTable.module.scss";
+import { PaginationItem } from "@mui/material";
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 const ListTable = ({
   fields = [],
@@ -106,16 +110,22 @@ const ListTable = ({
         </Table>
       </TableContainer>
       {pagination?.total_pages > 0 && (
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={10}
-          rowsPerPage={10}
-          page={pagination?.selected_page}
-          labelRowsPerPage="Odaberi broj prikazanih"
-          onPageChange={handleChangePage}
-          // onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        // <TablePagination
+        //   rowsPerPageOptions={[10, 25, 100]}
+        //   component="div"
+        //   count={10}
+        //   rowsPerPage={10}
+        //   page={pagination?.selected_page}
+        //   labelRowsPerPage="Odaberi broj prikazanih"
+        //   onPageChange={handleChangePage}
+        //   // onRowsPerPageChange={handleChangeRowsPerPage}
+        // />
+
+      <Pagination count={20} variant="outlined" shape="rounded" className={styles.pagination+ ' settings-pagination'} siblingCount={6}>
+      <PaginationItem
+      className={styles.paginationLink}
+      />
+    </Pagination>
       )}
     </>
   );

@@ -9,6 +9,7 @@
     --main-color: #42b732;
     --second-color: #1b1b1b;
     --light-silver: #b3b3b3;
+    --dark-silver: #6d6d6d;
     --text-color: #1b1b1b;
     --small-text-color: #6c757d;
     --bg-color: #fff;
@@ -32,6 +33,7 @@
     --alert-info-color: #d1ecf1;
     --alert-border-color: rgba(0, 0, 0, .125);
     --card-divader-color: rgba(0, 0, 0, .1);
+    --transparent-blue: #1397a3;
     --categories-hover-bg: #f8f9fa;
     --search-bg: #ecf0fa;
     --tabs-bg: #ecf0fa;
@@ -39,6 +41,7 @@
     --input-group-color: #efefef;
     --text-login-color: #212529;
     --login-white-background: #fff;
+    --bg-green: #32eb844d;
 }
 
 .theme-dark {
@@ -157,6 +160,19 @@ a {
     font-size: 14px;
     margin-bottom: 0;
     color: var(--third-color);
+}
+.settings-list {
+    .Mui-selected {
+        background-color: var(--main-color) !important;
+        color: white !important;
+    }
+}
+.settings-pagination {
+
+    .Mui-selected {
+        background-color: var(--main-color) !important;
+        color: white !important;
+    }
 }
 .remember-checkbox {
     .form-check {
@@ -619,7 +635,7 @@ li.dropdown-item-custom.open .dropdown-menu {
 
 #sidebar .sidebar-categories {
     padding: 10px 15px;
-    background-color: rgb(50 235 132 / 30%);
+    background-color: #32eb844d;
 }
 
 #sidebar .sidebar-categories p {

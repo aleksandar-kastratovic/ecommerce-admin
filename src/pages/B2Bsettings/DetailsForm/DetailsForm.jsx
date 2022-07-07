@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import CreateForm from "../../../components/shared/Form/CreateForm";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
-
+import styles from './DetailsForm.module.scss';
 import DetailsList from "./DetailsList";
 import TwoColumnDetails from "../../../components/shared/Layout/Details/TwoColumnDetails/TwoColumnDetails";
 import fieldsSlugsBasic from "../fieldsSlugsBasic.json";
@@ -183,6 +183,7 @@ const DetailsForm = ({}) => {
         handleBackToList={handleBackToList}
         list={
           <DetailsList
+
             selected={selected}
             detailsList={detailsList}
             handleSelectInDetails={handleSelectInDetails}
