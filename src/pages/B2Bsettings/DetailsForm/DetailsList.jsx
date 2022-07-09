@@ -11,6 +11,7 @@ import Icon from "@mui/material/Icon";
 import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
+import Alert from "@mui/material/Alert";
 
 import fields from "./DetailsListFields.json";
 
@@ -19,12 +20,9 @@ const DetailsList = ({
   detailsList = [],
   selected = "",
   isLoadingList,
+  isErrorList = false,
 }) => {
   const { submodules, name, module } = detailsList;
-
-  // const [selected, setSelected] = useState(
-  //   submodules ? submodules[0]?.slug : ""
-  // );
 
   const handleSelect = (slug) => {
     handleSelectInDetails(module, slug);
@@ -34,42 +32,53 @@ const DetailsList = ({
   // More info can be find on link
   // https://fontawesomeicons.com/materialdesign/icons
   return (
-    <List
-      subheader={
-        <Typography variant="h5" component="div" sx={{ margin: "1rem" }}>
-          {name}
-        </Typography>
-      }
-    >
-      {!isLoadingList ? (
-        <>
-          {fields.map(({ prop_name, field_name, disabled, ui_prop }, index) => (
-            <ListItem
-              key={prop_name}
-              disablePadding
-              selected={selected === prop_name ? true : false}
-              onClick={() => handleSelect(submodules[index]?.slug)}
-              disabled={disabled}
-            >
-              <ListItemButton>
-                <ListItemIcon>
-                  <Icon>{ui_prop}</Icon>
-                </ListItemIcon>
-                <ListItemText primary={field_name} />
-                <ChevronRightIcon />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </>
-      ) : (
-        <Stack spacing={1}>
-          <Skeleton variant="text" height={50} />
-          <Skeleton variant="text" height={50} />
-          <Skeleton variant="text" height={50} />
-          <Skeleton variant="text" height={50} />
+    <>
+      <List
+        subheader={
+          <Typography variant="h5" component="div" sx={{ margin: "1rem" }}>
+            {name}
+          </Typography>
+        }
+      >
+        {!isLoadingList ? (
+          <>
+            {fields.map(
+              ({ prop_name, field_name, disabled, ui_prop }, index) => (
+                <ListItem
+                  key={prop_name}
+                  disablePadding
+                  selected={selected === prop_name ? true : false}
+                  onClick={() => handleSelect(submodules[index]?.slug)}
+                  disabled={disabled}
+                >
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <Icon>{ui_prop}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary={field_name} />
+                    <ChevronRightIcon />
+                  </ListItemButton>
+                </ListItem>
+              )
+            )}
+          </>
+        ) : (
+          <Stack spacing={1}>
+            <Skeleton variant="text" height={50} />
+            <Skeleton variant="text" height={50} />
+            <Skeleton variant="text" height={50} />
+            <Skeleton variant="text" height={50} />
+          </Stack>
+        )}
+      </List>
+      {isErrorList && (
+        <Stack sx={{ width: "100%" }}>
+          <Alert severity="error">
+            Doslo je do greske. Molim Vas pokusajte kasnije.
+          </Alert>
         </Stack>
       )}
-    </List>
+    </>
   );
 };
 

@@ -1,14 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 
 // mui imports
 import Typography from "@mui/material/Typography";
-import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
+
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 import FormHelperText from "@mui/material/FormHelperText";
+import CircularProgress from "@mui/material/CircularProgress";
+import { blue } from "@mui/material/colors";
+import Avatar from "@mui/material/Avatar";
+import Chip from "@mui/material/Chip";
+import Grid from "@mui/material/Grid";
+import Fab from "@mui/material/Fab";
+import Tooltip from "@mui/material/Tooltip";
+import CheckIcon from "@mui/icons-material/Check";
+import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadRounded";
+import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
+import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import Stack from "@mui/material/Stack";
+import Alert from "@mui/material/Alert";
 
 // other imports
 import styles from "./ImageUpload.module.scss";
@@ -21,70 +36,121 @@ const ImageUpload = ({
   value = "",
   error = "",
   onImageUpload = () => {},
+  onImagePreview = () => {},
 }) => {
-  // just a component that will behave through properties
+  const [loadingImage, setLoadingImage] = useState(false);
+
+  // Just on of the ways to implement css it doesnt have to be here it could be moved to module scss file
+  const buttonSx = {
+    color: "white",
+    ...(value && {
+      bgcolor: blue[100],
+    }),
+  };
+
+  const handleImageUpload = (e) => {
+    setLoadingImage(true);
+    onImageUpload(e);
+    const timeOutId = setTimeout(() => {
+      setLoadingImage(false);
+    }, 1000);
+    return () => clearTimeout(timeOutId);
+  };
+
   return (
     <>
-      <FormControl
-        sx={{
-          margin: "0.5rem",
-        }}
-      >
-        <FormLabel required={required}>{label}</FormLabel>
-        <Typography variant="caption" display="block" gutterBottom>
-          <br />
-          {description}
-        </Typography>
-        <label htmlFor={label}>
-          <Input
-            multiple
-            name={name}
-            accept="image/*"
-            id={label}
-            onChange={(e) => onImageUpload(e)}
-            type="file"
-            sx={{ display: "none" }}
-          />
-          <Button variant="contained" component="span">
-            <Box
-              sx={{
-                width: 100,
-                height: 100,
-                "&:hover": {
-                  backgroundColor: "primary.main",
-                  opacity: [0.9, 0.8, 0.7],
-                },
-              }}
-            >
-              <Typography
-                variant="caption"
-                display="block"
-                gutterBottom
-                sx={{ fontSize: "8px" }}
-              />
-              <AddPhotoAlternateOutlinedIcon sx={{ fontSize: "6rem" }} />
+      <Box sx={{ flexGrow: 1 }}>
+        <Grid container spacing={2} alignItems="center">
+          <Grid item xs={8} md={8}>
+            <FormControl className={styles.formStyle}>
+              <FormLabel required={required}>{label}</FormLabel>
+              <Typography variant="caption" display="block" gutterBottom>
+                <br />
+                {description}
+              </Typography>
+              <label htmlFor={label}>
+                <Input
+                  multiple
+                  name={name}
+                  accept="image/*"
+                  id={label}
+                  onChange={(e) => handleImageUpload(e)}
+                  type="file"
+                  sx={{ display: "none" }}
+                />
+                <Button
+                  variant="contained"
+                  component="span"
+                  className={styles.buttonStyle}
+                >
+                  <Box className={styles.boxStyle}>
+                    <Typography
+                      variant="caption"
+                      display="block"
+                      gutterBottom
+                    />
+                    {!value ? (
+                      <AddPhotoAlternateOutlinedIcon
+                        className={styles.addPhotoAlternateOutlinedIcon}
+                      />
+                    ) : (
+                      <ImageOutlinedIcon className={styles.imageOutlinedIcon} />
+                    )}
+                  </Box>
+                  <Box className={styles.avatarBoxStyle}>
+                    <Box className={styles.avatarStyle}>
+                      <Avatar sx={buttonSx}>
+                        {value ? (
+                          <CheckIcon />
+                        ) : (
+                          <DriveFolderUploadRoundedIcon />
+                        )}
+                      </Avatar>
+                      {loadingImage && (
+                        <CircularProgress
+                          className={styles.loadingImage}
+                          size={50}
+                        />
+                      )}
+                    </Box>
+                    <Box sx={{ m: 1, position: "relative" }}>
+                      <Chip label={label} sx={buttonSx} />
+                    </Box>
+                  </Box>
+                </Button>
+              </label>
+              <FormHelperText>
+                Maximum file size: 2MB, Allowed types: JBG, GIF, PNG, ICO, APNG,
+                Not all browsers support these formats
+              </FormHelperText>
+            </FormControl>
+          </Grid>
+          <Grid item xs={4} md={4}>
+            <Box>
+              {value && (
+                <Tooltip
+                  title="Klikni da pogledas sliku"
+                  className={styles.successAvatar}
+                >
+                  <Fab
+                    variant="extended"
+                    onClick={() => onImagePreview(value, label)}
+                  >
+                    <VisibilityOutlinedIcon
+                      className={styles.visibilityOutlinedIcon}
+                    />
+                  </Fab>
+                </Tooltip>
+              )}
+              {error && (
+                <Stack sx={{ width: "100%" }}>
+                  <Alert severity="error">{error}</Alert>
+                </Stack>
+              )}
             </Box>
-            {/* <Box
-              sx={{
-                width: 100,
-                height: 100,
-                backgroundColor: "green",
-                marginLeft: "2rem",
-                "&:hover": {
-                  backgroundColor: "primary.main",
-                  opacity: [0.9, 0.8, 0.7],
-                },
-              }}
-            >
-              TODO Jos jedan box za spiner dok se upload slika sa porukom succes
-            </Box> */}
-          </Button>
-        </label>
-        <FormHelperText>
-          Maximum file size: 2MB, Allowed types: JBG, GIF, PNG, ICO, APNG, Not
-          all browsers support these formats
-        </FormHelperText>
-      </FormControl>
+          </Grid>
+        </Grid>
+      </Box>
     </>
   );
 };

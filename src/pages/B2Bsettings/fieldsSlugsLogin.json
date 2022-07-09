@@ -6,7 +6,7 @@
         "in_details": true,
         "editable": true,
         "disabled": false,
-        "required": true,
+        "required": false,
         "description": "Slika koja se prikazuje na login strani",
         "ui_prop": "xyz",
         "sortable": true,

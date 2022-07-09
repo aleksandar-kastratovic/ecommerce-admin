@@ -6,7 +6,7 @@
         "in_details": true,
         "editable": true,
         "disabled": false,
-        "required": true,
+        "required": false,
         "description": "Kratak opis koji se, u zavisnosti gde, prikazuje prilikom share-a login forme",
         "ui_prop": "xyz",
         "sortable": true,

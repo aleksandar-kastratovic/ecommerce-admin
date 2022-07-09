@@ -14,6 +14,7 @@ const CreateForm = ({
   item = {},
   onChangeHandler = () => {},
   onImageUpload = () => {},
+  onImagePreview = () => {},
   value = "",
   error = "",
 }) => {
@@ -21,6 +22,7 @@ const CreateForm = ({
   // value is obvious
   // onChangeHandler change handler
   // error is for validations backend and frontend
+
   let formItem = null;
   if (Array.isArray(item)) {
     formItem = (
@@ -62,6 +64,7 @@ const CreateForm = ({
               value={value}
               error={error}
               onImageUpload={onImageUpload}
+              onImagePreview={onImagePreview}
             />
           );
           break;

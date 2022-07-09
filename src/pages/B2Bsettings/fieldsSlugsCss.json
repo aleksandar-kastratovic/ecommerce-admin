@@ -6,7 +6,7 @@
         "in_details": true,
         "editable": true,
         "disabled": false,
-        "required": true,
+        "required": false,
         "description": "CSS stil koji će se koristiti prilikom prikaza B2B portala",
         "ui_prop": "xyz",
         "sortable": true,

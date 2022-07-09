@@ -310,13 +310,13 @@ function App() {
                       );
                     }
                     // TODO: Change screensData item
-                    if (object.id === screensData.SETNG.id) {
+                    if (object.id === screensData.B2BCFG.id) {
                       return (
                         <Route
                           key={object.id}
                           path="/settings"
                           element={
-                            <SettingsPage routeData={screensData.SETNG} />
+                            <SettingsPage routeData={screensData.B2BCFG} />
                           }
                         />
                       );

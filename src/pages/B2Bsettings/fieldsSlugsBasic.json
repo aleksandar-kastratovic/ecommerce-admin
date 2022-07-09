@@ -14,7 +14,7 @@
     },
     {
         "field_name": "Favicon",
-        "prop_name": "image_favicon",
+        "prop_name": "favicon",
         "inMainTable": true,
         "in_details": true,
         "editable": true,
@@ -27,7 +27,7 @@
     },
     {
         "field_name": "Logo",
-        "prop_name": "image_logo",
+        "prop_name": "logo",
         "inMainTable": true,
         "in_details": true,
         "editable": true,
