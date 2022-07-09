@@ -33,29 +33,10 @@ const DetailsForm = ({}) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
-  const {
-    isSuccessList,
-    data: response,
-    isLoadingList,
-    isErrorList,
-  } = useQuery(["getSubmodulesList"], () =>
-    getSubmodulesList(user.access_token, B2BId)
-  );
-
   const [moduleId, setModuleId] = useState({
     module: "presentation",
     slug: "basic",
   });
-
-  const {
-    isSuccessSlugs,
-    data: responseSlugs,
-    isLoadingSlugs,
-    isErrorSlugs,
-  } = useQuery(["moduleId", moduleId], () =>
-    getSlug(user.access_token, moduleId.module, moduleId.slug)
-  );
-
   const [fields, setFields] = useState(fieldsSlugsBasic);
   // new item
   const [newItem, setNewItem] = useState({});
@@ -70,6 +51,24 @@ const DetailsForm = ({}) => {
   // Ofc they can be merged, but for sake of simplicity they should stay divided.
   const [inputsError, setInputsError] = useState({});
   const [selected, setSelected] = useState("basic");
+
+  const {
+    isSuccessList,
+    data: response,
+    isLoadingList,
+    isErrorList,
+  } = useQuery(["moduleId", moduleId.module], () =>
+    getSubmodulesList(user.access_token, B2BId)
+  );
+
+  const {
+    isSuccessSlugs,
+    data: responseSlugs,
+    isLoadingSlugs,
+    isErrorSlugs,
+  } = useQuery(["moduleId", moduleId], () =>
+    getSlug(user.access_token, moduleId.module, moduleId.slug)
+  );
 
   useEffect(() => {
     setFields(fieldsSlugsBasic);
