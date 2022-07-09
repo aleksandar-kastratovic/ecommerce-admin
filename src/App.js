@@ -30,6 +30,8 @@ import SettingsPage from "./pages/SettingsPage";
 import OrdersPage from "./pages/OrdersPage";
 import B2Bsettings from "./pages/B2Bsettings/B2Bsettings";
 import DetailsForm from "./pages/B2Bsettings/DetailsForm/DetailsForm";
+import B2Bbanners from "./pages/B2Bbanners/B2Bbanners";
+import DetailsBanners from "./pages/B2Bbanners/DetailsBanners/DetailsBanners";
 
 function App() {
   const queryClient = new QueryClient();
@@ -319,6 +321,23 @@ function App() {
                             <SettingsPage routeData={screensData.B2BCFG} />
                           }
                         />
+                      );
+                    }
+                    if (object.id === screensData.BANNERS_B2B.id) {
+                      return (
+                        <Route key={object.id}>
+                          <Route
+                            key={object.id}
+                            path="/B2B-banners"
+                            element={
+                              <B2Bbanners routeData={screensData.BANNERS_B2B} />
+                            }
+                          />
+                          <Route
+                            path="/B2B-settings/:B2BId"
+                            element={<DetailsBanners />}
+                          />
+                        </Route>
                       );
                     }
                   })}

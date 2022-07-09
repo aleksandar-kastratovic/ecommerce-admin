@@ -9,6 +9,7 @@ import {
   faSearchLocation,
   faUsers,
   faPeopleArrows,
+  faImage,
 } from "@fortawesome/free-solid-svg-icons";
 
 export const MainMenuGroups = {
@@ -44,6 +45,14 @@ const screenDateDef = [
     "/B2B-settings",
     faCog,
     MainMenuGroups.SETTINGS,
+  ],
+  [
+    13,
+    "BANNERS_B2B",
+    "B2B baneri",
+    "/B2B-banners",
+    faImage,
+    MainMenuGroups.B2B,
   ],
 ];
 
