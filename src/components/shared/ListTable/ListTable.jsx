@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+import moment from "moment";
+
 // material-ui components
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -10,14 +12,18 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import IconButton from "@mui/material/IconButton";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { PaginationItem } from "@mui/material";
+
 import ListTableHead from "./ListTableHead";
 import styles from "./ListTable.module.scss";
-import { PaginationItem } from "@mui/material";
 
 const ListTable = ({
   fields = [],
   listData = [],
   handleEditClick = () => {},
+  handleActions = () => {},
 }) => {
   // Please use destructuring
   // Since on a project is not used strong type(for example typescript or even proptypes - deprecated)
@@ -55,14 +61,44 @@ const ListTable = ({
     let content;
 
     switch (input_type) {
-      case "iconButton":
+      case "edit_icon":
         content = (
-          <IconButton
-            aria-label="edit"
-            onClick={handleEditClick(data["module"])}
-          >
+          <IconButton aria-label="edit" onClick={handleActions(data["module"])}>
             <ModeEditOutlineOutlinedIcon />
           </IconButton>
+        );
+        break;
+      case "edit_preview":
+        content = (
+          <>
+            <IconButton
+              aria-label="edit"
+              onClick={handleActions(data["id"], "edit")}
+            >
+              <ModeEditOutlineOutlinedIcon />
+            </IconButton>
+            <IconButton
+              aria-label="preview"
+              onClick={handleActions(data["id"], "preview")}
+            >
+              <VisibilityOutlinedIcon />
+            </IconButton>
+            <IconButton
+              aria-label="preview"
+              onClick={handleActions(data["id"], "delete")}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </>
+        );
+        break;
+      case "date_format":
+        content = (
+          <>
+            {moment(data[prop_name]).isValid()
+              ? moment(data[prop_name]).format("DD. MMM yyyy HH:mm A")
+              : ""}
+          </>
         );
         break;
       default:

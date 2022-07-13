@@ -334,7 +334,7 @@ function App() {
                             }
                           />
                           <Route
-                            path="/B2B-settings/:B2BId"
+                            path="/B2B-banners/:B2BId"
                             element={<DetailsBanners />}
                           />
                         </Route>

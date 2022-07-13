@@ -31,7 +31,7 @@ const mockFields = [
       "Maximum file size: 2MB, Allowed file types: Not all browsers support all these formats!",
     ui_prop: "xyz",
     sortable: true,
-    input_type: "iconButton",
+    input_type: "edit_icon",
   },
 ];
 

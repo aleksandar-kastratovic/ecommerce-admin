@@ -1,7 +1,7 @@
 @import '../../../variables.scss';
 
 .titleStyle {
-    margin:1.5rem 2rem !important;
+    margin: 1.5rem 2rem !important;
     display: inline-block;
 }
 
@@ -12,6 +12,7 @@
     display: inline-block !important;
     float: right !important;
     position: relative !important;
+    margin-top: 1rem !important;
 }
 
 .buttonCreate:hover {
