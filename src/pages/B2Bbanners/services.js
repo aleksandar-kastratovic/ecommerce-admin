@@ -14,3 +14,13 @@ export const getListB2Bbanners = async (token, module) => {
     },
   });
 };
+
+export const getDetailsB2Bbanners = async (token, id) => {
+  return await axios({
+    method: "get",
+    url: `${api()}admin/banners-b2b/${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

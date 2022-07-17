@@ -39,7 +39,7 @@ const TextBox = ({
       <TextField
         name={name}
         size={size}
-        value={value}
+        value={value ? value : ""}
         error={!!error}
         placeholder={placeholder}
         onChange={onChange}
@@ -48,7 +48,7 @@ const TextBox = ({
           "& fieldset": { top: 0 },
         }}
         // helperText={error.content}
-        helperText={error.content ? error.content : description}
+        helperText={error?.content ? error.content : description}
         InputProps={{
           endAdornment: (
             <InputAdornment position="start">

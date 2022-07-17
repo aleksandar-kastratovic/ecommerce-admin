@@ -3,7 +3,7 @@ import TextBox from "../TextBox/TextBox";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
-import InputLabel from "@mui/material/InputLabel";
+import FormLabel from "@mui/material/FormLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -76,21 +76,32 @@ const CreateForm = ({
         case "radio":
           formItem = (
             <FormControlLabel
-              value="male"
+              value=""
               control={<Radio />}
               label={item.field_name}
             />
           );
           break;
-        case "dropdown":
+        case "select":
           formItem = (
-            <FormControl fullWidth>
-              <InputLabel id="select-label">{item.field_name}</InputLabel>
-              <Select labelId="select-label" id="simple-select" label="Age">
-                {/* TODO get options through configuration  */}
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+            <FormControl
+              fullWidth
+              size="small"
+              sx={{ ml: "0.5rem", mt: "0.5rem" }}
+            >
+              <FormLabel required={item.required}>{item.field_name}</FormLabel>
+              <Select
+                labelId={`select-label-${item.field_name}`}
+                id={`select-label-${item.field_name}`}
+                value={value}
+                label={item.field_name}
+                onChange={onChangeHandler}
+              >
+                {item.options.map((itemUnit, index) => (
+                  <MenuItem key={itemUnit} value={itemUnit}>
+                    {itemUnit}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           );
