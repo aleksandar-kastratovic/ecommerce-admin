@@ -49,7 +49,7 @@
         "in_details": true,
         "editable": true,
         "disabled": false,
-        "required": true,
+        "required": false,
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
@@ -66,7 +66,7 @@
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "input"
+        "input_type": "date_time"
     },
     {
         "field_name": "Aktivan do",
@@ -79,7 +79,7 @@
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "input"
+        "input_type": "date_time"
     },
     {
         "field_name": "button",
@@ -144,7 +144,7 @@
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "radio"
+        "input_type": "switch"
     },
     {
         "field_name": "target",

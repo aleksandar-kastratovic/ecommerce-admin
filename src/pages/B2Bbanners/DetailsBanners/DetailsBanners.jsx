@@ -19,12 +19,31 @@ import fields from "./fieldsDetails.json";
 import { isEmpty } from "lodash";
 import AuthContext from "../../../store/auth-contex";
 import { useQuery } from "react-query";
-import { getDetailsB2Bbanners } from "../services";
+import { getDetailsB2Bbanners, createBanner } from "../services";
 
 const DetailsBanners = ({}) => {
   const { B2BId } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+
+  const init = {
+    active_from: null,
+    active_to: null,
+    button: "",
+    download: null,
+    duration: 0,
+    image: null,
+    is_active: true,
+    name: "",
+    position: "primary",
+    priority: 76,
+    subtitle: "",
+    target: "blank",
+    text: "",
+    title: "AI",
+    url: null,
+    video: null,
+  };
 
   const {
     isSuccess,
@@ -35,12 +54,17 @@ const DetailsBanners = ({}) => {
     getDetailsB2Bbanners(user.access_token, B2BId)
   );
 
-  const [newItem, setNewItem] = useState({});
+  const [newItem, setNewItem] = useState(B2BId === "new" ? init : {});
   const [inputsError, setInputsError] = useState({});
 
   useEffect(() => {
     if (response) {
-      setNewItem(response?.data?.payload);
+      const resp = response?.data?.payload;
+      const repack = {
+        ...resp,
+        is_active: resp.is_active === 1 ? true : false,
+      };
+      setNewItem(repack);
     }
   }, [response]);
 
@@ -68,27 +92,41 @@ const DetailsBanners = ({}) => {
     navigate(`/B2B-banners`);
   };
 
-  const formItemChangeHandler = ({ target }) => {
-    setNewItem({ ...newItem, [target.name]: target.value });
+  const formItemChangeHandler = ({ target }, type) => {
+    if (type) {
+      setNewItem({ ...newItem, [target.name]: target.checked });
+    } else {
+      setNewItem({ ...newItem, [target.name]: target.value });
+    }
   };
 
   const onSubmit = () => {
     const errors = {};
     Object.keys(newItem).forEach((prop_name) => {
       if (isEmpty(newItem[prop_name])) {
-        if (prop_name === "name" || prop_name === "priority") {
+        if (prop_name === "name") {
           errors[prop_name] = {
             content: "Polje je obavezno, molim vas unesite vrednost.",
           };
         }
       }
     });
-    console.log(inputsError);
     isEmpty(errors) ? saveData() : setInputsError(errors);
   };
 
   const saveData = () => {
-    console.log(newItem);
+    // TODO image and rest of base 64 repack if it is not a type URL
+    const repackToSend = {
+      ...newItem,
+      priority: parseInt(newItem.priority),
+      image: null,
+    };
+    try {
+      createBanner(user.access_token, repackToSend);
+      handleBackToList();
+    } catch (error) {
+      console.warn(error);
+    }
   };
 
   return (
@@ -100,7 +138,7 @@ const DetailsBanners = ({}) => {
           <TwoColumnDetails
             middle={
               <>
-                {!false ? (
+                {!isLoading ? (
                   <Box component="form" autoComplete="off">
                     {fields &&
                       fields

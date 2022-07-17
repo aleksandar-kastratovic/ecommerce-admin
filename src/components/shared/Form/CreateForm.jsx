@@ -8,7 +8,10 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import TextareaAutosize from "@mui/material/TextareaAutosize";
+import Switch from "@mui/material/Switch";
+
 import ImageUpload from "../ImageUpload/ImageUpload";
+import BasicDateTimePicker from "../BasicDateTimePicker/BasicDateTimePicker";
 
 const CreateForm = ({
   item = {},
@@ -82,6 +85,21 @@ const CreateForm = ({
             />
           );
           break;
+        case "switch":
+          formItem = (
+            <FormControlLabel
+              sx={{ ml: "0rem" }}
+              control={
+                <Switch
+                  name={item.prop_name}
+                  checked={typeof value === "string" ? true : value}
+                  onChange={(e) => onChangeHandler(e, "switch")}
+                />
+              }
+              label={item.field_name}
+            />
+          );
+          break;
         case "select":
           formItem = (
             <FormControl
@@ -112,6 +130,16 @@ const CreateForm = ({
               aria-label="minimum height"
               minRows={3}
               placeholder="Minimum 3 rows"
+            />
+          );
+          break;
+        case "date_time":
+          formItem = (
+            <BasicDateTimePicker
+              value={value}
+              label={item.field_name}
+              name={item.prop_name}
+              onChangeHandler={onChangeHandler}
             />
           );
           break;

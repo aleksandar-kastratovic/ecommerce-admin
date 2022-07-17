@@ -24,3 +24,14 @@ export const getDetailsB2Bbanners = async (token, id) => {
     },
   });
 };
+
+export const createBanner = async (token, data) => {
+  return await axios({
+    method: "post",
+    url: `${api()}admin/banners-b2b`,
+    data: data,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

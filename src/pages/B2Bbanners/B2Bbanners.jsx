@@ -56,9 +56,7 @@ const B2Bbanners = ({}) => {
   };
 
   const handleCreateNew = (e) => {
-    // TODO handle create new
-    // navigate(`/B2B-banners/new`);
-    console.log(e);
+    navigate(`/B2B-banners/new`);
   };
 
   return (

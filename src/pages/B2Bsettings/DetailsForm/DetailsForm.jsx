@@ -116,7 +116,6 @@ const DetailsForm = ({}) => {
 
   const saveData = () => {
     const repacked = repackToSend(newItem, fields);
-    console.log(repacked);
     createSlug(user.access_token, moduleId.module, moduleId.slug, repacked);
     handleBackToList();
   };
