@@ -2,6 +2,8 @@ import React, { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Paper from "@mui/material/Paper";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
 
 import ListTable from "../../components/shared/ListTable/ListTable";
 import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
@@ -59,23 +61,43 @@ const B2Bbanners = ({}) => {
     navigate(`/B2B-banners/new`);
   };
 
+  const onColumnsChange = (e) => {
+    console.log(e);
+  };
+
   return (
     <>
-      <Paper elevation={0} className={styles.paperStyle}>
-        <ListTableTitle
-          title="B2B eCommerce podesavanje modula"
-          showButton={true}
-          handleCreateNew={handleCreateNew}
-        />
+      {!isLoading ? (
+        <Paper elevation={0} className={styles.paperStyle}>
+          <ListTableTitle
+            title="B2B eCommerce podesavanje modula"
+            showButton={true}
+            handleCreateNew={handleCreateNew}
+          />
 
-        <ListTableToolbar showToolbar={true} />
+          <ListTableToolbar
+            showToolbar={true}
+            onColumnsChange={onColumnsChange}
+            fields={fields}
+          />
 
-        <ListTable
-          fields={flatten(fields).filter(({ in_main_table }) => in_main_table)}
-          listData={listData}
-          handleActions={handleActions}
-        />
-      </Paper>
+          <ListTable
+            fields={flatten(fields).filter(
+              ({ in_main_table }) => in_main_table
+            )}
+            listData={listData}
+            handleActions={handleActions}
+          />
+        </Paper>
+      ) : (
+        <Stack spacing={1}>
+          <Skeleton variant="text" height={150} />
+          <Stack spacing={1}>
+            <Skeleton variant="text" height={60} />
+            <Skeleton variant="rectangular" height={508} />
+          </Stack>
+        </Stack>
+      )}
       <DeleteModal
         title="Brisanje banera"
         description="Da li ste sigurni da zelite da obrisete?"
