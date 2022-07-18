@@ -107,7 +107,7 @@ const ListTableToolbar = ({
                       Odaberi
                     </Button>
                     <Button variant="outlined" onClick={handleClose}>
-                      Otkazi
+                      Otkaži
                     </Button>
                   </Stack>
                 </FormControl>

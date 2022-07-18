@@ -101,7 +101,7 @@ const B2Bbanners = ({}) => {
       )}
       <DeleteModal
         title="Brisanje banera"
-        description="Da li ste sigurni da zelite da obrisete?"
+        description="Da li ste sigurni da želite da obrišete?"
         openDeleteModal={openDeleteModal}
         setOpenDeleteModal={setOpenDeleteModal}
       />

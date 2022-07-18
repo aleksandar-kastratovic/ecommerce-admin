@@ -36,7 +36,7 @@ const DeleteModal = ({
           //   disabled={disabler?.confirm}
           onClick={() => setOpenDeleteModal(false)}
         >
-          obrisi
+          obriši
         </Button>
         <Button
           data-test-id="confirm-dialog-cancel"
@@ -47,7 +47,7 @@ const DeleteModal = ({
           //   disabled={disabler?.cancel}
           onClick={() => setOpenDeleteModal(false)}
         >
-          otkazi
+          otkaži
         </Button>
       </DialogActions>
     </Dialog>
