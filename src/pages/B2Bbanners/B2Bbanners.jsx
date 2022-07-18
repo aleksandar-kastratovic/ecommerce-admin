@@ -22,6 +22,7 @@ const B2Bbanners = ({}) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const [listData, setListData] = useState();
+  const [fieldsColumns, setFieldsColumns] = useState(fields);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
 
   const {
@@ -61,8 +62,8 @@ const B2Bbanners = ({}) => {
     navigate(`/B2B-banners/new`);
   };
 
-  const onColumnsChange = (e) => {
-    console.log(e);
+  const onColumnsChange = (newFields) => {
+    setFieldsColumns(newFields);
   };
 
   return (
@@ -78,11 +79,11 @@ const B2Bbanners = ({}) => {
           <ListTableToolbar
             showToolbar={true}
             onColumnsChange={onColumnsChange}
-            fields={fields}
+            fields={fieldsColumns}
           />
 
           <ListTable
-            fields={flatten(fields).filter(
+            fields={flatten(fieldsColumns).filter(
               ({ in_main_table }) => in_main_table
             )}
             listData={listData}

@@ -18,13 +18,23 @@ import Checkbox from "@mui/material/Checkbox";
 // other imports
 import styles from "./ListTableToolbar.module.scss";
 
-const ListTableToolbar = ({ showToolbar = false, fields = [] }) => {
+const ListTableToolbar = ({
+  showToolbar = false,
+  fields = [],
+  onColumnsChange = () => {},
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [columnsValues, setColumnsValues] = useState({});
   const open = Boolean(anchorEl);
 
   // open menu for selecting columns to display in main table
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
+    const repack = fields.reduce(
+      (acc, cur) => ({ ...acc, [cur.prop_name]: cur.in_main_table }),
+      {}
+    );
+    setColumnsValues(repack);
   };
 
   // close menu for selecting columns to display in main table
@@ -33,8 +43,21 @@ const ListTableToolbar = ({ showToolbar = false, fields = [] }) => {
   };
 
   // handle change to display in main table
-  const handleChange = (e) => {
-    // TODO use porperty in_main_table from fields
+  const handleChange = ({ target }) => {
+    setColumnsValues({ ...columnsValues, [target.name]: target.checked });
+  };
+
+  // close menu and send filtered columns to parent
+  const handleConfirm = () => {
+    const repackToSend = fields.map((item, index) => {
+      const object = {
+        ...item,
+        in_main_table: columnsValues[item.prop_name],
+      };
+      return object;
+    });
+    onColumnsChange(repackToSend);
+    setAnchorEl(null);
   };
 
   return (
@@ -54,7 +77,7 @@ const ListTableToolbar = ({ showToolbar = false, fields = [] }) => {
                 "aria-labelledby": "basic-button",
               }}
             >
-              <Box sx={{ display: "flex" }}>
+              <Box className={styles.formStyle}>
                 <FormControl
                   className={styles.formControl}
                   component="fieldset"
@@ -70,7 +93,7 @@ const ListTableToolbar = ({ showToolbar = false, fields = [] }) => {
                           key={item.prop_name}
                           control={
                             <Checkbox
-                              // checked={checked}
+                              checked={columnsValues[item.prop_name]}
                               onChange={handleChange}
                               name={item.prop_name}
                             />
@@ -80,7 +103,9 @@ const ListTableToolbar = ({ showToolbar = false, fields = [] }) => {
                       ))}
                   </FormGroup>
                   <Stack spacing={2} direction="row">
-                    <Button variant="contained">Odaberi</Button>
+                    <Button variant="contained" onClick={handleConfirm}>
+                      Odaberi
+                    </Button>
                     <Button variant="outlined" onClick={handleClose}>
                       Otkazi
                     </Button>
