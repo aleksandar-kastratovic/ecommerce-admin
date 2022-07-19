@@ -15,10 +15,12 @@ const DeleteModal = ({
   description = "",
   confirmIcon = "delete",
   cancelIcon = "cancel",
+  handleConfirm = () => {},
+  handleCancel = () => {},
 }) => {
   return (
     <Dialog
-      open={openDeleteModal}
+      open={openDeleteModal.show}
       aria-labelledby="alert-dialog-title"
       aria-describedby="alert-dialog-description"
     >
@@ -34,7 +36,7 @@ const DeleteModal = ({
           color="primary"
           startIcon={<Icon>{confirmIcon}</Icon>}
           //   disabled={disabler?.confirm}
-          onClick={() => setOpenDeleteModal(false)}
+          onClick={handleConfirm}
         >
           obriši
         </Button>
@@ -45,7 +47,7 @@ const DeleteModal = ({
           color="error"
           startIcon={<Icon>{cancelIcon}</Icon>}
           //   disabled={disabler?.cancel}
-          onClick={() => setOpenDeleteModal(false)}
+          onClick={handleCancel}
         >
           otkaži
         </Button>

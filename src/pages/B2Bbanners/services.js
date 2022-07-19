@@ -35,3 +35,13 @@ export const createBanner = async (token, data) => {
     },
   });
 };
+
+export const deleteB2Bbanners = async (token, id) => {
+  return await axios({
+    method: "delete",
+    url: `${api()}admin/banners-b2b/${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

@@ -16,21 +16,25 @@ import fields from "./mainListFields.json";
 
 import { useQuery } from "react-query";
 import AuthContext from "../../store/auth-contex";
-import { getListB2Bbanners } from "./services.js";
+import { getListB2Bbanners, deleteB2Bbanners } from "./services.js";
 
 const B2Bbanners = ({}) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const [listData, setListData] = useState();
   const [fieldsColumns, setFieldsColumns] = useState(fields);
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openDeleteModal, setOpenDeleteModal] = useState({
+    show: false,
+    id: null,
+    mutate: null,
+  });
 
   const {
     isSuccess,
     data: response,
     isLoading,
     isError,
-  } = useQuery(["getListB2Bbanners"], () =>
+  } = useQuery(["openDeleteModal.mutate", openDeleteModal.mutate], () =>
     getListB2Bbanners(user.access_token)
   );
 
@@ -46,8 +50,7 @@ const B2Bbanners = ({}) => {
         navigate(`/B2B-banners/${id}`);
         break;
       case "delete":
-        console.log("delete call", id);
-        setOpenDeleteModal(true);
+        setOpenDeleteModal({ show: true, id: id, mutate: null });
         break;
       case "preview":
         console.log("preview set", id);
@@ -64,6 +67,20 @@ const B2Bbanners = ({}) => {
 
   const onColumnsChange = (newFields) => {
     setFieldsColumns(newFields);
+  };
+
+  const handleConfirm = async () => {
+    try {
+      await deleteB2Bbanners(user.access_token, openDeleteModal.id);
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      setOpenDeleteModal({ show: false, id: null, mutate: 1 });
+    }
+  };
+
+  const handleCancel = (e) => {
+    setOpenDeleteModal({ show: false, id: null });
   };
 
   return (
@@ -104,6 +121,8 @@ const B2Bbanners = ({}) => {
         description="Da li ste sigurni da želite da obrišete?"
         openDeleteModal={openDeleteModal}
         setOpenDeleteModal={setOpenDeleteModal}
+        handleConfirm={handleConfirm}
+        handleCancel={handleCancel}
       />
     </>
   );
