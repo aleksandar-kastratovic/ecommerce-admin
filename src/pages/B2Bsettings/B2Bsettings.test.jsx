@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { shallow } from "enzyme";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 import B2Bsettings from "./B2Bsettings";
 
@@ -14,6 +15,8 @@ jest.mock("react-router-dom", () => {
   };
 });
 
+const queryClient = new QueryClient();
+
 describe("<B2Bsettings />", () => {
   beforeEach(async () => {
     // gets executed before each 'it' (test)
@@ -24,7 +27,11 @@ describe("<B2Bsettings />", () => {
     jest.clearAllMocks();
   });
   it("should render successfully", async () => {
-    const wrapper = shallow(<B2Bsettings />);
+    const wrapper = shallow(
+      <QueryClientProvider client={queryClient}>
+        <B2Bsettings />
+      </QueryClientProvider>
+    );
     expect.assertions(1);
     expect(wrapper).toHaveLength(1);
   });

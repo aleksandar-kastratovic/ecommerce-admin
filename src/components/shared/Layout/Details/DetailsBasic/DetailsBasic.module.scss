@@ -14,3 +14,34 @@
     color: $black  !important;
     cursor: pointer !important;
 }
+
+.titleStyle {
+    margin-top: 3rem !important;
+    display: inline;
+}
+
+.main {
+    margin-top: 6rem !important;
+}
+.list {
+    &>ul{
+        &>div {
+            &:first-child {
+                margin: 5rem 1rem;
+                overflow: visible;
+                white-space: nowrap;
+            }
+        }
+        li {
+            background-color: var(--main-bg-color);
+            &:hover {
+                background-color: var(--main-color);
+                color: white;
+            }
+            &.Mui-selected {
+
+                background-color: var(--main-color);
+            }
+        }
+    }
+}

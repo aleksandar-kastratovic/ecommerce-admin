@@ -1,8 +1,7 @@
 [
     {
-        "id": 0,
         "field_name": "Osnovne informacije",
-        "prop_name": "name",
+        "prop_name": "basic",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
@@ -14,13 +13,38 @@
         "input_type": "input"
     },
     {
-        "id": 1,
-        "field_name": "Strana za prijavu na portal",
-        "prop_name": "name",
+        "field_name": "Podešavanje login forma za B2B",
+        "prop_name": "login",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
-        "disabled": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "settings",
+        "sortable": true,
+        "input_type": "input"
+    },
+    {
+        "field_name": "Izgled login forme prilikom share-a",
+        "prop_name": "share",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "settings",
+        "sortable": true,
+        "input_type": "input"
+    },
+    {
+        "field_name": "Manuelni CSS",
+        "prop_name": "css",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
         "required": true,
         "description": "255",
         "ui_prop": "settings",

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { shallow } from "enzyme";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 import DetailsForm from "./DetailsForm";
 
@@ -14,6 +15,8 @@ jest.mock("react-router-dom", () => {
   };
 });
 
+const queryClient = new QueryClient();
+
 describe("<DetailsForm />", () => {
   beforeEach(async () => {
     // gets executed before each 'it' (test)
@@ -24,7 +27,11 @@ describe("<DetailsForm />", () => {
     jest.clearAllMocks();
   });
   it("should render successfully", async () => {
-    const wrapper = shallow(<DetailsForm />);
+    const wrapper = shallow(
+      <QueryClientProvider client={queryClient}>
+        <DetailsForm />
+      </QueryClientProvider>
+    );
     expect.assertions(1);
     expect(wrapper).toHaveLength(1);
   });

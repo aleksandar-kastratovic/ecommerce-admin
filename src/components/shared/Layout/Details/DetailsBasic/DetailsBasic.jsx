@@ -16,13 +16,13 @@ const DetailsBasic = ({
   return (
     <Paper elevation={0} className={styles.paperStyle}>
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
-        <Box gridColumn="span 3">{list}</Box>
+        <Box gridColumn="span 3" className={styles.list + ' settings-list'}>{list}</Box>
         <Box gridColumn="span 9">
           <Button onClick={handleBackToList} className={styles.buttonBack}>
             Nazad
             <KeyboardReturnIcon />
           </Button>
-          <Box>{main}</Box>
+          <Box className={styles.main}>{main}</Box>
         </Box>
       </Box>
     </Paper>

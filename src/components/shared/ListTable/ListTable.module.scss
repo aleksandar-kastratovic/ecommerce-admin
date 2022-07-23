@@ -25,7 +25,22 @@
 }
 
 .tableStyle {
-    margin-top: 1rem;
+    margin-top: 2rem;
+    border-radius: 0px !important;
+    td {
+        padding: 0rem 1rem;
+        color: var(--dark-silver);
+        svg {
+            fill: var(--transparent-blue);
+        }
+    }
+    tr {
+        &:hover {
+            td{
+                color: var(--main-color);
+            }
+        }
+    }
 }
 
 .toolbarButtonsGroup {
@@ -36,4 +51,31 @@
     background-color: $lightGrey  !important;
     color: $black  !important;
     margin-left: 1rem !important;
+}
+
+.pagination {
+    margin: 5rem 2rem;
+    ul {
+        width:fit-content;
+        margin-inline-start: auto;
+        border-radius: 3px;
+        border: 1px solid var(--main-bg-color);
+        justify-content: flex-end;
+        button {
+            border: none !important;
+            margin: 0 0;
+            
+            
+        }
+        li {
+            border-right:1px solid var(--main-bg-color);
+        }
+    }
+}
+.paginationLink {
+    background-color: blue !important;
+    button {
+
+    background-color: blue !important;
+    }
 }
