@@ -59,7 +59,7 @@ pipelines:
           name: Reflekta
           deployment: reflekta
 
-    prod-reflekta:
+    prod-akt:
       - step:
           <<: *execute
           name: Akt
