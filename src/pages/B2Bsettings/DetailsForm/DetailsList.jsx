@@ -15,6 +15,8 @@ import Alert from "@mui/material/Alert";
 
 import fields from "./DetailsListFields.json";
 
+import styles from "./DetailsList.module.scss";
+
 const DetailsList = ({
   handleSelectInDetails = () => {},
   detailsList = [],
@@ -35,7 +37,12 @@ const DetailsList = ({
     <>
       <List
         subheader={
-          <Typography variant="h5" component="div" sx={{ margin: "1rem" }}>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{ margin: "1rem" }}
+            className={styles.title}
+          >
             {name}
           </Typography>
         }

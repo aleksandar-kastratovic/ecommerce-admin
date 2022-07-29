@@ -28,6 +28,8 @@ import { getSubmodulesList, getSlug, createSlug } from "../services";
 import ImagePreview from "../../../components/shared/ImagePreview/ImagePreview";
 import { repackToSend } from "./util";
 
+import styles from "./DetailsForm.module.scss";
+
 const DetailsForm = ({}) => {
   const { B2BId } = useParams();
   const navigate = useNavigate();
@@ -197,7 +199,7 @@ const DetailsForm = ({}) => {
   };
 
   return (
-    <>
+    <Box className={styles.details}>
       <DetailsBasic
         handleBackToList={handleBackToList}
         list={
@@ -211,6 +213,7 @@ const DetailsForm = ({}) => {
         }
         main={
           <TwoColumnDetails
+            className={styles.boxStyle}
             middle={
               <>
                 {!loadingForm || isLoadingSlugs ? (
@@ -270,7 +273,7 @@ const DetailsForm = ({}) => {
           </Alert>
         </Stack>
       )}
-    </>
+    </Box>
   );
 };
 
