@@ -6,9 +6,15 @@
   top: 9rem !important;
   margin-right: 5rem !important;
   margin-top: 0rem !important;
-  padding: 0.8rem 2rem !important;
+  padding: 0.8rem 1.5rem !important;
   background-color: $lightGrey !important;
+  text-transform: capitalize !important;
+  font-weight: 400 !important;
   color: $black !important;
+  i {
+    transform: rotate(90deg);
+    margin-right: 10px;
+  }
 }
 
 .buttonBack:hover {
