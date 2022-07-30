@@ -11,6 +11,8 @@ import Alert from "@mui/material/Alert";
 // components
 import DetailsList from "./DetailsList";
 import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
+import ImageModal from "../../../components/shared/Dialogs/ImageModal";
+import ImageDialog from "../../../components/shared/Dialogs/ImageDialog";
 
 // config
 import TwoColumnDetails from "../../../components/shared/Layout/Details/TwoColumnDetails/TwoColumnDetails";
@@ -25,7 +27,6 @@ import AuthContext from "../../../store/auth-contex";
 import { useQuery } from "react-query";
 import { getSubmodulesList, getSlug, createSlug } from "../services";
 
-import ImagePreview from "../../../components/shared/ImagePreview/ImagePreview";
 import { repackToSend } from "./util";
 
 import styles from "./DetailsForm.module.scss";
@@ -39,10 +40,15 @@ const DetailsForm = ({}) => {
     module: "presentation",
     slug: "basic",
   });
+  const [openImageDialog, setOpenImageDialog] = useState({
+    show: false,
+    image: null,
+    label: "",
+  });
   const [fields, setFields] = useState(fieldsSlugsBasic);
   // new item
   const [newItem, setNewItem] = useState({});
-  const [imagePreviewList, setImagePreviewList] = useState([]);
+  // const [imagePreviewList, setImagePreviewList] = useState([]);
   const [detailsList, setDetailsList] = useState([]);
   const [loadingForm, setLoadingForm] = useState(false);
   // when you receive a backend validation it should be implemented through the same error object
@@ -181,99 +187,102 @@ const DetailsForm = ({}) => {
     setNewItem({ ...newItem, [event.target.name]: result });
   };
 
-  const formImagePreview = useCallback(
-    (img, label) => {
-      const found = imagePreviewList.some((el) => el.image === img);
-      if (!found) {
-        setImagePreviewList([
-          ...imagePreviewList,
-          { image: img, label: label },
-        ]);
-      }
-    },
-    [imagePreviewList]
-  );
+  const formImagePreview = useCallback((img, label) => {
+    console.log(img, label, "open image modal");
+    setOpenImageDialog({ show: true, image: img, label: label });
+  }, []);
+
+  const handleCancel = () => {
+    setOpenImageDialog({ show: false, image: null, label: "" });
+  };
 
   const handleBackToList = () => {
     navigate(`/B2B-settings`);
   };
 
   return (
-    <Box className={styles.details}>
-      <DetailsBasic
-        handleBackToList={handleBackToList}
-        list={
-          <DetailsList
-            selected={selected}
-            detailsList={detailsList}
-            handleSelectInDetails={handleSelectInDetails}
-            isLoadingList={isLoadingList}
-            isErrorList={isErrorList}
-          />
-        }
-        main={
-          <TwoColumnDetails
-            className={styles.boxStyle}
-            middle={
-              <>
-                {!loadingForm || isLoadingSlugs ? (
-                  <Box component="form" autoComplete="off">
-                    {fields &&
-                      fields.map((item, index) => (
-                        <CreateForm
-                          data-test-id="B2B-settings-form"
-                          onChangeHandler={formItemChangeHandler}
-                          onImageUpload={formImageUpload}
-                          onImagePreview={formImagePreview}
-                          item={item}
-                          key={index}
-                          error={
-                            Array.isArray(item)
-                              ? item.map(
-                                  ({ prop_name }) => inputsError[prop_name]
-                                )
-                              : inputsError[item.prop_name]
-                          }
-                          value={
-                            Array.isArray(item) && newItem
-                              ? newItem[item.prop_name]
-                              : newItem[item.prop_name]
-                          }
-                        />
-                      ))}
-                  </Box>
-                ) : (
-                  <Stack spacing={1}>
-                    <Skeleton variant="text" height={60} />
-                    <Skeleton variant="text" height={60} />
+    <>
+      <Box className={styles.details}>
+        <DetailsBasic
+          handleBackToList={handleBackToList}
+          list={
+            <DetailsList
+              selected={selected}
+              detailsList={detailsList}
+              handleSelectInDetails={handleSelectInDetails}
+              isLoadingList={isLoadingList}
+              isErrorList={isErrorList}
+            />
+          }
+          main={
+            <TwoColumnDetails
+              className={styles.boxStyle}
+              middle={
+                <>
+                  {!loadingForm || isLoadingSlugs ? (
+                    <Box component="form" autoComplete="off">
+                      {fields &&
+                        fields.map((item, index) => (
+                          <CreateForm
+                            data-test-id="B2B-settings-form"
+                            onChangeHandler={formItemChangeHandler}
+                            onImageUpload={formImageUpload}
+                            onImagePreview={formImagePreview}
+                            item={item}
+                            key={index}
+                            error={
+                              Array.isArray(item)
+                                ? item.map(
+                                    ({ prop_name }) => inputsError[prop_name]
+                                  )
+                                : inputsError[item.prop_name]
+                            }
+                            value={
+                              Array.isArray(item) && newItem
+                                ? newItem[item.prop_name]
+                                : newItem[item.prop_name]
+                            }
+                          />
+                        ))}
+                    </Box>
+                  ) : (
                     <Stack spacing={1}>
-                      <Skeleton variant="text" />
-                      <Skeleton variant="circular" width={40} height={40} />
-                      <Skeleton
-                        variant="rectangular"
-                        width={210}
-                        height={118}
-                      />
+                      <Skeleton variant="text" height={60} />
+                      <Skeleton variant="text" height={60} />
+                      <Stack spacing={1}>
+                        <Skeleton variant="text" />
+                        <Skeleton variant="circular" width={40} height={40} />
+                        <Skeleton
+                          variant="rectangular"
+                          width={210}
+                          height={118}
+                        />
+                      </Stack>
+                      <Skeleton variant="text" height={60} />
                     </Stack>
-                    <Skeleton variant="text" height={60} />
-                  </Stack>
-                )}
-              </>
-            }
-            right={<ImagePreview imagePreviewList={imagePreviewList} />}
-            onSubmit={onSubmit}
-            buttonText="Sacuvaj"
-          />
-        }
+                  )}
+                </>
+              }
+              right={<div />}
+              onSubmit={onSubmit}
+              buttonText="Sacuvaj"
+            />
+          }
+        />
+        {isErrorSlugs && (
+          <Stack sx={{ width: "100%" }}>
+            <Alert severity="error">
+              Doslo je do greske. Molim Vas pokusajte kasnije.
+            </Alert>
+          </Stack>
+        )}
+      </Box>
+      <ImageDialog
+        title="Obrada slike"
+        openImageDialog={openImageDialog}
+        handleCancel={handleCancel}
       />
-      {isErrorSlugs && (
-        <Stack sx={{ width: "100%" }}>
-          <Alert severity="error">
-            Doslo je do greske. Molim Vas pokusajte kasnije.
-          </Alert>
-        </Stack>
-      )}
-    </Box>
+    </>
   );
 };
 

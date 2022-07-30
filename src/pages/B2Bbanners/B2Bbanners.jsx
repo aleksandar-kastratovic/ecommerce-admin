@@ -8,7 +8,7 @@ import Stack from "@mui/material/Stack";
 import ListTable from "../../components/shared/ListTable/ListTable";
 import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
 import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar";
-import DeleteModal from "../../components/shared/Modals/DeleteModal";
+import DeleteDialog from "../../components/shared/Dialogs/DeleteDialog";
 
 import styles from "./B2Bbanners.module.scss";
 import { flatten } from "lodash";
@@ -23,7 +23,7 @@ const B2Bbanners = ({}) => {
   const { user } = useContext(AuthContext);
   const [listData, setListData] = useState();
   const [fieldsColumns, setFieldsColumns] = useState(fields);
-  const [openDeleteModal, setOpenDeleteModal] = useState({
+  const [openDeleteDialog, setOpenDeleteDialog] = useState({
     show: false,
     id: null,
     mutate: null,
@@ -34,7 +34,7 @@ const B2Bbanners = ({}) => {
     data: response,
     isLoading,
     isError,
-  } = useQuery(["openDeleteModal.mutate", openDeleteModal.mutate], () =>
+  } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate], () =>
     getListB2Bbanners(user.access_token)
   );
 
@@ -50,7 +50,7 @@ const B2Bbanners = ({}) => {
         navigate(`/B2B-banners/${id}`);
         break;
       case "delete":
-        setOpenDeleteModal({ show: true, id: id, mutate: null });
+        setOpenDeleteDialog({ show: true, id: id, mutate: null });
         break;
       case "preview":
         console.log("preview set", id);
@@ -71,16 +71,16 @@ const B2Bbanners = ({}) => {
 
   const handleConfirm = async () => {
     try {
-      await deleteB2Bbanners(user.access_token, openDeleteModal.id);
+      await deleteB2Bbanners(user.access_token, openDeleteDialog.id);
     } catch (error) {
       console.warn(error);
     } finally {
-      setOpenDeleteModal({ show: false, id: null, mutate: 1 });
+      setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
     }
   };
 
   const handleCancel = (e) => {
-    setOpenDeleteModal({ show: false, id: null });
+    setOpenDeleteDialog({ show: false, id: null });
   };
 
   return (
@@ -116,11 +116,11 @@ const B2Bbanners = ({}) => {
           </Stack>
         </Stack>
       )}
-      <DeleteModal
+      <DeleteDialog
         title="Brisanje banera"
         description="Da li ste sigurni da želite da obrišete?"
-        openDeleteModal={openDeleteModal}
-        setOpenDeleteModal={setOpenDeleteModal}
+        openDeleteDialog={openDeleteDialog}
+        setOpenDeleteDialog={setOpenDeleteDialog}
         handleConfirm={handleConfirm}
         handleCancel={handleCancel}
       />
