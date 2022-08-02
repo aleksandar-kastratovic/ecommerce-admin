@@ -13,9 +13,10 @@ const TwoColumnDetails = ({
   right = <div />,
   onSubmit = () => {},
   buttonText = "",
+  ...props
 }) => {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1 }} className={props.className}>
       <Grid container spacing={2} alignItems="center" justifyContent="center">
         <Grid item xs={6}>
           {middle}

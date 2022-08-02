@@ -5,6 +5,7 @@ import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import KeyboardReturnIcon from "@mui/icons-material/KeyboardReturn";
+import UTurnLeftIcon from "@mui/icons-material/UTurnLeft";
 
 import styles from "./DetailsBasic.module.scss";
 
@@ -16,11 +17,15 @@ const DetailsBasic = ({
   return (
     <Paper elevation={0} className={styles.paperStyle}>
       <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
-        <Box gridColumn="span 3" className={styles.list + ' settings-list'}>{list}</Box>
+        <Box gridColumn="span 3" className={styles.list + " settings-list"}>
+          {list}
+        </Box>
         <Box gridColumn="span 9">
           <Button onClick={handleBackToList} className={styles.buttonBack}>
+            <i>
+              <UTurnLeftIcon />
+            </i>
             Nazad
-            <KeyboardReturnIcon />
           </Button>
           <Box className={styles.main}>{main}</Box>
         </Box>

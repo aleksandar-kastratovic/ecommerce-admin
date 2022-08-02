@@ -1,0 +1,31 @@
+@import "../../../variables.scss";
+
+.modalStyle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: auto;
+    background-color: $white;
+    // bgcolor: "background.paper",
+    border: 2px solid $lightGrey;
+    box-shadow: 24;
+    padding: 3rem;
+}
+
+.imageStyle {
+    max-width: fit-content;
+    max-height: auto;
+    margin: auto;
+    border: 3px solid $blue;
+    padding: 0.5rem;
+}
+
+.labelStyle {
+    font-weight: bold;
+}
+
+.btnGroup {
+    padding: 1rem;
+    margin: 1rem;
+}
