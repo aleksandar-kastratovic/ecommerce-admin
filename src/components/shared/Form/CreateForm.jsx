@@ -12,6 +12,7 @@ import Switch from "@mui/material/Switch";
 
 import ImageUpload from "../ImageUpload/ImageUpload";
 import BasicDateTimePicker from "../BasicDateTimePicker/BasicDateTimePicker";
+import ImageButton from "../ImageButton/ImageButton";
 
 const CreateForm = ({
   item = {},
@@ -60,6 +61,20 @@ const CreateForm = ({
         case "image_upload":
           formItem = (
             <ImageUpload
+              name={item.prop_name}
+              label={item.field_name}
+              required={item.required}
+              description={item.description}
+              value={value}
+              error={error}
+              onImageUpload={onImageUpload}
+              onImagePreview={onImagePreview}
+            />
+          );
+          break;
+        case "image_button":
+          formItem = (
+            <ImageButton
               name={item.prop_name}
               label={item.field_name}
               required={item.required}

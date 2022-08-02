@@ -9,8 +9,7 @@ import DialogTitle from "@mui/material/DialogTitle";
 import Icon from "@mui/material/Icon";
 
 const DeleteModal = ({
-  openDeleteModal,
-  setOpenDeleteModal,
+  openDeleteDialog,
   title = "",
   description = "",
   confirmIcon = "delete",
@@ -20,9 +19,9 @@ const DeleteModal = ({
 }) => {
   return (
     <Dialog
-      open={openDeleteModal.show}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
+      open={openDeleteDialog.show}
+      aria-labelledby="delete-dialog-title"
+      aria-describedby="delete-dialog-description"
     >
       <DialogTitle>{title}</DialogTitle>
       <DialogContent>
