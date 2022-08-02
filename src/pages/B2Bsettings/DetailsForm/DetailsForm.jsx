@@ -155,7 +155,7 @@ const DetailsForm = ({}) => {
 
   const handleSelectInDetails = useCallback(async (module, slug) => {
     setLoadingForm(true);
-    setImagePreviewList([]);
+    //setImagePreviewList([]);
     changeFields(slug);
     setModuleId({ ...moduleId, slug: slug });
     setSelected(slug);
