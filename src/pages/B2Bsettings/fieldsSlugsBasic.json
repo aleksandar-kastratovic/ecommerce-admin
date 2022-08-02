@@ -49,6 +49,6 @@
     "description": "Slika koja se koristi kada slika artikla nije dostupna",
     "ui_prop": "xyz",
     "sortable": false,
-    "input_type": "image_upload"
+    "input_type": "image_button"
   }
 ]

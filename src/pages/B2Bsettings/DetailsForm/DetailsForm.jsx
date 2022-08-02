@@ -45,11 +45,12 @@ const DetailsForm = ({}) => {
     show: false,
     image: null,
     label: "",
+    name: "",
   });
   const [fields, setFields] = useState(fieldsSlugsBasic);
   // new item
   const [newItem, setNewItem] = useState({});
-  const [imagePreviewList, setImagePreviewList] = useState([]);
+  // const [imagePreviewList, setImagePreviewList] = useState([]);
   const [detailsList, setDetailsList] = useState([]);
   const [loadingForm, setLoadingForm] = useState(false);
   // when you receive a backend validation it should be implemented through the same error object
@@ -156,7 +157,7 @@ const DetailsForm = ({}) => {
 
   const handleSelectInDetails = useCallback(async (module, slug) => {
     setLoadingForm(true);
-    setImagePreviewList([]);
+    // setImagePreviewList([]);
     changeFields(slug);
     setModuleId({ ...moduleId, slug: slug });
     setSelected(slug);
@@ -188,26 +189,27 @@ const DetailsForm = ({}) => {
     setNewItem({ ...newItem, [event.target.name]: result });
   };
 
-  // const formImagePreview = useCallback((img, label) => {
-  //   console.log(img, label, "open image modal");
-  //   setOpenImageDialog({ show: true, image: img, label: label });
-  // }, []);
+  const onOpenImageDialog = useCallback((img, label, name) => {
+    // console.log(img, label, "open image modal");
+    setOpenImageDialog({ show: true, image: img, label: label, name: name });
+  }, []);
 
-  const formImagePreview = useCallback(
-    (img, label) => {
-      const found = imagePreviewList.some((el) => el.image === img);
-      if (!found) {
-        setImagePreviewList([
-          ...imagePreviewList,
-          { image: img, label: label },
-        ]);
-      }
-    },
-    [imagePreviewList]
-  );
+  // image preview for old form
+  // const formImagePreview = useCallback(
+  //   (img, label) => {
+  //     const found = imagePreviewList.some((el) => el.image === img);
+  //     if (!found) {
+  //       setImagePreviewList([
+  //         ...imagePreviewList,
+  //         { image: img, label: label },
+  //       ]);
+  //     }
+  //   },
+  //   [imagePreviewList]
+  // );
 
   const handleCancel = () => {
-    setOpenImageDialog({ show: false, image: null, label: "" });
+    setOpenImageDialog({ show: false, image: null, label: "", name: "" });
   };
 
   const handleBackToList = () => {
@@ -241,7 +243,8 @@ const DetailsForm = ({}) => {
                             data-test-id="B2B-settings-form"
                             onChangeHandler={formItemChangeHandler}
                             onImageUpload={formImageUpload}
-                            onImagePreview={formImagePreview}
+                            // onImagePreview={formImagePreview}
+                            onOpenImageDialog={onOpenImageDialog}
                             item={item}
                             key={index}
                             error={
@@ -277,7 +280,9 @@ const DetailsForm = ({}) => {
                   )}
                 </>
               }
-              right={<ImagePreview imagePreviewList={imagePreviewList} />}
+              // old form preview
+              // right={<ImagePreview imagePreviewList={imagePreviewList} />}
+              right={<div />}
               onSubmit={onSubmit}
               buttonText="Sacuvaj"
             />
@@ -295,6 +300,7 @@ const DetailsForm = ({}) => {
         title="Obrada slike"
         openImageDialog={openImageDialog}
         handleCancel={handleCancel}
+        onImageUpload={formImageUpload}
       />
     </>
   );

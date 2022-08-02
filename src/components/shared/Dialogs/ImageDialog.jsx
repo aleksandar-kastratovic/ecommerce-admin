@@ -6,13 +6,14 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import ImageEditorComponent from "../ImageEditorComponent/ImageEditorComponent";
+import Input from "@mui/material/Input";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import styles from "./ImageDialog.module.scss";
 
@@ -36,10 +37,11 @@ const ImageDialog = ({
   description = "",
   confirmIcon = "delete",
   cancelIcon = "cancel",
-  handleConfirm = () => {},
+  onImageUpload = () => {},
   handleCancel = () => {},
 }) => {
   const [editMode, setEditMode] = useState(false);
+  const [loadingImage, setLoadingImage] = useState(false);
 
   const wrapperRefPopup = useRef();
   const [width, setWidth] = useState(0);
@@ -60,10 +62,30 @@ const ImageDialog = ({
     setEditMode(true);
   };
 
+  const handleImageUpload = (e) => {
+    setLoadingImage(true);
+    onImageUpload(e);
+    const timeOutId = setTimeout(() => {
+      setLoadingImage(false);
+      handleCancel();
+    }, 1000);
+    return () => clearTimeout(timeOutId);
+  };
+
+  // const stylesClasses = {
+  //   dialogPaper: {
+  //     minHeight: "80vh",
+  //     maxHeight: "80vh",
+  //     height: "90vh",
+  //   },
+  // };
+
   return (
     <Dialog
+      // classes={{ paper: stylesClasses.dialogPaper }}
       open={openImageDialog.show}
       maxWidth={"xl"}
+      fullWidth
       aria-labelledby="delete-dialog-title"
       aria-describedby="delete-dialog-description"
     >
@@ -80,11 +102,38 @@ const ImageDialog = ({
           </Box>
         ) : (
           <Box>
-            Naziv slike:{" "}
-            <span className={styles.labelStyle}>{openImageDialog?.label}</span>
-            <div className={styles.imageStyle}>
-              <img src={openImageDialog?.image} alt={openImageDialog?.label} />
-            </div>
+            {loadingImage ? (
+              <div
+              // style={{
+              //   maxWidth: "100%",
+              //   maxHeight: "calc(100vh - 64px)",
+              //   height: "calc(30vh - 64px)",
+              // }}
+              >
+                <CircularProgress
+                  size="4rem"
+                  sx={{ ml: "45%" }}
+                  disableShrink
+                />
+              </div>
+            ) : (
+              <div>
+                Naziv slike:{" "}
+                <span className={styles.labelStyle}>
+                  {openImageDialog?.label}
+                </span>
+                <div className={styles.imageStyle}>
+                  <img
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "calc(100vh - 64px)",
+                    }}
+                    src={openImageDialog?.image}
+                    alt={openImageDialog?.label}
+                  />
+                </div>
+              </div>
+            )}
           </Box>
         )}
       </DialogContent>
@@ -98,15 +147,23 @@ const ImageDialog = ({
             spacing={2}
             className={styles.btnGroup}
           >
+            {/* <input hidden accept="image/*" type="file" onImageUpload /> */}
             <Button
               variant="outlined"
               component="label"
               startIcon={<PhotoCamera />}
             >
               Nova slika
-              <input hidden accept="image/*" type="file" />
+              <Input
+                multiple
+                name={openImageDialog.name}
+                accept="image/*"
+                id={openImageDialog.label}
+                onChange={(e) => handleImageUpload(e)}
+                type="file"
+                sx={{ display: "none" }}
+              />
             </Button>
-
             <Button
               variant="outlined"
               onClick={handleOpenEditMode}

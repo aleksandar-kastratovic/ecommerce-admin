@@ -18,7 +18,9 @@ const CreateForm = ({
   item = {},
   onChangeHandler = () => {},
   onImageUpload = () => {},
+  // TODO remove onImagePreview
   onImagePreview = () => {},
+  onOpenImageDialog = () => {},
   value = "",
   error = "",
 }) => {
@@ -82,7 +84,7 @@ const CreateForm = ({
               value={value}
               error={error}
               onImageUpload={onImageUpload}
-              onImagePreview={onImagePreview}
+              onOpenImageDialog={onOpenImageDialog}
             />
           );
           break;
