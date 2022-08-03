@@ -12,6 +12,7 @@ import Alert from "@mui/material/Alert";
 import DetailsList from "./DetailsList";
 import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
 import ImageModal from "../../../components/shared/Dialogs/ImageModal";
+import ImagePreview from "../../../components/shared/ImagePreview/ImagePreview";
 import ImageDialog from "../../../components/shared/Dialogs/ImageDialog";
 
 // config
@@ -48,7 +49,7 @@ const DetailsForm = ({}) => {
   const [fields, setFields] = useState(fieldsSlugsBasic);
   // new item
   const [newItem, setNewItem] = useState({});
-  // const [imagePreviewList, setImagePreviewList] = useState([]);
+  const [imagePreviewList, setImagePreviewList] = useState([]);
   const [detailsList, setDetailsList] = useState([]);
   const [loadingForm, setLoadingForm] = useState(false);
   // when you receive a backend validation it should be implemented through the same error object
@@ -155,7 +156,7 @@ const DetailsForm = ({}) => {
 
   const handleSelectInDetails = useCallback(async (module, slug) => {
     setLoadingForm(true);
-    //setImagePreviewList([]);
+    setImagePreviewList([]);
     changeFields(slug);
     setModuleId({ ...moduleId, slug: slug });
     setSelected(slug);
@@ -187,10 +188,23 @@ const DetailsForm = ({}) => {
     setNewItem({ ...newItem, [event.target.name]: result });
   };
 
-  const formImagePreview = useCallback((img, label) => {
-    console.log(img, label, "open image modal");
-    setOpenImageDialog({ show: true, image: img, label: label });
-  }, []);
+  // const formImagePreview = useCallback((img, label) => {
+  //   console.log(img, label, "open image modal");
+  //   setOpenImageDialog({ show: true, image: img, label: label });
+  // }, []);
+
+  const formImagePreview = useCallback(
+    (img, label) => {
+      const found = imagePreviewList.some((el) => el.image === img);
+      if (!found) {
+        setImagePreviewList([
+          ...imagePreviewList,
+          { image: img, label: label },
+        ]);
+      }
+    },
+    [imagePreviewList]
+  );
 
   const handleCancel = () => {
     setOpenImageDialog({ show: false, image: null, label: "" });
@@ -263,7 +277,7 @@ const DetailsForm = ({}) => {
                   )}
                 </>
               }
-              right={<div />}
+              right={<ImagePreview imagePreviewList={imagePreviewList} />}
               onSubmit={onSubmit}
               buttonText="Sacuvaj"
             />
