@@ -85,7 +85,6 @@ const ImageDialog = ({
       // classes={{ paper: stylesClasses.dialogPaper }}
       open={openImageDialog.show}
       maxWidth={"xl"}
-      fullWidth
       aria-labelledby="delete-dialog-title"
       aria-describedby="delete-dialog-description"
     >
@@ -103,13 +102,7 @@ const ImageDialog = ({
         ) : (
           <Box>
             {loadingImage ? (
-              <div
-              // style={{
-              //   maxWidth: "100%",
-              //   maxHeight: "calc(100vh - 64px)",
-              //   height: "calc(30vh - 64px)",
-              // }}
-              >
+              <div>
                 <CircularProgress
                   size="4rem"
                   sx={{ ml: "45%" }}

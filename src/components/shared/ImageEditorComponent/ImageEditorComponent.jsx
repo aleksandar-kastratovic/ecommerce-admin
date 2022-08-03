@@ -11,6 +11,11 @@ import Stack from "@mui/material/Stack";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import Icon from "@mui/material/Icon";
 import Slider from "@mui/material/Slider";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import RotateLeftIcon from "@mui/icons-material/RotateLeft";
@@ -20,6 +25,7 @@ import CheckIcon from "@mui/icons-material/Check";
 import Skeleton from "@mui/material/Skeleton";
 
 import styles from "./ImageEditorComponent.module.scss";
+import { Input } from "@mui/material";
 
 // https://www.npmjs.com/package/react-avatar-editor
 
@@ -34,6 +40,9 @@ const ImageEditorComponent = ({
     url: imageURL,
     rotate: 0,
     scale: 0,
+    borderRadius: 0,
+    width: 600,
+    height: 300,
   });
   const [loadingImage, setLoadingImage] = useState(false);
 
@@ -69,14 +78,6 @@ const ImageEditorComponent = ({
     }
   };
 
-  const handleScale = (e) => {
-    const scale = parseFloat(e.target.value);
-    setImgState({
-      ...imgState,
-      scale: scale,
-    });
-  };
-
   const rotateLeft = (e) => {
     e.preventDefault();
     setImgState({
@@ -100,6 +101,21 @@ const ImageEditorComponent = ({
     });
   };
 
+  const handleBorderRadius = (event, newValue) => {
+    // const scale = parseFloat(e.target.value);
+    setImgState({
+      ...imgState,
+      borderRadius: newValue,
+    });
+  };
+
+  const handleImageWidthHeight = (event) => {
+    setImgState({
+      ...imgState,
+      [event.target.name]: parseInt(event.target.value),
+    });
+  };
+
   return (
     <>
       {loadingImage ? (
@@ -107,11 +123,14 @@ const ImageEditorComponent = ({
           <AvatarEditor
             ref={editor}
             image={imageURL}
-            width={250}
-            height={250}
-            border={50}
+            width={imgState.width}
+            height={imgState.height}
+            border={100}
+            backgroundColor="#ecf0fa"
+            borderRadius={imgState.borderRadius}
             rotate={imgState.rotate}
             scale={imgState.scale}
+            disableHiDPIScaling
           />
           <Stack
             direction="row"
@@ -119,6 +138,24 @@ const ImageEditorComponent = ({
             spacing={2}
             className={styles.btnGroup}
           >
+            <TextField
+              id="width"
+              name="width"
+              type="number"
+              label="width"
+              variant="standard"
+              value={imgState.width}
+              onChange={handleImageWidthHeight}
+            />
+            <TextField
+              id="height"
+              name="height"
+              type="number"
+              label="height"
+              variant="standard"
+              value={imgState.height}
+              onChange={handleImageWidthHeight}
+            />
             <IconButton
               color="primary"
               aria-label="rotete left"
@@ -139,7 +176,21 @@ const ImageEditorComponent = ({
               onChange={handleChangeZoom}
               size="small"
               min={1}
-              max={5}
+              max={3}
+              step={1}
+              marks
+            />
+            <Slider
+              aria-label="borderRadius"
+              value={
+                typeof imgState.borderRadius === "number"
+                  ? imgState.borderRadius
+                  : 0
+              }
+              onChange={handleBorderRadius}
+              size="small"
+              min={1}
+              max={200}
               step={1}
               marks
             />
