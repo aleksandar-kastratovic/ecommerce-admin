@@ -20,11 +20,13 @@ import { isEmpty } from "lodash";
 import AuthContext from "../../../store/auth-contex";
 import { useQuery } from "react-query";
 import { getDetailsB2Bbanners, createBanner } from "../services";
+import ImagePreview from "../../../components/shared/ImagePreview/ImagePreview";
 
 const DetailsBanners = ({}) => {
   const { B2BId } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const [imagePreviewList, setImagePreviewList] = useState([]);
 
   const init = {
     active_from: null,
@@ -119,7 +121,6 @@ const DetailsBanners = ({}) => {
     const repackToSend = {
       ...newItem,
       priority: parseInt(newItem.priority),
-      image: null,
     };
     try {
       createBanner(user.access_token, repackToSend);
@@ -128,6 +129,41 @@ const DetailsBanners = ({}) => {
       console.warn(error);
     }
   };
+
+  const formImageUpload = useCallback(
+    (event) => {
+      event.preventDefault();
+      const selectedFile = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        // setNewItem({ ...newItem, [event.target.name]: reader.result });
+        const timeOutId = setTimeout(() => {
+          setter(event, reader.result);
+        }, 500);
+        return () => clearTimeout(timeOutId);
+      };
+      reader.readAsDataURL(selectedFile);
+    },
+    [newItem]
+  );
+
+  const setter = (event, result) => {
+    setNewItem({ ...newItem, [event.target.name]: result });
+  };
+
+  const formImagePreview = useCallback(
+    (img, label) => {
+      const found = imagePreviewList.some((el) => el.image === img);
+      if (!found) {
+        setImagePreviewList([
+          ...imagePreviewList,
+          { image: img, label: label },
+        ]);
+      }
+    },
+    [imagePreviewList]
+  );
 
   return (
     <>
@@ -147,6 +183,8 @@ const DetailsBanners = ({}) => {
                           <CreateForm
                             data-test-id="B2B-banners-form"
                             onChangeHandler={formItemChangeHandler}
+                            onImageUpload={formImageUpload}
+                            onImagePreview={formImagePreview}
                             item={item}
                             key={index}
                             error={inputsError[item.prop_name]}
@@ -176,7 +214,7 @@ const DetailsBanners = ({}) => {
                 )}
               </>
             }
-            right={<div />}
+            right={<ImagePreview imagePreviewList={imagePreviewList} />}
             onSubmit={onSubmit}
             buttonText="Sacuvaj"
           />
