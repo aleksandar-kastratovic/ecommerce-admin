@@ -33,12 +33,14 @@ const style = {
 
 const ImageDialog = ({
   openImageDialog,
+  base64,
   title = "",
   description = "",
   confirmIcon = "delete",
   cancelIcon = "cancel",
   onImageUpload = () => {},
   handleCancel = () => {},
+  handleSaveEditImage = () => {},
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
@@ -94,7 +96,11 @@ const ImageDialog = ({
           <Box>
             <ImageEditorComponent
               handleCloseEditMode={handleCloseEditMode}
-              imageURL={openImageDialog?.image}
+              handleCancel={handleCancel}
+              imageURL={openImageDialog.image}
+              imageName={openImageDialog.name}
+              handleSaveEditImage={handleSaveEditImage}
+              base64={base64}
               width={width}
               height={height}
             />
@@ -116,14 +122,16 @@ const ImageDialog = ({
                   {openImageDialog?.label}
                 </span>
                 <div className={styles.imageStyle}>
-                  <img
-                    style={{
-                      maxWidth: "100%",
-                      maxHeight: "calc(100vh - 64px)",
-                    }}
-                    src={openImageDialog?.image}
-                    alt={openImageDialog?.label}
-                  />
+                  {base64 && (
+                    <img
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "calc(100vh - 64px)",
+                      }}
+                      src={`data:image/jpg;base64,${base64}`}
+                      alt={openImageDialog?.label}
+                    />
+                  )}
                 </div>
               </div>
             )}

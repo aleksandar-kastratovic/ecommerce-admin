@@ -31,9 +31,13 @@ import { Input } from "@mui/material";
 
 const ImageEditorComponent = ({
   handleCloseEditMode,
+  handleCancel,
   imageURL,
+  base64,
   width,
   height,
+  handleSaveEditImage,
+  imageName,
 }) => {
   const editor = useRef(null);
   const [imgState, setImgState] = useState({
@@ -66,12 +70,16 @@ const ImageEditorComponent = ({
     handleImageUpload();
   }, []);
 
-  const handleChange = () => {
+  const handleSave = () => {
     if (editor) {
       // This returns a HTMLCanvasElement, it can be made into a data URL or a blob,
       // drawn on another canvas, or added to the DOM.
       const canvas = editor.current.getImage();
-      console.log(canvas);
+      const base64Image = canvas.toDataURL("image/jpeg");
+      console.log(base64Image);
+      handleSaveEditImage(imageName, base64Image);
+      handleCloseEditMode();
+      handleCancel();
 
       // If you want the image resized to the canvas size (also a HTMLCanvasElement)
       const canvasScaled = editor.current.getImageScaledToCanvas();
@@ -122,7 +130,7 @@ const ImageEditorComponent = ({
         <>
           <AvatarEditor
             ref={editor}
-            image={imageURL}
+            image={`data:image/jpg;base64,${base64}`}
             width={imgState.width}
             height={imgState.height}
             border={100}
@@ -204,7 +212,7 @@ const ImageEditorComponent = ({
             <Button
               variant="outlined"
               color="primary"
-              onClick={handleChange}
+              onClick={handleSave}
               startIcon={<CheckIcon />}
             >
               Sačuvaj
