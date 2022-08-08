@@ -1,3 +1,24 @@
 .btnGroup {
     margin: 1rem;
+    position: absolute;
+    bottom: 20px;
+    left: 60%;
+    width: 100%;
+    transform: translateX(-50%);
+    height: 40px;
+    display: flex;
+    align-items: center;
+
+    input::-webkit-slider-runnable-track {
+        background-color: var(--sidebar-bg-color);
+    }
+}
+
+.cropContainer {
+    position: absolute;
+    margin-top: 5rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 10rem;
 }

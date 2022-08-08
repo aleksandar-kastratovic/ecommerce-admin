@@ -74,17 +74,17 @@ const ImageDialog = ({
     return () => clearTimeout(timeOutId);
   };
 
-  // const stylesClasses = {
-  //   dialogPaper: {
-  //     minHeight: "80vh",
-  //     maxHeight: "80vh",
-  //     height: "90vh",
-  //   },
-  // };
+  const stylesClasses = {
+    dialogPaper: {
+      minHeight: "80vh",
+      maxHeight: "80vh",
+      height: "90vh",
+    },
+  };
 
   return (
     <Dialog
-      // classes={{ paper: stylesClasses.dialogPaper }}
+      classes={{ paper: stylesClasses.dialogPaper }}
       open={openImageDialog.show}
       maxWidth={"xl"}
       aria-labelledby="delete-dialog-title"
@@ -93,7 +93,12 @@ const ImageDialog = ({
       <DialogTitle>{title}</DialogTitle>
       <DialogContent ref={wrapperRefPopup}>
         {editMode ? (
-          <Box>
+          <Box
+            sx={{
+              width: 1200,
+              height: 600,
+            }}
+          >
             <ImageEditorComponent
               handleCloseEditMode={handleCloseEditMode}
               handleCancel={handleCancel}
