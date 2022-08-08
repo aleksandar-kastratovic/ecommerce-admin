@@ -1,17 +1,18 @@
 .btnGroup {
-    margin: 1rem;
+    margin-left: 0rem;
+    margin-top: 2rem !important;
     position: absolute;
-    bottom: 20px;
+    bottom: 3rem;
     left: 60%;
-    width: 100%;
-    transform: translateX(-50%);
-    height: 40px;
-    display: flex;
-    align-items: center;
+    width: 90% !important;
+    transform: translateX(-61%);
+    // height: 40px;
+    // display: flex;
+    align-items: left;
 
-    input::-webkit-slider-runnable-track {
-        background-color: var(--sidebar-bg-color);
-    }
+    // input::-webkit-slider-runnable-track {
+    //     background-color: var(--sidebar-bg-color);
+    // }
 }
 
 .cropContainer {
@@ -20,5 +21,5 @@
     top: 0;
     left: 0;
     right: 0;
-    bottom: 10rem;
+    bottom: 12rem;
 }

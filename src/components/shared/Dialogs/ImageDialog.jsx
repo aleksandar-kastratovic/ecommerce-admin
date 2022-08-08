@@ -17,44 +17,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 import styles from "./ImageDialog.module.scss";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-};
-
 const ImageDialog = ({
   openImageDialog,
-  base64,
   title = "",
-  description = "",
-  confirmIcon = "delete",
-  cancelIcon = "cancel",
   onImageUpload = () => {},
   handleCancel = () => {},
   handleSaveEditImage = () => {},
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
-
-  const wrapperRefPopup = useRef();
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-
-  useEffect(() => {
-    if (wrapperRefPopup.current) {
-      setWidth(wrapperRefPopup.current.clientWidth);
-      setHeight(wrapperRefPopup.current.clientHeight);
-    }
-  }, [editMode]);
 
   const handleCloseEditMode = () => {
     setEditMode(false);
@@ -74,28 +45,19 @@ const ImageDialog = ({
     return () => clearTimeout(timeOutId);
   };
 
-  const stylesClasses = {
-    dialogPaper: {
-      minHeight: "80vh",
-      maxHeight: "80vh",
-      height: "90vh",
-    },
-  };
-
   return (
     <Dialog
-      classes={{ paper: stylesClasses.dialogPaper }}
       open={openImageDialog.show}
       maxWidth={"xl"}
       aria-labelledby="delete-dialog-title"
       aria-describedby="delete-dialog-description"
     >
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent ref={wrapperRefPopup}>
+      <DialogContent>
         {editMode ? (
           <Box
             sx={{
-              width: 1200,
+              width: 900,
               height: 600,
             }}
           >
@@ -105,9 +67,6 @@ const ImageDialog = ({
               imageURL={openImageDialog.image}
               imageName={openImageDialog.name}
               handleSaveEditImage={handleSaveEditImage}
-              base64={base64}
-              width={width}
-              height={height}
             />
           </Box>
         ) : (
@@ -127,13 +86,13 @@ const ImageDialog = ({
                   {openImageDialog?.label}
                 </span>
                 <div className={styles.imageStyle}>
-                  {base64 && (
+                  {openImageDialog.image && (
                     <img
                       style={{
                         maxWidth: "100%",
                         maxHeight: "calc(100vh - 64px)",
                       }}
-                      src={`data:image/jpg;base64,${base64}`}
+                      src={openImageDialog.image}
                       alt={openImageDialog?.label}
                     />
                   )}

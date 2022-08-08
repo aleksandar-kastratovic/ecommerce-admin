@@ -3,28 +3,31 @@ import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import CheckIcon from "@mui/icons-material/Check";
+import Box from "@mui/material/Box";
+import TextField from "@mui/material/TextField";
+import Grid from "@mui/material/Grid";
+import Slider from "@mui/material/Slider";
+import Typography from "@mui/material/Typography";
+import Switch from "@mui/material/Switch";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import FormControlLabel from "@mui/material/FormControlLabel";
+
 import styles from "./ImageEditorComponent.module.scss";
-
 import Cropper from "react-easy-crop";
-import getCroppedImg from "../../../helpers/cropImage";
-import { createImage } from "../../../helpers/cropImage";
-
-// https://www.npmjs.com/package/react-avatar-editor
+import { getCroppedImg } from "./util";
 
 const ImageEditorComponent = ({
   handleCloseEditMode,
   handleCancel,
   imageURL,
-  base64,
-  width,
-  height,
   handleSaveEditImage,
   imageName,
 }) => {
-  // Apsoultno isti kod kao u vec postojecem crop editoru na products details ili category details
-  // jedina razlika je sto tamo stize base64 odnosno radi se upload slike a ovde stize URL
-  // svaki pokusaj pretvaranja tog url u base64 ili bilo kakvu manipulaciju puca i ne radi
   const [crop, setCrop] = useState({ x: 0, y: 0 });
+  const [rotation, setRotation] = useState(0);
+  const [cropSize, setCropSize] = useState({ width: 300, height: 200 });
+  const [roundCrop, setRoundCrop] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
   const [croppedImage, setCroppedImage] = useState(null);
@@ -35,65 +38,24 @@ const ImageEditorComponent = ({
 
   useEffect(() => {
     if (imageURL) {
-      // postoji vec funkcija za pretvaranje url slike u sliku sa cors flagom
-      // slicne funkcije sam pravio ali poenta je ista
-      // const createImageFromUrl = async () => {
-      //   await createImage(imageURL);
-      // };
-      // console.log(createImageFromUrl());
-
-      // isto ne radi
-      // setCroppedImage(`${imageURL}?time=20220807125138-123546a`);
       setCroppedImage(imageURL);
     }
   }, [imageURL]);
 
-  const imageCroped = (img, imgFile, flag) => {
-    console.log(img, imgFile, flag);
-
-    // Pretvaranje slike u kanvas pa u base64 i cuvanje editovane slike
-    // const canvas = editor.current.getImage();
-    // const base64Image = canvas.toDataURL("image/jpeg");
-    // console.log(base64Image);
-    // handleSaveEditImage(imageName, base64Image);
-    // handleCloseEditMode();
-    // handleCancel();
+  const handleSave = (base64Image) => {
+    handleSaveEditImage(imageName, base64Image);
+    handleCloseEditMode();
+    handleCancel();
   };
 
   const showCroppedImage = useCallback(async () => {
     try {
       const croppedImg = await getCroppedImg(croppedImage, croppedAreaPixels);
-      imageCroped({
-        img: URL.createObjectURL(croppedImg),
-        imgFile: croppedImg,
-        flag: imgForCrooping.flag,
-      });
+      handleSave(croppedImg);
     } catch (e) {
       console.error(e);
     }
-
-    setCroppedImage(null);
-    setCroppedAreaPixels(null);
-    setZoom(1);
-    setCrop({ x: 0, y: 0 });
-    // handleClose();
   }, [croppedAreaPixels]);
-
-  // const handleSave = () => {
-  //   if (editor) {
-  //     // This returns a HTMLCanvasElement, it can be made into a data URL or a blob,
-  //     // drawn on another canvas, or added to the DOM.
-  //     const canvas = editor.current.getImage();
-  //     const base64Image = canvas.toDataURL("image/jpeg");
-  //     console.log(base64Image);
-  //     handleSaveEditImage(imageName, base64Image);
-  //     handleCloseEditMode();
-  //     handleCancel();
-
-  //     // If you want the image resized to the canvas size (also a HTMLCanvasElement)
-  //     const canvasScaled = editor.current.getImageScaledToCanvas();
-  //   }
-  // };
 
   return (
     <>
@@ -101,40 +63,131 @@ const ImageEditorComponent = ({
         <Cropper
           image={croppedImage}
           crop={crop}
-          minZoom={0.1}
-          maxZoom={3}
-          zoomSpeed={0.1}
           restrictPosition={false}
           objectFit="contain"
+          cropShape={roundCrop ? "round" : "rect"}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
+          zoom={zoom}
+          rotation={rotation}
+          onRotationChange={setRotation}
+          cropSize={{ width: cropSize.width, height: cropSize.height }}
+          zoomWithScroll
         />
       </div>
 
-      <Stack
-        direction="row"
-        alignItems="right"
-        spacing={2}
-        className={styles.btnGroup}
-      >
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={showCroppedImage}
-          startIcon={<CheckIcon />}
-        >
-          Sačuvaj
-        </Button>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={handleCloseEditMode}
-          startIcon={<CancelOutlinedIcon />}
-        >
-          Otkaži
-        </Button>
-      </Stack>
+      <Grid container spacing={1} className={styles.btnGroup}>
+        <Grid item xs={4}>
+          <Box width={200}>
+            <Typography id="zoom-slider" gutterBottom>
+              Uvećaj
+            </Typography>
+            <Slider
+              aria-labelledby="zoom-slider"
+              value={typeof rotation === "number" ? zoom : 0}
+              onChange={(e, zoom) => setZoom(zoom)}
+              min={0.5}
+              max={3}
+              step={0.5}
+              marks
+            />
+          </Box>
+        </Grid>
+        <Grid item xs={4}>
+          <Box width={200}>
+            <Typography id="rotation-slider" gutterBottom>
+              Rotiraj
+            </Typography>
+            <Slider
+              aria-labelledby="rotation-slider"
+              min={-180}
+              max={180}
+              step={10}
+              value={typeof rotation === "number" ? rotation : 0}
+              onChange={(e, rotation) => setRotation(rotation)}
+            />
+          </Box>
+        </Grid>
+
+        <Grid item xs={8}>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <Box width={150}>
+              <Typography id="width-slider" gutterBottom>
+                Širina oblasti
+              </Typography>
+              <Slider
+                aria-labelledby="width-slider"
+                min={50}
+                max={900}
+                step={10}
+                value={typeof cropSize.width === "number" ? cropSize.width : 0}
+                onChange={(e, width) =>
+                  setCropSize({
+                    ...cropSize,
+                    width: width,
+                  })
+                }
+              />
+            </Box>
+            <Box width={150}>
+              <Typography id="height-slider" gutterBottom>
+                Visina oblasti
+              </Typography>
+              <Slider
+                aria-labelledby="height-slider"
+                min={50}
+                max={400}
+                step={10}
+                value={
+                  typeof cropSize.height === "number" ? cropSize.height : 0
+                }
+                onChange={(e, height) =>
+                  setCropSize({
+                    ...cropSize,
+                    height: height,
+                  })
+                }
+              />
+            </Box>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={roundCrop}
+                  onChange={(event) => setRoundCrop(event.target.checked)}
+                  inputProps={{ "aria-label": "controlled" }}
+                />
+              }
+              label="Okrugla oblast"
+            />
+          </Stack>
+        </Grid>
+        <Grid item xs={4}>
+          <Stack
+            direction="row"
+            alignItems="right"
+            spacing={2}
+            // className={styles.btnGroup}
+          >
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={showCroppedImage}
+              startIcon={<CheckIcon />}
+            >
+              Sačuvaj
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={handleCloseEditMode}
+              startIcon={<CancelOutlinedIcon />}
+            >
+              Otkaži
+            </Button>
+          </Stack>
+        </Grid>
+      </Grid>
     </>
   );
 };
