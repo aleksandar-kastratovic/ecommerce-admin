@@ -21,8 +21,9 @@ const ImageDialog = ({
   openImageDialog,
   title = "",
   onImageUpload = () => {},
-  handleCancel = () => {},
+  handleCloseImageDialog = () => {},
   handleSaveEditImage = () => {},
+  handleDeleteImage = () => {},
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
@@ -35,12 +36,17 @@ const ImageDialog = ({
     setEditMode(true);
   };
 
+  const onDeleteImageClick = () => {
+    handleDeleteImage(openImageDialog.name);
+    handleCloseImageDialog();
+  };
+
   const handleImageUpload = (e) => {
     setLoadingImage(true);
     onImageUpload(e);
     const timeOutId = setTimeout(() => {
       setLoadingImage(false);
-      handleCancel();
+      handleCloseImageDialog();
     }, 1000);
     return () => clearTimeout(timeOutId);
   };
@@ -63,7 +69,7 @@ const ImageDialog = ({
           >
             <ImageEditorComponent
               handleCloseEditMode={handleCloseEditMode}
-              handleCancel={handleCancel}
+              handleCloseImageDialog={handleCloseImageDialog}
               imageURL={openImageDialog.image}
               imageName={openImageDialog.name}
               handleSaveEditImage={handleSaveEditImage}
@@ -140,7 +146,7 @@ const ImageDialog = ({
             <Button
               variant="outlined"
               color="error"
-              onClick={handleCancel}
+              onClick={onDeleteImageClick}
               startIcon={<DeleteOutlineOutlinedIcon />}
             >
               Obrisi
@@ -148,7 +154,7 @@ const ImageDialog = ({
             <Button
               variant="outlined"
               color="secondary"
-              onClick={handleCancel}
+              onClick={handleCloseImageDialog}
               startIcon={<CancelOutlinedIcon />}
             >
               Otkaži

@@ -19,7 +19,7 @@ import { getCroppedImg } from "./util";
 
 const ImageEditorComponent = ({
   handleCloseEditMode,
-  handleCancel,
+  handleCloseImageDialog,
   imageURL,
   handleSaveEditImage,
   imageName,
@@ -45,7 +45,7 @@ const ImageEditorComponent = ({
   const handleSave = (base64Image) => {
     handleSaveEditImage(imageName, base64Image);
     handleCloseEditMode();
-    handleCancel();
+    handleCloseImageDialog();
   };
 
   const showCroppedImage = useCallback(async () => {

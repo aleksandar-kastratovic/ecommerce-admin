@@ -17,7 +17,6 @@ import Alert from "@mui/material/Alert";
 // components
 import DetailsList from "./DetailsList";
 import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
-import ImageModal from "../../../components/shared/Dialogs/ImageModal";
 import ImagePreview from "../../../components/shared/ImagePreview/ImagePreview";
 import ImageDialog from "../../../components/shared/Dialogs/ImageDialog";
 
@@ -209,21 +208,7 @@ const DetailsForm = ({}) => {
     });
   };
 
-  // image preview for old form
-  // const formImagePreview = useCallback(
-  //   (img, label) => {
-  //     const found = imagePreviewList.some((el) => el.image === img);
-  //     if (!found) {
-  //       setImagePreviewList([
-  //         ...imagePreviewList,
-  //         { image: img, label: label },
-  //       ]);
-  //     }
-  //   },
-  //   [imagePreviewList]
-  // );
-
-  const handleCancel = () => {
+  const handleCloseImageDialog = () => {
     setOpenImageDialog({ show: false, image: null, label: "", name: "" });
   };
 
@@ -231,64 +216,16 @@ const DetailsForm = ({}) => {
     navigate(`/B2B-settings`);
   };
 
-  // ODAVDE
-
-  // const referenceImage = useRef(null);
-  // const referenceCanvas = useRef(null);
-
-  // const [base64, setBase64] = useState(null);
-
-  // useEffect(() => {
-  //   drawCanvas();
-  // }, []);
-
-  // const drawCanvas = () => {
-  //   const canvas = document.getElementById("canvas");
-  //   const ctx = canvas.getContext("2d");
-  //   const image = document.getElementById("recivedImage");
-  //   const dataURL = canvas.toDataURL("image/jpg");
-  //   const generateBase64 = dataURL.replace(
-  //     /^data:image\/(png|jpg);base64,/,
-  //     ""
-  //   );
-
-  //   // setBase64(`data:image/jpg;base64,${generateBase64}`);
-  //   // setBase64(generateBase64);
-  //   // console.log(base64);
-
-  //   // image.onload = function () {
-  //   //   ctx.drawImage(image, 33, 71, 104, 124, 21, 20, 87, 104);
-  //   // };
-
-  //   image.onload = function () {
-  //     var canvas = document.createElement("canvas");
-  //     canvas.width = image.width;
-  //     canvas.height = image.height;
-  //     var ctx = canvas.getContext("2d");
-  //     ctx.drawImage(image, 0, 0);
-  //     var dataURL = canvas.toDataURL("image/png"),
-  //       dataURL = dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
-
-  //     setBase64(dataURL); // the base64 string
-  //   };
-
-  //   // set attributes and src
-  //   image.setAttribute("crossOrigin", "anonymous"); //
-  //   image.src = image.src;
-  // };
-
   const handleSaveEditImage = (imageName, image) => {
     setNewItem({ ...newItem, [imageName]: image });
   };
 
+  const handleDeleteImage = (imageName) => {
+    setNewItem({ ...newItem, [imageName]: "DELETE" });
+  };
+
   return (
     <>
-      {/* <canvas ref={referenceCanvas} id="canvas"></canvas>
-      <img
-        ref={referenceImage}
-        src="https://api.staging.croonus.com/croonus-uploads/config/b2b/missing-c44688ab6c85edd868b44dcd7f82c89a.jpeg"
-        id="recivedImage"
-      /> */}
       <Box className={styles.details}>
         <DetailsBasic
           handleBackToList={handleBackToList}
@@ -370,9 +307,10 @@ const DetailsForm = ({}) => {
       <ImageDialog
         title="Obrada slike"
         openImageDialog={openImageDialog}
-        handleCancel={handleCancel}
+        handleCloseImageDialog={handleCloseImageDialog}
         onImageUpload={formImageUpload}
         handleSaveEditImage={handleSaveEditImage}
+        handleDeleteImage={handleDeleteImage}
       />
     </>
   );
