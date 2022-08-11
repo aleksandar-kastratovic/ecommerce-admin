@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import TextBox from "../TextBox/TextBox";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -26,6 +26,12 @@ const CreateForm = ({
   // value is obvious
   // onChangeHandler change handler
   // error is for validations backend and frontend
+
+  const [inputValue, setInputValue] = useState(value);
+  const onInputChangeHandler = (event) => {
+    onChangeHandler(event);
+    setInputValue(event.target.value);
+  };
 
   let formItem = null;
   if (Array.isArray(item)) {
@@ -126,13 +132,14 @@ const CreateForm = ({
               <Select
                 labelId={`select-label-${item.field_name}`}
                 id={`select-label-${item.field_name}`}
-                value={value}
+                name={item.prop_name}
+                value={inputValue}
                 label={item.field_name}
-                onChange={onChangeHandler}
+                onChange={onInputChangeHandler}
               >
                 {item.options.map((itemUnit, index) => (
-                  <MenuItem key={itemUnit} value={itemUnit}>
-                    {itemUnit}
+                  <MenuItem key={itemUnit.id} value={itemUnit.id}>
+                    {itemUnit.name}
                   </MenuItem>
                 ))}
               </Select>
