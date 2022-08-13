@@ -98,7 +98,7 @@ const ImageDialog = ({
                         maxWidth: "100%",
                         maxHeight: "calc(100vh - 64px)",
                       }}
-                      src={openImageDialog.image}
+                      src={openImageDialog?.image}
                       alt={openImageDialog?.label}
                     />
                   )}

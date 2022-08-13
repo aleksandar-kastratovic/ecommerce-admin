@@ -174,8 +174,8 @@ const DetailsForm = ({}) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         const timeOutId = setTimeout(() => {
-          setter(event, reader.result);
-        }, 500);
+          imageSetter(event, reader.result);
+        }, 800);
         return () => clearTimeout(timeOutId);
       };
       reader.readAsDataURL(selectedFile);
@@ -183,7 +183,7 @@ const DetailsForm = ({}) => {
     [newItem]
   );
 
-  const setter = (event, result) => {
+  const imageSetter = (event, result) => {
     setNewItem({ ...newItem, [event.target.name]: result });
   };
 
