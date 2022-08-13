@@ -23,7 +23,7 @@
     "description": "Favicon koji se prikazuje u tabu browser-u",
     "ui_prop": "xyz",
     "sortable": false,
-    "input_type": "image_upload"
+    "input_type": "image_button"
   },
   {
     "field_name": "Logo",
@@ -36,7 +36,7 @@
     "description": "Logo firme koji se prikazuje u gornjem levom uglu portala",
     "ui_prop": "xyz",
     "sortable": false,
-    "input_type": "image_upload"
+    "input_type": "image_button"
   },
   {
     "field_name": "Podrazumevana slika",
