@@ -1,10 +1,4 @@
-import React, {
-  useEffect,
-  useContext,
-  useState,
-  useCallback,
-  useRef,
-} from "react";
+import React, { useEffect, useContext, useState, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 // material-ui components
@@ -33,7 +27,7 @@ import AuthContext from "../../../store/auth-contex";
 import { useQuery } from "react-query";
 import { getSubmodulesList, getSlug, createSlug } from "../services";
 
-import { repackToSend } from "./util";
+import { repackToSend, isUrlValid } from "./util";
 
 import styles from "./DetailsForm.module.scss";
 
@@ -179,7 +173,6 @@ const DetailsForm = ({}) => {
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        // setNewItem({ ...newItem, [event.target.name]: reader.result });
         const timeOutId = setTimeout(() => {
           setter(event, reader.result);
         }, 500);
@@ -200,12 +193,29 @@ const DetailsForm = ({}) => {
     });
     const found = findBase64[0].base64;
 
-    setOpenImageDialog({
-      show: true,
-      image: found,
-      label: label,
-      name: imageName,
-    });
+    // If the image is a type of URL it means that user still did not upload new image,
+    // but if it is not type of URL it means that user uploaded new image
+    // Additionally, if this solution is not reliable, new flag state can be introduced for example
+    // type boolean
+    // const [newImageUploaded, setNewImageUploaded] = useState(false)
+    // when user uploads a new image it can be set to true
+    const checkImage = isUrlValid(img);
+
+    if (checkImage) {
+      setOpenImageDialog({
+        show: true,
+        image: found,
+        label: label,
+        name: imageName,
+      });
+    } else {
+      setOpenImageDialog({
+        show: true,
+        image: img,
+        label: label,
+        name: imageName,
+      });
+    }
   };
 
   const handleCloseImageDialog = () => {
