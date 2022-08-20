@@ -56,6 +56,8 @@ const B2Bsettings = ({}) => {
   // TODO DEMO Start Multiple images drag and drop
 
   const [imageList, setImageList] = useState();
+  // TODO DEMO handle drag state
+  const [dragActive, setDragActive] = useState(false);
 
   const handleMultipleImageUpload = useCallback(
     (event) => {
@@ -63,7 +65,7 @@ const B2Bsettings = ({}) => {
       const selectedFiles = event.target.files;
 
       const newImagesArray = [];
-
+      // TODO redundant move to helper
       for (let i = 0; i < selectedFiles.length; i++) {
         var file = selectedFiles[i];
         const reader = new FileReader();
@@ -93,6 +95,48 @@ const B2Bsettings = ({}) => {
     }
   }, []);
 
+  // TODO DEMO handle drag events
+  const handleDrag = function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    if (e.type === "dragenter" || e.type === "dragover") {
+      setDragActive(true);
+    } else if (e.type === "dragleave") {
+      setDragActive(false);
+    }
+  };
+
+  // TODO DEMO triggers when file is dropped
+  const handleDrop = function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    setDragActive(false);
+    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+      const selectedFiles = e.dataTransfer.files;
+
+      const newImagesArray = [];
+      // TODO redundant move to helper
+      for (let i = 0; i < selectedFiles.length; i++) {
+        var file = selectedFiles[i];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          newImagesArray.push({
+            id: i + 1,
+            name: selectedFiles[i].name,
+            position: i + 1,
+            alt: selectedFiles[i].name,
+            size: selectedFiles[i].size,
+            type: selectedFiles[i].type,
+            src: reader.result,
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+
+      setImageList(newImagesArray);
+    }
+  };
+
   return (
     <>
       <Paper elevation={0} className={styles.paperStyle}>
@@ -118,7 +162,11 @@ const B2Bsettings = ({}) => {
         >
           <ImageMultipleDnD
             handleMultipleImageUpload={handleMultipleImageUpload}
+            handleDrag={handleDrag}
+            handleDrop={handleDrop}
+            dragActive={dragActive}
           />
+
           <ImageListRow setImageList={setImageList} imageList={imageList} />
         </Grid>
       </Paper>
