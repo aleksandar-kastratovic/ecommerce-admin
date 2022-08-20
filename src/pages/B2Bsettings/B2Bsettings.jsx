@@ -1,8 +1,9 @@
-import React, { useEffect, useContext, useState } from "react";
+import React, { useEffect, useContext, useState, useCallback } from "react";
 
 import { useNavigate } from "react-router-dom";
 
 import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
 
 import styles from "./B2Bsettings.module.scss";
 import { flatten } from "lodash";
@@ -15,6 +16,8 @@ import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar
 import { useQuery } from "react-query";
 import AuthContext from "../../store/auth-contex";
 import { getListB2Bconfig } from "./services";
+import ImageMultipleDnD from "../../components/shared/ImageMultipleDnD/ImageMultipleDnD";
+import ImageListRow from "../../components/shared/ImageListRow/ImageListRow";
 
 const B2Bsettings = ({}) => {
   const { user } = useContext(AuthContext);
@@ -50,6 +53,46 @@ const B2Bsettings = ({}) => {
     navigate(`/B2B-settings/${module}`);
   };
 
+  // TODO DEMO Start Multiple images drag and drop
+
+  const [imageList, setImageList] = useState();
+
+  const handleMultipleImageUpload = useCallback(
+    (event) => {
+      event.preventDefault();
+      const selectedFiles = event.target.files;
+
+      const newImagesArray = [];
+
+      for (let i = 0; i < selectedFiles.length; i++) {
+        var file = selectedFiles[i];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          newImagesArray.push({
+            id: i + 1,
+            name: selectedFiles[i].name,
+            position: i + 1,
+            alt: selectedFiles[i].name,
+            size: selectedFiles[i].size,
+            type: selectedFiles[i].type,
+            src: reader.result,
+          });
+        };
+        reader.readAsDataURL(file);
+      }
+
+      setImageList(newImagesArray);
+    },
+    [imageList]
+  );
+
+  useEffect(() => {
+    let storedImages = JSON.parse(sessionStorage.getItem("storageImages"));
+    if (storedImages) {
+      setImageList(storedImages);
+    }
+  }, []);
+
   return (
     <>
       <Paper elevation={0} className={styles.paperStyle}>
@@ -66,6 +109,18 @@ const B2Bsettings = ({}) => {
           listData={listData}
           handleActions={handleActions}
         />
+
+        <Grid
+          container
+          spacing={1}
+          direction="row"
+          sx={{ mt: "2rem", ml: "1rem" }}
+        >
+          <ImageMultipleDnD
+            handleMultipleImageUpload={handleMultipleImageUpload}
+          />
+          <ImageListRow setImageList={setImageList} imageList={imageList} />
+        </Grid>
       </Paper>
     </>
   );

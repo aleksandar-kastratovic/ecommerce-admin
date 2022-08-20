@@ -1,0 +1,16 @@
+@import "../../../variables.scss";
+
+.buttonStyle {
+    background-color: $lightGrey  !important;
+    width: 10rem !important;
+    height: 10rem;
+}
+
+.buttonStyle:hover {
+    background-color: $lightGreen  !important;
+    opacity: 0.9, 0.8, 0.7;
+}
+
+.addAPhotoIcon {
+    font-size: 6rem !important;
+}
