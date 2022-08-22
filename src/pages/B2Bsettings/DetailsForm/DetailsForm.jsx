@@ -11,7 +11,6 @@ import Alert from "@mui/material/Alert";
 // components
 import DetailsList from "./DetailsList";
 import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
-import ImageModal from "../../../components/shared/Dialogs/ImageModal";
 import ImagePreview from "../../../components/shared/ImagePreview/ImagePreview";
 import ImageDialog from "../../../components/shared/Dialogs/ImageDialog";
 
@@ -28,7 +27,7 @@ import AuthContext from "../../../store/auth-contex";
 import { useQuery } from "react-query";
 import { getSubmodulesList, getSlug, createSlug } from "../services";
 
-import { repackToSend } from "./util";
+import { repackToSend, isUrlValid } from "./util";
 
 import styles from "./DetailsForm.module.scss";
 
@@ -45,11 +44,12 @@ const DetailsForm = ({}) => {
     show: false,
     image: null,
     label: "",
+    name: "",
   });
   const [fields, setFields] = useState(fieldsSlugsBasic);
   // new item
   const [newItem, setNewItem] = useState({});
-  const [imagePreviewList, setImagePreviewList] = useState([]);
+  // const [imagePreviewList, setImagePreviewList] = useState([]);
   const [detailsList, setDetailsList] = useState([]);
   const [loadingForm, setLoadingForm] = useState(false);
   // when you receive a backend validation it should be implemented through the same error object
@@ -156,7 +156,7 @@ const DetailsForm = ({}) => {
 
   const handleSelectInDetails = useCallback(async (module, slug) => {
     setLoadingForm(true);
-    setImagePreviewList([]);
+    // setImagePreviewList([]);
     changeFields(slug);
     setModuleId({ ...moduleId, slug: slug });
     setSelected(slug);
@@ -173,10 +173,9 @@ const DetailsForm = ({}) => {
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        // setNewItem({ ...newItem, [event.target.name]: reader.result });
         const timeOutId = setTimeout(() => {
-          setter(event, reader.result);
-        }, 500);
+          imageSetter(event, reader.result);
+        }, 800);
         return () => clearTimeout(timeOutId);
       };
       reader.readAsDataURL(selectedFile);
@@ -184,34 +183,55 @@ const DetailsForm = ({}) => {
     [newItem]
   );
 
-  const setter = (event, result) => {
+  const imageSetter = (event, result) => {
     setNewItem({ ...newItem, [event.target.name]: result });
   };
 
-  // const formImagePreview = useCallback((img, label) => {
-  //   console.log(img, label, "open image modal");
-  //   setOpenImageDialog({ show: true, image: img, label: label });
-  // }, []);
+  const onOpenImageDialog = (img, label, imageName) => {
+    const findBase64 = responseSlugs.data.payload.items.filter((item) => {
+      return item.slug === imageName;
+    });
+    const found = findBase64[0].base64;
 
-  const formImagePreview = useCallback(
-    (img, label) => {
-      const found = imagePreviewList.some((el) => el.image === img);
-      if (!found) {
-        setImagePreviewList([
-          ...imagePreviewList,
-          { image: img, label: label },
-        ]);
-      }
-    },
-    [imagePreviewList]
-  );
+    // If the image is a type of URL it means that user still did not upload new image,
+    // but if it is not type of URL it means that user uploaded new image
+    // Additionally, if this solution is not reliable, new flag state can be introduced for example
+    // type boolean
+    // const [newImageUploaded, setNewImageUploaded] = useState(false)
+    // when user uploads a new image it can be set to true
+    const checkImage = isUrlValid(img);
 
-  const handleCancel = () => {
-    setOpenImageDialog({ show: false, image: null, label: "" });
+    if (checkImage) {
+      setOpenImageDialog({
+        show: true,
+        image: found,
+        label: label,
+        name: imageName,
+      });
+    } else {
+      setOpenImageDialog({
+        show: true,
+        image: img,
+        label: label,
+        name: imageName,
+      });
+    }
+  };
+
+  const handleCloseImageDialog = () => {
+    setOpenImageDialog({ show: false, image: null, label: "", name: "" });
   };
 
   const handleBackToList = () => {
     navigate(`/B2B-settings`);
+  };
+
+  const handleSaveEditImage = (imageName, image) => {
+    setNewItem({ ...newItem, [imageName]: image });
+  };
+
+  const handleDeleteImage = (imageName) => {
+    setNewItem({ ...newItem, [imageName]: "DELETE" });
   };
 
   return (
@@ -241,7 +261,8 @@ const DetailsForm = ({}) => {
                             data-test-id="B2B-settings-form"
                             onChangeHandler={formItemChangeHandler}
                             onImageUpload={formImageUpload}
-                            onImagePreview={formImagePreview}
+                            // onImagePreview={formImagePreview}
+                            onOpenImageDialog={onOpenImageDialog}
                             item={item}
                             key={index}
                             error={
@@ -277,7 +298,9 @@ const DetailsForm = ({}) => {
                   )}
                 </>
               }
-              right={<ImagePreview imagePreviewList={imagePreviewList} />}
+              // old form preview
+              // right={<ImagePreview imagePreviewList={imagePreviewList} />}
+              right={<div />}
               onSubmit={onSubmit}
               buttonText="Sacuvaj"
             />
@@ -294,7 +317,10 @@ const DetailsForm = ({}) => {
       <ImageDialog
         title="Obrada slike"
         openImageDialog={openImageDialog}
-        handleCancel={handleCancel}
+        handleCloseImageDialog={handleCloseImageDialog}
+        onImageUpload={formImageUpload}
+        handleSaveEditImage={handleSaveEditImage}
+        handleDeleteImage={handleDeleteImage}
       />
     </>
   );
