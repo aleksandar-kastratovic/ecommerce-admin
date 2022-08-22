@@ -54,6 +54,14 @@ const screenDateDef = [
     faImage,
     MainMenuGroups.B2B,
   ],
+  [
+    14,
+    "ADMIN_FORM",
+    "Admin forme",
+    "/admin-form",
+    faCog,
+    MainMenuGroups.SETTINGS,
+  ],
 ];
 
 export const easyScreensData = screenDateDef.map((item) => ({
