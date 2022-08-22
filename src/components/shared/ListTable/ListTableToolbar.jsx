@@ -22,6 +22,7 @@ const ListTableToolbar = ({
   showToolbar = false,
   fields = [],
   onColumnsChange = () => {},
+  showDatePicker = true,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [columnsValues, setColumnsValues] = useState({});
@@ -65,8 +66,12 @@ const ListTableToolbar = ({
       {showToolbar && (
         <Toolbar>
           <TextBox placeholder="Kljucne reci za pretragu" ui_prop="search" />
-          <BasicDatePicker label="datum od" />
-          <BasicDatePicker label="datum do" />
+          {showDatePicker && (
+            <>
+              <BasicDatePicker label="datum od" />
+              <BasicDatePicker label="datum do" />
+            </>
+          )}
           <Box className={styles.toolbarButtonsGroup}>
             <Menu
               id="basic-menu"

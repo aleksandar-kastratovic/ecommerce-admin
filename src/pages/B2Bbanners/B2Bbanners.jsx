@@ -82,7 +82,6 @@ const B2Bbanners = ({}) => {
   const handleCancel = (e) => {
     setOpenDeleteDialog({ show: false, id: null });
   };
-
   return (
     <>
       {!isLoading ? (
