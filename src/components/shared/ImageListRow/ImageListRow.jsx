@@ -12,7 +12,12 @@ import { reorder, getItemStyle, getListStyle } from "./util";
 
 // https://github.com/atlassian/react-beautiful-dnd
 
-const ImageListRow = ({ imageList = [], setImageList }) => {
+const ImageListRow = ({
+  imageList = [],
+  setImageList,
+  handleModalOpen = () => {},
+  handleDeleteImage = () => {},
+}) => {
   const onDragEnd = ({ destination, source }) => {
     // dropped outside the list
     if (!destination) return;
@@ -43,7 +48,7 @@ const ImageListRow = ({ imageList = [], setImageList }) => {
                           snapshot.isDragging,
                           provided.draggableProps.style
                         )}
-                        // TODO moze i ovako
+                        // TODO moze i ovako da se podesava stil na drag slika/elemenata
                         // className={snapshot.isDragging ? "class1" : "class2"}
                       >
                         <img
@@ -55,6 +60,17 @@ const ImageListRow = ({ imageList = [], setImageList }) => {
                           style={{
                             height: "6rem",
                           }}
+                          onClick={(e) =>
+                            handleModalOpen(
+                              e,
+                              item.src,
+                              item.alt,
+                              item.name,
+                              item.size,
+                              item.type,
+                              item.id
+                            )
+                          }
                         />
                         <ImageListItemBar
                           sx={{
@@ -69,6 +85,7 @@ const ImageListRow = ({ imageList = [], setImageList }) => {
                             <IconButton
                               sx={{ color: "white" }}
                               aria-label={`delete ${item.name}`}
+                              onClick={(e) => handleDeleteImage(e, item.id)}
                             >
                               <DeleteOutlineIcon />
                             </IconButton>

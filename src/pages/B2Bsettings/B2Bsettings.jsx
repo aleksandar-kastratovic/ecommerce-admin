@@ -18,6 +18,7 @@ import AuthContext from "../../store/auth-contex";
 import { getListB2Bconfig } from "./services";
 import ImageMultipleDnD from "../../components/shared/ImageMultipleDnD/ImageMultipleDnD";
 import ImageListRow from "../../components/shared/ImageListRow/ImageListRow";
+import ImageDialogFullPage from "../../components/shared/Dialogs/ImageDialogFullPage";
 
 const B2Bsettings = ({}) => {
   const { user } = useContext(AuthContext);
@@ -58,29 +59,42 @@ const B2Bsettings = ({}) => {
   const [imageList, setImageList] = useState();
   // TODO DEMO handle drag state
   const [dragActive, setDragActive] = useState(false);
+  // handle open full page modal
+  const init = {
+    show: false,
+    image: "",
+    alt: "",
+    name: "",
+    size: "",
+    type: "",
+  };
+  const [openFullPageialog, setOpenFullPageialog] = useState(init);
 
   const handleMultipleImageUpload = useCallback(
     (event) => {
       event.preventDefault();
-      const selectedFiles = event.target.files;
-
       const newImagesArray = [];
-      // TODO redundant move to helper
-      for (let i = 0; i < selectedFiles.length; i++) {
-        var file = selectedFiles[i];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          newImagesArray.push({
-            id: i + 1,
-            name: selectedFiles[i].name,
-            position: i + 1,
-            alt: selectedFiles[i].name,
-            size: selectedFiles[i].size,
-            type: selectedFiles[i].type,
-            src: reader.result,
-          });
-        };
-        reader.readAsDataURL(file);
+
+      if (event.target.files && event.target.files[0]) {
+        const selectedFiles = event.target.files;
+
+        // TODO redundant move to helper
+        for (let i = 0; i < selectedFiles.length; i++) {
+          var file = selectedFiles[i];
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            newImagesArray.push({
+              id: i + 1,
+              name: selectedFiles[i].name,
+              position: i + 1,
+              alt: selectedFiles[i].name,
+              size: selectedFiles[i].size,
+              type: selectedFiles[i].type,
+              src: reader.result,
+            });
+          };
+          reader.readAsDataURL(file);
+        }
       }
 
       setImageList(newImagesArray);
@@ -123,7 +137,7 @@ const B2Bsettings = ({}) => {
           newImagesArray.push({
             id: i + 1,
             name: selectedFiles[i].name,
-            position: i + 1,
+            position: i,
             alt: selectedFiles[i].name,
             size: selectedFiles[i].size,
             type: selectedFiles[i].type,
@@ -135,6 +149,79 @@ const B2Bsettings = ({}) => {
 
       setImageList(newImagesArray);
     }
+  };
+
+  const handleModalOpen = (e, src, alt, name, size, type, id) => {
+    setOpenFullPageialog({
+      show: true,
+      id: id,
+      image: src,
+      alt: alt,
+      name: name,
+      size: size,
+      type: type,
+    });
+  };
+
+  const handleCloseImageDialog = () => {
+    setOpenFullPageialog(init);
+  };
+
+  const formImageUpload = useCallback(
+    (event) => {
+      event.preventDefault();
+      const selectedFile = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const timeOutId = setTimeout(() => {
+          imageSetter(event, reader.result, selectedFile);
+        }, 800);
+        return () => clearTimeout(timeOutId);
+      };
+      reader.readAsDataURL(selectedFile);
+    },
+    [openFullPageialog]
+  );
+
+  const imageSetter = (event, result, selectedFile) => {
+    setOpenFullPageialog({
+      ...openFullPageialog,
+      show: true,
+      image: result,
+      name: selectedFile.name,
+      alt: selectedFile.name,
+      size: selectedFile.size,
+      type: selectedFile.type,
+    });
+  };
+
+  const handleDeleteImage = (e, deleteImgId) => {
+    console.log(
+      "Prikazi modal da li je siguran da zeli da obrise ili ne i ovo neka bude callback."
+    );
+    setOpenFullPageialog({
+      ...openFullPageialog,
+      image: "DELETE",
+    });
+
+    let imageItem = {
+      id: null,
+      position: null,
+      alt: null,
+      size: null,
+      type: null,
+      name: null,
+      src: "DELETE",
+    };
+
+    const newState = imageList.map((img) => {
+      if (img.id === deleteImgId) {
+        return { ...imageItem };
+      }
+      return img;
+    });
+    setImageList(newState);
   };
 
   return (
@@ -167,7 +254,21 @@ const B2Bsettings = ({}) => {
             dragActive={dragActive}
           />
 
-          <ImageListRow setImageList={setImageList} imageList={imageList} />
+          <ImageListRow
+            setImageList={setImageList}
+            imageList={imageList}
+            handleModalOpen={handleModalOpen}
+            handleDeleteImage={handleDeleteImage}
+          />
+          <ImageDialogFullPage
+            openFullPageialog={openFullPageialog}
+            setOpenFullPageialog={setOpenFullPageialog}
+            setImageList={setImageList}
+            imageList={imageList}
+            handleCloseImageDialog={handleCloseImageDialog}
+            onImageUpload={formImageUpload}
+            handleDeleteImage={handleDeleteImage}
+          />
         </Grid>
       </Paper>
     </>
