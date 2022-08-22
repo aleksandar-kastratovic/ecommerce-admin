@@ -43,3 +43,38 @@ export const deleteForm = async (token, id) => {
     },
   });
 };
+
+export const saveForm = async (token, data = {}) => {
+  console.log(data);
+  const req = JSON.stringify(data);
+  return await axios({
+    method: "POST",
+    url: `${api()}admin/form`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: req,
+  });
+};
+
+export const saveFormField = async (token, data = {}) => {
+  const req = JSON.stringify(data);
+  return await axios({
+    method: "POST",
+    url: `${api()}admin/form/fields`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: req,
+  });
+};
+
+export const deleteFormField = async (token, id) => {
+  return await axios({
+    method: "DELETE",
+    url: `${api()}admin/form/fields/${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

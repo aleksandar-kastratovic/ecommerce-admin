@@ -4,7 +4,10 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
 import AuthContext from "../../../store/auth-contex";
-import { getFormData, getListFormFields } from "../services";
+import { getFormData, getListFormFields, saveForm } from "../services";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import { isEmpty } from "lodash";
 
 import styles from "./DetailsAdminForm.module.scss";
 import DetailsList from "./DetailsList";
@@ -12,6 +15,8 @@ import DetailsList from "./DetailsList";
 import listData from "./DetailsListData.json";
 import fields from "./DetailsFields.json";
 import CreateForm from "../../../components/shared/Form/CreateForm";
+import TwoColumnDetails from "../../../components/shared/Layout/Details/TwoColumnDetails/TwoColumnDetails";
+import SetFormFields from "./SetFormFields/SetFormFields";
 
 const DetailsAdminForm = () => {
   const { FormId } = useParams();
@@ -19,36 +24,29 @@ const DetailsAdminForm = () => {
   const navigate = useNavigate();
   const [selected, setSelected] = useState("info");
   const [detailsList, setDetailsList] = useState(listData);
-  const [data, setData] = useState([]);
-  const [formFields, setFormFields] = useState([]);
 
   const init = {
-    active_from: null,
-    active_to: null,
-    button: "",
-    download: null,
-    duration: 0,
-    image: null,
-    is_active: true,
-    name: "",
-    position: "primary",
-    priority: 76,
-    subtitle: "",
-    target: "blank",
-    text: "",
-    title: "AI",
-    url: null,
-    video: null,
+    id: null,
+    slug: "",
+    module: "",
+    submodule: "",
+    method: "",
+    action_url: "",
+    description: "",
+    order: 0,
   };
 
-  const newItem = init;
+  const [data, setData] = useState(init);
+  const [formFields, setFormFields] = useState([]);
+  const [inputsError, setInputsError] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [displayed, setDisplayed] = useState();
 
   const handleBackToList = () => {
     navigate(`/admin-form`);
   };
 
   const handleSelectInDetails = (module, slug) => {
-    console.log(module);
     if (FormId !== "new") {
       setSelected(slug);
     }
@@ -59,30 +57,131 @@ const DetailsAdminForm = () => {
       let response = await getFormData(user.access_token, FormId);
       let { payload } = response.data;
       setData(payload);
+      setIsLoading(true);
     } catch (error) {
       console.warn(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleFormFields = async () => {
     try {
+      setIsLoading(true);
       let response = await getListFormFields(user.access_token, FormId);
       let { payload } = response.data;
       setFormFields(payload.items);
     } catch (error) {
       console.warn(error);
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const formItemChangeHandler = ({ target }, type) => {
+    if (type) {
+      setData({ ...data, [target.name]: target.checked });
+    } else {
+      setData({ ...data, [target.name]: target.value });
+    }
+  };
+
+  const saveData = async () => {
+    try {
+      let response = await saveForm(user.access_token, data);
+      console.log(response);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const onSubmit = () => {
+    const errors = {};
+    Object.keys(data).forEach((prop_name) => {
+      if (isEmpty(data[prop_name])) {
+        if (
+          prop_name === "slug" ||
+          prop_name === "module" ||
+          prop_name === "method" ||
+          prop_name === "action_url"
+        )
+          errors[prop_name] = {
+            content: "Polje je obavezno, molim vas unesite vrednost.",
+          };
+      }
+    });
+    isEmpty(errors) ? saveData() : setInputsError(errors);
   };
 
   useEffect(() => {
     if (FormId !== "new") {
       handleFormData();
-      handleFormFields();
     }
   }, []);
 
-  console.log(data);
-  console.log(formFields);
+  useEffect(() => {
+    if (selected === "fields" && FormId !== "new") {
+      handleFormFields();
+    }
+  }, [selected]);
+
+  const getDisplayed = () => {
+    switch (selected) {
+      case "info":
+        return (
+          <Box component="form" autoComplete="off">
+            {fields &&
+              fields
+                .filter(({ in_details }) => in_details)
+                .map((item, index) => {
+                  return (
+                    <CreateForm
+                      data-test-id="admin-form"
+                      onChangeHandler={formItemChangeHandler}
+                      item={item}
+                      key={index}
+                      error={inputsError[item.prop_name]}
+                      value={
+                        Array.isArray(item) && data
+                          ? data[item.prop_name]
+                          : data[item.prop_name]
+                      }
+                    />
+                  );
+                })}
+          </Box>
+        );
+
+      case "fields":
+        return <SetFormFields formFields={formFields} formId={data.id} />;
+
+      default:
+        return (
+          <Box component="form" autoComplete="off">
+            {fields &&
+              fields
+                .filter(({ in_details }) => in_details)
+                .map((item, index) => {
+                  return (
+                    <CreateForm
+                      data-test-id="admin-form"
+                      onChangeHandler={formItemChangeHandler}
+                      item={item}
+                      key={index}
+                      error={inputsError[item.prop_name]}
+                      value={
+                        Array.isArray(item) && data
+                          ? data[item.prop_name]
+                          : data[item.prop_name]
+                      }
+                    />
+                  );
+                })}
+          </Box>
+        );
+    }
+  };
+
   return (
     <>
       <Box className={styles.details}>
@@ -98,29 +197,33 @@ const DetailsAdminForm = () => {
             />
           }
           main={
-            <div>
-              <Box component="form" autoComplete="off">
-                {fields &&
-                  fields
-                    .filter(({ in_details }) => in_details)
-                    .map((item, index) => (
-                      <CreateForm
-                        data-test-id="B2B-banners-form"
-                        onChangeHandler={() => {}}
-                        onImageUpload={() => {}}
-                        onImagePreview={() => {}}
-                        item={item}
-                        key={index}
-                        error={""}
-                        value={
-                          Array.isArray(item) && newItem
-                            ? newItem[item.prop_name]
-                            : newItem[item.prop_name]
-                        }
-                      />
-                    ))}
-              </Box>
-            </div>
+            <TwoColumnDetails
+              middle={
+                <>
+                  {!isLoading ? (
+                    getDisplayed()
+                  ) : (
+                    <Stack spacing={1}>
+                      <Skeleton variant="text" height={60} />
+                      <Skeleton variant="text" height={60} />
+                      <Stack spacing={1}>
+                        <Skeleton variant="text" />
+                        <Skeleton variant="circular" width={40} height={40} />
+                        <Skeleton
+                          variant="rectangular"
+                          width={210}
+                          height={118}
+                        />
+                      </Stack>
+                      <Skeleton variant="text" height={60} />
+                    </Stack>
+                  )}
+                </>
+              }
+              hasButton={selected === "info"}
+              onSubmit={onSubmit}
+              buttonText="Sacuvaj"
+            />
           }
         />
       </Box>
