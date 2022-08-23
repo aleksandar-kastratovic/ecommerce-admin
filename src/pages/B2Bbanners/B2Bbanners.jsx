@@ -87,7 +87,7 @@ const B2Bbanners = ({}) => {
       {!isLoading ? (
         <Paper elevation={0} className={styles.paperStyle}>
           <ListTableTitle
-            title="B2B eCommerce podesavanje modula"
+            title="B2B baneri"
             showButton={true}
             handleCreateNew={handleCreateNew}
           />
