@@ -65,7 +65,7 @@ const ListTableToolbar = ({
     <Box className={styles.toolBarStyle}>
       {showToolbar && (
         <Toolbar>
-          <TextBox placeholder="Kljucne reci za pretragu" ui_prop="search" />
+          <TextBox placeholder="Ključne reci za pretragu" ui_prop="search" />
           {showDatePicker && (
             <>
               <BasicDatePicker label="datum od" />
