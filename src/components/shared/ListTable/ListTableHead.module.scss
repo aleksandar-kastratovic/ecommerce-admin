@@ -5,4 +5,15 @@
   border-radius: 0px !important;
   padding: 0.5rem 1rem !important;
   padding-left: 31px !important;
+  border-bottom: none !important;
+}
+.headStyle :last-child {
+  text-align: left !important;
+}
+.tableHead :nth-child(-n + 4) {
+  text-align: left !important;
+}
+.tableHead :last-child {
+  text-align: right !important;
+  padding-right: 18px !important;
 }

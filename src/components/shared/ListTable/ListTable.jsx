@@ -87,7 +87,7 @@ const ListTable = ({
               aria-label="delete"
               onClick={handleActions(data["id"], "delete")}
             >
-              <DeleteIcon />
+              <DeleteIcon className={styles.deleteIcon} />
             </IconButton>
           </>
         );

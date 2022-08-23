@@ -87,7 +87,7 @@ const B2Bbanners = ({}) => {
       {!isLoading ? (
         <Paper elevation={0} className={styles.paperStyle}>
           <ListTableTitle
-            title="B2B baneri"
+            title="B2B BANERI"
             showButton={true}
             handleCreateNew={handleCreateNew}
           />

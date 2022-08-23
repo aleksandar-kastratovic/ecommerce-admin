@@ -238,7 +238,7 @@ const DetailsBanners = ({}) => {
               }
               right={<ImagePreview imagePreviewList={imagePreviewList} />}
               onSubmit={onSubmit}
-              buttonText="Sacuvaj"
+              buttonText="Sačuvaj"
             />
           }
         />
@@ -246,7 +246,7 @@ const DetailsBanners = ({}) => {
       {false && (
         <Stack sx={{ width: "100%" }}>
           <Alert severity="error">
-            Doslo je do greske. Molim Vas pokusajte kasnije.
+            Došlo je do greške. Molim Vas pokušajte kasnije.
           </Alert>
         </Stack>
       )}

@@ -1183,12 +1183,15 @@ a[data-toggle="collapse"] {
 /*------------------ LOADER END ------------------*/
 
 /*------------------ TABS START ------------------*/
+.tabs-container {
+  padding: 20px;
+}
 .tabs-wrapper .nav-link.active {
   color: #ffffff !important;
   background-color: var(--main-color);
   border-color: var(--main-color);
-  border-radius: 0;
-  font-weight: 600;
+  border-radius: 5px;
+  //font-weight: 600;
   font-size: 14px;
   line-height: 24px;
 }
@@ -1197,8 +1200,8 @@ a[data-toggle="collapse"] {
   color: #ffffff !important;
   background-color: var(--main-color);
   border-color: var(--main-color);
-  border-radius: 0;
-  font-weight: 600;
+  border-radius: 5px;
+  //font-weight: 600;
   font-size: 14px;
   line-height: 24px;
   isolation: unset;
@@ -1208,9 +1211,9 @@ a[data-toggle="collapse"] {
   color: var(--third-color);
   position: relative;
   border: 1px solid var(--tabs-bg);
-  border-radius: 0;
+  border-radius: 5px;
   background-color: var(--tabs-bg);
-  font-weight: 600;
+  //font-weight: 600;
   font-size: 14px;
   line-height: 24px;
   isolation: unset;
@@ -1241,7 +1244,8 @@ a[data-toggle="collapse"] {
 .tabs-container .btn-control.button-add {
   height: 42px;
   padding: 0.5rem 1rem;
-  font-weight: 600;
+  //font-weight: 600;
+  border-radius: 5px;
   font-size: 14px;
   white-space: nowrap;
 }
@@ -1367,7 +1371,8 @@ a[data-toggle="collapse"] {
 #roles-page.card {
   word-wrap: break-word;
   background: var(--bg-color);
-  padding: 1.5rem;
+  //padding: 1.5rem;
+  height: 100%;
   border-radius: 5px;
   border: 1px solid var(--bg-color);
   margin-bottom: 1.3rem;
@@ -1434,15 +1439,18 @@ a[data-toggle="collapse"] {
 .table-responsive {
   overflow-x: hidden;
 }
+
 .table-bordered td,
 .table-bordered th {
-  border: 1px solid var(--table-border);
+  border: none;
+}
+.table-bordered thead td {
   color: var(--item-table-color);
 }
-.table-bordered thead td,
 .table-bordered thead th {
-  color: var(--item-table-color);
+  background-color: #ecf0fa;
 }
+
 .small-row-table .table td,
 .table th {
   padding: 0.3rem 0.75rem;

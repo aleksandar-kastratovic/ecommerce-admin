@@ -65,7 +65,7 @@ const ListTableToolbar = ({
     <Box className={styles.toolBarStyle}>
       {showToolbar && (
         <Toolbar>
-          <TextBox placeholder="Ključne reci za pretragu" ui_prop="search" />
+          <TextBox placeholder="Ključne reči za pretragu" ui_prop="search" />
           {showDatePicker && (
             <>
               <BasicDatePicker label="datum od" />
@@ -121,19 +121,19 @@ const ListTableToolbar = ({
 
             <Button
               className={styles.toolbarButtons}
-              startIcon={<Icon>{"settings"}</Icon>}
+              startIcon={<Icon fontSize="small">{"settings"}</Icon>}
               aria-controls={open ? "basic-menu" : undefined}
               aria-haspopup="true"
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
             >
-              Kolone
+              <h1>Kolone</h1>
             </Button>
             <Button
               className={styles.toolbarButtons}
-              startIcon={<Icon>{"tune"}</Icon>}
+              startIcon={<Icon fontSize="small">{"tune"}</Icon>}
             >
-              Filteri
+              <h1>Filteri</h1>
             </Button>
           </Box>
         </Toolbar>

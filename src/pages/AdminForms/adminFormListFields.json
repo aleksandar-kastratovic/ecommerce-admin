@@ -13,7 +13,7 @@
     "input_type": "input"
   },
   {
-    "field_name": "Pozicija na glavnoj starni",
+    "field_name": "Pozicija na glavnoj strani",
     "prop_name": "submodule",
     "in_main_table": true,
     "in_details": true,
