@@ -15,7 +15,8 @@ import {
 export const MainMenuGroups = {
   PRODUCT: { order: 0, name: "Katalog" },
   B2B: { order: 1, name: "B2B" },
-  SETTINGS: { order: 2, name: "Podešavanja" },
+  B2C: { order: 2, name: "B2C" },
+  SETTINGS: { order: 3, name: "Podešavanja" },
 };
 
 const screenDateDef = [
@@ -62,6 +63,7 @@ const screenDateDef = [
     faCog,
     MainMenuGroups.SETTINGS,
   ],
+  [15, "BANNERS_B2B", "B2C baneri", "/B2C-banners", faCog, MainMenuGroups.B2C],
 ];
 
 export const easyScreensData = screenDateDef.map((item) => ({
