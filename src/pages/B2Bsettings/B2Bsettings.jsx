@@ -43,7 +43,6 @@ const B2Bsettings = ({}) => {
 
   const handleCreateNew = (e) => {
     // TODO handle create new
-    console.log(e);
   };
 
   const handleActions = (module) => () => {

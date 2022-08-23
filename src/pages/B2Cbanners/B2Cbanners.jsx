@@ -23,6 +23,7 @@ const B2Cbanners = ({}) => {
   const { user } = useContext(AuthContext);
   const [listData, setListData] = useState();
   const [fieldsColumns, setFieldsColumns] = useState(fields);
+  const [search, setSearch] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     show: false,
     id: null,
@@ -34,8 +35,9 @@ const B2Cbanners = ({}) => {
     data: response,
     isLoading,
     isError,
-  } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate], () =>
-    getListB2Cbanners(user.access_token)
+  } = useQuery(
+    ["openDeleteDialog.mutate", openDeleteDialog.mutate, search],
+    () => getListB2Cbanners(user.access_token, search)
   );
 
   useEffect(() => {
@@ -82,22 +84,26 @@ const B2Cbanners = ({}) => {
   const handleCancel = (e) => {
     setOpenDeleteDialog({ show: false, id: null });
   };
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
   return (
     <>
-      {!isLoading ? (
-        <Paper elevation={0} className={styles.paperStyle}>
-          <ListTableTitle
-            title="B2C baneri"
-            showButton={true}
-            handleCreateNew={handleCreateNew}
-          />
+      <Paper elevation={0} className={styles.paperStyle}>
+        <ListTableTitle
+          title="B2C baneri"
+          showButton={true}
+          handleCreateNew={handleCreateNew}
+        />
 
-          <ListTableToolbar
-            showToolbar={true}
-            onColumnsChange={onColumnsChange}
-            fields={fieldsColumns}
-          />
-
+        <ListTableToolbar
+          showToolbar={true}
+          onColumnsChange={onColumnsChange}
+          fields={fieldsColumns}
+          onSearch={handleSearch}
+          searchValue={search}
+        />
+        {!isLoading ? (
           <ListTable
             fields={flatten(fieldsColumns).filter(
               ({ in_main_table }) => in_main_table
@@ -105,16 +111,17 @@ const B2Cbanners = ({}) => {
             listData={listData}
             handleActions={handleActions}
           />
-        </Paper>
-      ) : (
-        <Stack spacing={1}>
-          <Skeleton variant="text" height={150} />
+        ) : (
           <Stack spacing={1}>
-            <Skeleton variant="text" height={60} />
-            <Skeleton variant="rectangular" height={508} />
+            <Skeleton variant="text" height={150} />
+            <Stack spacing={1}>
+              <Skeleton variant="text" height={60} />
+              <Skeleton variant="rectangular" height={508} />
+            </Stack>
           </Stack>
-        </Stack>
-      )}
+        )}
+      </Paper>
+
       <DeleteDialog
         title="Brisanje banera"
         description="Da li ste sigurni da želite da obrišete?"

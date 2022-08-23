@@ -36,7 +36,7 @@ const screenDateDef = [
   ["ROLES", "Uloge", "/roles", faPeopleArrows, MainMenuGroups.SETTINGS],
   ["USERS", "Korisnici", "/users", faUsers, MainMenuGroups.SETTINGS],
   ["ACTON", "Akcije", "/", faPercentage, MainMenuGroups.SETTINGS],
-  ["B2BCFG", "B2B podešavanja", "/B2B-settings", faCog, MainMenuGroups.B2C],
+  ["B2BCFG", "B2B podešavanja", "/B2B-settings", faCog, MainMenuGroups.B2B],
   ["B2CCFG", "B2C podešavanja", "/B2C-settings", faCog, MainMenuGroups.B2C],
   ["PARAMS", "Parametri", "/params", faCog, MainMenuGroups.SETTINGS],
 ];

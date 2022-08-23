@@ -18,6 +18,7 @@ const AdminForms = () => {
   const { user } = useContext(AuthContext);
   const [forms, setForms] = useState([]);
   const [fields, setFields] = useState(tblFields);
+  const [search, setSearch] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     show: false,
     id: null,
@@ -30,7 +31,7 @@ const AdminForms = () => {
   const handleFormsList = async () => {
     try {
       setIsLoading(true);
-      let response = await getListAdminForms(user.access_token);
+      let response = await getListAdminForms(user.access_token, search);
       let { payload } = response.data;
       let { items } = payload;
       setForms(payload);
@@ -80,27 +81,36 @@ const AdminForms = () => {
     setOpenDeleteDialog({ show: false, id: null });
   };
 
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
+  useEffect(() => {
+    handleFormsList();
+  }, [search]);
+
   useEffect(() => {
     handleFormsList();
   }, []);
 
   return (
     <>
-      {!isLoading ? (
-        <Paper elevation={0} className={styles.paperStyle}>
-          <ListTableTitle
-            title="Admin forms"
-            showButton={true}
-            handleCreateNew={handleCreateNew}
-          />
+      <Paper elevation={0} className={styles.paperStyle}>
+        <ListTableTitle
+          title="Admin forms"
+          showButton={true}
+          handleCreateNew={handleCreateNew}
+        />
 
-          <ListTableToolbar
-            showToolbar={true}
-            onColumnsChange={onColumnsChange}
-            fields={fields}
-            showDatePicker={false}
-          />
-
+        <ListTableToolbar
+          showToolbar={true}
+          onColumnsChange={onColumnsChange}
+          fields={fields}
+          showDatePicker={false}
+          onSearch={handleSearch}
+          searchValue={search}
+        />
+        {!isLoading ? (
           <ListTable
             fields={flatten(fields).filter(
               ({ in_main_table }) => in_main_table
@@ -108,16 +118,17 @@ const AdminForms = () => {
             listData={forms}
             handleActions={handleActions}
           />
-        </Paper>
-      ) : (
-        <Stack spacing={1}>
-          <Skeleton variant="text" height={150} />
+        ) : (
           <Stack spacing={1}>
-            <Skeleton variant="text" height={60} />
-            <Skeleton variant="rectangular" height={508} />
+            <Skeleton variant="text" height={150} />
+            <Stack spacing={1}>
+              <Skeleton variant="text" height={60} />
+              <Skeleton variant="rectangular" height={508} />
+            </Stack>
           </Stack>
-        </Stack>
-      )}
+        )}
+      </Paper>
+
       <DeleteDialog
         title="Brisanje"
         description="Da li ste sigurni da želite da obrišete?"

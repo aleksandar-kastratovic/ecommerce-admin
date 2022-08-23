@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // material-ui components
 import Button from "@mui/material/Button";
@@ -23,6 +23,8 @@ const ListTableToolbar = ({
   fields = [],
   onColumnsChange = () => {},
   showDatePicker = true,
+  onSearch = () => {},
+  searchValue = "",
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [columnsValues, setColumnsValues] = useState({});
@@ -65,7 +67,12 @@ const ListTableToolbar = ({
     <Box className={styles.toolBarStyle}>
       {showToolbar && (
         <Toolbar>
-          <TextBox placeholder="Ključne reci za pretragu" ui_prop="search" />
+          <TextBox
+            placeholder="Ključne reci za pretragu"
+            ui_prop="search"
+            onChange={onSearch}
+            value={searchValue}
+          />
           {showDatePicker && (
             <>
               <BasicDatePicker label="datum od" />
