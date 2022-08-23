@@ -18,7 +18,9 @@ const CreateForm = ({
   item = {},
   onChangeHandler = () => {},
   onImageUpload = () => {},
+  // TODO remove onImagePreview
   onImagePreview = () => {},
+  onOpenImageDialog = () => {},
   value = "",
   error = "",
 }) => {
@@ -88,7 +90,7 @@ const CreateForm = ({
               value={value}
               error={error}
               onImageUpload={onImageUpload}
-              onImagePreview={onImagePreview}
+              onOpenImageDialog={onOpenImageDialog}
             />
           );
           break;
@@ -113,7 +115,13 @@ const CreateForm = ({
               control={
                 <Switch
                   name={item.prop_name}
-                  checked={typeof value === "string" ? true : value}
+                  checked={
+                    typeof value === "string"
+                      ? true
+                      : typeof value === "number"
+                      ? value === 1
+                      : value
+                  }
                   onChange={(e) => onChangeHandler(e, "switch")}
                 />
               }

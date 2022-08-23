@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import ButtonBase from "@mui/material/ButtonBase";
 import Button from "@mui/material/Button";
@@ -30,7 +29,7 @@ const ImageButton = ({
   value = "",
   error = "",
   onImageUpload = () => {},
-  onImagePreview = () => {},
+  onOpenImageDialog = () => {},
 }) => {
   const [imageDimensions, setImageDimensions] = useState({
     width: 0,
@@ -69,7 +68,7 @@ const ImageButton = ({
               <ButtonBase
                 focusRipple
                 className={styles.imageButtonStyled}
-                onClick={() => onImagePreview(value, label)}
+                onClick={() => onOpenImageDialog(value, label, name)}
               >
                 <span
                   style={{

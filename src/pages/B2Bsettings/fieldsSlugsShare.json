@@ -49,6 +49,6 @@
         "description": "Podrazumevana slika stranice koja se postavlja u meta tag",
         "ui_prop": "xyz",
         "sortable": false,
-        "input_type": "image_upload"
+        "input_type": "image_button"
     }
 ]

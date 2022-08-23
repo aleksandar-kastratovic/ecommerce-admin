@@ -127,4 +127,4 @@ const B2Bbanners = ({}) => {
   );
 };
 
-export default B2Bbanners;
+export default B2Cbanners;

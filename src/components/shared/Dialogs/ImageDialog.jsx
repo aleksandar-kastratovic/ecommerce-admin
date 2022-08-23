@@ -6,51 +6,27 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
 import Stack from "@mui/material/Stack";
 import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import ImageEditorComponent from "../ImageEditorComponent/ImageEditorComponent";
+import Input from "@mui/material/Input";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import styles from "./ImageDialog.module.scss";
-
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  pt: 2,
-  px: 4,
-  pb: 3,
-};
 
 const ImageDialog = ({
   openImageDialog,
   title = "",
-  description = "",
-  confirmIcon = "delete",
-  cancelIcon = "cancel",
-  handleConfirm = () => {},
-  handleCancel = () => {},
+  onImageUpload = () => {},
+  handleCloseImageDialog = () => {},
+  handleSaveEditImage = () => {},
+  handleDeleteImage = () => {},
 }) => {
   const [editMode, setEditMode] = useState(false);
-
-  const wrapperRefPopup = useRef();
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-
-  useEffect(() => {
-    if (wrapperRefPopup.current) {
-      setWidth(wrapperRefPopup.current.clientWidth);
-      setHeight(wrapperRefPopup.current.clientHeight);
-    }
-  }, [editMode]);
+  const [loadingImage, setLoadingImage] = useState(false);
 
   const handleCloseEditMode = () => {
     setEditMode(false);
@@ -58,6 +34,21 @@ const ImageDialog = ({
 
   const handleOpenEditMode = () => {
     setEditMode(true);
+  };
+
+  const onDeleteImageClick = () => {
+    handleDeleteImage(openImageDialog.name);
+    handleCloseImageDialog();
+  };
+
+  const handleImageUpload = (e) => {
+    setLoadingImage(true);
+    onImageUpload(e);
+    const timeOutId = setTimeout(() => {
+      setLoadingImage(false);
+      handleCloseImageDialog();
+    }, 1000);
+    return () => clearTimeout(timeOutId);
   };
 
   return (
@@ -68,23 +59,52 @@ const ImageDialog = ({
       aria-describedby="delete-dialog-description"
     >
       <DialogTitle>{title}</DialogTitle>
-      <DialogContent ref={wrapperRefPopup}>
+      <DialogContent>
         {editMode ? (
-          <Box>
+          <Box
+            sx={{
+              width: 900,
+              height: 600,
+            }}
+          >
             <ImageEditorComponent
               handleCloseEditMode={handleCloseEditMode}
-              imageURL={openImageDialog?.image}
-              width={width}
-              height={height}
+              handleCloseImageDialog={handleCloseImageDialog}
+              imageURL={openImageDialog.image}
+              imageName={openImageDialog.name}
+              handleSaveEditImage={handleSaveEditImage}
             />
           </Box>
         ) : (
           <Box>
-            Naziv slike:{" "}
-            <span className={styles.labelStyle}>{openImageDialog?.label}</span>
-            <div className={styles.imageStyle}>
-              <img src={openImageDialog?.image} alt={openImageDialog?.label} />
-            </div>
+            {loadingImage ? (
+              <div>
+                <CircularProgress
+                  size="4rem"
+                  sx={{ ml: "45%" }}
+                  disableShrink
+                />
+              </div>
+            ) : (
+              <div>
+                Naziv slike:{" "}
+                <span className={styles.labelStyle}>
+                  {openImageDialog?.label}
+                </span>
+                <div className={styles.imageStyle}>
+                  {openImageDialog.image && (
+                    <img
+                      style={{
+                        maxWidth: "100%",
+                        maxHeight: "calc(100vh - 64px)",
+                      }}
+                      src={openImageDialog?.image}
+                      alt={openImageDialog?.label}
+                    />
+                  )}
+                </div>
+              </div>
+            )}
           </Box>
         )}
       </DialogContent>
@@ -98,15 +118,23 @@ const ImageDialog = ({
             spacing={2}
             className={styles.btnGroup}
           >
+            {/* <input hidden accept="image/*" type="file" onImageUpload /> */}
             <Button
               variant="outlined"
               component="label"
               startIcon={<PhotoCamera />}
             >
               Nova slika
-              <input hidden accept="image/*" type="file" />
+              <Input
+                multiple
+                name={openImageDialog.name}
+                accept="image/*"
+                id={openImageDialog.label}
+                onChange={(e) => handleImageUpload(e)}
+                type="file"
+                sx={{ display: "none" }}
+              />
             </Button>
-
             <Button
               variant="outlined"
               onClick={handleOpenEditMode}
@@ -118,7 +146,7 @@ const ImageDialog = ({
             <Button
               variant="outlined"
               color="error"
-              onClick={handleCancel}
+              onClick={onDeleteImageClick}
               startIcon={<DeleteOutlineOutlinedIcon />}
             >
               Obrisi
@@ -126,7 +154,7 @@ const ImageDialog = ({
             <Button
               variant="outlined"
               color="secondary"
-              onClick={handleCancel}
+              onClick={handleCloseImageDialog}
               startIcon={<CancelOutlinedIcon />}
             >
               Otkaži
