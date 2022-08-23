@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-import HomePage from "./pages/HomePage";
+import ImportStep1 from "./pages/Import/ImportStep1";
 import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
 import { toast, ToastContainer } from "react-toastify";
@@ -15,11 +15,7 @@ import UsersPage from "./pages/UsersPage";
 import CategoriesPage from "./pages/CategoriesPage";
 import { screensData } from "./helpers/const";
 import Loader from "./components/UI/Loader";
-import {
-  referenceDataService,
-  refreshTokenService,
-  userScreensService,
-} from "./helpers/services";
+import { referenceDataService, refreshTokenService, userScreensService, } from "./helpers/services";
 import ProductAttributesPage from "./pages/ProductAttributesPage";
 import ProductsPage from "./pages/ProductsPage";
 import LocationsPage from "./pages/LocationsPage";
@@ -41,8 +37,8 @@ function App() {
   const { isLoading, sendRequest: referenceDataRequest } = useHttp();
   const { isLoading2, sendRequest: userScreenRequest } = useHttp();
 
-  const [sidenav, setSidenav] = useState(true);
-  const [activeTheme, setActiveTheme] = useState(
+  const [ sidenav, setSidenav ] = useState(true);
+  const [ activeTheme, setActiveTheme ] = useState(
     localStorage.getItem("theme") === "true" ?? false
   );
 
@@ -63,7 +59,7 @@ function App() {
 
       refreshToken();
     }
-  }, [authCtx.isRefreshingToken]);
+  }, [ authCtx.isRefreshingToken ]);
 
   useEffect(() => {
     if (authCtx.isTokenExpired) {
@@ -71,7 +67,7 @@ function App() {
       authCtx.changeTokenExpired(false);
       navigate(`/`);
     }
-  }, [authCtx.isTokenExpired]);
+  }, [ authCtx.isTokenExpired ]);
 
   if (!authCtx.isLoggedIn) {
     routerClass = "";
@@ -112,7 +108,7 @@ function App() {
 
       userScreens();
     }
-  }, [referenceDataRequest, userScreenRequest, authCtx.isLoggedIn]);
+  }, [ referenceDataRequest, userScreenRequest, authCtx.isLoggedIn ]);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -169,184 +165,187 @@ function App() {
                   exact
                   element={<Navigate replace to="/orders" />}
                 />
-                {authCtx.userScreens !== undefined &&
-                  authCtx.userScreens.map(function (object) {
-                    if (object.id === screensData.ROLES.id) {
-                      return (
+                {authCtx.userScreens?.map(screen => {
+                  if (screen.screen_code === screensData.ROLES.screen_code) {
+                    return (
+                      <Route
+                        key={screen.screen_code}
+                        path="/roles"
+                        element={<RolesPage routeData={screensData.ROLES} />}
+                      >
+                        <Route path=":roleId" element={<RolesPage />} />
+                      </Route>
+                    );
+                  }
+                  if (screen.screen_code === screensData.B2BCFG.screen_code) {
+                    return (
+                      <Route key={screen.screen_code}>
                         <Route
-                          key={object.id}
-                          path="/roles"
-                          element={<RolesPage routeData={screensData.ROLES} />}
-                        >
-                          <Route path=":roleId" element={<RolesPage />} />
-                        </Route>
-                      );
-                    }
-                    if (object.id === screensData.B2BCFG.id) {
-                      return (
-                        <Route key={object.id}>
-                          <Route
-                            key={object.id}
-                            path="/B2B-settings"
-                            element={
-                              <B2Bsettings routeData={screensData.B2BCFG} />
-                            }
-                          />
-                          <Route
-                            path="/B2B-settings/:B2BId"
-                            element={<DetailsForm />}
-                          />
-                        </Route>
-                      );
-                    }
-                    if (object.id === screensData.USERS.id) {
-                      return (
-                        <Route
-                          key={object.id}
-                          path="/users"
-                          element={<UsersPage routeData={screensData.USERS} />}
-                        >
-                          <Route path=":userId" element={<UsersPage />} />
-                        </Route>
-                      );
-                    }
-                    if (object.id === screensData.CATEG.id) {
-                      return (
-                        <Route
-                          key={object.id}
-                          path="/categories"
+                          key={screen.screen_code}
+                          path="/B2B-settings"
                           element={
-                            <CategoriesPage routeData={screensData.CATEG} />
-                          }
-                        >
-                          <Route path=":catId" element={<CategoriesPage />} />
-                        </Route>
-                      );
-                    }
-                    // TODO: Change screensData item
-                    if (object.id === screensData.NEEWS.id) {
-                      return (
-                        <Route
-                          key={object.id + 10}
-                          path="/product-attributes"
-                          element={
-                            <ProductAttributesPage
-                              routeData={screensData.CATEG}
-                            />
-                          }
-                        >
-                          <Route
-                            path=":attId"
-                            element={<ProductAttributesPage />}
-                          />
-                        </Route>
-                      );
-                    }
-                    if (object.id === screensData.PRODU.id) {
-                      return (
-                        <Route
-                          key={object.id}
-                          path="/products"
-                          element={
-                            <ProductsPage routeData={screensData.PRODU} />
-                          }
-                        >
-                          <Route path=":prodId" element={<ProductsPage />} />
-                        </Route>
-                      );
-                    }
-                    if (object.id === screensData.LOCAT.id) {
-                      return (
-                        <Route
-                          key={object.id}
-                          path="/locations"
-                          element={
-                            <LocationsPage routeData={screensData.LOCAT} />
-                          }
-                        >
-                          <Route path=":locId" element={<LocationsPage />} />
-                        </Route>
-                      );
-                    }
-                    // if (object.id === screensData.ACTON.id) {
-                    //   return  <Route key={object.id}  path='/actions' element={<ActionsPage routeData={screensData.ACTON} />} >
-                    //             <Route path=":actId" element={<ActionsPage />} />
-                    //           </Route>
-                    // }
-                    if (object.id === screensData.CUSTM.id) {
-                      return (
-                        <Route
-                          key={object.id}
-                          path="/b2b-customers"
-                          element={
-                            <B2BCustomersPage routeData={screensData.CUSTM} />
-                          }
-                        >
-                          <Route path=":cusId" element={<B2BCustomersPage />} />
-                        </Route>
-                      );
-                    }
-                    // TODO: Change screensData item
-                    if (object.id === screensData.COMPN.id) {
-                      return (
-                        <Route
-                          key={object.id}
-                          path="/companies"
-                          element={
-                            <CompaniesPage routeData={screensData.COMPN} />
-                          }
-                        >
-                          <Route path=":comId" element={<CompaniesPage />} />
-                        </Route>
-                      );
-                    }
-                    if (object.id === screensData.ORDER.id) {
-                      return (
-                        <Route
-                          key={object.id}
-                          path="/orders"
-                          element={<OrdersPage routeData={screensData.ORDER} />}
-                        >
-                          <Route path=":ordId" element={<OrdersPage />} />
-                        </Route>
-                      );
-                    }
-                    // TODO: Change screensData item
-                    if (object.id === screensData.B2BCFG.id) {
-                      return (
-                        <Route
-                          key={object.id}
-                          path="/settings"
-                          element={
-                            <SettingsPage routeData={screensData.B2BCFG} />
+                            <B2Bsettings routeData={screensData.B2BCFG} />
                           }
                         />
-                      );
-                    }
-                    if (object.id === screensData.BANNERS_B2B.id) {
-                      return (
-                        <Route key={object.id}>
-                          <Route
-                            key={object.id}
-                            path="/B2B-banners"
-                            element={
-                              <B2Bbanners routeData={screensData.BANNERS_B2B} />
-                            }
+                        <Route
+                          path="/B2B-settings/:B2BId"
+                          element={<DetailsForm />}
+                        />
+                      </Route>
+                    );
+                  }
+                  if (screen.screen_code === screensData.USERS.screen_code) {
+                    return (
+                      <Route
+                        key={screen.screen_code}
+                        path="/users"
+                        element={<UsersPage routeData={screensData.USERS} />}
+                      >
+                        <Route path=":userId" element={<UsersPage />} />
+                      </Route>
+                    );
+                  }
+                  if (screen.screen_code === screensData.CATEG.screen_code) {
+                    return (
+                      <Route
+                        key={screen.screen_code}
+                        path="/categories"
+                        element={
+                          <CategoriesPage routeData={screensData.CATEG} />
+                        }
+                      >
+                        <Route path=":catId" element={<CategoriesPage />} />
+                      </Route>
+                    );
+                  }
+                  // TODO: Change screensData item
+                  if (screen.screen_code === screensData.NEEWS.screen_code) {
+                    return (
+                      <Route
+                        key={screen.screen_code + 10}
+                        path="/product-attributes"
+                        element={
+                          <ProductAttributesPage
+                            routeData={screensData.CATEG}
                           />
-                          <Route
-                            path="/B2B-banners/:B2BId"
-                            element={<DetailsBanners />}
-                          />
-                        </Route>
-                      );
-                    }
-                  })}
+                        }
+                      >
+                        <Route
+                          path=":attId"
+                          element={<ProductAttributesPage />}
+                        />
+                      </Route>
+                    );
+                  }
+                  if (screen.screen_code === screensData.PRODU.screen_code) {
+                    return (
+                      <Route
+                        key={screen.screen_code}
+                        path="/products"
+                        element={<ProductsPage routeData={screensData.PRODU} />}
+                      >
+                        <Route path=":prodId" element={<ProductsPage />} />
+                      </Route>
+                    );
+                  }
+
+                  // Import catalogue
+                  if (screensData.IMPORT.screen_code === screen.screen_code) {
+                    return <Route key={screen.screen_code} path={screen.screen_code} element={<ImportStep1 />} />;
+                  }
+
+                  if (screen.screen_code === screensData.LOCAT.screen_code) {
+                    return (
+                      <Route
+                        key={screen.screen_code}
+                        path="/locations"
+                        element={
+                          <LocationsPage routeData={screensData.LOCAT} />
+                        }
+                      >
+                        <Route path=":locId" element={<LocationsPage />} />
+                      </Route>
+                    );
+                  }
+                  // if (object.id === screensData.ACTON.screen_code) {
+                  //   return  <Route key={object.id}  path='/actions' element={<ActionsPage routeData={screensData.ACTON} />} >
+                  //             <Route path=":actId" element={<ActionsPage />} />
+                  //           </Route>
+                  // }
+                  if (screen.screen_code === screensData.CUSTM.screen_code) {
+                    return (
+                      <Route
+                        key={screen.screen_code}
+                        path="/b2b-customers"
+                        element={
+                          <B2BCustomersPage routeData={screensData.CUSTM} />
+                        }
+                      >
+                        <Route path=":cusId" element={<B2BCustomersPage />} />
+                      </Route>
+                    );
+                  }
+                  // TODO: Change screensData item
+                  if (screen.screen_code === screensData.COMPN.screen_code) {
+                    return (
+                      <Route
+                        key={screen.screen_code}
+                        path="/companies"
+                        element={
+                          <CompaniesPage routeData={screensData.COMPN} />
+                        }
+                      >
+                        <Route path=":comId" element={<CompaniesPage />} />
+                      </Route>
+                    );
+                  }
+                  if (screen.screen_code === screensData.ORDER.screen_code) {
+                    return (
+                      <Route
+                        key={screen.screen_code}
+                        path="/orders"
+                        element={<OrdersPage routeData={screensData.ORDER} />}
+                      >
+                        <Route path=":ordId" element={<OrdersPage />} />
+                      </Route>
+                    );
+                  }
+                  // TODO: Change screensData item
+                  if (screen.screen_code === screensData.B2BCFG.screen_code) {
+                    return (
+                      <Route
+                        key={screen.screen_code}
+                        path="/settings"
+                        element={
+                          <SettingsPage routeData={screensData.B2BCFG} />
+                        }
+                      />
+                    );
+                  }
+                  if (screen.screen_code === screensData.BANNERS_B2B.screen_code) {
+                    return (
+                      <Route key={screen.screen_code}>
+                        <Route
+                          key={screen.screen_code}
+                          path="/B2B-banners"
+                          element={
+                            <B2Bbanners routeData={screensData.BANNERS_B2B} />
+                          }
+                        />
+                        <Route
+                          path="/B2B-banners/:B2BId"
+                          element={<DetailsBanners />}
+                        />
+                      </Route>
+                    );
+                  }
+                })}
               </>
             )}
-            <Route
-              path="*"
-              element={<NotFound routeData={screensData.not_found} />}
-            />
+
+            {/* Fall back to 404 - Not found*/}
+            <Route path="*" element={<NotFound routeData={screensData.not_found} />} />
+
           </Routes>
         </div>
         <ToastContainer theme="colored" position="top-right" />
