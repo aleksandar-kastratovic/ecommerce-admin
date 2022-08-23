@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
 import { useContext, useState } from "react";
-import AuthContext from "../../../../store/auth-contex";
+import AuthContext from "../../../store/auth-contex";
 import { deleteFormField } from "../../services";
-import SetFormField from "./ListItem";
+import SetFormField from "./SetFormFields/ListItem";
 
 const List = ({ formFields = [], formId }) => {
   const init = {
