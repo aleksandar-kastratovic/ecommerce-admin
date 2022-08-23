@@ -10,15 +10,15 @@ import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
 import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar";
 import DeleteDialog from "../../components/shared/Dialogs/DeleteDialog";
 
-import styles from "./B2Bbanners.module.scss";
+import styles from "./B2Cbanners.module.scss";
 import { flatten } from "lodash";
 import fields from "./mainListFields.json";
 
 import { useQuery } from "react-query";
 import AuthContext from "../../store/auth-contex";
-import { getListB2Bbanners, deleteB2Bbanners } from "./services.js";
+import { getListB2Cbanners, deleteB2Cbanners } from "./services.js";
 
-const B2Bbanners = ({}) => {
+const B2Cbanners = ({}) => {
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const [listData, setListData] = useState();
@@ -35,7 +35,7 @@ const B2Bbanners = ({}) => {
     isLoading,
     isError,
   } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate], () =>
-    getListB2Bbanners(user.access_token)
+    getListB2Cbanners(user.access_token)
   );
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const B2Bbanners = ({}) => {
   const handleActions = (id, type) => () => {
     switch (type) {
       case "edit":
-        navigate(`/B2B-banners/${id}`);
+        navigate(`/B2C-banners/${id}`);
         break;
       case "delete":
         setOpenDeleteDialog({ show: true, id: id, mutate: null });
@@ -62,7 +62,7 @@ const B2Bbanners = ({}) => {
   };
 
   const handleCreateNew = (e) => {
-    navigate(`/B2B-banners/new`);
+    navigate(`/B2C-banners/new`);
   };
 
   const onColumnsChange = (newFields) => {
@@ -71,7 +71,7 @@ const B2Bbanners = ({}) => {
 
   const handleConfirm = async () => {
     try {
-      await deleteB2Bbanners(user.access_token, openDeleteDialog.id);
+      await deleteB2Cbanners(user.access_token, openDeleteDialog.id);
     } catch (error) {
       console.warn(error);
     } finally {
@@ -87,7 +87,7 @@ const B2Bbanners = ({}) => {
       {!isLoading ? (
         <Paper elevation={0} className={styles.paperStyle}>
           <ListTableTitle
-            title="B2B eCommerce podesavanje modula"
+            title="B2C baneri"
             showButton={true}
             handleCreateNew={handleCreateNew}
           />
