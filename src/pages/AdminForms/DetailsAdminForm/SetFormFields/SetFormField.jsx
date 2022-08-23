@@ -5,6 +5,7 @@ import CreateForm from "../../../../components/shared/Form/CreateForm";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import DeleteDialog from "../../../../components/shared/Dialogs/DeleteDialog";
+import { toast } from "react-toastify";
 
 import fields from "./SetterFields.json";
 import styles from "./SetFormFields.module.scss";
@@ -64,11 +65,11 @@ const SetFormField = ({ data, index, onDelete }) => {
 
   const saveData = async () => {
     try {
-      console.log(fieldData);
       let response = await saveFormField(user.access_token, fieldData);
-      console.log(response);
+      toast.success("Uspešno sačuvano!");
     } catch (error) {
       console.warn(error);
+      toast.warning("Greška!");
     }
   };
 

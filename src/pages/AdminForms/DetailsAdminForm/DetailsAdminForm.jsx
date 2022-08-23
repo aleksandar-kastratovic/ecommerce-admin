@@ -8,6 +8,7 @@ import { getFormData, getListFormFields, saveForm } from "../services";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import { isEmpty } from "lodash";
+import { toast } from "react-toastify";
 
 import styles from "./DetailsAdminForm.module.scss";
 import DetailsList from "./DetailsList";
@@ -40,7 +41,6 @@ const DetailsAdminForm = () => {
   const [formFields, setFormFields] = useState([]);
   const [inputsError, setInputsError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [displayed, setDisplayed] = useState();
 
   const handleBackToList = () => {
     navigate(`/admin-form`);
@@ -89,9 +89,11 @@ const DetailsAdminForm = () => {
   const saveData = async () => {
     try {
       let response = await saveForm(user.access_token, data);
-      console.log(response);
+      handleBackToList();
+      toast.success("Uspešno uneta forma!");
     } catch (error) {
-      console.warn(error);
+      console.warn(error.response);
+      toast.warning("Greška ");
     }
   };
 

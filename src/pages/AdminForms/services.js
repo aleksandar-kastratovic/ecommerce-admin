@@ -45,7 +45,6 @@ export const deleteForm = async (token, id) => {
 };
 
 export const saveForm = async (token, data = {}) => {
-  console.log(data);
   const req = JSON.stringify(data);
   return await axios({
     method: "POST",

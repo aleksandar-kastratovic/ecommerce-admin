@@ -2,11 +2,12 @@ import { useContext, useEffect, useState } from "react";
 import ListTable from "../../components/shared/ListTable/ListTable";
 import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar";
 import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
-import { Paper } from "@mui/material";
+import { Paper, Skeleton, Stack } from "@mui/material";
 import { flatten } from "lodash";
 import { useNavigate, useParams } from "react-router-dom";
 import tblFields from "./adminFormListFields.json";
 import DeleteDialog from "../../components/shared/Dialogs/DeleteDialog";
+import { toast } from "react-toastify";
 
 import styles from "./AdminForms.module.scss";
 
@@ -24,15 +25,19 @@ const AdminForms = () => {
   });
 
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFormsList = async () => {
     try {
+      setIsLoading(true);
       let response = await getListAdminForms(user.access_token);
       let { payload } = response.data;
       let { items } = payload;
       setForms(payload);
     } catch (error) {
       console.warn(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -62,8 +67,10 @@ const AdminForms = () => {
     try {
       await deleteForm(user.access_token, openDeleteDialog.id);
     } catch (error) {
+      toast.warning("Neuspešno brisanje!");
       console.warn(error);
     } finally {
+      toast.success("Uspešno obrisana forma!");
       setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
       handleFormsList();
     }
@@ -79,26 +86,38 @@ const AdminForms = () => {
 
   return (
     <>
-      <Paper elevation={0} className={styles.paperStyle}>
-        <ListTableTitle
-          title="Admin forms"
-          showButton={true}
-          handleCreateNew={handleCreateNew}
-        />
+      {!isLoading ? (
+        <Paper elevation={0} className={styles.paperStyle}>
+          <ListTableTitle
+            title="Admin forms"
+            showButton={true}
+            handleCreateNew={handleCreateNew}
+          />
 
-        <ListTableToolbar
-          showToolbar={true}
-          onColumnsChange={onColumnsChange}
-          fields={fields}
-          showDatePicker={false}
-        />
+          <ListTableToolbar
+            showToolbar={true}
+            onColumnsChange={onColumnsChange}
+            fields={fields}
+            showDatePicker={false}
+          />
 
-        <ListTable
-          fields={flatten(fields).filter(({ in_main_table }) => in_main_table)}
-          listData={forms}
-          handleActions={handleActions}
-        />
-      </Paper>
+          <ListTable
+            fields={flatten(fields).filter(
+              ({ in_main_table }) => in_main_table
+            )}
+            listData={forms}
+            handleActions={handleActions}
+          />
+        </Paper>
+      ) : (
+        <Stack spacing={1}>
+          <Skeleton variant="text" height={150} />
+          <Stack spacing={1}>
+            <Skeleton variant="text" height={60} />
+            <Skeleton variant="rectangular" height={508} />
+          </Stack>
+        </Stack>
+      )}
       <DeleteDialog
         title="Brisanje"
         description="Da li ste sigurni da želite da obrišete?"
