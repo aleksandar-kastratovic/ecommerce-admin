@@ -140,136 +140,132 @@ const AddB2BCustomerModal = ({ openModal, handleClose, saveCustomer, companyList
             <Modal.Body>
                 <div className="row">
                     <div className="col-xl-12">
-                        <Accordion defaultActiveKey="0">
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faUserTag} />Podaci o kupcu:</Accordion.Header>
-                                <Accordion.Body>
-                                    <div className="row">
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={firstNameValue}
-                                                onInputChange={firstNameChangeHandler}
-                                                onInputBlur={firstNameBlurHandler}
-                                                hasInputError={firstNameHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg " + (firstNameHasError ? 'invalid' : '')}
-                                                text="Ime"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezno!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={lastNameValue}
-                                                onInputChange={lastNameChangeHandler}
-                                                onInputBlur={lastNameBlurHandler}
-                                                hasInputError={lastNameHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg " + (lastNameHasError ? 'invalid' : '')}
-                                                text="Prezime"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezno!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                value={companyValue}
-                                                isMulti={false}
-                                                handleChange={companyChanged}
-                                                onInputBlur={(e, action) => { setSearch(e); companyBlurHandler}}
-                                                hasInputError={companyHasError}
-                                                placeHolder={"Minimalno 3 karaktera"}
-                                                disabled={false}
-                                                isSearchable
-                                                data={companyList ?? []}
-                                                inputType="select-react"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg select-style " + (companyHasError ? 'invalid' : '')}
-                                                text="Naziv firme"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezna!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={emailValue}
-                                                onInputChange={emailChangeHandler}
-                                                onInputBlur={emailBlurHandler}
-                                                hasInputError={emailHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
-                                                text="Email"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezan!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={phoneValue}
-                                                onInputChange={phoneChangeHandler}
-                                                onInputBlur={phoneBlurHandler}
-                                                hasInputError={phoneHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
-                                                text="Telefon"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezan!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={mobilePhoneValue}
-                                                onInputChange={mobilePhoneChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class="form-control input-style form-control-lg "
-                                                text="Mobilni telefon"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                            inputValue={passwordValue}
-                                            onInputChange={passwordChangeHandler}
-                                            onInputBlur={passwordBlurHandler}
-                                            hasInputError={passwordHasError}
+                        <div className="orders-item-holder">
+                            <h5>Podaci o kupcu:</h5>
+                                <div className="row buyers">
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={firstNameValue}
+                                            onInputChange={firstNameChangeHandler}
+                                            onInputBlur={firstNameBlurHandler}
+                                            hasInputError={firstNameHasError}
                                             disabled={false}
                                             inputType="input"
-                                            offAutoComplete={true}
-                                            type="password"
-                                            class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}
-                                            text="Lozinka"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg " + (firstNameHasError ? 'invalid' : '')}
+                                            text="Ime"
                                             text_class="m-0 required"
-                                            inputErrorText="mora da ima minimalno 6 karaktera!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={passwordConfirmValue}
-                                                onInputChange={passwordConfirmChangeHandler}
-                                                onInputBlur={passwordConfirmBlurHandler}
-                                                hasInputError={passwordConfirmHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="password"
-                                                class={"form-control input-style form-control-lg " + (passwordConfirmHasError ? 'invalid' : '')}
-                                                text="Potvrdite lozinku"
-                                                text_class="m-0 required"
-                                                inputErrorText="mora da se poklapa sa lozinkom!"
-                                            />
-                                        </div>
+                                            inputErrorText="je obavezno!"
+                                        />
                                     </div>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={lastNameValue}
+                                            onInputChange={lastNameChangeHandler}
+                                            onInputBlur={lastNameBlurHandler}
+                                            hasInputError={lastNameHasError}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg " + (lastNameHasError ? 'invalid' : '')}
+                                            text="Prezime"
+                                            text_class="m-0 required"
+                                            inputErrorText="je obavezno!"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            value={companyValue}
+                                            isMulti={false}
+                                            handleChange={companyChanged}
+                                            onInputBlur={(e, action) => { setSearch(e); companyBlurHandler}}
+                                            hasInputError={companyHasError}
+                                            placeHolder={"Minimalno 3 karaktera"}
+                                            disabled={false}
+                                            isSearchable
+                                            data={companyList ?? []}
+                                            inputType="select-react"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg select-style " + (companyHasError ? 'invalid' : '')}
+                                            text="Naziv firme"
+                                            text_class="m-0 required"
+                                            inputErrorText="je obavezna!"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={emailValue}
+                                            onInputChange={emailChangeHandler}
+                                            onInputBlur={emailBlurHandler}
+                                            hasInputError={emailHasError}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
+                                            text="Email"
+                                            text_class="m-0 required"
+                                            inputErrorText="je obavezan!"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={phoneValue}
+                                            onInputChange={phoneChangeHandler}
+                                            onInputBlur={phoneBlurHandler}
+                                            hasInputError={phoneHasError}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
+                                            text="Telefon"
+                                            text_class="m-0 required"
+                                            inputErrorText="je obavezan!"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={mobilePhoneValue}
+                                            onInputChange={mobilePhoneChangeHandler}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class="form-control input-style form-control-lg "
+                                            text="Mobilni telefon"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                        inputValue={passwordValue}
+                                        onInputChange={passwordChangeHandler}
+                                        onInputBlur={passwordBlurHandler}
+                                        hasInputError={passwordHasError}
+                                        disabled={false}
+                                        inputType="input"
+                                        offAutoComplete={true}
+                                        type="password"
+                                        class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}
+                                        text="Lozinka"
+                                        text_class="m-0 required"
+                                        inputErrorText="mora da ima minimalno 6 karaktera!"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={passwordConfirmValue}
+                                            onInputChange={passwordConfirmChangeHandler}
+                                            onInputBlur={passwordConfirmBlurHandler}
+                                            hasInputError={passwordConfirmHasError}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="password"
+                                            class={"form-control input-style form-control-lg " + (passwordConfirmHasError ? 'invalid' : '')}
+                                            text="Potvrdite lozinku"
+                                            text_class="m-0 required"
+                                            inputErrorText="mora da se poklapa sa lozinkom!"
+                                        />
+                                    </div>
+                                </div>
+                        </div>
                     </div>
                 </div>
             </Modal.Body>

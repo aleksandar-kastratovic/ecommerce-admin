@@ -21,10 +21,8 @@ const DatailsTabs = ({ tabsData, onTabChange, activeTabKey }) => {
             style={ {order: tabsData[tab].order} }
         >
             <div>
-                <FontAwesomeIcon className="me-1" icon={tabsData[tab].icon} />
                 { tabsData[tab].title }
             </div>
-            <FontAwesomeIcon  className="ms-1" icon={faArrowAltCircleRight}/>
         </button>
     );
 

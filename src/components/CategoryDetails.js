@@ -344,164 +344,155 @@ const CategoryDetails = ({ categoryListData, categorySynchroListData, saveCatego
                 <FontAwesomeIcon className="me-1" icon={faTrashAlt} />
                 Izbrišite
             </button>
+                <Form.Group className="btn-control btn checkbox-style remember-checkbox remember-checkbox-details">
+                    <Form.Check
+                        type="checkbox"
+                        label="Aktivna"
+                        checked={isActive}
+                        onChange={() => setIsActive(isActive ? 0 : 1)}
+                    />
+                </Form.Group>
             </div>
             <div className="row">
                 <div className="col-xl-12">
-                    <Accordion defaultActiveKey="0">
-                        <Accordion.Item eventKey="0">
-                            <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faUser} />Podaci o kategoriji:</Accordion.Header>
-                            <Accordion.Body>
-                                <div className="row">
-                                    <div className="col-12">
-                                        <Form.Group className="remember-checkbox remember-checkbox-details">
-                                            <Form.Check
-                                                type="checkbox"
-                                                label="Aktivna"
-                                                checked={isActive}
-                                                onChange={() => setIsActive(isActive ? 0 : 1)}
-                                            />
-                                        </Form.Group>
+                    <div className="row">
+                        <div className="col-6">
+                            <Input
+                                inputValue={nameValue}
+                                onInputChange={nameChangeHandler}
+                                onInputBlur={nameBlurHandler}
+                                hasInputError={nameHasError}
+                                disabled={false}
+                                inputType="input"
+                                type="text"
+                                class={"form-control input-style form-control-lg " + (nameHasError ? 'invalid' : '')}
+                                text="Naziv kategorije"
+                                text_class="m-0 required"
+                                inputErrorText="je obavezan!"
+                            />
+                        </div>
+                        <div className="col-6">
+                            <p htmlFor="dropdownTreeSelectCategory" className="m-0 form-control-label">Roditeljska kategorija</p>
+                            <DropdownTreeSelect
+                                className={
+                                    "form-control input-style form-control-lg select-style dropdown-tree-style "
+                                    + (parentIdValue != '' ? ' dropdown-tree-selected' : '')
+                                    + (categoryFocus ? ' dropdown-tree-focus' : '')
+                                }
+                                id="dropdownTreeSelectCategory"
+                                data={categoryList}
+                                mode="radioSelect"
+                                texts={{ placeholder: ' ' }}
+                                onChange={onChangeParentCategory}
+                                onBlur={onNodeBlur}
+                                onFocus={onNodeFocus}
+                                keepTreeOnSearch
+                            />
+                            <p className="error-text"></p>
+                        </div>
+                        <div className="col-12">
+                            <p htmlFor="dropdownTreeSelectCategory" className="m-0 form-control-label">ERP sinhronizacija</p>
+                            <DropdownTreeSelect
+                                className={
+                                    "form-control input-style form-control-lg select-style dropdown-tree-multiselect-style dropdown-tree-style "
+                                    + (categorySynchroIds.length > 0 ? ' dropdown-tree-selected' : '')
+                                    + (categorySynchroFocus ? ' dropdown-tree-focus' : '')
+                                }
+                                id="dropdownTreeSelectCategory"
+                                data={categorySynchroList}
+                                mode="hierarchical"
+                                texts={{ placeholder: ' ' }}
+                                onChange={onChangeSynchroCategory}
+                                onBlur={onNodeSynchroBlur}
+                                onFocus={onNodeSynchroFocus}
+                                clearSearchOnChange={true}
+                                keepTreeOnSearch
+                            />
+                            <p className="error-text"></p>
+                        </div>
+                        <div className="col-12">
+                            <Input
+                                inputValue={seoKeyValue}
+                                onInputChange={seoKeyChangeHandler}
+                                inputErrorVisible={false}
+                                disabled={false}
+                                inputType="input"
+                                type="text"
+                                class="form-control input-style form-control-lg"
+                                text="Ključne reči kategorije za SEO"
+                                text_class="m-0"
+                            />
+                        </div>
+                        <div className="col-12">
+                            <Input
+                                inputValue={seoDecriptionValue}
+                                onInputChange={seoDecriptionChangeHandler}
+                                inputErrorVisible={false}
+                                disabled={false}
+                                inputType="textarea"
+                                type="text"
+                                class={"form-control input-style form-control-lg "}
+                                text="Opis kategorije za SEO"
+                                text_class="m-0"
+                            />
+                        </div>
+                        <div className="col-6">
+                            <div>
+                                <p className="m-0 form-control-label">Slika kategorije</p>
+                                {selectedImage && (
+                                    <div className="selected-img-container">
+                                        <img alt={selectedImage} src={selectedImage} />
+                                        <button onClick={()=> { setSelectedImage(null); setSelectedImageFile(null); }}><FontAwesomeIcon icon={faTimes} /></button>
                                     </div>
-                                    <div className="col-6">
-                                        <Input
-                                            inputValue={nameValue}
-                                            onInputChange={nameChangeHandler}
-                                            onInputBlur={nameBlurHandler}
-                                            hasInputError={nameHasError}
-                                            disabled={false}
-                                            inputType="input"
-                                            type="text"
-                                            class={"form-control input-style form-control-lg " + (nameHasError ? 'invalid' : '')}
-                                            text="Naziv kategorije"
-                                            text_class="m-0 required"
-                                            inputErrorText="je obavezan!"
+                                )}
+                                {!selectedImage && (
+                                    <div className="no-img-container">
+                                        <p className="no-img-text">Click here to add image.</p>
+                                        <img src={noImage} alt={noImage} />
+                                        <input
+                                            className="img-input"
+                                            type="file"
+                                            name="myImage"
+                                            accept="image/*"
+                                            onChange={(event) => addImg(event.target.files[0])}
+                                            onClick={e => (e.target.value = null)}
                                         />
                                     </div>
-                                    <div className="col-6">
-                                        <p htmlFor="dropdownTreeSelectCategory" className="m-0 form-control-label">Roditeljska kategorija</p>
-                                        <DropdownTreeSelect
-                                            className={
-                                                "form-control input-style form-control-lg select-style dropdown-tree-style "
-                                                + (parentIdValue != '' ? ' dropdown-tree-selected' : '')
-                                                + (categoryFocus ? ' dropdown-tree-focus' : '')
-                                            }
-                                            id="dropdownTreeSelectCategory"
-                                            data={categoryList}
-                                            mode="radioSelect"
-                                            texts={{ placeholder: ' ' }}
-                                            onChange={onChangeParentCategory}
-                                            onBlur={onNodeBlur}
-                                            onFocus={onNodeFocus}
-                                            keepTreeOnSearch
-                                        />
-                                        <p className="error-text"></p>
+                                )}
+                            </div>
+                        </div>
+                        <div className="col-6">
+                            <div>
+                                <p className="m-0 form-control-label">Ikonica kategorije</p>
+                                {selectedIcon && (
+                                    <div className="selected-img-container">
+                                        <img alt={selectedIcon} src={selectedIcon} />
+                                        <button onClick={()=>{setSelectedIcon(null); setSelectedIconFile(null);}}><FontAwesomeIcon icon={faTimes} /></button>
                                     </div>
-                                    <div className="col-12">
-                                        <p htmlFor="dropdownTreeSelectCategory" className="m-0 form-control-label">ERP sinhronizacija</p>
-                                        <DropdownTreeSelect
-                                            className={
-                                                "form-control input-style form-control-lg select-style dropdown-tree-multiselect-style dropdown-tree-style "
-                                                + (categorySynchroIds.length > 0 ? ' dropdown-tree-selected' : '')
-                                                + (categorySynchroFocus ? ' dropdown-tree-focus' : '')
-                                            }
-                                            id="dropdownTreeSelectCategory"
-                                            data={categorySynchroList}
-                                            mode="hierarchical"
-                                            texts={{ placeholder: ' ' }}
-                                            onChange={onChangeSynchroCategory}
-                                            onBlur={onNodeSynchroBlur}
-                                            onFocus={onNodeSynchroFocus}
-                                            clearSearchOnChange={true}
-                                            keepTreeOnSearch
-                                        />
-                                        <p className="error-text"></p>
-                                    </div>
-                                    <div className="col-12">
-                                        <Input
-                                            inputValue={seoKeyValue}
-                                            onInputChange={seoKeyChangeHandler}
-                                            inputErrorVisible={false}
-                                            disabled={false}
-                                            inputType="input"
-                                            type="text"
-                                            class="form-control input-style form-control-lg"
-                                            text="Ključne reči kategorije za SEO"
-                                            text_class="m-0"
+                                )}
+                                {!selectedIcon && (
+                                    <div className="no-img-container">
+                                        <p className="no-img-text">Click here to add image.</p>
+                                        <img src={noImage} alt={noImage} />
+                                        <input
+                                            className="img-input"
+                                            type="file"
+                                            name="myImage"
+                                            accept="image/*"
+                                            onChange={(event) => addIcon(event.target.files[0])}
+                                            onClick={e => (e.target.value = null)}
                                         />
                                     </div>
-                                    <div className="col-12">
-                                        <Input
-                                            inputValue={seoDecriptionValue}
-                                            onInputChange={seoDecriptionChangeHandler}
-                                            inputErrorVisible={false}
-                                            disabled={false}
-                                            inputType="textarea"
-                                            type="text"
-                                            class={"form-control input-style form-control-lg "}
-                                            text="Opis kategorije za SEO"
-                                            text_class="m-0"
-                                        />
-                                    </div>
-                                    <div className="col-6">
-                                        <div>
-                                            <p className="m-0 form-control-label">Slika kategorije</p>
-                                            {selectedImage && (
-                                                <div className="selected-img-container">
-                                                    <img alt={selectedImage} src={selectedImage} />
-                                                    <button onClick={()=> { setSelectedImage(null); setSelectedImageFile(null); }}><FontAwesomeIcon icon={faTimes} /></button>
-                                                </div>
-                                            )}
-                                            {!selectedImage && (
-                                                <div className="no-img-container">
-                                                    <p className="no-img-text">Click here to add image.</p>
-                                                    <img src={noImage} alt={noImage} />
-                                                    <input
-                                                        className="img-input"
-                                                        type="file"
-                                                        name="myImage"
-                                                        accept="image/*"
-                                                        onChange={(event) => addImg(event.target.files[0])}
-                                                        onClick={e => (e.target.value = null)}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <div className="col-6">
-                                        <div>
-                                            <p className="m-0 form-control-label">Ikonica kategorije</p>
-                                            {selectedIcon && (
-                                                <div className="selected-img-container">
-                                                    <img alt={selectedIcon} src={selectedIcon} />
-                                                    <button onClick={()=>{setSelectedIcon(null); setSelectedIconFile(null);}}><FontAwesomeIcon icon={faTimes} /></button>
-                                                </div>
-                                            )}
-                                            {!selectedIcon && (
-                                                <div className="no-img-container">
-                                                    <p className="no-img-text">Click here to add image.</p>
-                                                    <img src={noImage} alt={noImage} />
-                                                    <input
-                                                        className="img-input"
-                                                        type="file"
-                                                        name="myImage"
-                                                        accept="image/*"
-                                                        onChange={(event) => addIcon(event.target.files[0])}
-                                                        onClick={e => (e.target.value = null)}
-                                                    />
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-                                    <ImageCrop
-                                        openModal={show}
-                                        handleClose={() => {setShow(false)}}
-                                        imageCroped={(imgData) => { setCropedImg(imgData);}}
-                                        imgForCrooping={dataForCrop}
-                                    />
-                                </div>
-                            </Accordion.Body>
-                        </Accordion.Item>
-                    </Accordion>
+                                )}
+                            </div>
+                        </div>
+                        <ImageCrop
+                            openModal={show}
+                            handleClose={() => {setShow(false)}}
+                            imageCroped={(imgData) => { setCropedImg(imgData);}}
+                            imgForCrooping={dataForCrop}
+                        />
+                    </div>
                 </div>
             </div>
             <ConfirmModal confirmWhat={confirmWhat} confirm={confirm} />
