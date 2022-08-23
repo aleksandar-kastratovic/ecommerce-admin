@@ -38,6 +38,7 @@ import B2Cbanners from "./pages/B2Cbanners/B2Cbanners";
 import DetailsBannersB2C from "./pages/B2Cbanners/DetailsBanners/DetailsBannersB2C";
 import Params from "./pages/Params/Params";
 import B2CSettings from "./pages/B2CSettings/B2CSettings";
+import DetailsParams from "./pages/Params/DetailsParams/DetailsParams";
 
 function App() {
   const queryClient = new QueryClient();
@@ -397,7 +398,10 @@ function App() {
                             path="/params"
                             element={<Params routeData={screensData.PARAMS} />}
                           />
-                          <Route path="/params/:pid" element={<Params />} />
+                          <Route
+                            path="/params/:pid"
+                            element={<DetailsParams />}
+                          />
                         </Route>
                       );
                     }

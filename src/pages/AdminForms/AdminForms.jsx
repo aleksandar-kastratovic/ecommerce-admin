@@ -4,7 +4,7 @@ import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar
 import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
 import { Paper, Skeleton, Stack } from "@mui/material";
 import { flatten } from "lodash";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import tblFields from "./adminFormListFields.json";
 import DeleteDialog from "../../components/shared/Dialogs/DeleteDialog";
 import { toast } from "react-toastify";
@@ -33,7 +33,6 @@ const AdminForms = () => {
       setIsLoading(true);
       let response = await getListAdminForms(user.access_token, search);
       let { payload } = response.data;
-      let { items } = payload;
       setForms(payload);
     } catch (error) {
       console.warn(error);
