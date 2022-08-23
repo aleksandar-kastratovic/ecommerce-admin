@@ -64,6 +64,8 @@ const screenDateDef = [
     MainMenuGroups.SETTINGS,
   ],
   [15, "BANNERS_B2C", "B2C baneri", "/B2C-banners", faCog, MainMenuGroups.B2C],
+  [16, "B2CCFG", "B2C podešavanja", "/B2C-settings", faCog, MainMenuGroups.B2C],
+  [17, "PARAMS", "Parametri", "/params", faCog, MainMenuGroups.SETTINGS],
 ];
 
 export const easyScreensData = screenDateDef.map((item) => ({

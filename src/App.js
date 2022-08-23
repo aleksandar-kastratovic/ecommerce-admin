@@ -36,6 +36,8 @@ import AdminForms from "./pages/AdminForms/AdminForms";
 import DetailsAdminForm from "./pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
 import B2Cbanners from "./pages/B2Cbanners/B2Cbanners";
 import DetailsBannersB2C from "./pages/B2Cbanners/DetailsBanners/DetailsBannersB2C";
+import Params from "./pages/Params/Params";
+import B2CSettings from "./pages/B2CSettings/B2CSettings";
 
 function App() {
   const queryClient = new QueryClient();
@@ -377,6 +379,37 @@ function App() {
                             path="/B2C-banners/:B2CId"
                             element={<DetailsBannersB2C />}
                           />
+                        </Route>
+                      );
+                    }
+
+                    if (object.id === screensData.B2CCFG.id) {
+                      return (
+                        <Route key={object.id}>
+                          <Route
+                            key={object.id}
+                            path="/B2C-settings"
+                            element={
+                              <B2CSettings routeData={screensData.B2CCFG} />
+                            }
+                          />
+                          <Route
+                            path="/B2C-settings/:B2CId"
+                            element={<B2CSettings />}
+                          />
+                        </Route>
+                      );
+                    }
+
+                    if (object.id === screensData.PARAMS.id) {
+                      return (
+                        <Route key={object.id}>
+                          <Route
+                            key={object.id}
+                            path="/params"
+                            element={<Params routeData={screensData.PARAMS} />}
+                          />
+                          <Route path="/params/:pid" element={<Params />} />
                         </Route>
                       );
                     }
