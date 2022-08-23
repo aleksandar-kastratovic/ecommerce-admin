@@ -55,7 +55,7 @@ const B2Bsettings = ({}) => {
       <Paper elevation={0} className={styles.paperStyle}>
         <ListTableTitle
           title="B2B eCommerce podesavanje modula"
-          showButton={false}
+          showButton={true}
           handleCreateNew={handleCreateNew}
         />
 

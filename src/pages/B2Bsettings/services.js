@@ -40,3 +40,11 @@ export const createSlug = async (token, module, slug, data) => {
     }
   );
 };
+
+export const getFormBySlug = async (token, slug) => {
+  return await axios.get(`${api()}admin/form/data/${slug}`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
