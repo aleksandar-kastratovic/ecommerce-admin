@@ -15,3 +15,34 @@ export const getListParams = async (token, search) => {
     data: { search: search },
   });
 };
+
+export const getParamData = async (token, id) => {
+  return await axios({
+    method: "GET",
+    url: `${api()}admin/params/main/${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const setParamData = async (token, data) => {
+  return await axios({
+    method: "POST",
+    url: `${api()}admin/params/main/`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  });
+};
+
+export const deleteParam = async (token, id) => {
+  return await axios({
+    method: "DELETE",
+    url: `${api()}admin/params/${id}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
