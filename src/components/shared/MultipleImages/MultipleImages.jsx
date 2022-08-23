@@ -5,9 +5,9 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
-import styles from "./ImageMultipleDnD.module.scss";
+import styles from "./MultipleImages.module.scss";
 
-const ImageMultipleDnD = ({
+const MultipleImages = ({
   handleMultipleImageUpload = () => {},
   handleDrag = () => {},
   handleDrop = () => {},
@@ -67,4 +67,4 @@ const ImageMultipleDnD = ({
   );
 };
 
-export default ImageMultipleDnD;
+export default MultipleImages;
