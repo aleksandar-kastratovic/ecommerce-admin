@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -11,7 +11,7 @@ import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
-import ImageEditorComponent from "../ImageEditorComponent/ImageEditorComponent";
+import ImageEditorComponent from "../../ImageEditorComponent/ImageEditorComponent";
 import Input from "@mui/material/Input";
 import CircularProgress from "@mui/material/CircularProgress";
 import AppBar from "@mui/material/AppBar";
@@ -24,8 +24,8 @@ import CheckIcon from "@mui/icons-material/Check";
 import styles from "./ImageDialogFullPage.module.scss";
 
 const ImageDialogFullPage = ({
-  openFullPageialog,
-  setOpenFullPageialog,
+  openFullPageDialog,
+  setOpenFullPageDialog,
   title = "",
   setImageList,
   imageList = [],
@@ -54,23 +54,24 @@ const ImageDialogFullPage = ({
   };
 
   const handleSaveEdited = (imageName, base64Image) => {
+    // TODO DEMO
     // set Image to parent component for example B2Bsetings in state
     // just like for single image
     // with all the data that you need to save image
     // please keep in mind that this is an array of images
 
     let imageItem = {
-      id: openFullPageialog.id,
-      position: openFullPageialog.position,
-      alt: openFullPageialog.alt,
-      size: openFullPageialog.size,
-      type: openFullPageialog.type,
+      id: openFullPageDialog.id,
+      position: openFullPageDialog.position,
+      alt: openFullPageDialog.alt,
+      size: openFullPageDialog.size,
+      type: openFullPageDialog.type,
       name: imageName,
       src: base64Image,
     };
 
-    setOpenFullPageialog({
-      ...openFullPageialog,
+    setOpenFullPageDialog({
+      ...openFullPageDialog,
       image: base64Image,
     });
 
@@ -88,7 +89,7 @@ const ImageDialogFullPage = ({
 
   return (
     <Dialog
-      open={openFullPageialog.show}
+      open={openFullPageDialog.show}
       fullScreen
       aria-labelledby="delete-dialog-title"
       aria-describedby="delete-dialog-description"
@@ -96,7 +97,7 @@ const ImageDialogFullPage = ({
       <AppBar sx={{ position: "relative" }}>
         <Toolbar>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-            {openFullPageialog.name}
+            {openFullPageDialog.name}
           </Typography>
         </Toolbar>
       </AppBar>
@@ -111,8 +112,8 @@ const ImageDialogFullPage = ({
           >
             <ImageEditorComponent
               handleCloseEditMode={handleCloseEditMode}
-              imageURL={openFullPageialog.image}
-              imageName={openFullPageialog.name}
+              imageURL={openFullPageDialog.image}
+              imageName={openFullPageDialog.name}
               handleSaveEditImage={handleSaveEdited}
             />
           </Box>
@@ -131,14 +132,14 @@ const ImageDialogFullPage = ({
                 <Grid container spacing={2}>
                   <Grid item xs={8}>
                     <div className={styles.imageStyle}>
-                      {openFullPageialog.image && (
+                      {openFullPageDialog.image && (
                         <img
                           style={{
                             maxWidth: "90%",
                             maxHeight: "calc(90vh - 64px)",
                           }}
-                          src={openFullPageialog?.image}
-                          alt={openFullPageialog?.name}
+                          src={openFullPageDialog?.image}
+                          alt={openFullPageDialog?.name}
                         />
                       )}
                     </div>
@@ -150,7 +151,7 @@ const ImageDialogFullPage = ({
                         type="text"
                         disabled
                         label="Naziv slike"
-                        value={openFullPageialog?.name}
+                        value={openFullPageDialog?.name}
                         variant="outlined"
                       />
                       <TextField
@@ -158,7 +159,7 @@ const ImageDialogFullPage = ({
                         type="text"
                         disabled
                         label="Alt slike"
-                        value={openFullPageialog?.alt}
+                        value={openFullPageDialog?.alt}
                         variant="outlined"
                       />
                       <TextField
@@ -166,7 +167,7 @@ const ImageDialogFullPage = ({
                         type="text"
                         disabled
                         label="Velicina slike"
-                        value={openFullPageialog?.size}
+                        value={openFullPageDialog?.size}
                         variant="outlined"
                       />
                       <TextField
@@ -174,7 +175,7 @@ const ImageDialogFullPage = ({
                         type="text"
                         disabled
                         label="Tip slike"
-                        value={openFullPageialog?.type}
+                        value={openFullPageDialog?.type}
                         variant="outlined"
                       />
                     </form>
@@ -203,7 +204,6 @@ const ImageDialogFullPage = ({
             >
               Sačuvaj
             </Button>
-            {/* <input hidden accept="image/*" type="file" onImageUpload /> */}
             <Button
               variant="outlined"
               component="label"
@@ -213,7 +213,7 @@ const ImageDialogFullPage = ({
               <Input
                 name="image"
                 accept="image/*"
-                id={openFullPageialog.name}
+                id={openFullPageDialog.name}
                 onChange={(e) => handleImageUpload(e)}
                 type="file"
                 sx={{ display: "none" }}
@@ -230,7 +230,7 @@ const ImageDialogFullPage = ({
             <Button
               variant="outlined"
               color="error"
-              onClick={(e) => handleDeleteImage(e, openFullPageialog.id)}
+              onClick={(e) => handleDeleteImage(e, openFullPageDialog.id)}
               startIcon={<DeleteOutlineOutlinedIcon />}
             >
               Obrisi

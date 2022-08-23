@@ -16,9 +16,9 @@ import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar
 import { useQuery } from "react-query";
 import AuthContext from "../../store/auth-contex";
 import { getListB2Bconfig } from "./services";
-import ImageMultipleDnD from "../../components/shared/ImageMultipleDnD/ImageMultipleDnD";
-import ImageListRow from "../../components/shared/ImageListRow/ImageListRow";
-import ImageDialogFullPage from "../../components/shared/Dialogs/ImageDialogFullPage";
+import MultipleImages from "../../components/shared/MultipleImages/MultipleImages";
+import ImageListRow from "../../components/shared/MultipleImages/ImageListRow/ImageListRow";
+import ImageDialogFullPage from "../../components/shared/MultipleImages/ImageDialogFullPage/ImageDialogFullPage";
 
 const B2Bsettings = ({}) => {
   const { user } = useContext(AuthContext);
@@ -56,10 +56,13 @@ const B2Bsettings = ({}) => {
 
   // TODO DEMO Start Multiple images drag and drop
 
+  // state for openFullPageDialog and imageList single image is very similar it should be one state.
+  // Here for demo purposes it is divided to two different states
+  // Also setting that different states is redundant it should be one state and setter redundant part should be moved to util/helper file
   const [imageList, setImageList] = useState();
   // TODO DEMO handle drag state
   const [dragActive, setDragActive] = useState(false);
-  // handle open full page modal
+  // initial state of image dialog and image data
   const init = {
     show: false,
     image: "",
@@ -68,8 +71,10 @@ const B2Bsettings = ({}) => {
     size: "",
     type: "",
   };
-  const [openFullPageialog, setOpenFullPageialog] = useState(init);
+  // handle open full page modal with image data
+  const [openFullPageDialog, setOpenFullPageDialog] = useState(init);
 
+  // handler for uploading images, maping to array with image data for components
   const handleMultipleImageUpload = useCallback(
     (event) => {
       event.preventDefault();
@@ -78,7 +83,7 @@ const B2Bsettings = ({}) => {
       if (event.target.files && event.target.files[0]) {
         const selectedFiles = event.target.files;
 
-        // TODO redundant move to helper
+        // TODO redundant move to helper and one state
         for (let i = 0; i < selectedFiles.length; i++) {
           var file = selectedFiles[i];
           const reader = new FileReader();
@@ -102,13 +107,6 @@ const B2Bsettings = ({}) => {
     [imageList]
   );
 
-  useEffect(() => {
-    let storedImages = JSON.parse(sessionStorage.getItem("storageImages"));
-    if (storedImages) {
-      setImageList(storedImages);
-    }
-  }, []);
-
   // TODO DEMO handle drag events
   const handleDrag = function (e) {
     e.preventDefault();
@@ -120,7 +118,7 @@ const B2Bsettings = ({}) => {
     }
   };
 
-  // TODO DEMO triggers when file is dropped
+  // TODO DEMO triggers when file is dropped same as upload
   const handleDrop = function (e) {
     e.preventDefault();
     e.stopPropagation();
@@ -129,7 +127,8 @@ const B2Bsettings = ({}) => {
       const selectedFiles = e.dataTransfer.files;
 
       const newImagesArray = [];
-      // TODO redundant move to helper
+
+      // TODO redundant move to helper and one state
       for (let i = 0; i < selectedFiles.length; i++) {
         var file = selectedFiles[i];
         const reader = new FileReader();
@@ -151,8 +150,9 @@ const B2Bsettings = ({}) => {
     }
   };
 
+  // modal open handler
   const handleModalOpen = (e, src, alt, name, size, type, id) => {
-    setOpenFullPageialog({
+    setOpenFullPageDialog({
       show: true,
       id: id,
       image: src,
@@ -163,10 +163,12 @@ const B2Bsettings = ({}) => {
     });
   };
 
+  // close modal back to initial state
   const handleCloseImageDialog = () => {
-    setOpenFullPageialog(init);
+    setOpenFullPageDialog(init);
   };
 
+  // single image upload in opend modal
   const formImageUpload = useCallback(
     (event) => {
       event.preventDefault();
@@ -181,12 +183,36 @@ const B2Bsettings = ({}) => {
       };
       reader.readAsDataURL(selectedFile);
     },
-    [openFullPageialog]
+    [openFullPageDialog]
   );
 
   const imageSetter = (event, result, selectedFile) => {
-    setOpenFullPageialog({
-      ...openFullPageialog,
+    // TODO redundant move to helper and one state
+    const find = imageList.filter((item) => {
+      return item.name === event.target.id;
+    });
+    const found = find[0];
+
+    let imageItem = {
+      id: found.id,
+      position: found.position,
+      alt: selectedFile.name,
+      size: selectedFile.size,
+      type: selectedFile.type,
+      name: selectedFile.name,
+      src: result,
+    };
+
+    const newState = imageList.map((img) => {
+      if (img.id === found.id) {
+        return { ...imageItem };
+      }
+      return img;
+    });
+    setImageList(newState);
+
+    setOpenFullPageDialog({
+      ...openFullPageDialog,
       show: true,
       image: result,
       name: selectedFile.name,
@@ -197,14 +223,14 @@ const B2Bsettings = ({}) => {
   };
 
   const handleDeleteImage = (e, deleteImgId) => {
-    console.log(
-      "Prikazi modal da li je siguran da zeli da obrise ili ne i ovo neka bude callback."
-    );
-    setOpenFullPageialog({
-      ...openFullPageialog,
+    alert("Prikazi modal da li je siguran da zeli da obrise ili ne");
+    setOpenFullPageDialog({
+      ...openFullPageDialog,
       image: "DELETE",
     });
 
+    // If it is an edit mode it value of property src/image should be string "DELETE"
+    // but if it is a first upload it should be removed from images array
     let imageItem = {
       id: null,
       position: null,
@@ -241,13 +267,15 @@ const B2Bsettings = ({}) => {
           handleActions={handleActions}
         />
 
+        {/* TODO DEMO Start */}
+        {/* put into grid just as an example */}
         <Grid
           container
           spacing={1}
           direction="row"
           sx={{ mt: "2rem", ml: "1rem" }}
         >
-          <ImageMultipleDnD
+          <MultipleImages
             handleMultipleImageUpload={handleMultipleImageUpload}
             handleDrag={handleDrag}
             handleDrop={handleDrop}
@@ -261,8 +289,8 @@ const B2Bsettings = ({}) => {
             handleDeleteImage={handleDeleteImage}
           />
           <ImageDialogFullPage
-            openFullPageialog={openFullPageialog}
-            setOpenFullPageialog={setOpenFullPageialog}
+            openFullPageDialog={openFullPageDialog}
+            setOpenFullPageDialog={setOpenFullPageDialog}
             setImageList={setImageList}
             imageList={imageList}
             handleCloseImageDialog={handleCloseImageDialog}
@@ -270,6 +298,7 @@ const B2Bsettings = ({}) => {
             handleDeleteImage={handleDeleteImage}
           />
         </Grid>
+        {/* TODO DEMO End */}
       </Paper>
     </>
   );
