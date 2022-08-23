@@ -115,7 +115,13 @@ const CreateForm = ({
               control={
                 <Switch
                   name={item.prop_name}
-                  checked={typeof value === "string" ? true : value}
+                  checked={
+                    typeof value === "string"
+                      ? true
+                      : typeof value === "number"
+                      ? value === 1
+                      : value
+                  }
                   onChange={(e) => onChangeHandler(e, "switch")}
                 />
               }

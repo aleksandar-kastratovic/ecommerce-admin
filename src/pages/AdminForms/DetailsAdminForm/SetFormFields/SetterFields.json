@@ -1,7 +1,7 @@
 [
   {
-    "field_name": "Ime",
-    "prop_name": "name",
+    "field_name": "Field name",
+    "prop_name": "field_name",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -13,8 +13,8 @@
     "input_type": "input"
   },
   {
-    "field_name": "Naslov",
-    "prop_name": "title",
+    "field_name": "Prop name",
+    "prop_name": "prop_name",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -24,6 +24,41 @@
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
+  },
+  {
+    "field_name": "Input type",
+    "prop_name": "input_type",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "options": [
+      {
+        "id": "input",
+        "name": "Input"
+      },
+      {
+        "id": "select",
+        "name": "Select"
+      },
+      {
+        "id": "date_time",
+        "name": "Date"
+      },
+      {
+        "id": "image_upload",
+        "name": "Image upload"
+      },
+      {
+        "id": "switch",
+        "name": "Switch"
+      }
+    ],
+    "input_type": "select"
   },
   {
     "field_name": "Podnaslov",
@@ -39,122 +74,8 @@
     "input_type": "input"
   },
   {
-    "field_name": "Pozicija",
-    "prop_name": "position",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "options": [
-      {
-        "id": "primary",
-        "name": "Slajder"
-      },
-      {
-        "id": "secondary",
-        "name": "Baner"
-      }
-    ],
-    "input_type": "select"
-  },
-  {
-    "field_name": "Prioritet",
-    "prop_name": "priority",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
-  },
-  {
-    "field_name": "Aktivan od",
-    "prop_name": "active_from",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "date_time"
-  },
-  {
-    "field_name": "Aktivan do",
-    "prop_name": "active_to",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "date_time"
-  },
-  {
-    "field_name": "button",
-    "prop_name": "button",
-    "in_main_table": true,
-    "in_details": false,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
-  },
-  {
-    "field_name": "Download",
-    "prop_name": "download",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
-  },
-  {
-    "field_name": "Trajanje",
-    "prop_name": "duration",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
-  },
-  {
-    "field_name": "Slika",
-    "prop_name": "image",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "image_upload"
-  },
-  {
-    "field_name": "Aktivan",
-    "prop_name": "is_active",
+    "field_name": "U tabeli",
+    "prop_name": "in_main_table",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -166,31 +87,73 @@
     "input_type": "switch"
   },
   {
-    "field_name": "target",
-    "prop_name": "target",
+    "field_name": "U detaljima",
+    "prop_name": "in_details",
     "in_main_table": true,
-    "in_details": false,
+    "in_details": true,
     "editable": true,
     "disabled": false,
     "required": false,
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "options": [
-      {
-        "name": "blank",
-        "id": "blank"
-      },
-      {
-        "name": "self",
-        "id": "self"
-      }
-    ],
-    "input_type": "select"
+    "input_type": "switch"
   },
   {
-    "field_name": "Tekst",
-    "prop_name": "text",
+    "field_name": "Disabled",
+    "prop_name": "disabled",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "switch"
+  },
+  {
+    "field_name": "Required",
+    "prop_name": "required",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "switch"
+  },
+  {
+    "field_name": "Sortable",
+    "prop_name": "sortable",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "switch"
+  },
+  {
+    "field_name": "Izmenljivo",
+    "prop_name": "editable",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "switch"
+  },
+  {
+    "field_name": "Description",
+    "prop_name": "description",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -202,8 +165,8 @@
     "input_type": "input"
   },
   {
-    "field_name": "Naslov",
-    "prop_name": "title",
+    "field_name": "UI prop",
+    "prop_name": "ui_prop",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -215,21 +178,8 @@
     "input_type": "input"
   },
   {
-    "field_name": "URL",
-    "prop_name": "url",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
-  },
-  {
-    "field_name": "Video",
-    "prop_name": "video",
+    "field_name": "Option props",
+    "prop_name": "option_prop",
     "in_main_table": true,
     "in_details": true,
     "editable": true,

@@ -5,25 +5,25 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
 import React, { useContext } from "react";
 import AuthContext from "../store/auth-contex";
-import { easyScreensData } from "./../helpers/const"
+import { easyScreensData } from "../helpers/const";
 
 const SideNavigation = ({ activeTheme, userName }) => {
 
     const { userScreens } = useContext(AuthContext);
 
     // Populate the menu
-    let menu= [];
-    for(const allowedScreen of userScreens) { 
+    let menu = [];
+    for (const allowedScreen of (userScreens ?? [])) {
 
-        // Check for local screen definetion
+        // Check for local screen definition
         const screen = easyScreensData.find(screen => screen.screen_code === allowedScreen.screen_code);
-        if(screen) {
+        if (screen) {
 
             // Init
             menu[screen.group.order] = menu[screen.group.order] ?? {
-                name: screen.group.name,
+                name : screen.group.name,
                 items: []
-            }
+            };
 
             // Add item
             menu[screen.group.order].items.push(screen);
@@ -32,11 +32,11 @@ const SideNavigation = ({ activeTheme, userName }) => {
 
     return (
         <nav id="sidebar">
-             <NavLink to='/' className="logo">
-                <img 
+            <NavLink to="/" className="logo">
+                <img
                     className={"img-fluid desktop-logo" + (activeTheme ? " dark-theme-logo" : " light-theme-logo")}
-                    src={activeTheme ? sideNavLogoDark: sideNavLogoLight}
-                    alt={activeTheme ? sideNavLogoDark: sideNavLogoLight}
+                    src={activeTheme ? sideNavLogoDark : sideNavLogoLight}
+                    alt={activeTheme ? sideNavLogoDark : sideNavLogoLight}
                 />
                 <img
                     className={"img-fluid mobile-logo" + (activeTheme ? " dark-theme-icon" : " light-theme-icon")}
@@ -49,45 +49,48 @@ const SideNavigation = ({ activeTheme, userName }) => {
                 <p>{userName}</p>
             </div>
             <ul className="list-unstyled components mb-5 scroll-view">
-                {/* <li>
-                    <NavLink to='/' className={navData => navData.isActive ? 'active' : '' }>
-                        <FontAwesomeIcon icon={faHome} />
-                        Početna
-                    </NavLink>
-                </li> */}
+                {/*
+                 <li>
+                 <NavLink to='/' className={navData => navData.isActive ? 'active' : '' }>
+                 <FontAwesomeIcon icon={faHome} />
+                 Početna
+                 </NavLink>
+                 </li>
+                 */}
 
                 {
-                    menu.map(function(menuGroup) {
+                    menu.map(menuGroup => (
+                        <React.Fragment key={menuGroup.name}>
 
-                        return <React.Fragment key={menuGroup.name}>
-                 
                             <li className="sidebar-categories">
                                 <p>{menuGroup.name}</p>
                             </li>
-                 
+
                             {
                                 menuGroup.items.map(item => (
-                                    <li key={item.id}>
-                                        <NavLink to={item.path} className={navData => navData.isActive ? 'active' : '' }>
+                                    <li key={item.screen_code}>
+                                        <NavLink to={item.path} className={navData => navData.isActive ? "active" : ""}>
                                             <FontAwesomeIcon icon={item.icon} />
                                             {item.name}
                                         </NavLink>
                                     </li>
                                 ))
                             }
-                       </React.Fragment>
-                    })
+                        </React.Fragment>
+                    ))
                 }
 
-                {/* <li className="sidebar-categories">
-                    <p>Ostalo</p>
-                </li>
-                <li>
-                    <NavLink to='/notification' className={navData => navData.isActive ? 'active' : '' }>
-                        <FontAwesomeIcon icon={faBell} />
-                        Obaveštenja
-                    </NavLink>
-                </li> */}
+                {/*
+                 <li className="sidebar-categories">
+                 <p>Ostalo</p>
+                 </li>
+                 <li>
+                 <NavLink to='/notification' className={navData => navData.isActive ? 'active' : '' }>
+                 <FontAwesomeIcon icon={faBell} />
+                 Obaveštenja
+                 </NavLink>
+                 </li>
+                 */}
             </ul>
         </nav>
     );
