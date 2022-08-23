@@ -21,8 +21,9 @@ const ListTableTitle = ({
       </Typography>
       {showButton && (
         <Button onClick={handleCreateNew} className={styles.buttonCreate}>
-          Kreiraj novi
-          <AddIcon />
+          <AddIcon className={styles.AddIcon} />
+         Kreiraj novi
+          
         </Button>
       )}
     </Box>

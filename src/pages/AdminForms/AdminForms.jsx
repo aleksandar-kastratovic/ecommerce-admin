@@ -1,59 +1,61 @@
-import React, { useEffect, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-import Paper from "@mui/material/Paper";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
-
+import { useContext, useEffect, useState } from "react";
 import ListTable from "../../components/shared/ListTable/ListTable";
-import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
 import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar";
-import DeleteDialog from "../../components/shared/Dialogs/DeleteDialog";
-
-import styles from "./B2Bbanners.module.scss";
+import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
+import { Paper, Skeleton, Stack } from "@mui/material";
 import { flatten } from "lodash";
-import fields from "./mainListFields.json";
+import { useNavigate, useParams } from "react-router-dom";
+import tblFields from "./adminFormListFields.json";
+import DeleteDialog from "../../components/shared/Dialogs/DeleteDialog";
+import { toast } from "react-toastify";
 
-import { useQuery } from "react-query";
+import styles from "./AdminForms.module.scss";
+
 import AuthContext from "../../store/auth-contex";
-import { getListB2Bbanners, deleteB2Bbanners } from "./services.js";
+import { deleteForm, getListAdminForms } from "./services";
 
-const B2Bbanners = ({}) => {
-  const navigate = useNavigate();
+const AdminForms = () => {
   const { user } = useContext(AuthContext);
-  const [listData, setListData] = useState();
-  const [fieldsColumns, setFieldsColumns] = useState(fields);
+  const [forms, setForms] = useState([]);
+  const [fields, setFields] = useState(tblFields);
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     show: false,
     id: null,
     mutate: null,
   });
 
-  const {
-    isSuccess,
-    data: response,
-    isLoading,
-    isError,
-  } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate], () =>
-    getListB2Bbanners(user.access_token)
-  );
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (response) {
-      setListData(response?.data?.payload);
+  const handleFormsList = async () => {
+    try {
+      setIsLoading(true);
+      let response = await getListAdminForms(user.access_token);
+      let { payload } = response.data;
+      let { items } = payload;
+      setForms(payload);
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [response]);
+  };
+
+  const onColumnsChange = (newFields) => {
+    setFields(newFields);
+  };
+
+  const handleCreateNew = () => {
+    navigate("/admin-form/new");
+  };
 
   const handleActions = (id, type) => () => {
     switch (type) {
       case "edit":
-        navigate(`/B2B-banners/${id}`);
+        navigate(`/admin-form/${id}`);
         break;
       case "delete":
         setOpenDeleteDialog({ show: true, id: id, mutate: null });
-        break;
-      case "preview":
-        console.log("preview set", id);
         break;
 
       default:
@@ -61,33 +63,33 @@ const B2Bbanners = ({}) => {
     }
   };
 
-  const handleCreateNew = (e) => {
-    navigate(`/B2B-banners/new`);
-  };
-
-  const onColumnsChange = (newFields) => {
-    setFieldsColumns(newFields);
-  };
-
   const handleConfirm = async () => {
     try {
-      await deleteB2Bbanners(user.access_token, openDeleteDialog.id);
+      await deleteForm(user.access_token, openDeleteDialog.id);
     } catch (error) {
+      toast.warning("Neuspešno brisanje!");
       console.warn(error);
     } finally {
+      toast.success("Uspešno obrisana forma!");
       setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
+      handleFormsList();
     }
   };
 
   const handleCancel = (e) => {
     setOpenDeleteDialog({ show: false, id: null });
   };
+
+  useEffect(() => {
+    handleFormsList();
+  }, []);
+
   return (
     <>
       {!isLoading ? (
         <Paper elevation={0} className={styles.paperStyle}>
           <ListTableTitle
-            title="B2B eCommerce podesavanje modula"
+            title="Admin forms"
             showButton={true}
             handleCreateNew={handleCreateNew}
           />
@@ -95,14 +97,15 @@ const B2Bbanners = ({}) => {
           <ListTableToolbar
             showToolbar={true}
             onColumnsChange={onColumnsChange}
-            fields={fieldsColumns}
+            fields={fields}
+            showDatePicker={false}
           />
 
           <ListTable
-            fields={flatten(fieldsColumns).filter(
+            fields={flatten(fields).filter(
               ({ in_main_table }) => in_main_table
             )}
-            listData={listData}
+            listData={forms}
             handleActions={handleActions}
           />
         </Paper>
@@ -116,7 +119,7 @@ const B2Bbanners = ({}) => {
         </Stack>
       )}
       <DeleteDialog
-        title="Brisanje banera"
+        title="Brisanje"
         description="Da li ste sigurni da želite da obrišete?"
         openDeleteDialog={openDeleteDialog}
         setOpenDeleteDialog={setOpenDeleteDialog}
@@ -127,4 +130,4 @@ const B2Bbanners = ({}) => {
   );
 };
 
-export default B2Bbanners;
+export default AdminForms;

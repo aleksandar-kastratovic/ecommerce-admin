@@ -5,81 +5,86 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { NavLink } from "react-router-dom";
 import React, { useContext } from "react";
 import AuthContext from "../store/auth-contex";
-import { easyScreensData } from "./../helpers/const"
+import { easyScreensData } from "./../helpers/const";
 
 const SideNavigation = ({ activeTheme, userName }) => {
+  const { userScreens } = useContext(AuthContext);
 
-    const { userScreens } = useContext(AuthContext);
+  // Populate the menu
+  let menu = [];
 
-    // Populate the menu
-    let menu= [];
-    for(const allowedScreen of userScreens) { 
+  for (const allowedScreen of userScreens) {
+    // Check for local screen definetion
+    const screen = easyScreensData.find(
+      (screen) => screen.screen_code === allowedScreen.screen_code
+    );
+    if (screen) {
+      // Init
+      menu[screen.group.order] = menu[screen.group.order] ?? {
+        name: screen.group.name,
+        items: [],
+      };
 
-        // Check for local screen definetion
-        const screen = easyScreensData.find(screen => screen.screen_code === allowedScreen.screen_code);
-        if(screen) {
-
-            // Init
-            menu[screen.group.order] = menu[screen.group.order] ?? {
-                name: screen.group.name,
-                items: []
-            }
-
-            // Add item
-            menu[screen.group.order].items.push(screen);
-        }
+      // Add item
+      menu[screen.group.order].items.push(screen);
     }
+  }
 
-    return (
-        <nav id="sidebar">
-             <NavLink to='/' className="logo">
-                <img 
-                    className={"img-fluid desktop-logo" + (activeTheme ? " dark-theme-logo" : " light-theme-logo")}
-                    src={activeTheme ? sideNavLogoDark: sideNavLogoLight}
-                    alt={activeTheme ? sideNavLogoDark: sideNavLogoLight}
-                />
-                <img
-                    className={"img-fluid mobile-logo" + (activeTheme ? " dark-theme-icon" : " light-theme-icon")}
-                    src={sideNavIcon}
-                    alt={sideNavIcon}
-                />
-            </NavLink>
-            <div className="sidebar-welcome">
-                <h5>Dobrodošli</h5>
-                <p>{userName}</p>
-            </div>
-            <ul className="list-unstyled components mb-5 scroll-view">
-                {/* <li>
+  return (
+    <nav id="sidebar">
+      <NavLink to="/" className="logo">
+        <img
+          className={
+            "img-fluid desktop-logo" +
+            (activeTheme ? " dark-theme-logo" : " light-theme-logo")
+          }
+          src={activeTheme ? sideNavLogoDark : sideNavLogoLight}
+          alt={activeTheme ? sideNavLogoDark : sideNavLogoLight}
+        />
+        <img
+          className={
+            "img-fluid mobile-logo" +
+            (activeTheme ? " dark-theme-icon" : " light-theme-icon")
+          }
+          src={sideNavIcon}
+          alt={sideNavIcon}
+        />
+      </NavLink>
+      <div className="sidebar-welcome">
+        <h5>Dobrodošli</h5>
+        <p>{userName}</p>
+      </div>
+      <ul className="list-unstyled components mb-5 scroll-view">
+        {/* <li>
                     <NavLink to='/' className={navData => navData.isActive ? 'active' : '' }>
                         <FontAwesomeIcon icon={faHome} />
                         Početna
                     </NavLink>
                 </li> */}
 
-                {
-                    menu.map(function(menuGroup) {
+        {menu.map(function (menuGroup) {
+          return (
+            <React.Fragment key={menuGroup.name}>
+              <li className="sidebar-categories">
+                <p>{menuGroup.name}</p>
+              </li>
 
-                        return <React.Fragment key={menuGroup.name}>
-                 
-                            <li className="sidebar-categories">
-                                <p>{menuGroup.name}</p>
-                            </li>
-                 
-                            {
-                                menuGroup.items.map(item => (
-                                    <li key={item.id}>
-                                        <NavLink to={item.path} className={navData => navData.isActive ? 'active' : '' }>
-                                            <FontAwesomeIcon icon={item.icon} />
-                                            {item.name}
-                                        </NavLink>
-                                    </li>
-                                ))
-                            }
-                       </React.Fragment>
-                    })
-                }
+              {menuGroup.items.map((item) => (
+                <li key={item.id}>
+                  <NavLink
+                    to={item.path}
+                    className={(navData) => (navData.isActive ? "active" : "")}
+                  >
+                    <FontAwesomeIcon icon={item.icon} />
+                    {item.name}
+                  </NavLink>
+                </li>
+              ))}
+            </React.Fragment>
+          );
+        })}
 
-                {/* <li className="sidebar-categories">
+        {/* <li className="sidebar-categories">
                     <p>Ostalo</p>
                 </li>
                 <li>
@@ -88,10 +93,9 @@ const SideNavigation = ({ activeTheme, userName }) => {
                         Obaveštenja
                     </NavLink>
                 </li> */}
-            </ul>
-        </nav>
-    );
-
+      </ul>
+    </nav>
+  );
 };
 
 export default SideNavigation;
