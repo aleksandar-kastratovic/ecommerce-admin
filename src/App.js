@@ -34,6 +34,8 @@ import B2Bbanners from "./pages/B2Bbanners/B2Bbanners";
 import DetailsBanners from "./pages/B2Bbanners/DetailsBanners/DetailsBanners";
 import AdminForms from "./pages/AdminForms/AdminForms";
 import DetailsAdminForm from "./pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
+import B2Cbanners from "./pages/B2Cbanners/B2Cbanners";
+import DetailsBannersB2C from "./pages/B2Cbanners/DetailsBanners/DetailsBannersB2C";
 
 function App() {
   const queryClient = new QueryClient();
@@ -356,6 +358,24 @@ function App() {
                           <Route
                             path="/admin-form/:FormId"
                             element={<DetailsAdminForm />}
+                          />
+                        </Route>
+                      );
+                    }
+
+                    if (object.id === screensData.BANNERS_B2C.id) {
+                      return (
+                        <Route key={object.id}>
+                          <Route
+                            key={object.id}
+                            path="/B2C-banners"
+                            element={
+                              <B2Cbanners routeData={screensData.BANNERS_B2C} />
+                            }
+                          />
+                          <Route
+                            path="/B2C-banners/:B2CId"
+                            element={<DetailsBannersB2C />}
                           />
                         </Route>
                       );
