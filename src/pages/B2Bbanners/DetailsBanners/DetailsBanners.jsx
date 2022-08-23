@@ -118,23 +118,8 @@ const DetailsBanners = ({}) => {
     isEmpty(errors) ? saveData() : setInputsError(errors);
   };
 
-  const imageUrlToBase64 = (url) => {
-    const selectedFile = url;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      // setNewItem({ ...newItem, [event.target.name]: reader.result });
-      const timeOutId = setTimeout(() => {
-        /* setter(event, reader.result); */
-        console.log(reader.result);
-      }, 500);
-      return () => clearTimeout(timeOutId);
-    };
-    reader.readAsDataURL(selectedFile);
-  };
   const saveData = () => {
     // TODO image and rest of base 64 repack if it is not a type URL
-    console.log(imageUrlToBase64(newItem.image));
     const repackToSend = {
       ...newItem,
       priority: parseInt(newItem.priority),

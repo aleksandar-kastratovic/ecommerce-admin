@@ -4,13 +4,14 @@ const api = () => {
   return localStorage.getItem("api");
   // return apiLocal;
 };
-export const getListAdminForms = async (token) => {
+export const getListAdminForms = async (token, search) => {
   return await axios({
     method: "LIST",
     url: `${api()}admin/form`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
+    data: { search: search },
   });
 };
 

@@ -1,28 +1,21 @@
-import React, { useEffect, useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
-
-import Paper from "@mui/material/Paper";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
-
+import { Paper, Skeleton, Stack } from "@mui/material";
 import ListTable from "../../components/shared/ListTable/ListTable";
 import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
 import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar";
 import DeleteDialog from "../../components/shared/Dialogs/DeleteDialog";
-
-import styles from "./B2Bbanners.module.scss";
-import { flatten } from "lodash";
-import fields from "./mainListFields.json";
-
-import { useQuery } from "react-query";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../store/auth-contex";
-import { getListB2Bbanners, deleteB2Bbanners } from "./services.js";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { flatten } from "lodash";
 
-const B2Bbanners = ({}) => {
-  const navigate = useNavigate();
+import styles from "./Params.module.scss";
+import { getListParams } from "./services";
+
+const Params = () => {
   const { user } = useContext(AuthContext);
-  const [listData, setListData] = useState();
-  const [fieldsColumns, setFieldsColumns] = useState(fields);
+  const [data, setData] = useState([]);
+  const [fields, setFields] = useState([]);
   const [search, setSearch] = useState("");
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     show: false,
@@ -30,32 +23,37 @@ const B2Bbanners = ({}) => {
     mutate: null,
   });
 
-  const {
-    isSuccess,
-    data: response,
-    isLoading,
-    isError,
-  } = useQuery(
-    ["openDeleteDialog.mutate", openDeleteDialog.mutate, search],
-    () => getListB2Bbanners(user.access_token, search)
-  );
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (response) {
-      setListData(response?.data?.payload);
+  const handleData = async () => {
+    try {
+      setIsLoading(true);
+      let response = await getListParams(user.access_token, search);
+      let { payload } = response.data;
+      setData(payload);
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      setIsLoading(false);
     }
-  }, [response]);
+  };
+
+  const onColumnsChange = (newFields) => {
+    setFields(newFields);
+  };
+
+  const handleCreateNew = () => {
+    navigate("/params/new");
+  };
 
   const handleActions = (id, type) => () => {
     switch (type) {
       case "edit":
-        navigate(`/B2B-banners/${id}`);
+        navigate(`/params/${id}`);
         break;
       case "delete":
         setOpenDeleteDialog({ show: true, id: id, mutate: null });
-        break;
-      case "preview":
-        console.log("preview set", id);
         break;
 
       default:
@@ -63,37 +61,39 @@ const B2Bbanners = ({}) => {
     }
   };
 
-  const handleCreateNew = (e) => {
-    navigate(`/B2B-banners/new`);
-  };
-
-  const onColumnsChange = (newFields) => {
-    setFieldsColumns(newFields);
-  };
-
   const handleConfirm = async () => {
     try {
-      await deleteB2Bbanners(user.access_token, openDeleteDialog.id);
     } catch (error) {
+      toast.warning("Neuspešno brisanje!");
       console.warn(error);
     } finally {
+      toast.success("Uspešno obrisana forma!");
       setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
+      handleData();
     }
-  };
-
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
   };
 
   const handleCancel = (e) => {
     setOpenDeleteDialog({ show: false, id: null });
   };
 
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+  };
+
+  useEffect(() => {
+    handleData();
+  }, [search]);
+
+  useEffect(() => {
+    handleData();
+  }, []);
+
   return (
     <>
       <Paper elevation={0} className={styles.paperStyle}>
         <ListTableTitle
-          title="B2B baneri"
+          title="Parametri"
           showButton={true}
           handleCreateNew={handleCreateNew}
         />
@@ -101,16 +101,17 @@ const B2Bbanners = ({}) => {
         <ListTableToolbar
           showToolbar={true}
           onColumnsChange={onColumnsChange}
-          fields={fieldsColumns}
+          fields={fields}
+          showDatePicker={false}
           onSearch={handleSearch}
           searchValue={search}
         />
         {!isLoading ? (
           <ListTable
-            fields={flatten(fieldsColumns).filter(
+            fields={flatten(fields).filter(
               ({ in_main_table }) => in_main_table
             )}
-            listData={listData}
+            listData={data}
             handleActions={handleActions}
           />
         ) : (
@@ -125,7 +126,7 @@ const B2Bbanners = ({}) => {
       </Paper>
 
       <DeleteDialog
-        title="Brisanje banera"
+        title="Brisanje"
         description="Da li ste sigurni da želite da obrišete?"
         openDeleteDialog={openDeleteDialog}
         setOpenDeleteDialog={setOpenDeleteDialog}
@@ -136,4 +137,4 @@ const B2Bbanners = ({}) => {
   );
 };
 
-export default B2Bbanners;
+export default Params;

@@ -43,7 +43,6 @@ const B2Bsettings = ({}) => {
 
   const handleCreateNew = (e) => {
     // TODO handle create new
-    console.log(e);
   };
 
   const handleActions = (module) => () => {
@@ -55,7 +54,7 @@ const B2Bsettings = ({}) => {
       <Paper elevation={0} className={styles.paperStyle}>
         <ListTableTitle
           title="B2B eCommerce podesavanje modula"
-          showButton={false}
+          showButton={true}
           handleCreateNew={handleCreateNew}
         />
 

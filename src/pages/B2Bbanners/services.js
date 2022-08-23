@@ -5,12 +5,15 @@ const api = () => {
   // return apiLocal;
 };
 
-export const getListB2Bbanners = async (token, module) => {
+export const getListB2Bbanners = async (token, search) => {
   return await axios({
     method: "LIST",
     url: `${api()}admin/banners-b2b`,
     headers: {
       Authorization: `Bearer ${token}`,
+    },
+    data: {
+      search: search,
     },
   });
 };

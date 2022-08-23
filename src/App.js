@@ -36,6 +36,9 @@ import AdminForms from "./pages/AdminForms/AdminForms";
 import DetailsAdminForm from "./pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
 import B2Cbanners from "./pages/B2Cbanners/B2Cbanners";
 import DetailsBannersB2C from "./pages/B2Cbanners/DetailsBanners/DetailsBannersB2C";
+import Params from "./pages/Params/Params";
+import B2CSettings from "./pages/B2CSettings/B2CSettings";
+import DetailsParams from "./pages/Params/DetailsParams/DetailsParams";
 
 function App() {
   const queryClient = new QueryClient();
@@ -174,7 +177,7 @@ function App() {
                   element={<Navigate replace to="/orders" />}
                 />
                 {authCtx.userScreens !== undefined &&
-                  authCtx.userScreens.map(screen => {
+                  authCtx.userScreens.map((screen) => {
                     if (screen.screen_code === screensData.ROLES.screen_code) {
                       return (
                         <Route
@@ -327,7 +330,9 @@ function App() {
                         />
                       );
                     }
-                    if (screen.screen_code === screensData.BANNERS_B2B.screen_code) {
+                    if (
+                      screen.screen_code === screensData.BANNERS_B2B.screen_code
+                    ) {
                       return (
                         <Route key={screen.screen_code}>
                           <Route
@@ -345,7 +350,9 @@ function App() {
                       );
                     }
 
-                    if (screen.screen_code === screensData.ADMIN_FORM.screen_code) {
+                    if (
+                      screen.screen_code === screensData.ADMIN_FORM.screen_code
+                    ) {
                       return (
                         <Route key={screen.screen_code}>
                           <Route
@@ -363,7 +370,9 @@ function App() {
                       );
                     }
 
-                    if (screen.screen_code === screensData.BANNERS_B2C.screen_code) {
+                    if (
+                      screen.screen_code === screensData.BANNERS_B2C.screen_code
+                    ) {
                       return (
                         <Route key={screen.screen_code}>
                           <Route
@@ -376,6 +385,39 @@ function App() {
                           <Route
                             path="/B2C-banners/:B2CId"
                             element={<DetailsBannersB2C />}
+                          />
+                        </Route>
+                      );
+                    }
+
+                    if (screen.screen_code === screensData.PARAMS.screen_code) {
+                      return (
+                        <Route key={screen.screen_code}>
+                          <Route
+                            key={screen.screen_code}
+                            path="/params"
+                            element={<Params routeData={screensData.PARAMS} />}
+                          />
+                          <Route
+                            path="/params/:pid"
+                            element={<DetailsParams />}
+                          />
+                        </Route>
+                      );
+                    }
+                    if (screen.screen_code === screensData.B2CCFG.screen_code) {
+                      return (
+                        <Route key={screen.screen_code}>
+                          <Route
+                            key={screen.screen_code}
+                            path="/B2C-settings"
+                            element={
+                              <B2CSettings routeData={screensData.B2CCFG} />
+                            }
+                          />
+                          <Route
+                            path="/B2C-settings/:B2CId"
+                            element={<B2CSettings />}
                           />
                         </Route>
                       );
