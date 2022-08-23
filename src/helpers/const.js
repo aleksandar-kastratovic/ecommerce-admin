@@ -20,61 +20,33 @@ export const MainMenuGroups = {
 };
 
 const screenDateDef = [
-  [1, "PRODU", "Proizvodi", "/products", faArchive, MainMenuGroups.PRODUCT],
-  [2, "ORDER", "Porudžbine", "/orders", faFileAlt, MainMenuGroups.B2B],
-  [3, "BANNR", "Baneri", "/", faSitemap, MainMenuGroups.B2B],
-  [4, "NEEWS", "Novosti", "/", faArchive, MainMenuGroups.B2B],
-  [5, "CATEG", "Kategorije", "/categories", faSitemap, MainMenuGroups.PRODUCT],
-  [6, "ROLES", "Uloge", "/roles", faPeopleArrows, MainMenuGroups.SETTINGS],
-  [7, "USERS", "Korisnici", "/users", faUsers, MainMenuGroups.SETTINGS],
-  [8, "ACTON", "Akcije", "/", faPercentage, MainMenuGroups.SETTINGS],
-  [9, "CUSTM", "Kupci", "/b2b-customers", faUserTag, MainMenuGroups.B2B],
-  [
-    10,
-    "LOCAT",
-    "Lokacije",
-    "/locations",
-    faSearchLocation,
-    MainMenuGroups.PRODUCT,
-  ],
-  [11, "COMPN", "Kompanije", "/companies", faCity, MainMenuGroups.B2B],
-  // [12, 'SETNG', 'Podešavanja', '/', faCog, MainMenuGroups.SETTINGS ],
-  [
-    12,
-    "B2BCFG",
-    "B2B podešavanja",
-    "/B2B-settings",
-    faCog,
-    MainMenuGroups.SETTINGS,
-  ],
-  [
-    13,
-    "BANNERS_B2B",
-    "B2B baneri",
-    "/B2B-banners",
-    faImage,
-    MainMenuGroups.B2B,
-  ],
-  [
-    14,
-    "ADMIN_FORM",
-    "Admin forme",
-    "/admin-form",
-    faCog,
-    MainMenuGroups.SETTINGS,
-  ],
-  [15, "BANNERS_B2C", "B2C baneri", "/B2C-banners", faCog, MainMenuGroups.B2C],
-  [16, "B2CCFG", "B2C podešavanja", "/B2C-settings", faCog, MainMenuGroups.B2C],
-  [17, "PARAMS", "Parametri", "/params", faCog, MainMenuGroups.SETTINGS],
+  ["CATEG", "Kategorije", "/categories", faSitemap, MainMenuGroups.PRODUCT],
+  ["PRODU", "Proizvodi", "/products", faArchive, MainMenuGroups.PRODUCT],
+  ["LOCAT", "Lokacije", "/locations", faSearchLocation, MainMenuGroups.PRODUCT],
+
+  ["ORDER", "Porudžbine", "/orders", faFileAlt, MainMenuGroups.B2B],
+  ["COMPN", "Kompanije", "/companies", faCity, MainMenuGroups.B2B],
+  ["CUSTM", "Kupci", "/b2b-customers", faUserTag, MainMenuGroups.B2B],
+  ["BANNR", "Baneri", "/", faSitemap, MainMenuGroups.B2B],
+  ["NEEWS", "Novosti", "/", faArchive, MainMenuGroups.B2B],
+  ["ADMIN_FORM", "Admin forme", "/admin-form", faCog, MainMenuGroups.SETTINGS],
+  ["BANNERS_B2B", "B2B baneri", "/B2B-banners", faImage, MainMenuGroups.B2B],
+  ["BANNERS_B2C", "B2C baneri", "/B2C-banners", faCog, MainMenuGroups.B2C],
+
+  ["ROLES", "Uloge", "/roles", faPeopleArrows, MainMenuGroups.SETTINGS],
+  ["USERS", "Korisnici", "/users", faUsers, MainMenuGroups.SETTINGS],
+  ["ACTON", "Akcije", "/", faPercentage, MainMenuGroups.SETTINGS],
+  ["B2BCFG", "B2B podešavanja", "/B2B-settings", faCog, MainMenuGroups.B2C],
+  ["B2CCFG", "B2C podešavanja", "/B2C-settings", faCog, MainMenuGroups.B2C],
+  ["PARAMS", "Parametri", "/params", faCog, MainMenuGroups.SETTINGS],
 ];
 
 export const easyScreensData = screenDateDef.map((item) => ({
-  id: item[0],
-  screen_code: item[1],
-  name: item[2],
-  path: item[3],
-  icon: item[4],
-  group: item[5],
+  screen_code: item[0],
+  name: item[1],
+  path: item[2],
+  icon: item[3],
+  group: item[4],
 }));
 
 export const screensData = easyScreensData.reduce((acc, screen) => {
@@ -89,5 +61,3 @@ export const inventoryOptions = [
 
 export const regax =
   /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+\.)+[^<>()[\].,;:\s@"]{2,})$/i;
-
-export const apiLocal = "http://127.0.0.1:8000/api/v1/";
