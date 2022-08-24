@@ -1,4 +1,5 @@
 import { Paper, Skeleton, Stack } from "@mui/material";
+import ListPage from "../../components/shared/ListPage/ListPage";
 import ListTable from "../../components/shared/ListTable/ListTable";
 import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
 import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar";
@@ -8,9 +9,9 @@ import AuthContext from "../../store/auth-contex";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { flatten } from "lodash";
-
+import tblFields from "./ParamsListFields.json";
 import styles from "./Params.module.scss";
-import { getListParams } from "./services";
+import { deleteParam, getListParams } from "./services";
 
 const Params = () => {
   const { user } = useContext(AuthContext);
@@ -91,7 +92,20 @@ const Params = () => {
 
   return (
     <>
-      <Paper elevation={0} className={styles.paperStyle}>
+     <ListPage
+      getData={getListParams}
+      deleteDate={deleteParam}
+      title="Parametri"
+      showNewButton={true}
+      newPath="/params/new"
+      columnFields={tblFields}
+      showToolbar={true}
+      editPath="/params/"
+      deleteTitle="Brisanje"
+      deleteDescription="Da li ste sigurni da želite da obrišete?"
+      showDatePicker={false}
+    />
+      {/* <Paper elevation={0} className={styles.paperStyle}>
         <ListTableTitle
           title="Parametri"
           showButton={true}
@@ -132,7 +146,7 @@ const Params = () => {
         setOpenDeleteDialog={setOpenDeleteDialog}
         handleConfirm={handleConfirm}
         handleCancel={handleCancel}
-      />
+      /> */}
     </>
   );
 };
