@@ -12,9 +12,19 @@ import styles from "./ProductDetails.module.scss";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../../store/auth-contex";
 import { isEmpty } from "lodash";
+import CreateForm from "../../../components/shared/Form/CreateForm";
 
 import basic_data from "./forms/basic_data.json";
-import CreateForm from "../../../components/shared/Form/CreateForm";
+import categories from "./forms/categories.json";
+import certificate_doc from "./forms/certificate_doc.json";
+import declaration from "./forms/declaration.json";
+import description from "./forms/description.json";
+import gallery from "./forms/gallery.json";
+import instruction_doc from "./forms/instruction_doc.json";
+import inventories from "./forms/inventories.json";
+import prices from "./forms/prices.json";
+import seo from "./forms/seo.json";
+import technical_doc from "./forms/tehnical_doc.json";
 
 const ProductDetails = () => {
   const { prodId } = useParams();
@@ -96,13 +106,56 @@ const ProductDetails = () => {
     if (selected === "fields" && prodId !== "new") {
       handleFormFields();
     }
+    console.log(selected);
+    switch (selected) {
+      case "basic_data":
+        setFormFields(basic_data);
+        break;
+      case "categories":
+        setFormFields(categories);
+        break;
+      case "certificate_doc":
+        setFormFields(certificate_doc);
+        break;
+      case "declaration":
+        setFormFields(declaration);
+        break;
+      case "description":
+        setFormFields(description);
+        break;
+      case "gallery":
+        setFormFields(gallery);
+        break;
+      case "instruction_doc":
+        setFormFields(instruction_doc);
+        break;
+      case "inventories":
+        setFormFields(inventories);
+        break;
+      case "prices":
+        setFormFields(prices);
+        break;
+      case "seo":
+        setFormFields(seo);
+        break;
+      case "technical_doc":
+        setFormFields(technical_doc);
+        break;
+      default:
+        setFormFields(basic_data);
+        break;
+    }
   }, [selected]);
+
+  useEffect(() => {
+    console.log(formFields);
+  }, [formFields]);
 
   const getDisplayed = () => {
     return (
       <Box component="form" autoComplete="off">
-        {basic_data &&
-          basic_data
+        {formFields &&
+          formFields
             .filter(({ in_details }) => in_details)
             .map((item, index) => {
               return (
