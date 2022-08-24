@@ -34,6 +34,12 @@ import B2Bbanners from "./pages/B2Bbanners/B2Bbanners";
 import DetailsBanners from "./pages/B2Bbanners/DetailsBanners/DetailsBanners";
 import AdminForms from "./pages/AdminForms/AdminForms";
 import DetailsAdminForm from "./pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
+import B2Cbanners from "./pages/B2Cbanners/B2Cbanners";
+import DetailsBannersB2C from "./pages/B2Cbanners/DetailsBanners/DetailsBannersB2C";
+import Params from "./pages/Params/Params";
+import B2CSettings from "./pages/B2CSettings/B2CSettings";
+import DetailsParams from "./pages/Params/DetailsParams/DetailsParams";
+import Products from "./pages/Products/Products";
 
 function App() {
   const queryClient = new QueryClient();
@@ -172,11 +178,11 @@ function App() {
                   element={<Navigate replace to="/orders" />}
                 />
                 {authCtx.userScreens !== undefined &&
-                  authCtx.userScreens.map(function (object) {
-                    if (object.id === screensData.ROLES.id) {
+                  authCtx.userScreens.map((screen) => {
+                    if (screen.screen_code === screensData.ROLES.screen_code) {
                       return (
                         <Route
-                          key={object.id}
+                          key={screen.screen_code}
                           path="/roles"
                           element={<RolesPage routeData={screensData.ROLES} />}
                         >
@@ -184,11 +190,11 @@ function App() {
                         </Route>
                       );
                     }
-                    if (object.id === screensData.B2BCFG.id) {
+                    if (screen.screen_code === screensData.B2BCFG.screen_code) {
                       return (
-                        <Route key={object.id}>
+                        <Route key={screen.screen_code}>
                           <Route
-                            key={object.id}
+                            key={screen.screen_code}
                             path="/B2B-settings"
                             element={
                               <B2Bsettings routeData={screensData.B2BCFG} />
@@ -201,10 +207,10 @@ function App() {
                         </Route>
                       );
                     }
-                    if (object.id === screensData.USERS.id) {
+                    if (screen.screen_code === screensData.USERS.screen_code) {
                       return (
                         <Route
-                          key={object.id}
+                          key={screen.screen_code}
                           path="/users"
                           element={<UsersPage routeData={screensData.USERS} />}
                         >
@@ -212,10 +218,10 @@ function App() {
                         </Route>
                       );
                     }
-                    if (object.id === screensData.CATEG.id) {
+                    if (screen.screen_code === screensData.CATEG.screen_code) {
                       return (
                         <Route
-                          key={object.id}
+                          key={screen.screen_code}
                           path="/categories"
                           element={
                             <CategoriesPage routeData={screensData.CATEG} />
@@ -226,10 +232,10 @@ function App() {
                       );
                     }
                     // TODO: Change screensData item
-                    if (object.id === screensData.NEEWS.id) {
+                    if (screen.screen_code === screensData.NEEWS.screen_code) {
                       return (
                         <Route
-                          key={object.id + 10}
+                          key={screen.screen_code + 10}
                           path="/product-attributes"
                           element={
                             <ProductAttributesPage
@@ -244,23 +250,21 @@ function App() {
                         </Route>
                       );
                     }
-                    if (object.id === screensData.PRODU.id) {
+                    if (screen.screen_code === screensData.PRODU.screen_code) {
                       return (
                         <Route
-                          key={object.id}
+                          key={screen.screen_code}
                           path="/products"
-                          element={
-                            <ProductsPage routeData={screensData.PRODU} />
-                          }
+                          element={<Products routeData={screensData.PRODU} />}
                         >
                           <Route path=":prodId" element={<ProductsPage />} />
                         </Route>
                       );
                     }
-                    if (object.id === screensData.LOCAT.id) {
+                    if (screen.screen_code === screensData.LOCAT.screen_code) {
                       return (
                         <Route
-                          key={object.id}
+                          key={screen.screen_code}
                           path="/locations"
                           element={
                             <LocationsPage routeData={screensData.LOCAT} />
@@ -270,15 +274,15 @@ function App() {
                         </Route>
                       );
                     }
-                    // if (object.id === screensData.ACTON.id) {
-                    //   return  <Route key={object.id}  path='/actions' element={<ActionsPage routeData={screensData.ACTON} />} >
+                    // if (screen.screen_code === screensData.ACTON.screen_code) {
+                    //   return  <Route key={screen.screen_code}  path='/actions' element={<ActionsPage routeData={screensData.ACTON} />} >
                     //             <Route path=":actId" element={<ActionsPage />} />
                     //           </Route>
                     // }
-                    if (object.id === screensData.CUSTM.id) {
+                    if (screen.screen_code === screensData.CUSTM.screen_code) {
                       return (
                         <Route
-                          key={object.id}
+                          key={screen.screen_code}
                           path="/b2b-customers"
                           element={
                             <B2BCustomersPage routeData={screensData.CUSTM} />
@@ -289,10 +293,10 @@ function App() {
                       );
                     }
                     // TODO: Change screensData item
-                    if (object.id === screensData.COMPN.id) {
+                    if (screen.screen_code === screensData.COMPN.screen_code) {
                       return (
                         <Route
-                          key={object.id}
+                          key={screen.screen_code}
                           path="/companies"
                           element={
                             <CompaniesPage routeData={screensData.COMPN} />
@@ -302,10 +306,10 @@ function App() {
                         </Route>
                       );
                     }
-                    if (object.id === screensData.ORDER.id) {
+                    if (screen.screen_code === screensData.ORDER.screen_code) {
                       return (
                         <Route
-                          key={object.id}
+                          key={screen.screen_code}
                           path="/orders"
                           element={<OrdersPage routeData={screensData.ORDER} />}
                         >
@@ -314,10 +318,10 @@ function App() {
                       );
                     }
                     // TODO: Change screensData item
-                    if (object.id === screensData.B2BCFG.id) {
+                    if (screen.screen_code === screensData.B2BCFG.screen_code) {
                       return (
                         <Route
-                          key={object.id}
+                          key={screen.screen_code}
                           path="/settings"
                           element={
                             <SettingsPage routeData={screensData.B2BCFG} />
@@ -325,11 +329,13 @@ function App() {
                         />
                       );
                     }
-                    if (object.id === screensData.BANNERS_B2B.id) {
+                    if (
+                      screen.screen_code === screensData.BANNERS_B2B.screen_code
+                    ) {
                       return (
-                        <Route key={object.id}>
+                        <Route key={screen.screen_code}>
                           <Route
-                            key={object.id}
+                            key={screen.screen_code}
                             path="/B2B-banners"
                             element={
                               <B2Bbanners routeData={screensData.BANNERS_B2B} />
@@ -343,11 +349,13 @@ function App() {
                       );
                     }
 
-                    if (object.id === screensData.ADMIN_FORM.id) {
+                    if (
+                      screen.screen_code === screensData.ADMIN_FORM.screen_code
+                    ) {
                       return (
-                        <Route key={object.id}>
+                        <Route key={screen.screen_code}>
                           <Route
-                            key={object.id}
+                            key={screen.screen_code}
                             path="/admin-form"
                             element={
                               <AdminForms routeData={screensData.ADMIN_FORM} />
@@ -356,6 +364,59 @@ function App() {
                           <Route
                             path="/admin-form/:FormId"
                             element={<DetailsAdminForm />}
+                          />
+                        </Route>
+                      );
+                    }
+
+                    if (
+                      screen.screen_code === screensData.BANNERS_B2C.screen_code
+                    ) {
+                      return (
+                        <Route key={screen.screen_code}>
+                          <Route
+                            key={screen.screen_code}
+                            path="/B2C-banners"
+                            element={
+                              <B2Cbanners routeData={screensData.BANNERS_B2C} />
+                            }
+                          />
+                          <Route
+                            path="/B2C-banners/:B2CId"
+                            element={<DetailsBannersB2C />}
+                          />
+                        </Route>
+                      );
+                    }
+
+                    if (screen.screen_code === screensData.PARAMS.screen_code) {
+                      return (
+                        <Route key={screen.screen_code}>
+                          <Route
+                            key={screen.screen_code}
+                            path="/params"
+                            element={<Params routeData={screensData.PARAMS} />}
+                          />
+                          <Route
+                            path="/params/:pid"
+                            element={<DetailsParams />}
+                          />
+                        </Route>
+                      );
+                    }
+                    if (screen.screen_code === screensData.B2CCFG.screen_code) {
+                      return (
+                        <Route key={screen.screen_code}>
+                          <Route
+                            key={screen.screen_code}
+                            path="/B2C-settings"
+                            element={
+                              <B2CSettings routeData={screensData.B2CCFG} />
+                            }
+                          />
+                          <Route
+                            path="/B2C-settings/:B2CId"
+                            element={<B2CSettings />}
                           />
                         </Route>
                       );

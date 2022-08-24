@@ -19,11 +19,13 @@ import fields from "./fieldsDetails.json";
 import { isEmpty } from "lodash";
 import AuthContext from "../../../store/auth-contex";
 import { useQuery } from "react-query";
-import { getDetailsB2Bbanners, createBanner } from "../services";
+import { getDetailsB2Cbanners, createBanner } from "../services";
 import ImagePreview from "../../../components/shared/ImagePreview/ImagePreview";
 
-const DetailsBanners = ({}) => {
-  const { B2BId } = useParams();
+import styles from "./DetailsBanners.module.scss";
+
+const DetailsBannersB2C = ({}) => {
+  const { B2CId } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const [imagePreviewList, setImagePreviewList] = useState([]);
@@ -52,11 +54,11 @@ const DetailsBanners = ({}) => {
     data: response,
     isLoading,
     isError,
-  } = useQuery(["B2BId", B2BId], () =>
-    getDetailsB2Bbanners(user.access_token, B2BId)
+  } = useQuery(["B2CId", B2CId], () =>
+    getDetailsB2Cbanners(user.access_token, B2CId)
   );
 
-  const [newItem, setNewItem] = useState(B2BId === "new" ? init : {});
+  const [newItem, setNewItem] = useState(B2CId === "new" ? init : {});
   const [inputsError, setInputsError] = useState({});
 
   useEffect(() => {
@@ -91,7 +93,7 @@ const DetailsBanners = ({}) => {
   }, [newItem]);
 
   const handleBackToList = () => {
-    navigate(`/B2B-banners`);
+    navigate(`/B2C-banners`);
   };
 
   const formItemChangeHandler = ({ target }, type) => {
@@ -118,13 +120,14 @@ const DetailsBanners = ({}) => {
 
   const saveData = () => {
     // TODO image and rest of base 64 repack if it is not a type URL
+
     const repackToSend = {
       ...newItem,
       priority: parseInt(newItem.priority),
     };
     try {
       createBanner(user.access_token, repackToSend);
-      handleBackToList();
+      //handleBackToList();
     } catch (error) {
       console.warn(error);
     }
@@ -167,59 +170,65 @@ const DetailsBanners = ({}) => {
 
   return (
     <>
-      <DetailsBasic
-        handleBackToList={handleBackToList}
-        list={<div />}
-        main={
-          <TwoColumnDetails
-            middle={
-              <>
-                {!isLoading ? (
-                  <Box component="form" autoComplete="off">
-                    {fields &&
-                      fields
-                        .filter(({ in_details }) => in_details)
-                        .map((item, index) => (
-                          <CreateForm
-                            data-test-id="B2B-banners-form"
-                            onChangeHandler={formItemChangeHandler}
-                            onImageUpload={formImageUpload}
-                            onImagePreview={formImagePreview}
-                            item={item}
-                            key={index}
-                            error={inputsError[item.prop_name]}
-                            value={
-                              Array.isArray(item) && newItem
-                                ? newItem[item.prop_name]
-                                : newItem[item.prop_name]
-                            }
-                          />
-                        ))}
-                  </Box>
-                ) : (
-                  <Stack spacing={1}>
-                    <Skeleton variant="text" height={60} />
-                    <Skeleton variant="text" height={60} />
+      <Box className={styles.details}>
+        <DetailsBasic
+          handleBackToList={handleBackToList}
+          list={
+            <h4 className={styles.title}>
+              {isEmpty(newItem.name) ? "Unos novog banera" : newItem.name}
+            </h4>
+          }
+          main={
+            <TwoColumnDetails
+              middle={
+                <>
+                  {!isLoading ? (
+                    <Box component="form" autoComplete="off">
+                      {fields &&
+                        fields
+                          .filter(({ in_details }) => in_details)
+                          .map((item, index) => (
+                            <CreateForm
+                              data-test-id="B2C-banners-form"
+                              onChangeHandler={formItemChangeHandler}
+                              onImageUpload={formImageUpload}
+                              onImagePreview={formImagePreview}
+                              item={item}
+                              key={index}
+                              error={inputsError[item.prop_name]}
+                              value={
+                                Array.isArray(item) && newItem
+                                  ? newItem[item.prop_name]
+                                  : newItem[item.prop_name]
+                              }
+                            />
+                          ))}
+                    </Box>
+                  ) : (
                     <Stack spacing={1}>
-                      <Skeleton variant="text" />
-                      <Skeleton variant="circular" width={40} height={40} />
-                      <Skeleton
-                        variant="rectangular"
-                        width={210}
-                        height={118}
-                      />
+                      <Skeleton variant="text" height={60} />
+                      <Skeleton variant="text" height={60} />
+                      <Stack spacing={1}>
+                        <Skeleton variant="text" />
+                        <Skeleton variant="circular" width={40} height={40} />
+                        <Skeleton
+                          variant="rectangular"
+                          width={210}
+                          height={118}
+                        />
+                      </Stack>
+                      <Skeleton variant="text" height={60} />
                     </Stack>
-                    <Skeleton variant="text" height={60} />
-                  </Stack>
-                )}
-              </>
-            }
-            right={<ImagePreview imagePreviewList={imagePreviewList} />}
-            onSubmit={onSubmit}
-            buttonText="Sacuvaj"
-          />
-        }
-      />
+                  )}
+                </>
+              }
+              right={<ImagePreview imagePreviewList={imagePreviewList} />}
+              onSubmit={onSubmit}
+              buttonText="Sacuvaj"
+            />
+          }
+        />
+      </Box>
       {false && (
         <Stack sx={{ width: "100%" }}>
           <Alert severity="error">
@@ -231,4 +240,4 @@ const DetailsBanners = ({}) => {
   );
 };
 
-export default DetailsBanners;
+export default DetailsBannersB2C;

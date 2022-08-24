@@ -22,6 +22,8 @@ import { useQuery } from "react-query";
 import { getDetailsB2Bbanners, createBanner } from "../services";
 import ImagePreview from "../../../components/shared/ImagePreview/ImagePreview";
 
+import styles from "./DetailsBanners.module.scss";
+
 const DetailsBanners = ({}) => {
   const { B2BId } = useParams();
   const navigate = useNavigate();
@@ -124,7 +126,7 @@ const DetailsBanners = ({}) => {
     };
     try {
       createBanner(user.access_token, repackToSend);
-      handleBackToList();
+      //handleBackToList();
     } catch (error) {
       console.warn(error);
     }
@@ -167,63 +169,69 @@ const DetailsBanners = ({}) => {
 
   return (
     <>
-      <DetailsBasic
-        handleBackToList={handleBackToList}
-        list={<div />}
-        main={
-          <TwoColumnDetails
-            middle={
-              <>
-                {!isLoading ? (
-                  <Box component="form" autoComplete="off">
-                    {fields &&
-                      fields
-                        .filter(({ in_details }) => in_details)
-                        .map((item, index) => (
-                          <CreateForm
-                            data-test-id="B2B-banners-form"
-                            onChangeHandler={formItemChangeHandler}
-                            onImageUpload={formImageUpload}
-                            onImagePreview={formImagePreview}
-                            item={item}
-                            key={index}
-                            error={inputsError[item.prop_name]}
-                            value={
-                              Array.isArray(item) && newItem
-                                ? newItem[item.prop_name]
-                                : newItem[item.prop_name]
-                            }
-                          />
-                        ))}
-                  </Box>
-                ) : (
-                  <Stack spacing={1}>
-                    <Skeleton variant="text" height={60} />
-                    <Skeleton variant="text" height={60} />
+      <Box className={styles.details}>
+        <DetailsBasic
+          handleBackToList={handleBackToList}
+          list={
+            <h4 className={styles.title}>
+              {isEmpty(newItem.name) ? "Unos novog banera" : newItem.name}
+            </h4>
+          }
+          main={
+            <TwoColumnDetails
+              middle={
+                <>
+                  {!isLoading ? (
+                    <Box component="form" autoComplete="off">
+                      {fields &&
+                        fields
+                          .filter(({ in_details }) => in_details)
+                          .map((item, index) => (
+                            <CreateForm
+                              data-test-id="B2B-banners-form"
+                              onChangeHandler={formItemChangeHandler}
+                              onImageUpload={formImageUpload}
+                              onImagePreview={formImagePreview}
+                              item={item}
+                              key={index}
+                              error={inputsError[item.prop_name]}
+                              value={
+                                Array.isArray(item) && newItem
+                                  ? newItem[item.prop_name]
+                                  : newItem[item.prop_name]
+                              }
+                            />
+                          ))}
+                    </Box>
+                  ) : (
                     <Stack spacing={1}>
-                      <Skeleton variant="text" />
-                      <Skeleton variant="circular" width={40} height={40} />
-                      <Skeleton
-                        variant="rectangular"
-                        width={210}
-                        height={118}
-                      />
+                      <Skeleton variant="text" height={60} />
+                      <Skeleton variant="text" height={60} />
+                      <Stack spacing={1}>
+                        <Skeleton variant="text" />
+                        <Skeleton variant="circular" width={40} height={40} />
+                        <Skeleton
+                          variant="rectangular"
+                          width={210}
+                          height={118}
+                        />
+                      </Stack>
+                      <Skeleton variant="text" height={60} />
                     </Stack>
-                    <Skeleton variant="text" height={60} />
-                  </Stack>
-                )}
-              </>
-            }
-            right={<ImagePreview imagePreviewList={imagePreviewList} />}
-            onSubmit={onSubmit}
-            buttonText="Sacuvaj"
-          />
-        }
-      />
+                  )}
+                </>
+              }
+              right={<ImagePreview imagePreviewList={imagePreviewList} />}
+              onSubmit={onSubmit}
+              buttonText="Sačuvaj"
+            />
+          }
+        />
+      </Box>
       {false && (
         <Stack sx={{ width: "100%" }}>
           <Alert severity="error">
-            Doslo je do greske. Molim Vas pokusajte kasnije.
+            Došlo je do greške. Molim Vas pokušajte kasnije.
           </Alert>
         </Stack>
       )}
