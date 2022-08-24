@@ -72,10 +72,9 @@ const AddRoleModal = ({ openModal, handleClose, saveRole }) => {
             <Modal.Body>
                 <div className="row">
                     <div className="col-xl-6">
-                        <Accordion defaultActiveKey="0">
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faPeopleArrows} />Podaci uloge:</Accordion.Header>
-                                <Accordion.Body>
+                        <div className="orders-item-holder">
+                            <h5>Podaci uloge:</h5>
+                                <div className="buyers">
                                     <Input
                                         inputValue={nameValue}
                                         onInputChange={nameChangeHandler}
@@ -89,27 +88,22 @@ const AddRoleModal = ({ openModal, handleClose, saveRole }) => {
                                         text_class="m-0 required"
                                         inputErrorText="je obavezan!"
                                     />
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
+                                </div>
+                            </div>
                     </div>
                     <div className="col-xl-6">
-                        <Accordion defaultActiveKey="1">
-                            <Accordion.Item eventKey="1">
-                                <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faDesktop} />Ekrani za ulogu:</Accordion.Header>
-                                <Accordion.Body>
-                                    <div className="row screens-wrapper">
-                                        <p className="m-0 required form-control-label">Lista Ekrana:</p>
-                                        { referenceData.screens !== undefined && ( referenceData.screens.map(function(object) {
-                                        return  <Form.Group key={object.id} className="remember-checkbox" controlId="formBasicCheckbox5">
-                                                    <Form.Check id={object.id} type="checkbox" label={object.screen} onChange={() => checkScreen(object.id)}/>
-                                                </Form.Group>;
-                                        }))}
+                        <div className="orders-item-holder">
+                            <h5>Ekrani za ulogu:</h5>
+                                <div className="row screens-wrapper buyers">
+                                    <p className="m-0 required form-control-label">Lista Ekrana:</p>
+                                    { referenceData.screens !== undefined && ( referenceData.screens.map(function(object) {
+                                    return  <Form.Group key={object.id} className="remember-checkbox" controlId="formBasicCheckbox5">
+                                                <Form.Check id={object.id} type="checkbox" label={object.screen} onChange={() => checkScreen(object.id)}/>
+                                            </Form.Group>;
+                                    }))}
 
-                                    </div>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
+                                </div>
+                            </div>
                     </div>
                 </div>
             </Modal.Body>
