@@ -88,7 +88,7 @@
 $arrow-black: url("data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27 fill=%27%23212529%27%3e%3cpath fill-rule=%27evenodd%27 d=%27M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z%27/%3e%3c/svg%3e");
 
 body {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Montserrat", sans-serif !important;
   font-weight: 400 !important;
 }
 .router-container {
@@ -118,7 +118,7 @@ body {
   color: var(--third-color);
   border-radius: 0.25rem;
   line-height: 0px;
-  font-size: .9rem;
+  font-size: 0.9rem;
 }
 .login-form-control {
   border-color: var(--login-forms-border);
@@ -430,7 +430,7 @@ a {
     box-shadow: unset;
     border: 1px solid #ced4da;
     outline: unset;
-    border-radius: .25rem;
+    border-radius: 0.25rem;
     border-color: var(--forms-border);
     background-color: var(--forms-bg);
     color: var(--third-color);
@@ -1384,7 +1384,7 @@ a[data-toggle="collapse"] {
 #roles-page.card {
   word-wrap: break-word;
   background: var(--bg-color);
-  //padding: 1.5rem;
+  padding: 1.5rem;
   height: 100%;
   border-radius: 5px;
   border: 1px solid var(--bg-color);
@@ -1802,7 +1802,7 @@ a[data-toggle="collapse"] {
   text-align: center;
   border: 0.0625rem dashed #0000;
   border-color: var(--forms-border);
-  border-radius: .25rem;
+  border-radius: 0.25rem;
   padding: 1.5rem 0;
 }
 .no-img-container img {
@@ -2175,7 +2175,3 @@ a[data-toggle="collapse"] {
 .orders-item-holder .buyers {
   padding: 1rem;
 }
-
-
-
-
