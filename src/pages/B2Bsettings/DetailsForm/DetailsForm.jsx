@@ -218,7 +218,6 @@ const DetailsForm = ({}) => {
   const handleDeleteImage = (imageName) => {
     setNewItem({ ...newItem, [imageName]: "DELETE" });
   };
-  console.log(detailsList);
   return (
     <>
       <Box className={styles.details}>

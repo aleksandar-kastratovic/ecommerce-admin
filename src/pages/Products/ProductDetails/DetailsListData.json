@@ -1,7 +1,7 @@
 {
   "description": "",
   "module": "presentation",
-  "name": "Admin forme",
+  "name": "Product details",
   "submodules": [
     {
       "name": "Osnovne informacije",
@@ -10,7 +10,7 @@
     },
     {
       "name": "Deklaracija",
-      "slug": "description"
+      "slug": "declaration"
     },
     {
       "name": "Seo",
@@ -19,7 +19,7 @@
     },
     {
       "name": "Opis",
-      "slug": "declaration",
+      "slug": "description",
       "description": ""
     },
     {
