@@ -39,6 +39,7 @@ import DetailsBannersB2C from "./pages/B2Cbanners/DetailsBanners/DetailsBannersB
 import Params from "./pages/Params/Params";
 import B2CSettings from "./pages/B2CSettings/B2CSettings";
 import DetailsParams from "./pages/Params/DetailsParams/DetailsParams";
+import Products from "./pages/Products/Products";
 
 function App() {
   const queryClient = new QueryClient();
@@ -254,9 +255,7 @@ function App() {
                         <Route
                           key={screen.screen_code}
                           path="/products"
-                          element={
-                            <ProductsPage routeData={screensData.PRODU} />
-                          }
+                          element={<Products routeData={screensData.PRODU} />}
                         >
                           <Route path=":prodId" element={<ProductsPage />} />
                         </Route>
