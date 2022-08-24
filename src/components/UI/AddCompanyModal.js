@@ -274,360 +274,344 @@ const AddCompanyModal = ({ openModal, handleClose, saveCompany }) => {
             <Modal.Body>
                 <div className="row">
                     <div className="col-xl-12">
-                        <Accordion defaultActiveKey="0">
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faCity} />Podaci o kompaniji:</Accordion.Header>
-                                <Accordion.Body>
-                                    <div className="row">
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={companyValue}
-                                                onInputChange={companyChangeHandler}
-                                                onInputBlur={companyBlurHandler}
-                                                hasInputError={companyHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg " + (companyHasError ? 'invalid' : '')}
-                                                text="Naziv firme"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezan!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={tinValue}
-                                                onInputChange={tinChangeHandler}
-                                                onInputBlur={tinBlurHandler}
-                                                hasInputError={tinHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="number"
-                                                class={"form-control input-style form-control-lg " + (tinHasError ? 'invalid' : '')}
-                                                text="PIB"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezan!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={registryNumberValue}
-                                                onInputChange={registryNumberChangeHandler}
-                                                onInputBlur={registryNumberBlurHandler}
-                                                hasInputError={registryNumberHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="number"
-                                                class={"form-control input-style form-control-lg " + (registryNumberHasError ? 'invalid' : '')}
-                                                text="MB"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezan!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={emailValue}
-                                                onInputChange={emailChangeHandler}
-                                                onInputBlur={emailBlurHandler}
-                                                hasInputError={emailHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
-                                                text="Email"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezan!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={phoneValue}
-                                                onInputChange={phoneChangeHandler}
-                                                onInputBlur={phoneBlurHandler}
-                                                hasInputError={phoneHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg " + (phoneHasError ? 'invalid' : '')}
-                                                text="Telefon"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezan!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={mobilePhoneValue}
-                                                onInputChange={mobilePhoneChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class="form-control input-style form-control-lg "
-                                                text="Mobilni telefon"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={accountValue}
-                                                onInputChange={accountChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class="form-control input-style form-control-lg "
-                                                text="Račun"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={dayPeymentValue}
-                                                onInputChange={dayPeymentChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="number"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="Broj dana za plaćanje"
-                                                text_class="m-0"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={creditLimitValue}
-                                                onInputChange={creditLimitChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="number"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="Kreditni limit"
-                                                text_class="m-0"
-                                            />
-                                        </div>
-                                    </div>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
+                    <div className="orders-item-holder">
+                        <h5>Podaci o kompaniji:</h5>
+                            <div className="row buyers">
+                                <div className="col-6">
+                                    <Input
+                                        inputValue={companyValue}
+                                        onInputChange={companyChangeHandler}
+                                        onInputBlur={companyBlurHandler}
+                                        hasInputError={companyHasError}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="text"
+                                        class={"form-control input-style form-control-lg " + (companyHasError ? 'invalid' : '')}
+                                        text="Naziv firme"
+                                        text_class="m-0 required"
+                                        inputErrorText="je obavezan!"
+                                    />
+                                </div>
+                                <div className="col-6">
+                                    <Input
+                                        inputValue={tinValue}
+                                        onInputChange={tinChangeHandler}
+                                        onInputBlur={tinBlurHandler}
+                                        hasInputError={tinHasError}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="number"
+                                        class={"form-control input-style form-control-lg " + (tinHasError ? 'invalid' : '')}
+                                        text="PIB"
+                                        text_class="m-0 required"
+                                        inputErrorText="je obavezan!"
+                                    />
+                                </div>
+                                <div className="col-6">
+                                    <Input
+                                        inputValue={registryNumberValue}
+                                        onInputChange={registryNumberChangeHandler}
+                                        onInputBlur={registryNumberBlurHandler}
+                                        hasInputError={registryNumberHasError}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="number"
+                                        class={"form-control input-style form-control-lg " + (registryNumberHasError ? 'invalid' : '')}
+                                        text="MB"
+                                        text_class="m-0 required"
+                                        inputErrorText="je obavezan!"
+                                    />
+                                </div>
+                                <div className="col-6">
+                                    <Input
+                                        inputValue={emailValue}
+                                        onInputChange={emailChangeHandler}
+                                        onInputBlur={emailBlurHandler}
+                                        hasInputError={emailHasError}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="text"
+                                        class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
+                                        text="Email"
+                                        text_class="m-0 required"
+                                        inputErrorText="je obavezan!"
+                                    />
+                                </div>
+                                <div className="col-6">
+                                    <Input
+                                        inputValue={phoneValue}
+                                        onInputChange={phoneChangeHandler}
+                                        onInputBlur={phoneBlurHandler}
+                                        hasInputError={phoneHasError}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="text"
+                                        class={"form-control input-style form-control-lg " + (phoneHasError ? 'invalid' : '')}
+                                        text="Telefon"
+                                        text_class="m-0 required"
+                                        inputErrorText="je obavezan!"
+                                    />
+                                </div>
+                                <div className="col-6">
+                                    <Input
+                                        inputValue={mobilePhoneValue}
+                                        onInputChange={mobilePhoneChangeHandler}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="text"
+                                        class="form-control input-style form-control-lg "
+                                        text="Mobilni telefon"
+                                    />
+                                </div>
+                                <div className="col-6">
+                                    <Input
+                                        inputValue={accountValue}
+                                        onInputChange={accountChangeHandler}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="text"
+                                        class="form-control input-style form-control-lg "
+                                        text="Račun"
+                                    />
+                                </div>
+                                <div className="col-6">
+                                    <Input
+                                        inputValue={dayPeymentValue}
+                                        onInputChange={dayPeymentChangeHandler}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="number"
+                                        class={"form-control input-style form-control-lg"}
+                                        text="Broj dana za plaćanje"
+                                        text_class="m-0"
+                                    />
+                                </div>
+                                <div className="col-6">
+                                    <Input
+                                        inputValue={creditLimitValue}
+                                        onInputChange={creditLimitChangeHandler}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="number"
+                                        class={"form-control input-style form-control-lg"}
+                                        text="Kreditni limit"
+                                        text_class="m-0"
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="col-xl-6">
-                        <Accordion defaultActiveKey="0">
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faMoneyCheckAlt} />Podaci o naplati:</Accordion.Header>
-                                <Accordion.Body>
-                                    <div className="row">
-                                        <div className="col-12">
-                                            <Input
-                                                inputValue={billingAddressValue}
-                                                onInputChange={billingAddressChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="Adresa naplate"
-                                                text_class="m-0"
-                                            />
-                                        </div>
-                                        <div className="col-12">
-                                            <Input
-                                                inputValue={billingCityValue}
-                                                onInputChange={billingCityChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="Grad naplate"
-                                                text_class="m-0"
-                                            />
-                                        </div>
-                                        <div className="col-12">
-                                            <Input
-                                                inputValue={billingStateValue}
-                                                onInputChange={billingStateChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="Stanje naplate"
-                                                text_class="m-0"
-                                            />
-                                        </div>
-                                        <div className="col-12">
-                                            <Input
-                                                inputValue={billingZipValue}
-                                                onInputChange={billingZipChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="number"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="ZIP naplate"
-                                                text_class="m-0"
-                                            />
-                                        </div>
-                                        <div className="col-12">
-                                            <Input
-                                                inputValue={billingCountryValue}
-                                                onInputChange={billingCountryChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="Zemlja naplate"
-                                                text_class="m-0"
-                                            />
-                                        </div>
-                                    </div>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
+                        <div className="orders-item-holder">
+                            <h5>Podaci o naplati:</h5>
+                            <div className="row buyers">
+                                <div className="col-12">
+                                    <Input
+                                        inputValue={billingAddressValue}
+                                        onInputChange={billingAddressChangeHandler}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="text"
+                                        class={"form-control input-style form-control-lg"}
+                                        text="Adresa naplate"
+                                        text_class="m-0"
+                                    />
+                                </div>
+                                <div className="col-12">
+                                    <Input
+                                        inputValue={billingCityValue}
+                                        onInputChange={billingCityChangeHandler}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="text"
+                                        class={"form-control input-style form-control-lg"}
+                                        text="Grad naplate"
+                                        text_class="m-0"
+                                    />
+                                </div>
+                                <div className="col-12">
+                                    <Input
+                                        inputValue={billingStateValue}
+                                        onInputChange={billingStateChangeHandler}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="text"
+                                        class={"form-control input-style form-control-lg"}
+                                        text="Stanje naplate"
+                                        text_class="m-0"
+                                    />
+                                </div>
+                                <div className="col-12">
+                                    <Input
+                                        inputValue={billingZipValue}
+                                        onInputChange={billingZipChangeHandler}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="number"
+                                        class={"form-control input-style form-control-lg"}
+                                        text="ZIP naplate"
+                                        text_class="m-0"
+                                    />
+                                </div>
+                                <div className="col-12">
+                                    <Input
+                                        inputValue={billingCountryValue}
+                                        onInputChange={billingCountryChangeHandler}
+                                        disabled={false}
+                                        inputType="input"
+                                        type="text"
+                                        class={"form-control input-style form-control-lg"}
+                                        text="Zemlja naplate"
+                                        text_class="m-0"
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div className="col-xl-6">
-                        <Accordion defaultActiveKey="0">
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faTruck} />Podaci o dostavi:</Accordion.Header>
-                                <Accordion.Body>
-                                    <div className="row">
-                                        <div className="col-12">
-                                            <Input
-                                                inputValue={shippingAddressValue}
-                                                onInputChange={shippingAddressChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="Adresa dostave"
-                                                text_class="m-0"
-                                            />
-                                        </div>
-                                        <div className="col-12">
-                                            <Input
-                                                inputValue={shippingCityValue}
-                                                onInputChange={shippingCityChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="Grad dostave"
-                                            />
-                                        </div>
-                                        <div className="col-12">
-                                            <Input
-                                                inputValue={shippingStateValue}
-                                                onInputChange={shippingStateChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="Region dostave"
-                                                text_class="m-0"
-                                            />
-                                        </div>
-                                        <div className="col-12">
-                                            <Input
-                                                inputValue={shippingZipValue}
-                                                onInputChange={shippingZipChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="number"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="ZIP dostave"
-                                                text_class="m-0"
-                                            />
-                                        </div>
-                                        <div className="col-12">
-                                            <Input
-                                                inputValue={shippingCountryValue}
-                                                onInputChange={shippingCountryChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg"}
-                                                text="Zemlja dostave"
-                                                text_class="m-0"
-                                            />
-                                        </div>
+                        <div className="orders-item-holder">
+                            <h5>Podaci o dostavi:</h5>
+                                <div className="row buyers">
+                                    <div className="col-12">
+                                        <Input
+                                            inputValue={shippingAddressValue}
+                                            onInputChange={shippingAddressChangeHandler}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg"}
+                                            text="Adresa dostave"
+                                            text_class="m-0"
+                                        />
                                     </div>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
+                                    <div className="col-12">
+                                        <Input
+                                            inputValue={shippingCityValue}
+                                            onInputChange={shippingCityChangeHandler}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg"}
+                                            text="Grad dostave"
+                                        />
+                                    </div>
+                                    <div className="col-12">
+                                        <Input
+                                            inputValue={shippingStateValue}
+                                            onInputChange={shippingStateChangeHandler}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg"}
+                                            text="Region dostave"
+                                            text_class="m-0"
+                                        />
+                                    </div>
+                                    <div className="col-12">
+                                        <Input
+                                            inputValue={shippingZipValue}
+                                            onInputChange={shippingZipChangeHandler}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="number"
+                                            class={"form-control input-style form-control-lg"}
+                                            text="ZIP dostave"
+                                            text_class="m-0"
+                                        />
+                                    </div>
+                                    <div className="col-12">
+                                        <Input
+                                            inputValue={shippingCountryValue}
+                                            onInputChange={shippingCountryChangeHandler}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg"}
+                                            text="Zemlja dostave"
+                                            text_class="m-0"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                     <div className="col-xl-12">
-                        <Accordion defaultActiveKey="0">
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faFileInvoiceDollar} />Podaci o plaćanju:</Accordion.Header>
-                                <Accordion.Body>
-                                    <div className="row">
-                                        <div className="col-6">
-                                            <Input
-                                                value={statusValue}
-                                                isMulti={false}
-                                                handleChange={statusChanged}
-                                                disabled={false}
-                                                data={referenceData.customer_status ?? []}
-                                                inputType="select-react"
-                                                type="text"
-                                                class="form-control input-style form-control-lg select-style"
-                                                text="Status kupca"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                value={priceListValue}
-                                                isMulti={false}
-                                                handleChange={priceListChanged}
-                                                disabled={false}
-                                                data={referenceData.customer_price_list ?? []}
-                                                inputType="select-react"
-                                                type="text"
-                                                class="form-control input-style form-control-lg select-style"
-                                                text="Cenovnik"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                value={transportValue}
-                                                isMulti={false}
-                                                handleChange={transportChanged}
-                                                disabled={false}
-                                                data={referenceData.customer_transport ?? []}
-                                                inputType="select-react"
-                                                type="text"
-                                                class="form-control input-style form-control-lg select-style"
-                                                text="Transport"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={rabatValue}
-                                                onInputChange={rabatChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="number"
-                                                class="form-control input-style form-control-lg "
-                                                text="Rabat"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={nonInvoiceRabatValue}
-                                                onInputChange={nonInvoiceRabatChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="number"
-                                                class="form-control input-style form-control-lg "
-                                                text="Vanfakturni rabati"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={expectedDelayValue}
-                                                onInputChange={expectedDelayChangeHandler}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="number"
-                                                class="form-control input-style form-control-lg "
-                                                text="Očekivano kašnjenje u plaćanju"
-                                            />
-                                        </div>
+                        <div className="orders-item-holder">
+                            <h5>Podaci o plaćanju:</h5>
+                                <div className="row buyers">
+                                    <div className="col-6">
+                                        <Input
+                                            value={statusValue}
+                                            isMulti={false}
+                                            handleChange={statusChanged}
+                                            disabled={false}
+                                            data={referenceData.customer_status ?? []}
+                                            inputType="select-react"
+                                            type="text"
+                                            class="form-control input-style form-control-lg select-style"
+                                            text="Status kupca"
+                                        />
                                     </div>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
+                                    <div className="col-6">
+                                        <Input
+                                            value={priceListValue}
+                                            isMulti={false}
+                                            handleChange={priceListChanged}
+                                            disabled={false}
+                                            data={referenceData.customer_price_list ?? []}
+                                            inputType="select-react"
+                                            type="text"
+                                            class="form-control input-style form-control-lg select-style"
+                                            text="Cenovnik"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            value={transportValue}
+                                            isMulti={false}
+                                            handleChange={transportChanged}
+                                            disabled={false}
+                                            data={referenceData.customer_transport ?? []}
+                                            inputType="select-react"
+                                            type="text"
+                                            class="form-control input-style form-control-lg select-style"
+                                            text="Transport"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={rabatValue}
+                                            onInputChange={rabatChangeHandler}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="number"
+                                            class="form-control input-style form-control-lg "
+                                            text="Rabat"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={nonInvoiceRabatValue}
+                                            onInputChange={nonInvoiceRabatChangeHandler}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="number"
+                                            class="form-control input-style form-control-lg "
+                                            text="Vanfakturni rabati"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={expectedDelayValue}
+                                            onInputChange={expectedDelayChangeHandler}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="number"
+                                            class="form-control input-style form-control-lg "
+                                            text="Očekivano kašnjenje u plaćanju"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                 </div>
             </Modal.Body>
