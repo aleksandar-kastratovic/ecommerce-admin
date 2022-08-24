@@ -1,4 +1,4 @@
-@import "../../../variables.scss";
+@import "../../../../variables.scss";
 
 .title {
   font-weight: bold !important;
@@ -6,4 +6,26 @@
   margin: 0 !important;
   margin-top: 10px !important;
   margin-bottom: 60px !important;
+}
+
+.list {
+  & > ul {
+    & > div {
+      &:first-child {
+        margin: 5rem 1rem;
+        overflow: visible;
+        white-space: nowrap;
+      }
+    }
+    li {
+      background-color: var(--main-bg-color);
+      &:hover {
+        background-color: var(--main-color);
+        color: white;
+      }
+      &.Mui-selected {
+        background-color: var(--main-color);
+      }
+    }
+  }
 }

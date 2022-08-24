@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,6 +18,9 @@ import fields from "./DetailsFields.json";
 import CreateForm from "../../../components/shared/Form/CreateForm";
 import TwoColumnDetails from "../../../components/shared/Layout/Details/TwoColumnDetails/TwoColumnDetails";
 import SetFormFields from "./SetFormFields/SetFormFields";
+import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
+
+import detailsFields from "./DetailsListFields.json";
 
 const DetailsAdminForm = () => {
   const { FormId } = useParams();
@@ -41,6 +44,7 @@ const DetailsAdminForm = () => {
   const [formFields, setFormFields] = useState([]);
   const [inputsError, setInputsError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [main, setMain] = useState();
 
   const handleBackToList = () => {
     navigate(`/admin-form`);
@@ -127,7 +131,7 @@ const DetailsAdminForm = () => {
     }
   }, [selected]);
 
-  const getDisplayed = () => {
+  const getDisplayed = (selected) => {
     switch (selected) {
       case "info":
         return (
@@ -179,14 +183,33 @@ const DetailsAdminForm = () => {
                     />
                   );
                 })}
+            <Button>Sačuvaj</Button>
           </Box>
         );
     }
   };
 
+  const onChangeSelected = (selected) => {
+    setMain(getDisplayed(selected));
+  };
+
   return (
     <>
-      <Box className={styles.details}>
+      <DetailsPage
+        title="Admin forme"
+        backButton={true}
+        backPath="/admin-form"
+        hasList={true}
+        isLoadingList={false}
+        isErrorList={false}
+        detailsList={detailsList}
+        defaultSelected={selected}
+        fields={detailsFields}
+        onChangeSelected={onChangeSelected}
+        main={main}
+      />
+
+      {/* <Box className={styles.details}>
         <DetailsBasic
           handleBackToList={handleBackToList}
           list={
@@ -228,7 +251,7 @@ const DetailsAdminForm = () => {
             />
           }
         />
-      </Box>
+      </Box> */}
     </>
   );
 };
