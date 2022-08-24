@@ -1,21 +1,19 @@
-import { useRef } from "react";
-import DetailsBasic from "../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
+import NoteBox from "../../components/shared/NoteBox/NoteBox"
 
-/** Show an upload form for the import file. */
-const ImportStep1 = () => {
+/**
+ * Show an upload form for the import file.
+ *
+ * @param {*} fileInputRef The value of the useFileInput() hook.
+ *
+ * @return {JSX.Element}
+ * @constructor
+ */
+const ImportStep1 = ({ fileInputRef }) => (
+  <label className="wide clickable">
+    <NoteBox message="Kliknite ovde kako biste odabrali fajl za import." />
 
-  // Handle uploaded file
-  const inputElement = useRef();
-  inputElement.current?.addListener
+    <input ref={fileInputRef} type="file" style={{ display: "none" }} />
+  </label>
+)
 
-  return (
-    <DetailsBasic title="Import kataloga">
-      <label className="clickable">
-        Kliknite ovde kako biste odabrali fajl za import
-        <input ref={inputElement} type="file" style={{ display: "none" }} />
-      </label>
-    </DetailsBasic>
-  );
-};
-
-export default ImportStep1;
+export default ImportStep1
