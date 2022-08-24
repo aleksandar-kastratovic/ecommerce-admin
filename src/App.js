@@ -40,6 +40,7 @@ import Params from "./pages/Params/Params";
 import B2CSettings from "./pages/B2CSettings/B2CSettings";
 import DetailsParams from "./pages/Params/DetailsParams/DetailsParams";
 import Products from "./pages/Products/Products";
+import ProductDetails from "./pages/Products/ProductDetails/ProductDetails";
 
 function App() {
   const queryClient = new QueryClient();
@@ -252,12 +253,16 @@ function App() {
                     }
                     if (screen.screen_code === screensData.PRODU.screen_code) {
                       return (
-                        <Route
-                          key={screen.screen_code}
-                          path="/products"
-                          element={<Products routeData={screensData.PRODU} />}
-                        >
-                          <Route path=":prodId" element={<ProductsPage />} />
+                        <Route key={screen.screen_code}>
+                          <Route
+                            key={screen.screen_code}
+                            path="/products"
+                            element={<Products routeData={screensData.PRODU} />}
+                          />
+                          <Route
+                            path="/products/:prodId"
+                            element={<ProductDetails />}
+                          />
                         </Route>
                       );
                     }

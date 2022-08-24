@@ -1,7 +1,7 @@
 @import "~bootstrap/scss/bootstrap.scss";
 @import "react-bootstrap-table-next/dist/react-bootstrap-table2.min.css";
 @import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap");
 @import "react-dropdown-tree-select/dist/styles.css";
 
 .theme-light {
@@ -89,6 +89,7 @@ $arrow-black: url("data:image/svg+xml,%3csvg xmlns=%27http://www.w3.org/2000/svg
 
 body {
   font-family: "Montserrat", sans-serif;
+  font-weight: 400 !important;
 }
 .router-container {
   padding-left: 90px;
@@ -115,6 +116,9 @@ body {
   border-color: var(--forms-border);
   background-color: var(--forms-bg);
   color: var(--third-color);
+  border-radius: 0.25rem;
+  line-height: 0px;
+  font-size: .9rem;
 }
 .login-form-control {
   border-color: var(--login-forms-border);
@@ -192,8 +196,8 @@ a {
       background-position: center;
     }
     label {
-      font-size: 0.875rem;
-      color: var(--third-color);
+      font-size: 16px;
+      color: var(--side-color);
     }
   }
 }
@@ -346,7 +350,7 @@ a {
     background: transparent;
     box-shadow: unset;
     border-color: var(--forms-border);
-    height: 48px;
+    height: 39.59px;
     border-radius: unset;
     color: var(--third-color);
   }
@@ -379,6 +383,7 @@ a {
   .tag-item .tag {
     background: transparent;
     border: unset;
+    line-height: 11px;
     color: var(--third-color);
   }
   .tag-remove {
@@ -419,13 +424,13 @@ a {
   }
   input.search {
     width: 100%;
-    height: 48px;
+    height: 39.59px;
     padding: 0.5rem 1rem;
     font-size: 1.25rem;
     box-shadow: unset;
     border: 1px solid #ced4da;
     outline: unset;
-    border-radius: unset;
+    border-radius: .25rem;
     border-color: var(--forms-border);
     background-color: var(--forms-bg);
     color: var(--third-color);
@@ -1151,10 +1156,10 @@ a[data-toggle="collapse"] {
   background: transparent;
   border: 1vw solid #fff;
   border-radius: 100%;
-  border-top-color: #df691a;
+  border-top-color: var(--main-color);
   width: 5vw;
   height: 5vw;
-  opacity: 0.6;
+  opacity: 1;
   padding: 0;
   position: absolute;
   z-index: 999;
@@ -1257,18 +1262,26 @@ a[data-toggle="collapse"] {
   flex-direction: column;
   .datails-tab-item {
     width: 100%;
-    padding: 0.5rem 0.75rem;
+    padding: 1rem 0.75rem;
     background-color: var(--tabs-bg);
     border: unset;
     color: var(--sidebar-bg-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-left: 3px solid transparent;
   }
   .datails-tab-item.active {
-    color: var(--white-side-color);
-    background-color: var(--main-color);
+    color: var(--sidebar-bg-color);
+    background-color: var(--bg-color);
+    border-left: 3px solid var(--main-color);
+    border-top: 1px solid #e3e3e3;
+    border-bottom: 1px solid #e3e3e3;
   }
+}
+.datails-tab-container {
+  padding: 1rem 0 1rem 1rem;
+  background-color: var(--tabs-bg);
 }
 .details-wrapper {
   padding: 2rem;
@@ -1789,7 +1802,7 @@ a[data-toggle="collapse"] {
   text-align: center;
   border: 0.0625rem dashed #0000;
   border-color: var(--forms-border);
-  border-radius: calc(var(--p-border-radius-base) + 0.125rem);
+  border-radius: .25rem;
   padding: 1.5rem 0;
 }
 .no-img-container img {
@@ -2009,7 +2022,7 @@ a[data-toggle="collapse"] {
   }
   p {
     font-size: 0.9375rem;
-    font-weight: 300;
+    font-weight: 400;
     margin-bottom: 0;
     color: var(--small-text-color);
   }
@@ -2069,7 +2082,8 @@ a[data-toggle="collapse"] {
   padding: unset;
 }
 .accordion-p-0-body {
-  padding: 1rem 1.25rem;
+  padding: 1rem;
+  padding-bottom: 0;
 }
 .order-details-page {
   ul {
@@ -2077,8 +2091,7 @@ a[data-toggle="collapse"] {
   }
 }
 .order-status-buttons {
-  padding: 0.75rem 1.25rem;
-  border-top: 1px solid var(--card-divader-color);
+  padding: 0 1.25rem;
   display: flex;
   justify-content: space-between;
   .btn-control.button-add {
@@ -2137,3 +2150,32 @@ a[data-toggle="collapse"] {
   }
 }
 /*--------------- ORDERS END ---------------*/
+.checkbox-style {
+  background-color: var(--dark-silver);
+}
+.orders-item-holder h5 {
+  font-weight: 400;
+  padding: 0.5rem;
+  font-size: 17px;
+  background-color: #ecf0fa;
+  border-radius: 0.25rem;
+}
+.orders-item-holder ul {
+  padding: 1rem;
+}
+.orders-item-holder {
+  margin-bottom: 2rem;
+}
+.orders-item-holder .order-items-accordion {
+  padding: 1rem;
+}
+.orders-item-holder .order-details-accordion {
+  padding: 1rem;
+}
+.orders-item-holder .buyers {
+  padding: 1rem;
+}
+
+
+
+

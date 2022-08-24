@@ -57,6 +57,12 @@ const ListPage = ({
     }
   }, [response]);
 
+  useEffect(() => {
+    if (response) {
+      setListData(response?.data?.payload);
+    }
+  }, []);
+
   const handleCreateNew = (e) => {
     navigate(newPath);
   };
