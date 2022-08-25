@@ -90,9 +90,7 @@ const ProductDetails = () => {
 
   const formItemChangeHandler = ({ target }, type) => {
     if (type === "date") {
-      let date = new Date(target.value);
-      let value = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
-      setData({ ...data, [target.name]: value });
+      setData({ ...data, [target.name]: formatDate(target.value) });
     } else if (type) {
       setData({ ...data, [target.name]: target.checked });
     } else {
