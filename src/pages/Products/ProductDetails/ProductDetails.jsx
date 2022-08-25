@@ -232,7 +232,7 @@ const ProductDetails = () => {
   const saveData = async () => {
     try {
       let repack = { ...inits[selected], ...data };
-      console.log(repack);
+
       if (prodId !== "new") {
         repack.id = prodId;
       }
