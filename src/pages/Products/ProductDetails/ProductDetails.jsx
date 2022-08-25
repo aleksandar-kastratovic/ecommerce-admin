@@ -27,12 +27,22 @@ import seo from "./forms/seo.json";
 import technical_doc from "./forms/tehnical_doc.json";
 import requiredFields from "./forms/requiredFields.json";
 
-import { getProductSlugData, postProductSlugData } from "../services";
+import {
+  getListProductSection,
+  getProductSlugData,
+  postProductSlugData,
+} from "../services";
 import List from "../../../components/shared/ListAdder/List";
 import { toast } from "react-toastify";
+import { formatDate } from "../../../helpers/dateFormat";
 
-const adderFields = ["prices", "inventories", "categories"];
-
+const adderFields = ["prices", "inventories", "categories", "seo"];
+const multipleImages = [
+  "gallery",
+  "technical_doc",
+  "certificate_doc",
+  "instruction_doc",
+];
 const ProductDetails = () => {
   const { prodId } = useParams();
   const { user } = useContext(AuthContext);
@@ -57,7 +67,7 @@ const ProductDetails = () => {
   const [formFields, setFormFields] = useState([]);
   const [inputsError, setInputsError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [main, setMain] = useState();
+  const [listFields, setListFields] = useState();
 
   const handleBackToList = () => {
     navigate(`/products`);
@@ -95,6 +105,24 @@ const ProductDetails = () => {
       setData({ ...data, [target.name]: target.checked });
     } else {
       setData({ ...data, [target.name]: target.value });
+    }
+  };
+
+  const handleListFields = async () => {
+    try {
+      let response = await getListProductSection(
+        user.access_token,
+        {
+          filter: prodId,
+        },
+        selected
+      );
+      setListFields(response?.data?.payload?.items);
+      setIsLoading(true);
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -168,8 +196,13 @@ const ProductDetails = () => {
         setFormFields(basic_data);
         break;
     }
+
     if (prodId !== "new") {
-      handleData();
+      if (adderFields.includes(selected) || multipleImages.includes(selected)) {
+        handleListFields();
+      } else {
+        handleData();
+      }
     }
   }, [selected]);
 
@@ -178,9 +211,9 @@ const ProductDetails = () => {
       return (
         <List
           key={selected}
-          listFields={[]}
+          listFields={listFields}
           formFields={formFields}
-          init={[]}
+          init={{}}
           onDelete={() => {}}
           required={requiredFields}
           onSave={onSubmit}
