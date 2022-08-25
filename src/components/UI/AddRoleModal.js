@@ -1,8 +1,6 @@
-import { Accordion, Form, Modal } from "react-bootstrap";
+import { Form, Modal } from "react-bootstrap";
 import useInput from "../../hooks/use-input";
 import Input from "./Input";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPeopleArrows, faDesktop } from '@fortawesome/free-solid-svg-icons'
 import { useContext, useState } from "react";
 import AuthContext from "../../store/auth-contex";
 import { toast } from 'react-toastify';
