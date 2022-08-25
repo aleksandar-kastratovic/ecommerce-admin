@@ -38,10 +38,9 @@ export const setParamData = async (token, data) => {
 };
 
 export const deleteParam = async (token, id) => {
-  
   return await axios({
     method: "DELETE",
-    url: `${api()}admin/params/${id}`,
+    url: `${api()}admin/params/main/${id}`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
