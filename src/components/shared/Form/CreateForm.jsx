@@ -193,6 +193,9 @@ const CreateForm = ({
             />
           );
           break;
+        case "MultipleImages":
+          formItem = <div>Test</div>;
+          break;
 
         default:
           formItem = null;
