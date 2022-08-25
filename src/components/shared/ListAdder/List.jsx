@@ -1,35 +1,23 @@
 import { Button } from "@mui/material";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../../store/auth-contex";
-import { deleteFormField } from "../../services";
-import SetFormField from "./SetFormFields/ListItem";
+import ListItem from "./ListItem";
 
-const List = ({ formFields = [], formId }) => {
-  const init = {
-    id: null,
-    admin_form_id: formId,
-    field_name: "",
-    prop_name: "",
-    input_type: "input",
-    subtitle: "",
-    in_main_table: false,
-    in_details: false,
-    disabled: false,
-    required: false,
-    sortable: false,
-    editable: false,
-    description: "",
-    ui_prop: "",
-    option_prop: "",
-    order: 0,
-  };
-  const [fields, setFields] = useState(formFields);
+const List = ({
+  listFields = [],
+  formFields = [],
+  init = {},
+  onDelete = () => {},
+  required = [],
+  onSave = () => {},
+}) => {
+  const [fields, setFields] = useState(listFields);
   const { user } = useContext(AuthContext);
 
   const deleteHandler = async (id, dataId) => {
     if (dataId !== null) {
       try {
-        await deleteFormField(user.access_token, dataId);
+        await onDelete(user.access_token, dataId);
       } catch (error) {
         console.warn(error);
       }
@@ -47,11 +35,14 @@ const List = ({ formFields = [], formId }) => {
       <Button onClick={addFieldHandler}>Add field</Button>
       {fields.map((field, index) => {
         return (
-          <SetFormField
-            key={field.id}
+          <ListItem
+            key={field.id !== null ? field.id : index + "new"}
             data={field}
             index={index}
             onDelete={deleteHandler}
+            saveData={onSave}
+            required={required}
+            formFields={formFields}
           />
         );
       })}

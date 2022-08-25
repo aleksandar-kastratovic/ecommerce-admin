@@ -25,6 +25,13 @@ import inventories from "./forms/inventories.json";
 import prices from "./forms/prices.json";
 import seo from "./forms/seo.json";
 import technical_doc from "./forms/tehnical_doc.json";
+import requiredFields from "./forms/requiredFields.json";
+
+import { getProductSlugData, postProductSlugData } from "../services";
+import List from "../../../components/shared/ListAdder/List";
+import { toast } from "react-toastify";
+
+const adderFields = ["prices", "inventories", "categories"];
 
 const ProductDetails = () => {
   const { prodId } = useParams();
@@ -62,12 +69,31 @@ const ProductDetails = () => {
     }
   };
 
-  const handleFormData = async () => {};
+  const handleData = async () => {
+    try {
+      let response = await getProductSlugData(
+        user.access_token,
+        prodId,
+        selected
+      );
+      let { payload } = response.data;
+      setData(payload);
+      setIsLoading(true);
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleFormFields = async () => {};
 
   const formItemChangeHandler = ({ target }, type) => {
-    if (type) {
+    if (type === "date") {
+      let date = new Date(target.value);
+      let value = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+      setData({ ...data, [target.name]: value });
+    } else if (type) {
       setData({ ...data, [target.name]: target.checked });
     } else {
       setData({ ...data, [target.name]: target.value });
@@ -75,19 +101,28 @@ const ProductDetails = () => {
   };
 
   const saveData = async () => {
-    console.log("test");
+    try {
+      let repack = { ...data };
+      if (prodId !== "new") {
+        repack.id = prodId;
+      }
+      let response = await postProductSlugData(
+        user.access_token,
+        repack,
+        selected
+      );
+      if (prodId === "new") handleBackToList();
+      toast.success("Uspešno dodati podaci!");
+    } catch (error) {
+      console.warn(error);
+    }
   };
 
   const onSubmit = () => {
     const errors = {};
     Object.keys(data).forEach((prop_name) => {
       if (isEmpty(data[prop_name])) {
-        if (
-          prop_name === "slug" ||
-          prop_name === "module" ||
-          prop_name === "method" ||
-          prop_name === "action_url"
-        )
+        if (requiredFields.includes(prop_name))
           errors[prop_name] = {
             content: "Polje je obavezno, molim vas unesite vrednost.",
           };
@@ -97,16 +132,6 @@ const ProductDetails = () => {
   };
 
   useEffect(() => {
-    if (prodId !== "new") {
-      handleFormData();
-    }
-  }, []);
-
-  useEffect(() => {
-    if (selected === "fields" && prodId !== "new") {
-      handleFormFields();
-    }
-    console.log(selected);
     switch (selected) {
       case "basic_data":
         setFormFields(basic_data);
@@ -145,13 +170,25 @@ const ProductDetails = () => {
         setFormFields(basic_data);
         break;
     }
+    if (prodId !== "new") {
+      handleData();
+    }
   }, [selected]);
 
-  useEffect(() => {
-    console.log(formFields);
-  }, [formFields]);
-
   const getDisplayed = () => {
+    if (adderFields.includes(selected)) {
+      return (
+        <List
+          key={selected}
+          listFields={[]}
+          formFields={formFields}
+          init={[]}
+          onDelete={() => {}}
+          required={requiredFields}
+          onSave={onSubmit}
+        />
+      );
+    }
     return (
       <Box component="form" autoComplete="off">
         {formFields &&
