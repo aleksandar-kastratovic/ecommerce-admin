@@ -19,6 +19,7 @@ const DetailsPage = ({
   fields = [],
   onChangeSelected = () => {},
   main,
+  isNewPage = false,
 }) => {
   const [selected, setSelected] = useState(defaultSelected);
   const navigate = useNavigate();
@@ -27,7 +28,7 @@ const DetailsPage = ({
   };
 
   const handleSelectInDetails = (module, slug) => {
-    setSelected(slug);
+    if (!isNewPage) setSelected(slug);
   };
 
   useEffect(() => {

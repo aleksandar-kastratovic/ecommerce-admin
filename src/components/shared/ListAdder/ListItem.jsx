@@ -1,20 +1,23 @@
 import { Delete } from "@mui/icons-material";
 import { Box } from "@mui/system";
-import { useContext, useState } from "react";
-import CreateForm from "../../Form/CreateForm";
+import { useState } from "react";
+import CreateForm from "../Form/CreateForm";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import DeleteDialog from "../../Dialogs/DeleteDialog";
-import { toast } from "react-toastify";
+import DeleteDialog from "../Dialogs/DeleteDialog";
 
-import fields from "./SetterFields.json";
 import styles from "./SetFormFields.module.scss";
 import { Button } from "@mui/material";
 import { isEmpty } from "lodash";
-import { saveFormField } from "../../services";
-import AuthContext from "../../../../store/auth-contex";
 
-const ListItem = ({ data, index, onDelete, saveData }) => {
+const ListItem = ({
+  data,
+  index,
+  onDelete = () => {},
+  saveData = () => {},
+  required = [],
+  formFields,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [fieldData, setFieldData] = useState(data);
   const [inputsError, setInputsError] = useState({});
@@ -29,9 +32,6 @@ const ListItem = ({ data, index, onDelete, saveData }) => {
     if (type) {
       setFieldData({ ...fieldData, [target.name]: target.checked });
     } else {
-      if (target.name === "admin_form_id") {
-        setFieldData({ ...fieldData, [target.name]: Number(target.value) });
-      }
       setFieldData({ ...fieldData, [target.name]: target.value });
     }
   };
@@ -52,7 +52,7 @@ const ListItem = ({ data, index, onDelete, saveData }) => {
         fieldData[prop_name] = fieldData[prop_name] ? 1 : 0;
       }
       if (isEmpty(fieldData[prop_name])) {
-        if (prop_name === "field_name") {
+        if (required.includes(prop_name)) {
           errors[prop_name] = {
             content: "Polje je obavezno, molim vas unesite vrednost.",
           };
@@ -65,7 +65,6 @@ const ListItem = ({ data, index, onDelete, saveData }) => {
   const handleCancel = () => {
     setOpenDeleteDialog({ show: false, id: null });
   };
-
   return (
     <div>
       <div className={styles.formFieldHeader}>
@@ -74,20 +73,20 @@ const ListItem = ({ data, index, onDelete, saveData }) => {
             setIsOpen(!isOpen);
           }}
         >
-          {fieldData.field_name}
+          {fieldData[0]}
           {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </div>
         <Delete className={styles.iconDelete} onClick={onClickDelete} />
       </div>
       {isOpen && (
         <Box component="form" autoComplete="off">
-          {fields &&
-            fields
+          {formFields &&
+            formFields
               .filter(({ in_details }) => in_details)
               .map((item, index) => {
                 return (
                   <CreateForm
-                    data-test-id="admin-form"
+                    data-test-id="form"
                     onChangeHandler={formItemChangeHandler}
                     item={item}
                     key={index}

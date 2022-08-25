@@ -91,8 +91,10 @@ const DetailsAdminForm = () => {
   };
 
   const saveData = async () => {
+    console.log("test");
     try {
       let response = await saveForm(user.access_token, data);
+      console.log(response);
       handleBackToList();
       toast.success("Uspešno uneta forma!");
     } catch (error) {
@@ -162,54 +164,13 @@ const DetailsAdminForm = () => {
         return <SetFormFields formFields={formFields} formId={data.id} />;
 
       default:
-        return (
-          <Box component="form" autoComplete="off">
-            {fields &&
-              fields
-                .filter(({ in_details }) => in_details)
-                .map((item, index) => {
-                  return (
-                    <CreateForm
-                      data-test-id="admin-form"
-                      onChangeHandler={formItemChangeHandler}
-                      item={item}
-                      key={index}
-                      error={inputsError[item.prop_name]}
-                      value={
-                        Array.isArray(item) && data
-                          ? data[item.prop_name]
-                          : data[item.prop_name]
-                      }
-                    />
-                  );
-                })}
-            <Button>Sačuvaj</Button>
-          </Box>
-        );
+        break;
     }
-  };
-
-  const onChangeSelected = (selected) => {
-    setMain(getDisplayed(selected));
   };
 
   return (
     <>
-      <DetailsPage
-        title="Admin forme"
-        backButton={true}
-        backPath="/admin-form"
-        hasList={true}
-        isLoadingList={false}
-        isErrorList={false}
-        detailsList={detailsList}
-        defaultSelected={selected}
-        fields={detailsFields}
-        onChangeSelected={onChangeSelected}
-        main={main}
-      />
-
-      {/* <Box className={styles.details}>
+      <Box className={styles.details}>
         <DetailsBasic
           handleBackToList={handleBackToList}
           list={
@@ -251,7 +212,7 @@ const DetailsAdminForm = () => {
             />
           }
         />
-      </Box> */}
+      </Box>
     </>
   );
 };

@@ -1,11 +1,12 @@
 import ListPage from "../../components/shared/ListPage/ListPage";
 
 import tblFields from "./ProductColumnFields.json";
+import { getListProducts } from "./services";
 
 const Products = () => {
   return (
     <ListPage
-      getData={() => {}}
+      getData={getListProducts}
       deleteData={() => {}}
       title="Proizvodi"
       showNewButton={true}
