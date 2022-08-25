@@ -43,6 +43,7 @@ const multipleImages = [
   "certificate_doc",
   "instruction_doc",
 ];
+
 let inits = {
   basic_data: {
     id: null,
