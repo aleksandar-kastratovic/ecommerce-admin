@@ -37,16 +37,17 @@ class ImportApiService {
   /**
    * Confirm import.
    *
-   * @param {boolean} commit True to apply immediately, false to get additional preview.
    * @param {string} uuid The UUID of the import to execute, as returned from the putProductsImport().
-   * @param {number} offset The number of rows to skip.
+   * @param {boolean} commit True to apply immediately, false to get additional preview.
    * @param {boolean} insert Set to true to insert all products that are not found.
+   * @param {number} offset The number of rows to skip.
    * @param {{}} map The chosen map for columns.
    *
    * @return {Promise<APIResponse>}
    */
-  postProductsImportExecute(commit, uuid, offset, insert, map) {
-    return this._execute("POST", "admin/products/import/execute", { commit, uuid, offset, insert, map })
+  postProductsImportExecute(uuid, insert, commit, offset, map) {
+    const params = { offset }
+    return this._execute("POST", "admin/products/import/execute", { uuid, commit, insert, params, map })
   }
 
   /**

@@ -70,7 +70,7 @@ const ImportStep2 = ({ filename, payload }) => {
     }
 
     // Send
-    api.postProductsImportExecute(true, uuid, offset, insert, map)
+    api.postProductsImportExecute(uuid, true, insert, offset, map)
       .catch(setError)
       .then(response => {
         setExecute(false)
