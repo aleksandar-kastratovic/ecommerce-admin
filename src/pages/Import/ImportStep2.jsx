@@ -1,5 +1,5 @@
 import { Check } from "@mui/icons-material"
-import { TableHead, TableBody, TableRow, FormControl, Select, MenuItem, TableCell, FormLabel } from "@mui/material"
+import { TableHead, TableBody, TableRow, FormControl, Select, MenuItem, TableCell, FormLabel, Checkbox } from "@mui/material"
 import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
@@ -27,7 +27,7 @@ const ImportStep2 = ({ filename, payload }) => {
   // Handle both error and success when uploading the file
   const [ error: { response: {} }, setError ] = useState()
   const [ response: {}, setResponse ] = useState()
-  const { uuid, preview, keys, options } = response?.payload ?? { preview: [], keys: [], options: [] }
+  const { uuid, preview, targets, columns } = response?.payload ?? { preview: [], keys: [], options: [] }
 
   // The selected mapping by the user
   const [ mapping, setMapping ] = useState({})
@@ -41,6 +41,7 @@ const ImportStep2 = ({ filename, payload }) => {
   }, [ filename, payload ])
 
   // Confirm import
+  const [ insert, setInsert ] = useState(false)
   const [ offset, setOffset ] = useState(1)
   const [ execute, setExecute ] = useState(false)
   const onSubmit = () => {
@@ -63,13 +64,18 @@ const ImportStep2 = ({ filename, payload }) => {
       toast.warning("Neophodno je odabrati jednu kolonu kao 'Jedinstveni broj' ili 'Šifra'")
       return setExecute(false)
     }
+    if (!map.name) {
+      toast.warning("Neophodno je odabrati jednu kolonu kao 'Naziv'")
+      return setExecute(false)
+    }
 
     // Send
-    api.postProductsImportExecute(true, uuid, offset, map)
+    api.postProductsImportExecute(true, uuid, offset, insert, map)
       .catch(setError)
       .then(response => {
-        toast.success(`Uspešno je uvezeno ${response.payload.rows.length} proizvoda`)
-        navigate("/products")
+        setExecute(false)
+        toast.success(`Uspešno je uveženo ${response.payload.rows.length} proizvoda`)
+        // navigate("/products")
       })
   }
 
@@ -97,10 +103,10 @@ const ImportStep2 = ({ filename, payload }) => {
             {/* The list of options to choose from */}
             <TableCell className="no-padding">
               <FormControl fullWidth size="small" style={{ padding: "5px 1em 5px 5px" }}>
-                <Select name={options[index]} value={mapping[options[index]] ?? ""} onChange={updateMapping}>
+                <Select name={columns[index]} value={mapping[columns[index]] ?? ""} onChange={updateMapping} label=" ">
                   <MenuItem value="">-</MenuItem>
-                  {keys.map(key =>
-                    <MenuItem key={key.value} value={key.value}>{key.label}</MenuItem>
+                  {targets.map(key =>
+                    <MenuItem key={key.code} value={key.code}>{key.name}</MenuItem>
                   )}
                 </Select>
               </FormControl>
@@ -122,6 +128,14 @@ const ImportStep2 = ({ filename, payload }) => {
     {/* Do not show button until ready */}
     {response?.success && (
       <Buttons>
+
+        {/* Create missing products */}
+        <FormControl size="small">
+          <FormLabel>Kreiraj nove proizvode</FormLabel>
+          <Checkbox checked={insert} onChange={event => setInsert(event.target.checked)} />
+        </FormControl>
+
+        {/* Skip starting rows */}
         <FormControl size="small">
           <FormLabel>Preskoči redova</FormLabel>
           <Select value={offset} onChange={event => setOffset(event.target.value)}>
@@ -131,6 +145,8 @@ const ImportStep2 = ({ filename, payload }) => {
             <MenuItem value={3}>3</MenuItem>
           </Select>
         </FormControl>
+
+        {/* Submit */}
         <Button icon={<Check />} label="Potvrdi uvoz" onClick={onSubmit} variant="contained" />
       </Buttons>
     )}
