@@ -30,14 +30,18 @@ const List = ({
     setFields([...fields, init]);
   };
 
+  useEffect(() => {
+    setFields(listFields);
+  }, []);
+
   return (
     <div>
       <Button onClick={addFieldHandler}>Add field</Button>
       {fields.map((field, index) => {
         return (
           <ListItem
-            key={field.id !== null ? field.id : index + "new"}
-            data={field}
+            key={field.id !== undefined ? field.id : `${index}new`}
+            data={listFields[index] !== undefined ? listFields[index] : field}
             index={index}
             onDelete={deleteHandler}
             saveData={onSave}
