@@ -36,3 +36,14 @@ export const postProductSlugData = async (token, data = {}, slug = "") => {
     data: data,
   });
 };
+
+export const getListProductSection = async (token, data = {}, slug = "") => {
+  return await axios({
+    method: "LIST",
+    url: `${api()}admin/productitems/${slug}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  });
+};

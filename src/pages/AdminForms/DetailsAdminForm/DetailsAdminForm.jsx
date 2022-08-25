@@ -133,7 +133,7 @@ const DetailsAdminForm = () => {
     }
   }, [selected]);
 
-  const getDisplayed = (selected) => {
+  const getDisplayed = () => {
     switch (selected) {
       case "info":
         return (
@@ -164,7 +164,7 @@ const DetailsAdminForm = () => {
         return <SetFormFields formFields={formFields} formId={data.id} />;
 
       default:
-        break;
+        return <p>Došlo je do greške! Molimo pokušajte kasnije.</p>;
     }
   };
 
