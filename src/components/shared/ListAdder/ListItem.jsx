@@ -21,7 +21,6 @@ const ListItem = ({
   const [isOpen, setIsOpen] = useState(false);
   const [fieldData, setFieldData] = useState(data);
   const [inputsError, setInputsError] = useState({});
-
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     show: false,
     id: null,
@@ -59,9 +58,8 @@ const ListItem = ({
         }
       }
     });
-    isEmpty(errors)
-      ? saveData(fieldData.id !== undefined ? fieldData.id : null)
-      : setInputsError(errors);
+    saveData(fieldData);
+    //isEmpty(errors) ? saveData(fieldData) : setInputsError(errors);
   };
 
   const handleCancel = () => {

@@ -1,4 +1,5 @@
 import { Button } from "@mui/material";
+import { isEmpty } from "lodash";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../../store/auth-contex";
 import ListItem from "./ListItem";
@@ -40,8 +41,8 @@ const List = ({
       {fields.map((field, index) => {
         return (
           <ListItem
-            key={field.id !== undefined ? field.id : `${index}new`}
-            data={listFields[index] !== undefined ? listFields[index] : field}
+            key={!isEmpty(field.id) ? field.id : `${index}new`}
+            data={listFields[index] ?? init}
             index={index}
             onDelete={deleteHandler}
             saveData={onSave}
