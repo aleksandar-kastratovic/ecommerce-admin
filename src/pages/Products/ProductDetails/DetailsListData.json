@@ -1,0 +1,61 @@
+{
+  "description": "",
+  "module": "presentation",
+  "name": "Product details",
+  "submodules": [
+    {
+      "name": "Osnovne informacije",
+      "slug": "basic_data",
+      "description": ""
+    },
+    {
+      "name": "Deklaracija",
+      "slug": "declaration"
+    },
+    {
+      "name": "Seo",
+      "slug": "seo",
+      "description": ""
+    },
+    {
+      "name": "Opis",
+      "slug": "description",
+      "description": ""
+    },
+    {
+      "name": "Cene",
+      "slug": "prices",
+      "description": ""
+    },
+    {
+      "name": "Inventories",
+      "slug": "inventories",
+      "description": ""
+    },
+    {
+      "name": "Kategorije",
+      "slug": "categories",
+      "description": ""
+    },
+    {
+      "name": "Galerija",
+      "slug": "gallery",
+      "description": ""
+    },
+    {
+      "name": "Tehnička dokumentacija",
+      "slug": "technical_doc",
+      "description": ""
+    },
+    {
+      "name": "Sertifikati",
+      "slug": "certificate_doc",
+      "description": ""
+    },
+    {
+      "name": "Instrukcije",
+      "slug": "instruction_doc",
+      "description": ""
+    }
+  ]
+}

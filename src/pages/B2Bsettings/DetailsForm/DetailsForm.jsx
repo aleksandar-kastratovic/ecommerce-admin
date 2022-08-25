@@ -16,16 +16,17 @@ import ImageDialog from "../../../components/shared/Dialogs/ImageDialog";
 
 // config
 import TwoColumnDetails from "../../../components/shared/Layout/Details/TwoColumnDetails/TwoColumnDetails";
-import fieldsSlugsBasic from "../fieldsSlugsBasic.json";
-import fieldsSlugsLogin from "../fieldsSlugsLogin.json";
-import fieldsSlugsShare from "../fieldsSlugsShare.json";
-import fieldsSlugsCss from "../fieldsSlugsCss.json";
 
 // other
 import { isEmpty } from "lodash";
 import AuthContext from "../../../store/auth-contex";
 import { useQuery } from "react-query";
-import { getSubmodulesList, getSlug, createSlug } from "../services";
+import {
+  getSubmodulesList,
+  getSlug,
+  createSlug,
+  getFormBySlug,
+} from "../services";
 
 import { repackToSend, isUrlValid } from "./util";
 
@@ -46,7 +47,7 @@ const DetailsForm = ({}) => {
     label: "",
     name: "",
   });
-  const [fields, setFields] = useState(fieldsSlugsBasic);
+  const [fields, setFields] = useState([]);
   // new item
   const [newItem, setNewItem] = useState({});
   // const [imagePreviewList, setImagePreviewList] = useState([]);
@@ -78,10 +79,6 @@ const DetailsForm = ({}) => {
   } = useQuery(["moduleId", moduleId], () =>
     getSlug(user.access_token, moduleId.module, moduleId.slug)
   );
-
-  useEffect(() => {
-    setFields(fieldsSlugsBasic);
-  }, []);
 
   useEffect(() => {
     if (responseSlugs) {
@@ -129,38 +126,26 @@ const DetailsForm = ({}) => {
     handleBackToList();
   };
 
-  // TODO imitating the async API call it will be removed after configuration fields are retrieved from backend side
-  const changeFields = (slug) => {
-    const timeoutId = setTimeout(() => {
+  const changeFields = async (slug) => {
+    try {
+      let response = await getFormBySlug(user.access_token, slug);
+      setFields(response?.data?.payload);
       setLoadingForm(false);
-      switch (slug) {
-        case "basic":
-          setFields(fieldsSlugsBasic);
-          break;
-        case "login":
-          setFields(fieldsSlugsLogin);
-          break;
-        case "share":
-          setFields(fieldsSlugsShare);
-          break;
-        case "css":
-          setFields(fieldsSlugsCss);
-          break;
-
-        default:
-          break;
-      }
-    }, 1000);
-    return () => clearTimeout(timeoutId);
+    } catch (error) {
+      console.warn(error);
+    }
   };
 
   const handleSelectInDetails = useCallback(async (module, slug) => {
     setLoadingForm(true);
     // setImagePreviewList([]);
-    changeFields(slug);
     setModuleId({ ...moduleId, slug: slug });
     setSelected(slug);
   }, []);
+
+  useEffect(() => {
+    changeFields(selected);
+  }, [selected]);
 
   const formItemChangeHandler = ({ target }) => {
     setNewItem({ ...newItem, [target.name]: target.value });

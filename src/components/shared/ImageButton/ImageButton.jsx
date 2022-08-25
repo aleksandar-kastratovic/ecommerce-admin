@@ -36,6 +36,7 @@ const ImageButton = ({
     height: 0,
   });
   const [loadingImage, setLoadingImage] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   const buttonSx = {
     color: "white",
@@ -45,18 +46,23 @@ const ImageButton = ({
   };
 
   useEffect(() => {
-    const loadImage = async (url) => {
-      const imageRatio = await getImageRatio(url);
-      if (imageRatio) {
-        setImageDimensions({
-          width: imageRatio.width,
-          height: imageRatio.height,
-        });
-      }
-    };
-
-    loadImage(value);
+    if (loaded) {
+      const loadImage = async (url) => {
+        const imageRatio = await getImageRatio(url);
+        if (imageRatio) {
+          setImageDimensions({
+            width: imageRatio.width,
+            height: imageRatio.height,
+          });
+        }
+      };
+      loadImage(value);
+    }
   }, [value]);
+
+  useEffect(() => {
+    setLoaded(true);
+  }, []);
 
   return (
     <>

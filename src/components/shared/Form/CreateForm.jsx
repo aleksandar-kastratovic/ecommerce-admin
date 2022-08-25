@@ -58,7 +58,11 @@ const CreateForm = ({
             <TextBox
               name={item.prop_name}
               label={item.field_name}
-              required={item.required}
+              required={
+                typeof item.required === "number"
+                  ? item.required === 1
+                  : item.required
+              }
               description={item.description}
               value={value}
               error={error}
@@ -71,7 +75,11 @@ const CreateForm = ({
             <ImageUpload
               name={item.prop_name}
               label={item.field_name}
-              required={item.required}
+              required={
+                typeof item.required === "number"
+                  ? item.required === 1
+                  : item.required
+              }
               description={item.description}
               value={value}
               error={error}
@@ -85,7 +93,11 @@ const CreateForm = ({
             <ImageButton
               name={item.prop_name}
               label={item.field_name}
-              required={item.required}
+              required={
+                typeof item.required === "number"
+                  ? item.required === 1
+                  : item.required
+              }
               description={item.description}
               value={value}
               error={error}
@@ -136,7 +148,15 @@ const CreateForm = ({
               size="small"
               sx={{ ml: "0.5rem", mt: "0.5rem" }}
             >
-              <FormLabel required={item.required}>{item.field_name}</FormLabel>
+              <FormLabel
+                required={
+                  typeof item.required === "number"
+                    ? item.required === 1
+                    : item.required
+                }
+              >
+                {item.field_name}
+              </FormLabel>
               <Select
                 labelId={`select-label-${item.field_name}`}
                 id={`select-label-${item.field_name}`}
@@ -172,6 +192,9 @@ const CreateForm = ({
               onChangeHandler={onChangeHandler}
             />
           );
+          break;
+        case "MultipleImages":
+          formItem = <div>Test</div>;
           break;
 
         default:

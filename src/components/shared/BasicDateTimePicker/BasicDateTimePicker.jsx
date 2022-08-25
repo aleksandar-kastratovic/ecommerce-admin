@@ -21,7 +21,7 @@ const BasicDateTimePicker = ({
         value: newValue,
       },
     };
-    onChangeHandler(ev);
+    onChangeHandler(ev, "date");
   };
 
   return (
@@ -29,6 +29,7 @@ const BasicDateTimePicker = ({
       <DateTimePicker
         label={label}
         value={value}
+        inputFormat="yyyy-mm-dd hh:mm:ss"
         onChange={handleChange}
         renderInput={(params) => (
           <TextField

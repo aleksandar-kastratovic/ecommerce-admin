@@ -26,12 +26,14 @@
 
 .tableStyle {
   margin-top: 2rem;
-  border-radius: 0px !important;
+  border-radius: 0 0 5px 5px !important;
+  box-shadow: none !important;
   td {
-    padding: 0rem 2rem;
+    padding: 0.4rem 2rem;
     color: var(--dark-silver);
     svg {
       fill: var(--transparent-blue);
+      font-size: 1rem !important;
     }
   }
   tr {
@@ -42,7 +44,9 @@
     }
   }
 }
-
+.tableStyle tr :last-child {
+  text-align: right !important;
+}
 .toolbarButtonsGroup {
   display: flex;
 }
@@ -74,4 +78,7 @@
   button {
     background-color: blue !important;
   }
+}
+.deleteIcon {
+  fill: rgb(219, 48, 48) !important;
 }

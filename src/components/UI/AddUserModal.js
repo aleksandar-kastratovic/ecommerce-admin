@@ -134,121 +134,117 @@ const AddUserModal = ({ openModal, handleClose, saveUser }) => {
             <Modal.Body>
                 <div className="row">
                     <div className="col-xl-12">
-                        <Accordion defaultActiveKey="0">
-                            <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faUser} />Podaci o korisniku:</Accordion.Header>
-                                <Accordion.Body>
-                                    <div className="row">
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={nameValue}
-                                                onInputChange={nameChangeHandler}
-                                                onInputBlur={nameBlurHandler}
-                                                hasInputError={nameHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg " + (nameHasError ? 'invalid' : '')}
-                                                text="Ime"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezno!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={lastnameValue}
-                                                onInputChange={lastnameChangeHandler}
-                                                onInputBlur={lastnameBlurHandler}
-                                                hasInputError={lastnameHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg " + (lastnameHasError ? 'invalid' : '')}
-                                                text="Prezime"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezno!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={emailValue}
-                                                onInputChange={emailChangeHandler}
-                                                onInputBlur={emailBlurHandler}
-                                                hasInputError={emailHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
-                                                text="Mail"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezan!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={phoneValue}
-                                                onInputChange={phoneChangeHandler}
-                                                inputErrorVisible={false}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg "}
-                                                text="Telefon"
-                                                text_class="m-0"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={passwordValue}
-                                                onInputChange={passwordChangeHandler}
-                                                onInputBlur={passwordBlurHandler}
-                                                hasInputError={passwordHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="password"
-                                                offAutoComplete={true}
-                                                class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}
-                                                text="Lozinka"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezna!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                inputValue={passwordConfirmValue}
-                                                onInputChange={passwordConfirmChangeHandler}
-                                                onInputBlur={passwordConfirmBlurHandler}
-                                                hasInputError={passwordConfirmHasError}
-                                                disabled={false}
-                                                inputType="input"
-                                                type="password"
-                                                class={"form-control input-style form-control-lg " + (passwordConfirmHasError ? 'invalid' : '')}
-                                                text="Potvrdite lozinku"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezno!"
-                                            />
-                                        </div>
-                                        <div className="col-6">
-                                            <Input
-                                                value={roleValue}
-                                                isMulti={false}
-                                                handleChange={roleChangeHandler}
-                                                onInputBlur={roleBlurHandler}
-                                                hasInputError={roleHasError}
-                                                disabled={false}
-                                                data={rolesList}
-                                                inputType="select-react"
-                                                type="text"
-                                                class={"form-control input-style form-control-lg select-style " + (roleHasError ? 'invalid' : '')}
-                                                text="Uloga"
-                                                text_class="m-0 required"
-                                                inputErrorText="je obavezna!"
-                                            />
-                                        </div>
+                        <div className="orders-item-holder">
+                            <h5>Podaci o korisniku:</h5>
+                                <div className="row buyers">
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={nameValue}
+                                            onInputChange={nameChangeHandler}
+                                            onInputBlur={nameBlurHandler}
+                                            hasInputError={nameHasError}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg " + (nameHasError ? 'invalid' : '')}
+                                            text="Ime"
+                                            text_class="m-0 required"
+                                            inputErrorText="je obavezno!"
+                                        />
                                     </div>
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={lastnameValue}
+                                            onInputChange={lastnameChangeHandler}
+                                            onInputBlur={lastnameBlurHandler}
+                                            hasInputError={lastnameHasError}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg " + (lastnameHasError ? 'invalid' : '')}
+                                            text="Prezime"
+                                            text_class="m-0 required"
+                                            inputErrorText="je obavezno!"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={emailValue}
+                                            onInputChange={emailChangeHandler}
+                                            onInputBlur={emailBlurHandler}
+                                            hasInputError={emailHasError}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
+                                            text="Mail"
+                                            text_class="m-0 required"
+                                            inputErrorText="je obavezan!"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={phoneValue}
+                                            onInputChange={phoneChangeHandler}
+                                            inputErrorVisible={false}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg "}
+                                            text="Telefon"
+                                            text_class="m-0"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={passwordValue}
+                                            onInputChange={passwordChangeHandler}
+                                            onInputBlur={passwordBlurHandler}
+                                            hasInputError={passwordHasError}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="password"
+                                            offAutoComplete={true}
+                                            class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}
+                                            text="Lozinka"
+                                            text_class="m-0 required"
+                                            inputErrorText="je obavezna!"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            inputValue={passwordConfirmValue}
+                                            onInputChange={passwordConfirmChangeHandler}
+                                            onInputBlur={passwordConfirmBlurHandler}
+                                            hasInputError={passwordConfirmHasError}
+                                            disabled={false}
+                                            inputType="input"
+                                            type="password"
+                                            class={"form-control input-style form-control-lg " + (passwordConfirmHasError ? 'invalid' : '')}
+                                            text="Potvrdite lozinku"
+                                            text_class="m-0 required"
+                                            inputErrorText="je obavezno!"
+                                        />
+                                    </div>
+                                    <div className="col-6">
+                                        <Input
+                                            value={roleValue}
+                                            isMulti={false}
+                                            handleChange={roleChangeHandler}
+                                            onInputBlur={roleBlurHandler}
+                                            hasInputError={roleHasError}
+                                            disabled={false}
+                                            data={rolesList}
+                                            inputType="select-react"
+                                            type="text"
+                                            class={"form-control input-style form-control-lg select-style " + (roleHasError ? 'invalid' : '')}
+                                            text="Uloga"
+                                            text_class="m-0 required"
+                                            inputErrorText="je obavezna!"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                 </div>
             </Modal.Body>

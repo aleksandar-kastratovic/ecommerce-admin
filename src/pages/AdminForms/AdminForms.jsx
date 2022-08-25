@@ -1,132 +1,26 @@
-import { useContext, useEffect, useState } from "react";
-import ListTable from "../../components/shared/ListTable/ListTable";
-import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar";
-import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
-import { Paper, Skeleton, Stack } from "@mui/material";
-import { flatten } from "lodash";
-import { useNavigate, useParams } from "react-router-dom";
+import ListPage from "../../components/shared/ListPage/ListPage";
+
 import tblFields from "./adminFormListFields.json";
-import DeleteDialog from "../../components/shared/Dialogs/DeleteDialog";
-import { toast } from "react-toastify";
 
 import styles from "./AdminForms.module.scss";
 
-import AuthContext from "../../store/auth-contex";
 import { deleteForm, getListAdminForms } from "./services";
 
 const AdminForms = () => {
-  const { user } = useContext(AuthContext);
-  const [forms, setForms] = useState([]);
-  const [fields, setFields] = useState(tblFields);
-  const [openDeleteDialog, setOpenDeleteDialog] = useState({
-    show: false,
-    id: null,
-    mutate: null,
-  });
-
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleFormsList = async () => {
-    try {
-      setIsLoading(true);
-      let response = await getListAdminForms(user.access_token);
-      let { payload } = response.data;
-      let { items } = payload;
-      setForms(payload);
-    } catch (error) {
-      console.warn(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const onColumnsChange = (newFields) => {
-    setFields(newFields);
-  };
-
-  const handleCreateNew = () => {
-    navigate("/admin-form/new");
-  };
-
-  const handleActions = (id, type) => () => {
-    switch (type) {
-      case "edit":
-        navigate(`/admin-form/${id}`);
-        break;
-      case "delete":
-        setOpenDeleteDialog({ show: true, id: id, mutate: null });
-        break;
-
-      default:
-        break;
-    }
-  };
-
-  const handleConfirm = async () => {
-    try {
-      await deleteForm(user.access_token, openDeleteDialog.id);
-    } catch (error) {
-      toast.warning("Neuspešno brisanje!");
-      console.warn(error);
-    } finally {
-      toast.success("Uspešno obrisana forma!");
-      setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
-      handleFormsList();
-    }
-  };
-
-  const handleCancel = (e) => {
-    setOpenDeleteDialog({ show: false, id: null });
-  };
-
-  useEffect(() => {
-    handleFormsList();
-  }, []);
-
   return (
-    <>
-      {!isLoading ? (
-        <Paper elevation={0} className={styles.paperStyle}>
-          <ListTableTitle
-            title="Admin forms"
-            showButton={true}
-            handleCreateNew={handleCreateNew}
-          />
-
-          <ListTableToolbar
-            showToolbar={true}
-            onColumnsChange={onColumnsChange}
-            fields={fields}
-            showDatePicker={false}
-          />
-
-          <ListTable
-            fields={flatten(fields).filter(
-              ({ in_main_table }) => in_main_table
-            )}
-            listData={forms}
-            handleActions={handleActions}
-          />
-        </Paper>
-      ) : (
-        <Stack spacing={1}>
-          <Skeleton variant="text" height={150} />
-          <Stack spacing={1}>
-            <Skeleton variant="text" height={60} />
-            <Skeleton variant="rectangular" height={508} />
-          </Stack>
-        </Stack>
-      )}
-      <DeleteDialog
-        title="Brisanje"
-        description="Da li ste sigurni da želite da obrišete?"
-        openDeleteDialog={openDeleteDialog}
-        setOpenDeleteDialog={setOpenDeleteDialog}
-        handleConfirm={handleConfirm}
-        handleCancel={handleCancel}
-      />
-    </>
+    <ListPage
+      getData={getListAdminForms}
+      deleteData={deleteForm}
+      title="Admin forms"
+      showNewButton={true}
+      newPath="/admin-form/new"
+      columnFields={tblFields}
+      showToolbar={true}
+      editPath="/admin-form/"
+      deleteTitle="Brisanje"
+      deleteDescription="Da li ste sigurni da želite da obrišete?"
+      showDatePicker={false}
+    />
   );
 };
 

@@ -118,23 +118,8 @@ const DetailsBanners = ({}) => {
     isEmpty(errors) ? saveData() : setInputsError(errors);
   };
 
-  const imageUrlToBase64 = (url) => {
-    const selectedFile = url;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      // setNewItem({ ...newItem, [event.target.name]: reader.result });
-      const timeOutId = setTimeout(() => {
-        /* setter(event, reader.result); */
-        console.log(reader.result);
-      }, 500);
-      return () => clearTimeout(timeOutId);
-    };
-    reader.readAsDataURL(selectedFile);
-  };
   const saveData = () => {
     // TODO image and rest of base 64 repack if it is not a type URL
-    console.log(imageUrlToBase64(newItem.image));
     const repackToSend = {
       ...newItem,
       priority: parseInt(newItem.priority),
@@ -238,7 +223,7 @@ const DetailsBanners = ({}) => {
               }
               right={<ImagePreview imagePreviewList={imagePreviewList} />}
               onSubmit={onSubmit}
-              buttonText="Sacuvaj"
+              buttonText="Sačuvaj"
             />
           }
         />
@@ -246,7 +231,7 @@ const DetailsBanners = ({}) => {
       {false && (
         <Stack sx={{ width: "100%" }}>
           <Alert severity="error">
-            Doslo je do greske. Molim Vas pokusajte kasnije.
+            Došlo je do greške. Molim Vas pokušajte kasnije.
           </Alert>
         </Stack>
       )}

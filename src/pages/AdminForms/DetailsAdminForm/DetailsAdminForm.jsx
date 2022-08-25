@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -18,6 +18,9 @@ import fields from "./DetailsFields.json";
 import CreateForm from "../../../components/shared/Form/CreateForm";
 import TwoColumnDetails from "../../../components/shared/Layout/Details/TwoColumnDetails/TwoColumnDetails";
 import SetFormFields from "./SetFormFields/SetFormFields";
+import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
+
+import detailsFields from "./DetailsListFields.json";
 
 const DetailsAdminForm = () => {
   const { FormId } = useParams();
@@ -41,6 +44,7 @@ const DetailsAdminForm = () => {
   const [formFields, setFormFields] = useState([]);
   const [inputsError, setInputsError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [main, setMain] = useState();
 
   const handleBackToList = () => {
     navigate(`/admin-form`);
@@ -87,8 +91,10 @@ const DetailsAdminForm = () => {
   };
 
   const saveData = async () => {
+    console.log("test");
     try {
       let response = await saveForm(user.access_token, data);
+      console.log(response);
       handleBackToList();
       toast.success("Uspešno uneta forma!");
     } catch (error) {
@@ -158,29 +164,7 @@ const DetailsAdminForm = () => {
         return <SetFormFields formFields={formFields} formId={data.id} />;
 
       default:
-        return (
-          <Box component="form" autoComplete="off">
-            {fields &&
-              fields
-                .filter(({ in_details }) => in_details)
-                .map((item, index) => {
-                  return (
-                    <CreateForm
-                      data-test-id="admin-form"
-                      onChangeHandler={formItemChangeHandler}
-                      item={item}
-                      key={index}
-                      error={inputsError[item.prop_name]}
-                      value={
-                        Array.isArray(item) && data
-                          ? data[item.prop_name]
-                          : data[item.prop_name]
-                      }
-                    />
-                  );
-                })}
-          </Box>
-        );
+        return <p>Došlo je do greške! Molimo pokušajte kasnije.</p>;
     }
   };
 

@@ -1,0 +1,43 @@
+@import "../../../../variables.scss";
+
+.buttonBack {
+  position: absolute !important;
+  right: 0 !important;
+  top: 9rem !important;
+  margin-right: 5rem !important;
+  margin-top: 0rem !important;
+  padding: 0.8rem 1.5rem !important;
+  background-color: $lightGrey !important;
+  text-transform: capitalize !important;
+  font-weight: 400 !important;
+  color: $black !important;
+  i {
+    transform: rotate(90deg);
+    margin-right: 10px;
+  }
+}
+
+.buttonBack:hover {
+  background-color: $lightGrey !important;
+  color: $black !important;
+  cursor: pointer !important;
+}
+
+.details {
+  padding: 50px 50px;
+  border-radius: 10px;
+  background: white;
+}
+
+.content {
+  display: flex;
+}
+
+.detailsList {
+  width: 30%;
+}
+
+.main {
+  min-width: 70%;
+  padding: 40px;
+}
