@@ -94,7 +94,7 @@ const Params = () => {
     <>
      <ListPage
       getData={getListParams}
-      deleteDate={deleteParam}
+      deleteData={deleteParam}
       title="Parametri"
       showNewButton={true}
       newPath="/params/new"

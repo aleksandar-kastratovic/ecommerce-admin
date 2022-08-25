@@ -73,7 +73,9 @@ const ListPage = ({
 
   const handleConfirm = async () => {
     try {
-      await deleteData(user.access_token, openDeleteDialog.id);
+      
+      let response = await deleteData(user.access_token, openDeleteDialog.id);
+      
     } catch (error) {
       console.warn(error);
     } finally {

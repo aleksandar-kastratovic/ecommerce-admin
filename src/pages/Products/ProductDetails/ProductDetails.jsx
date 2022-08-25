@@ -43,6 +43,7 @@ const multipleImages = [
   "certificate_doc",
   "instruction_doc",
 ];
+
 const ProductDetails = () => {
   const { prodId } = useParams();
   const { user } = useContext(AuthContext);
