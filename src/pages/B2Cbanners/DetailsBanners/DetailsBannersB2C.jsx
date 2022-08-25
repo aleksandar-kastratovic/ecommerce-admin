@@ -19,13 +19,13 @@ import fields from "./fieldsDetails.json";
 import { isEmpty } from "lodash";
 import AuthContext from "../../../store/auth-contex";
 import { useQuery } from "react-query";
-import { getDetailsB2Bbanners, createBanner } from "../services";
+import { getDetailsB2Cbanners, createBanner } from "../services";
 import ImagePreview from "../../../components/shared/ImagePreview/ImagePreview";
 
 import styles from "./DetailsBanners.module.scss";
 
-const DetailsBanners = ({}) => {
-  const { B2BId } = useParams();
+const DetailsBannersB2C = ({}) => {
+  const { B2CId } = useParams();
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
   const [imagePreviewList, setImagePreviewList] = useState([]);
@@ -54,11 +54,11 @@ const DetailsBanners = ({}) => {
     data: response,
     isLoading,
     isError,
-  } = useQuery(["B2BId", B2BId], () =>
-    getDetailsB2Bbanners(user.access_token, B2BId)
+  } = useQuery(["B2CId", B2CId], () =>
+    getDetailsB2Cbanners(user.access_token, B2CId)
   );
 
-  const [newItem, setNewItem] = useState(B2BId === "new" ? init : {});
+  const [newItem, setNewItem] = useState(B2CId === "new" ? init : {});
   const [inputsError, setInputsError] = useState({});
 
   useEffect(() => {
@@ -93,7 +93,7 @@ const DetailsBanners = ({}) => {
   }, [newItem]);
 
   const handleBackToList = () => {
-    navigate(`/B2B-banners`);
+    navigate(`/B2C-banners`);
   };
 
   const formItemChangeHandler = ({ target }, type) => {
@@ -203,7 +203,7 @@ const DetailsBanners = ({}) => {
                           .filter(({ in_details }) => in_details)
                           .map((item, index) => (
                             <CreateForm
-                              data-test-id="B2B-banners-form"
+                              data-test-id="B2C-banners-form"
                               onChangeHandler={formItemChangeHandler}
                               onImageUpload={formImageUpload}
                               onImagePreview={formImagePreview}
@@ -254,4 +254,4 @@ const DetailsBanners = ({}) => {
   );
 };
 
-export default DetailsBanners;
+export default DetailsBannersB2C;

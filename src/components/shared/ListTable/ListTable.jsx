@@ -84,7 +84,25 @@ const ListTable = ({
               <VisibilityOutlinedIcon />
             </IconButton>
             <IconButton
-              aria-label="preview"
+              aria-label="delete"
+              onClick={handleActions(data["id"], "delete")}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </>
+        );
+        break;
+      case "edit_delete":
+        content = (
+          <>
+            <IconButton
+              aria-label="edit"
+              onClick={handleActions(data["id"], "edit")}
+            >
+              <ModeEditOutlineOutlinedIcon />
+            </IconButton>
+            <IconButton
+              aria-label="delete"
               onClick={handleActions(data["id"], "delete")}
             >
               <DeleteIcon />

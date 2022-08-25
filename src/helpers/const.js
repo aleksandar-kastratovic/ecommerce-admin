@@ -16,14 +16,14 @@ import {
 export const MainMenuGroups = {
   PRODUCT : { order: 0, name: "Katalog" },
   B2B     : { order: 1, name: "B2B" },
-  SETTINGS: { order: 2, name: "Podešavanja" },
-  TOOLS   : { order: 3, name: "Alati" }
+  B2C     : { order: 2, name: "B2C" },
+  SETTINGS: { order: 3, name: "Podešavanja" },
+  TOOLS   : { order: 4, name: "Alati" }
 }
 
 const screenDateDef = [
   [ "CATEG", "Kategorije", "/categories", faSitemap, MainMenuGroups.PRODUCT ],
   [ "PRODU", "Proizvodi", "/products", faArchive, MainMenuGroups.PRODUCT ],
-  [ "ACTON", "Akcije", "/", faPercentage, MainMenuGroups.SETTINGS ],
 
   [ "ORDER", "Porudžbine", "/orders", faFileAlt, MainMenuGroups.B2B ],
   [ "COMPN", "Kompanije", "/companies", faCity, MainMenuGroups.B2B ],
@@ -32,9 +32,13 @@ const screenDateDef = [
   [ "NEEWS", "Novosti", "/", faArchive, MainMenuGroups.B2B ],
   [ "BANNERS_B2B", "B2B baneri", "/B2B-banners", faImage, MainMenuGroups.B2B ],
 
+  [ "BANNERS_B2C", "B2C baneri", "/B2C-banners", faCog, MainMenuGroups.B2C ],
+
   [ "ROLES", "Uloge", "/roles", faPeopleArrows, MainMenuGroups.SETTINGS ],
   [ "USERS", "Korisnici", "/users", faUsers, MainMenuGroups.SETTINGS ],
+  [ "ACTON", "Akcije", "/", faPercentage, MainMenuGroups.SETTINGS ],
   [ "B2BCFG", "B2B podešavanja", "/B2B-settings", faCog, MainMenuGroups.SETTINGS ],
+  [ "ADMIN_FORM", "Admin forme", "/admin-form", faCog, MainMenuGroups.SETTINGS ],
   [ "LOCAT", "Lokacije", "/locations", faSearchLocation, MainMenuGroups.SETTINGS ],
 
   [ "IMPORT", "Uvoz podataka", "/import", faUpload, MainMenuGroups.TOOLS ]

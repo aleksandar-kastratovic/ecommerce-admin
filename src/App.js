@@ -30,12 +30,15 @@ import DetailsForm from "./pages/B2Bsettings/DetailsForm/DetailsForm"
 import B2Bbanners from "./pages/B2Bbanners/B2Bbanners"
 import DetailsBanners from "./pages/B2Bbanners/DetailsBanners/DetailsBanners"
 import CroonusTheme from "./theme"
+import AdminForms from "./pages/AdminForms/AdminForms";
+import DetailsAdminForm from "./pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
+import B2Cbanners from "./pages/B2Cbanners/B2Cbanners";
+import DetailsBannersB2C from "./pages/B2Cbanners/DetailsBanners/DetailsBannersB2C";
 
 function App() {
   const queryClient = new QueryClient()
   const authCtx = useContext(AuthContext)
   let navigate = useNavigate()
-  let routerClass = ""
   const { isLoading, sendRequest: referenceDataRequest } = useHttp()
   const { isLoading2, sendRequest: userScreenRequest } = useHttp()
 
@@ -71,6 +74,7 @@ function App() {
     }
   }, [ authCtx.isTokenExpired ])
 
+  let routerClass;
   if (!authCtx.isLoggedIn) {
     routerClass = ""
   } else if (sidenav) {
@@ -270,8 +274,8 @@ function App() {
                         </Route>
                       )
                     }
-                    // if (object.id === screensData.ACTON.screen_code) {
-                    //   return  <Route key={object.id}  path='/actions' element={<ActionsPage routeData={screensData.ACTON} />} >
+                    // if (screen.screen_code === screensData.ACTON.screen_code) {
+                    //   return  <Route key={screen.screen_code}  path='/actions' element={<ActionsPage routeData={screensData.ACTON} />} >
                     //             <Route path=":actId" element={<ActionsPage />} />
                     //           </Route>
                     // }
@@ -341,6 +345,42 @@ function App() {
                           />
                         </Route>
                       )
+                    }
+
+                    if (screen.screen_code === screensData.ADMIN_FORM.screen_code) {
+                      return (
+                        <Route key={screen.screen_code}>
+                          <Route
+                            key={screen.screen_code}
+                            path="/admin-form"
+                            element={
+                              <AdminForms routeData={screensData.ADMIN_FORM} />
+                            }
+                          />
+                          <Route
+                            path="/admin-form/:FormId"
+                            element={<DetailsAdminForm />}
+                          />
+                        </Route>
+                      );
+                    }
+
+                    if (screen.screen_code === screensData.BANNERS_B2C.screen_code) {
+                      return (
+                        <Route key={screen.screen_code}>
+                          <Route
+                            key={screen.screen_code}
+                            path="/B2C-banners"
+                            element={
+                              <B2Cbanners routeData={screensData.BANNERS_B2C} />
+                            }
+                          />
+                          <Route
+                            path="/B2C-banners/:B2CId"
+                            element={<DetailsBannersB2C />}
+                          />
+                        </Route>
+                      );
                     }
                   })}
                 </>
