@@ -126,11 +126,15 @@ const ProductDetails = () => {
     }
   };
 
-  const saveData = async () => {
+  const saveData = async (listId) => {
     try {
       let repack = { ...data };
       if (prodId !== "new") {
         repack.id = prodId;
+      }
+      if (listId) {
+        repack.id = listId;
+        repack.id_product = prodId;
       }
       let response = await postProductSlugData(
         user.access_token,
@@ -155,6 +159,19 @@ const ProductDetails = () => {
       }
     });
     isEmpty(errors) ? saveData() : setInputsError(errors);
+  };
+
+  const onListSubmit = (listId) => {
+    const errors = {};
+    Object.keys(data).forEach((prop_name) => {
+      if (isEmpty(data[prop_name])) {
+        if (requiredFields.includes(prop_name))
+          errors[prop_name] = {
+            content: "Polje je obavezno, molim vas unesite vrednost.",
+          };
+      }
+    });
+    isEmpty(errors) ? saveData(listId) : setInputsError(errors);
   };
 
   useEffect(() => {
@@ -216,7 +233,7 @@ const ProductDetails = () => {
           init={{}}
           onDelete={() => {}}
           required={requiredFields}
-          onSave={onSubmit}
+          onSave={onListSubmit}
         />
       );
     }
@@ -282,7 +299,7 @@ const ProductDetails = () => {
                   )}
                 </>
               }
-              hasButton={true}
+              hasButton={!adderFields.includes(selected)}
               onSubmit={onSubmit}
               buttonText="Sacuvaj"
             />

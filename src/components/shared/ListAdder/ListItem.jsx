@@ -59,7 +59,9 @@ const ListItem = ({
         }
       }
     });
-    isEmpty(errors) ? saveData() : setInputsError(errors);
+    isEmpty(errors)
+      ? saveData(fieldData.id !== undefined ? fieldData.id : null)
+      : setInputsError(errors);
   };
 
   const handleCancel = () => {
@@ -73,7 +75,7 @@ const ListItem = ({
             setIsOpen(!isOpen);
           }}
         >
-          {fieldData[0]}
+          {Object.values(fieldData)[0]}
           {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </div>
         <Delete className={styles.iconDelete} onClick={onClickDelete} />
