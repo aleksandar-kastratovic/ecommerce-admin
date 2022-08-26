@@ -44,8 +44,9 @@ const ResetForm = () => {
     if (emailIsValid && passwordIsValid && passwordConfirmIsValid) {
         formIsValid = true;
     }
+  console.log(token)
 
-    const submitHandler = async (event) => {
+  const submitHandler = async (event) => {
         event.preventDefault();
         if (!formIsValid) {
             toast.warning("Forma nije validna!");
@@ -82,7 +83,7 @@ const ResetForm = () => {
                         <h5>Dobrodošli na Croonus CMS.</h5>
                         {/* <p className="login-from-text">Molimo prijavite se za pristup administraciji.</p> */}
                         <form onSubmit={submitHandler} className="login-form">
-                            <Input 
+                            <Input
                                 inputValue={emailValue}
                                 onInputChange={emailChangeHandler}
                                 onInputBlur={emailBlurHandler}
@@ -94,7 +95,7 @@ const ResetForm = () => {
                                 text="Email adresa"
                                 text_class="m-0 required"
                             />
-                            <Input 
+                            <Input
                                 inputValue={passwordValue}
                                 onInputChange={passwordChangeHandler}
                                 onInputBlur={passwordBlurHandler}
@@ -108,7 +109,7 @@ const ResetForm = () => {
                                 text_class="m-0 required"
                                 inputErrorText="je obavezna!"
                             />
-                            <Input 
+                            <Input
                                 inputValue={passwordConfirmValue}
                                 onInputChange={passwordConfirmChangeHandler}
                                 onInputBlur={passwordConfirmBlurHandler}

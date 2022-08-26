@@ -47,3 +47,13 @@ export const getListProductSection = async (token, data = {}, slug = "") => {
     data: data,
   });
 };
+
+export const getProductSpecsSetDDL = async (token) => {
+  return await axios({
+    method: "GET",
+    url: `${api()}admin/productitems/specifications/ddl`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};

@@ -31,10 +31,8 @@ const ListTableTitle = ({
         return (
           <Button
             key={button.id}
-            onClick={() => {
-              console.log(button.action);
-            }}
-            className={`${styles.buttonCreate} ${button.className}`}
+            onClick={button.action}
+            className={`${styles.buttonAdditional} ${button.className}`}
           >
             {button.icon}
             {button.text}

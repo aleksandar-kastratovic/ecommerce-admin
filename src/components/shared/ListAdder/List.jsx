@@ -1,7 +1,10 @@
 import { Button } from "@mui/material";
+import { isEmpty } from "lodash";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../../store/auth-contex";
 import ListItem from "./ListItem";
+
+import styles from "./List.module.scss";
 
 const List = ({
   listFields = [],
@@ -10,6 +13,8 @@ const List = ({
   onDelete = () => {},
   required = [],
   onSave = () => {},
+  additionalButtons = [],
+  actions = {},
 }) => {
   const [fields, setFields] = useState(listFields);
   const { user } = useContext(AuthContext);
@@ -32,21 +37,45 @@ const List = ({
 
   useEffect(() => {
     setFields(listFields);
+  }, [listFields]);
+
+  useEffect(() => {
+    setFields(listFields);
   }, []);
 
   return (
-    <div>
-      <Button onClick={addFieldHandler}>Add field</Button>
+    <div className={styles.list}>
+      <div className={styles.buttonsHolder}>
+        <Button onClick={addFieldHandler} className={styles.buttonPrimary}>
+          Add field
+        </Button>
+        <div className={styles.additionalButtonsHolder}>
+          {additionalButtons.map((button) => {
+            return (
+              <Button
+                key={button.id}
+                onClick={button.action}
+                className={`${styles.buttonAdditional} ${button.className}`}
+              >
+                {button.icon}
+                {button.text}
+              </Button>
+            );
+          })}
+        </div>
+      </div>
+
       {fields.map((field, index) => {
         return (
           <ListItem
             key={field.id !== undefined ? field.id : `${index}new`}
-            data={listFields[index] !== undefined ? listFields[index] : field}
+            data={listFields[index] ?? init}
             index={index}
             onDelete={deleteHandler}
             saveData={onSave}
             required={required}
             formFields={formFields}
+            actions={actions}
           />
         );
       })}
