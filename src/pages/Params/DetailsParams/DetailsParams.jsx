@@ -32,16 +32,16 @@ const DetailsParams = () => {
 
   const init = {
     "id":null,
-	"field_type":"",
-  "slug": "",
-	"name": "",
-	"int_value" : 0,
-	"datetime_value" : "",
-	"description" : "",
-	"active_from":"",
-	"active_to":"",
-	"active": 0,
-	"order":0
+    "field_type":"",
+    "slug": "",
+    "name": "",
+    "int_value" : 0,
+    "datetime_value" : "",
+    "description" : "",
+    "active_from":"",
+    "active_to":"",
+    "active": 0,
+    "order":0
   };
 
   const [data, setData] = useState(init);
