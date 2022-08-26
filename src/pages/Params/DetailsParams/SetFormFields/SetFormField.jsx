@@ -13,6 +13,22 @@ import { Button } from "@mui/material";
 import { isEmpty } from "lodash";
 import { saveFormField } from "../../services";
 import AuthContext from "../../../../store/auth-contex";
+import { formatDate } from "../../../../helpers/dateFormat";
+
+const init = {
+    "id":null,
+    "field_type":"",
+    "slug": "",
+    "name": "",
+    "int_value" : 0,
+    "datetime_value" : "",
+    "description" : "",
+    "active_from":"",
+    "active_to":"",
+    "active_from":"",
+    "active": 0,
+    "order":0
+}
 
 const SetFormField = ({ data, index, onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +43,10 @@ const SetFormField = ({ data, index, onDelete }) => {
   const { user } = useContext(AuthContext);
 
   const formItemChangeHandler = ({ target }, type) => {
-    if (type) {
+    if(type==="date") {
+      setFieldData({ ...fieldData, [target.name]: formatDate(target.value ) });
+    }
+    else if (type) {
       setFieldData({ ...fieldData, [target.name]: target.checked });
     } else {
       if (target.name === "admin_form_id") {
@@ -60,12 +79,14 @@ const SetFormField = ({ data, index, onDelete }) => {
         }
       }
     });
-    isEmpty(errors) ? saveData() : setInputsError(errors);
+    saveData()
+    // isEmpty(errors) ? saveData() : setInputsError(errors);
   };
 
   const saveData = async () => {
     try {
-      let response = await saveFormField(user.access_token, fieldData);
+      let repack = {...init, ...fieldData};
+      let response = await saveFormField(user.access_token, repack);
       toast.success("Uspešno sačuvano!");
     } catch (error) {
       console.warn(error);
