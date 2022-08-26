@@ -11,6 +11,9 @@ import {
   faImage,
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
+import Countries from "../pages/Countries/Countries";
+import CountriesDetails from "../pages/Countries/CountriesDetails/CountriesDetails";
+import Municipalities from "../pages/Municipalities/Municipalities";
 import ProductDetails from "../pages/Products/ProductDetails/ProductDetails";
 import AdminForms from "./../pages/AdminForms/AdminForms";
 import DetailsAdminForm from "./../pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
@@ -151,6 +154,22 @@ const screens = {
     SETTINGS,
     Params,
     [[":pid", DetailsParams]],
+  ],
+  COUNTRIES: [
+    "/countries",
+    "Države",
+    faCog,
+    SETTINGS,
+    Countries,
+    [[":cid", CountriesDetails]],
+  ],
+  MUNICIPALITIES: [
+    "/municipalities",
+    "Opštine",
+    faCog,
+    SETTINGS,
+    Municipalities,
+    [],
   ],
 
   IMPORT: ["/import", "Uvoz podataka", faUpload, TOOLS, ImportSteps],
