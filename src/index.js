@@ -1,6 +1,6 @@
-import "./assets/scss/custom.scss";
-import ReactDOM from "react-dom";
 import App from "./App";
+import ReactDOM from "react-dom";
+import "./assets/scss/index.scss";
 import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from "./store/auth-contex";
 

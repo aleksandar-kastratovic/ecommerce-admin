@@ -44,6 +44,108 @@ const multipleImages = [
   "instruction_doc",
 ];
 
+let inits = {
+  basic_data: {
+    id: null,
+    b2b_active: 0,
+    b2c_active: 0,
+    name: "",
+    sku: "",
+    barcode: "",
+    new: 1,
+    new_from: "",
+    new_to: "",
+    order: 0,
+  },
+  certificate_doc: {
+    id: null,
+    id_product: 0,
+    id_product_variant: 0,
+    id_category: 0,
+    certificate_doc: "",
+  },
+  technical_doc: {
+    id: null,
+    id_product: 0,
+    id_product_variant: 0,
+    id_category: 0,
+  },
+  categories: {
+    id: null,
+    id_product: 0,
+    id_product_variant: 0,
+    id_category: 0,
+    category_path: "",
+  },
+  inventories: {
+    id: null,
+    id_product: 0,
+    id_product_variant: 0,
+    id_location: 0,
+    quantity: 0,
+    unit: "",
+  },
+  prices: {
+    id: 0,
+    id_product: 0,
+    system: "",
+    country: 0,
+    currency: "",
+    type: "",
+    group: "",
+    id_product_variant: 0,
+    price_single_with_out_vat: 0,
+    price_single_with_vat: 0,
+    price_vat_procent: 0,
+    price_quantity: null,
+    price_unit: "",
+    active_to: "",
+    price_with_out_vat: 0,
+    price_with_vat: 0,
+  },
+  gallery: {
+    id: null,
+    id_product: 0,
+    id_product_variant: null,
+    gallery: "",
+  },
+  instruction_doc: {
+    id: null,
+    id_product: 0,
+    id_product_variant: null,
+    instruction_doc: "",
+  },
+  description: {
+    id: 0,
+    short_description: "",
+    description: "",
+  },
+  declaration: {
+    id: 0,
+    declaration_id_manufacture: 0,
+    declaration_manufacture_name: "",
+    declaration_id_country: 0,
+    declaration_country_name: "",
+    declaration_name: "",
+    declaration_note: "",
+    declaration_year: "",
+  },
+  seo: {
+    id: null,
+    id_product: 0,
+    id_product_variant: 0,
+    id_country: 0,
+    lang: "",
+    slug: "",
+    meta_title: "",
+    meta_keywords: "",
+    meta_description: "",
+    meta_url: "",
+    active: 0,
+    order: 0,
+  },
+};
+
 const ProductDetails = () => {
   const { prodId } = useParams();
   const { user } = useContext(AuthContext);
@@ -64,7 +166,7 @@ const ProductDetails = () => {
     order: 0,
   };
 
-  const [data, setData] = useState(init);
+  const [data, setData] = useState(inits[selected]);
   const [formFields, setFormFields] = useState([]);
   const [inputsError, setInputsError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -129,7 +231,8 @@ const ProductDetails = () => {
 
   const saveData = async () => {
     try {
-      let repack = { ...data };
+      let repack = { ...inits[selected], ...data };
+
       if (prodId !== "new") {
         repack.id = prodId;
       }
@@ -138,6 +241,24 @@ const ProductDetails = () => {
         repack,
         selected
       );
+      if (prodId === "new") handleBackToList();
+      toast.success("Uspešno dodati podaci!");
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const saveListData = async (listData) => {
+    try {
+      console.log(listData);
+      let repack = { ...listData, id_product: prodId, id_product_variant: 0 };
+
+      let response = await postProductSlugData(
+        user.access_token,
+        repack,
+        selected
+      );
+      console.log(response);
       if (prodId === "new") handleBackToList();
       toast.success("Uspešno dodati podaci!");
     } catch (error) {
@@ -156,6 +277,11 @@ const ProductDetails = () => {
       }
     });
     isEmpty(errors) ? saveData() : setInputsError(errors);
+  };
+
+  const onListSubmit = (listData) => {
+    console.log("here");
+    saveListData(listData);
   };
 
   useEffect(() => {
@@ -214,10 +340,10 @@ const ProductDetails = () => {
           key={selected}
           listFields={listFields}
           formFields={formFields}
-          init={{}}
+          init={inits[selected]}
           onDelete={() => {}}
           required={requiredFields}
-          onSave={onSubmit}
+          onSave={onListSubmit}
         />
       );
     }
@@ -283,7 +409,7 @@ const ProductDetails = () => {
                   )}
                 </>
               }
-              hasButton={true}
+              hasButton={!adderFields.includes(selected)}
               onSubmit={onSubmit}
               buttonText="Sacuvaj"
             />

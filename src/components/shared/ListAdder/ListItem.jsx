@@ -21,7 +21,6 @@ const ListItem = ({
   const [isOpen, setIsOpen] = useState(false);
   const [fieldData, setFieldData] = useState(data);
   const [inputsError, setInputsError] = useState({});
-
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     show: false,
     id: null,
@@ -59,7 +58,8 @@ const ListItem = ({
         }
       }
     });
-    isEmpty(errors) ? saveData() : setInputsError(errors);
+    saveData(fieldData);
+    //isEmpty(errors) ? saveData(fieldData) : setInputsError(errors);
   };
 
   const handleCancel = () => {
@@ -73,7 +73,7 @@ const ListItem = ({
             setIsOpen(!isOpen);
           }}
         >
-          {fieldData[0]}
+          {Object.values(fieldData)[0]}
           {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </div>
         <Delete className={styles.iconDelete} onClick={onClickDelete} />
