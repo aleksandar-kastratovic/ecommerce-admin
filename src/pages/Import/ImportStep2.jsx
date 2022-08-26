@@ -70,12 +70,12 @@ const ImportStep2 = ({ filename, payload }) => {
     }
 
     // Send
-    api.postProductsImportExecute(uuid, true, insert, offset, map)
+    api.postProductsImportExecute(uuid, insert, offset, map)
       .catch(setError)
-      .then(response => {
+      .then(() => {
         setExecute(false)
-        toast.success(`Uspešno je uveženo ${response.payload.rows.length} proizvoda`)
-        // navigate("/products")
+        toast.success(`Proizvodi su unešeni uspešno`)
+        navigate("/products")
       })
   }
 

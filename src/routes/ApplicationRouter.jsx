@@ -17,7 +17,7 @@ const ApplicationRouter = () => {
   const authContext: { isLoggedIn: boolean, userScreens: [ { screen_code: string } ] } = useContext(AuthContext)
 
   // Get the default screen for the user
-  const defaultPath = authContext.userScreens?.find(userScreen => availableScreens[userScreen.screen_code])?.path ?? "/login"
+  const defaultPath = availableScreens[authContext.userScreens?.find(userScreen => availableScreens[userScreen.screen_code])?.screen_code]?.path ?? "/login"
 
   // Unauthorized users
   const unauthorizedRoutes = (
@@ -34,6 +34,7 @@ const ApplicationRouter = () => {
   const authorizedRoutes = (
     <>
       <Route path="" exact element={<Navigate replace to={defaultPath} />} />
+      <Route path="/" exact element={<Navigate replace to={defaultPath} />} />
       {authContext.userScreens?.map(userScreen => makeRoute(availableScreens[userScreen.screen_code]))}
     </>
   )
