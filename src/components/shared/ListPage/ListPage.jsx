@@ -73,11 +73,10 @@ const ListPage = ({
 
   const handleConfirm = async () => {
     try {
-      
       let response = await deleteData(user.access_token, openDeleteDialog.id);
-      
     } catch (error) {
       console.warn(error);
+      toast.warning("Greška");
     } finally {
       setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
     }
@@ -105,6 +104,12 @@ const ListPage = ({
     setOpenDeleteDialog({ show: false, id: null });
   };
 
+  useEffect(() => {
+    if (isError) {
+      toast.warning("Greška");
+    }
+  }, [isError]);
+
   return (
     <>
       <Paper elevation={0} className={`${styles.paperStyle} ${className}`}>
@@ -112,6 +117,7 @@ const ListPage = ({
           title={title}
           showButton={showNewButton}
           handleCreateNew={handleCreateNew}
+          additionalButtons={additionalButtons}
         />
 
         <ListTableToolbar
@@ -120,7 +126,6 @@ const ListPage = ({
           fields={fieldsColumns}
           onSearch={handleSearch}
           searchValue={search}
-          additionalButtons={additionalButtons}
           showDatePicker={showDatePicker}
         />
         {!isLoading ? (

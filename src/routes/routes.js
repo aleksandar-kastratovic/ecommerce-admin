@@ -12,6 +12,10 @@ import {
   faUpload,
 } from "@fortawesome/free-solid-svg-icons";
 import ProductDetails from "../pages/Products/ProductDetails/ProductDetails";
+import ProductGroupDetails from "../pages/ProductSpecs/ProductGroupDetails/ProductGroupDetails";
+import ProductSpecs from "../pages/ProductSpecs/ProductSpecs";
+import ProductSpecsGroups from "../pages/ProductSpecs/ProductSpecsGroups";
+import ProductSpecsDetails from "../pages/ProductSpecs/ProductsSpecsDetails/ProductSpecsDetails";
 import AdminForms from "./../pages/AdminForms/AdminForms";
 import DetailsAdminForm from "./../pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
 import B2Bbanners from "./../pages/B2Bbanners/B2Bbanners";
@@ -52,6 +56,18 @@ const screens = {
     PRODUCT,
     Products,
     [[":prodId", ProductDetails]],
+  ],
+  PRODUCT_SPEC: [
+    "/product-specs",
+    "Specifikacija proizvoda",
+    faArchive,
+    PRODUCT,
+    ProductSpecs,
+    [
+      [":specId", ProductSpecsDetails],
+      ["groups", ProductSpecsGroups],
+      ["groups/:groupId", ProductGroupDetails],
+    ],
   ],
 
   ORDER: [

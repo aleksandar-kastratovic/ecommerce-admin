@@ -35,6 +35,7 @@ import {
 import List from "../../../components/shared/ListAdder/List";
 import { toast } from "react-toastify";
 import { formatDate } from "../../../helpers/dateFormat";
+import Specification from "./ProductDetailsSpecification/Specification";
 
 const adderFields = ["prices", "inventories", "categories", "seo"];
 const multipleImages = [
@@ -199,8 +200,6 @@ const ProductDetails = () => {
     }
   };
 
-  const handleFormFields = async () => {};
-
   const formItemChangeHandler = ({ target }, type) => {
     if (type === "date") {
       setData({ ...data, [target.name]: formatDate(target.value) });
@@ -346,6 +345,10 @@ const ProductDetails = () => {
           onSave={onListSubmit}
         />
       );
+    }
+    if (selected === "specification") {
+      return <Specification />;
+    } else if (selected === "variation") {
     }
     return (
       <Box component="form" autoComplete="off">

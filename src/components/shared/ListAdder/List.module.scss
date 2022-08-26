@@ -1,36 +1,42 @@
 @import "../../../variables.scss";
 
-.titleStyle {
-  margin: 1.5rem 2rem !important;
-  display: inline-block;
+.list {
+  width: 100%;
 }
 
-.buttonCreate {
-  right: 1.5rem !important;
+.buttonsHolder {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.additionalButtonsHolder {
+  display: flex;
+  gap: 10px;
+}
+
+.buttonPrimary {
   background-color: $lightGreen !important;
   color: $white !important;
-  float: right !important;
-  position: relative !important;
   margin-top: 1.2rem !important;
-  padding: 6px 33px 6px !important;
+  padding: 6px 10px !important;
   text-transform: none !important;
   border-radius: 5px;
 }
 
-.buttonCreate:hover {
+.buttonPrimary:hover {
   background-color: $lightGrey !important;
   color: $black !important;
   cursor: pointer !important;
 }
 
 .buttonAdditional {
-  right: 1.5rem !important;
   background-color: $lightGrey !important;
   color: $black !important;
-  float: right !important;
-  position: relative !important;
   margin-top: 1.2rem !important;
-  padding: 6px 33px 6px !important;
+  padding: 6px 10px !important;
   text-transform: none !important;
   border-radius: 5px;
   margin-right: 10px !important;
@@ -40,10 +46,4 @@
   background-color: $lightGreen !important;
   color: $white !important;
   cursor: pointer !important;
-}
-
-.AddIcon {
-  font-size: 0.8rem !important;
-  margin: auto;
-  margin-right: 2px;
 }
