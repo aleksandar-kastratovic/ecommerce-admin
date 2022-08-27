@@ -5,10 +5,10 @@ const api = () => {
   // return apiLocal;
 };
 
-export const getListMunicipalities = async (token, search) => {
+export const getListManufacturers = async (token, search) => {
     return await axios({
       method: "LIST",
-      url: `${api()}admin/municipalities`,
+      url: `${api()}admin/manufacturers`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -16,10 +16,10 @@ export const getListMunicipalities = async (token, search) => {
     });
   };
 
-export const deleteMunicipality = async (token, id) => {
+export const deleteManufacturer = async (token, id) => {
     return await axios({
       method: "DELETE",
-      url: `${api()}admin/municipalities/${id}`,
+      url: `${api()}admin/manufacturers/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },

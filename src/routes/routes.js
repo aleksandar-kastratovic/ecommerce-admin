@@ -10,10 +10,28 @@ import {
   faPeopleArrows,
   faImage,
   faUpload,
+  faList,
+  faFlag,
+  faBuilding,
+  faRoad,
+  faCopyright,
+  faIndustry,
+  faStore
 } from "@fortawesome/free-solid-svg-icons";
 import Countries from "../pages/Countries/Countries";
 import CountriesDetails from "../pages/Countries/CountriesDetails/CountriesDetails";
+import Towns from "../pages/Towns/Towns";
+import TownsDetails from "../pages/Towns/TownsDetails/TownsDetails";
+import Streets from "../pages/Streets/Streets";
+import StreetsDetails from "../pages/Streets/StreetsDetails/StreetsDetails";
+import Brands from "../pages/Brands/Brands";
+import BrandsDetails from "../pages/Brands/BrandsDetails/BrandsDetails";
+import Stores from "../pages/Stores/Stores";
+import StoresDetails from "../pages/Stores/StoresDetails/StoresDetails";
 import Municipalities from "../pages/Municipalities/Municipalities";
+import MunicipalitiesDetails from "../pages/Municipalities/MunicipalitiesDetails/MunicipalitiesDetails";
+import Manufacturers from "../pages/Manufacturers/Manufacturers";
+import ManufacturersDetails from "../pages/Manufacturers/ManufacturersDetails/ManufacturersDetails";
 import ProductDetails from "../pages/Products/ProductDetails/ProductDetails";
 import ProductGroupDetails from "../pages/ProductSpecs/ProductGroupDetails/ProductGroupDetails";
 import ProductSpecs from "../pages/ProductSpecs/ProductSpecs";
@@ -150,7 +168,7 @@ const screens = {
   ADMIN_FORM: [
     "/admin-form",
     "Admin forme",
-    faCog,
+    faList,
     SETTINGS,
     AdminForms,
     [[":FormId", DetailsAdminForm]],
@@ -174,7 +192,7 @@ const screens = {
   COUNTRIES: [
     "/countries",
     "Države",
-    faCog,
+    faFlag,
     SETTINGS,
     Countries,
     [[":cid", CountriesDetails]],
@@ -182,10 +200,50 @@ const screens = {
   MUNICIPALITIES: [
     "/municipalities",
     "Opštine",
-    faCog,
+    faCity,
     SETTINGS,
     Municipalities,
-    [],
+    [[":mid", MunicipalitiesDetails]],
+  ],
+  TOWNS: [
+    "/towns",
+    "Mesta",
+    faBuilding,
+    SETTINGS,
+    Towns,
+    [[":tid", TownsDetails]],
+  ],
+  STREETS: [
+    "/streets",
+    "Ulice",
+    faRoad,
+    SETTINGS,
+    Streets,
+    [[":sid", StreetsDetails]],
+  ],
+  BRANDS: [
+    "/brands",
+    "Brendovi",
+    faCopyright,
+    SETTINGS,
+    Brands,
+    [[":bid", BrandsDetails]],
+  ],
+  STORES: [
+    "/stores",
+    "Skladišta",
+    faStore,
+    SETTINGS,
+    Stores,
+    [[":ssid", StoresDetails]],
+  ],
+  MANUFACTURERS: [
+    "/manufacturers",
+    "Proizvođači",
+    faIndustry,
+    SETTINGS,
+    Manufacturers,
+    [[":mmid", ManufacturersDetails]],
   ],
 
   IMPORT: ["/import", "Uvoz podataka", faUpload, TOOLS, ImportSteps],

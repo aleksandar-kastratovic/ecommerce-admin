@@ -1,19 +1,19 @@
-import { deleteMunicipality, getListMunicipalities } from "./services";
+import { deleteStore, getListStores } from "./services";
 import ListPage from "../../components/shared/ListPage/ListPage";
 
 import tblFields from './tblFields.json'; 
 
-const Municipalities = () => {
+const Stores = () => {
     return(
-        <ListPage
-                getData={getListMunicipalities}
-                deleteData={deleteMunicipality}
-                title="Opštine"
+            <ListPage
+                getData={getListStores}
+                deleteData={deleteStore}
+                title="Skladišta"
                 showNewButton={true}
-                newPath="/municipalities/new"
+                newPath="/stores/new"
                 columnFields={[tblFields]}
                 showToolbar={true}
-                editPath="/municipalities/"
+                editPath="/stores/"
                 deleteTitle="Brisanje"
                 deleteDescription="Da li ste sigurni da želite da obrišete?"
                 showDatePicker={false}
@@ -21,4 +21,4 @@ const Municipalities = () => {
     )
 };
 
-export default Municipalities;
+export default Stores;
