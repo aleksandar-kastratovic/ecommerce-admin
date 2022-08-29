@@ -177,11 +177,12 @@ const CreateForm = ({
                 onChange={onInputChangeHandler}
                 disabled={disabled}
               >
-                {item.options.map((itemUnit, index) => (
-                  <MenuItem key={itemUnit.id} value={itemUnit.id}>
-                    {itemUnit.name}
-                  </MenuItem>
-                ))}
+                {Array.isArray(item.options) &&
+                  item.options.map((itemUnit, index) => (
+                    <MenuItem key={itemUnit.id} value={itemUnit.id}>
+                      {itemUnit.name}
+                    </MenuItem>
+                  ))}
               </Select>
             </FormControl>
           );
