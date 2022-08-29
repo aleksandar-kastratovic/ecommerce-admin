@@ -108,16 +108,6 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "select",
-    "options": [
-      {
-        "id": "1",
-        "name": "Option1"
-      },
-      {
-        "id": "2",
-        "name": "Option2"
-      }
-    ]
+    "input_type": "date_time"
   }
 ]

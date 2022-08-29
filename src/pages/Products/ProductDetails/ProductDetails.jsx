@@ -326,6 +326,7 @@ const ProductDetails = () => {
     if (prodId !== "new") {
       if (adderFields.includes(selected) || multipleImages.includes(selected)) {
         handleListFields();
+      } else if (selected === "specification") {
       } else {
         handleData();
       }

@@ -7,17 +7,23 @@ import groupForm from "../groupForm.json";
 import CreateForm from "../../../../../components/shared/Form/CreateForm";
 import { formatDate } from "../../../../../helpers/dateFormat";
 import { Button } from "@mui/material";
+import { useContext } from "react";
+import AuthContext from "../../../../../store/auth-contex";
+import { getFieldsByGroupId } from "../../../services";
 
-const GroupField = ({ title = "", groupId, setId }) => {
+const GroupField = ({ name = "", groupId, setId, onChange = () => {} }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formFields, setFormFields] = useState([]);
   const [data, setData] = useState({});
+
+  const { user } = useContext(AuthContext);
 
   const isOpenToggle = () => {
     setIsOpen(!isOpen);
   };
 
   const formItemChangeHandler = ({ target }, type) => {
+    onChange();
     if (type === "date") {
       setData({ ...data, [target.name]: formatDate(target.value) });
     } else if (type) {
@@ -27,16 +33,25 @@ const GroupField = ({ title = "", groupId, setId }) => {
     }
   };
 
+  const groupFiledsHandler = async () => {
+    try {
+      let response = await getFieldsByGroupId(user.access_token, groupId);
+      setFormFields(response?.payload);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
   useEffect(() => {
     if (open) {
-      setFormFields(groupForm);
+      groupFiledsHandler();
     }
   }, [open]);
 
   return (
     <Box>
       <div onClick={isOpenToggle}>
-        {groupId}
+        {name}
         {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
       </div>
       {isOpen && (

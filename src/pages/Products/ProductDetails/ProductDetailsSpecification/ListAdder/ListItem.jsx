@@ -11,6 +11,9 @@ import { Button } from "@mui/material";
 import { isEmpty } from "lodash";
 import { useEffect } from "react";
 import GroupField from "./GroupField";
+import { useContext } from "react";
+import AuthContext from "../../../../../store/auth-contex";
+import { getGrupsBySetID } from "../../../services";
 
 const testGroups = [
   { id: 1, name: "grupa1" },
@@ -27,12 +30,16 @@ const ListItem = ({
   setFormFields = [],
   selectedSet = undefined,
 }) => {
+  const [loaded, setLoaded] = useState(false);
   //set form
   const [fields, setFields] = useState(setFormFields);
   const [selected, setSetlected] = useState(selectedSet);
 
   //set groups
   const [groups, setGroups] = useState([]);
+
+  const { user } = useContext(AuthContext);
+  const [ddlDisabled, setDdlDisabled] = useState(false);
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     show: false,
@@ -57,12 +64,23 @@ const ListItem = ({
     setOpenDeleteDialog({ show: false, id: null });
   };
 
-  const groupsChangeHandler = () => {
-    setGroups(testGroups);
+  const groupsChangeHandler = async () => {
+    try {
+      let response = await getGrupsBySetID(user.access_token, selected);
+      setGroups(response?.data?.payload?.groups);
+    } catch (error) {
+      console.warn(error);
+    }
   };
 
   useEffect(() => {
-    groupsChangeHandler();
+    if (loaded) {
+      groupsChangeHandler();
+    }
+  }, [selected, loaded]);
+
+  useEffect(() => {
+    setLoaded(true);
   }, []);
 
   return (
@@ -75,6 +93,7 @@ const ListItem = ({
             item={fields[0]}
             key={index}
             value={selected}
+            disabled={ddlDisabled}
           />
         </Box>
         <Button className={styles.deleteButton} onClick={onClickDelete}>
@@ -90,6 +109,9 @@ const ListItem = ({
               name={group.name}
               groupId={group.id}
               steId={setId}
+              onChange={() => {
+                setDdlDisabled(true);
+              }}
             />
           );
         })}

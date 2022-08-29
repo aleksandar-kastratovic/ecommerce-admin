@@ -51,7 +51,27 @@ export const getListProductSection = async (token, data = {}, slug = "") => {
 export const getProductSpecsSetDDL = async (token) => {
   return await axios({
     method: "GET",
-    url: `${api()}admin/productitems/specifications/ddl`,
+    url: `${api()}admin/productitems/specifications/ddl/prodspecset`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const getGrupsBySetID = async (token, setId) => {
+  return await axios({
+    method: "GET",
+    url: `${api()}admin/productitems/specifications/set/${setId}`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+};
+
+export const getFieldsByGroupId = async (token, groupID) => {
+  return await axios({
+    method: "GET",
+    url: `${api()}admin/productitems/specifications/group/${groupID}`,
     headers: {
       Authorization: `Bearer ${token}`,
     },
