@@ -32,7 +32,7 @@ const AttributesModal = ({
     id_group_attribute: idAttribute,
     slug: "",
     name: "",
-    image: "",
+    image: "empty",
     use_in_variants: 0,
     description: "",
     order: 0,
@@ -88,10 +88,10 @@ const AttributesModal = ({
       <DialogTitle>Unos vrednosti za select</DialogTitle>
       <DialogContent>
         <List
-          listFields={[]}
+          listFields={listFields}
           formFields={formFields}
           init={initList}
-          onDelete={deleteProductSpecsGroupAttributeValues}
+          onDelete={() => {}}
           required={[]}
           onSave={saveListData}
         />
