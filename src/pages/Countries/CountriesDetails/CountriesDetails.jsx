@@ -1,20 +1,38 @@
 import { Box } from "@mui/system";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect, useContext } from "react";
 import CreateForm from "../../../components/shared/Form/CreateForm";
+import Button from "../../../components/shared/Button/Button";
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
 import { formatDate } from "../../../helpers/dateFormat";
 
 import fields from './formField.json';
+import { getCountry, saveCountry } from "../services";
+import AuthContext from "../../../store/auth-contex";
+import requirePropFactory from "@mui/utils/requirePropFactory";
+import { isEmpty } from "lodash";
+import { toast } from "react-toastify";
 
+const required = [];
+const init = {
+    "slug": "",
+		"name": "",
+		"phone_code": "",
+		"source": "",
+		"id_source ": null,
+		"id_source": 0
+}
 const CountriesDetails = () => {
+    const { cid } = useParams();
     const navigate = useNavigate();
     const handleBack = () => {
         navigate("/countries");
     }
-    const [data, setData] = useState([]);
+    const [data, setData] = useState(init);
     const [inputsError, setInputsError] = useState([]);
-
+    const [isLoading, setIsLoading] = useState(false);
+    const {user} = useContext(AuthContext);
+    
     const formItemChangeHandler = ({ target }, type) => {
         if(type==="date") {
           setData({ ...data, [target.name]: formatDate(target.value ) });
@@ -26,6 +44,52 @@ const CountriesDetails = () => {
         }
       };
 
+      const handleData = async () => {
+        try {
+          setIsLoading(true);
+          let response = await getCountry(user.access_token, cid);
+          let { payload } = response.data;
+          setData(payload);
+        } catch (error) {
+          console.warn(error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      const saveData = async () => {
+        try {
+          let response = await saveCountry(user.access_token, data);
+          handleBack();
+          toast.success("Uspešno uneta forma!");
+        } catch (error) {
+          console.warn(error.response);
+          toast.warning("Greška ");
+        }
+      };
+
+      const onSubmit = () => {
+        const errors = {};
+        console.log(data);
+        Object.keys(data).forEach((prop_name) => {
+          if (isEmpty(data[prop_name])) {
+            if (
+              required.includes(prop_name)
+            )
+              errors[prop_name] = {
+                content: "Polje je obavezno, molim Vas unesite vrednost.",
+              };
+          }
+        });
+        isEmpty(errors) ? saveData() : setInputsError(errors);
+      };
+      
+      useEffect(() => {
+        if (cid !== "new") {
+          handleData();
+        }
+      }, []);
+    
     return(
        <PageWrapper title="Detalji države" back={handleBack}>
            <Box component="form" autoComplete="off">
@@ -48,6 +112,7 @@ const CountriesDetails = () => {
                     />
                   );
                 })}
+                <Button label="Sačuvaj" onClick={onSubmit}/>
           </Box>
        </PageWrapper>
     )

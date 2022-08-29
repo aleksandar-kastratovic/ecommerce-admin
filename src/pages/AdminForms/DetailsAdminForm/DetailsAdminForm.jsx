@@ -58,10 +58,10 @@ const DetailsAdminForm = () => {
 
   const handleFormData = async () => {
     try {
+      setIsLoading(true);
       let response = await getFormData(user.access_token, FormId);
       let { payload } = response.data;
       setData(payload);
-      setIsLoading(true);
     } catch (error) {
       console.warn(error);
     } finally {
@@ -91,10 +91,8 @@ const DetailsAdminForm = () => {
   };
 
   const saveData = async () => {
-    console.log("test");
     try {
       let response = await saveForm(user.access_token, data);
-      console.log(response);
       handleBackToList();
       toast.success("Uspešno uneta forma!");
     } catch (error) {

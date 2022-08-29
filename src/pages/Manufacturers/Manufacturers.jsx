@@ -11,7 +11,7 @@ const Manufacturers = () => {
                 title="Proizvođači"
                 showNewButton={true}
                 newPath="/manufacturers/new"
-                columnFields={[tblFields]}
+                columnFields={tblFields}
                 showToolbar={true}
                 editPath="/manufacturers/"
                 deleteTitle="Brisanje"
