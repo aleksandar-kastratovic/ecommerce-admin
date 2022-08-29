@@ -348,7 +348,7 @@ const ProductDetails = () => {
       );
     }
     if (selected === "specification") {
-      return <Specification />;
+      return <Specification productId={prodId} />;
     } else if (selected === "variation") {
     }
     return (
@@ -413,7 +413,11 @@ const ProductDetails = () => {
                   )}
                 </>
               }
-              hasButton={!adderFields.includes(selected)}
+              hasButton={
+                !(
+                  adderFields.includes(selected) || selected === "specification"
+                )
+              }
               onSubmit={onSubmit}
               buttonText="Sacuvaj"
             />

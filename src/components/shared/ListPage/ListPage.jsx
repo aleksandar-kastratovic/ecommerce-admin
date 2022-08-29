@@ -109,7 +109,6 @@ const ListPage = ({
       toast.warning("Greška");
     }
   }, [isError]);
-
   return (
     <>
       <Paper elevation={0} className={`${styles.paperStyle} ${className}`}>

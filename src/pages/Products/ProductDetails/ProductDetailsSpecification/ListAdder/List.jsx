@@ -11,8 +11,8 @@ import { getProductSpecsSetDDL } from "../../../services";
 
 const set = { setId: 0, setFormFields: chooseSetForm, selectedSet: 1 };
 
-const List = ({ onDelete = () => {} }) => {
-  const [fields, setFields] = useState([set]);
+const List = ({ onDelete = () => {}, productId }) => {
+  const [fields, setFields] = useState([]);
   const { user } = useContext(AuthContext);
   const [chooseSet, setChooseSet] = useState(chooseSetForm[0]);
 
@@ -42,7 +42,6 @@ const List = ({ onDelete = () => {} }) => {
   };
 
   useEffect(() => {
-    setFields([]);
     getSetDDL();
   }, []);
 
@@ -57,11 +56,11 @@ const List = ({ onDelete = () => {} }) => {
         return (
           <ListItem
             key={field.setId ? field.setId : `${index}new`}
-            setId={field.setId}
             index={index}
             onDelete={deleteHandler}
             setFormFields={[chooseSet]}
             selectedSet={field.selectedSet}
+            productId={productId}
           />
         );
       })}

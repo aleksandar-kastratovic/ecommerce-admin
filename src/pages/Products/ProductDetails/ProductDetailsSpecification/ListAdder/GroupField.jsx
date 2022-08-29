@@ -9,9 +9,22 @@ import { formatDate } from "../../../../../helpers/dateFormat";
 import { Button } from "@mui/material";
 import { useContext } from "react";
 import AuthContext from "../../../../../store/auth-contex";
-import { getFieldsByGroupId } from "../../../services";
+import {
+  getFieldsByGroupId,
+  getProductGroupAttributeDDL,
+  postProductGroupAttribute,
+} from "../../../services";
 
-const GroupField = ({ name = "", groupId, setId, onChange = () => {} }) => {
+const GroupField = ({
+  name = "",
+  slug = "",
+  groupId,
+  setId,
+  nameSet,
+  slugSet,
+  onChange = () => {},
+  productId,
+}) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formFields, setFormFields] = useState([]);
   const [data, setData] = useState({});
@@ -20,6 +33,46 @@ const GroupField = ({ name = "", groupId, setId, onChange = () => {} }) => {
 
   const isOpenToggle = () => {
     setIsOpen(!isOpen);
+  };
+
+  const onSubmit = async () => {
+    try {
+      for (const field of formFields) {
+        if (data[field.name] !== undefined) {
+          let repack = { id: data.id !== undefined ? data.id : null };
+          repack = {
+            ...repack,
+            id_product: productId,
+            id_set: setId,
+            id_group: groupId,
+            id_attribute: field.id,
+            slug_set: slugSet,
+            set_name: nameSet,
+            group_name: name,
+            slug_group: slug,
+            slug_attribute: field.slug,
+            id_product_variant: 1,
+            name_attribute: field.name,
+            id_attribute_value: null,
+            slug_attribute_value: "",
+            order: 0,
+            name_attribute_value: data[field.name],
+          };
+          if (field.field_type === "select") {
+            //repack
+          }
+
+          let response = await postProductGroupAttribute(
+            user.access_token,
+            repack
+          );
+          console.log(response);
+        }
+      }
+      //let response = await postProductGroupAttribute(user.access_token);
+    } catch (error) {
+      console.warn(error);
+    }
   };
 
   const formItemChangeHandler = ({ target }, type) => {
@@ -36,9 +89,24 @@ const GroupField = ({ name = "", groupId, setId, onChange = () => {} }) => {
   const groupFiledsHandler = async () => {
     try {
       let response = await getFieldsByGroupId(user.access_token, groupId);
-      setFormFields(response?.payload);
+
+      setFormFields(response?.data?.payload);
     } catch (error) {
       console.warn(error);
+    }
+  };
+
+  const attributeDdlHandler = async (idAttr) => {
+    try {
+      let response = await getProductGroupAttributeDDL(
+        user.access_token,
+        groupId,
+        idAttr
+      );
+      return response?.data?.payload;
+    } catch (error) {
+      console.warn(error);
+      return [];
     }
   };
 
@@ -47,6 +115,10 @@ const GroupField = ({ name = "", groupId, setId, onChange = () => {} }) => {
       groupFiledsHandler();
     }
   }, [open]);
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <Box>
@@ -57,24 +129,36 @@ const GroupField = ({ name = "", groupId, setId, onChange = () => {} }) => {
       {isOpen && (
         <Box component="form" autoComplete="off">
           {formFields &&
-            formFields
-              .filter(({ in_details }) => in_details)
-              .map((item, index) => {
-                return (
-                  <CreateForm
-                    data-test-id="admin-form"
-                    onChangeHandler={formItemChangeHandler}
-                    item={item}
-                    key={index}
-                    value={
-                      Array.isArray(item) && data
-                        ? data[item.prop_name]
-                        : data[item.prop_name]
-                    }
-                  />
-                );
-              })}
-          <Button onClick={() => {}}>Sačuvaj</Button>
+            formFields.map((item, index) => {
+              let repackItem = {
+                ...item,
+                field_name: item.name,
+                prop_name: item.name,
+                input_type: item.field_type,
+                editable: true,
+                required: false,
+              };
+              if (item.field_type === "select") {
+                repackItem = {
+                  ...repackItem,
+                  options: attributeDdlHandler(item.id),
+                };
+              }
+              return (
+                <CreateForm
+                  data-test-id="admin-form"
+                  onChangeHandler={formItemChangeHandler}
+                  item={repackItem}
+                  key={index}
+                  value={
+                    Array.isArray(repackItem) && data
+                      ? data[repackItem.prop_name]
+                      : data[repackItem.prop_name]
+                  }
+                />
+              );
+            })}
+          <Button onClick={onSubmit}>Sačuvaj</Button>
         </Box>
       )}
     </Box>

@@ -24,11 +24,11 @@ const testGroups = [
 ];
 
 const ListItem = ({
-  setId,
   index,
   onDelete = () => {},
   setFormFields = [],
   selectedSet = undefined,
+  productId,
 }) => {
   const [loaded, setLoaded] = useState(false);
   //set form
@@ -37,6 +37,7 @@ const ListItem = ({
 
   //set groups
   const [groups, setGroups] = useState([]);
+  const [set, setSet] = useState({});
 
   const { user } = useContext(AuthContext);
   const [ddlDisabled, setDdlDisabled] = useState(false);
@@ -67,6 +68,7 @@ const ListItem = ({
   const groupsChangeHandler = async () => {
     try {
       let response = await getGrupsBySetID(user.access_token, selected);
+      setSet(response?.data?.payload?.set);
       setGroups(response?.data?.payload?.groups);
     } catch (error) {
       console.warn(error);
@@ -108,7 +110,11 @@ const ListItem = ({
               key={group.id}
               name={group.name}
               groupId={group.id}
-              steId={setId}
+              slug={group.slug}
+              setId={set.id}
+              slugSet={set.slug}
+              nameSet={set.name}
+              productId={productId}
               onChange={() => {
                 setDdlDisabled(true);
               }}
