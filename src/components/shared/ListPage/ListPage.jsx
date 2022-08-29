@@ -74,6 +74,7 @@ const ListPage = ({
   const handleConfirm = async () => {
     try {
       let response = await deleteData(user.access_token, openDeleteDialog.id);
+      console.log(response);
     } catch (error) {
       console.warn(error);
       toast.warning("Greška");

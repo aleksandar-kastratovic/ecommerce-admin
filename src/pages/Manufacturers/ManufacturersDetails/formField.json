@@ -1,7 +1,7 @@
 [
     {
-      "field_name": "Field name",
-      "prop_name": "field_name",
+      "field_name": "Slug",
+      "prop_name": "slug",
       "in_main_table": true,
       "in_details": true,
       "editable": true,
@@ -13,8 +13,8 @@
       "input_type": "input"
     },
     {
-      "field_name": "Prop name",
-      "prop_name": "prop_name",
+      "field_name": "Naslov",
+      "prop_name": "title",
       "in_main_table": true,
       "in_details": true,
       "editable": true,
@@ -26,47 +26,8 @@
       "input_type": "input"
     },
     {
-      "field_name": "Input type",
-      "prop_name": "input_type",
-      "in_main_table": true,
-      "in_details": true,
-      "editable": true,
-      "disabled": false,
-      "required": false,
-      "description": "",
-      "ui_prop": "xyz",
-      "sortable": true,
-      "options": [
-        {
-          "id": "input",
-          "name": "Input"
-        },
-        {
-          "id": "select",
-          "name": "Select"
-        },
-        {
-          "id": "date_time",
-          "name": "Date"
-        },
-        {
-          "id": "image_upload",
-          "name": "Image upload"
-        },
-        {
-          "id": "image_button",
-          "name": "Image button"
-        },
-        {
-          "id": "switch",
-          "name": "Switch"
-        }
-      ],
-      "input_type": "select"
-    },
-    {
-      "field_name": "Podnaslov",
-      "prop_name": "subtitle",
+      "field_name": "ID Države",
+      "prop_name": "id_country",
       "in_main_table": true,
       "in_details": true,
       "editable": true,
@@ -78,8 +39,8 @@
       "input_type": "input"
     },
     {
-      "field_name": "U tabeli",
-      "prop_name": "in_main_table",
+      "field_name": "Naziv države",
+      "prop_name": "country_name",
       "in_main_table": true,
       "in_details": true,
       "editable": true,
@@ -88,11 +49,11 @@
       "description": "",
       "ui_prop": "xyz",
       "sortable": true,
-      "input_type": "switch"
+      "input_type": "input"
     },
     {
-      "field_name": "U detaljima",
-      "prop_name": "in_details",
+      "field_name": "Kratak opis",
+      "prop_name": "short_description",
       "in_main_table": true,
       "in_details": true,
       "editable": true,
@@ -101,89 +62,11 @@
       "description": "",
       "ui_prop": "xyz",
       "sortable": true,
-      "input_type": "switch"
+      "input_type": "input"
     },
     {
-      "field_name": "Disabled",
-      "prop_name": "disabled",
-      "in_main_table": true,
-      "in_details": true,
-      "editable": true,
-      "disabled": false,
-      "required": false,
-      "description": "",
-      "ui_prop": "xyz",
-      "sortable": true,
-      "input_type": "switch"
-    },
-    {
-      "field_name": "Required",
-      "prop_name": "required",
-      "in_main_table": true,
-      "in_details": true,
-      "editable": true,
-      "disabled": false,
-      "required": false,
-      "description": "",
-      "ui_prop": "xyz",
-      "sortable": true,
-      "input_type": "switch"
-    },
-    {
-      "field_name": "Sortable",
-      "prop_name": "sortable",
-      "in_main_table": true,
-      "in_details": true,
-      "editable": true,
-      "disabled": false,
-      "required": false,
-      "description": "",
-      "ui_prop": "xyz",
-      "sortable": true,
-      "input_type": "switch"
-    },
-    {
-      "field_name": "Izmenljivo",
-      "prop_name": "editable",
-      "in_main_table": true,
-      "in_details": true,
-      "editable": true,
-      "disabled": false,
-      "required": false,
-      "description": "",
-      "ui_prop": "xyz",
-      "sortable": true,
-      "input_type": "switch"
-    },
-    {
-      "field_name": "Description",
+      "field_name": "Opis",
       "prop_name": "description",
-      "in_main_table": true,
-      "in_details": true,
-      "editable": true,
-      "disabled": false,
-      "required": false,
-      "description": "",
-      "ui_prop": "xyz",
-      "sortable": true,
-      "input_type": "input"
-    },
-    {
-      "field_name": "UI prop",
-      "prop_name": "ui_prop",
-      "in_main_table": true,
-      "in_details": true,
-      "editable": true,
-      "disabled": false,
-      "required": false,
-      "description": "",
-      "ui_prop": "xyz",
-      "sortable": true,
-      "input_type": "input"
-    },
-    {
-      "field_name": "Option props",
-      "prop_name": "option_prop",
       "in_main_table": true,
       "in_details": true,
       "editable": true,

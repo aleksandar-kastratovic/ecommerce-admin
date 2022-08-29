@@ -16,6 +16,28 @@ export const getListStreets = async (token, search) => {
     });
   };
 
+  export const getStreet = async (token, id) => {
+    return await axios({
+      method: "GET",
+      url: `${api()}admin/streets/${id}`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+  };
+
+  export const saveStreet = async (token, data = {}) => {
+    const req = JSON.stringify(data);
+    return await axios({
+      method: "POST",
+      url: `${api()}admin/streets`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: req,
+    });
+  };
+
 export const deleteStreet = async (token, id) => {
     return await axios({
       method: "DELETE",
