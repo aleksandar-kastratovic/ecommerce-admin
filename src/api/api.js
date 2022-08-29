@@ -32,6 +32,52 @@ class ApiService {
         .catch((error) => reject(error));
     });
   }
+
+  /**
+   * Execute the get API call
+   *
+   * @param {string} path The path to the API, without the domain and API version suffix.
+   *
+   * @return {Promise<APIResponse>}
+   */
+  get(path) {
+    return this._execute("GET", path, null);
+  }
+
+  /**
+   * Execute the post API call
+   *
+   * @param {string} path The path to the API, without the domain and API version suffix.
+   * @param {?{}} payload The payload to send in the request.
+   *
+   * @return {Promise<APIResponse>}
+   */
+  post(path, payload = null) {
+    return this._execute("POST", path, payload);
+  }
+
+  /**
+   * Execute the list API call
+   *
+   * @param {string} path The path to the API, without the domain and API version suffix.
+   * @param {?{}} payload The payload to send in the request.
+   *
+   * @return {Promise<APIResponse>}
+   */
+  list(path, payload = null) {
+    return this._execute("LIST", path, payload);
+  }
+
+  /**
+   * Execute the delete API call
+   *
+   * @param {string} path The path to the API, without the domain and API version suffix.
+   *
+   * @return {Promise<APIResponse>}
+   */
+  delete(path) {
+    return this._execute("DELETE", path, null);
+  }
 }
 
 /**

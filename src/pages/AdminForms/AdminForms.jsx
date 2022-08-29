@@ -16,7 +16,7 @@ const AdminForms = () => {
 
   const getList = async () => {
     return api
-      ._execute("LIST", "admin/form")
+      .list("admin/form")
       .then((response) => setResponse(response?.payload))
       .catch(setError);
   };
