@@ -15,20 +15,13 @@ import { useContext } from "react";
 import AuthContext from "../../../../../store/auth-contex";
 import { getGrupsBySetID } from "../../../services";
 
-const testGroups = [
-  { id: 1, name: "grupa1" },
-  { id: 2, name: "grupa2" },
-  { id: 3, name: "grupa3" },
-  { id: 4, name: "grupa4" },
-  { id: 5, name: "grupa5" },
-];
-
 const ListItem = ({
   index,
   onDelete = () => {},
   setFormFields = [],
   selectedSet = undefined,
   productId,
+  productVariantId,
 }) => {
   const [loaded, setLoaded] = useState(false);
   //set form
@@ -53,7 +46,7 @@ const ListItem = ({
   };
 
   const deleteHandler = () => {
-    onDelete(index, setId);
+    onDelete(index, index);
     setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
   };
 
@@ -118,6 +111,7 @@ const ListItem = ({
               onChange={() => {
                 setDdlDisabled(true);
               }}
+              productVariantId={productVariantId}
             />
           );
         })}

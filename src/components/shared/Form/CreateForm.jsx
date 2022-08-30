@@ -179,7 +179,11 @@ const CreateForm = ({
               >
                 {Array.isArray(item.options) &&
                   item.options.map((itemUnit, index) => (
-                    <MenuItem key={itemUnit.id} value={itemUnit.id}>
+                    <MenuItem
+                      key={itemUnit.id}
+                      value={itemUnit.id}
+                      selected={itemUnit.id === inputValue}
+                    >
                       {itemUnit.name}
                     </MenuItem>
                   ))}

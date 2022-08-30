@@ -7,9 +7,10 @@ import ListItem from "./ListItem";
 import styles from "./List.module.scss";
 
 import chooseSetForm from "../chooseSetForm.json";
-import { getProductSpecsSetDDL } from "../../../services";
-
-const set = { setId: 0, setFormFields: chooseSetForm, selectedSet: 1 };
+import {
+  getListSetByProductID,
+  getProductSpecsSetDDL,
+} from "../../../services";
 
 const List = ({ onDelete = () => {}, productId }) => {
   const [fields, setFields] = useState([]);
@@ -20,6 +21,15 @@ const List = ({ onDelete = () => {}, productId }) => {
     try {
       let response = await getProductSpecsSetDDL(user.access_token);
       setChooseSet({ ...chooseSet, options: response?.data?.payload });
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const setListHandler = async () => {
+    try {
+      let response = await getListSetByProductID(user.access_token, productId);
+      setFields(response?.data?.payload);
     } catch (error) {
       console.warn(error);
     }
@@ -38,11 +48,12 @@ const List = ({ onDelete = () => {}, productId }) => {
   };
 
   const addFieldHandler = () => {
-    setFields([...fields, { ...set, setId: fields.length }]);
+    setFields([...fields, { ...set }]);
   };
 
   useEffect(() => {
     getSetDDL();
+    setListHandler();
   }, []);
 
   return (
@@ -55,12 +66,13 @@ const List = ({ onDelete = () => {}, productId }) => {
       {fields.map((field, index) => {
         return (
           <ListItem
-            key={field.setId ? field.setId : `${index}new`}
+            key={field.id ? field.id : `${index}new`}
             index={index}
             onDelete={deleteHandler}
             setFormFields={[chooseSet]}
-            selectedSet={field.selectedSet}
+            selectedSet={field.id_set ?? undefined}
             productId={productId}
+            productVariantId={field.id_product_variant ?? 0}
           />
         );
       })}

@@ -61,6 +61,11 @@
       "name": "Specifikacija",
       "slug": "specification",
       "description": ""
+    },
+    {
+      "name": "Varijacije",
+      "slug": "variation",
+      "description": ""
     }
   ]
 }

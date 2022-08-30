@@ -24,6 +24,7 @@ const GroupField = ({
   slugSet,
   onChange = () => {},
   productId,
+  productVariantId,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [formFields, setFormFields] = useState([]);
@@ -51,7 +52,7 @@ const GroupField = ({
             group_name: name,
             slug_group: slug,
             slug_attribute: field.slug,
-            id_product_variant: 1,
+            id_product_variant: productVariantId ?? 1,
             name_attribute: field.name,
             id_attribute_value: null,
             slug_attribute_value: "",

@@ -60,7 +60,7 @@ export const getProductSpecsSetDDL = async (token) => {
 
 export const getListSetByProductID = async (token, id) => {
   return await axios({
-    method: "LIST",
+    method: "GET",
     url: `${api()}admin/productitems/specifications/product/${id}`,
     headers: {
       Authorization: `Bearer ${token}`,

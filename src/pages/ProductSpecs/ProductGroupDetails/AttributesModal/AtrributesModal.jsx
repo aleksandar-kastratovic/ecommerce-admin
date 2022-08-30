@@ -56,7 +56,6 @@ const AttributesModal = ({
 
   const saveListData = async (data, index) => {
     try {
-      console.log(data);
       let repack = { ...initList, id_group: idGroup, ...data };
 
       let response = await postProductSpecsGroupAttributeValues(
