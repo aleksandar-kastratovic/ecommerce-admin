@@ -32,7 +32,7 @@ const AttributesModal = ({
     id_group_attribute: idAttribute,
     slug: "",
     name: "",
-    image: "",
+    image: "empty",
     use_in_variants: 0,
     description: "",
     order: 0,
@@ -56,9 +56,11 @@ const AttributesModal = ({
 
   const saveListData = async (data, index) => {
     try {
-      console.log(data);
-      let repack = { ...initList, id_group: idGroup, ...data };
-
+      let repack = {
+        ...initList,
+        id_group: idGroup,
+        ...data,
+      };
       let response = await postProductSpecsGroupAttributeValues(
         user.access_token,
         repack
@@ -88,10 +90,10 @@ const AttributesModal = ({
       <DialogTitle>Unos vrednosti za select</DialogTitle>
       <DialogContent>
         <List
-          listFields={[]}
+          listFields={listFields}
           formFields={formFields}
           init={initList}
-          onDelete={deleteProductSpecsGroupAttributeValues}
+          onDelete={() => {}}
           required={[]}
           onSave={saveListData}
         />

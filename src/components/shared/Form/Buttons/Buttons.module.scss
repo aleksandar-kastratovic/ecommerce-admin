@@ -1,7 +1,9 @@
+@import "../../../../variables.scss";
+
 .wrapper {
-	display:         flex;
-	width:           100%;
-	justify-content: end;
-	margin-top:      1em;
-	gap:             .5em;
+  display: flex;
+  width: 100%;
+  justify-content: end;
+  margin-top: 1em;
+  gap: $gap;
 }

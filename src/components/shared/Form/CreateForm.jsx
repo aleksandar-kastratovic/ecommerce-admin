@@ -13,6 +13,7 @@ import Switch from "@mui/material/Switch";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import BasicDateTimePicker from "../BasicDateTimePicker/BasicDateTimePicker";
 import ImageButton from "../ImageButton/ImageButton";
+import InputMultipleImages from "../InputMultipleImages/InputMultipleImages";
 
 const CreateForm = ({
   item = {},
@@ -23,6 +24,7 @@ const CreateForm = ({
   onOpenImageDialog = () => {},
   value = "",
   error = "",
+  disabled = false,
 }) => {
   // depending on input type in fields you will get a control
   // value is obvious
@@ -46,6 +48,7 @@ const CreateForm = ({
             onChangeHandler={onChangeHandler}
             error={error[index]}
             value={value}
+            disabled={disabled}
           />
         ))}
       </>
@@ -67,6 +70,7 @@ const CreateForm = ({
               value={value}
               error={error}
               onChange={onChangeHandler}
+              disabled={disabled}
             />
           );
           break;
@@ -85,6 +89,7 @@ const CreateForm = ({
               error={error}
               onImageUpload={onImageUpload}
               onImagePreview={onImagePreview}
+              disabled={disabled}
             />
           );
           break;
@@ -103,19 +108,23 @@ const CreateForm = ({
               error={error}
               onImageUpload={onImageUpload}
               onOpenImageDialog={onOpenImageDialog}
+              disabled={disabled}
             />
           );
           break;
         case "checkbox":
           formItem = (
-            <FormControlLabel control={<Checkbox />} label={item.field_name} />
+            <FormControlLabel
+              control={<Checkbox disabled={disabled} />}
+              label={item.field_name}
+            />
           );
           break;
         case "radio":
           formItem = (
             <FormControlLabel
               value=""
-              control={<Radio />}
+              control={<Radio disabled={disabled} />}
               label={item.field_name}
             />
           );
@@ -135,6 +144,7 @@ const CreateForm = ({
                       : value
                   }
                   onChange={(e) => onChangeHandler(e, "switch")}
+                  disabled={disabled}
                 />
               }
               label={item.field_name}
@@ -154,6 +164,7 @@ const CreateForm = ({
                     ? item.required === 1
                     : item.required
                 }
+                disabled={disabled}
               >
                 {item.field_name}
               </FormLabel>
@@ -164,12 +175,18 @@ const CreateForm = ({
                 value={inputValue}
                 label={item.field_name}
                 onChange={onInputChangeHandler}
+                disabled={disabled}
               >
-                {item.options.map((itemUnit, index) => (
-                  <MenuItem key={itemUnit.id} value={itemUnit.id}>
-                    {itemUnit.name}
-                  </MenuItem>
-                ))}
+                {Array.isArray(item.options) &&
+                  item.options.map((itemUnit, index) => (
+                    <MenuItem
+                      key={itemUnit.id}
+                      value={itemUnit.id}
+                      selected={itemUnit.id === inputValue}
+                    >
+                      {itemUnit.name}
+                    </MenuItem>
+                  ))}
               </Select>
             </FormControl>
           );
@@ -180,6 +197,7 @@ const CreateForm = ({
               aria-label="minimum height"
               minRows={3}
               placeholder="Minimum 3 rows"
+              disabled={disabled}
             />
           );
           break;
@@ -190,11 +208,12 @@ const CreateForm = ({
               label={item.field_name}
               name={item.prop_name}
               onChangeHandler={onChangeHandler}
+              disabled={disabled}
             />
           );
           break;
         case "MultipleImages":
-          formItem = <div>Test</div>;
+          formItem = <InputMultipleImages />;
           break;
 
         default:

@@ -1,0 +1,17 @@
+@import "../../../variables.scss";
+
+.button {
+  padding: 0 !important;
+  font-weight: 400;
+  width: auto !important;
+  min-width: 0 !important;
+  text-align: center;
+  border: none !important;
+  .button:hover {
+    border: none !important;
+  }
+}
+
+.icon {
+  margin: 0;
+}

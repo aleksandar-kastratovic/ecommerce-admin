@@ -136,7 +136,7 @@ export const getListProductSpecsGroupAttributeValues = async (
     },
     data: {
       filter_id_group: groupId,
-      filter_id_attribute: attributeId,
+      filter_id_group_attr: attributeId,
     },
   });
 };
@@ -158,6 +158,30 @@ export const postProductSpecsGroupAttributeValues = async (
   return await axios({
     method: "POST",
     url: `${api()}admin/productitemspec/groupattributevalues/`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: data,
+  });
+};
+
+export const getListSetGroups = async (token, idSet) => {
+  return await axios({
+    method: "LIST",
+    url: `${api()}admin/productitemspec/setgroup/list`,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    data: {
+      filter_id_set: idSet,
+    },
+  });
+};
+
+export const postSetGroup = async (token, data) => {
+  return await axios({
+    method: "POST",
+    url: `${api()}admin/productitemspec/setgroup/`,
     headers: {
       Authorization: `Bearer ${token}`,
     },

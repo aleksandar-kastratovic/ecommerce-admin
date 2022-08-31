@@ -36,6 +36,7 @@ import List from "../../../components/shared/ListAdder/List";
 import { toast } from "react-toastify";
 import { formatDate } from "../../../helpers/dateFormat";
 import Specification from "./ProductDetailsSpecification/Specification";
+import ProductDetailsVariation from "./ProductDetailsVariation/ProductDetailsVariation";
 
 const adderFields = ["prices", "inventories", "categories", "seo"];
 const multipleImages = [
@@ -326,6 +327,7 @@ const ProductDetails = () => {
     if (prodId !== "new") {
       if (adderFields.includes(selected) || multipleImages.includes(selected)) {
         handleListFields();
+      } else if (selected === "specification" || selected === "variation") {
       } else {
         handleData();
       }
@@ -347,8 +349,9 @@ const ProductDetails = () => {
       );
     }
     if (selected === "specification") {
-      return <Specification />;
+      return <Specification productId={prodId} />;
     } else if (selected === "variation") {
+      return <ProductDetailsVariation productId={prodId} />;
     }
     return (
       <Box component="form" autoComplete="off">
@@ -412,7 +415,11 @@ const ProductDetails = () => {
                   )}
                 </>
               }
-              hasButton={!adderFields.includes(selected)}
+              hasButton={
+                !(
+                  adderFields.includes(selected) || selected === "specification"
+                )
+              }
               onSubmit={onSubmit}
               buttonText="Sacuvaj"
             />

@@ -19,6 +19,7 @@ import { getListB2Bconfig } from "./services";
 import MultipleImages from "../../components/shared/MultipleImages/MultipleImages";
 import ImageListRow from "../../components/shared/MultipleImages/ImageListRow/ImageListRow";
 import ImageDialogFullPage from "../../components/shared/MultipleImages/ImageDialogFullPage/ImageDialogFullPage";
+import InputMultipleImages from "../../components/shared/InputMultipleImages/InputMultipleImages";
 
 const B2Bsettings = ({}) => {
   const { user } = useContext(AuthContext);
@@ -77,18 +78,18 @@ const B2Bsettings = ({}) => {
   const handleMultipleImageUpload = useCallback(
     (event) => {
       event.preventDefault();
-      const newImagesArray = [];
+      let newImagesArray = [];
 
       if (event.target.files && event.target.files[0]) {
         const selectedFiles = event.target.files;
-
+        let len = imageList === undefined ? 0 : imageList.length;
         // TODO redundant move to helper and one state
         for (let i = 0; i < selectedFiles.length; i++) {
           var file = selectedFiles[i];
           const reader = new FileReader();
           reader.onloadend = () => {
             newImagesArray.push({
-              id: i + 1,
+              id: i + 1 + len,
               name: selectedFiles[i].name,
               position: i + 1,
               alt: selectedFiles[i].name,
@@ -101,6 +102,9 @@ const B2Bsettings = ({}) => {
         }
       }
 
+      if (Array.isArray(imageList)) {
+        newImagesArray = [...imageList, ...newImagesArray];
+      }
       setImageList(newImagesArray);
     },
     [imageList]
@@ -261,7 +265,9 @@ const B2Bsettings = ({}) => {
         <ListTableToolbar showToolbar={false} />
 
         <ListTable
-          fields={flatten(fields).filter(({ in_main_table }) => in_main_table)}
+          tableFields={flatten(fields).filter(
+            ({ in_main_table }) => in_main_table
+          )}
           listData={listData}
           handleActions={handleActions}
         />

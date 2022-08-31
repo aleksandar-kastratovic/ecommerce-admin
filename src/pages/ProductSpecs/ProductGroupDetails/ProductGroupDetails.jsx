@@ -134,8 +134,10 @@ const ProductGroupDetails = () => {
     try {
       let repack = { ...initList, id_group: groupId, ...data };
       let response = await postProductGroupAttribute(user.access_token, repack);
-      let newList = [...listFields, response?.data?.payload];
-      setListFields(newList);
+      if (repack.id === undefined) {
+        let newList = [...listFields, response?.data?.payload];
+        setListFields(newList);
+      }
       toast.success("Uspešno!");
     } catch (error) {
       console.warn(error.response);

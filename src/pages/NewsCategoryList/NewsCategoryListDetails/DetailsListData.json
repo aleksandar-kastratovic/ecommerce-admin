@@ -1,0 +1,9 @@
+{
+  "description": "",
+  "module": "presentation",
+  "name": "Naziv kategorije",
+  "submodules": [
+    { "slug": "info", "name": "Osnovne informacije", "description": "" },
+    { "slug": "fields", "name": "SEO", "description": "" }
+  ]
+}

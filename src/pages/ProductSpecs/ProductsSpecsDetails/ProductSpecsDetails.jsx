@@ -19,7 +19,12 @@ import listData from "./DetailsListData.json";
 import fields from "./DetailsFields.json";
 import listFormFileds from "./ListFormFields.json";
 
-import { getProductSpecsSet, postProductSpecsSet } from "../services";
+import {
+  getListSetGroups,
+  getProductSpecsSet,
+  postProductSpecsSet,
+  postSetGroup,
+} from "../services";
 
 const ProductSpecsDetails = () => {
   const { specId } = useParams();
@@ -37,11 +42,18 @@ const ProductSpecsDetails = () => {
     status: "on",
   };
 
+  const listInit = {
+    id_set: Number(specId),
+    id: null,
+    order: 1,
+    status: "on",
+  };
+
   const [data, setData] = useState(init);
   const [formFields, setFormFields] = useState(listFormFileds);
   const [inputsError, setInputsError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [main, setMain] = useState();
+  const [listFields, setListFields] = useState([]);
 
   const handleBackToList = () => {
     navigate(`/product-specs`);
@@ -66,6 +78,19 @@ const ProductSpecsDetails = () => {
       let response = await getProductSpecsSet(user.access_token, specId);
       let { payload } = response.data;
       setData(payload);
+      setIsLoading(true);
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleListFields = async () => {
+    try {
+      let response = await getListSetGroups(user.access_token, specId);
+      let { payload } = response.data;
+      setListFields(payload?.items);
       setIsLoading(true);
     } catch (error) {
       console.warn(error);
@@ -111,6 +136,27 @@ const ProductSpecsDetails = () => {
     isEmpty(errors) ? saveData() : setInputsError(errors);
   };
 
+  const saveListData = async (listData) => {
+    try {
+      let repack = {
+        ...listData,
+        id_set: Number(listData.id_set),
+        id_group: Number(listData.id_group),
+      };
+      let response = await postSetGroup(user.access_token, repack);
+      toast.success("Uspešno!");
+    } catch (error) {
+      console.warn(error.response);
+      toast.warning("Greška ");
+    }
+  };
+
+  useEffect(() => {
+    if (specId !== "new") {
+      handleListFields();
+    }
+  }, [selected]);
+
   useEffect(() => {
     if (specId !== "new") {
       handleFormData();
@@ -147,12 +193,12 @@ const ProductSpecsDetails = () => {
       case "fields":
         return (
           <List
-            listFields={[]}
+            listFields={listFields}
             formFields={formFields}
-            init={{}}
+            init={listInit}
             onDelete={() => {}}
             required={[]}
-            onSave={() => {}}
+            onSave={saveListData}
             additionalButtons={listButtons}
           />
         );

@@ -1,10 +1,10 @@
-import { Button as MaterialButton } from "@mui/material"
-import scss from "./Button.module.scss"
-
+import { Button as MaterialButton } from "@mui/material";
+import scss from "./Button.module.scss";
+import { Icon } from "@mui/material";
 /**
  * A standardized button with an optional icon.
  *
- * @param {JSX.Element} icon The optional icon to use.
+ * @param {string} icon The optional icon to use. @see https://fonts.google.com/icons
  * @param {string} label The label on the button.
  * @param {function} onClick The callback to invoke when the button is clicked.
  * @param {"text"|"contained"|"outlined"} variant The variant of the button to use.
@@ -14,9 +14,9 @@ import scss from "./Button.module.scss"
  */
 const Button = ({ icon, label, onClick, variant = "outlined" }) => (
   <MaterialButton onClick={onClick} variant={variant}>
-    {icon && <i className={scss.icon}>{icon}</i>}
+    {icon && <Icon className={scss.icon}>{icon}</Icon>}
     {label}
   </MaterialButton>
-)
+);
 
-export default Button
+export default Button;

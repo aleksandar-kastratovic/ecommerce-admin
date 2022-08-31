@@ -11,28 +11,29 @@ import { Button } from "@mui/material";
 import { isEmpty } from "lodash";
 import { useEffect } from "react";
 import GroupField from "./GroupField";
-
-const testGroups = [
-  { id: 1, name: "grupa1" },
-  { id: 2, name: "grupa2" },
-  { id: 3, name: "grupa3" },
-  { id: 4, name: "grupa4" },
-  { id: 5, name: "grupa5" },
-];
+import { useContext } from "react";
+import AuthContext from "../../../../../store/auth-contex";
+import { getGrupsBySetID } from "../../../services";
 
 const ListItem = ({
-  setId,
   index,
   onDelete = () => {},
   setFormFields = [],
   selectedSet = undefined,
+  productId,
+  productVariantId,
 }) => {
+  const [loaded, setLoaded] = useState(false);
   //set form
   const [fields, setFields] = useState(setFormFields);
   const [selected, setSetlected] = useState(selectedSet);
 
   //set groups
   const [groups, setGroups] = useState([]);
+  const [set, setSet] = useState({});
+
+  const { user } = useContext(AuthContext);
+  const [ddlDisabled, setDdlDisabled] = useState(false);
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     show: false,
@@ -45,7 +46,7 @@ const ListItem = ({
   };
 
   const deleteHandler = () => {
-    onDelete(index, setId);
+    onDelete(index, index);
     setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
   };
 
@@ -57,12 +58,24 @@ const ListItem = ({
     setOpenDeleteDialog({ show: false, id: null });
   };
 
-  const groupsChangeHandler = () => {
-    setGroups(testGroups);
+  const groupsChangeHandler = async () => {
+    try {
+      let response = await getGrupsBySetID(user.access_token, selected);
+      setSet(response?.data?.payload?.set);
+      setGroups(response?.data?.payload?.groups);
+    } catch (error) {
+      console.warn(error);
+    }
   };
 
   useEffect(() => {
-    groupsChangeHandler();
+    if (loaded) {
+      groupsChangeHandler();
+    }
+  }, [selected, loaded]);
+
+  useEffect(() => {
+    setLoaded(true);
   }, []);
 
   return (
@@ -75,6 +88,7 @@ const ListItem = ({
             item={fields[0]}
             key={index}
             value={selected}
+            disabled={ddlDisabled}
           />
         </Box>
         <Button className={styles.deleteButton} onClick={onClickDelete}>
@@ -89,7 +103,15 @@ const ListItem = ({
               key={group.id}
               name={group.name}
               groupId={group.id}
-              steId={setId}
+              slug={group.slug}
+              setId={set.id}
+              slugSet={set.slug}
+              nameSet={set.name}
+              productId={productId}
+              onChange={() => {
+                setDdlDisabled(true);
+              }}
+              productVariantId={productVariantId}
             />
           );
         })}
