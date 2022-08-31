@@ -136,7 +136,7 @@ export const getListProductSpecsGroupAttributeValues = async (
     },
     data: {
       filter_id_group: groupId,
-      filter_id_attribute: attributeId,
+      filter_id_group_attr: attributeId,
     },
   });
 };

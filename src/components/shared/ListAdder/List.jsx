@@ -5,14 +5,15 @@ import AuthContext from "../../../store/auth-contex";
 import ListItem from "./ListItem";
 
 import styles from "./List.module.scss";
+import useAPI from "../../../api/api";
 
 const List = ({
   listFields = [],
   formFields = [],
   init = {},
-  onDelete = () => {},
   required = [],
   onSave = () => {},
+  onDelete = () => {},
   additionalButtons = [],
   actions = {},
 }) => {
