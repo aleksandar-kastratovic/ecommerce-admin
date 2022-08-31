@@ -1,6 +1,6 @@
 import { Box } from "@mui/system";
 import { isEmpty } from "lodash";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Button from "../Button/Button";
 import CreateForm from "./CreateForm";
 import Buttons from "./Buttons/Buttons";
@@ -10,6 +10,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => {} }) => {
   const navigate = useNavigate();
   const [data, setData] = useState(initialData);
   const [inputsError, setInputsError] = useState([]);
+  const [imagePreviewList, setImagePreviewList] = useState([]);
 
   const submitHandler = () => {
     const errors = {};
@@ -33,6 +34,31 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => {} }) => {
     }
   };
 
+  const formImageUpload = useCallback(
+    (event) => {
+      event.preventDefault();
+      const selectedFile = event.target.files[0];
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const timeOutId = setTimeout(() => {
+          setter(event, reader.result);
+        }, 500);
+        return () => clearTimeout(timeOutId);
+      };
+      reader.readAsDataURL(selectedFile);
+    },
+    [data]
+  );
+
+  const setter = (event, result) => {
+    setData({ ...data, [event.target.name]: result });
+  };
+
+  useEffect(() => {
+    setData(initialData);
+  }, [initialData]);
+
   return (
     <Box component="form" autoComplete="off">
       {formFields &&
@@ -43,6 +69,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => {} }) => {
               <CreateForm
                 data-test-id="admin-form"
                 onChangeHandler={formItemChangeHandler}
+                onImageUpload={formImageUpload}
                 item={item}
                 key={index}
                 error={inputsError[item.prop_name]}

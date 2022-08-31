@@ -21,6 +21,8 @@ const ActionField = ({
   handlePreview = () => {},
   handleDelete = () => {},
   handleEdit = () => {},
+  handleListGroup = () => {},
+  handleCategoryTree = () => {},
 }) => {
   const [displayed, setDisplayed] = useState([]);
 
@@ -49,6 +51,24 @@ const ActionField = ({
             <FormActionButton
               icon="delete"
               onClick={handleDelete}
+              key={action}
+            />
+          );
+          break;
+        case "listGroup":
+          button = (
+            <FormActionButton
+              icon="list"
+              onClick={handleListGroup}
+              key={action}
+            />
+          );
+          break;
+        case "categoryTree":
+          button = (
+            <FormActionButton
+              icon="account_tree"
+              onClick={handleCategoryTree}
               key={action}
             />
           );

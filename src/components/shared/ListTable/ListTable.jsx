@@ -66,6 +66,14 @@ const ListTable = ({
                                 "preview"
                               )}
                               handleDelete={handleActions(data["id"], "delete")}
+                              handleListGroup={handleActions(
+                                data["id"],
+                                "listGroup"
+                              )}
+                              handleCategoryTree={handleActions(
+                                data["id"],
+                                "categoryTree"
+                              )}
                             />
                           ) : (
                             displayData(data[prop_name], input_type)

@@ -112,10 +112,14 @@ const ListPage = ({
         navigate(`${pathname}/${id}`);
         break;
       case "delete":
-        console.log(id);
         setOpenDeleteDialog({ show: true, id: id, mutate: null });
         break;
-
+      case "listGroup":
+        navigate(`${pathname}/category/${id}`);
+        break;
+      case "categoryTree":
+        navigate(`${pathname}/tree/${id}`);
+        break;
       default:
         break;
     }
