@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import ProductSpecsFields from "./ProductSpecsFields.json";
-import { getListProductSpecsSet, deleteProductSpecsSet } from "./services";
 
 const ProductSpecs = () => {
   const navigate = useNavigate();

@@ -39,6 +39,10 @@ import ProductSpecsGroups from "../pages/ProductSpecs/ProductSpecsGroups";
 import ProductSpecsDetails from "../pages/ProductSpecs/ProductsSpecsDetails/ProductSpecsDetails";
 import AdminForms from "./../pages/AdminForms/AdminForms";
 import DetailsAdminForm from "./../pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
+import News from './../pages/News/News';
+import NewsDetails from './../pages/News/NewsDetails/NewsDetails';
+import NewsCategoryList from './../pages/NewsCategoryList/NewsCategoryList';
+import NewsCategoryListDetails from './../pages/NewsCategoryList/NewsCategoryListDetails/NewsCategoryListDetails';
 import B2Bbanners from "./../pages/B2Bbanners/B2Bbanners";
 import DetailsBanners from "./../pages/B2Bbanners/DetailsBanners/DetailsBanners";
 import B2BCustomersPage from "./../pages/B2BCustomersPage";
@@ -90,6 +94,7 @@ const screens = {
       ["groups/:groupId", ProductGroupDetails],
     ],
   ],
+
 
   ORDER: [
     "/orders",
@@ -148,6 +153,19 @@ const screens = {
     B2CSettings,
     [[":B2CId", B2CSettings]],
   ],
+  B2C_NEWS: [
+    "/news",
+    "Vesti",
+    faArchive,
+    B2C,
+    News,
+    [
+      [":nid", NewsDetails],
+      ["category", NewsCategoryList],
+      ["category/:cid", NewsCategoryListDetails],
+    ],
+  ],
+
 
   ROLES: [
     "/roles",
