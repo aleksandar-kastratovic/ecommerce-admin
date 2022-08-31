@@ -51,7 +51,6 @@ import DetailsForm from "./../pages/B2Bsettings/DetailsForm/DetailsForm";
 import B2Cbanners from "./../pages/B2Cbanners/B2Cbanners";
 import DetailsBannersB2C from "./../pages/B2Cbanners/DetailsBanners/DetailsBannersB2C";
 import B2CSettings from "./../pages/B2CSettings/B2CSettings";
-import CategoriesPage from "./../pages/CategoriesPage";
 import CompaniesPage from "./../pages/CompaniesPage";
 import ImportSteps from "./../pages/Import/ImportSteps";
 import LocationsPage from "./../pages/LocationsPage";
@@ -61,7 +60,13 @@ import Params from "./../pages/Params/Params";
 import Products from "./../pages/Products/Products";
 import RolesPage from "./../pages/RolesPage";
 import UsersPage from "./../pages/UsersPage";
+import Categories from "../pages/Categories/Categories";
+import CategoriesDetails from "../pages/Categories/CategoriesDetails/CategoriesDetails";
+
 import { makeScreen, MenuGroup } from "./utils";
+import CategoriesList from "../pages/Categories/CategoriesList/CategoriseList";
+import CategoriesTree from "../pages/Categories/CategoriesTree/CategoriesTree";
+import GroupDetails from "../pages/Categories/GroupDetails/GroupDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -71,8 +76,13 @@ const screens = {
     "Kategorije",
     faSitemap,
     PRODUCT,
-    CategoriesPage,
-    [[":catId", CategoriesPage]],
+    Categories,
+    [
+      [":gid", GroupDetails],
+      ["tree/:gid", CategoriesTree],
+      ["category/:gid", CategoriesList],
+      ["category/:gid/:cid", CategoriesDetails],
+    ],
   ],
   PRODU: [
     "/products",
