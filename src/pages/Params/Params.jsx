@@ -92,19 +92,19 @@ const Params = () => {
 
   return (
     <>
-     <ListPage
-      getData={getListParams}
-      deleteData={deleteParam}
-      title="Parametri"
-      showNewButton={true}
-      newPath="/params/new"
-      columnFields={tblFields}
-      showToolbar={true}
-      editPath="/params/"
-      deleteTitle="Brisanje"
-      deleteDescription="Da li ste sigurni da želite da obrišete?"
-      showDatePicker={false}
-    />
+      <ListPage
+        getData={getListParams}
+        deleteData={deleteParam}
+        title="Parametri"
+        showNewButton={true}
+        newPath="/params/new"
+        columnFields={tblFields}
+        showToolbar={true}
+        editPath="/params/"
+        deleteTitle="Brisanje"
+        deleteDescription="Da li ste sigurni da želite da obrišete?"
+        showDatePicker={false}
+      />
       {/* <Paper elevation={0} className={styles.paperStyle}>
         <ListTableTitle
           title="Parametri"

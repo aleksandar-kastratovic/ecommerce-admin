@@ -9,21 +9,14 @@ const ProductSpecs = () => {
     navigate("/product-specs/groups");
   };
 
-  const buttons = [{ id: 1, text: "Grupe", action: groupPage }];
+  const buttons = [{ id: 1, label: "Grupe", action: groupPage }];
 
   return (
     <ListPage
-      getData={getListProductSpecsSet}
-      deleteData={deleteProductSpecsSet}
       title="Speifikacije proizvoda - Setovi"
-      showNewButton={true}
-      newPath="/product-specs/new"
+      apiUrl="admin/productitemspec/set/list"
+      deleteUrl="admin/productitemspec/groupattributevalues"
       columnFields={ProductSpecsFields}
-      showToolbar={true}
-      editPath="/product-specs/"
-      deleteTitle="Brisanje"
-      deleteDescription="Da li ste sigurni da želite da obrišete?"
-      showDatePicker={false}
       additionalButtons={buttons}
     />
   );

@@ -265,7 +265,9 @@ const B2Bsettings = ({}) => {
         <ListTableToolbar showToolbar={false} />
 
         <ListTable
-          fields={flatten(fields).filter(({ in_main_table }) => in_main_table)}
+          tableFields={flatten(fields).filter(
+            ({ in_main_table }) => in_main_table
+          )}
           listData={listData}
           handleActions={handleActions}
         />

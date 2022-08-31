@@ -17,6 +17,7 @@ const List = ({
   actions = {},
 }) => {
   const [fields, setFields] = useState(listFields);
+  const [load, setLoad] = useState(false);
   const { user } = useContext(AuthContext);
 
   const deleteHandler = async (id, dataId) => {
@@ -40,7 +41,13 @@ const List = ({
   }, [listFields]);
 
   useEffect(() => {
-    setFields(listFields);
+    if (load) {
+      setFields(listFields);
+    }
+  }, [load]);
+
+  useEffect(() => {
+    setLoad(true);
   }, []);
 
   return (

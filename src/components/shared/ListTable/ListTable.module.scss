@@ -44,9 +44,7 @@
     }
   }
 }
-.tableStyle tr :last-child {
-  text-align: right !important;
-}
+
 .toolbarButtonsGroup {
   display: flex;
 }
@@ -56,8 +54,15 @@
   color: $black !important;
 }
 
+.paginationLabel {
+  font-size: 1em;
+}
+
 .pagination {
   margin: 5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
   ul {
     width: fit-content;
     margin-inline-start: auto;

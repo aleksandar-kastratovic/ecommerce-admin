@@ -16,7 +16,7 @@ import {
   faRoad,
   faCopyright,
   faIndustry,
-  faStore
+  faStore,
 } from "@fortawesome/free-solid-svg-icons";
 import Countries from "../pages/Countries/Countries";
 import CountriesDetails from "../pages/Countries/CountriesDetails/CountriesDetails";
@@ -211,7 +211,7 @@ const screens = {
     faBuilding,
     SETTINGS,
     Towns,
-    [[":tid", TownsDetails]],
+    [[":id", TownsDetails]],
   ],
   STREETS: [
     "/streets",

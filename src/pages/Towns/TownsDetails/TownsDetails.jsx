@@ -4,119 +4,82 @@ import { useState, useEffect, useContext } from "react";
 import CreateForm from "../../../components/shared/Form/CreateForm";
 import Button from "../../../components/shared/Button/Button";
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
-import { formatDate } from "../../../helpers/dateFormat";
 
-import fields from './formField.json';
-import { getTown, saveTown } from "../services";
+import fields from "./formField.json";
+import { getTown } from "../services";
 import AuthContext from "../../../store/auth-contex";
 import requirePropFactory from "@mui/utils/requirePropFactory";
 import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
+import Form from "../../../components/shared/Form/Form";
+import LoadingForm from "../../../components/shared/Loading/LoadingForm";
+import useAPI from "../../../api/api";
 
-const required = [];
 const init = {
-    "slug": "",
-		"name": "",
-		"phone_code": "",
-		"source": "",
-		"id_source ": null,
-		"id_source": 0
-}
+  slug: "",
+  name: "",
+  phone_code: "",
+  source: "",
+  id_source: 0,
+};
 const TownsDetails = () => {
-    const { tid } = useParams();
-    const navigate = useNavigate();
-    const handleBack = () => {
-        navigate("/towns");
-    }
-    const [data, setData] = useState(init);
-    const [inputsError, setInputsError] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const {user} = useContext(AuthContext);
+  const { id } = useParams();
+  const api = useAPI();
+  const navigate = useNavigate();
+  const [data, setData] = useState(init);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const formItemChangeHandler = ({ target }, type) => {
-      if(type==="date") {
-        setData({ ...data, [target.name]: formatDate(target.value ) });
-      }
-      else if (type) {
-        setData({ ...data, [target.name]: target.checked });
-      } else {
-        setData({ ...data, [target.name]: target.value });
-      }
-    };
-
-    const handleData = async () => {
-      try {
-        setIsLoading(true);
-        let response = await getTown(user.access_token, tid);
-        let { payload } = response.data;
-        setData(payload);
-      } catch (error) {
+  const handleData = async () => {
+    setIsLoading(true);
+    api
+      .get(`admin/towns/${id}`)
+      .then((response) => {
+        setData(response?.payload);
+      })
+      .catch((error) => {
         console.warn(error);
-      } finally {
+      })
+      .then(() => {
         setIsLoading(false);
-      }
-    };
+      });
+  };
 
-    const saveData = async () => {
-      try {
-        let response = await saveTown(user.access_token, data);
-        handleBack();
-        toast.success("Uspešno uneta forma!");
-      } catch (error) {
-        console.warn(error.response);
-        toast.warning("Greška ");
-      }
-    };
-
-    const onSubmit = () => {
-      const errors = {};
-      console.log(data);
-      Object.keys(data).forEach((prop_name) => {
-        if (isEmpty(data[prop_name])) {
-          if (
-            required.includes(prop_name)
-          )
-            errors[prop_name] = {
-              content: "Polje je obavezno, molim Vas unesite vrednost.",
-            };
+  const saveData = async (data) => {
+    const repack = { ...data, id: id === "new" ? null : Number(id) };
+    api
+      .post(`admin/towns`, repack)
+      .then((response) => {
+        setData(response?.payload);
+        toast.success(
+          `Uspešno ${id === "new" ? "dodati" : "izmenjeni"} podaci`
+        );
+      })
+      .catch((error) => {
+        console.warn(error);
+        toast.warning("Greška");
+      })
+      .then(() => {
+        if (id === "new") {
+          navigate(-1);
         }
       });
-      isEmpty(errors) ? saveData() : setInputsError(errors);
-    };
-    
-    useEffect(() => {
-      if (tid !== "new") {
-        handleData();
-      }
-    }, []);
-  
+  };
 
-    return(
-       <PageWrapper title="Detalji mesta" back={handleBack}>
-           <Box component="form" autoComplete="off">
-            {fields &&
-              fields
-                .filter(({ in_details }) => in_details)
-                .map((item, index) => {
-                  return (
-                    <CreateForm
-                      data-test-id="admin-form"
-                      onChangeHandler={formItemChangeHandler}
-                      item={item}
-                      key={index}
-                      error={inputsError[item.prop_name]}
-                      value={
-                        Array.isArray(item) && data
-                          ? data[item.prop_name]
-                          : data[item.prop_name]
-                      }
-                    />
-                  );
-                })}
-                <Button label="Sačuvaj" onClick={onSubmit}/>
-          </Box>
-       </PageWrapper>
-    )
+  useEffect(() => {
+    if (id !== "new") {
+      handleData();
+    }
+  }, []);
+
+  return (
+    <PageWrapper title="Detalji mesta" back={() => navigate(-1)}>
+      {!isLoading ? (
+        <Form formFields={fields} initialData={data} onSubmit={saveData} />
+      ) : (
+        <LoadingForm fields={fields.length} />
+      )}
+    </PageWrapper>
+  );
 };
 
 export default TownsDetails;

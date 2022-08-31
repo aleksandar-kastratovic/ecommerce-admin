@@ -1,17 +1,16 @@
 @import "../../../../variables.scss";
 
 .wrapper {
-	clear:         both;
-	min-height:    40px;
-	margin-bottom: 1em;
+  clear: both;
+  min-height: 40px;
+  margin-bottom: 1em;
 }
 
 .title {
-
 }
 
 .buttons {
-	float:   right;
-	display: flex;
-	gap:     .8em;
+  float: right;
+  display: flex;
+  gap: 0.8em;
 }

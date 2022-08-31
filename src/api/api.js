@@ -41,7 +41,7 @@ class ApiService {
    * @return {Promise<APIResponse>}
    */
   get(path) {
-    return this._execute("GET", path, null);
+    return this._execute("GET", path);
   }
 
   /**
@@ -52,7 +52,7 @@ class ApiService {
    *
    * @return {Promise<APIResponse>}
    */
-  post(path, payload = null) {
+  post(path, payload) {
     return this._execute("POST", path, payload);
   }
 
@@ -64,7 +64,7 @@ class ApiService {
    *
    * @return {Promise<APIResponse>}
    */
-  list(path, payload = null) {
+  list(path, payload) {
     return this._execute("LIST", path, payload);
   }
 
@@ -76,7 +76,7 @@ class ApiService {
    * @return {Promise<APIResponse>}
    */
   delete(path) {
-    return this._execute("DELETE", path, null);
+    return this._execute("DELETE", path);
   }
 }
 
