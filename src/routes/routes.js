@@ -45,6 +45,10 @@ import NewsCategoryList from './../pages/NewsCategoryList/NewsCategoryList';
 import NewsCategoryListDetails from './../pages/NewsCategoryList/NewsCategoryListDetails/NewsCategoryListDetails';
 import B2Bbanners from "./../pages/B2Bbanners/B2Bbanners";
 import DetailsBanners from "./../pages/B2Bbanners/DetailsBanners/DetailsBanners";
+import StaticPages from "../pages/StaticPages/StaticPages";
+import StaticPagesDetails from "../pages/StaticPages/StaticPagesDetails/StaticPagesDetails";
+import Newsletter from "../pages/Newsletter/Newsletter";
+import ContactForm from "../pages/ContactForm/ContactForm";
 import B2BCustomersPage from "./../pages/B2BCustomersPage";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
 import DetailsForm from "./../pages/B2Bsettings/DetailsForm/DetailsForm";
@@ -67,6 +71,8 @@ import { makeScreen, MenuGroup } from "./utils";
 import CategoriesList from "../pages/Categories/CategoriesList/CategoriseList";
 import CategoriesTree from "../pages/Categories/CategoriesTree/CategoriesTree";
 import GroupDetails from "../pages/Categories/GroupDetails/GroupDetails";
+
+
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -174,6 +180,30 @@ const screens = {
       ["category", NewsCategoryList],
       ["category/:cid", NewsCategoryListDetails],
     ],
+  ],
+  B2C_STATIC_PAGES: [
+    "/staticpages",
+    "Statičke strane",
+    faArchive,
+    B2C,
+    StaticPages,
+    [[":spid", StaticPagesDetails]],
+  ],
+  B2C_NEWSLETTER: [
+    "/newsletter",
+    "Newsletter",
+    faArchive,
+    B2C,
+    Newsletter,
+    [[":nlid", Newsletter]],
+  ],
+  B2C_CONTACT_FORMS: [
+    "/contactform",
+    "Kontakt forma",
+    faArchive,
+    B2C,
+    ContactForm,
+    [[":cfid", ContactForm]],
   ],
 
 

@@ -5,10 +5,10 @@ const api = () => {
   // return apiLocal;
 };
 
-export const getListNews = async (token, search) => {
+export const getListNewsletter = async (token, search) => {
     return await axios({
       method: "LIST",
-      url: `${api()}admin/news-b2c/news/`,
+      url: `${api()}admin/newsletter-b2c/`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -16,21 +16,21 @@ export const getListNews = async (token, search) => {
     });
   };
 
-  export const getNews = async (token, id) => {
+  export const getNewsletter= async (token, id) => {
     return await axios({
       method: "GET",
-      url: `${api()}admin/news-b2c/news/${id}`,
+      url: `${api()}admin/newsletter-b2c/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
   };
 
-  export const saveNews= async (token, data = {}) => {
+  export const saveNewsletter= async (token, data = {}) => {
     const req = JSON.stringify(data);
     return await axios({
       method: "POST",
-      url: `${api()}admin/news-b2c/news/`,
+      url: `${api()}admin/newsletter-b2c/`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -38,10 +38,10 @@ export const getListNews = async (token, search) => {
     });
   };
 
-export const deleteNews = async (token, id) => {
+export const deleteNewsletter = async (token, id) => {
     return await axios({
       method: "DELETE",
-      url: `${api()}admin/news-b2c/news/${id}`,
+      url: `${api()}admin/newsletter-b2c/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
