@@ -84,6 +84,7 @@ const ListItem = ({
       }
     });
     saveData(fieldData, index);
+    setIsOpen(false);
     //isEmpty(errors) ? saveData(fieldData) : setInputsError(errors);
   };
 

@@ -1,0 +1,93 @@
+[
+  {
+    "field_name": "Osnovne informacije",
+    "prop_name": "basic_data",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "255",
+    "ui_prop": "settings",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
+    "field_name": "Sedište",
+    "prop_name": "head-office-address",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "255",
+    "ui_prop": "settings",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
+    "field_name": "Adresa dostave",
+    "prop_name": "delivery_address",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "255",
+    "ui_prop": "settings",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
+    "field_name": "Kontakt",
+    "prop_name": "contact",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "255",
+    "ui_prop": "settings",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
+    "field_name": "Napomene",
+    "prop_name": "notes",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "255",
+    "ui_prop": "settings",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
+    "field_name": "Komercijalista",
+    "prop_name": "sales_officer",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "255",
+    "ui_prop": "settings",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
+    "field_name": "Korisnici",
+    "prop_name": "users",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "255",
+    "ui_prop": "settings",
+    "sortable": true,
+    "input_type": "input"
+  }
+]

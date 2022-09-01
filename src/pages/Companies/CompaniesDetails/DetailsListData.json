@@ -1,0 +1,26 @@
+{
+  "description": "",
+  "module": "presentation",
+  "name": "Podaci kompanije",
+  "submodules": [
+    { "slug": "basic_data", "name": "Osnovne informacije", "description": "" },
+    {
+      "slug": "head-office-address",
+      "name": "Sedište",
+      "description": ""
+    },
+    {
+      "slug": "delivery_address",
+      "name": "Adresa dostave",
+      "description": ""
+    },
+    { "slug": "contact", "name": "Kontakt", "description": "" },
+    { "slug": "notes", "name": "Beleške", "description": "" },
+    {
+      "slug": "sales_officer",
+      "name": "Komercijalista",
+      "description": ""
+    },
+    { "slug": "users", "name": "Korisnici", "description": "" }
+  ]
+}

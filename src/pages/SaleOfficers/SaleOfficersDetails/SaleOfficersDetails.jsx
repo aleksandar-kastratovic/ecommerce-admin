@@ -2,20 +2,21 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
 
-import fields from "./formField.json";
+import fields from "./formFields.json";
 import { toast } from "react-toastify";
 import Form from "../../../components/shared/Form/Form";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import useAPI from "../../../api/api";
 
 const init = {
-  slug: "",
-  name: "",
-  phone_code: "",
-  source: "",
-  id_source: 0,
+  id: null,
+  first_name: "",
+  last_name: "",
+  phone: "",
+  email: "",
+  order: 0,
 };
-const TownsDetails = () => {
+const SaleOfficersDetails = () => {
   const { id } = useParams();
   const api = useAPI();
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const TownsDetails = () => {
   const handleData = async () => {
     setIsLoading(true);
     api
-      .get(`admin/towns/${id}`)
+      .get(`admin/referents-b2b/${id}`)
       .then((response) => {
         setData(response?.payload);
       })
@@ -40,7 +41,7 @@ const TownsDetails = () => {
   const saveData = async (data) => {
     const repack = { ...data, id: id === "new" ? null : Number(id) };
     api
-      .post(`admin/towns`, repack)
+      .post(`admin/referents-b2b`, repack)
       .then((response) => {
         setData(response?.payload);
         toast.success(
@@ -60,7 +61,7 @@ const TownsDetails = () => {
   }, []);
 
   return (
-    <PageWrapper title="Detalji mesta" back={() => navigate(-1)}>
+    <PageWrapper title="Detalji komercijaliste" back={() => navigate(-1)}>
       {!isLoading ? (
         <Form formFields={fields} initialData={data} onSubmit={saveData} />
       ) : (
@@ -70,4 +71,4 @@ const TownsDetails = () => {
   );
 };
 
-export default TownsDetails;
+export default SaleOfficersDetails;

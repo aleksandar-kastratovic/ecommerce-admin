@@ -37,6 +37,7 @@ import { toast } from "react-toastify";
 import { formatDate } from "../../../helpers/dateFormat";
 import Specification from "./ProductDetailsSpecification/Specification";
 import ProductDetailsVariation from "./ProductDetailsVariation/ProductDetailsVariation";
+import useAPI from "../../../api/api";
 
 const adderFields = ["prices", "inventories", "categories", "seo"];
 const multipleImages = [
@@ -108,13 +109,13 @@ let inits = {
   gallery: {
     id: null,
     id_product: 0,
-    id_product_variant: null,
+    id_product_variant: 0,
     gallery: "",
   },
   instruction_doc: {
     id: null,
     id_product: 0,
-    id_product_variant: null,
+    id_product_variant: 0,
     instruction_doc: "",
   },
   description: {
@@ -173,6 +174,7 @@ const ProductDetails = () => {
   const [inputsError, setInputsError] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [listFields, setListFields] = useState();
+  const api = useAPI();
 
   const handleBackToList = () => {
     navigate(`/products`);
@@ -199,6 +201,17 @@ const ProductDetails = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleMultipleData = () => {
+    api
+      .list(`admin/productitems/${selected}`, { filter_id_prod: prodId })
+      .then((response) => {
+        setData({ [selected]: response?.payload?.items });
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
   };
 
   const formItemChangeHandler = ({ target }, type) => {
@@ -230,27 +243,52 @@ const ProductDetails = () => {
   };
 
   const saveData = async () => {
-    try {
-      let repack = { ...inits[selected], ...data };
-
-      if (prodId !== "new") {
-        repack.id = prodId;
+    if (multipleImages.includes(selected)) {
+      for (const obj of data[selected]) {
+        console.log(obj);
+        if (obj.new || obj.src == "DELETE") {
+          let req = {
+            id: obj.new ? null : obj.id,
+            id_product: prodId,
+            id_product_variant: 1,
+            gallery: obj.src,
+          };
+          api
+            .post(`admin/productitems/${selected}`, req)
+            .then((response) => {
+              handleMultipleData();
+              toast.success("Uspešno");
+            })
+            .catch((error) => {
+              console.warn(error);
+              toast.warning("Greška");
+              handleMultipleData();
+            });
+        }
       }
-      let response = await postProductSlugData(
-        user.access_token,
-        repack,
-        selected
-      );
-      if (prodId === "new") handleBackToList();
-      toast.success("Uspešno dodati podaci!");
-    } catch (error) {
-      console.warn(error);
+    } else {
+      try {
+        let repack = { ...inits[selected], ...data };
+
+        if (prodId !== "new") {
+          repack.id = prodId;
+        }
+        let response = await postProductSlugData(
+          user.access_token,
+          repack,
+          selected
+        );
+        if (prodId === "new") handleBackToList();
+        toast.success("Uspešno dodati podaci!");
+      } catch (error) {
+        console.warn(error);
+        toast.warning("Greška");
+      }
     }
   };
 
   const saveListData = async (listData) => {
     try {
-      console.log(listData);
       let repack = { ...listData, id_product: prodId, id_product_variant: 0 };
 
       let response = await postProductSlugData(
@@ -280,7 +318,6 @@ const ProductDetails = () => {
   };
 
   const onListSubmit = (listData) => {
-    console.log("here");
     saveListData(listData);
   };
 
@@ -325,9 +362,11 @@ const ProductDetails = () => {
     }
 
     if (prodId !== "new") {
-      if (adderFields.includes(selected) || multipleImages.includes(selected)) {
+      if (adderFields.includes(selected)) {
         handleListFields();
       } else if (selected === "specification" || selected === "variation") {
+      } else if (multipleImages.includes(selected)) {
+        handleMultipleData();
       } else {
         handleData();
       }
@@ -353,6 +392,7 @@ const ProductDetails = () => {
     } else if (selected === "variation") {
       return <ProductDetailsVariation productId={prodId} />;
     }
+
     return (
       <Box component="form" autoComplete="off">
         {formFields &&

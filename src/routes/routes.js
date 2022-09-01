@@ -39,10 +39,10 @@ import ProductSpecsGroups from "../pages/ProductSpecs/ProductSpecsGroups";
 import ProductSpecsDetails from "../pages/ProductSpecs/ProductsSpecsDetails/ProductSpecsDetails";
 import AdminForms from "./../pages/AdminForms/AdminForms";
 import DetailsAdminForm from "./../pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
-import News from './../pages/News/News';
-import NewsDetails from './../pages/News/NewsDetails/NewsDetails';
-import NewsCategoryList from './../pages/NewsCategoryList/NewsCategoryList';
-import NewsCategoryListDetails from './../pages/NewsCategoryList/NewsCategoryListDetails/NewsCategoryListDetails';
+import News from "./../pages/News/News";
+import NewsDetails from "./../pages/News/NewsDetails/NewsDetails";
+import NewsCategoryList from "./../pages/NewsCategoryList/NewsCategoryList";
+import NewsCategoryListDetails from "./../pages/NewsCategoryList/NewsCategoryListDetails/NewsCategoryListDetails";
 import B2Bbanners from "./../pages/B2Bbanners/B2Bbanners";
 import DetailsBanners from "./../pages/B2Bbanners/DetailsBanners/DetailsBanners";
 import B2BCustomersPage from "./../pages/B2BCustomersPage";
@@ -67,6 +67,10 @@ import { makeScreen, MenuGroup } from "./utils";
 import CategoriesList from "../pages/Categories/CategoriesList/CategoriseList";
 import CategoriesTree from "../pages/Categories/CategoriesTree/CategoriesTree";
 import GroupDetails from "../pages/Categories/GroupDetails/GroupDetails";
+import Companies from "../pages/Companies/Companies";
+import CompaniesDetails from "../pages/Companies/CompaniesDetails/CompaniesDetails";
+import SaleOfficers from "../pages/SaleOfficers/SaleOfficers";
+import SaleOfficersDetails from "../pages/SaleOfficers/SaleOfficersDetails/SaleOfficersDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -105,7 +109,6 @@ const screens = {
     ],
   ],
 
-
   ORDER: [
     "/orders",
     "Porudžbine",
@@ -119,16 +122,8 @@ const screens = {
     "Kompanije",
     faCity,
     B2B,
-    CompaniesPage,
-    [[":comId", CompaniesPage]],
-  ],
-  CUSTM: [
-    "/b2b-customers",
-    "Kupci",
-    faUserTag,
-    B2B,
-    B2BCustomersPage,
-    [[":cusId", B2BCustomersPage]],
+    Companies,
+    [[":comId", CompaniesDetails]],
   ],
   BANNERS_B2B: [
     "/B2B-banners",
@@ -145,6 +140,14 @@ const screens = {
     B2B,
     B2Bsettings,
     [[":B2BId", DetailsForm]],
+  ],
+  B2B_SALES_OFFICER: [
+    "/B2B-sales-officers",
+    "B2B komercijalisti",
+    faCog,
+    B2B,
+    SaleOfficers,
+    [[":id", SaleOfficersDetails]],
   ],
 
   BANNERS_B2C: [
@@ -175,7 +178,6 @@ const screens = {
       ["category/:cid", NewsCategoryListDetails],
     ],
   ],
-
 
   ROLES: [
     "/roles",

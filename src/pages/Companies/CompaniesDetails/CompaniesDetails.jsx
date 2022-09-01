@@ -5,7 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
-import CreateForm from "../../../components/shared/Form/CreateForm";
+
 import DetailsList from "./DetailsList";
 import { toast } from "react-toastify";
 import listData from "./DetailsListData.json";
@@ -15,16 +15,28 @@ import useAPI from "../../../api/api";
 import List from "../../../components/shared/ListAdder/List";
 
 import styles from "./GroupDetails.module.scss";
+import basic_data from "./forms/basic_data.json";
+import head_office from "./forms/head_office_address.json";
+import contact from "./forms/contact.json";
+import delivery_address from "./forms/delivery_address.json";
+import notes from "./forms/notes.json";
+import sales from "./forms/sales_officer.json";
+import users from "./forms/users.json";
 
-import paramsTypeField from "./forms/paramsType.json";
-import paramsTypeSingle from "./forms/paramsTypeSingle.json";
-import paramsTypeMulty from "./forms/paramsTypeMulti.json";
+const multi = [
+  "contact",
+  "notes",
+  "sales_officer",
+  "users",
+  "delivery_address",
+];
 
-const ParamsDetails = () => {
-  const { pid } = useParams();
+const CompaniesDetails = () => {
+  const { comId } = useParams();
   const navigate = useNavigate();
-  const [selected, setSelected] = useState("info");
+  const [selected, setSelected] = useState("basic_data");
   const [detailsList, setDetailsList] = useState(listData);
+  const [salesDdl, setSalesDdl] = useState([]);
 
   const init = {
     id: null,
@@ -40,15 +52,12 @@ const ParamsDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const api = useAPI();
 
-  const [paramType, setParamType] = useState(1);
-  const [paramSubType, setParamSubType] = useState("");
-
   const handleBackToList = () => {
     navigate(-1);
   };
 
   const handleSelectInDetails = (module, slug) => {
-    if (pid !== "new") {
+    if (comId !== "new") {
       setSelected(slug);
     }
   };
@@ -58,14 +67,14 @@ const ParamsDetails = () => {
       .post(`admin/customers-b2b/${selected}`, {
         id: null,
         type: "head_office",
-        id_company: pid,
+        id_company: comId,
         order: 0,
         ...data,
       })
       .then((response) => {
         toast.success("Uspešno");
-        if (pid === "new") navigate(-1);
-        if (selected === "fields") {
+        if (comId === "new") navigate(-1);
+        if (multi.includes(selected)) {
           handleGetList();
         } else {
           setData(response?.payload);
@@ -78,7 +87,7 @@ const ParamsDetails = () => {
 
   const handleGetList = () => {
     api
-      .list(`admin/params/values/${pid}`)
+      .list(`admin/customers-b2b/${selected}/${comId}`)
       .then((response) => {
         setData(response?.payload?.items);
       })
@@ -90,7 +99,7 @@ const ParamsDetails = () => {
 
   const onDelete = (token, id) => {
     api
-      .delete(`admin/params/values/${selected}/${pid}/${id}`)
+      .delete(`admin/customers-b2b/${selected}/${comId}/${id}`)
       .then((response) => {
         handleGetList();
         toast.success("Uspešno obrisano");
@@ -99,49 +108,115 @@ const ParamsDetails = () => {
   };
 
   useEffect(() => {
-    /* if (pid !== "new") {
+    if (comId !== "new") {
+      if (multi.includes(selected)) {
+        handleGetList();
+      } else {
+        api
+          .get(`admin/customers-b2b/${selected}/${comId}`)
+          .then((response) => {
+            setData(response?.payload);
+          })
+          .catch((error) => {
+            console.warn(error);
+          });
+      }
+    }
+  }, [selected]);
+
+  useEffect(() => {
+    if (selected === "sales_officer") {
       api
-        .get(`admin/params/main/${selected}/${pid}`)
+        .get(`admin/customers-b2b/sales_officer/ddl/id_sales_officer`)
         .then((response) => {
-          setData(response?.payload);
+          setSalesDdl(response?.payload);
         })
         .catch((error) => {
-          console.warn(error);
+          setSalesDdl([]);
         });
-    } */
+    }
   }, [selected]);
 
   const getDisplayed = () => {
     switch (selected) {
-      case "info":
+      case "basic_data":
         return (
-          <>
-            <CreateForm
-              onChangeHandler={({ target }) => setParamType(target.value)}
-              item={paramsTypeField}
-              value={paramType}
-            />
-            {paramType === 1 ? (
-              <CreateForm
-                onChangeHandler={({ target }) => setParamSubType(target.value)}
-                key={paramType}
-                item={paramsTypeSingle}
-                value={paramSubType}
-              />
-            ) : (
-              <CreateForm
-                onChangeHandler={({ target }) => setParamSubType(target.value)}
-                key={paramType}
-                item={paramsTypeMulty}
-                value={paramSubType}
-              />
-            )}
-          </>
+          <Form
+            key="basic_data"
+            formFields={basic_data}
+            initialData={data}
+            onSubmit={onSubmit}
+          />
         );
+      case "head-office-address":
+        return (
+          <Form
+            key="head_office_address"
+            formFields={head_office}
+            initialData={data}
+            onSubmit={onSubmit}
+          />
+        );
+      case "delivery_address":
+        return (
+          <List
+            key="delivery_address"
+            formFields={delivery_address}
+            listFields={data}
+            onSave={onSubmit}
+            onDelete={onDelete}
+          />
+        );
+      case "contact":
+        return (
+          <List
+            key="contact"
+            formFields={contact}
+            listFields={data}
+            onSave={onSubmit}
+            onDelete={onDelete}
+          />
+        );
+      case "notes":
+        return (
+          <List
+            key="notes"
+            formFields={notes}
+            listFields={data}
+            onSave={onSubmit}
+            onDelete={onDelete}
+          />
+        );
+      case "sales_officer":
+        let form = [];
 
-      case "fields":
-        return <div>Details</div>;
+        for (const item of sales) {
+          if (item.prop_name === "id_sales_officer") {
+            form.push({ ...item, options: salesDdl });
+          } else {
+            form.push(item);
+          }
+        }
 
+        return (
+          <List
+            key="sales_officer"
+            formFields={form}
+            listFields={data}
+            onSave={onSubmit}
+            onDelete={onDelete}
+          />
+        );
+      case "users":
+        return (
+          <List
+            key="users"
+            formFields={users}
+            listFields={data}
+            onSave={onSubmit}
+            onDelete={onDelete}
+          />
+        );
       default:
         return <p>Došlo je do greške! Molimo pokušajte kasnije.</p>;
     }
@@ -195,4 +270,4 @@ const ParamsDetails = () => {
   );
 };
 
-export default ParamsDetails;
+export default CompaniesDetails;

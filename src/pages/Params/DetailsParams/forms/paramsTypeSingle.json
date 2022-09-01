@@ -1,0 +1,27 @@
+{
+  "field_name": "Single tip parametra",
+  "prop_name": "field_type",
+  "in_main_table": true,
+  "in_details": true,
+  "editable": true,
+  "disabled": false,
+  "required": false,
+  "description": "",
+  "ui_prop": "xyz",
+  "sortable": true,
+  "input_type": "select",
+  "options": [
+    {
+      "id": "1",
+      "name": "Text"
+    },
+    {
+      "id": "2",
+      "name": "Date"
+    },
+    {
+      "id": "3",
+      "name": "Image"
+    }
+  ]
+}

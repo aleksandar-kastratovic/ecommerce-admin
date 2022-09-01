@@ -22,7 +22,7 @@ const List = ({
   const { user } = useContext(AuthContext);
 
   const deleteHandler = async (id, dataId) => {
-    if (dataId !== null) {
+    if (dataId !== null && dataId !== undefined) {
       try {
         await onDelete(user.access_token, dataId);
       } catch (error) {
@@ -38,14 +38,10 @@ const List = ({
   };
 
   useEffect(() => {
-    setFields(listFields);
-  }, [listFields]);
-
-  useEffect(() => {
     if (load) {
       setFields(listFields);
     }
-  }, [load]);
+  }, [load, listFields]);
 
   useEffect(() => {
     setLoad(true);
@@ -73,20 +69,21 @@ const List = ({
         </div>
       </div>
 
-      {fields.map((field, index) => {
-        return (
-          <ListItem
-            key={field.id !== undefined ? field.id : `${index}new`}
-            data={listFields[index] ?? init}
-            index={index}
-            onDelete={deleteHandler}
-            saveData={onSave}
-            required={required}
-            formFields={formFields}
-            actions={actions}
-          />
-        );
-      })}
+      {Array.isArray(fields) &&
+        fields.map((field, index) => {
+          return (
+            <ListItem
+              key={field.id !== undefined ? field.id : `${index}new`}
+              data={listFields[index] ?? init}
+              index={index}
+              onDelete={deleteHandler}
+              saveData={onSave}
+              required={required}
+              formFields={formFields}
+              actions={actions}
+            />
+          );
+        })}
     </div>
   );
 };
