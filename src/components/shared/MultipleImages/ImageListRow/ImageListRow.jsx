@@ -26,17 +26,21 @@ const ImageListRow = ({
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <Droppable droppableId="droppable" direction="horizontal">
-        {(provided, snapshot) => (
-          <ImageList
-            ref={provided.innerRef}
-            style={getListStyle(snapshot.isDraggingOver)}
-            {...provided.droppableProps}
-          >
-            {imageList &&
-              imageList.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.name} index={index}>
+    <>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable droppableId="droppable" direction="horizontal">
+          {(provided, snapshot) => (
+            <ImageList
+              ref={provided.innerRef}
+              style={getListStyle(snapshot.isDraggingOver)}
+              {...provided.droppableProps}
+            >
+              {imageList.map((item, index) => (
+                <Draggable
+                  key={item.id}
+                  draggableId={item.name ?? item.id + "drag"}
+                  index={index}
+                >
                   {(provided, snapshot) => (
                     <div>
                       <ImageListItem
@@ -101,11 +105,12 @@ const ImageListRow = ({
                   )}
                 </Draggable>
               ))}
-            {provided.placeholder}
-          </ImageList>
-        )}
-      </Droppable>
-    </DragDropContext>
+              {provided.placeholder}
+            </ImageList>
+          )}
+        </Droppable>
+      </DragDropContext>
+    </>
   );
 };
 

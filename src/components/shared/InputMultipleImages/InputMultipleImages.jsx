@@ -1,16 +1,20 @@
 import { Grid } from "@mui/material";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import ImageDialogFullPage from "../MultipleImages/ImageDialogFullPage/ImageDialogFullPage";
 import ImageListRow from "../MultipleImages/ImageListRow/ImageListRow";
 import MultipleImages from "../MultipleImages/MultipleImages";
 
-export const InputMultipleImages = () => {
+export const InputMultipleImages = ({
+  list = [],
+  onChangeHandler = () => {},
+  name,
+}) => {
   // TODO DEMO Start Multiple images drag and drop
 
   // state for openFullPageDialog and imageList single image is very similar it should be one state.
   // Here for demo purposes it is divided to two different states
   // Also setting that different states is redundant it should be one state and setter redundant part should be moved to util/helper file
-  const [imageList, setImageList] = useState();
+  const [imageList, setImageList] = useState(list);
   // TODO DEMO handle drag state
   const [dragActive, setDragActive] = useState(false);
   // initial state of image dialog and image data
@@ -48,17 +52,17 @@ export const InputMultipleImages = () => {
               size: selectedFiles[i].size,
               type: selectedFiles[i].type,
               src: reader.result,
+              new: true,
             });
+            if (Array.isArray(imageList)) {
+              newImagesArray = [...imageList, ...newImagesArray];
+            }
+
+            setImageList(newImagesArray);
           };
           reader.readAsDataURL(file);
         }
       }
-      console.log(newImagesArray);
-      if (Array.isArray(imageList)) {
-        newImagesArray = [...imageList, ...newImagesArray];
-      }
-
-      setImageList(newImagesArray);
     },
     [imageList]
   );
@@ -79,30 +83,33 @@ export const InputMultipleImages = () => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
-    if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-      const selectedFiles = e.dataTransfer.files;
+    if (event.target.files && event.target.files[0]) {
+      const selectedFiles = event.target.files;
 
-      const newImagesArray = [];
-
+      let len = imageList === undefined ? 0 : imageList.length;
       // TODO redundant move to helper and one state
       for (let i = 0; i < selectedFiles.length; i++) {
         var file = selectedFiles[i];
         const reader = new FileReader();
         reader.onloadend = () => {
           newImagesArray.push({
-            id: i + 1,
+            id: i + 1 + len,
             name: selectedFiles[i].name,
-            position: i,
+            position: i + 1,
             alt: selectedFiles[i].name,
             size: selectedFiles[i].size,
             type: selectedFiles[i].type,
             src: reader.result,
+            new: true,
           });
+          if (Array.isArray(imageList)) {
+            newImagesArray = [...imageList, ...newImagesArray];
+          }
+
+          setImageList(newImagesArray);
         };
         reader.readAsDataURL(file);
       }
-
-      setImageList(newImagesArray);
     }
   };
 
@@ -188,7 +195,7 @@ export const InputMultipleImages = () => {
     // If it is an edit mode it value of property src/image should be string "DELETE"
     // but if it is a first upload it should be removed from images array
     let imageItem = {
-      id: null,
+      id: deleteImgId,
       position: null,
       alt: null,
       size: null,
@@ -205,6 +212,14 @@ export const InputMultipleImages = () => {
     });
     setImageList(newState);
   };
+
+  useEffect(() => {
+    setImageList(list);
+  }, [list]);
+
+  useEffect(() => {
+    onChangeHandler({ target: { value: imageList, name: name } });
+  }, [imageList]);
 
   return (
     <Grid container spacing={1} direction="row" sx={{ mt: "2rem", ml: "1rem" }}>

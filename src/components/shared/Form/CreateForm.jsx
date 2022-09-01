@@ -213,7 +213,13 @@ const CreateForm = ({
           );
           break;
         case "MultipleImages":
-          formItem = <InputMultipleImages />;
+          formItem = (
+            <InputMultipleImages
+              list={Array.isArray(value) ? value : []}
+              name={item.prop_name}
+              onChangeHandler={onChangeHandler}
+            />
+          );
           break;
 
         default:

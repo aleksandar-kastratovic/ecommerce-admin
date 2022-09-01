@@ -15,11 +15,7 @@ const MultipleImages = ({
 }) => {
   return (
     <>
-      <form
-        className={styles.formUpload}
-        onDragEnter={handleDrag}
-        onSubmit={(e) => e.preventDefault()}
-      >
+      <Box className={styles.formUpload} onDragEnter={handleDrag}>
         <input type="file" className={styles.inputUpload} multiple={true} />
         <label
           className={
@@ -62,7 +58,7 @@ const MultipleImages = ({
             onDrop={handleDrop}
           />
         )}
-      </form>
+      </Box>
     </>
   );
 };
