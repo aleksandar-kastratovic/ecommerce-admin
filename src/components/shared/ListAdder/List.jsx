@@ -1,16 +1,15 @@
-import { Button } from "@mui/material";
-import { isEmpty } from "lodash";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../../store/auth-contex";
 import ListItem from "./ListItem";
 
 import styles from "./List.module.scss";
-import useAPI from "../../../api/api";
+import Button from "../Button/Button";
 
 const List = ({
   listFields = [],
   formFields = [],
   init = {},
+  addFieldLabel = "Dodaj polje",
   required = [],
   onSave = () => {},
   onDelete = () => {},
@@ -50,20 +49,22 @@ const List = ({
   return (
     <div className={styles.list}>
       <div className={styles.buttonsHolder}>
-        <Button onClick={addFieldHandler} className={styles.buttonPrimary}>
-          Add field
-        </Button>
+        <Button
+          label={addFieldLabel}
+          onClick={addFieldHandler}
+          icon="add"
+          variant="contained"
+        />
+
         <div className={styles.additionalButtonsHolder}>
           {additionalButtons.map((button) => {
             return (
               <Button
                 key={button.id}
+                icon={button.icon}
+                label={button.text}
                 onClick={button.action}
-                className={`${styles.buttonAdditional} ${button.className}`}
-              >
-                {button.icon}
-                {button.text}
-              </Button>
+              />
             );
           })}
         </div>

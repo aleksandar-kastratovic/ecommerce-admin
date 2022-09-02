@@ -39,8 +39,8 @@
     "input_type": "input"
   },
   {
-    "field_name": "Vrednost",
-    "prop_name": "int_value",
+    "field_name": "Parametar sa više vrednosti",
+    "prop_name": "field_is_multiple",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -49,11 +49,11 @@
     "description": "255",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "boolean"
   },
   {
     "field_name": "Opis",
-    "prop_name": "description",
+    "prop_name": "field_description",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -65,8 +65,8 @@
     "input_type": "input"
   },
   {
-    "field_name": "Datum",
-    "prop_name": "datetime_value",
+    "field_name": "Aktivan od",
+    "prop_name": "active_from",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -76,6 +76,32 @@
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "date_format"
+  },
+  {
+    "field_name": "Aktivan do",
+    "prop_name": "active_to",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "255",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "date_format"
+  },
+  {
+    "field_name": "Status",
+    "prop_name": "status",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "255",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "select"
   },
   {
     "field_name": "Akcije",

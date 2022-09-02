@@ -43,7 +43,7 @@ const ListPage = ({
     isError,
   } = useQuery(
     ["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page],
-    () => api.list(apiUrl, { page: page, serach: search })
+    () => api.list(apiUrl, { page: page, search: search })
   );
 
   useEffect(() => {

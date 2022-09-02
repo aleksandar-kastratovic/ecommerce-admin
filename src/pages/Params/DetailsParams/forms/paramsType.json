@@ -12,12 +12,28 @@
   "input_type": "select",
   "options": [
     {
-      "id": "1",
-      "name": "Single"
+      "id": "long_text",
+      "name": "Dug tekst"
     },
     {
-      "id": "2",
-      "name": "Multy"
+      "id": "number",
+      "name": "Broj"
+    },
+    {
+      "id": "date",
+      "name": "Datum"
+    },
+    {
+      "id": "datetime",
+      "name": "Datum i vreme"
+    },
+    {
+      "id": "image",
+      "name": "Slika"
+    },
+    {
+      "id": "image_description",
+      "name": "Slika sa opisom"
     }
   ]
 }

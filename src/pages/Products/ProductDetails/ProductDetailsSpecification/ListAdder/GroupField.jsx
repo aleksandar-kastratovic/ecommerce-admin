@@ -117,10 +117,6 @@ const GroupField = ({
     }
   }, [open]);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
-
   return (
     <Box>
       <div onClick={isOpenToggle}>

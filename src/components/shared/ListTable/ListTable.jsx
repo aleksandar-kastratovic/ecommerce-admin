@@ -74,6 +74,7 @@ const ListTable = ({
                                 data["id"],
                                 "categoryTree"
                               )}
+                              system_required={data.system_required}
                             />
                           ) : (
                             displayData(data[prop_name], input_type)

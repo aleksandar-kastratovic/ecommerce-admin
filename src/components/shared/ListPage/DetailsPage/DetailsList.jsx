@@ -1,5 +1,3 @@
-import React, { useState } from "react";
-
 // material-ui components
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -8,31 +6,23 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Icon from "@mui/material/Icon";
-import Typography from "@mui/material/Typography";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
+import { Box } from "@mui/material";
 
 import styles from "./DetailsList.module.scss";
-import { Box } from "@mui/system";
 
 const DetailsList = ({
-  handleSelectInDetails = () => {},
-  detailsList = [],
-  selected = "",
+  handleSelect = () => {},
+  fields = [],
+  selected = 0,
   isLoadingList = false,
   isErrorList = false,
-  fields = [],
 }) => {
-  const { submodules, name, module } = detailsList;
-
-  const handleSelect = (slug) => {
-    handleSelectInDetails(module, slug);
+  const handleSelectItem = (value) => {
+    handleSelect(value);
   };
-
-  // NOTE: Icons are dynamic aligned with material ui icons and google icons just a string.
-  // More info can be find on link
-  // https://fontawesomeicons.com/materialdesign/icons
 
   return (
     <>
@@ -40,25 +30,23 @@ const DetailsList = ({
         <List>
           {!isLoadingList ? (
             <>
-              {fields.map(
-                ({ prop_name, field_name, disabled, ui_prop }, index) => (
-                  <ListItem
-                    key={prop_name}
-                    disablePadding
-                    selected={selected === prop_name ? true : false}
-                    onClick={() => handleSelect(submodules[index]?.slug)}
-                    disabled={disabled}
-                  >
-                    <ListItemButton>
-                      <ListItemIcon>
-                        <Icon>{ui_prop}</Icon>
-                      </ListItemIcon>
-                      <ListItemText primary={field_name} />
-                      <ChevronRightIcon />
-                    </ListItemButton>
-                  </ListItem>
-                )
-              )}
+              {fields.map((field) => (
+                <ListItem
+                  key={field.id}
+                  disablePadding
+                  selected={selected === field.id ? true : false}
+                  onClick={() => handleSelectItem(field.id)}
+                  disabled={field.disabled}
+                >
+                  <ListItemButton>
+                    <ListItemIcon>
+                      <Icon>{field.icon}</Icon>
+                    </ListItemIcon>
+                    <ListItemText primary={field.name} />
+                    <ChevronRightIcon />
+                  </ListItemButton>
+                </ListItem>
+              ))}
             </>
           ) : (
             <Stack spacing={1}>

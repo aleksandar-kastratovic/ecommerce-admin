@@ -1,68 +1,60 @@
-import { Box, Button } from "@mui/material";
-import UTurnLeftIcon from "@mui/icons-material/UTurnLeft";
-
-import { useNavigate } from "react-router-dom";
-import DetailsList from "./DetailsList";
+import { Box } from "@mui/material";
 import { useState } from "react";
-import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import PageWrapper from "../../Layout/PageWrapper/PageWrapper";
+import DetailsList from "./DetailsList";
 
 import styles from "./DetailsPage.module.scss";
+
 const DetailsPage = ({
   title = "",
-  backButton = false,
-  backPath = "",
-  hasList = false,
-  isLoadingList = false,
-  isErrorList = false,
-  detailsList = {},
-  defaultSelected = "",
   fields = [],
-  onChangeSelected = () => {},
-  main,
-  isNewPage = false,
+  components = {},
+  additionalButtons = [],
 }) => {
-  const [selected, setSelected] = useState(defaultSelected);
+  const [selected, setSelected] = useState(fields[0].id ?? null);
+
   const navigate = useNavigate();
-  const handleBackToList = () => {
-    navigate(backPath);
+
+  const handleChange = (value) => {
+    setSelected(value);
   };
 
-  const handleSelectInDetails = (module, slug) => {
-    if (!isNewPage) setSelected(slug);
+  const handleBack = () => {
+    navigate(-1);
   };
 
-  useEffect(() => {
-    onChangeSelected(selected);
-  }, [selected]);
+  const getFieldComponent = () => {
+    for (const item of fields) {
+      if (item.id === selected) {
+        return item.component;
+      }
+    }
+    return null;
+  };
+
   return (
-    <Box className={styles.details}>
-      <Box className={styles.header}>
-        <h2>{title}</h2>
-        {backButton && (
-          <Button onClick={handleBackToList} className={styles.buttonBack}>
-            <i>
-              <UTurnLeftIcon />
-            </i>
-            Nazad
-          </Button>
-        )}
+    <PageWrapper title={title} back={handleBack} actions={additionalButtons}>
+      <Box className={styles.details}>
+        <Box className={styles.list}>
+          <DetailsList
+            fields={fields}
+            handleSelect={handleChange}
+            selected={selected}
+          />
+        </Box>
+        {fields.map((field) => {
+          if (field.id === selected) {
+            return (
+              <Box className={styles.main} key={field.id}>
+                {field.component}
+              </Box>
+            );
+          }
+          return null;
+        })}
       </Box>
-      <Box className={styles.content}>
-        {hasList && (
-          <Box className={styles.detailsList}>
-            <DetailsList
-              selected={selected}
-              detailsList={detailsList}
-              handleSelectInDetails={handleSelectInDetails}
-              isLoadingList={isLoadingList}
-              isErrorList={isErrorList}
-              fields={fields}
-            />
-          </Box>
-        )}
-        <Box className={styles.main}>{main !== undefined && main}</Box>
-      </Box>
-    </Box>
+    </PageWrapper>
   );
 };
 

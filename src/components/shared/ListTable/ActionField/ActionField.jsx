@@ -18,6 +18,7 @@ import FormActionButton from "../../FormActionButton/FormActionButton";
  */
 const ActionField = ({
   field_type = "",
+  system_required = false,
   handlePreview = () => {},
   handleDelete = () => {},
   handleEdit = () => {},
@@ -47,13 +48,17 @@ const ActionField = ({
           );
           break;
         case "delete":
-          button = (
-            <FormActionButton
-              icon="delete"
-              onClick={handleDelete}
-              key={action}
-            />
-          );
+          if (system_required) {
+            button = null;
+          } else {
+            button = (
+              <FormActionButton
+                icon="delete"
+                onClick={handleDelete}
+                key={action}
+              />
+            );
+          }
           break;
         case "listGroup":
           button = (

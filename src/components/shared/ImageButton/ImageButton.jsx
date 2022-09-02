@@ -167,7 +167,7 @@ const ImageButton = ({
                   </Button>
                 </label>
                 <FormHelperText>
-                  Maximum file size: 2MB, Allowed types: JBG, GIF, PNG, ICO,
+                  Maximum file size: 2MB, Allowed types: JPG, GIF, PNG, ICO,
                   APNG, Not all browsers support these formats
                 </FormHelperText>
               </FormControl>

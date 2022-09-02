@@ -5,12 +5,25 @@ import Button from "../Button/Button";
 import CreateForm from "./CreateForm";
 import Buttons from "./Buttons/Buttons";
 import { useNavigate } from "react-router-dom";
+import { formatDate, formatDateTime } from "../../../helpers/dateFormat";
+import ImageDialog from "../Dialogs/ImageDialog";
+import { repackToSend, isUrlValid } from "./util";
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => {} }) => {
+const Form = ({
+  formFields = [],
+  initialData = {},
+  onSubmit = () => {},
+  cancelButton = true,
+}) => {
   const navigate = useNavigate();
   const [data, setData] = useState(initialData);
   const [inputsError, setInputsError] = useState([]);
-  const [imagePreviewList, setImagePreviewList] = useState([]);
+  const [openImageDialog, setOpenImageDialog] = useState({
+    show: false,
+    image: null,
+    label: "",
+    name: "",
+  });
 
   const submitHandler = () => {
     const errors = {};
@@ -27,7 +40,9 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => {} }) => {
   const formItemChangeHandler = ({ target }, type) => {
     if (type === "date") {
       setData({ ...data, [target.name]: formatDate(target.value) });
-    } else if (type) {
+    } else if (type === "date_time") {
+      setData({ ...data, [target.name]: formatDateTime(target.value) });
+    } else if (type === "swicth" || type === "checkbox") {
       setData({ ...data, [target.name]: target.checked });
     } else {
       setData({ ...data, [target.name]: target.value });
@@ -51,6 +66,46 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => {} }) => {
     [data]
   );
 
+  const onOpenImageDialog = (img, label, imageName) => {
+    const found = data[imageName];
+
+    // If the image is a type of URL it means that user still did not upload new image,
+    // but if it is not type of URL it means that user uploaded new image
+    // Additionally, if this solution is not reliable, new flag state can be introduced for example
+    // type boolean
+    // const [newImageUploaded, setNewImageUploaded] = useState(false)
+    // when user uploads a new image it can be set to true
+    const checkImage = isUrlValid(img);
+
+    if (checkImage) {
+      setOpenImageDialog({
+        show: true,
+        image: found,
+        label: label,
+        name: imageName,
+      });
+    } else {
+      setOpenImageDialog({
+        show: true,
+        image: img,
+        label: label,
+        name: imageName,
+      });
+    }
+  };
+
+  const handleCloseImageDialog = () => {
+    setOpenImageDialog({ show: false, image: null, label: "", name: "" });
+  };
+
+  const handleSaveEditImage = (imageName, image) => {
+    setData({ ...data, [imageName]: image });
+  };
+
+  const handleDeleteImage = (imageName) => {
+    setData({ ...data, [imageName]: "DELETE" });
+  };
+
   const setter = (event, result) => {
     setData({ ...data, [event.target.name]: result });
   };
@@ -60,32 +115,45 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => {} }) => {
   }, [initialData]);
 
   return (
-    <Box component="form" autoComplete="off">
-      {formFields &&
-        formFields
-          .filter(({ in_details }) => in_details)
-          .map((item, index) => {
-            return (
-              <CreateForm
-                data-test-id="admin-form"
-                onChangeHandler={formItemChangeHandler}
-                onImageUpload={formImageUpload}
-                item={item}
-                key={index}
-                error={inputsError[item.prop_name]}
-                value={
-                  Array.isArray(item) && data
-                    ? data[item.prop_name]
-                    : data[item.prop_name]
-                }
-              />
-            );
-          })}
-      <Buttons>
-        <Button label="Odustani" onClick={() => navigate(-1)} />
-        <Button label="Sačuvaj" onClick={submitHandler} variant="contained" />
-      </Buttons>
-    </Box>
+    <>
+      <Box component="form" autoComplete="off">
+        {formFields &&
+          formFields
+            .filter(({ in_details }) => in_details)
+            .map((item, index) => {
+              return (
+                <CreateForm
+                  data-test-id="admin-form"
+                  onChangeHandler={formItemChangeHandler}
+                  onImageUpload={formImageUpload}
+                  onOpenImageDialog={onOpenImageDialog}
+                  item={item}
+                  key={index}
+                  error={inputsError[item.prop_name]}
+                  value={
+                    Array.isArray(item) && data
+                      ? data[item.prop_name]
+                      : data[item.prop_name]
+                  }
+                />
+              );
+            })}
+        <Buttons>
+          {cancelButton && (
+            <Button label="Odustani" onClick={() => navigate(-1)} />
+          )}
+          <Button label="Sačuvaj" onClick={submitHandler} variant="contained" />
+        </Buttons>
+      </Box>
+      <ImageDialog
+        title="Obrada slike"
+        openImageDialog={openImageDialog}
+        handleCloseImageDialog={handleCloseImageDialog}
+        onImageUpload={formImageUpload}
+        handleSaveEditImage={handleSaveEditImage}
+        handleDeleteImage={handleDeleteImage}
+      />
+    </>
   );
 };
 

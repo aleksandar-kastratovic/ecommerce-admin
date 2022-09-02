@@ -4,12 +4,11 @@ import TextField from "@mui/material/TextField";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import styles from "./BasicDateTimePicker.module.scss";
 
 const BasicDateTimePicker = ({
-  value = new Date(),
+  value = null,
   label = "",
   name = "",
   onChangeHandler = () => {},
@@ -21,7 +20,7 @@ const BasicDateTimePicker = ({
         value: newValue,
       },
     };
-    onChangeHandler(ev, "date");
+    onChangeHandler(ev, "date_time");
   };
 
   return (
@@ -29,8 +28,9 @@ const BasicDateTimePicker = ({
       <DateTimePicker
         label={label}
         value={value}
-        inputFormat="yyyy-mm-dd hh:mm:ss"
         onChange={handleChange}
+        ampm={false}
+        inputFormat="dd/MM/yyyy hh:mm"
         renderInput={(params) => (
           <TextField
             className={styles.dateTimePickerStyle}

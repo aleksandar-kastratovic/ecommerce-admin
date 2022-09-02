@@ -6,7 +6,7 @@ import Button from "../../../components/shared/Button/Button";
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
 import { formatDate } from "../../../helpers/dateFormat";
 
-import fields from './formField.json';
+import fields from "./formField.json";
 import { getCountry, saveCountry } from "../services";
 import AuthContext from "../../../store/auth-contex";
 import requirePropFactory from "@mui/utils/requirePropFactory";
@@ -15,107 +15,103 @@ import { toast } from "react-toastify";
 
 const required = [];
 const init = {
-    "slug": "",
-		"name": "",
-		"phone_code": "",
-		"source": "",
-		"id_source ": null,
-		"id_source": 0
-}
+  slug: "",
+  name: "",
+  phone_code: "",
+  source: "",
+  "id_source ": null,
+  id_source: 0,
+};
 const CountriesDetails = () => {
-    const { cid } = useParams();
-    const navigate = useNavigate();
-    const handleBack = () => {
-        navigate("/countries");
+  const { cid } = useParams();
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate("/countries");
+  };
+  const [data, setData] = useState(init);
+  const [inputsError, setInputsError] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const { user } = useContext(AuthContext);
+
+  const formItemChangeHandler = ({ target }, type) => {
+    if (type === "date") {
+      setData({ ...data, [target.name]: formatDate(target.value) });
+    } else if (type) {
+      setData({ ...data, [target.name]: target.checked });
+    } else {
+      setData({ ...data, [target.name]: target.value });
     }
-    const [data, setData] = useState(init);
-    const [inputsError, setInputsError] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const {user} = useContext(AuthContext);
-    
-    const formItemChangeHandler = ({ target }, type) => {
-        if(type==="date") {
-          setData({ ...data, [target.name]: formatDate(target.value ) });
-        }
-        else if (type) {
-          setData({ ...data, [target.name]: target.checked });
-        } else {
-          setData({ ...data, [target.name]: target.value });
-        }
-      };
+  };
 
-      const handleData = async () => {
-        try {
-          setIsLoading(true);
-          let response = await getCountry(user.access_token, cid);
-          let { payload } = response.data;
-          setData(payload);
-        } catch (error) {
-          console.warn(error);
-        } finally {
-          setIsLoading(false);
-        }
-      };
+  const handleData = async () => {
+    try {
+      setIsLoading(true);
+      let response = await getCountry(user.access_token, cid);
+      let { payload } = response.data;
+      setData(payload);
+    } catch (error) {
+      console.warn(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-      const saveData = async () => {
-        try {
-          let response = await saveCountry(user.access_token, data);
-          handleBack();
-          toast.success("Uspešno uneta forma!");
-        } catch (error) {
-          console.warn(error.response);
-          toast.warning("Greška ");
-        }
-      };
+  const saveData = async () => {
+    try {
+      let response = await saveCountry(user.access_token, data);
+      handleBack();
+      toast.success("Uspešno uneta forma!");
+    } catch (error) {
+      console.warn(error.response);
+      toast.warning("Greška ");
+    }
+  };
 
-      const onSubmit = () => {
-        const errors = {};
-        console.log(data);
-        Object.keys(data).forEach((prop_name) => {
-          if (isEmpty(data[prop_name])) {
-            if (
-              required.includes(prop_name)
-            )
-              errors[prop_name] = {
-                content: "Polje je obavezno, molim Vas unesite vrednost.",
-              };
-          }
-        });
-        isEmpty(errors) ? saveData() : setInputsError(errors);
-      };
-      
-      useEffect(() => {
-        if (cid !== "new") {
-          handleData();
-        }
-      }, []);
-    
-    return(
-       <PageWrapper title="Detalji države" back={handleBack}>
-           <Box component="form" autoComplete="off">
-            {fields &&
-              fields
-                .filter(({ in_details }) => in_details)
-                .map((item, index) => {
-                  return (
-                    <CreateForm
-                      data-test-id="admin-form"
-                      onChangeHandler={formItemChangeHandler}
-                      item={item}
-                      key={index}
-                      error={inputsError[item.prop_name]}
-                      value={
-                        Array.isArray(item) && data
-                          ? data[item.prop_name]
-                          : data[item.prop_name]
-                      }
-                    />
-                  );
-                })}
-                <Button label="Sačuvaj" onClick={onSubmit}/>
-          </Box>
-       </PageWrapper>
-    )
+  const onSubmit = () => {
+    const errors = {};
+    Object.keys(data).forEach((prop_name) => {
+      if (isEmpty(data[prop_name])) {
+        if (required.includes(prop_name))
+          errors[prop_name] = {
+            content: "Polje je obavezno, molim Vas unesite vrednost.",
+          };
+      }
+    });
+    isEmpty(errors) ? saveData() : setInputsError(errors);
+  };
+
+  useEffect(() => {
+    if (cid !== "new") {
+      handleData();
+    }
+  }, []);
+
+  return (
+    <PageWrapper title="Detalji države" back={handleBack}>
+      <Box component="form" autoComplete="off">
+        {fields &&
+          fields
+            .filter(({ in_details }) => in_details)
+            .map((item, index) => {
+              return (
+                <CreateForm
+                  data-test-id="admin-form"
+                  onChangeHandler={formItemChangeHandler}
+                  item={item}
+                  key={index}
+                  error={inputsError[item.prop_name]}
+                  value={
+                    Array.isArray(item) && data
+                      ? data[item.prop_name]
+                      : data[item.prop_name]
+                  }
+                />
+              );
+            })}
+        <Button label="Sačuvaj" onClick={onSubmit} />
+      </Box>
+    </PageWrapper>
+  );
 };
 
 export default CountriesDetails;

@@ -7,13 +7,14 @@ import FormLabel from "@mui/material/FormLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 import Switch from "@mui/material/Switch";
 
 import ImageUpload from "../ImageUpload/ImageUpload";
 import BasicDateTimePicker from "../BasicDateTimePicker/BasicDateTimePicker";
 import ImageButton from "../ImageButton/ImageButton";
 import InputMultipleImages from "../InputMultipleImages/InputMultipleImages";
+import BasicDatePicker from "../BasicDatePicker/BasicDatePicker";
+import Textarea from "../TextArea/Textarea";
 
 const CreateForm = ({
   item = {},
@@ -30,7 +31,7 @@ const CreateForm = ({
   // value is obvious
   // onChangeHandler change handler
   // error is for validations backend and frontend
-
+  value = value === null ? "" : value;
   const [inputValue, setInputValue] = useState(value);
   const onInputChangeHandler = (event) => {
     onChangeHandler(event);
@@ -115,7 +116,20 @@ const CreateForm = ({
         case "checkbox":
           formItem = (
             <FormControlLabel
-              control={<Checkbox disabled={disabled} />}
+              control={
+                <Checkbox
+                  name={item.prop_name}
+                  checked={
+                    typeof value === "string"
+                      ? true
+                      : typeof value === "number"
+                      ? value === 1
+                      : value
+                  }
+                  onChange={(e) => onChangeHandler(e, "checkbox")}
+                  disabled={disabled}
+                />
+              }
               label={item.field_name}
             />
           );
@@ -153,11 +167,7 @@ const CreateForm = ({
           break;
         case "select":
           formItem = (
-            <FormControl
-              fullWidth
-              size="small"
-              sx={{ ml: "0.5rem", mt: "0.5rem" }}
-            >
+            <FormControl fullWidth size="small">
               <FormLabel
                 required={
                   typeof item.required === "number"
@@ -172,7 +182,7 @@ const CreateForm = ({
                 labelId={`select-label-${item.field_name}`}
                 id={`select-label-${item.field_name}`}
                 name={item.prop_name}
-                value={inputValue}
+                value={value}
                 label={item.field_name}
                 onChange={onInputChangeHandler}
                 disabled={disabled}
@@ -193,17 +203,32 @@ const CreateForm = ({
           break;
         case "textarea":
           formItem = (
-            <TextareaAutosize
+            <Textarea
               aria-label="minimum height"
               minRows={3}
-              placeholder="Minimum 3 rows"
+              placeholder={item.field_name}
+              name={item.prop_name}
+              onChange={onChangeHandler}
+              value={value}
               disabled={disabled}
+              style={{ width: "100%" }}
             />
           );
           break;
         case "date_time":
           formItem = (
             <BasicDateTimePicker
+              value={value}
+              label={item.field_name}
+              name={item.prop_name}
+              onChangeHandler={onChangeHandler}
+              disabled={disabled}
+            />
+          );
+          break;
+        case "date":
+          formItem = (
+            <BasicDatePicker
               value={value}
               label={item.field_name}
               name={item.prop_name}

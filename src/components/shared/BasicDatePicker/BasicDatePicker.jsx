@@ -7,21 +7,30 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import styles from "./BasicDatePicker.module.scss";
 
-const BasicDatePicker = ({ value = new Date(), label = "" }) => {
+const BasicDatePicker = ({
+  value = new Date(),
+  label = "",
+  name = "",
+  onChangeHandler = () => {},
+}) => {
+  const handleChange = (newValue) => {
+    const ev = {
+      target: {
+        name: name,
+        value: newValue,
+      },
+    };
+    onChangeHandler(ev, "date");
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <DatePicker
         label={label}
         value={value}
-        onChange={(newValue) => {
-          setValue(newValue);
-        }}
+        onChange={handleChange}
+        inputFormat="dd/MM/yyyy"
         renderInput={(params) => (
-          <TextField
-            {...params}
-            size="small"
-            className={styles.textFieldStyle}
-          />
+          <TextField {...params} className={styles.datePickerStyle} />
         )}
       />
     </LocalizationProvider>

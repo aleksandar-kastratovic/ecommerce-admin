@@ -71,7 +71,6 @@ const VariationSection = ({
   }, []);
 
   const onSubmit = (data) => {
-    console.log(data);
     const req = {
       ...init,
       ...data,
