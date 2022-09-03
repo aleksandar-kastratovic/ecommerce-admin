@@ -62,6 +62,6 @@
     "description": "255",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "edit_preview"
+    "input_type": "edit_delete"
   }
 ]

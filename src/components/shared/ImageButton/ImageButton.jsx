@@ -28,6 +28,7 @@ const ImageButton = ({
   description = "",
   value = "",
   error = "",
+
   onImageUpload = () => {},
   onOpenImageDialog = () => {},
 }) => {

@@ -150,7 +150,7 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "image_upload"
+    "input_type": "image_button"
   },
   {
     "field_name": "Aktivan",

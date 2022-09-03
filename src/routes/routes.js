@@ -72,6 +72,7 @@ import CompaniesDetails from "../pages/Companies/CompaniesDetails/CompaniesDetai
 import SaleOfficers from "../pages/SaleOfficers/SaleOfficers";
 import SaleOfficersDetails from "../pages/SaleOfficers/SaleOfficersDetails/SaleOfficersDetails";
 import B2BbannersPositions from "../pages/B2BbannersPositions/B2BbannersPositions";
+import PositionDetails from "../pages/B2BbannersPositions/DetailsPage/PositionDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -135,6 +136,7 @@ const screens = {
     [
       [":B2BId", DetailsBanners],
       ["positions", B2BbannersPositions],
+      ["positions/:id", PositionDetails],
     ],
   ],
   B2BCFG: [
