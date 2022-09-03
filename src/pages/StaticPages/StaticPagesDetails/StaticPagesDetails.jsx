@@ -4,13 +4,13 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
 import AuthContext from "../../../store/auth-contex";
-import { getFormData, getListFormFields, saveForm } from "../services";
+import { getListStaticPages, getStaticPages, saveForm } from "../services";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
 
-import styles from "./NewsCategoryListDetails.module.scss";
+import styles from "./StaticPagesDetails.module.scss";
 import DetailsList from "./DetailsList";
 
 import listData from "./DetailsListData.json";
@@ -18,30 +18,26 @@ import fields from "./DetailsFields.json";
 import CreateForm from "../../../components/shared/Form/CreateForm";
 import TwoColumnDetails from "../../../components/shared/Layout/Details/TwoColumnDetails/TwoColumnDetails";
 import SetFormFields from "./SetFormFields/SetFormFields";
-import {formatDate} from "../../../helpers/dateFormat"
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 
 import detailsFields from "./DetailsListFields.json";
 
-const NewsCategoryListDetails = () => {
-  const { cid } = useParams();
+const StaticPagesDetails = () => {
+  const { spid } = useParams();
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
   const [selected, setSelected] = useState("info");
   const [detailsList, setDetailsList] = useState(listData);
 
   const init = {
-    "id":null,
-    "field_type":"",
-    "slug": "",
-    "name": "",
-    "int_value" : 0,
-    "datetime_value" : "",
-    "description" : "",
-    "active_from":"",
-    "active_to":"",
-    "active": 0,
-    "order":0
+    id: null,
+    slug: "",
+    module: "",
+    submodule: "",
+    method: "",
+    action_url: "",
+    description: "",
+    order: 0,
   };
 
   const [data, setData] = useState(init);
@@ -51,21 +47,21 @@ const NewsCategoryListDetails = () => {
   const [main, setMain] = useState();
 
   const handleBackToList = () => {
-    navigate(`/news/category`);
+    navigate(`/staticpages`);
   };
 
   const handleSelectInDetails = (module, slug) => {
-    if (cid !== "new") {
+    if (spid !== "new") {
       setSelected(slug);
     }
   };
 
   const handleFormData = async () => {
     try {
-      let response = await getFormData(user.access_token, cid);
-      let { payload } = response.data;
-      setData({...data,...payload});
       setIsLoading(true);
+      let response = await getStaticPages(user.access_token, spid);
+      let { payload } = response.data;
+      setData(payload);
     } catch (error) {
       console.warn(error);
     } finally {
@@ -76,7 +72,7 @@ const NewsCategoryListDetails = () => {
   const handleFormFields = async () => {
     try {
       setIsLoading(true);
-      let response = await getListFormFields(user.access_token, cid);
+      let response = await getListStaticPages(user.access_token, spid);
       let { payload } = response.data;
       setFormFields(payload.items);
     } catch (error) {
@@ -87,10 +83,7 @@ const NewsCategoryListDetails = () => {
   };
 
   const formItemChangeHandler = ({ target }, type) => {
-    if(type==="date") {
-      setData({ ...data, [target.name]: formatDate(target.value ) });
-    }
-    else if (type) {
+    if (type) {
       setData({ ...data, [target.name]: target.checked });
     } else {
       setData({ ...data, [target.name]: target.value });
@@ -98,15 +91,13 @@ const NewsCategoryListDetails = () => {
   };
 
   const saveData = async () => {
-    console.log("test");
     try {
       let response = await saveForm(user.access_token, data);
-      console.log(response);
       handleBackToList();
       toast.success("Uspešno uneta forma!");
     } catch (error) {
       console.warn(error.response);
-      toast.warning("Greška");
+      toast.warning("Greška ");
     }
   };
 
@@ -129,13 +120,13 @@ const NewsCategoryListDetails = () => {
   };
 
   useEffect(() => {
-    if (cid !== "new") {
+    if (spid !== "new") {
       handleFormData();
     }
   }, []);
 
   useEffect(() => {
-    if (selected === "fields" && cid !== "new") {
+    if (selected === "fields" && spid !== "new") {
       handleFormFields();
     }
   }, [selected]);
@@ -168,7 +159,7 @@ const NewsCategoryListDetails = () => {
         );
 
       case "fields":
-        return <SetFormFields formFields={formFields} cid={data.id} />;
+        return <SetFormFields formFields={formFields} spid={data.id} />;
 
       default:
         return <p>Došlo je do greške! Molimo pokušajte kasnije.</p>;
@@ -224,4 +215,4 @@ const NewsCategoryListDetails = () => {
   );
 };
 
-export default NewsCategoryListDetails;
+export default StaticPagesDetails;

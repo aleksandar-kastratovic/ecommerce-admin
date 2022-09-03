@@ -5,10 +5,10 @@ const api = () => {
   // return apiLocal;
 };
 
-export const getListNewsCategoryList = async (token, search) => {
+export const getListStaticPages = async (token, search) => {
     return await axios({
       method: "LIST",
-      url: `${api()}admin/news-b2c/category/`,
+      url: `${api()}admin/static-pages-b2c/page/`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -16,21 +16,21 @@ export const getListNewsCategoryList = async (token, search) => {
     });
   };
 
-  export const getNewsCategoryList = async (token, id) => {
+  export const getStaticPages = async (token, id) => {
     return await axios({
       method: "GET",
-      url: `${api()}admin/news-b2c/category/${id}`,
+      url: `${api()}admin/static-pages-b2c/page/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
   };
 
-  export const saveNewsCategoryList= async (token, data = {}) => {
+  export const saveStaticPages = async (token, data = {}) => {
     const req = JSON.stringify(data);
     return await axios({
       method: "POST",
-      url: `${api()}admin/news-b2c/category/`,
+      url: `${api()}admin/static-pages-b2c/page/`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -38,10 +38,10 @@ export const getListNewsCategoryList = async (token, search) => {
     });
   };
 
-export const deleteNewsCategoryList = async (token, id) => {
+export const deleteStaticPages = async (token, id) => {
     return await axios({
       method: "DELETE",
-      url: `${api()}admin/news-b2c/category/${id}`,
+      url: `${api()}admin/static-pages-b2c/page/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -51,7 +51,7 @@ export const deleteNewsCategoryList = async (token, id) => {
     const req = JSON.stringify(data);
     return await axios({
       method: "POST",
-      url: `${api()}admin/news-b2c/category/`,
+      url: `${api()}admin/static-pages-b2c/page/`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -63,7 +63,7 @@ export const deleteNewsCategoryList = async (token, id) => {
     const req = JSON.stringify(data);
     return await axios({
       method: "POST",
-      url: `${api()}admin/news-b2c/category/`,
+      url: `${api()}admin/static-pages-b2c/page/`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -74,7 +74,7 @@ export const deleteNewsCategoryList = async (token, id) => {
   export const deleteFormField = async (token, id) => {
     return await axios({
       method: "DELETE",
-      url: `${api()}admin/news-b2c/category/values/${id}`,
+      url: `${api()}admin/static-pages-b2c/page/values/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -83,7 +83,7 @@ export const deleteNewsCategoryList = async (token, id) => {
   export const getFormData = async (token, id) => {
     return await axios({
       method: "GET",
-      url: `${api()}admin/news-b2c/category/main/${id}`,
+      url: `${api()}admin/static-pages-b2c/page/main/${id}`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -93,7 +93,7 @@ export const deleteNewsCategoryList = async (token, id) => {
   export const getListFormFields = async (token, id) => {
     return await axios({
       method: "LIST",
-      url: `${api()}admin/nnews-b2c/category/values/`,
+      url: `${api()}admin/static-pages-b2c/page/values/`,
       headers: {
         Authorization: `Bearer ${token}`,
       },

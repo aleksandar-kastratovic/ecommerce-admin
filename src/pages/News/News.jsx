@@ -13,7 +13,7 @@ const News = () => {
     const categoryButtons = [{ id: 1, label: "Kategorije", action: categoryPage }];
 
     return(
-        <ListPage apiUrl="admin/news_b2c/b2c_news" title="Lista vesti" columnFields={tblFields}  additionalButtons={categoryButtons}/>
+        <ListPage apiUrl="admin/news-b2c/news" title="Lista vesti" columnFields={tblFields}  additionalButtons={categoryButtons}/>
     )
 };
 

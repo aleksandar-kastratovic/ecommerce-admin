@@ -18,6 +18,7 @@ const ListPage = ({
   columnFields = [],
   additionalButtons = [],
   showDatePicker = false,
+  showNewButton=true
 }) => {
   const api = useAPI();
 
@@ -125,14 +126,14 @@ const ListPage = ({
     }
   };
 
-  const titleButtons = [
+  const titleButtons = showNewButton?[
     {
       label: "Novi",
       action: handleCreateNew,
       variant: "contained",
       icon: "add",
     },
-  ];
+  ]:[];
 
   return (
     <>
