@@ -66,21 +66,6 @@ const DetailsBanners = ({}) => {
   }, [response]);
 
   useEffect(() => {
-    switch (data.position) {
-      case "image":
-        setSubFields(image);
-        break;
-      case "image_description":
-        setSubFields(image_description);
-        break;
-
-      default:
-        setSubFields([]);
-        break;
-    }
-  }, [data.position]);
-
-  useEffect(() => {
     const fillDDl = async () => {
       await api
         .get(`admin/banners-b2b/main/ddl/position`)
@@ -92,8 +77,39 @@ const DetailsBanners = ({}) => {
         });
     };
 
-    //fillDDl();
+    fillDDl();
   }, []);
+
+  useEffect(() => {
+    const getForm = async () => {
+      let res;
+      await api
+        .get(`admin/banners-b2b/positions/slug/${data.position}`)
+        .then((response) => {
+          res = response?.payload;
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
+      if (res) {
+        switch (res.type) {
+          case "image":
+            setSubFields(image);
+            break;
+          case "image_description":
+            setSubFields(image_description);
+            break;
+
+          default:
+            setSubFields([]);
+            break;
+        }
+      }
+    };
+    if (data && data.position !== null) {
+      getForm();
+    }
+  }, [data]);
 
   return (
     <PageWrapper title="Unos novog banera" back={() => navigate(-1)}>
