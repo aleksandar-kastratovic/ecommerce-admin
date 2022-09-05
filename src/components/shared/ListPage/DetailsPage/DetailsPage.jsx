@@ -6,12 +6,7 @@ import DetailsList from "./DetailsList";
 
 import styles from "./DetailsPage.module.scss";
 
-const DetailsPage = ({
-  title = "",
-  fields = [],
-  components = {},
-  additionalButtons = [],
-}) => {
+const DetailsPage = ({ title = "", fields = [], additionalButtons = [] }) => {
   const [selected, setSelected] = useState(fields[0].id ?? null);
 
   const navigate = useNavigate();

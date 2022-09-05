@@ -1,111 +1,77 @@
-import { Box } from "@mui/system";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
-import CreateForm from "../../../components/shared/Form/CreateForm";
-import Button from "../../../components/shared/Button/Button";
+import { useState, useEffect } from "react";
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
-import { formatDate } from "../../../helpers/dateFormat";
-
-import fields from "./formField.json";
-import { getBrand, saveBrand } from "../services";
-import AuthContext from "../../../store/auth-contex";
-import requirePropFactory from "@mui/utils/requirePropFactory";
-import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
+import LoadingForm from "../../../components/shared/Loading/LoadingForm";
+import Form from "../../../components/shared/Form/Form";
+import useAPI from "../../../api/api";
 
-const required = [];
-const init = {
-  slug: "",
-  name: "",
-  phone_code: "",
-  source: "",
-  "id_source ": null,
-  id_source: 0,
-};
+import formFields from "./formField.json";
+import useFormDdl from "../../../helpers/useFormDdl";
+
 const BrandsDetails = () => {
+  const init = {
+    id: null,
+    name: null,
+    slug: null,
+    group: null,
+    title: null,
+    subtitle: null,
+    short_description: null,
+    description: null,
+    id_manufacturer: null,
+    logo: null,
+    status: "on",
+  };
   const { bid } = useParams();
+  const navigate = useNavigate();
+  const api = useAPI();
   const [data, setData] = useState(init);
-  const [inputsError, setInputsError] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useContext(AuthContext);
+  const [fields, setFields] = useState(formFields);
+  const formDdl = useFormDdl();
 
-  const formItemChangeHandler = ({ target }, type) => {
-    if (type === "date") {
-      setData({ ...data, [target.name]: formatDate(target.value) });
-    } else if (type) {
-      setData({ ...data, [target.name]: target.checked });
-    } else {
-      setData({ ...data, [target.name]: target.value });
-    }
-  };
-
-  const handleData = async () => {
-    try {
-      setIsLoading(true);
-      let response = await getBrand(user.access_token, bid);
-      let { payload } = response.data;
-      setData(payload);
-    } catch (error) {
-      console.warn(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const saveData = async () => {
-    try {
-      let response = await saveBrand(user.access_token, data);
-      handleBack();
-      toast.success("Uspešno uneta forma!");
-    } catch (error) {
-      console.warn(error.response);
-      toast.warning("Greška ");
-    }
-  };
-
-  const onSubmit = () => {
-    const errors = {};
-    Object.keys(data).forEach((prop_name) => {
-      if (isEmpty(data[prop_name])) {
-        if (required.includes(prop_name))
-          errors[prop_name] = {
-            content: "Polje je obavezno, molim Vas unesite vrednost.",
-          };
-      }
-    });
-    isEmpty(errors) ? saveData() : setInputsError(errors);
+  const submitHandler = (data) => {
+    api
+      .post("admin/brands/", data)
+      .then((response) => {
+        toast.success("Uspešno");
+        console.log(response?.payload);
+        setData(response?.payload);
+      })
+      .catch((error) => {
+        toast.warning("Greška");
+        console.warn(error);
+      });
   };
 
   useEffect(() => {
-    if (bid !== "new") {
-      handleData();
-    }
+    setIsLoading(true);
+
+    api
+      .get(`admin/brands/${bid}`)
+      .then((response) => {
+        setData(response?.payload);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+
+    setIsLoading(false);
   }, []);
 
   return (
-    <PageWrapper title="Detalji brenda" back={handleBack}>
-      <Box component="form" autoComplete="off">
-        {fields &&
-          fields
-            .filter(({ in_details }) => in_details)
-            .map((item, index) => {
-              return (
-                <CreateForm
-                  data-test-id="admin-form"
-                  onChangeHandler={formItemChangeHandler}
-                  item={item}
-                  key={index}
-                  error={inputsError[item.prop_name]}
-                  value={
-                    Array.isArray(item) && data
-                      ? data[item.prop_name]
-                      : data[item.prop_name]
-                  }
-                />
-              );
-            })}
-        <Button label="Sačuvaj" onClick={onSubmit} />
-      </Box>
+    <PageWrapper
+      title={bid == "new" ? "Detalji brenda" : data?.name}
+      back={() => {
+        navigate(-1);
+      }}
+    >
+      {!isLoading ? (
+        <Form formFields={fields} initialData={data} onSubmit={submitHandler} />
+      ) : (
+        <LoadingForm fields={formFields.length} />
+      )}
     </PageWrapper>
   );
 };
