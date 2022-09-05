@@ -90,25 +90,27 @@ const ListTable = ({
           </TableBody>
         </Table>
       </TableContainer>
-      <Stack className={styles.pagination + " settings-pagination"}>
-        <Typography className={styles.paginationLabel}>
-          {`${pagination?.items_per_page * (page - 1)}-${
-            page !== pagination?.total_pages
-              ? pagination?.items_per_page * page
-              : pagination?.total_items
-          } of ${pagination?.total_items}`}
-        </Typography>
-        <Pagination
-          count={pagination?.total_pages}
-          onChange={onPageChange}
-          page={page}
-          variant="outlined"
-          shape="rounded"
-          siblingCount={3}
-        >
-          <PaginationItem />
-        </Pagination>
-      </Stack>
+      {pagination?.total_pages > 1 && (
+        <Stack className={styles.pagination + " settings-pagination"}>
+          <Typography className={styles.paginationLabel}>
+            {`${pagination?.items_per_page * (page - 1)}-${
+              page !== pagination?.total_pages
+                ? pagination?.items_per_page * page
+                : pagination?.total_items
+            } of ${pagination?.total_items}`}
+          </Typography>
+          <Pagination
+            count={pagination?.total_pages}
+            onChange={onPageChange}
+            page={page}
+            variant="outlined"
+            shape="rounded"
+            siblingCount={3}
+          >
+            <PaginationItem />
+          </Pagination>
+        </Stack>
+      )}
     </>
   );
 };

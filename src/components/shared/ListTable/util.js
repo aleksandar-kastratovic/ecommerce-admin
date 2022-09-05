@@ -30,6 +30,8 @@ export const displayData = (value, input_type) => {
             : ""}
         </>
       );
+    case "image":
+      return <img src={value} height="70px" />;
     case "input":
     default:
       return value;
