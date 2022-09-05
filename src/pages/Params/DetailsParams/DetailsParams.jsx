@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
 import List from "../../../components/shared/ListAdder/List";
@@ -64,6 +64,7 @@ const ParamsDetails = () => {
   const { pid } = useParams();
   const [data, setData] = useState(init);
   const [list, setList] = useState([]);
+  const navigate = useNavigate();
 
   const api = useAPI();
 
@@ -72,8 +73,12 @@ const ParamsDetails = () => {
       .post(`admin/params/main/`, { ...init, ...data })
       .then((response) => {
         toast.success("Uspešno");
+        if (pid === "new") {
+          navigate(-1);
+        }
       })
       .catch((error) => {
+        toast.warning("Greška");
         console.warn(error);
       });
   };

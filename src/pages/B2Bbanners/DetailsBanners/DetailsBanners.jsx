@@ -53,7 +53,7 @@ const DetailsBanners = ({}) => {
     isError,
   } = useQuery([], () => api.get(`admin/banners-b2b/main/${B2BId}`));
 
-  const saveData = async (data) => {
+  const saveData = (data) => {
     api
       .post(`admin/banners-b2b/main/`, data)
       .then((response) => {

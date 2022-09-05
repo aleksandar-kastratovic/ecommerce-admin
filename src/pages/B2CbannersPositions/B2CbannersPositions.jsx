@@ -1,26 +1,25 @@
 import { useNavigate } from "react-router-dom";
 import ListPage from "../../components/shared/ListPage/ListPage";
-import tblFields from "./mainListFields.json";
-
-const B2Cbanners = ({}) => {
+import tblFields from "./tblFields.json";
+const B2CbannersPositions = () => {
   const navigate = useNavigate();
   const buttons = [
     {
-      label: "Pozicije",
+      label: "Baneri",
       action: () => {
-        navigate("positions");
+        navigate(-1);
       },
     },
   ];
 
   return (
     <ListPage
-      title={"B2C baneri"}
-      apiUrl="admin/banners-b2c/main"
+      title="Pozicije B2C banera"
+      apiUrl="admin/banners-b2c/positions"
       columnFields={tblFields}
       additionalButtons={buttons}
     />
   );
 };
 
-export default B2Cbanners;
+export default B2CbannersPositions;
