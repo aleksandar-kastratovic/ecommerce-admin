@@ -1,6 +1,6 @@
 [
   {
-    "field_name": "Ime",
+    "field_name": "Naziv",
     "prop_name": "name",
     "in_main_table": true,
     "in_details": true,
@@ -13,7 +13,7 @@
     "input_type": "input"
   },
   {
-    "field_name": "Slug",
+    "field_name": "Kod",
     "prop_name": "slug",
     "in_main_table": true,
     "in_details": true,
@@ -39,7 +39,7 @@
     "input_type": "input"
   },
   {
-    "field_name": "Širina",
+    "field_name": "Širina (px)",
     "prop_name": "width",
     "in_main_table": true,
     "in_details": true,
@@ -52,7 +52,7 @@
     "input_type": "input"
   },
   {
-    "field_name": "Visina",
+    "field_name": "Visina (px)",
     "prop_name": "height",
     "in_main_table": true,
     "in_details": true,

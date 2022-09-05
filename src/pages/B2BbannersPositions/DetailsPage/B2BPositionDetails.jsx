@@ -7,7 +7,6 @@ import useAPI from "../../../api/api";
 import { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { ConstructionRounded } from "@mui/icons-material";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 
 const B2BPositionDetails = () => {
