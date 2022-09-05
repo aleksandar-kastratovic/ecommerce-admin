@@ -79,7 +79,7 @@ const B2CPositionDetails = () => {
 
   return (
     <PageWrapper
-      title="Detalji pozicije"
+      title={id == "new" ? "Detalji pozicije" : data?.name}
       back={() => {
         navigate(-1);
       }}

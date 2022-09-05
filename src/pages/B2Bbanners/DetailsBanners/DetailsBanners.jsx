@@ -41,10 +41,6 @@ const DetailsBanners = ({}) => {
   const [data, setData] = useState(init);
   const [positionField, setPositionField] = useState(positionForm);
   const [subFields, setSubFields] = useState([]);
-  const [imageDimesion, setImageDimension] = useState({
-    width: null,
-    height: null,
-  });
 
   const {
     isSuccess,
@@ -130,7 +126,10 @@ const DetailsBanners = ({}) => {
   }, [data]);
 
   return (
-    <PageWrapper title="Unos novog banera" back={() => navigate(-1)}>
+    <PageWrapper
+      title={B2BId == "new" ? "Unos novog banera" : data?.name}
+      back={() => navigate(-1)}
+    >
       {!isLoading ? (
         <>
           <CreateForm

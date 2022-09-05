@@ -126,7 +126,10 @@ const DetailsBannersB2C = ({}) => {
   }, [data]);
 
   return (
-    <PageWrapper title="Unos novog banera" back={() => navigate(-1)}>
+    <PageWrapper
+      title={B2CId == "new" ? "Unos novog banera" : data?.name}
+      back={() => navigate(-1)}
+    >
       {!isLoading ? (
         <>
           <CreateForm
