@@ -12,6 +12,7 @@ import name from "../forms/name.json";
 import positionForm from "../forms/position.json";
 import image from "../forms/image.json";
 import image_description from "../forms/image_description.json";
+import status from "../forms/status.json";
 
 const DetailsBanners = ({}) => {
   const { B2BId } = useParams();
@@ -48,7 +49,7 @@ const DetailsBanners = ({}) => {
     isError,
   } = useQuery([], () => api.get(`admin/banners-b2b/main/${B2BId}`));
 
-  const saveData = async (data) => {
+  const saveData = (data) => {
     api
       .post(`admin/banners-b2b/main/`, data)
       .then((response) => {
@@ -92,18 +93,31 @@ const DetailsBanners = ({}) => {
           console.warn(error);
         });
       if (res) {
+        let dimensions = { width: res.width, height: res.height };
+        let fields;
+
         switch (res.type) {
           case "image":
-            setSubFields(image);
+            fields = image;
             break;
           case "image_description":
-            setSubFields(image_description);
+            fields = image_description;
             break;
 
           default:
-            setSubFields([]);
+            fields = [];
             break;
         }
+
+        let arr = [];
+        for (const item of fields) {
+          if (item.prop_name === "image") {
+            arr.push({ ...item, dimensions: dimensions });
+          } else {
+            arr.push(item);
+          }
+        }
+        setSubFields(arr);
       }
     };
     if (data && data.position !== null) {
@@ -112,7 +126,10 @@ const DetailsBanners = ({}) => {
   }, [data]);
 
   return (
-    <PageWrapper title="Unos novog banera" back={() => navigate(-1)}>
+    <PageWrapper
+      title={B2BId == "new" ? "Unos novog banera" : data?.name}
+      back={() => navigate(-1)}
+    >
       {!isLoading ? (
         <>
           <CreateForm
@@ -129,7 +146,11 @@ const DetailsBanners = ({}) => {
             item={positionField}
             value={data ? data.position : ""}
           />
-          <Form formFields={subFields} initialData={data} onSubmit={saveData} />
+          <Form
+            formFields={[...subFields, status]}
+            initialData={data}
+            onSubmit={saveData}
+          />
         </>
       ) : (
         <LoadingForm fields={5} />

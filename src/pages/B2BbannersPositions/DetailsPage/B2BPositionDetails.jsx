@@ -7,10 +7,9 @@ import useAPI from "../../../api/api";
 import { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { ConstructionRounded } from "@mui/icons-material";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 
-const PositionDetails = () => {
+const B2BPositionDetails = () => {
   const init = {
     id: null,
     slug: null,
@@ -80,7 +79,7 @@ const PositionDetails = () => {
 
   return (
     <PageWrapper
-      title={"Detalji pozicije"}
+      title={id == "new" ? "Detalji pozicije" : data?.name}
       back={() => {
         navigate(-1);
       }}
@@ -94,4 +93,4 @@ const PositionDetails = () => {
   );
 };
 
-export default PositionDetails;
+export default B2BPositionDetails;

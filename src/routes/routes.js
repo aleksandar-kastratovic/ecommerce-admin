@@ -76,9 +76,9 @@ import CompaniesDetails from "../pages/Companies/CompaniesDetails/CompaniesDetai
 import SaleOfficers from "../pages/SaleOfficers/SaleOfficers";
 import SaleOfficersDetails from "../pages/SaleOfficers/SaleOfficersDetails/SaleOfficersDetails";
 import B2BbannersPositions from "../pages/B2BbannersPositions/B2BbannersPositions";
-import PositionDetails from "../pages/B2BbannersPositions/DetailsPage/PositionDetails";
-
-
+import B2BPositionDetails from "../pages/B2BbannersPositions/DetailsPage/B2BPositionDetails";
+import B2CbannersPositions from "../pages/B2CbannersPositions/B2CbannersPositions";
+import B2CPositionDetails from "../pages/B2CbannersPositions/DetailsPage/B2CPositionDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -106,7 +106,7 @@ const screens = {
   ],
   PRODUCT_SPEC: [
     "/product-specs",
-    "Specifikacija proizvoda",
+    "Specifikacija",
     faArchive,
     PRODUCT,
     ProductSpecs,
@@ -135,27 +135,19 @@ const screens = {
   ],
   BANNERS_B2B: [
     "/B2B-banners",
-    "B2B baneri",
+    "Baneri",
     faImage,
     B2B,
     B2Bbanners,
     [
       [":B2BId", DetailsBanners],
       ["positions", B2BbannersPositions],
-      ["positions/:id", PositionDetails],
+      ["positions/:id", B2BPositionDetails],
     ],
-  ],
-  B2BCFG: [
-    "/B2B-settings",
-    "B2B podešavanja",
-    faCog,
-    B2B,
-    B2Bsettings,
-    [[":B2BId", DetailsForm]],
   ],
   B2B_SALES_OFFICER: [
     "/B2B-sales-officers",
-    "B2B komercijalisti",
+    "Komercijalisti",
     faCog,
     B2B,
     SaleOfficers,
@@ -164,19 +156,15 @@ const screens = {
 
   BANNERS_B2C: [
     "/B2C-banners",
-    "B2C baneri",
+    "Baneri",
     faCog,
     B2C,
     B2Cbanners,
-    [[":B2CId", DetailsBannersB2C]],
-  ],
-  B2CCFG: [
-    "/B2C-settings",
-    "B2C podešavanja",
-    faCog,
-    B2C,
-    B2CSettings,
-    [[":B2CId", B2CSettings]],
+    [
+      [":B2CId", DetailsBannersB2C],
+      ["positions", B2CbannersPositions],
+      ["positions/:id", B2CPositionDetails],
+    ],
   ],
   B2C_NEWS: [
     "/news",
@@ -230,14 +218,6 @@ const screens = {
     SETTINGS,
     UsersPage,
     [[":userId", UsersPage]],
-  ],
-  ADMIN_FORM: [
-    "/admin-form",
-    "Admin forme",
-    faList,
-    SETTINGS,
-    AdminForms,
-    [[":FormId", DetailsAdminForm]],
   ],
   LOCAT: [
     "/locations",
@@ -312,7 +292,32 @@ const screens = {
     [[":mmid", ManufacturersDetails]],
   ],
 
+  B2BCFG: [
+    "/B2B-settings",
+    "B2B podešavanja",
+    faCog,
+    TOOLS,
+    B2Bsettings,
+    [[":B2BId", DetailsForm]],
+  ],
   IMPORT: ["/import", "Uvoz podataka", faUpload, TOOLS, ImportSteps],
+
+  B2CCFG: [
+    "/B2C-settings",
+    "B2C podešavanja",
+    faCog,
+    TOOLS,
+    B2CSettings,
+    [[":B2CId", B2CSettings]],
+  ],
+  ADMIN_FORM: [
+    "/admin-form",
+    "Admin forme",
+    faList,
+    TOOLS,
+    AdminForms,
+    [[":FormId", DetailsAdminForm]],
+  ],
 };
 
 /**

@@ -1,7 +1,7 @@
 [
   {
-    "field_name": "Tip polja",
-    "prop_name": "field_type",
+    "field_name": "Naziv",
+    "prop_name": "name",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -9,11 +9,24 @@
     "required": true,
     "description": "255",
     "ui_prop": "xyz",
-    "sortable": false,
+    "sortable": true,
     "input_type": "input"
   },
   {
-    "field_name": "Slug",
+    "field_name": "Opis",
+    "prop_name": "field_description",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "255",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
+    "field_name": "Kod",
     "prop_name": "slug",
     "in_main_table": true,
     "in_details": true,
@@ -26,8 +39,8 @@
     "input_type": "input"
   },
   {
-    "field_name": "Ime",
-    "prop_name": "name",
+    "field_name": "Tip polja",
+    "prop_name": "field_type",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -35,7 +48,7 @@
     "required": true,
     "description": "255",
     "ui_prop": "xyz",
-    "sortable": true,
+    "sortable": false,
     "input_type": "input"
   },
   {
@@ -50,19 +63,6 @@
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "boolean"
-  },
-  {
-    "field_name": "Opis",
-    "prop_name": "field_description",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": true,
-    "description": "255",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
   },
   {
     "field_name": "Aktivan od",

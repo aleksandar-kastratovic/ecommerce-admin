@@ -22,13 +22,18 @@ const Form = ({
     show: false,
     image: null,
     label: "",
+    width: 300,
+    height: 200,
     name: "",
   });
 
   const submitHandler = () => {
     const errors = {};
     for (const field of formFields) {
-      if (data[field.prop_name] === "" && field.required) {
+      if (
+        (data[field.prop_name] === "" || data[field.prop_name] === null) &&
+        field.required
+      ) {
         errors[field.prop_name] = {
           content: "Polje je obavezno, molim Vas unesite vrednost.",
         };
@@ -66,15 +71,8 @@ const Form = ({
     [data]
   );
 
-  const onOpenImageDialog = (img, label, imageName) => {
+  const onOpenImageDialog = (img, label, imageName, width, height) => {
     const found = data[imageName];
-
-    // If the image is a type of URL it means that user still did not upload new image,
-    // but if it is not type of URL it means that user uploaded new image
-    // Additionally, if this solution is not reliable, new flag state can be introduced for example
-    // type boolean
-    // const [newImageUploaded, setNewImageUploaded] = useState(false)
-    // when user uploads a new image it can be set to true
     const checkImage = isUrlValid(img);
 
     if (checkImage) {
@@ -82,14 +80,20 @@ const Form = ({
         show: true,
         image: found,
         label: label,
+        width: width,
+        height: height,
         name: imageName,
+        showDimensions: false,
       });
     } else {
       setOpenImageDialog({
         show: true,
         image: img,
         label: label,
+        width: width,
+        height: height,
         name: imageName,
+        showDimensions: false,
       });
     }
   };
@@ -103,7 +107,7 @@ const Form = ({
   };
 
   const handleDeleteImage = (imageName) => {
-    setData({ ...data, [imageName]: "DELETE" });
+    setData({ ...data, [imageName]: null });
   };
 
   const setter = (event, result) => {
@@ -129,7 +133,11 @@ const Form = ({
                   onOpenImageDialog={onOpenImageDialog}
                   item={item}
                   key={index}
-                  error={inputsError[item.prop_name]}
+                  error={
+                    inputsError[item.prop_name]
+                      ? inputsError[item.prop_name].content
+                      : ""
+                  }
                   value={
                     Array.isArray(item) && data
                       ? data[item.prop_name]

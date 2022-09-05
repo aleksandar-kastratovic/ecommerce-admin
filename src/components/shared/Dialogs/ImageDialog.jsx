@@ -54,6 +54,7 @@ const ImageDialog = ({
   return (
     <Dialog
       open={openImageDialog.show}
+      fullScreen
       maxWidth={"xl"}
       aria-labelledby="delete-dialog-title"
       aria-describedby="delete-dialog-description"
@@ -72,7 +73,10 @@ const ImageDialog = ({
               handleCloseImageDialog={handleCloseImageDialog}
               imageURL={openImageDialog.image}
               imageName={openImageDialog.name}
+              imageWidth={openImageDialog.width}
+              imageHeight={openImageDialog.height}
               handleSaveEditImage={handleSaveEditImage}
+              showDimensions={openImageDialog.showDimensions}
             />
           </Box>
         ) : (
