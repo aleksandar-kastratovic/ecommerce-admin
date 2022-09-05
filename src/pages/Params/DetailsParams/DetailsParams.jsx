@@ -202,8 +202,8 @@ const ParamsDetails = () => {
 
   return (
     <DetailsPage
-      title="Detalji paramtera"
-      fields={data.field_is_multiple && pid !== "new" ? fields : [fields[0]]}
+      title={pid === "new" ? "Unos novog parametra" : data?.name}
+      fields={data?.field_is_multiple && pid !== "new" ? fields : [fields[0]]}
     />
   );
 };
