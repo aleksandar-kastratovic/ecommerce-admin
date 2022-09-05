@@ -10,7 +10,7 @@ import { toast } from "react-toastify";
 import { ConstructionRounded } from "@mui/icons-material";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 
-const PositionDetails = () => {
+const B2BPositionDetails = () => {
   const init = {
     id: null,
     slug: null,
@@ -94,4 +94,4 @@ const PositionDetails = () => {
   );
 };
 
-export default PositionDetails;
+export default B2BPositionDetails;

@@ -15,6 +15,7 @@ import datetime from "./forms/datetime.json";
 import image from "./forms/image.json";
 import image_description from "./forms/image_description.json";
 import slug from "./forms/slug.json";
+import status from "./forms/status.json";
 
 const init = {
   id: null,
@@ -95,6 +96,7 @@ const ParamsDetails = () => {
     api
       .list(`admin/params/values/`, { id_param: pid })
       .then((response) => {
+        console.log(response?.payload?.items);
         setList(response?.payload?.items);
       })
       .catch((error) => {
@@ -115,12 +117,12 @@ const ParamsDetails = () => {
       });
   };
 
-  const handleListSubmit = (data) => {
-    api
+  const handleListSubmit = async (data) => {
+    await api
       .post("admin/params/values/", { ...data, id_params: pid })
       .then((response) => {
-        toast.success("Uspešno");
         handleGetList();
+        toast.success("Uspešno");
       })
       .catch((error) => {
         toast.warning("Greška");
@@ -182,7 +184,7 @@ const ParamsDetails = () => {
       disabled: false,
       component: (
         <List
-          formFields={[slug, ...getParamSubForm(false)]}
+          formFields={[slug, ...getParamSubForm(false), status]}
           listFields={list}
           onSave={handleListSubmit}
           addFieldLabel={"Dodaj polje"}

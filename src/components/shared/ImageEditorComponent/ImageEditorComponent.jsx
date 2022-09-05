@@ -21,12 +21,18 @@ const ImageEditorComponent = ({
   handleCloseEditMode,
   handleCloseImageDialog,
   imageURL,
+  imageWidth = 300,
+  imageHeight = 200,
   handleSaveEditImage,
   imageName,
+  showDimensions = true,
 }) => {
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [rotation, setRotation] = useState(0);
-  const [cropSize, setCropSize] = useState({ width: 300, height: 200 });
+  const [cropSize, setCropSize] = useState({
+    width: imageWidth,
+    height: imageHeight,
+  });
   const [roundCrop, setRoundCrop] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -50,7 +56,16 @@ const ImageEditorComponent = ({
 
   const showCroppedImage = useCallback(async () => {
     try {
-      const croppedImg = await getCroppedImg(croppedImage, croppedAreaPixels);
+      const croppedImg = await getCroppedImg(
+        croppedImage,
+        {
+          ...croppedAreaPixels,
+          width: cropSize.width,
+          height: cropSize.height,
+        },
+        rotation,
+        zoom
+      );
       handleSave(croppedImg);
     } catch (e) {
       console.error(e);
@@ -64,12 +79,14 @@ const ImageEditorComponent = ({
           image={croppedImage}
           crop={crop}
           restrictPosition={false}
-          objectFit="contain"
           cropShape={roundCrop ? "round" : "rect"}
           onCropChange={setCrop}
           onCropComplete={onCropComplete}
           onZoomChange={setZoom}
           zoom={zoom}
+          zoomSpeed={0.1}
+          minZoom={0.5}
+          maxZoom={5}
           rotation={rotation}
           onRotationChange={setRotation}
           cropSize={{ width: cropSize.width, height: cropSize.height }}
@@ -88,8 +105,8 @@ const ImageEditorComponent = ({
               value={typeof rotation === "number" ? zoom : 0}
               onChange={(e, zoom) => setZoom(zoom)}
               min={0.5}
-              max={3}
-              step={0.5}
+              max={5}
+              step={0.1}
               marks
             />
           </Box>
@@ -110,58 +127,62 @@ const ImageEditorComponent = ({
           </Box>
         </Grid>
 
-        <Grid item xs={8}>
-          <Stack direction="row" alignItems="center" spacing={1}>
-            <Box width={150}>
-              <Typography id="width-slider" gutterBottom>
-                Širina oblasti
-              </Typography>
-              <Slider
-                aria-labelledby="width-slider"
-                min={50}
-                max={900}
-                step={10}
-                value={typeof cropSize.width === "number" ? cropSize.width : 0}
-                onChange={(e, width) =>
-                  setCropSize({
-                    ...cropSize,
-                    width: width,
-                  })
-                }
-              />
-            </Box>
-            <Box width={150}>
-              <Typography id="height-slider" gutterBottom>
-                Visina oblasti
-              </Typography>
-              <Slider
-                aria-labelledby="height-slider"
-                min={50}
-                max={400}
-                step={10}
-                value={
-                  typeof cropSize.height === "number" ? cropSize.height : 0
-                }
-                onChange={(e, height) =>
-                  setCropSize({
-                    ...cropSize,
-                    height: height,
-                  })
-                }
-              />
-            </Box>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={roundCrop}
-                  onChange={(event) => setRoundCrop(event.target.checked)}
-                  inputProps={{ "aria-label": "controlled" }}
+        {showDimensions && (
+          <Grid item xs={8}>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Box width={150}>
+                <Typography id="width-slider" gutterBottom>
+                  Širina oblasti
+                </Typography>
+                <Slider
+                  aria-labelledby="width-slider"
+                  min={50}
+                  max={900}
+                  step={10}
+                  value={
+                    typeof cropSize.width === "number" ? cropSize.width : 0
+                  }
+                  onChange={(e, width) =>
+                    setCropSize({
+                      ...cropSize,
+                      width: width,
+                    })
+                  }
                 />
-              }
-              label="Okrugla oblast"
-            />
-          </Stack>
-        </Grid>
+              </Box>
+              <Box width={150}>
+                <Typography id="height-slider" gutterBottom>
+                  Visina oblasti
+                </Typography>
+                <Slider
+                  aria-labelledby="height-slider"
+                  min={50}
+                  max={400}
+                  step={10}
+                  value={
+                    typeof cropSize.height === "number" ? cropSize.height : 0
+                  }
+                  onChange={(e, height) =>
+                    setCropSize({
+                      ...cropSize,
+                      height: height,
+                    })
+                  }
+                />
+              </Box>
+              <FormControlLabel
+                control={
+                  <Switch
+                    checked={roundCrop}
+                    onChange={(event) => setRoundCrop(event.target.checked)}
+                    inputProps={{ "aria-label": "controlled" }}
+                  />
+                }
+                label="Okrugla oblast"
+              />
+            </Stack>
+          </Grid>
+        )}
         <Grid item xs={4}>
           <Stack
             direction="row"

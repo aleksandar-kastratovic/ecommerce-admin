@@ -28,13 +28,14 @@ const ImageButton = ({
   description = "",
   value = "",
   error = "",
-
+  imgWidth = null,
+  imgHeight = null,
   onImageUpload = () => {},
   onOpenImageDialog = () => {},
 }) => {
   const [imageDimensions, setImageDimensions] = useState({
-    width: 0,
-    height: 0,
+    width: imgWidth ?? 0,
+    height: imgHeight ?? 0,
   });
   const [loadingImage, setLoadingImage] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -72,10 +73,13 @@ const ImageButton = ({
           <Grid container spacing={2} alignItems="center">
             <FormControl className={styles.formStyle}>
               <FormLabel required={required}>{label}</FormLabel>
+              <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
               <ButtonBase
                 focusRipple
                 className={styles.imageButtonStyled}
-                onClick={() => onOpenImageDialog(value, label, name)}
+                onClick={() =>
+                  onOpenImageDialog(value, label, name, imgWidth, imgHeight)
+                }
               >
                 <span
                   style={{
@@ -122,6 +126,7 @@ const ImageButton = ({
             <Grid item xs={8} md={8}>
               <FormControl className={styles.formStyle}>
                 <FormLabel required={required}>{label}</FormLabel>
+                <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
                 <Typography variant="caption" display="block" gutterBottom>
                   <br />
                   {description}

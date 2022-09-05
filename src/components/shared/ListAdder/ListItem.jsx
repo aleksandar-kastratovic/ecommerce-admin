@@ -42,12 +42,15 @@ const ListItem = ({
 
   const onSubmit = (data) => {
     saveData(data, index);
-    setIsOpen(false);
   };
 
   const handleCancel = () => {
     setOpenDeleteDialog({ show: false, id: null });
   };
+
+  useEffect(() => {
+    setFieldData(data);
+  }, [data]);
 
   useEffect(() => {
     fields
@@ -87,7 +90,9 @@ const ListItem = ({
             Object.values(fieldData)[0]}
           {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
         </div>
-        <Delete className={styles.iconDelete} onClick={onClickDelete} />
+        {!fieldData.system_required && (
+          <Delete className={styles.iconDelete} onClick={onClickDelete} />
+        )}
       </div>
       {isOpen && (
         <>

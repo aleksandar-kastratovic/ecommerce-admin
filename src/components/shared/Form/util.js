@@ -21,7 +21,7 @@ export const repackToSend = (newItem, fields) => {
       propName === "image"
     ) {
       newItem[propName] = isValidHttpUrl(newItem[propName])
-        ? null
+        ? "IGNORE"
         : newItem[propName];
     }
   });

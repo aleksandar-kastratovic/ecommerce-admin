@@ -12,6 +12,7 @@ import name from "../forms/name.json";
 import positionForm from "../forms/position.json";
 import image from "../forms/image.json";
 import image_description from "../forms/image_description.json";
+import status from "../forms/status.json";
 
 const DetailsBanners = ({}) => {
   const { B2BId } = useParams();
@@ -40,6 +41,10 @@ const DetailsBanners = ({}) => {
   const [data, setData] = useState(init);
   const [positionField, setPositionField] = useState(positionForm);
   const [subFields, setSubFields] = useState([]);
+  const [imageDimesion, setImageDimension] = useState({
+    width: null,
+    height: null,
+  });
 
   const {
     isSuccess,
@@ -92,18 +97,31 @@ const DetailsBanners = ({}) => {
           console.warn(error);
         });
       if (res) {
+        let dimensions = { width: res.width, height: res.height };
+        let fields;
+
         switch (res.type) {
           case "image":
-            setSubFields(image);
+            fields = image;
             break;
           case "image_description":
-            setSubFields(image_description);
+            fields = image_description;
             break;
 
           default:
-            setSubFields([]);
+            fields = [];
             break;
         }
+
+        let arr = [];
+        for (const item of fields) {
+          if (item.prop_name === "image") {
+            arr.push({ ...item, dimensions: dimensions });
+          } else {
+            arr.push(item);
+          }
+        }
+        setSubFields(arr);
       }
     };
     if (data && data.position !== null) {
@@ -129,7 +147,11 @@ const DetailsBanners = ({}) => {
             item={positionField}
             value={data ? data.position : ""}
           />
-          <Form formFields={subFields} initialData={data} onSubmit={saveData} />
+          <Form
+            formFields={[...subFields, status]}
+            initialData={data}
+            onSubmit={saveData}
+          />
         </>
       ) : (
         <LoadingForm fields={5} />

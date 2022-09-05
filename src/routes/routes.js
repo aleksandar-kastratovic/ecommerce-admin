@@ -76,9 +76,9 @@ import CompaniesDetails from "../pages/Companies/CompaniesDetails/CompaniesDetai
 import SaleOfficers from "../pages/SaleOfficers/SaleOfficers";
 import SaleOfficersDetails from "../pages/SaleOfficers/SaleOfficersDetails/SaleOfficersDetails";
 import B2BbannersPositions from "../pages/B2BbannersPositions/B2BbannersPositions";
-import PositionDetails from "../pages/B2BbannersPositions/DetailsPage/PositionDetails";
-
-
+import B2BPositionDetails from "../pages/B2BbannersPositions/DetailsPage/B2BPositionDetails";
+import B2CbannersPositions from "../pages/B2CbannersPositions/B2CbannersPositions";
+import B2CPositionDetails from "../pages/B2CbannersPositions/DetailsPage/B2CPositionDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -142,7 +142,7 @@ const screens = {
     [
       [":B2BId", DetailsBanners],
       ["positions", B2BbannersPositions],
-      ["positions/:id", PositionDetails],
+      ["positions/:id", B2BPositionDetails],
     ],
   ],
   B2BCFG: [
@@ -168,7 +168,11 @@ const screens = {
     faCog,
     B2C,
     B2Cbanners,
-    [[":B2CId", DetailsBannersB2C]],
+    [
+      [":B2CId", DetailsBannersB2C],
+      ["positions", B2CbannersPositions],
+      ["positions/:id", B2CPositionDetails],
+    ],
   ],
   B2CCFG: [
     "/B2C-settings",
