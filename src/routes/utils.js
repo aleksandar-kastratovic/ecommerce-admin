@@ -19,6 +19,7 @@ export const MenuGroup = {
  * @return {AvailableScreen}
  */
 export const makeScreen = (screen, parentPath) => {
+
   // Quick screen without name
   if (screen.length === 2) {
     screen = [screen[0], null, null, null, screen[1], []];

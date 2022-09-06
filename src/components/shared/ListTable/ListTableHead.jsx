@@ -20,7 +20,7 @@ const ListTableHead = ({
   };
 
   return (
-    <TableHead className={styles.tableHead}>
+    <TableHead>
       <TableRow>
         {fields.map(({ prop_name, field_name, sortable }) => (
           <TableCell

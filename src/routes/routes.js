@@ -16,9 +16,10 @@ import {
     faCopyright,
     faIndustry,
     faStore,
-    faPercentage
 } from "@fortawesome/free-solid-svg-icons"
-import RebatesListPage from "../pages/B2BRebates/RebatesListPage"
+import IconList from "../helpers/icons"
+import B2BRebatesDetails from "../pages/B2BRebates/B2BRebatesDetails/B2BRebatesDetails"
+import B2BRebatesListPage from "../pages/B2BRebates/B2BRebatesListPage"
 import Countries from "../pages/Countries/Countries"
 import CountriesDetails from "../pages/Countries/CountriesDetails/CountriesDetails"
 import Towns from "../pages/Towns/Towns"
@@ -132,10 +133,10 @@ const screens = {
         [ [ ":comId", CompaniesDetails ] ]
     ],
     REBATES          : [
-        "/rebates",
-        "Rabati", faPercentage, B2B,
-        RebatesListPage,
-        [ [ ":rebateId", RebatesListPage ] ]
+        "/b2b/rebates",
+        "Rabati", IconList.percent, B2B,
+        B2BRebatesListPage,
+        [ [ ":rebateId", B2BRebatesDetails ] ]
     ],
     BANNERS_B2B      : [
         "/B2B-banners",

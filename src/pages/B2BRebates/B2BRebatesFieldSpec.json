@@ -23,7 +23,7 @@
         "description": null,
         "ui_prop": null,
         "sortable": true,
-        "input_type": "input"
+        "input_type": "textarea"
     },
     {
         "field_name": "Akcije",
@@ -35,7 +35,7 @@
         "required": true,
         "description": null,
         "ui_prop": null,
-        "sortable": true,
+        "sortable": false,
         "input_type": "edit_delete"
     }
 ]
