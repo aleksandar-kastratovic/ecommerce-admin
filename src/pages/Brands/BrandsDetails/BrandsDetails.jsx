@@ -7,7 +7,6 @@ import Form from "../../../components/shared/Form/Form";
 import useAPI from "../../../api/api";
 
 import formFields from "./formField.json";
-import useFormDdl from "../../../helpers/useFormDdl";
 
 const BrandsDetails = () => {
   const init = {
@@ -28,8 +27,6 @@ const BrandsDetails = () => {
   const api = useAPI();
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
-  const [fields, setFields] = useState(formFields);
-  const formDdl = useFormDdl();
 
   const submitHandler = (data) => {
     api
@@ -68,7 +65,11 @@ const BrandsDetails = () => {
       }}
     >
       {!isLoading ? (
-        <Form formFields={fields} initialData={data} onSubmit={submitHandler} />
+        <Form
+          formFields={formFields}
+          initialData={data}
+          onSubmit={submitHandler}
+        />
       ) : (
         <LoadingForm fields={formFields.length} />
       )}

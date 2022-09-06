@@ -180,6 +180,8 @@ const CreateForm = ({
               onChange={onInputChangeHandler}
               options={item.options}
               description={item.description}
+              fillFromApi={item.fillFromApi}
+              usePropName={item.usePropName}
             />
           );
           break;

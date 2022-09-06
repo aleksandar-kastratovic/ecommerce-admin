@@ -16,6 +16,8 @@ import {
   LocalizationProvider,
 } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { useEffect, useState } from "react";
+import useAPI from "../../../../api/api";
 
 /**
  * Wrapper for the input element
@@ -237,7 +239,9 @@ export const InputSwitch = ({
  * @param {string} value Field value
  * @param {function} onChange Change handler for the field
  * @param {string} description Field description
- * @param {array} options Select options
+ * @param {string} fillFromApi Path to get select options from
+ * @param {boolean} usePropName If api call should use prop name at the end of the path
+ * @param {array} options Select options if there is no api call
  *
  * @return {JSX.Element}
  */
@@ -251,8 +255,31 @@ export const InputSelect = ({
   value,
   onChange = () => {},
   description,
+  fillFromApi,
+  usePropName,
   options,
 }) => {
+  const api = useAPI();
+  const [opt, setOpt] = useState(options);
+
+  useEffect(() => {
+    let path = usePropName ? `${fillFromApi}/${name}` : fillFromApi;
+    const fillDdl = async () => {
+      await api
+        .get(path)
+        .then((response) => {
+          setOpt(response?.payload);
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
+    };
+
+    if (fillFromApi) {
+      fillDdl();
+    }
+  }, []);
+
   return (
     <InputWrapper
       label={label}
@@ -262,7 +289,7 @@ export const InputSelect = ({
     >
       <Select
         name={name}
-        value={value}
+        value={opt.length === 0 ? "" : value}
         onChange={onChange}
         disabled={disabled}
         sx={{
@@ -270,7 +297,7 @@ export const InputSelect = ({
           "& fieldset": { top: 0 },
         }}
       >
-        {(options ?? []).map((item) => (
+        {(opt ?? []).map((item) => (
           <MenuItem key={item.id} value={item.id} selected={item.id === value}>
             {item.name}
           </MenuItem>

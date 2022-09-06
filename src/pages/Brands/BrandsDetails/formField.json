@@ -116,6 +116,8 @@
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "select",
+    "fillFromApi": "admin/brands/ddl",
+    "usePropName": true,
     "options": []
   },
   {

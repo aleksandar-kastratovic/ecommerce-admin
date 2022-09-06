@@ -39,7 +39,6 @@ const DetailsBanners = ({}) => {
 
   const api = useAPI();
   const [data, setData] = useState(init);
-  const [positionField, setPositionField] = useState(positionForm);
   const [subFields, setSubFields] = useState([]);
 
   const {
@@ -65,21 +64,6 @@ const DetailsBanners = ({}) => {
   useEffect(() => {
     setData(response?.payload);
   }, [response]);
-
-  useEffect(() => {
-    const fillDDl = async () => {
-      await api
-        .get(`admin/banners-b2b/main/ddl/position`)
-        .then((response) => {
-          setPositionField({ ...positionField, options: response.payload });
-        })
-        .catch((error) => {
-          console.warn(error);
-        });
-    };
-
-    fillDDl();
-  }, []);
 
   useEffect(() => {
     const getForm = async () => {
@@ -143,7 +127,7 @@ const DetailsBanners = ({}) => {
             onChangeHandler={({ target }) =>
               setData({ ...data, position: target.value })
             }
-            item={positionField}
+            item={positionForm}
             value={data ? data.position : ""}
           />
           <Form
