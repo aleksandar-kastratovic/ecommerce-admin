@@ -44,7 +44,7 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
                             {prop_name !== "action"
                                 ? displayData(row[prop_name], input_type)
                                 : <ActionField
-                                    field_type={input_type}
+                                    fieldType={input_type}
                                     handleEdit={handleActions(row["id"], "edit")}
                                     handlePreview={handleActions(row["id"], "preview")}
                                     handleDelete={handleActions(row["id"], "delete")}

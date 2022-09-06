@@ -9,6 +9,18 @@ import { flatten } from "lodash"
 import { useQuery } from "react-query"
 import useAPI from "../../../api/api"
 
+/**
+ *
+ * @param {string} apiUrl
+ * @param {?string} deleteUrl
+ * @param {string} title
+ * @param {FieldSpec[]} columnFields
+ * @param {[]} additionalButtons
+ * @param {boolean} showDatePicker
+ * @param {boolean}showNewButton
+ *
+ * @constructor
+ */
 const ListPage = ({
                       apiUrl = "",
                       deleteUrl = null,
@@ -18,14 +30,18 @@ const ListPage = ({
                       showDatePicker = false,
                       showNewButton = true
                   }) => {
-    const api = useAPI()
 
+    // TODO Sorting is disabled as it does not work with pagination
+    columnFields = columnFields.map(field => ({ ...field, sortable: false }))
+
+    const api = useAPI()
     const navigate = useNavigate()
     const { pathname } = useLocation()
     const [ fieldsColumns, setFieldsColumns ] = useState(columnFields)
     const [ search, setSearch ] = useState("")
     const [ page, setPage ] = useState(1)
 
+    // Default delete URL is the same as the main URL
     deleteUrl = deleteUrl ?? apiUrl
 
     const [ openDeleteDialog, setOpenDeleteDialog ] = useState({
@@ -146,7 +162,7 @@ const ListPage = ({
 
             <DeleteDialog
                 title="Brisanje"
-                description="Da li ste sigurni da želite da obrišete?"
+                description="Da li ste sigurni da želite da obrišete ovaj zapis?"
                 openDeleteDialog={openDeleteDialog}
                 setOpenDeleteDialog={setOpenDeleteDialog}
                 handleConfirm={handleConfirm}
