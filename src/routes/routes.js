@@ -2,7 +2,6 @@ import {
     faFileAlt,
     faCity,
     faCog,
-    faUserTag,
     faSitemap,
     faArchive,
     faSearchLocation,
@@ -16,7 +15,8 @@ import {
     faRoad,
     faCopyright,
     faIndustry,
-    faStore
+    faStore,
+    faPercentage
 } from "@fortawesome/free-solid-svg-icons"
 import Countries from "../pages/Countries/Countries"
 import CountriesDetails from "../pages/Countries/CountriesDetails/CountriesDetails"
