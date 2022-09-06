@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
 import { toast } from "react-toastify";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import Form from "../../../components/shared/Form/Form";
 import useAPI from "../../../api/api";
+import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
 
 import formFields from "./formField.json";
 
@@ -33,7 +33,6 @@ const BrandsDetails = () => {
       .post("admin/brands/", data)
       .then((response) => {
         toast.success("Uspešno");
-        console.log(response?.payload);
         setData(response?.payload);
       })
       .catch((error) => {
@@ -58,22 +57,14 @@ const BrandsDetails = () => {
   }, []);
 
   return (
-    <PageWrapper
+    <FormWrapper
       title={bid == "new" ? "Detalji brenda" : data?.name}
       back={() => {
         navigate(-1);
       }}
     >
-      {!isLoading ? (
-        <Form
-          formFields={formFields}
-          initialData={data}
-          onSubmit={submitHandler}
-        />
-      ) : (
-        <LoadingForm fields={formFields.length} />
-      )}
-    </PageWrapper>
+      {!isLoading ? <Form formFields={formFields} initialData={data} onSubmit={submitHandler} /> : <LoadingForm fields={formFields.length} />}
+    </FormWrapper>
   );
 };
 

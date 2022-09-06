@@ -41,7 +41,7 @@ const DetailsBanners = ({}) => {
   const [data, setData] = useState(init);
   const [subFields, setSubFields] = useState([]);
 
-  const { isSuccess, data: response, isLoading, isError } = useQuery([], () => api.get(`admin/banners-b2b/main/${B2BId}`));
+  const { data: response, isLoading } = useQuery([], () => api.get(`admin/banners-b2b/main/${B2BId}`));
 
   const saveData = (data) => {
     api
