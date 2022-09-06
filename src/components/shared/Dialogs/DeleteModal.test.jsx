@@ -22,25 +22,25 @@ describe("<DeleteDialog />", () => {
       />
     );
     wrapper
-      .find('[data-test-id="confirm-dialog-cancel"]')
+      .find('[data-test-id="btn-cancel"]')
       .first()
       .simulate("click");
     expect(setOpenDeleteDialog).toHaveBeenCalledTimes(1);
   });
   it("should successfully handle confirm click", async () => {
-    const setOpenDeleteDialog = jest.fn();
+    const handleConfirm = jest.fn();
     const openDeleteDialog = true;
 
     const wrapper = shallow(
       <DeleteDialog
         openDeleteDialog={openDeleteDialog}
-        setOpenDeleteDialog={setOpenDeleteDialog}
+        handleConfirm={handleConfirm}
       />
     );
     wrapper
-      .find('[data-test-id="confirm-dialog-confirm"]')
+      .find('[data-test-id="btn-confirm"]')
       .first()
       .simulate("click");
-    expect(setOpenDeleteDialog).toHaveBeenCalledTimes(1);
+    expect(handleConfirm).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,7 +1,7 @@
 import ListPage from "../../components/shared/ListPage/ListPage"
 import tblFields from "./ParamsListFields.json"
 
-const RebatesListPage = () => (
+const B2BRebatesListPage = () => (
   <ListPage
     apiUrl="admin/rebates"
     title="Rabati"
@@ -9,4 +9,4 @@ const RebatesListPage = () => (
   />
 )
 
-export default RebatesListPage
+export default B2BRebatesListPage

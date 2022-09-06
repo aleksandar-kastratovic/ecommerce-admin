@@ -161,13 +161,9 @@ const ListPage = ({
             </PageWrapper>
 
             <DeleteDialog
-                title="Brisanje"
-                description="Da li ste sigurni da želite da obrišete ovaj zapis?"
                 openDeleteDialog={openDeleteDialog}
-                setOpenDeleteDialog={setOpenDeleteDialog}
                 handleConfirm={handleConfirm}
-                handleCancel={handleCancel}
-            />
+                setOpenDeleteDialog={setOpenDeleteDialog} />
         </>
     )
 }
