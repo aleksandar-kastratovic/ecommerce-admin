@@ -13,7 +13,7 @@ import { Icon } from "@mui/material";
  * @constructor
  */
 const Button = ({ icon, label, onClick, variant = "outlined" }) => (
-  <MaterialButton onClick={onClick} variant={variant}>
+  <MaterialButton onClick={onClick} variant={variant} className={scss.button}>
     {icon && <Icon className={scss.icon}>{icon}</Icon>}
     {label}
   </MaterialButton>

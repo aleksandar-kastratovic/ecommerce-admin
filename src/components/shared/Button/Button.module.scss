@@ -1,25 +1,9 @@
 @import "../../../variables.scss";
 
 .button {
-  padding: 0.5rem 1.5rem;
-  background-color: $lightGrey;
-  font-weight: 400;
-  color: $black;
-
-  &:hover {
-    background-color: $lightGrey;
-    color: $black;
-    cursor: pointer;
-  }
+	min-width: 11.23em!important;
 }
 
 .icon {
-  margin: 0 0.4em 0 -0.5em;
-}
-
-.default {
-}
-
-.primary {
-  background: $lightGreen;
+	margin: 0 0.4em 0 -0.5em;
 }
