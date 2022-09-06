@@ -11,6 +11,30 @@ const CroonusTheme = createTheme({
 
     typography: {
         fontFamily: [ "Montserrat", "sans-serif" ].join(",")
+    },
+    components: {
+        MuiListItem    : {
+            styleOverrides: {
+                root: {
+                    "&.Mui-selected": {
+                        backgroundColor: scssVariables.theme,
+                        "span, svg"    : {
+                            color: "white"
+                        }
+                    },
+                    "&:hover"       : {
+                        // backgroundColor: "var(--main-color)"
+                    }
+                }
+            }
+        },
+        MuiListItemIcon: {
+            styleOverrides: {
+                root: {
+                    minWidth: 36
+                }
+            }
+        }
     }
 })
 

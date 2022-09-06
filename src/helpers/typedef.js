@@ -20,6 +20,14 @@
  * @typedef APIPagination
  *      @param {uint} selected_page The current page that is show.
  *      @param {uint} total_pages The total number of pages that are available.
- *      @param {uint} total_items The total number of items, accros all pages.
+ *      @param {uint} total_items The total number of items, across all pages.
  *      @param {uint} items_per_page The limit of items to show per a single page.
+ */
+
+/**
+ * @typedef PanelSpec
+ *      @param {string} name The name of the panel.
+ *      @param {string|{}} icon String to load from MUI, or an object imported from @fortawesome/free-solid-svg-icons;
+ *      @param {boolean} disabled True to disallow selecting this panel.
+ *      @param {JSX.Element} component The component that will handle this panel
  */

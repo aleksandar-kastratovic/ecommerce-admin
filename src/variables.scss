@@ -13,8 +13,6 @@ $danger:     #d32f2f;
 $gap:        0.5em;
 
 :export {
+	gap:   $gap;
 	theme: $theme;
 }
-
-// All palette color should be available on one place, here
-// or it is a good practice as now in global css but global css has more then 2000 ln
