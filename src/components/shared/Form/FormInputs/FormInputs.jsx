@@ -158,12 +158,15 @@ export const InputSelect = ({ label, required, disabled, error = null, name, val
   const [opt, setOpt] = useState(options);
 
   useEffect(() => {
+    let isMounted = true;
     let path = usePropName ? `${fillFromApi}/${name}` : fillFromApi;
     const fillDdl = async () => {
       await api
         .get(path)
         .then((response) => {
-          setOpt(response?.payload);
+          if (isMounted) {
+            setOpt(response?.payload);
+          }
         })
         .catch((error) => {
           console.warn(error);
@@ -173,6 +176,10 @@ export const InputSelect = ({ label, required, disabled, error = null, name, val
     if (fillFromApi) {
       fillDdl();
     }
+
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
