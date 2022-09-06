@@ -1,116 +1,74 @@
-import { Box } from "@mui/system";
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect, useContext } from "react";
-import CreateForm from "../../../components/shared/Form/CreateForm";
-import Button from "../../../components/shared/Button/Button";
-import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
-import { formatDate } from "../../../helpers/dateFormat";
+import { useState, useEffect } from "react";
 
 import fields from "./formField.json";
-import { getStore, saveStore } from "../services";
-import AuthContext from "../../../store/auth-contex";
-import requirePropFactory from "@mui/utils/requirePropFactory";
-import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
+import Form from "../../../components/shared/Form/Form";
+import LoadingForm from "../../../components/shared/Loading/LoadingForm";
+import useAPI from "../../../api/api";
+import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
 
-const required = [];
-const init = {
-  slug: "",
-  name: "",
-  phone_code: "",
-  source: "",
-  "id_source ": null,
-  id_source: 0,
-};
 const StoresDetails = () => {
   const { ssid } = useParams();
+  const api = useAPI();
+  const init = {
+    id: null,
+    slug: null,
+    name: null,
+    store_type: null,
+    id_country: null,
+    country_name: null,
+    id_town: null,
+    town: null,
+    zip_code: null,
+    address: null,
+    email: null,
+    phone: null,
+    longitude: null,
+    latitude: null,
+    work_hours: null,
+    short_description: null,
+    description: null,
+    status: "on",
+  };
   const navigate = useNavigate();
-  const handleBack = () => {
-    navigate("/stores");
-  };
   const [data, setData] = useState(init);
-  const [inputsError, setInputsError] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const { user } = useContext(AuthContext);
-
-  const formItemChangeHandler = ({ target }, type) => {
-    if (type === "date") {
-      setData({ ...data, [target.name]: formatDate(target.value) });
-    } else if (type) {
-      setData({ ...data, [target.name]: target.checked });
-    } else {
-      setData({ ...data, [target.name]: target.value });
-    }
-  };
 
   const handleData = async () => {
-    try {
-      setIsLoading(true);
-      let response = await getStore(user.access_token, ssid);
-      let { payload } = response.data;
-      setData(payload);
-    } catch (error) {
-      console.warn(error);
-    } finally {
-      setIsLoading(false);
-    }
+    setIsLoading(true);
+    await api
+      .get(`admin/stores/${ssid}`)
+      .then((response) => {
+        setData(response?.payload);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+    setIsLoading(false);
   };
 
-  const saveData = async () => {
-    try {
-      let response = await saveStore(user.access_token, data);
-      handleBack();
-      toast.success("Uspešno uneta forma!");
-    } catch (error) {
-      console.warn(error.response);
-      toast.warning("Greška ");
-    }
-  };
-
-  const onSubmit = () => {
-    const errors = {};
-    Object.keys(data).forEach((prop_name) => {
-      if (isEmpty(data[prop_name])) {
-        if (required.includes(prop_name))
-          errors[prop_name] = {
-            content: "Polje je obavezno, molim Vas unesite vrednost.",
-          };
-      }
-    });
-    isEmpty(errors) ? saveData() : setInputsError(errors);
+  const saveData = async (data) => {
+    api
+      .post(`admin/stores`, data)
+      .then((response) => {
+        setData(response?.payload);
+        toast.success(`Uspešno`);
+      })
+      .catch((error) => {
+        console.warn(error);
+        toast.warning("Greška");
+      });
   };
 
   useEffect(() => {
-    if (ssid !== "new") {
-      handleData();
-    }
+    handleData();
   }, []);
 
   return (
-    <PageWrapper title="Detalji skladišta" back={handleBack}>
-      <Box component="form" autoComplete="off">
-        {fields &&
-          fields
-            .filter(({ in_details }) => in_details)
-            .map((item, index) => {
-              return (
-                <CreateForm
-                  data-test-id="admin-form"
-                  onChangeHandler={formItemChangeHandler}
-                  item={item}
-                  key={index}
-                  error={inputsError[item.prop_name]}
-                  value={
-                    Array.isArray(item) && data
-                      ? data[item.prop_name]
-                      : data[item.prop_name]
-                  }
-                />
-              );
-            })}
-        <Button label="Sačuvaj" onClick={onSubmit} />
-      </Box>
-    </PageWrapper>
+    <FormWrapper title={ssid === "new" ? "Unos novog skladišta" : data.name} back={() => navigate(-1)}>
+      {!isLoading ? <Form formFields={fields} initialData={data} onSubmit={saveData} /> : <LoadingForm fields={fields.length} />}
+    </FormWrapper>
   );
 };
 
