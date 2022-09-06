@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import FormWrapper from "../../../components/shared/Layout/FromWrapper/FromWrapper";
+import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
 import useAPI from "../../../api/api";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import Form from "../../../components/shared/Form/Form";
@@ -41,12 +41,7 @@ const DetailsBanners = ({}) => {
   const [data, setData] = useState(init);
   const [subFields, setSubFields] = useState([]);
 
-  const {
-    isSuccess,
-    data: response,
-    isLoading,
-    isError,
-  } = useQuery([], () => api.get(`admin/banners-b2b/main/${B2BId}`));
+  const { isSuccess, data: response, isLoading, isError } = useQuery([], () => api.get(`admin/banners-b2b/main/${B2BId}`));
 
   const saveData = (data) => {
     api
@@ -110,31 +105,12 @@ const DetailsBanners = ({}) => {
   }, [data]);
 
   return (
-    <FormWrapper
-      title={B2BId == "new" ? "Unos novog banera" : data?.name}
-      back={() => navigate(-1)}
-    >
+    <FormWrapper title={B2BId == "new" ? "Unos novog banera" : data?.name} back={() => navigate(-1)}>
       {!isLoading ? (
         <>
-          <CreateForm
-            onChangeHandler={({ target }) =>
-              setData({ ...data, name: target.value })
-            }
-            item={name}
-            value={data ? data.name : ""}
-          />
-          <CreateForm
-            onChangeHandler={({ target }) =>
-              setData({ ...data, position: target.value })
-            }
-            item={positionForm}
-            value={data ? data.position : ""}
-          />
-          <Form
-            formFields={[...subFields, status]}
-            initialData={data}
-            onSubmit={saveData}
-          />
+          <CreateForm onChangeHandler={({ target }) => setData({ ...data, name: target.value })} item={name} value={data ? data.name : ""} />
+          <CreateForm onChangeHandler={({ target }) => setData({ ...data, position: target.value })} item={positionForm} value={data ? data.position : ""} />
+          <Form formFields={[...subFields, status]} initialData={data} onSubmit={saveData} />
         </>
       ) : (
         <LoadingForm fields={5} />
