@@ -3,16 +3,7 @@ import React, { useState } from "react";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import ImageButton from "../ImageButton/ImageButton";
 import InputMultipleImages from "../InputMultipleImages/InputMultipleImages";
-import {
-  InputCheckbox,
-  InputDate,
-  InputDateTime,
-  InputInput,
-  InputRadio,
-  InputSelect,
-  InputSwitch,
-  InputText,
-} from "./FormInputs/FormInputs";
+import { InputCheckbox, InputDate, InputDateTime, InputInput, InputRadio, InputSelect, InputSwitch, InputText } from "./FormInputs/FormInputs";
 
 const CreateForm = ({
   item = {},
@@ -22,7 +13,7 @@ const CreateForm = ({
   onImagePreview = () => {},
   onOpenImageDialog = () => {},
   value = "",
-  error = "",
+  error = null,
   disabled = false,
 }) => {
   // depending on input type in fields you will get a control
@@ -41,14 +32,7 @@ const CreateForm = ({
     formItem = (
       <>
         {item.map((itemUnit, index) => (
-          <CreateForm
-            item={itemUnit}
-            key={itemUnit.prop_name}
-            onChangeHandler={onChangeHandler}
-            error={error[index]}
-            value={value}
-            disabled={disabled}
-          />
+          <CreateForm item={itemUnit} key={itemUnit.prop_name} onChangeHandler={onChangeHandler} error={error[index]} value={value} disabled={disabled} />
         ))}
       </>
     );
@@ -60,14 +44,10 @@ const CreateForm = ({
             <InputInput
               name={item.prop_name}
               label={item.field_name}
-              required={
-                typeof item.required === "number"
-                  ? item.required === 1
-                  : item.required
-              }
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
               description={item.description}
               value={value}
-              error={error.content}
+              error={error}
               onChange={onChangeHandler}
               disabled={disabled}
             />
@@ -78,11 +58,7 @@ const CreateForm = ({
             <ImageUpload
               name={item.prop_name}
               label={item.field_name}
-              required={
-                typeof item.required === "number"
-                  ? item.required === 1
-                  : item.required
-              }
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
               description={item.description}
               value={value}
               error={error}
@@ -97,16 +73,12 @@ const CreateForm = ({
             <ImageButton
               name={item.prop_name}
               label={item.field_name}
-              required={
-                typeof item.required === "number"
-                  ? item.required === 1
-                  : item.required
-              }
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
               description={item.description}
               value={value}
               error={error}
-              imgWidth={item.dimensions ? item.dimensions.width : null}
-              imgHeight={item.dimensions ? item.dimensions.height : null}
+              imgWidth={item.dimensions ? item.dimensions.width : 300}
+              imgHeight={item.dimensions ? item.dimensions.height : 200}
               onImageUpload={onImageUpload}
               onOpenImageDialog={onOpenImageDialog}
               disabled={disabled}
@@ -117,13 +89,7 @@ const CreateForm = ({
           formItem = (
             <InputCheckbox
               name={item.prop_name}
-              value={
-                typeof value === "string"
-                  ? true
-                  : typeof value === "number"
-                  ? value === 1
-                  : value
-              }
+              value={typeof value === "string" ? true : typeof value === "number" ? value === 1 : value}
               onChange={(e) => onChangeHandler(e, "checkbox")}
               disabled={disabled}
               label={item.field_name}
@@ -134,13 +100,7 @@ const CreateForm = ({
           formItem = (
             <InputRadio
               name={item.prop_name}
-              value={
-                typeof value === "string"
-                  ? true
-                  : typeof value === "number"
-                  ? value === 1
-                  : value
-              }
+              value={typeof value === "string" ? true : typeof value === "number" ? value === 1 : value}
               onChange={(e) => onChangeHandler(e, "radio")}
               disabled={disabled}
               label={item.field_name}
@@ -152,13 +112,7 @@ const CreateForm = ({
             <InputSwitch
               label={item.field_name}
               name={item.prop_name}
-              value={
-                typeof value === "string"
-                  ? true
-                  : typeof value === "number"
-                  ? value === 1
-                  : value
-              }
+              value={typeof value === "string" ? true : typeof value === "number" ? value === 1 : value}
               onChange={(e) => onChangeHandler(e, "switch")}
               disabled={disabled}
             />
@@ -168,14 +122,10 @@ const CreateForm = ({
           formItem = (
             <InputSelect
               label={item.field_name}
-              required={
-                typeof item.required === "number"
-                  ? item.required === 1
-                  : item.required
-              }
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
               name={item.prop_name}
               disabled={disabled}
-              error={error.content}
+              error={error}
               value={value}
               onChange={onInputChangeHandler}
               options={item.options}
@@ -190,14 +140,10 @@ const CreateForm = ({
             <InputText
               name={item.prop_name}
               label={item.field_name}
-              required={
-                typeof item.required === "number"
-                  ? item.required === 1
-                  : item.required
-              }
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
               description={item.description}
               value={value}
-              error={error.content}
+              error={error}
               onChange={onChangeHandler}
               disabled={disabled}
             />
@@ -208,14 +154,10 @@ const CreateForm = ({
             <InputDateTime
               name={item.prop_name}
               label={item.field_name}
-              required={
-                typeof item.required === "number"
-                  ? item.required === 1
-                  : item.required
-              }
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
               description={item.description}
               value={value}
-              error={error.content}
+              error={error}
               onChange={onChangeHandler}
               disabled={disabled}
             />
@@ -226,27 +168,17 @@ const CreateForm = ({
             <InputDate
               name={item.prop_name}
               label={item.field_name}
-              required={
-                typeof item.required === "number"
-                  ? item.required === 1
-                  : item.required
-              }
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
               description={item.description}
               value={value}
-              error={error.content}
+              error={error}
               onChange={onChangeHandler}
               disabled={disabled}
             />
           );
           break;
-        case "MultipleImages":
-          formItem = (
-            <InputMultipleImages
-              list={Array.isArray(value) ? value : []}
-              name={item.prop_name}
-              onChangeHandler={onChangeHandler}
-            />
-          );
+        case "MultipleImages": //TODO
+          formItem = <InputMultipleImages list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} />;
           break;
 
         default:

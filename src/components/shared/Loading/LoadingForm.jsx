@@ -1,10 +1,14 @@
 import { Skeleton, Stack } from "@mui/material";
 
 const LoadingForm = ({ fields = 0 }) => {
+  let stack = [];
+  for (let i = 0; i < fields; i++) {
+    stack.push(<Skeleton variant="text" height={80} key={i} />);
+  }
   return (
     <Stack>
-      {Array(+fields).map(() => {
-        return <Skeleton variant="text" height={60} key={key} />;
+      {stack.map((field) => {
+        return field;
       })}
     </Stack>
   );

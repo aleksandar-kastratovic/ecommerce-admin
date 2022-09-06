@@ -28,8 +28,8 @@ const ImageButton = ({
   description = "",
   value = "",
   error = "",
-  imgWidth = null,
-  imgHeight = null,
+  imgWidth = 300,
+  imgHeight = 200,
   onImageUpload = () => {},
   onOpenImageDialog = () => {},
 }) => {
@@ -125,7 +125,7 @@ const ImageButton = ({
             }}
           >
             <Grid item xs={8} md={8} margin={0} padding={0} sx={{ padding: 0 }}>
-              <FormControl>
+              <FormControl error={error !== null}>
                 <FormLabel required={required}>{label}</FormLabel>
                 <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
                 <Typography variant="caption" display="block" gutterBottom>
@@ -155,15 +155,15 @@ const ImageButton = ({
                 <FormHelperText>Maximum file size: 2MB, Allowed types: JPG, GIF, PNG, ICO, APNG, Not all browsers support these formats</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={4} md={4} margin={0} padding={0}>
-              <Box>
-                {error && (
-                  <Stack sx={{ width: "100%" }}>
-                    <Alert severity="error">{error}</Alert>
-                  </Stack>
-                )}
-              </Box>
-            </Grid>
+          </Grid>
+          <Grid item xs={4} md={4} margin={0} padding={0}>
+            <Box>
+              {error && (
+                <Stack sx={{ width: "100%" }}>
+                  <Alert severity="error">{error}</Alert>
+                </Stack>
+              )}
+            </Box>
           </Grid>
         </Box>
       )}
