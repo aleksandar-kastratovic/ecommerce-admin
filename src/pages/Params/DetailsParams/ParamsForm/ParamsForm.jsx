@@ -10,13 +10,8 @@ import slugName from "../forms/slugNameField.json";
 import { useEffect } from "react";
 import { Box } from "@mui/material";
 
-const ParamsForm = ({
-  onSubmit = () => {},
-  onChange = () => {},
-  data = {},
-  subForm = [],
-}) => {
-  const [paramType, setParamType] = useState(data.field_type);
+const ParamsForm = ({ onSubmit = () => {}, onChange = () => {}, data = {}, subForm = [], isLoading = false }) => {
+  const [paramType, setParamType] = useState(data.field_type ?? "long_text");
   const [multiParam, setMultiParam] = useState(data.field_is_multiple);
 
   const submitHandler = (data) => {
@@ -32,27 +27,17 @@ const ParamsForm = ({
   }, [multiParam, paramType]);
 
   useEffect(() => {
-    setParamType(data.field_type);
-    setMultiParam(data.field_is_multiple);
-  }, [data]);
+    if (!isLoading) {
+      setParamType(data.field_type ?? "long_text");
+      setMultiParam(data.field_is_multiple);
+    }
+  }, [data, isLoading]);
 
   return (
     <Box>
-      <CreateForm
-        onChangeHandler={({ target }) => setParamType(target.value)}
-        item={paramsTypeField}
-        value={paramType}
-      />
-      <CreateForm
-        onChangeHandler={({ target }) => setMultiParam(target.checked)}
-        item={paramsCheckbox}
-        value={multiParam}
-      />
-      <Form
-        formFields={[...slugName, ...subForm, ...basicForm]}
-        initialData={data}
-        onSubmit={submitHandler}
-      />
+      <CreateForm onChangeHandler={({ target }) => setParamType(target.value)} item={paramsTypeField} value={paramType} />
+      <CreateForm onChangeHandler={({ target }) => setMultiParam(target.checked)} item={paramsCheckbox} value={multiParam} />
+      <Form formFields={[...slugName, ...subForm, ...basicForm]} initialData={data} onSubmit={submitHandler} />
     </Box>
   );
 };

@@ -65,6 +65,7 @@ const ParamsDetails = () => {
   const [data, setData] = useState(init);
   const [list, setList] = useState([]);
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const api = useAPI();
 
@@ -87,8 +88,9 @@ const ParamsDetails = () => {
     setData(data);
   };
 
-  const handleGetData = () => {
-    api
+  const handleGetData = async () => {
+    setIsLoading(true);
+    await api
       .get(`admin/params/main/${pid}`)
       .then((response) => {
         setData(response?.payload);
@@ -96,7 +98,9 @@ const ParamsDetails = () => {
       .catch((error) => {
         console.warn(error);
       });
+    setIsLoading(false);
   };
+
   const handleGetList = () => {
     api
       .list(`admin/params/values/`, { id_param: pid })
@@ -173,14 +177,7 @@ const ParamsDetails = () => {
       name: "Osnovno",
       icon: "settings",
       disabled: false,
-      component: (
-        <ParamsForm
-          onSubmit={onSubmit}
-          data={data}
-          onChange={onChange}
-          subForm={getParamSubForm(true)}
-        />
-      ),
+      component: <ParamsForm onSubmit={onSubmit} data={data} onChange={onChange} subForm={getParamSubForm(true)} isLoading={isLoading} />,
     },
     {
       id: 2,
@@ -200,12 +197,7 @@ const ParamsDetails = () => {
     },
   ];
 
-  return (
-    <DetailsPage
-      title={pid === "new" ? "Unos novog parametra" : data?.name}
-      fields={data?.field_is_multiple && pid !== "new" ? fields : [fields[0]]}
-    />
-  );
+  return <DetailsPage title={pid === "new" ? "Unos novog parametra" : data?.name} fields={data?.field_is_multiple && pid !== "new" ? fields : [fields[0]]} />;
 };
 
 export default ParamsDetails;

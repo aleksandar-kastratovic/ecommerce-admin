@@ -5,7 +5,7 @@
   "in_details": true,
   "editable": true,
   "disabled": false,
-  "required": false,
+  "required": true,
   "description": "",
   "ui_prop": "xyz",
   "sortable": true,

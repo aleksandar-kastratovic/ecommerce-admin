@@ -15,6 +15,7 @@ const CreateForm = ({
   value = "",
   error = null,
   disabled = false,
+  queryString = "",
 }) => {
   // depending on input type in fields you will get a control
   // value is obvious
@@ -132,6 +133,7 @@ const CreateForm = ({
               description={item.description}
               fillFromApi={item.fillFromApi}
               usePropName={item.usePropName}
+              queryString={queryString}
             />
           );
           break;
