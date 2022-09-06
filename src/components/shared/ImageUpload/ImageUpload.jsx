@@ -21,7 +21,6 @@ import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadR
 import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
 

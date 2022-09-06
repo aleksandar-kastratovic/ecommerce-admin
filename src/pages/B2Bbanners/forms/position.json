@@ -9,15 +9,8 @@
   "description": "",
   "ui_prop": "xyz",
   "sortable": true,
-  "options": [
-    {
-      "id": "image",
-      "name": "Slika"
-    },
-    {
-      "id": "image_description",
-      "name": "Slika opis"
-    }
-  ],
+  "fillFromApi": "admin/banners-b2b/main/ddl",
+  "usePropName": "true",
+  "options": [],
   "input_type": "select"
 }
