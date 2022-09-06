@@ -1,51 +1,53 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
 
 import fields from "./formField.json";
 import { toast } from "react-toastify";
 import Form from "../../../components/shared/Form/Form";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import useAPI from "../../../api/api";
+import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
 
-const init = {
-  slug: "",
-  name: "",
-  phone_code: "",
-  source: "",
-  id_source: 0,
-};
 const TownsDetails = () => {
   const { id } = useParams();
   const api = useAPI();
+  const init = {
+    id: null,
+    slug: null,
+    name: null,
+    display_name: null,
+    zip_code: null,
+    id_municipality: null,
+    id_country: null,
+    delivery_center: null,
+    delivery_days: null,
+    source: null,
+    id_source: null,
+    status: null,
+  };
   const navigate = useNavigate();
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleData = async () => {
     setIsLoading(true);
-    api
+    await api
       .get(`admin/towns/${id}`)
       .then((response) => {
         setData(response?.payload);
       })
       .catch((error) => {
         console.warn(error);
-      })
-      .then(() => {
-        setIsLoading(false);
       });
+    setIsLoading(false);
   };
 
   const saveData = async (data) => {
-    const repack = { ...data, id: id === "new" ? null : Number(id) };
     api
-      .post(`admin/towns`, repack)
+      .post(`admin/towns`, data)
       .then((response) => {
         setData(response?.payload);
-        toast.success(
-          `Uspešno ${id === "new" ? "dodati" : "izmenjeni"} podaci`
-        );
+        toast.success(`Uspešno`);
       })
       .catch((error) => {
         console.warn(error);
@@ -54,19 +56,13 @@ const TownsDetails = () => {
   };
 
   useEffect(() => {
-    if (id !== "new") {
-      handleData();
-    }
+    handleData();
   }, []);
 
   return (
-    <PageWrapper title="Detalji mesta" back={() => navigate(-1)}>
-      {!isLoading ? (
-        <Form formFields={fields} initialData={data} onSubmit={saveData} />
-      ) : (
-        <LoadingForm fields={fields.length} />
-      )}
-    </PageWrapper>
+    <FormWrapper title={id === "new" ? "Unos novog mesta" : data.name} back={() => navigate(-1)}>
+      {!isLoading ? <Form formFields={fields} initialData={data} onSubmit={saveData} /> : <LoadingForm fields={fields.length} />}
+    </FormWrapper>
   );
 };
 
