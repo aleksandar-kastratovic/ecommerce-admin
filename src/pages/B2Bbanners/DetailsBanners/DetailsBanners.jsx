@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
+import FormWrapper from "../../../components/shared/Layout/FromWrapper/FromWrapper";
 import useAPI from "../../../api/api";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import Form from "../../../components/shared/Form/Form";
@@ -110,7 +110,7 @@ const DetailsBanners = ({}) => {
   }, [data]);
 
   return (
-    <PageWrapper
+    <FormWrapper
       title={B2BId == "new" ? "Unos novog banera" : data?.name}
       back={() => navigate(-1)}
     >
@@ -139,7 +139,7 @@ const DetailsBanners = ({}) => {
       ) : (
         <LoadingForm fields={5} />
       )}
-    </PageWrapper>
+    </FormWrapper>
   );
 };
 
