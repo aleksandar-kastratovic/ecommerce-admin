@@ -34,7 +34,7 @@ const DetailsGroups = ({ specId }) => {
 
   useEffect(() => {
     api
-      .list("admin/product-item-specifications/setgroup/list", {
+      .list("admin/product-item-specifications/setgroup", {
         filter_id_set: specId,
       })
       .then((response) => {

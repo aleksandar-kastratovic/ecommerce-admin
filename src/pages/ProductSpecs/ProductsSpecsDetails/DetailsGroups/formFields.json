@@ -21,7 +21,7 @@
       }
     ],
     "input_type": "select",
-    "fillFromApi": "",
+    "fillFromApi": "admin/product-item-specifications/setgroup/ddl",
     "usePropName": true
   }
 ]
