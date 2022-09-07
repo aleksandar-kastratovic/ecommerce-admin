@@ -4,17 +4,21 @@ import ProductSpecsFields from "./ProductSpecsFields.json";
 
 const ProductSpecs = () => {
   const navigate = useNavigate();
-  const groupPage = () => {
-    navigate("/product-specs/groups");
-  };
 
-  const buttons = [{ id: 1, label: "Grupe", action: groupPage }];
+  const buttons = [
+    {
+      id: 1,
+      label: "Grupe",
+      action: () => {
+        navigate("/product-specs/groups");
+      },
+    },
+  ];
 
   return (
     <ListPage
       title="Speifikacije proizvoda - Setovi"
-      apiUrl="admin/productitemspec/set/list"
-      deleteUrl="admin/productitemspec/groupattributevalues"
+      apiUrl="admin/product-item-specifications/set"
       columnFields={ProductSpecsFields}
       additionalButtons={buttons}
     />

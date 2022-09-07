@@ -1,77 +1,62 @@
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-} from "@mui/material";
-import { useContext, useState } from "react";
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from "@mui/material";
+import { useState } from "react";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
+import useAPI from "../../../../api/api";
 import List from "../../../../components/shared/ListAdder/List";
-import AuthContext from "../../../../store/auth-contex";
-import {
-  deleteProductSpecsGroupAttributeValues,
-  getListProductSpecsGroupAttributeValues,
-  postProductSpecsGroupAttributeValues,
-} from "../../services";
 
 import formFields from "./AttrModalForm.json";
-import { repackToSend } from "./util";
 
-const AttributesModal = ({
-  open = false,
-  handleClose = () => {},
-  idGroup,
-  idAttribute,
-}) => {
-  const { user } = useContext(AuthContext);
-
+const AttributesModal = ({ open = false, handleClose = () => {}, idGroup, idAttribute }) => {
   const initList = {
     id_group: idGroup,
     id_group_attribute: idAttribute,
-    slug: "",
-    name: "",
-    image: "empty",
-    use_in_variants: 0,
-    description: "",
-    order: 0,
-    status: "off",
+    slug: null,
+    name: null,
+    image: null,
+    use_in_variants: null,
+    description: null,
+    order: null,
+    status: "on",
   };
 
   const [listFields, setListFields] = useState([]);
+  const api = useAPI();
 
-  const handleList = async () => {
-    try {
-      let response = await getListProductSpecsGroupAttributeValues(
-        user.access_token,
-        idGroup,
-        idAttribute
-      );
-      setListFields(response?.data?.payload?.items);
-    } catch (error) {
-      console.warn(error);
-    }
+  const handleList = () => {
+    api
+      .list(`admin/product-item-specifications/group-attribute-values/${idAttribute}`, { search: "" })
+      .then((response) => {
+        setListFields(response?.payload?.items);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
   };
 
-  const saveListData = async (data, index) => {
-    try {
-      let repack = {
-        ...initList,
-        id_group: idGroup,
-        ...data,
-      };
-      let response = await postProductSpecsGroupAttributeValues(
-        user.access_token,
-        repack
-      );
-      let newList = [...listFields, response?.data?.payload];
-      setListFields(newList);
-      toast.success("Uspešno!");
-    } catch (error) {
-      console.warn(error);
-      toast.warning("Greška");
-    }
+  const handleDelete = (token, id) => {
+    api
+      .delete(`admin/product-item-specifications/group-attribute-values/${id}`)
+      .then((response) => {
+        setListFields(response?.payload?.items);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  };
+
+  const saveListData = async (data) => {
+    api
+      .post("admin/product-item-specifications/group-attribute-values", { id_group: idGroup, id_group_attribute: idAttribute, ...data })
+      .then((response) => {
+        console.log(response);
+        handleList();
+        toast.success("Uspešno!");
+      })
+      .catch((error) => {
+        console.warn(error.response);
+        toast.warning("Greška ");
+      });
   };
 
   useEffect(() => {
@@ -89,14 +74,7 @@ const AttributesModal = ({
     <Dialog open={open} fullScreen>
       <DialogTitle>Unos vrednosti za select</DialogTitle>
       <DialogContent>
-        <List
-          listFields={listFields}
-          formFields={formFields}
-          init={initList}
-          onDelete={() => {}}
-          required={[]}
-          onSave={saveListData}
-        />
+        <List listFields={listFields} formFields={formFields} init={initList} onDelete={handleDelete} onSave={saveListData} />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Zatvori</Button>

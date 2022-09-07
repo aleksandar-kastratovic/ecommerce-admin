@@ -1,6 +1,6 @@
 [
   {
-    "field_name": "Name",
+    "field_name": "Naziv",
     "prop_name": "name",
     "in_main_table": true,
     "in_details": true,
@@ -13,7 +13,7 @@
     "input_type": "input"
   },
   {
-    "field_name": "Slug",
+    "field_name": "Kod",
     "prop_name": "slug",
     "in_main_table": true,
     "in_details": true,
@@ -37,12 +37,12 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "textarea"
   },
 
   {
-    "field_name": "Order",
-    "prop_name": "order",
+    "field_name": "Use in variants",
+    "prop_name": "use_in_variants",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -51,9 +51,61 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "options": [
+      {
+        "id": 1,
+        "name": "Da"
+      },
+      {
+        "id": 0,
+        "name": "Ne"
+      }
+    ],
+    "input_type": "select"
   },
-
+  {
+    "field_name": "Input type",
+    "prop_name": "field_type",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "options": [
+      {
+        "id": "input",
+        "name": "Input"
+      },
+      {
+        "id": "select",
+        "name": "Select"
+      },
+      {
+        "id": "date_time",
+        "name": "Date"
+      },
+      {
+        "id": "image_upload",
+        "name": "Image upload"
+      },
+      {
+        "id": "image_button",
+        "name": "Image button"
+      },
+      {
+        "id": "switch",
+        "name": "Switch"
+      },
+      {
+        "id": "textarea",
+        "name": "Textarea"
+      }
+    ],
+    "input_type": "select"
+  },
   {
     "field_name": "Status",
     "prop_name": "status",
@@ -68,11 +120,11 @@
     "options": [
       {
         "id": "on",
-        "name": "on"
+        "name": "On"
       },
       {
         "id": "off",
-        "name": "off"
+        "name": "Off"
       }
     ],
     "input_type": "select"
