@@ -1,20 +1,9 @@
 import React, { useState } from "react";
-import TextBox from "../TextBox/TextBox";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import FormLabel from "@mui/material/FormLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import Switch from "@mui/material/Switch";
 
 import ImageUpload from "../ImageUpload/ImageUpload";
-import BasicDateTimePicker from "../BasicDateTimePicker/BasicDateTimePicker";
 import ImageButton from "../ImageButton/ImageButton";
 import InputMultipleImages from "../InputMultipleImages/InputMultipleImages";
-import BasicDatePicker from "../BasicDatePicker/BasicDatePicker";
-import Textarea from "../TextArea/Textarea";
+import { InputCheckbox, InputDate, InputDateTime, InputInput, InputRadio, InputSelect, InputSwitch, InputText } from "./FormInputs/FormInputs";
 
 const CreateForm = ({
   item = {},
@@ -24,8 +13,9 @@ const CreateForm = ({
   onImagePreview = () => {},
   onOpenImageDialog = () => {},
   value = "",
-  error = "",
+  error = null,
   disabled = false,
+  queryString = "",
 }) => {
   // depending on input type in fields you will get a control
   // value is obvious
@@ -43,14 +33,7 @@ const CreateForm = ({
     formItem = (
       <>
         {item.map((itemUnit, index) => (
-          <CreateForm
-            item={itemUnit}
-            key={itemUnit.prop_name}
-            onChangeHandler={onChangeHandler}
-            error={error[index]}
-            value={value}
-            disabled={disabled}
-          />
+          <CreateForm item={itemUnit} key={itemUnit.prop_name} onChangeHandler={onChangeHandler} error={error[index]} value={value} disabled={disabled} />
         ))}
       </>
     );
@@ -59,14 +42,10 @@ const CreateForm = ({
       switch (item.input_type) {
         case "input":
           formItem = (
-            <TextBox
+            <InputInput
               name={item.prop_name}
               label={item.field_name}
-              required={
-                typeof item.required === "number"
-                  ? item.required === 1
-                  : item.required
-              }
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
               description={item.description}
               value={value}
               error={error}
@@ -75,16 +54,12 @@ const CreateForm = ({
             />
           );
           break;
-        case "image_upload":
+        case "image_upload": //TODO
           formItem = (
             <ImageUpload
               name={item.prop_name}
               label={item.field_name}
-              required={
-                typeof item.required === "number"
-                  ? item.required === 1
-                  : item.required
-              }
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
               description={item.description}
               value={value}
               error={error}
@@ -94,19 +69,17 @@ const CreateForm = ({
             />
           );
           break;
-        case "image_button":
+        case "image_button": //TODO
           formItem = (
             <ImageButton
               name={item.prop_name}
               label={item.field_name}
-              required={
-                typeof item.required === "number"
-                  ? item.required === 1
-                  : item.required
-              }
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
               description={item.description}
               value={value}
               error={error}
+              imgWidth={item.dimensions ? item.dimensions.width : 300}
+              imgHeight={item.dimensions ? item.dimensions.height : 200}
               onImageUpload={onImageUpload}
               onOpenImageDialog={onOpenImageDialog}
               disabled={disabled}
@@ -115,136 +88,99 @@ const CreateForm = ({
           break;
         case "checkbox":
           formItem = (
-            <FormControlLabel
-              control={
-                <Checkbox
-                  name={item.prop_name}
-                  checked={
-                    typeof value === "string"
-                      ? true
-                      : typeof value === "number"
-                      ? value === 1
-                      : value
-                  }
-                  onChange={(e) => onChangeHandler(e, "checkbox")}
-                  disabled={disabled}
-                />
-              }
+            <InputCheckbox
+              name={item.prop_name}
+              value={typeof value === "string" ? true : typeof value === "number" ? value === 1 : value}
+              onChange={(e) => onChangeHandler(e, "checkbox")}
+              disabled={disabled}
               label={item.field_name}
             />
           );
           break;
         case "radio":
           formItem = (
-            <FormControlLabel
-              value=""
-              control={<Radio disabled={disabled} />}
+            <InputRadio
+              name={item.prop_name}
+              value={typeof value === "string" ? true : typeof value === "number" ? value === 1 : value}
+              onChange={(e) => onChangeHandler(e, "radio")}
+              disabled={disabled}
               label={item.field_name}
             />
           );
           break;
         case "switch":
           formItem = (
-            <FormControlLabel
-              sx={{ ml: "0rem" }}
-              control={
-                <Switch
-                  name={item.prop_name}
-                  checked={
-                    typeof value === "string"
-                      ? true
-                      : typeof value === "number"
-                      ? value === 1
-                      : value
-                  }
-                  onChange={(e) => onChangeHandler(e, "switch")}
-                  disabled={disabled}
-                />
-              }
+            <InputSwitch
               label={item.field_name}
+              name={item.prop_name}
+              value={typeof value === "string" ? true : typeof value === "number" ? value === 1 : value}
+              onChange={(e) => onChangeHandler(e, "switch")}
+              disabled={disabled}
             />
           );
           break;
         case "select":
           formItem = (
-            <FormControl fullWidth size="small">
-              <FormLabel
-                required={
-                  typeof item.required === "number"
-                    ? item.required === 1
-                    : item.required
-                }
-                disabled={disabled}
-              >
-                {item.field_name}
-              </FormLabel>
-              <Select
-                labelId={`select-label-${item.field_name}`}
-                id={`select-label-${item.field_name}`}
-                name={item.prop_name}
-                value={value}
-                label={item.field_name}
-                onChange={onInputChangeHandler}
-                disabled={disabled}
-              >
-                {Array.isArray(item.options) &&
-                  item.options.map((itemUnit, index) => (
-                    <MenuItem
-                      key={itemUnit.id}
-                      value={itemUnit.id}
-                      selected={itemUnit.id === inputValue}
-                    >
-                      {itemUnit.name}
-                    </MenuItem>
-                  ))}
-              </Select>
-            </FormControl>
+            <InputSelect
+              label={item.field_name}
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
+              name={item.prop_name}
+              disabled={disabled}
+              error={error}
+              value={value}
+              onChange={onInputChangeHandler}
+              options={item.options}
+              description={item.description}
+              fillFromApi={item.fillFromApi}
+              usePropName={item.usePropName}
+              queryString={queryString}
+            />
           );
           break;
         case "textarea":
           formItem = (
-            <Textarea
-              aria-label="minimum height"
-              minRows={3}
-              placeholder={item.field_name}
+            <InputText
               name={item.prop_name}
-              onChange={onChangeHandler}
+              label={item.field_name}
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
+              description={item.description}
               value={value}
+              error={error}
+              onChange={onChangeHandler}
               disabled={disabled}
-              style={{ width: "100%" }}
             />
           );
           break;
         case "date_time":
           formItem = (
-            <BasicDateTimePicker
-              value={value}
-              label={item.field_name}
+            <InputDateTime
               name={item.prop_name}
-              onChangeHandler={onChangeHandler}
+              label={item.field_name}
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
+              description={item.description}
+              value={value}
+              error={error}
+              onChange={onChangeHandler}
               disabled={disabled}
             />
           );
           break;
         case "date":
           formItem = (
-            <BasicDatePicker
-              value={value}
-              label={item.field_name}
+            <InputDate
               name={item.prop_name}
-              onChangeHandler={onChangeHandler}
+              label={item.field_name}
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
+              description={item.description}
+              value={value}
+              error={error}
+              onChange={onChangeHandler}
               disabled={disabled}
             />
           );
           break;
-        case "MultipleImages":
-          formItem = (
-            <InputMultipleImages
-              list={Array.isArray(value) ? value : []}
-              name={item.prop_name}
-              onChangeHandler={onChangeHandler}
-            />
-          );
+        case "MultipleImages": //TODO
+          formItem = <InputMultipleImages list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} />;
           break;
 
         default:

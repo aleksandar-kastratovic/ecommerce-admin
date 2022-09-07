@@ -10,6 +10,7 @@ import styles from "./BasicDateTimePicker.module.scss";
 const BasicDateTimePicker = ({
   value = null,
   label = "",
+  error = null,
   name = "",
   onChangeHandler = () => {},
 }) => {

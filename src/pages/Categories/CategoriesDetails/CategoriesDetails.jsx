@@ -1,139 +1,106 @@
-import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
-
-import DetailsList from "./DetailsList";
 import { toast } from "react-toastify";
-import listData from "./DetailsListData.json";
-import TwoColumnDetails from "../../../components/shared/Layout/Details/TwoColumnDetails/TwoColumnDetails";
-import Form from "../../../components/shared/Form/Form";
 import useAPI from "../../../api/api";
+import Form from "../../../components/shared/Form/Form";
+import List from "../../../components/shared/ListAdder/List";
 
-import styles from "./GroupDetails.module.scss";
+import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
+import LoadingForm from "../../../components/shared/Loading/LoadingForm";
+
 import formFields from "./formFields.json";
 
 const CategoriesDetails = () => {
   const { gid, cid } = useParams();
-  const navigate = useNavigate();
-  const [selected, setSelected] = useState("info");
-  const [detailsList, setDetailsList] = useState(listData);
-
   const init = {
     id: null,
-    id_category_product_groups: 0,
-    parent_id: null,
-    slug: "",
-    name: "",
-    order: 0,
-    active: 1,
+    field_type: null,
+    field_is_multiple: false,
+    field_description: null,
+    slug: null,
+    name: null,
+    int_value: null,
+    text_value: null,
+    datetime_value: null,
+    title: null,
+    subtitle: null,
+    description: null,
+    image: null,
+    button: null,
+    target: null,
+    url: null,
+    active_from: null,
+    active_to: null,
+    status: "on",
   };
-
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
   const api = useAPI();
 
-  const handleBackToList = () => {
-    navigate(-1);
-  };
-
-  const handleSelectInDetails = (module, slug) => {
-    if (cid !== "new") {
-      setSelected(slug);
-    }
-  };
-
-  const onSubmit = (data) => {
+  const handleSubmit = (data) => {
     api
-      .post(`admin/category_product/categories/`, data)
+      .post("admin/category_product/categories/", { ...data, id_category_product_groups: gid })
       .then((response) => {
+        setData(response?.payload);
         toast.success("Uspešno");
-        if (cid === "new") navigate(-1);
+      })
+      .catch((error) => {
+        console.warn(error);
+        toast.warning("Greška");
+      });
+  };
+
+  const handleData = async () => {
+    setIsLoading(true);
+    await api
+      .get(`admin/category_product/categories/${cid}`)
+      .then((response) => {
         setData(response?.payload);
       })
       .catch((error) => {
         console.warn(error);
       });
+    setIsLoading(false);
   };
 
   useEffect(() => {
-    if (cid !== "new") {
-      api
-        .get(`admin/category_product/categories/${gid}/${cid}`)
-        .then((response) => {
-          setData(response?.payload);
-        })
-        .catch((error) => {
-          console.warn(error);
-        });
-    }
+    handleData();
   }, []);
 
-  const getDisplayed = () => {
-    switch (selected) {
-      case "info":
-        return (
-          <Form
-            formFields={formFields}
-            initialData={data}
-            onSubmit={onSubmit}
-          />
-        );
+  const fields = [
+    {
+      id: 1,
+      name: "Osnovno",
+      icon: "settings",
+      disabled: false,
+      component: (
+        <div>
+          {!isLoading ? (
+            <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}`} />
+          ) : (
+            <LoadingForm fields={formFields.length} />
+          )}
+        </div>
+      ),
+    },
+    {
+      id: 2,
+      name: "Seo",
+      icon: "settings",
+      disabled: false,
+      component: <div>Seo</div>,
+    },
+    {
+      id: 3,
+      name: "Specifikacija",
+      icon: "settings",
+      disabled: false,
+      component: <div>Specifikacija</div>,
+    },
+  ];
 
-      default:
-        return <p>Došlo je do greške! Molimo pokušajte kasnije.</p>;
-    }
-  };
-
-  return (
-    <>
-      <Box className={styles.details}>
-        <DetailsBasic
-          handleBackToList={handleBackToList}
-          list={
-            <DetailsList
-              selected={selected}
-              detailsList={detailsList}
-              handleSelectInDetails={handleSelectInDetails}
-              isLoadingList={false}
-              isErrorList={false}
-            />
-          }
-          main={
-            <TwoColumnDetails
-              middle={
-                <>
-                  {!isLoading ? (
-                    getDisplayed()
-                  ) : (
-                    <Stack spacing={1}>
-                      <Skeleton variant="text" height={60} />
-                      <Skeleton variant="text" height={60} />
-                      <Stack spacing={1}>
-                        <Skeleton variant="text" />
-                        <Skeleton variant="circular" width={40} height={40} />
-                        <Skeleton
-                          variant="rectangular"
-                          width={210}
-                          height={118}
-                        />
-                      </Stack>
-                      <Skeleton variant="text" height={60} />
-                    </Stack>
-                  )}
-                </>
-              }
-              hasButton={false}
-              buttonText="Sacuvaj"
-            />
-          }
-        />
-      </Box>
-    </>
-  );
+  return <DetailsPage title={cid === "new" ? "Unos nove kategorije" : data?.name} fields={cid !== "new" ? fields : [fields[0]]} />;
 };
 
 export default CategoriesDetails;

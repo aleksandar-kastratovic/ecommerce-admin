@@ -4,8 +4,8 @@ import { Icon } from "@mui/material";
 
 export const getComparator = (order, orderBy) => {
   return order === "desc"
-    ? (a, b) => descendingComparator(a, b, orderBy)
-    : (a, b) => -descendingComparator(a, b, orderBy);
+    ? (a, b) => -descendingComparator(a, b, orderBy)
+    : (a, b) => descendingComparator(a, b, orderBy);
 };
 
 const descendingComparator = (a, b, orderBy) => {
@@ -30,6 +30,8 @@ export const displayData = (value, input_type) => {
             : ""}
         </>
       );
+    case "image":
+      return <img src={value} height="70px" />;
     case "input":
     default:
       return value;

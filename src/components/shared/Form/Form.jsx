@@ -9,12 +9,7 @@ import { formatDate, formatDateTime } from "../../../helpers/dateFormat";
 import ImageDialog from "../Dialogs/ImageDialog";
 import { repackToSend, isUrlValid } from "./util";
 
-const Form = ({
-  formFields = [],
-  initialData = {},
-  onSubmit = () => {},
-  cancelButton = true,
-}) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => {}, cancelButton = true, queryString = "" }) => {
   const navigate = useNavigate();
   const [data, setData] = useState(initialData);
   const [inputsError, setInputsError] = useState([]);
@@ -22,13 +17,17 @@ const Form = ({
     show: false,
     image: null,
     label: "",
+    width: 300,
+    height: 200,
     name: "",
   });
 
-  const submitHandler = () => {
+  const submitHandler = (event) => {
+    event.preventDefault && event.preventDefault();
+
     const errors = {};
     for (const field of formFields) {
-      if (data[field.prop_name] === "" && field.required) {
+      if ((data[field.prop_name] === "" || data[field.prop_name] === null) && field.required) {
         errors[field.prop_name] = {
           content: "Polje je obavezno, molim Vas unesite vrednost.",
         };
@@ -47,6 +46,10 @@ const Form = ({
     } else {
       setData({ ...data, [target.name]: target.value });
     }
+    setInputsError((inputsError) => {
+      delete inputsError[target.name];
+      return inputsError;
+    });
   };
 
   const formImageUpload = useCallback(
@@ -66,15 +69,8 @@ const Form = ({
     [data]
   );
 
-  const onOpenImageDialog = (img, label, imageName) => {
+  const onOpenImageDialog = (img, label, imageName, width, height) => {
     const found = data[imageName];
-
-    // If the image is a type of URL it means that user still did not upload new image,
-    // but if it is not type of URL it means that user uploaded new image
-    // Additionally, if this solution is not reliable, new flag state can be introduced for example
-    // type boolean
-    // const [newImageUploaded, setNewImageUploaded] = useState(false)
-    // when user uploads a new image it can be set to true
     const checkImage = isUrlValid(img);
 
     if (checkImage) {
@@ -82,14 +78,20 @@ const Form = ({
         show: true,
         image: found,
         label: label,
+        width: width,
+        height: height,
         name: imageName,
+        showDimensions: false,
       });
     } else {
       setOpenImageDialog({
         show: true,
         image: img,
         label: label,
+        width: width,
+        height: height,
         name: imageName,
+        showDimensions: false,
       });
     }
   };
@@ -103,7 +105,7 @@ const Form = ({
   };
 
   const handleDeleteImage = (imageName) => {
-    setData({ ...data, [imageName]: "DELETE" });
+    setData({ ...data, [imageName]: null });
   };
 
   const setter = (event, result) => {
@@ -116,33 +118,27 @@ const Form = ({
 
   return (
     <>
-      <Box component="form" autoComplete="off">
-        {formFields &&
-          formFields
-            .filter(({ in_details }) => in_details)
-            .map((item, index) => {
-              return (
-                <CreateForm
-                  data-test-id="admin-form"
-                  onChangeHandler={formItemChangeHandler}
-                  onImageUpload={formImageUpload}
-                  onOpenImageDialog={onOpenImageDialog}
-                  item={item}
-                  key={index}
-                  error={inputsError[item.prop_name]}
-                  value={
-                    Array.isArray(item) && data
-                      ? data[item.prop_name]
-                      : data[item.prop_name]
-                  }
-                />
-              );
-            })}
+      <Box component="form" autoComplete="off" onSubmit={submitHandler}>
+        {(formFields ?? [])
+          .filter((field) => field.in_details)
+          .map((item, index) => {
+            return (
+              <CreateForm
+                data-test-id="admin-form"
+                onChangeHandler={formItemChangeHandler}
+                onImageUpload={formImageUpload}
+                onOpenImageDialog={onOpenImageDialog}
+                item={item}
+                key={index}
+                error={inputsError[item.prop_name] ? inputsError[item.prop_name].content : null}
+                value={Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name]}
+                queryString={queryString}
+              />
+            );
+          })}
         <Buttons>
-          {cancelButton && (
-            <Button label="Odustani" onClick={() => navigate(-1)} />
-          )}
-          <Button label="Sačuvaj" onClick={submitHandler} variant="contained" />
+          {cancelButton && <Button label="Odustani" onClick={() => navigate(-1)} />}
+          <Button type="submit" label="Sačuvaj" variant="contained" onClick={submitHandler} />
         </Buttons>
       </Box>
       <ImageDialog

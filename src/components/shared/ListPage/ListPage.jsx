@@ -1,16 +1,27 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-
 import ListTable from "../ListTable/ListTable";
 import ListTableToolbar from "../ListTable/ListTableToolbar";
 import DeleteDialog from "../Dialogs/DeleteDialog";
 import PageWrapper from "../Layout/PageWrapper/PageWrapper";
-
 import { flatten } from "lodash";
 import { useQuery } from "react-query";
 import useAPI from "../../../api/api";
 
+/**
+ *
+ * @param {string} apiUrl
+ * @param {?string} deleteUrl
+ * @param {string} title
+ * @param {FieldSpec[]} columnFields
+ * @param {[]} additionalButtons
+ * @param {boolean} showDatePicker
+ * @param {boolean} showNewButton
+ * @param {Object} filters - additional filters for list api
+ *
+ * @constructor
+ */
 const ListPage = ({
   apiUrl = "",
   deleteUrl = null,
@@ -18,17 +29,20 @@ const ListPage = ({
   columnFields = [],
   additionalButtons = [],
   showDatePicker = false,
-  showNewButton=true
+  showNewButton = true,
+  filters = {},
 }) => {
-  const api = useAPI();
+  // TODO Sorting is disabled as it does not work with pagination
+  columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
+  const api = useAPI();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const [listData, setListData] = useState();
   const [fieldsColumns, setFieldsColumns] = useState(columnFields);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
+  // Default delete URL is the same as the main URL
   deleteUrl = deleteUrl ?? apiUrl;
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
@@ -38,28 +52,12 @@ const ListPage = ({
   });
 
   const {
-    isSuccess,
     data: response,
     isLoading,
     isError,
-  } = useQuery(
-    ["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page],
-    () => api.list(apiUrl, { page: page, search: search })
-  );
+  } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page], () => api.list(apiUrl, { page: page, search: search, ...filters }));
 
-  useEffect(() => {
-    if (response) {
-      setListData(response?.payload);
-    }
-  }, [response]);
-
-  useEffect(() => {
-    if (response) {
-      setListData(response?.payload);
-    }
-  }, []);
-
-  const handleCreateNew = (e) => {
+  const handleCreateNew = () => {
     navigate("new");
   };
 
@@ -74,21 +72,17 @@ const ListPage = ({
   const handleConfirm = async () => {
     api
       .delete(`${deleteUrl}/${openDeleteDialog.id}`)
-      .then((response) => {
+      .then(() => {
         toast.success("Uspešno");
       })
-      .catch((error) => {
+      .catch(() => {
         toast.warning("Greška");
       });
     setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
   };
 
-  const handleCancel = (e) => {
+  const handleCancel = () => {
     setOpenDeleteDialog({ show: false, id: null });
-  };
-
-  const handleSearch = (e) => {
-    setSearch(e.target.value);
   };
 
   useEffect(() => {
@@ -103,56 +97,54 @@ const ListPage = ({
     }
   }, [isError]);
 
-  useEffect(() => {
-    setPage(1);
-  }, [search]);
+  // Update the search term and reset to the first page
+  const handleSearch = (value) => {
+    // TODO This always triggers two request as we are changing two states in a row
+    setPage(value);
+    setSearch(value);
+  };
 
   const handleActions = (id, type) => () => {
     switch (type) {
       case "edit":
         navigate(`${pathname}/${id}`);
         break;
+
       case "delete":
         setOpenDeleteDialog({ show: true, id: id, mutate: null });
         break;
+
       case "listGroup":
         navigate(`${pathname}/category/${id}`);
         break;
+
       case "categoryTree":
         navigate(`${pathname}/tree/${id}`);
         break;
+
       default:
         break;
     }
   };
 
-  const titleButtons = showNewButton?[
-    {
+  // Buttons in the page header
+  const titleButtons = [];
+  if (showNewButton) {
+    titleButtons.push({
       label: "Novi",
       action: handleCreateNew,
       variant: "contained",
       icon: "add",
-    },
-  ]:[];
+    });
+  }
 
   return (
     <>
-      <PageWrapper
-        title={title}
-        actions={[...additionalButtons, ...titleButtons]}
-      >
-        <ListTableToolbar
-          onColumnsChange={onColumnsChange}
-          fields={fieldsColumns}
-          onSearch={handleSearch}
-          searchValue={search}
-          showDatePicker={showDatePicker}
-        />
+      <PageWrapper title={title} actions={[...additionalButtons, ...titleButtons]}>
+        <ListTableToolbar onColumnsChange={onColumnsChange} fields={fieldsColumns} onSearch={handleSearch} showDatePicker={showDatePicker} />
         <ListTable
-          fields={flatten(fieldsColumns).filter(
-            ({ in_main_table }) => in_main_table
-          )}
-          listData={listData}
+          fields={flatten(fieldsColumns).filter((field) => field.in_main_table)}
+          listData={response?.payload}
           handleActions={handleActions}
           isLoading={isLoading}
           page={page}
@@ -160,14 +152,7 @@ const ListPage = ({
         />
       </PageWrapper>
 
-      <DeleteDialog
-        title="Brisanje"
-        description="Da li želite da obrišete?"
-        openDeleteDialog={openDeleteDialog}
-        setOpenDeleteDialog={setOpenDeleteDialog}
-        handleConfirm={handleConfirm}
-        handleCancel={handleCancel}
-      />
+      <DeleteDialog openDeleteDialog={openDeleteDialog} handleConfirm={handleConfirm} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );
 };

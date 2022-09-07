@@ -876,6 +876,14 @@ a[data-toggle="collapse"] {
   width: 14px;
 }
 
+.side-open #sidebar ul li a span {
+  font-size: 19px;
+  display: inline-block;
+  margin-right: 4px;
+  width: 19px;
+  margin-bottom: -4px;
+}
+
 #sidebar ul.components li a {
   font-size: 12px;
 }

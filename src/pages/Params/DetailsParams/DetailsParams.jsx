@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
 import List from "../../../components/shared/ListAdder/List";
@@ -15,6 +15,7 @@ import datetime from "./forms/datetime.json";
 import image from "./forms/image.json";
 import image_description from "./forms/image_description.json";
 import slug from "./forms/slug.json";
+import status from "./forms/status.json";
 
 const init = {
   id: null,
@@ -63,6 +64,8 @@ const ParamsDetails = () => {
   const { pid } = useParams();
   const [data, setData] = useState(init);
   const [list, setList] = useState([]);
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const api = useAPI();
 
@@ -71,8 +74,12 @@ const ParamsDetails = () => {
       .post(`admin/params/main/`, { ...init, ...data })
       .then((response) => {
         toast.success("Uspešno");
+        if (pid === "new") {
+          navigate(-1);
+        }
       })
       .catch((error) => {
+        toast.warning("Greška");
         console.warn(error);
       });
   };
@@ -81,8 +88,9 @@ const ParamsDetails = () => {
     setData(data);
   };
 
-  const handleGetData = () => {
-    api
+  const handleGetData = async () => {
+    setIsLoading(true);
+    await api
       .get(`admin/params/main/${pid}`)
       .then((response) => {
         setData(response?.payload);
@@ -90,11 +98,14 @@ const ParamsDetails = () => {
       .catch((error) => {
         console.warn(error);
       });
+    setIsLoading(false);
   };
+
   const handleGetList = () => {
     api
       .list(`admin/params/values/`, { id_param: pid })
       .then((response) => {
+        console.log(response?.payload?.items);
         setList(response?.payload?.items);
       })
       .catch((error) => {
@@ -115,12 +126,12 @@ const ParamsDetails = () => {
       });
   };
 
-  const handleListSubmit = (data) => {
-    api
+  const handleListSubmit = async (data) => {
+    await api
       .post("admin/params/values/", { ...data, id_params: pid })
       .then((response) => {
-        toast.success("Uspešno");
         handleGetList();
+        toast.success("Uspešno");
       })
       .catch((error) => {
         toast.warning("Greška");
@@ -166,14 +177,7 @@ const ParamsDetails = () => {
       name: "Osnovno",
       icon: "settings",
       disabled: false,
-      component: (
-        <ParamsForm
-          onSubmit={onSubmit}
-          data={data}
-          onChange={onChange}
-          subForm={getParamSubForm(true)}
-        />
-      ),
+      component: <ParamsForm onSubmit={onSubmit} data={data} onChange={onChange} subForm={getParamSubForm(true)} isLoading={isLoading} />,
     },
     {
       id: 2,
@@ -182,7 +186,7 @@ const ParamsDetails = () => {
       disabled: false,
       component: (
         <List
-          formFields={[slug, ...getParamSubForm(false)]}
+          formFields={[slug, ...getParamSubForm(false), status]}
           listFields={list}
           onSave={handleListSubmit}
           addFieldLabel={"Dodaj polje"}
@@ -193,12 +197,7 @@ const ParamsDetails = () => {
     },
   ];
 
-  return (
-    <DetailsPage
-      title="Detalji paramtera"
-      fields={data.field_is_multiple && pid !== "new" ? fields : [fields[0]]}
-    />
-  );
+  return <DetailsPage title={pid === "new" ? "Unos novog parametra" : data?.name} fields={data?.field_is_multiple && pid !== "new" ? fields : [fields[0]]} />;
 };
 
 export default ParamsDetails;

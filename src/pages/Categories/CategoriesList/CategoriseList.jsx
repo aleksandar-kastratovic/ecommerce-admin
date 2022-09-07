@@ -1,15 +1,28 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ListPage from "../../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 
 const CategoriesList = () => {
   const { gid } = useParams();
+  const navigate = useNavigate();
+
+  let buttons = [
+    {
+      id: 1,
+      label: "Grupe",
+      action: () => {
+        navigate("/categories");
+      },
+    },
+  ];
 
   return (
     <ListPage
-      apiUrl={`admin/category_product/categories/${gid}`}
+      apiUrl={`admin/category_product/categories`}
       title="Kategorije"
       columnFields={tblFields}
+      additionalButtons={buttons}
+      filters={{ id_category_product_group: gid }}
     />
   );
 };

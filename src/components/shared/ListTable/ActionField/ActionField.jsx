@@ -1,103 +1,67 @@
-import IconButton from "@mui/material/IconButton";
-import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
-import DeleteIcon from "@mui/icons-material/Delete";
-import { useEffect } from "react";
-import { useState } from "react";
-import FormActionButton from "../../FormActionButton/FormActionButton";
+import { Icon } from "@mui/material"
+import scss from "./ActionField.module.scss"
 
 /**
  * A standardized button with an optional icon.
  *
- * @param {"edit_preview_delete"} field_type Action type with all combination
+ * @param {string} fieldType Action type with all combination
+ * @param {bool} systemRequired Set to true to hide "Delete" button.
  * @param {function} handlePreview The callback to invoke when the preview button is clicked.
  * @param {function} handleDelete The callback to invoke when the delete button is clicked.
  * @param {function} handleEdit The callback to invoke when the edit button is clicked.
+ * @param {function} handleListGroup The callback to invoke when the edit button is clicked.
+ * @param {function} handleCategoryTree The callback to invoke when the edit button is clicked.
+ *
  * @return {JSX.Element}
  * @constructor
  */
-const ActionField = ({
-  field_type = "",
-  system_required = false,
-  handlePreview = () => {},
-  handleDelete = () => {},
-  handleEdit = () => {},
-  handleListGroup = () => {},
-  handleCategoryTree = () => {},
-}) => {
-  const [displayed, setDisplayed] = useState([]);
+const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree }) => {
 
-  const getDisplayed = () => {
-    let content = [];
-    let actions = field_type.split("_");
-    for (const action of actions) {
-      let button;
-      switch (action) {
-        case "edit":
-          button = (
-            <FormActionButton icon="edit" onClick={handleEdit} key={action} />
-          );
-          break;
-        case "preview":
-          button = (
-            <FormActionButton
-              icon="preview"
-              onClick={handlePreview}
-              key={action}
-            />
-          );
-          break;
-        case "delete":
-          if (system_required) {
-            button = null;
-          } else {
-            button = (
-              <FormActionButton
-                icon="delete"
-                onClick={handleDelete}
-                key={action}
-              />
-            );
-          }
-          break;
-        case "listGroup":
-          button = (
-            <FormActionButton
-              icon="list"
-              onClick={handleListGroup}
-              key={action}
-            />
-          );
-          break;
-        case "categoryTree":
-          button = (
-            <FormActionButton
-              icon="account_tree"
-              onClick={handleCategoryTree}
-              key={action}
-            />
-          );
-          break;
-        default:
-          button = null;
-          break;
-      }
-      content.push(button);
+    /**
+     * Parse action into button parameters.
+     *
+     * @param {string} action The name of the action.
+     *
+     * @return {(string|function)[]|null} Tuple of "icon" and the action for the onClick listener.
+     */
+    const parseButton = (action): ?[ string, function ] => {
+        switch (action) {
+            case "edit":
+                return [ "edit", handleEdit ]
+
+            case "preview":
+                return [ "preview", handlePreview ]
+
+            case "delete":
+                return !systemRequired
+                    ? [ "delete", handleDelete ]
+                    : null
+
+            case "listGroup":
+                return [ "list", handleListGroup ]
+
+            case "categoryTree":
+                return [ "account_tree", handleCategoryTree ]
+
+            default:
+                return null
+        }
     }
-    setDisplayed(content);
-  };
 
-  useEffect(() => {
-    getDisplayed();
-  }, []);
+    // Actions are joined with '_', extract them and make sure we can parse then into button parameters
+    const actions = fieldType.split("_")
+        .map(action => parseButton(action))
+        .filter(action => action)
 
-  return (
-    <>
-      {displayed.map((item) => {
-        return item;
-      })}
-    </>
-  );
-};
+    return (
+        <div className={scss.wrapper}>
+            {actions.map(button => (
+                <span key={button[0]} className={`${scss.button} ${scss[button[0]]}`} onClick={button[1]}>
+                    <Icon className={button[0]}>{button[0]}</Icon>
+                </span>
+            ))}
+        </div>
+    )
+}
 
-export default ActionField;
+export default ActionField

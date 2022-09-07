@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
+import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
 import useAPI from "../../../api/api";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import Form from "../../../components/shared/Form/Form";
@@ -12,6 +12,7 @@ import name from "../forms/name.json";
 import positionForm from "../forms/position.json";
 import image from "../forms/image.json";
 import image_description from "../forms/image_description.json";
+import status from "../forms/status.json";
 
 const DetailsBanners = ({}) => {
   const { B2BId } = useParams();
@@ -38,17 +39,11 @@ const DetailsBanners = ({}) => {
 
   const api = useAPI();
   const [data, setData] = useState(init);
-  const [positionField, setPositionField] = useState(positionForm);
   const [subFields, setSubFields] = useState([]);
 
-  const {
-    isSuccess,
-    data: response,
-    isLoading,
-    isError,
-  } = useQuery([], () => api.get(`admin/banners-b2b/main/${B2BId}`));
+  const { data: response, isLoading } = useQuery([], () => api.get(`admin/banners-b2b/main/${B2BId}`));
 
-  const saveData = async (data) => {
+  const saveData = (data) => {
     api
       .post(`admin/banners-b2b/main/`, data)
       .then((response) => {
@@ -66,21 +61,6 @@ const DetailsBanners = ({}) => {
   }, [response]);
 
   useEffect(() => {
-    const fillDDl = async () => {
-      await api
-        .get(`admin/banners-b2b/main/ddl/position`)
-        .then((response) => {
-          setPositionField({ ...positionField, options: response.payload });
-        })
-        .catch((error) => {
-          console.warn(error);
-        });
-    };
-
-    fillDDl();
-  }, []);
-
-  useEffect(() => {
     const getForm = async () => {
       let res;
       await api
@@ -92,18 +72,31 @@ const DetailsBanners = ({}) => {
           console.warn(error);
         });
       if (res) {
+        let dimensions = { width: res.width, height: res.height };
+        let fields;
+
         switch (res.type) {
           case "image":
-            setSubFields(image);
+            fields = image;
             break;
           case "image_description":
-            setSubFields(image_description);
+            fields = image_description;
             break;
 
           default:
-            setSubFields([]);
+            fields = [];
             break;
         }
+
+        let arr = [];
+        for (const item of fields) {
+          if (item.prop_name === "image") {
+            arr.push({ ...item, dimensions: dimensions });
+          } else {
+            arr.push(item);
+          }
+        }
+        setSubFields(arr);
       }
     };
     if (data && data.position !== null) {
@@ -112,29 +105,17 @@ const DetailsBanners = ({}) => {
   }, [data]);
 
   return (
-    <PageWrapper title="Unos novog banera" back={() => navigate(-1)}>
+    <FormWrapper title={B2BId == "new" ? "Unos novog banera" : data?.name} back={() => navigate(-1)}>
       {!isLoading ? (
         <>
-          <CreateForm
-            onChangeHandler={({ target }) =>
-              setData({ ...data, name: target.value })
-            }
-            item={name}
-            value={data ? data.name : ""}
-          />
-          <CreateForm
-            onChangeHandler={({ target }) =>
-              setData({ ...data, position: target.value })
-            }
-            item={positionField}
-            value={data ? data.position : ""}
-          />
-          <Form formFields={subFields} initialData={data} onSubmit={saveData} />
+          <CreateForm onChangeHandler={({ target }) => setData({ ...data, name: target.value })} item={name} value={data ? data.name : ""} />
+          <CreateForm onChangeHandler={({ target }) => setData({ ...data, position: target.value })} item={positionForm} value={data ? data.position : ""} />
+          <Form formFields={[...subFields, status]} initialData={data} onSubmit={saveData} />
         </>
       ) : (
         <LoadingForm fields={5} />
       )}
-    </PageWrapper>
+    </FormWrapper>
   );
 };
 

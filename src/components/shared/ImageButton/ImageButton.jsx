@@ -28,13 +28,14 @@ const ImageButton = ({
   description = "",
   value = "",
   error = "",
-
+  imgWidth = 300,
+  imgHeight = 200,
   onImageUpload = () => {},
   onOpenImageDialog = () => {},
 }) => {
   const [imageDimensions, setImageDimensions] = useState({
-    width: 0,
-    height: 0,
+    width: imgWidth ?? 0,
+    height: imgHeight ?? 0,
   });
   const [loadingImage, setLoadingImage] = useState(false);
   const [loaded, setLoaded] = useState(false);
@@ -69,14 +70,11 @@ const ImageButton = ({
     <>
       {value ? (
         <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={2} alignItems="center">
+          <Grid container spacing={2} alignItems="center" margin={0} padding={0}>
             <FormControl className={styles.formStyle}>
               <FormLabel required={required}>{label}</FormLabel>
-              <ButtonBase
-                focusRipple
-                className={styles.imageButtonStyled}
-                onClick={() => onOpenImageDialog(value, label, name)}
-              >
+              <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
+              <ButtonBase focusRipple className={styles.imageButtonStyled} onClick={() => onOpenImageDialog(value, label, name, imgWidth, imgHeight)}>
                 <span
                   style={{
                     backgroundImage: `url(${value})`,
@@ -85,8 +83,7 @@ const ImageButton = ({
                     right: 0,
                     top: 0,
                     bottom: 0,
-                    backgroundSize:
-                      imageDimensions.width > 200 ? "cover" : "contain",
+                    backgroundSize: imageDimensions.width > 200 ? "cover" : "contain",
                     backgroundRepeat: "no-repeat",
                     backgroundPosition: "center 40%",
                   }}
@@ -117,36 +114,29 @@ const ImageButton = ({
           </Grid>
         </Box>
       ) : (
-        <Box sx={{ flexGrow: 1 }}>
-          <Grid container spacing={2} alignItems="center">
-            <Grid item xs={8} md={8}>
-              <FormControl className={styles.formStyle}>
+        <Box>
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            margin={0}
+            sx={{
+              "&>.MuiGrid-item": { padding: 0 },
+            }}
+          >
+            <Grid item xs={8} md={8} margin={0} padding={0} sx={{ padding: 0 }}>
+              <FormControl error={error !== null}>
                 <FormLabel required={required}>{label}</FormLabel>
+                <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
                 <Typography variant="caption" display="block" gutterBottom>
                   <br />
                   {description}
                 </Typography>
                 <label htmlFor={label}>
-                  <Input
-                    multiple
-                    name={name}
-                    accept="image/*"
-                    id={label}
-                    onChange={(e) => onImageUpload(e)}
-                    type="file"
-                    sx={{ display: "none" }}
-                  />
-                  <Button
-                    variant="contained"
-                    component="span"
-                    className={styles.buttonStyle}
-                  >
+                  <Input multiple name={name} accept="image/*" id={label} onChange={(e) => onImageUpload(e)} type="file" sx={{ display: "none" }} />
+                  <Button variant="contained" component="span" className={styles.buttonStyle}>
                     <Box className={styles.boxStyle}>
-                      <Typography
-                        variant="caption"
-                        display="block"
-                        gutterBottom
-                      />
+                      <Typography variant="caption" display="block" gutterBottom />
                       <ImageOutlinedIcon className={styles.imageOutlinedIcon} />
                     </Box>
                     <Box className={styles.avatarBoxStyle}>
@@ -154,12 +144,7 @@ const ImageButton = ({
                         <Avatar sx={buttonSx}>
                           <DriveFolderUploadRoundedIcon />
                         </Avatar>
-                        {loadingImage && (
-                          <CircularProgress
-                            className={styles.loadingImage}
-                            size={50}
-                          />
-                        )}
+                        {loadingImage && <CircularProgress className={styles.loadingImage} size={50} />}
                       </Box>
                       <Box sx={{ m: 1, position: "relative" }}>
                         <Chip label={label} sx={buttonSx} />
@@ -167,21 +152,18 @@ const ImageButton = ({
                     </Box>
                   </Button>
                 </label>
-                <FormHelperText>
-                  Maximum file size: 2MB, Allowed types: JPG, GIF, PNG, ICO,
-                  APNG, Not all browsers support these formats
-                </FormHelperText>
+                <FormHelperText>Maximum file size: 2MB, Allowed types: JPG, GIF, PNG, ICO, APNG, Not all browsers support these formats</FormHelperText>
               </FormControl>
             </Grid>
-            <Grid item xs={4} md={4}>
-              <Box>
-                {error && (
-                  <Stack sx={{ width: "100%" }}>
-                    <Alert severity="error">{error}</Alert>
-                  </Stack>
-                )}
-              </Box>
-            </Grid>
+          </Grid>
+          <Grid item xs={4} md={4} margin={0} padding={0}>
+            <Box>
+              {error && (
+                <Stack sx={{ width: "100%" }}>
+                  <Alert severity="error">{error}</Alert>
+                </Stack>
+              )}
+            </Box>
           </Grid>
         </Box>
       )}

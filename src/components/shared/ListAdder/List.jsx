@@ -37,14 +37,8 @@ const List = ({
   };
 
   useEffect(() => {
-    if (load) {
-      setFields(listFields);
-    }
-  }, [load, listFields]);
-
-  useEffect(() => {
-    setLoad(true);
-  }, []);
+    setFields(listFields);
+  }, [listFields]);
 
   return (
     <div className={styles.list}>

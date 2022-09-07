@@ -33,19 +33,16 @@ const ApplicationRouter = () => {
   // Authorized users
   const authorizedRoutes = (
     <>
-      <Route path="" exact element={<Navigate replace to={defaultPath} />} />
-      <Route path="/" exact element={<Navigate replace to={defaultPath} />} />
+      <Route key="" path="" exact element={<Navigate replace to={defaultPath} />} />
+      <Route key="/" path="/" exact element={<Navigate replace to={defaultPath} />} />
       {authContext.userScreens?.map(userScreen => makeRoute(availableScreens[userScreen.screen_code]))}
     </>
   )
 
   return (
     <Routes>
-
       {authContext?.isLoggedIn ? authorizedRoutes : unauthorizedRoutes}
-
       <Route path="*" element={<Error404 />} />
-
     </Routes>
   )
 }

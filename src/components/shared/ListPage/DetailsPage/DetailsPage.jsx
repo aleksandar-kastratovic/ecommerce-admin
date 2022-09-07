@@ -1,61 +1,50 @@
-import { Box } from "@mui/material";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import PageWrapper from "../../Layout/PageWrapper/PageWrapper";
-import DetailsList from "./DetailsList";
+import { Box } from "@mui/material"
+import { useState } from "react"
+import PageWrapper from "../../Layout/PageWrapper/PageWrapper"
+import DetailsList from "./DetailsList"
 
-import styles from "./DetailsPage.module.scss";
+import styles from "./DetailsPage.module.scss"
 
-const DetailsPage = ({
-  title = "",
-  fields = [],
-  components = {},
-  additionalButtons = [],
-}) => {
-  const [selected, setSelected] = useState(fields[0].id ?? null);
+/**
+ * Render multiple panels.
+ *
+ * @param {string} title The title for the page.
+ * @param {PanelSpec[]} fields The panels to render.
+ * @param {[]} additionalButtons The additional buttons for the header.
+ *
+ * @return {JSX.Element}
+ * @constructor
+ */
+const DetailsPage = ({ title, fields, additionalButtons = [] }) => {
 
-  const navigate = useNavigate();
+    // Make sure all fields have and id
+    fields = fields.map((field, index) => ({ ...field, id: field.id ?? index }))
 
-  const handleChange = (value) => {
-    setSelected(value);
-  };
+    const [ selected, setSelected ] = useState(fields[0].id ?? null)
 
-  const handleBack = () => {
-    navigate(-1);
-  };
+    return (
+        <PageWrapper title={title} back={true} actions={additionalButtons}>
+            <Box className={styles.details}>
+                <Box className={styles.list}>
+                    <DetailsList
+                        fields={fields}
+                        handleSelect={field => !field.disabled && setSelected(field.id)}
+                        selected={selected}
+                    />
+                </Box>
+                {fields.map((field) => {
+                    if (field.id === selected) {
+                        return (
+                            <Box className={styles.main} key={field.id}>
+                                {field.component}
+                            </Box>
+                        )
+                    }
+                    return null
+                })}
+            </Box>
+        </PageWrapper>
+    )
+}
 
-  const getFieldComponent = () => {
-    for (const item of fields) {
-      if (item.id === selected) {
-        return item.component;
-      }
-    }
-    return null;
-  };
-
-  return (
-    <PageWrapper title={title} back={handleBack} actions={additionalButtons}>
-      <Box className={styles.details}>
-        <Box className={styles.list}>
-          <DetailsList
-            fields={fields}
-            handleSelect={handleChange}
-            selected={selected}
-          />
-        </Box>
-        {fields.map((field) => {
-          if (field.id === selected) {
-            return (
-              <Box className={styles.main} key={field.id}>
-                {field.component}
-              </Box>
-            );
-          }
-          return null;
-        })}
-      </Box>
-    </PageWrapper>
-  );
-};
-
-export default DetailsPage;
+export default DetailsPage
