@@ -27,7 +27,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
 
         const errors = {}
         for (const field of formFields) {
-            if (field.required && (data[field.prop_name] === "" || data[field.prop_name] === null)) {
+            if (field.required && (data[field.prop_name] === "" || data[field.prop_name] == null)) {
                 errors[field.prop_name] = {
                     content: "Polje je obavezno, molim Vas unesite vrednost."
                 }

@@ -20,6 +20,8 @@
         "name": "Option1"
       }
     ],
-    "input_type": "select"
+    "input_type": "select",
+    "fillFromApi": "admin/product-item-specifications/setgroup/ddl",
+    "usePropName": true
   }
 ]

@@ -64,3 +64,9 @@ pipelines:
           <<: *execute
           name: Akt
           deployment: akt
+    
+    prod-maximon:
+      - step:
+          <<: *execute
+          name: Maximon
+          deployment: maximon
