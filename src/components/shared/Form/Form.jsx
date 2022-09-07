@@ -138,7 +138,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                     })}
                 <Buttons>
                     {cancelButton && <Button label="Odustani" onClick={() => navigate(-1)} />}
-                    <Button type="submit" label="Sačuvaj" variant="contained" onClick={submitHandler} />
+                    <Button type="submit" label="Sačuvaj" variant="contained" />
                 </Buttons>
             </Box>
             <ImageDialog
