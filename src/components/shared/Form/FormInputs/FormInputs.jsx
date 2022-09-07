@@ -37,6 +37,7 @@ export const InputWrapper = ({ children = null, label, required, disabled, margi
  * @param {string} error Error message
  * @param {string} name Input field name
  * @param {string} value Field value
+ * @param {string} type The type of the input.
  * @param {"none"|"dense"|"normal"} margin The margin to use for FormControl.
  * @param {function} onChange Change handler for the field
  * @param {string} description Field description
@@ -45,10 +46,11 @@ export const InputWrapper = ({ children = null, label, required, disabled, margi
  * @return {JSX.Element}
  */
 
-export const InputInput = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, placeholder }) => {
+export const InputInput = ({ label, required, disabled, name, value, type = "text", error = null, margin = "dense", onChange = () => null, description, placeholder }) => {
     return (
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
             <TextField
+                type={type}
                 name={name}
                 value={value}
                 onChange={onChange}

@@ -1,9 +1,9 @@
 import { useEffect } from "react"
 import { useState } from "react"
 import { useParams } from "react-router-dom"
+import { toast } from "react-toastify"
 import useAPI from "../../../api/api"
 import NoteBox from "../../../components/shared/NoteBox/NoteBox"
-import Todo from "../../../components/shared/Todo/Todo"
 import { NEW } from "../../../helpers/const"
 import { updateStateKey } from "../../../helpers/data"
 import IconList from "../../../helpers/icons"
@@ -11,6 +11,7 @@ import DetailsPage from "../../../components/shared/ListPage/DetailsPage/Details
 import BasicPanel from "./Panels/BasicPanel"
 import BrandsPanel from "./Panels/BrandsPanel"
 import CategoriesPanel from "./Panels/CategoriesPanel"
+import TiersPanel from "./Panels/TiersPanel"
 
 const B2BRebatesDetails = () => {
     const api = useAPI()
@@ -19,11 +20,9 @@ const B2BRebatesDetails = () => {
     const [ data, setData ] = useState({
         rebate    : null,
         brands    : null,
-        categories: null
+        categories: null,
+        tiers     : null
     })
-
-    // Set the base API
-    const apiPath = "/admin/rebates"
 
     // Check if this is a new record, or we are modifying an existing one
     const isNew = params["rebateId"] === NEW
@@ -33,7 +32,7 @@ const B2BRebatesDetails = () => {
     useEffect(() => {
 
         // Rebate
-        api.get(`${apiPath}/${rebateId ?? 0}`)
+        api.get(`/admin/rebates/${rebateId ?? 0}`)
             .then(response => updateStateKey(setData, "rebate", response?.payload))
             .catch(setError)
 
@@ -47,11 +46,40 @@ const B2BRebatesDetails = () => {
             .then(response => updateStateKey(setData, "brands", response?.payload.items))
             .catch(setError)
 
+        // Tiers
+        api.list(`/admin/rebates/tiers`, { limit: -1 })
+            .then(response => updateStateKey(setData, "tiers", response?.payload.items))
+            .catch(setError)
+
     }, [ rebateId ])
 
     // Handle errors
     if (error) {
         return <NoteBox message={`Error: ${error}`} />
+    }
+
+    // Update from the basic table
+    const updateBasic = rebate =>
+        submit({
+            ...data.rebate,
+            id         : rebate.id,
+            name       : rebate.name,
+            description: rebate.description
+        })
+
+    // Send to API
+    const submit = rebate => {
+        updateStateKey(setData, "rebate", rebate)
+        api
+            .post("/admin/rebates", rebate)
+            .then(() => {
+                toast.success("Uspešno sačuvano")
+
+            })
+            .catch((error) => {
+                toast.warning("Došlo je do greške")
+                console.warn(error)
+            })
     }
 
     // The panels for the form
@@ -60,7 +88,7 @@ const B2BRebatesDetails = () => {
             name     : "Rabat",
             icon     : IconList.percent,
             loading  : data.rebate,
-            component: <BasicPanel data={data.rebate} updateData={rebate => setData({ ...data, rebate })} />
+            component: <BasicPanel data={data.rebate} updateData={updateBasic} />
         },
         {
             name     : "Kategorije",
@@ -69,7 +97,7 @@ const B2BRebatesDetails = () => {
             component: <CategoriesPanel
                 rebate={data.rebate}
                 categories={data.categories}
-                onUpdate={categories => updateStateKey(setData, "rebate", { ...data.rebate, categories })} />
+                onUpdate={categories => submit({ ...data.rebate, categories })} />
         },
         {
             name     : "Brendovi",
@@ -78,22 +106,25 @@ const B2BRebatesDetails = () => {
             component: <BrandsPanel
                 rebate={data.rebate}
                 brands={data.brands}
-                onUpdate={brands => updateStateKey(setData, "rebate", { ...data.rebate, brands })} />
+                onUpdate={brands => submit({ ...data.rebate, brands })} />
         },
         {
             name     : "Iznosi",
             icon     : IconList.bookmarks,
             enabled  : data.rebate?.id,
-            component: <Todo message="Iznosi" />
+            component: <TiersPanel
+                rebate={data.rebate}
+                tiers={data.tiers}
+                onUpdate={tiers => submit({ ...data.rebate, tiers })} />
         }
     ]
 
     // The title of the page
-    const title = data.rebate?.name
-        ? `Izmena: "${data.rebate?.name}"`
+    const title = !isNew
+        ? `Izmena: ${data.rebate?.name ? `"${data.rebate.name}"` : ""}`
         : "Novi unos"
 
-    return <DetailsPage title={title} fields={panels} ready={[ data.rebate, data.brands, data.categories ]} />
+    return <DetailsPage title={title} fields={panels} ready={[ data.rebate, data.tiers, data.categories, data.categories ]} />
 }
 
 export default B2BRebatesDetails
