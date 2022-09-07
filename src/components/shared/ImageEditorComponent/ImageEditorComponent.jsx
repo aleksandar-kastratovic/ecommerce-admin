@@ -56,16 +56,7 @@ const ImageEditorComponent = ({
 
   const showCroppedImage = useCallback(async () => {
     try {
-      const croppedImg = await getCroppedImg(
-        croppedImage,
-        {
-          ...croppedAreaPixels,
-          width: cropSize.width,
-          height: cropSize.height,
-        },
-        rotation,
-        zoom
-      );
+      const croppedImg = await getCroppedImg(croppedImage, croppedAreaPixels, rotation, { width: cropSize.width, height: cropSize.height });
       handleSave(croppedImg);
     } catch (e) {
       console.error(e);
@@ -89,7 +80,7 @@ const ImageEditorComponent = ({
           maxZoom={5}
           rotation={rotation}
           onRotationChange={setRotation}
-          cropSize={{ width: cropSize.width, height: cropSize.height }}
+          aspect={cropSize.width / cropSize.height}
           zoomWithScroll
         />
       </div>
@@ -139,9 +130,7 @@ const ImageEditorComponent = ({
                   min={50}
                   max={900}
                   step={10}
-                  value={
-                    typeof cropSize.width === "number" ? cropSize.width : 0
-                  }
+                  value={typeof cropSize.width === "number" ? cropSize.width : 0}
                   onChange={(e, width) =>
                     setCropSize({
                       ...cropSize,
@@ -159,9 +148,7 @@ const ImageEditorComponent = ({
                   min={50}
                   max={400}
                   step={10}
-                  value={
-                    typeof cropSize.height === "number" ? cropSize.height : 0
-                  }
+                  value={typeof cropSize.height === "number" ? cropSize.height : 0}
                   onChange={(e, height) =>
                     setCropSize({
                       ...cropSize,
@@ -171,13 +158,7 @@ const ImageEditorComponent = ({
                 />
               </Box>
               <FormControlLabel
-                control={
-                  <Switch
-                    checked={roundCrop}
-                    onChange={(event) => setRoundCrop(event.target.checked)}
-                    inputProps={{ "aria-label": "controlled" }}
-                  />
-                }
+                control={<Switch checked={roundCrop} onChange={(event) => setRoundCrop(event.target.checked)} inputProps={{ "aria-label": "controlled" }} />}
                 label="Okrugla oblast"
               />
             </Stack>
@@ -190,20 +171,10 @@ const ImageEditorComponent = ({
             spacing={2}
             // className={styles.btnGroup}
           >
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={showCroppedImage}
-              startIcon={<CheckIcon />}
-            >
+            <Button variant="outlined" color="primary" onClick={showCroppedImage} startIcon={<CheckIcon />}>
               Sačuvaj
             </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={handleCloseEditMode}
-              startIcon={<CancelOutlinedIcon />}
-            >
+            <Button variant="outlined" color="secondary" onClick={handleCloseEditMode} startIcon={<CancelOutlinedIcon />}>
               Otkaži
             </Button>
           </Stack>
