@@ -27,12 +27,13 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => {}, cancelBu
 
     const errors = {};
     for (const field of formFields) {
-      if ((data[field.prop_name] === "" || data[field.prop_name] === null) && field.required) {
+      if ((data[field.prop_name] === "" || data[field.prop_name] === null || data[field.prop_name] === undefined) && field.required) {
         errors[field.prop_name] = {
           content: "Polje je obavezno, molim Vas unesite vrednost.",
         };
       }
     }
+
     isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
   };
 
