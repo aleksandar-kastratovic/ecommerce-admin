@@ -1,142 +1,68 @@
-import { Box } from "@mui/material";
-import { useEffect } from "react";
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
-
-import DetailsList from "./DetailsList";
+import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import listData from "./DetailsListData.json";
-import TwoColumnDetails from "../../../components/shared/Layout/Details/TwoColumnDetails/TwoColumnDetails";
 import Form from "../../../components/shared/Form/Form";
+import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import useAPI from "../../../api/api";
+import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
 
-import styles from "./GroupDetails.module.scss";
-import formFields from "./formFields.json";
+import fields from "./formFields.json";
 
 const GroupDetails = () => {
   const { gid } = useParams();
-  const navigate = useNavigate();
-  const [selected, setSelected] = useState("info");
-  const [detailsList, setDetailsList] = useState(listData);
-
+  const api = useAPI();
   const init = {
     id: null,
-    id_country: 0,
-    id_group: 0,
-    slug: "",
-    name: "",
-    system: "",
-    description: "",
-    order: 0,
-    active: 0,
+    slug: null,
+    name: null,
+    display_name: null,
+    zip_code: null,
+    id_municipality: null,
+    id_country: null,
+    delivery_center: null,
+    delivery_days: null,
+    source: null,
+    id_source: null,
+    status: null,
   };
-
+  const navigate = useNavigate();
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
-  const api = useAPI();
 
-  const handleBackToList = () => {
-    navigate(-1);
-  };
-
-  const handleSelectInDetails = (module, slug) => {
-    if (gid !== "new") {
-      setSelected(slug);
-    }
-  };
-
-  const onSubmit = (data) => {
-    api
-      .post(`admin/category_product/groups/`, data)
+  const handleData = async () => {
+    setIsLoading(true);
+    await api
+      .get(`admin/category_product/groups/${gid}`)
       .then((response) => {
-        toast.success("Uspešno");
-        if (gid === "new") navigate(-1);
         setData(response?.payload);
       })
       .catch((error) => {
         console.warn(error);
       });
+    setIsLoading(false);
+  };
+
+  const saveData = async (data) => {
+    api
+      .post(`admin/category_product/groups/`, data)
+      .then((response) => {
+        setData(response?.payload);
+        toast.success(`Uspešno`);
+      })
+      .catch((error) => {
+        console.warn(error);
+        toast.warning("Greška");
+      });
   };
 
   useEffect(() => {
-    if (gid !== "new") {
-      api
-        .get(`admin/category_product/groups/${gid}`)
-        .then((response) => {
-          setData(response?.payload);
-        })
-        .catch((error) => {
-          console.warn(error);
-        });
-    }
+    handleData();
   }, []);
 
-  useEffect(() => {}, [selected]);
-
-  const getDisplayed = () => {
-    switch (selected) {
-      case "info":
-        return (
-          <Form
-            formFields={formFields}
-            initialData={data}
-            onSubmit={onSubmit}
-          />
-        );
-
-      default:
-        return <p>Došlo je do greške! Molimo pokušajte kasnije.</p>;
-    }
-  };
-
   return (
-    <>
-      <Box className={styles.details}>
-        <DetailsBasic
-          handleBackToList={handleBackToList}
-          list={
-            <DetailsList
-              selected={selected}
-              detailsList={detailsList}
-              handleSelectInDetails={handleSelectInDetails}
-              isLoadingList={false}
-              isErrorList={false}
-            />
-          }
-          main={
-            <TwoColumnDetails
-              middle={
-                <>
-                  {!isLoading ? (
-                    getDisplayed()
-                  ) : (
-                    <Stack spacing={1}>
-                      <Skeleton variant="text" height={60} />
-                      <Skeleton variant="text" height={60} />
-                      <Stack spacing={1}>
-                        <Skeleton variant="text" />
-                        <Skeleton variant="circular" width={40} height={40} />
-                        <Skeleton
-                          variant="rectangular"
-                          width={210}
-                          height={118}
-                        />
-                      </Stack>
-                      <Skeleton variant="text" height={60} />
-                    </Stack>
-                  )}
-                </>
-              }
-              hasButton={false}
-              buttonText="Sacuvaj"
-            />
-          }
-        />
-      </Box>
-    </>
+    <FormWrapper title={gid === "new" ? "Unos nove grupe" : data ? data.name : ""} back={() => navigate(-1)}>
+      {!isLoading ? <Form formFields={fields} initialData={data} onSubmit={saveData} /> : <LoadingForm fields={fields.length} />}
+    </FormWrapper>
   );
 };
 

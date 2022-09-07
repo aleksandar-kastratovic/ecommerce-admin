@@ -11,12 +11,12 @@ import { Box } from "@mui/material"
 import Unicon from "../../Unicon/Unicon"
 
 /**
- *
  * @param {PanelSpec[]} fields
  * @param {int} selected
  * @param (function) handleSelect
  * @param {boolean} isLoadingList
  * @param {boolean} isErrorList
+ *
  * @return {JSX.Element}
  * @constructor
  */
@@ -24,7 +24,7 @@ const DetailsList = ({ fields = [], selected = 0, handleSelect, isLoadingList, i
     return (
         <>
             <Box>
-                <List>
+                <List className="no-padding">
                     {!isLoadingList ? (
                         <>
                             {fields.map((field) => (

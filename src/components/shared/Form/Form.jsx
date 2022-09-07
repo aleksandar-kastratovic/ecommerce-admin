@@ -9,10 +9,7 @@ import { formatDate, formatDateTime } from "../../../helpers/dateFormat"
 import ImageDialog from "../Dialogs/ImageDialog"
 import { isUrlValid } from "./util"
 
-const Form = ({
-                  formFields = [], initialData = {}, onSubmit = () => {
-    }, cancelButton = true
-              }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = true, queryString = "" }) => {
     const navigate = useNavigate()
     const [ data, setData ] = useState(initialData)
     const [ inputsError, setInputsError ] = useState([])
@@ -135,6 +132,7 @@ const Form = ({
                                 key={index}
                                 error={inputsError[item.prop_name] ? inputsError[item.prop_name].content : null}
                                 value={Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name]}
+                                queryString={queryString}
                             />
                         )
                     })}

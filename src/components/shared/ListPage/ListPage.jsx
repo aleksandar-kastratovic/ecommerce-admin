@@ -18,18 +18,11 @@ import useAPI from "../../../api/api"
  * @param {[]} additionalButtons
  * @param {boolean} showDatePicker
  * @param {boolean}showNewButton
+ * @param {Object} filters - additional filters for list api
  *
  * @constructor
  */
-const ListPage = ({
-                      apiUrl = "",
-                      deleteUrl = null,
-                      title = "",
-                      columnFields = [],
-                      additionalButtons = [],
-                      showDatePicker = false,
-                      showNewButton = true
-                  }) => {
+const ListPage = ({ apiUrl = "", deleteUrl = null, title = "", columnFields = [], additionalButtons = [], showDatePicker = false, showNewButton = true, filters = {} }) => {
 
     // TODO Sorting is disabled as it does not work with pagination
     columnFields = columnFields.map(field => ({ ...field, sortable: false }))
@@ -52,7 +45,7 @@ const ListPage = ({
 
     const { data: response, isLoading, isError } = useQuery(
         [ "openDeleteDialog.mutate", openDeleteDialog.mutate, search, page ],
-        () => api.list(apiUrl, { page: page, search: search })
+        () => api.list(apiUrl, { page: page, search: search, ...filters })
     )
 
     const handleCreateNew = () => {

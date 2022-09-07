@@ -155,17 +155,18 @@ export const InputSwitch = ({ label, required, disabled, name, value, error = nu
  * @param {string} fillFromApi Path to get select options from
  * @param {boolean} usePropName If api call should use prop name at the end of the path
  * @param {array} options Select options if there is no api call
+ * @param {string} queryString Additional queryString for api call
  *
  * @return {JSX.Element}
  */
 
-export const InputSelect = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, fillFromApi, usePropName, options }) => {
+export const InputSelect = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, fillFromApi, usePropName, options, queryString = "" }) => {
     const api = useAPI()
     const [ opt, setOpt ] = useState(options)
 
     useEffect(() => {
         let isMounted = true
-        let path = usePropName ? `${fillFromApi}/${name}` : fillFromApi
+        let path = usePropName ? `${fillFromApi}/${name}?${queryString}` : `${fillFromApi}?${queryString}`
         const fillDdl = async () => {
             await api
                 .get(path)
