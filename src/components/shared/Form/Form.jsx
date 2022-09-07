@@ -1,120 +1,120 @@
-import { Box } from "@mui/material"
-import { isEmpty } from "lodash"
-import { useCallback, useEffect, useState } from "react"
-import Button from "../Button/Button"
-import CreateForm from "./CreateForm"
-import Buttons from "./Buttons/Buttons"
-import { useNavigate } from "react-router-dom"
-import { formatDate, formatDateTime } from "../../../helpers/dateFormat"
-import ImageDialog from "../Dialogs/ImageDialog"
-import { isUrlValid } from "./util"
+import { Box } from "@mui/material";
+import { isEmpty } from "lodash";
+import { useCallback, useEffect, useState } from "react";
+import Button from "../Button/Button";
+import CreateForm from "./CreateForm";
+import Buttons from "./Buttons/Buttons";
+import { useNavigate } from "react-router-dom";
+import { formatDate, formatDateTime } from "../../../helpers/dateFormat";
+import ImageDialog from "../Dialogs/ImageDialog";
+import { isUrlValid } from "./util";
 
 const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = true, queryString = "" }) => {
-    const navigate = useNavigate()
-    const [ data, setData ] = useState(initialData)
-    const [ inputsError, setInputsError ] = useState([])
-    const [ openImageDialog, setOpenImageDialog ] = useState({
-        show  : false,
-        image : null,
-        label : "",
-        width : 300,
+    const navigate = useNavigate();
+    const [data, setData] = useState(initialData);
+    const [inputsError, setInputsError] = useState([]);
+    const [openImageDialog, setOpenImageDialog] = useState({
+        show: false,
+        image: null,
+        label: "",
+        width: 300,
         height: 200,
-        name  : ""
-    })
+        name: "",
+    });
 
     const submitHandler = (event) => {
-        event.preventDefault && event.preventDefault()
+        event.preventDefault && event.preventDefault();
 
-        const errors = {}
+        const errors = {};
         for (const field of formFields) {
             if (field.required && (data[field.prop_name] === "" || data[field.prop_name] == null)) {
                 errors[field.prop_name] = {
-                    content: "Polje je obavezno, molim Vas unesite vrednost."
-                }
+                    content: "Polje je obavezno, molim Vas unesite vrednost.",
+                };
             }
         }
-        isEmpty(errors) ? onSubmit(data) : setInputsError(errors)
-    }
+        isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
+    };
 
     const formItemChangeHandler = ({ target }, type) => {
         if (type === "date") {
-            setData({ ...data, [target.name]: formatDate(target.value) })
+            setData({ ...data, [target.name]: formatDate(target.value) });
         } else if (type === "date_time") {
-            setData({ ...data, [target.name]: formatDateTime(target.value) })
+            setData({ ...data, [target.name]: formatDateTime(target.value) });
         } else if (type === "swicth" || type === "checkbox") {
-            setData({ ...data, [target.name]: target.checked })
+            setData({ ...data, [target.name]: target.checked });
         } else {
-            setData({ ...data, [target.name]: target.value })
+            setData({ ...data, [target.name]: target.value });
         }
         setInputsError((inputsError) => {
-            delete inputsError[target.name]
-            return inputsError
-        })
-    }
+            delete inputsError[target.name];
+            return inputsError;
+        });
+    };
 
     const formImageUpload = useCallback(
         (event) => {
-            event.preventDefault()
-            const selectedFile = event.target.files[0]
+            event.preventDefault();
+            const selectedFile = event.target.files[0];
 
-            const reader = new FileReader()
+            const reader = new FileReader();
             reader.onloadend = () => {
                 const timeOutId = setTimeout(() => {
-                    setter(event, reader.result)
-                }, 500)
-                return () => clearTimeout(timeOutId)
-            }
-            reader.readAsDataURL(selectedFile)
+                    setter(event, reader.result);
+                }, 500);
+                return () => clearTimeout(timeOutId);
+            };
+            reader.readAsDataURL(selectedFile);
         },
-        [ data ]
-    )
+        [data]
+    );
 
     const onOpenImageDialog = (img, label, imageName, width, height) => {
-        const found = data[imageName]
-        const checkImage = isUrlValid(img)
+        const found = data[imageName];
+        const checkImage = isUrlValid(img);
 
         if (checkImage) {
             setOpenImageDialog({
-                show          : true,
-                image         : found,
-                label         : label,
-                width         : width,
-                height        : height,
-                name          : imageName,
-                showDimensions: false
-            })
+                show: true,
+                image: found,
+                label: label,
+                width: width,
+                height: height,
+                name: imageName,
+                showDimensions: false,
+            });
         } else {
             setOpenImageDialog({
-                show          : true,
-                image         : img,
-                label         : label,
-                width         : width,
-                height        : height,
-                name          : imageName,
-                showDimensions: false
-            })
+                show: true,
+                image: img,
+                label: label,
+                width: width,
+                height: height,
+                name: imageName,
+                showDimensions: false,
+            });
         }
-    }
+    };
 
     const handleCloseImageDialog = () => {
-        setOpenImageDialog({ show: false, image: null, label: "", name: "" })
-    }
+        setOpenImageDialog({ show: false, image: null, label: "", name: "" });
+    };
 
     const handleSaveEditImage = (imageName, image) => {
-        setData({ ...data, [imageName]: image })
-    }
+        setData({ ...data, [imageName]: image });
+    };
 
     const handleDeleteImage = (imageName) => {
-        setData({ ...data, [imageName]: null })
-    }
+        setData({ ...data, [imageName]: null });
+    };
 
     const setter = (event, result) => {
-        setData({ ...data, [event.target.name]: result })
-    }
+        setData({ ...data, [event.target.name]: result });
+    };
 
     useEffect(() => {
-        setData(initialData)
-    }, [ initialData ])
+        setData(initialData);
+    }, [initialData]);
 
     return (
         <>
@@ -133,8 +133,9 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                                 error={inputsError[item.prop_name] ? inputsError[item.prop_name].content : null}
                                 value={Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name]}
                                 queryString={queryString}
+                                disabled={item.disabled || (item.prop_name === "slug" && data.system_required)}
                             />
-                        )
+                        );
                     })}
                 <Buttons>
                     {cancelButton && <Button label="Odustani" onClick={() => navigate(-1)} />}
@@ -150,7 +151,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                 handleDeleteImage={handleDeleteImage}
             />
         </>
-    )
-}
+    );
+};
 
-export default Form
+export default Form;
