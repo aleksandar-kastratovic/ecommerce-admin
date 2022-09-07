@@ -130,7 +130,7 @@ const ListPage = ({
     const titleButtons = []
     if (showNewButton) {
         titleButtons.push({
-            label  : "Novi",
+            label  : "Novi unos",
             action : handleCreateNew,
             variant: "contained",
             icon   : "add"
@@ -139,24 +139,22 @@ const ListPage = ({
 
     return (
         <>
-            <PageWrapper
-                title={title}
-                actions={[ ...additionalButtons, ...titleButtons ]}
-            >
+            <PageWrapper title={title} actions={[ ...additionalButtons, ...titleButtons ]}>
+
                 <ListTableToolbar
                     onColumnsChange={onColumnsChange}
                     fields={fieldsColumns}
                     onSearch={handleSearch}
-                    showDatePicker={showDatePicker}
-                />
+                    showDatePicker={showDatePicker} />
+
                 <ListTable
                     fields={flatten(fieldsColumns).filter(field => field.in_main_table)}
                     listData={response?.payload}
                     handleActions={handleActions}
                     isLoading={isLoading}
                     page={page}
-                    onPageChange={handlePageChange}
-                />
+                    onPageChange={handlePageChange} />
+
             </PageWrapper>
 
             <DeleteDialog

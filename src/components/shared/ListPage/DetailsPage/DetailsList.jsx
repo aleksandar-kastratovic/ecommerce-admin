@@ -33,7 +33,7 @@ const DetailsList = ({ fields = [], selected = 0, handleSelect, isLoadingList, i
                                     disablePadding
                                     selected={field.id === selected}
                                     onClick={() => handleSelect(field)}
-                                    disabled={field.disabled}
+                                    disabled={!field.enabled}
                                 >
                                     <ListItemButton>
                                         <ListItemIcon><Unicon icon={field.icon} /></ListItemIcon>

@@ -45,6 +45,18 @@ class ApiService {
   }
 
   /**
+   * Execute the pet API call
+   *
+   * @param {string} path The path to the API, without the domain and API version suffix.
+   * @param {?{}} payload The payload to send in the request.
+   *
+   * @return {Promise<APIResponse>}
+   */
+  put(path, payload = null) {
+    return this._execute("PUT", path, payload);
+  }
+
+  /**
    * Execute the post API call
    *
    * @param {string} path The path to the API, without the domain and API version suffix.

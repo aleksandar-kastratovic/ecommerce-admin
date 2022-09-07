@@ -1,16 +1,29 @@
-import Paper from "@mui/material/Paper";
-import React from "react";
-import PageTitle from "../PageTitle/PageTitle";
-import scss from "./PageWrapper.module.scss";
+import Paper from "@mui/material/Paper"
+import React from "react"
+import Loading from "../../Loading/Loading"
+import PageTitle from "../PageTitle/PageTitle"
+import scss from "./PageWrapper.module.scss"
 
-const PageWrapper = ({ title, back, children, actions }) => (
-  <Paper elevation={0} className={scss.wrapper}>
-    {/* Page title */}
-    {title && <PageTitle title={title} back={back} actions={actions} />}
+const PageWrapper = ({ title, back, children, actions, ready = true }) => {
+    let content = children
 
-    {/* Page contents */}
-    {children}
-  </Paper>
-);
+    // Make sure the content is ready to be shown
+    for (const flag of Array.isArray(ready) ? ready : [ ready ]) {
+        if (!flag && flag !== 0) {
+            content = <Loading />
+        }
+    }
 
-export default PageWrapper;
+    return (
+        <Paper elevation={0} className={scss.wrapper}>
+
+            {/* Page title */}
+            {title && <PageTitle title={title} back={back} actions={actions} />}
+
+            {/* Page contents */}
+            {content}
+        </Paper>
+    )
+}
+
+export default PageWrapper
