@@ -17,25 +17,14 @@ import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
 import { blue } from "@mui/material/colors";
 
-import styles from "./ImageButton.module.scss";
+import styles from "./FileButton.module.scss";
 
 import { getImageRatio } from "../../../helpers/imageSize";
 
-const ImageButton = ({
-    name = "",
-    label = "",
-    required = false,
-    description = "",
-    value = "",
-    error = "",
-    imgWidth = 300,
-    imgHeight = 200,
-    onImageUpload = () => {},
-    onOpenImageDialog = () => {},
-}) => {
+const FileButton = ({ name = "", label = "", required = false, description = "", value = "", error = "", onImageUpload = () => {}, onOpenImageDialog = () => {} }) => {
     const [imageDimensions, setImageDimensions] = useState({
-        width: imgWidth ?? 0,
-        height: imgHeight ?? 0,
+        width: 0,
+        height: 0,
     });
     const [loadingImage, setLoadingImage] = useState(false);
     const [loaded, setLoaded] = useState(false);
@@ -73,8 +62,7 @@ const ImageButton = ({
                     <Grid container spacing={2} alignItems="center" margin={0} padding={0}>
                         <FormControl className={styles.formStyle}>
                             <FormLabel required={required}>{label}</FormLabel>
-                            <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
-                            <ButtonBase focusRipple className={styles.imageButtonStyled} onClick={() => onOpenImageDialog(value, label, name, imgWidth, imgHeight)}>
+                            <ButtonBase focusRipple className={styles.imageButtonStyled} onClick={() => onOpenImageDialog(value, label, name)}>
                                 <span
                                     style={{
                                         backgroundImage: `url(${value})`,
@@ -127,13 +115,20 @@ const ImageButton = ({
                         <Grid item xs={8} md={8} margin={0} padding={0} sx={{ padding: 0 }}>
                             <FormControl error={error !== null}>
                                 <FormLabel required={required}>{label}</FormLabel>
-                                <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
                                 <Typography variant="caption" display="block" gutterBottom>
                                     <br />
                                     {description}
                                 </Typography>
                                 <label htmlFor={label}>
-                                    <Input multiple name={name} inputProps={{ accept: "image/*" }} id={label} onChange={(e) => onImageUpload(e)} type="file" sx={{ display: "none" }} />
+                                    <Input
+                                        multiple
+                                        name={name}
+                                        inputProps={{ accept: ".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf" }}
+                                        id={label}
+                                        onChange={(e) => onImageUpload(e)}
+                                        type="file"
+                                        sx={{ display: "none" }}
+                                    />
                                     <Button variant="contained" component="span" className={styles.buttonStyle}>
                                         <Box className={styles.boxStyle}>
                                             <Typography variant="caption" display="block" gutterBottom />
@@ -171,4 +166,4 @@ const ImageButton = ({
     );
 };
 
-export default ImageButton;
+export default FileButton;

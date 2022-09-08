@@ -15,148 +15,110 @@ import image_description from "../forms/image_description.json";
 import status from "../forms/status.json";
 
 const DetailsBannersB2C = ({}) => {
-  const { B2CId } = useParams();
-  const navigate = useNavigate();
+    const { B2CId } = useParams();
+    const navigate = useNavigate();
 
-  const init = {
-    active_from: null,
-    active_to: null,
-    button: null,
-    download: null,
-    duration: null,
-    image: null,
-    is_active: true,
-    name: null,
-    position: null,
-    priority: null,
-    subtitle: null,
-    target: null,
-    text: null,
-    title: null,
-    url: null,
-    video: null,
-  };
+    const init = {
+        active_from: null,
+        active_to: null,
+        button: null,
+        download: null,
+        duration: null,
+        image: null,
+        is_active: true,
+        name: null,
+        id_position: null,
+        priority: null,
+        subtitle: null,
+        target: null,
+        text: null,
+        title: null,
+        url: null,
+        video: null,
+    };
 
-  const api = useAPI();
-  const [data, setData] = useState(init);
-  const [positionField, setPositionField] = useState(positionForm);
-  const [subFields, setSubFields] = useState([]);
+    const api = useAPI();
+    const [data, setData] = useState(init);
+    const [subFields, setSubFields] = useState([]);
 
-  const {
-    isSuccess,
-    data: response,
-    isLoading,
-    isError,
-  } = useQuery([], () => api.get(`admin/banners-b2c/main/${B2CId}`));
+    const { isSuccess, data: response, isLoading, isError } = useQuery([], () => api.get(`admin/banners-b2c/main/${B2CId}`));
 
-  const saveData = (data) => {
-    api
-      .post(`admin/banners-b2c/main/`, data)
-      .then((response) => {
+    const saveData = (data) => {
+        console.log(data);
+        api.post(`admin/banners-b2c/main/`, data)
+            .then((response) => {
+                setData(response?.payload);
+                toast.success(`Uspešno`);
+            })
+            .catch((error) => {
+                console.warn(error);
+                toast.warning("Greška");
+            });
+    };
+
+    useEffect(() => {
         setData(response?.payload);
-        toast.success(`Uspešno`);
-      })
-      .catch((error) => {
-        console.warn(error);
-        toast.warning("Greška");
-      });
-  };
+    }, [response]);
 
-  useEffect(() => {
-    setData(response?.payload);
-  }, [response]);
-
-  useEffect(() => {
-    const fillDDl = async () => {
-      await api
-        .get(`admin/banners-b2c/main/ddl/position`)
-        .then((response) => {
-          setPositionField({ ...positionField, options: response.payload });
-        })
-        .catch((error) => {
-          console.warn(error);
-        });
-    };
-
-    fillDDl();
-  }, []);
-
-  useEffect(() => {
-    const getForm = async () => {
-      let res;
-      await api
-        .get(`admin/banners-b2c/positions/slug/${data.position}`)
-        .then((response) => {
-          res = response?.payload;
-        })
-        .catch((error) => {
-          console.warn(error);
-        });
-      if (res) {
-        let dimensions = { width: res.width, height: res.height };
-        let fields;
-
-        switch (res.type) {
-          case "image":
-            fields = image;
-            break;
-          case "image_description":
-            fields = image_description;
-            break;
-
-          default:
-            fields = [];
-            break;
-        }
-
-        let arr = [];
-        for (const item of fields) {
-          if (item.prop_name === "image") {
-            arr.push({ ...item, dimensions: dimensions });
-          } else {
-            arr.push(item);
-          }
-        }
-        setSubFields(arr);
-      }
-    };
-    if (data && data.position !== null) {
-      getForm();
-    }
-  }, [data]);
-
-  return (
-    <PageWrapper
-      title={B2CId == "new" ? "Unos novog banera" : data?.name}
-      back={() => navigate(-1)}
-    >
-      {!isLoading ? (
-        <>
-          <CreateForm
-            onChangeHandler={({ target }) =>
-              setData({ ...data, name: target.value })
+    useEffect(() => {
+        const getForm = async () => {
+            let res;
+            if (data.id_position) {
+                await api
+                    .get(`admin/banners-b2c/positions/slug/${data.id_position}`)
+                    .then((response) => {
+                        res = response?.payload;
+                    })
+                    .catch((error) => {
+                        console.warn(error);
+                    });
             }
-            item={name}
-            value={data ? data.name : ""}
-          />
-          <CreateForm
-            onChangeHandler={({ target }) =>
-              setData({ ...data, position: target.value })
+            if (res) {
+                let dimensions = { width: res.width, height: res.height };
+                let fields;
+
+                switch (res.type) {
+                    case "image":
+                        fields = image;
+                        break;
+                    case "image_description":
+                        fields = image_description;
+                        break;
+
+                    default:
+                        fields = [];
+                        break;
+                }
+
+                let arr = [];
+                for (const item of fields) {
+                    if (item.prop_name === "image") {
+                        arr.push({ ...item, dimensions: dimensions });
+                    } else {
+                        arr.push(item);
+                    }
+                }
+                setSubFields(arr);
             }
-            item={positionField}
-            value={data ? data.position : ""}
-          />
-          <Form
-            formFields={[...subFields, status]}
-            initialData={data}
-            onSubmit={saveData}
-          />
-        </>
-      ) : (
-        <LoadingForm fields={5} />
-      )}
-    </PageWrapper>
-  );
+        };
+        if (data && data.position !== null) {
+            getForm();
+        }
+    }, [data]);
+
+    return (
+        <PageWrapper title={B2CId == "new" ? "Unos novog banera" : data?.name} back={() => navigate(-1)}>
+            {!isLoading ? (
+                <>
+                    <CreateForm onChangeHandler={({ target }) => setData({ ...data, name: target.value })} item={name} value={data ? data.name : ""} />
+                    <CreateForm onChangeHandler={({ target }) => setData({ ...data, id_position: target.value })} item={positionForm} value={data ? data.id_position : ""} />
+                    <Form formFields={[...subFields, status]} initialData={data} onSubmit={saveData} />
+                </>
+            ) : (
+                <LoadingForm fields={5} />
+            )}
+        </PageWrapper>
+    );
 };
 
 export default DetailsBannersB2C;
