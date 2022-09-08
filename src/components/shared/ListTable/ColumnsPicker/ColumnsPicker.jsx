@@ -14,7 +14,7 @@ const ColumnsPicker = ({ tableFields = [], onChange }) => {
     return (
         <>
             <PickerMenu
-                anchorEl={anchor}
+                anchor={anchor}
                 tableFields={tableFields}
                 handleConfirm={handleConfirm}
                 handleClose={() => setAnchor(null)}

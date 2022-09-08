@@ -5,7 +5,6 @@ import ListPagination from "./ListPagination/ListPagination"
 import ListTableBody from "./ListTableBody"
 import ListTableHead from "./ListTableHead"
 import styles from "./ListTable.module.scss"
-import { getComparator } from "./util"
 
 const ListTable = ({ fields = [], listData = [], isLoading = false, onPageChange, handleActions }) => {
     const { items, pagination } = listData

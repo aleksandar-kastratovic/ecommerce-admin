@@ -5,7 +5,6 @@ import ColumnsPicker from "./ColumnsPicker/ColumnsPicker"
 import Button from "../Button/Button"
 import { useState } from "react"
 import FilterForm from "./FilterForm/FilterForm"
-
 import styles from "./ListTableToolbar.module.scss"
 
 const ListTableToolbar = ({ fields = [], filterFields = [], showDatePicker, onColumnsChange, onSearch}) => {

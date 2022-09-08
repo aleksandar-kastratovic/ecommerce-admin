@@ -5,7 +5,7 @@ import ListTable from "../ListTable/ListTable"
 import ListTableToolbar from "../ListTable/ListTableToolbar"
 import DeleteDialog from "../Dialogs/DeleteDialog"
 import PageWrapper from "../Layout/PageWrapper/PageWrapper"
-import { clone, flatten } from "lodash"
+import { flatten } from "lodash"
 import { useQuery } from "react-query"
 import useAPI from "../../../api/api"
 
