@@ -1,142 +1,148 @@
-import React from "react";
-import { ThemeProvider } from "@mui/material";
-import { useNavigate } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import ApplicationRouter from "./routes/ApplicationRouter";
-import AuthContext from "./store/auth-contex";
-import { useContext, useState, useEffect } from "react";
-import SideNavigation from "./components/SideNavigation";
-import Header from "./components/Header";
-import useHttp from "./hooks/use-http";
-import Loader from "./components/UI/Loader";
-import {
-  referenceDataService,
-  refreshTokenService,
-  userScreensService,
-} from "./helpers/services";
-import CroonusTheme from "./theme";
+import React from "react"
+import { ThemeProvider } from "@mui/material"
+import { useNavigate } from "react-router-dom"
+import { QueryClient, QueryClientProvider } from "react-query"
+import { Flip, toast, ToastContainer } from "react-toastify"
+import "react-toastify/dist/ReactToastify.css"
+import ApplicationRouter from "./routes/ApplicationRouter"
+import AuthContext from "./store/auth-contex"
+import { useContext, useState, useEffect } from "react"
+import SideNavigation from "./components/SideNavigation"
+import Header from "./components/Header"
+import useHttp from "./hooks/use-http"
+import Loader from "./components/UI/Loader"
+import { referenceDataService, refreshTokenService, userScreensService } from "./helpers/services"
+import CroonusTheme from "./theme"
 
 function App() {
-  const queryClient = new QueryClient();
-  const authCtx = useContext(AuthContext);
-  let navigate = useNavigate();
-  const { isLoading, sendRequest: referenceDataRequest } = useHttp();
-  const { isLoading2, sendRequest: userScreenRequest } = useHttp();
+    const queryClient = new QueryClient()
+    const authCtx = useContext(AuthContext)
+    let navigate = useNavigate()
+    const { isLoading, sendRequest: referenceDataRequest } = useHttp()
+    const { isLoading2, sendRequest: userScreenRequest } = useHttp()
 
-  const [sidenav, setSidenav] = useState(true);
-  const [activeTheme, setActiveTheme] = useState(
-    localStorage.getItem("theme") === "true" ?? false
-  );
+    const [ sidenav, setSidenav ] = useState(true)
+    const [ activeTheme, setActiveTheme ] = useState(
+        localStorage.getItem("theme") === "true" ?? false
+    )
 
-  useEffect(() => {
-    if (authCtx.isRefreshingToken) {
-      const setUserData = (userData) => {
-        const expirationTime = new Date(
-          new Date().getTime() + +userData.expires_in * 60 * 1000
-        );
+    useEffect(() => {
+        if (authCtx.isRefreshingToken) {
+            const setUserData = (userData) => {
+                const expirationTime = new Date(
+                    new Date().getTime() + +userData.expires_in * 60 * 1000
+                )
 
-        authCtx.login(userData, expirationTime);
-      };
+                authCtx.login(userData, expirationTime)
+            }
 
-      const refreshToken = async () => {
-        const data = await refreshTokenService(referenceDataRequest);
-        setUserData(data);
-      };
+            const refreshToken = async () => {
+                const data = await refreshTokenService(referenceDataRequest)
+                setUserData(data)
+            }
 
-      refreshToken();
+            refreshToken()
+        }
+    }, [ authCtx.isRefreshingToken ])
+
+    useEffect(() => {
+        if (authCtx.isTokenExpired) {
+            toast.warning("Istekao Vam je token!")
+            authCtx.changeTokenExpired(false)
+            navigate(`/`)
+        }
+    }, [ authCtx.isTokenExpired ])
+
+    let routerClass
+    if (!authCtx.isLoggedIn) {
+        routerClass = ""
+    } else if (sidenav) {
+        routerClass = "side-open router-container"
+    } else {
+        routerClass = "router-container"
     }
-  }, [authCtx.isRefreshingToken]);
 
-  useEffect(() => {
-    if (authCtx.isTokenExpired) {
-      toast.warning("Istekao Vam je token!");
-      authCtx.changeTokenExpired(false);
-      navigate(`/`);
+    if (activeTheme && authCtx.isLoggedIn) {
+        document.body.classList.add("theme-dark")
+        document.body.classList.remove("theme-light")
+    } else {
+        document.body.classList.add("theme-light")
+        document.body.classList.remove("theme-dark")
     }
-  }, [authCtx.isTokenExpired]);
 
-  let routerClass;
-  if (!authCtx.isLoggedIn) {
-    routerClass = "";
-  } else if (sidenav) {
-    routerClass = "side-open router-container";
-  } else {
-    routerClass = "router-container";
-  }
+    useEffect(() => {
+        const setReferenceData = (referenceData) => {
+            authCtx.getReferenceData(referenceData)
+        }
 
-  if (activeTheme && authCtx.isLoggedIn) {
-    document.body.classList.add("theme-dark");
-    document.body.classList.remove("theme-light");
-  } else {
-    document.body.classList.add("theme-light");
-    document.body.classList.remove("theme-dark");
-  }
+        const setUserScreens = (userScreens) => {
+            authCtx.getUserScreens(userScreens)
+        }
 
-  useEffect(() => {
-    const setReferenceData = (referenceData) => {
-      authCtx.getReferenceData(referenceData);
-    };
+        if (authCtx.isLoggedIn) {
+            const referenceData = async () => {
+                const data = await referenceDataService(referenceDataRequest)
+                setReferenceData(data)
+            }
 
-    const setUserScreens = (userScreens) => {
-      authCtx.getUserScreens(userScreens);
-    };
+            referenceData()
 
-    if (authCtx.isLoggedIn) {
-      const referenceData = async () => {
-        const data = await referenceDataService(referenceDataRequest);
-        setReferenceData(data);
-      };
+            const userScreens = async () => {
+                const data = await userScreensService(userScreenRequest)
+                setUserScreens(data)
+            }
 
-      referenceData();
+            userScreens()
+        }
+    }, [ referenceDataRequest, userScreenRequest, authCtx.isLoggedIn ])
 
-      const userScreens = async () => {
-        const data = await userScreensService(userScreenRequest);
-        setUserScreens(data);
-      };
+    return (
+        <QueryClientProvider client={queryClient}>
+            <ThemeProvider theme={CroonusTheme}>
+                <div className={routerClass}>
+                    {authCtx.isLoggedIn && (
+                        <>
+                            <SideNavigation
+                                activeTheme={activeTheme}
+                                userName={
+                                    (authCtx.user.user.first_name ?? "") +
+                                    " " +
+                                    (authCtx.user.user.last_name ?? "")
+                                }
+                            />
+                            <Header
+                                openSidenav={() => setSidenav(!sidenav)}
+                                activeTheme={activeTheme}
+                                changeTheme={() => {
+                                    setActiveTheme(!activeTheme)
+                                    localStorage.setItem("theme", !activeTheme)
+                                }}
+                            />
+                        </>
+                    )}
 
-      userScreens();
-    }
-  }, [referenceDataRequest, userScreenRequest, authCtx.isLoggedIn]);
+                    {/* Main content */}
+                    <div className={authCtx.isLoggedIn ? "main-wrapper" : ""}>
+                        <ApplicationRouter />
+                    </div>
 
-  return (
-    <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={CroonusTheme}>
-        <div className={routerClass}>
-          {authCtx.isLoggedIn && (
-            <>
-              <SideNavigation
-                activeTheme={activeTheme}
-                userName={
-                  (authCtx.user.user.first_name ?? "") +
-                  " " +
-                  (authCtx.user.user.last_name ?? "")
-                }
-              />
-              <Header
-                openSidenav={() => setSidenav(!sidenav)}
-                activeTheme={activeTheme}
-                changeTheme={() => {
-                  setActiveTheme(!activeTheme);
-                  localStorage.setItem("theme", !activeTheme);
-                }}
-              />
-            </>
-          )}
+                    {/* Toast */}
+                    <ToastContainer
+                        position="top-center"
+                        theme="colored"
+                        transition={Flip}
+                        autoClose={800}
+                        newestOnTop={false}
+                        draggable={false}
+                        closeOnClick
+                        hideProgressBar
+                        pauseOnHover />
 
-          {/* Main content */}
-          <div className={authCtx.isLoggedIn ? "main-wrapper" : ""}>
-            <ApplicationRouter />
-          </div>
-
-          <ToastContainer theme="colored" position="top-right" />
-
-          {(isLoading || isLoading2) && <Loader />}
-        </div>
-      </ThemeProvider>
-    </QueryClientProvider>
-  );
+                    {(isLoading || isLoading2) && <Loader />}
+                </div>
+            </ThemeProvider>
+        </QueryClientProvider>
+    )
 }
 
-export default App;
+export default App
