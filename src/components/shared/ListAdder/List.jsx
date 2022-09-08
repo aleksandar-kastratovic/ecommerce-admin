@@ -5,82 +5,60 @@ import ListItem from "./ListItem";
 import styles from "./List.module.scss";
 import Button from "../Button/Button";
 
-const List = ({
-  listFields = [],
-  formFields = [],
-  init = {},
-  addFieldLabel = "Dodaj polje",
-  required = [],
-  onSave = () => {},
-  onDelete = () => {},
-  additionalButtons = [],
-  actions = {},
-}) => {
-  const [fields, setFields] = useState(listFields);
-  const [load, setLoad] = useState(false);
-  const { user } = useContext(AuthContext);
+const List = ({ listFields = [], formFields = [], init = {}, addFieldLabel = "Dodaj polje", required = [], onSave = () => {}, onDelete = () => {}, additionalButtons = [], actions = {} }) => {
+    const [fields, setFields] = useState(listFields);
+    const [load, setLoad] = useState(false);
+    const { user } = useContext(AuthContext);
 
-  const deleteHandler = async (id, dataId) => {
-    if (dataId !== null && dataId !== undefined) {
-      try {
-        await onDelete(user.access_token, dataId);
-      } catch (error) {
-        console.warn(error);
-      }
-    }
-    let newFields = [...fields.slice(0, id), ...fields.slice(id + 1)];
-    setFields([...newFields]);
-  };
+    const deleteHandler = async (id, dataId) => {
+        if (dataId !== null && dataId !== undefined) {
+            try {
+                await onDelete(user.access_token, dataId);
+            } catch (error) {
+                console.warn(error);
+            }
+        }
+        let newFields = [...fields.slice(0, id), ...fields.slice(id + 1)];
+        setFields([...newFields]);
+    };
 
-  const addFieldHandler = () => {
-    setFields([...fields, init]);
-  };
+    const addFieldHandler = () => {
+        setFields([...fields, init]);
+    };
 
-  useEffect(() => {
-    setFields(listFields);
-  }, [listFields]);
+    useEffect(() => {
+        setFields(listFields);
+    }, [listFields]);
 
-  return (
-    <div className={styles.list}>
-      <div className={styles.buttonsHolder}>
-        <Button
-          label={addFieldLabel}
-          onClick={addFieldHandler}
-          icon="add"
-          variant="contained"
-        />
+    return (
+        <div className={styles.list}>
+            <div className={styles.buttonsHolder}>
+                <Button label={addFieldLabel} onClick={addFieldHandler} icon="add" variant="contained" />
 
-        <div className={styles.additionalButtonsHolder}>
-          {additionalButtons.map((button) => {
-            return (
-              <Button
-                key={button.id}
-                icon={button.icon}
-                label={button.text}
-                onClick={button.action}
-              />
-            );
-          })}
+                <div className={styles.additionalButtonsHolder}>
+                    {additionalButtons.map((button) => {
+                        return <Button key={button.id} icon={button.icon} label={button.text} onClick={button.action} />;
+                    })}
+                </div>
+            </div>
+
+            {Array.isArray(fields) &&
+                fields.map((field, index) => {
+                    return (
+                        <ListItem
+                            key={field.id != null ? field.id : `${index}new`}
+                            data={listFields[index] ?? init}
+                            index={index}
+                            onDelete={deleteHandler}
+                            saveData={onSave}
+                            required={required}
+                            formFields={formFields}
+                            actions={actions}
+                        />
+                    );
+                })}
         </div>
-      </div>
-
-      {Array.isArray(fields) &&
-        fields.map((field, index) => {
-          return (
-            <ListItem
-              key={field.id !== undefined ? field.id : `${index}new`}
-              data={listFields[index] ?? init}
-              index={index}
-              onDelete={deleteHandler}
-              saveData={onSave}
-              required={required}
-              formFields={formFields}
-              actions={actions}
-            />
-          );
-        })}
-    </div>
-  );
+    );
 };
 
 export default List;
