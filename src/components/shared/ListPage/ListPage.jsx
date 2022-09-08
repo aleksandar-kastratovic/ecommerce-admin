@@ -16,11 +16,12 @@ import useAPI from "../../../api/api"
  * @param {?string} deleteUrl
  * @param {string} title
  * @param {FieldSpec[]} columnFields
+ * @param {FieldSpec[]} filters
  * @param {[]} additionalButtons
  * @param {boolean} showDatePicker
  * @param {boolean} showNewButton
  * @param {function(*[]): []} modifyItems The function that accepts the items and return modified ones.
- * @param {Object} filters - additional filters for list api
+ * @param {Object} filters Additional filters for list api
  *
  * @constructor
  */
@@ -122,6 +123,7 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
                 <ListTableToolbar
                     onColumnsChange={setFieldsColumns}
                     fields={fieldsColumns}
+                    filters={filters}
                     onSearch={handleSearch}
                     showDatePicker={showDatePicker} />
 

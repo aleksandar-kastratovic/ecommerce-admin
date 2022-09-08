@@ -4,6 +4,7 @@ import React from "react"
 
 /**
  * Support for both MUI (as string) and FontAwesome icons (imported from @fortawesome/free-solid-svg-icons).
+ * @see https://mui.com/material-ui/material-icons/.
  *
  * @param {string|{}} icon String to load from MUI, or an object imported from @fortawesome/free-solid-svg-icons;
  *

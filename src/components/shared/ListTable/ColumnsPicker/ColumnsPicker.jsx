@@ -1,4 +1,5 @@
 import { useState } from "react"
+import IconList from "../../../../helpers/icons"
 import PickerMenu from "./PickerMenu"
 import Button from "../../Button/Button"
 
@@ -19,7 +20,7 @@ const ColumnsPicker = ({ tableFields = [], onChange }) => {
                 handleConfirm={handleConfirm}
                 handleClose={() => setAnchor(null)}
             />
-            <Button icon="settings" label="Kolone" onClick={event => setAnchor(event.currentTarget)} />
+            <Button icon={IconList.visibility} label="Kolone" onClick={event => setAnchor(event.currentTarget)} />
         </>
     )
 }

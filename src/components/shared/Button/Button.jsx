@@ -5,7 +5,7 @@ import { Icon } from "@mui/material"
 /**
  * A standardized button with an optional icon.
  *
- * @param {string} icon The optional icon to use. @see https://fonts.google.com/icons
+ * @param {string} icon The optional icon to use, @see https://mui.com/material-ui/material-icons/.
  * @param {string} label The label on the button.
  * @param {function} onClick The callback to invoke when the button is clicked.
  * @param {"button"|"reset"|"submit"} type The HTML button type.
