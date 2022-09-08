@@ -10,8 +10,9 @@
  *      @param {boolean} editable True to make this field editable via a form.
  *      @param {boolean} disabled True to make this field read-only.
  *      @param {boolean} required True to make this field required
- *      @param {string} description
- *      @param {string} ui_prop
+ *      @param {?string} description
+ *      @param {?string} ui_prop
+ *      @param {?string} table_props Additional properties for the list table view.
  *      @param {boolean} sortable True to allow list table to sort by this field.
  *      @param {string} input_type
  */

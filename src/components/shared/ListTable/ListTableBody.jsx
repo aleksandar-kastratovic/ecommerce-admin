@@ -1,11 +1,10 @@
 import TableBody from "@mui/material/TableBody"
 import TableCell from "@mui/material/TableCell"
 import TableRow from "@mui/material/TableRow"
+import { columnCell, columnProps } from "../../../helpers/table"
 import EmptyList from "../Empty/EmptyList"
 import LoadingTableRows from "../Loading/LoadingTableRows"
 import ActionField from "./ActionField/ActionField"
-import { displayData } from "./util"
-import scss from "./ListTableBody.module.scss"
 
 /**
  * Show the table body and handle lifecycle and events.
@@ -39,12 +38,12 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
         default:
             content = (items ?? []).map((row) => (
                 <TableRow hover key={row.id}>
-                    {fields.map(({ prop_name, input_type }) => (
-                        <TableCell key={prop_name} className={scss[prop_name]}>
-                            {prop_name !== "action"
-                                ? displayData(row[prop_name], input_type)
+                    {fields.map((column: FieldSpec) => (
+                        <TableCell {...columnProps(column)}>
+                            {column.prop_name !== "action"
+                                ? columnCell(row[column.prop_name], column.input_type)
                                 : <ActionField
-                                    fieldType={input_type}
+                                    fieldType={column.input_type}
                                     handleEdit={handleActions(row["id"], "edit")}
                                     handlePreview={handleActions(row["id"], "preview")}
                                     handleDelete={handleActions(row["id"], "delete")}

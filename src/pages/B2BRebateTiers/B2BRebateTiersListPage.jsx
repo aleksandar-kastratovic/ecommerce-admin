@@ -4,7 +4,7 @@ import fields from "./fields.json"
 const B2BRebateTiersListPage = () => (
     <ListPage
         apiUrl="admin/rebates/tiers"
-        title="Rebatne skale"
+        title="Rabatne skale"
         columnFields={fields} />
 )
 

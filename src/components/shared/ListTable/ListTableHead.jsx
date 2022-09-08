@@ -2,7 +2,7 @@ import TableCell from "@mui/material/TableCell"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import TableSortLabel from "@mui/material/TableSortLabel"
-import styles from "./ListTableHead.module.scss"
+import { columnProps } from "../../../helpers/table"
 
 const ListTableHead = ({ fields = [], onRequestSort, order, orderBy }) => {
 
@@ -15,14 +15,11 @@ const ListTableHead = ({ fields = [], onRequestSort, order, orderBy }) => {
         </TableSortLabel>
     )
 
-    // Get the width of the column
-    const columnWidth = (column: FieldSpec) => column.prop_name === "action" ? "120" : null
-
     return (
         <TableHead>
             <TableRow>
                 {fields.map((column: FieldSpec) => (
-                    <TableCell key={column.prop_name} className={styles.headStyle} sortDirection={sortingDirection(column)} width={columnWidth(column)}>
+                    <TableCell sortDirection={sortingDirection(column)} {...columnProps(column, true)} >
                         {column.sortable
                             ? sortableColumn(column)
                             : column.field_name

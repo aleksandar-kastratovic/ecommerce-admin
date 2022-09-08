@@ -12,16 +12,17 @@ const ListTableToolbar = ({ fields = [], filterFields, showDatePicker, onColumns
     const [ filterOpen, setFilterOpen ] = useState(false)
 
     return (
-        <>
+        <div className="list-page-toolbar">
             <Box className={styles.toolbarButtons}>
 
-                {/* Search by term*/}
+                {/* Search by term */}
                 <DebouncedInput
-                    placeholder="Ključne reci za pretragu"
+                    autoFocus
+                    placeholder="Pretraga po ključnoj reči"
                     ui_prop="search"
                     onChange={onSearch} />
 
-                {/* Search by data picker */}
+                {/* Search by date range */}
                 {showDatePicker && (
                     <>
                         <BasicDatePicker label="datum od" />
@@ -35,12 +36,16 @@ const ListTableToolbar = ({ fields = [], filterFields, showDatePicker, onColumns
                 )}
 
                 {/* Choose visible columns */}
-                <ColumnsPicker tableFields={fields} onChange={onColumnsChange} />
+                {fields.length >= 1 && (
+                    <ColumnsPicker tableFields={fields} onChange={onColumnsChange} />
+                )}
             </Box>
+
+            {/* Filter form */}
             {filterOpen && (
                 <FilterForm filterFields={filterFields} />
             )}
-        </>
+        </div>
     )
 }
 
