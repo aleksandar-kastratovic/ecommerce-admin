@@ -10,7 +10,7 @@ import ImageDialog from "../Dialogs/ImageDialog";
 import { isUrlValid } from "./util";
 import FileDialog from "../Dialogs/FileDialog/FileDialog";
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, queryString = "" }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, queryString = "", onChange = () => {} }) => {
     const navigate = useNavigate();
     const [data, setData] = useState(initialData);
     const [inputsError, setInputsError] = useState([]);
@@ -33,11 +33,9 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                     content: "Polje je obavezno, molim Vas unesite vrednost.",
                 };
             }
-		}
-        isEmpty(errors)
-            ? onSubmit(data)
-            : setInputsError(errors)
-    }
+        }
+        isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
+    };
 
     const formItemChangeHandler = ({ target }, type) => {
         if (type === "date") {
@@ -56,6 +54,10 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
             return inputsError;
         });
     };
+
+    useEffect(() => {
+        onChange(data);
+    }, [data]);
 
     const formImageUpload = useCallback(
         (event) => {

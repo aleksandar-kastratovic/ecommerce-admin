@@ -11,35 +11,35 @@ import { useEffect } from "react";
 import { Box } from "@mui/material";
 
 const ParamsForm = ({ onSubmit = () => {}, onChange = () => {}, data = {}, subForm = [], isLoading = false }) => {
-  const [paramType, setParamType] = useState(data.field_type ?? "long_text");
-  const [multiParam, setMultiParam] = useState(data.field_is_multiple);
+    const [paramType, setParamType] = useState(data.field_type ?? "long_text");
+    const [multiParam, setMultiParam] = useState(data.field_is_multiple);
 
-  const submitHandler = (data) => {
-    const ret = {
-      ...data,
-      field_type: paramType,
-      field_is_multiple: multiParam,
+    const submitHandler = (data) => {
+        const ret = {
+            ...data,
+            field_type: paramType,
+            field_is_multiple: multiParam,
+        };
+        onSubmit(ret);
     };
-    onSubmit(ret);
-  };
-  useEffect(() => {
-    onChange({ ...data, field_type: paramType, field_is_multiple: multiParam });
-  }, [multiParam, paramType]);
+    useEffect(() => {
+        onChange({ ...data, field_type: paramType, field_is_multiple: multiParam });
+    }, [multiParam, paramType]);
 
-  useEffect(() => {
-    if (!isLoading) {
-      setParamType(data.field_type ?? "long_text");
-      setMultiParam(data.field_is_multiple);
-    }
-  }, [data, isLoading]);
+    useEffect(() => {
+        if (!isLoading) {
+            setParamType(data.field_type ?? "long_text");
+            setMultiParam(data.field_is_multiple);
+        }
+    }, [data, isLoading]);
 
-  return (
-    <Box>
-      <CreateForm onChangeHandler={({ target }) => setParamType(target.value)} item={paramsTypeField} value={paramType} />
-      <CreateForm onChangeHandler={({ target }) => setMultiParam(target.checked)} item={paramsCheckbox} value={multiParam} />
-      <Form formFields={[...slugName, ...subForm, ...basicForm]} initialData={data} onSubmit={submitHandler} />
-    </Box>
-  );
+    return (
+        <Box>
+            <CreateForm onChangeHandler={({ target }) => setParamType(target.value)} item={paramsTypeField} value={paramType} />
+            <CreateForm onChangeHandler={({ target }) => setMultiParam(target.checked)} item={paramsCheckbox} value={multiParam} />
+            <Form formFields={[...slugName, ...subForm, ...basicForm]} initialData={data} onSubmit={submitHandler} onChange={onChange} />
+        </Box>
+    );
 };
 
 export default ParamsForm;
