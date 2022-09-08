@@ -26,8 +26,9 @@
 
 /**
  * @typedef PanelSpec
+ *      @param {int} id The unique id of the panel.
  *      @param {string} name The name of the panel.
  *      @param {string|{}} icon String to load from MUI, or an object imported from @fortawesome/free-solid-svg-icons;
- *      @param {boolean} disabled True to disallow selecting this panel.
+ *      @param {boolean} enabled True to allow selecting this panel, defaults to true if omitted.
  *      @param {JSX.Element} component The component that will handle this panel
  */

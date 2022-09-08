@@ -5,8 +5,7 @@ const B2BRebatesListPage = () => (
     <ListPage
         apiUrl="admin/rebates"
         title="Rabati"
-        columnFields={tblFields}
-    />
+        columnFields={tblFields} />
 )
 
 export default B2BRebatesListPage

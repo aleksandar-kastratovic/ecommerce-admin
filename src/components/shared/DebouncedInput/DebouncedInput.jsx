@@ -1,5 +1,5 @@
 import { useState } from "react"
-import TextBox from "../TextBox"
+import { InputInput } from "../Form/FormInputs/FormInputs"
 
 /**
  * A text input that will trigger an onChange event only after user stops typing.
@@ -29,7 +29,7 @@ const DebouncedInput = ({ onChange, timeout = 450, value, ...props }) => {
         setInputTimeout(setTimeout(() => onChange && onChange(value), timeout))
     }
 
-    return <TextBox {...props} value={localValue} onChange={event => inputOnChange(event.target.value)} />
+    return <InputInput {...props} value={localValue} onChange={event => inputOnChange(event.target.value)} margin="none" />
 }
 
 export default DebouncedInput

@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
 import Form from "../../../components/shared/Form/Form";
-import List from "../../../components/shared/ListAdder/List";
-
+import IconList from "../../../helpers/icons";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
+import DetailsSeo from "./DetailsSeo/DetailsSeo";
+import DetailsSpecification from "./DetailsSpecification/DetailsSpecification";
 
 import formFields from "./formFields.json";
 
@@ -70,14 +71,18 @@ const CategoriesDetails = () => {
 
   const fields = [
     {
-      id: 1,
       name: "Osnovno",
-      icon: "settings",
+      icon: IconList.category,
       disabled: false,
       component: (
         <div>
           {!isLoading ? (
-            <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}`} />
+            <Form
+              formFields={formFields}
+              initialData={data}
+              onSubmit={handleSubmit}
+              queryString={`id_category_product_groups=${gid}&id_category_product=${cid}`}
+            />
           ) : (
             <LoadingForm fields={formFields.length} />
           )}
@@ -85,22 +90,20 @@ const CategoriesDetails = () => {
       ),
     },
     {
-      id: 2,
       name: "Seo",
-      icon: "settings",
-      disabled: false,
-      component: <div>Seo</div>,
+      icon: IconList.search,
+      disabled: cid === "new",
+      component: <DetailsSeo cid={cid} gid={gid} />,
     },
     {
-      id: 3,
       name: "Specifikacija",
       icon: "settings",
-      disabled: false,
-      component: <div>Specifikacija</div>,
+      disabled: cid === "new",
+      component: <DetailsSpecification cid={cid} gid={gid} />,
     },
   ];
 
-  return <DetailsPage title={cid === "new" ? "Unos nove kategorije" : data?.name} fields={cid !== "new" ? fields : [fields[0]]} />;
+  return <DetailsPage title={cid === "new" ? "Unos nove kategorije" : data?.name} fields={fields} />;
 };
 
 export default CategoriesDetails;

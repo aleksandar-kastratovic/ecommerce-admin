@@ -8,7 +8,7 @@
         "disabled": false,
         "required": true,
         "description": "",
-        "ui_prop": "settings",
+        "ui_prop": "xyz",
         "sortable": true,
         "input_type": "input"
     },
@@ -21,51 +21,94 @@
         "disabled": false,
         "required": true,
         "description": "",
-        "ui_prop": "settings",
+        "ui_prop": "xyz",
         "sortable": true,
         "input_type": "input"
     },
+
     {
-        "field_name": "Slika",
-        "prop_name": "image",
+        "field_name": "Opis",
+        "prop_name": "description",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
         "disabled": false,
         "required": false,
         "description": "",
-        "ui_prop": "settings",
+        "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "image_button"
+        "input_type": "textarea"
+    },
+
+    {
+        "field_name": "Atribut za definisanje varijanti proizvoda",
+        "prop_name": "use_in_variants",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "options": [
+            {
+                "id": 1,
+                "name": "Da"
+            },
+            {
+                "id": 0,
+                "name": "Ne"
+            }
+        ],
+        "input_type": "select"
     },
     {
-        "field_name": "Ikona",
-        "prop_name": "icon",
+        "field_name": "Input type",
+        "prop_name": "field_type",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
         "disabled": false,
-        "required": false,
+        "required": true,
         "description": "",
-        "ui_prop": "settings",
+        "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "image_button"
-    },
-    {
-        "field_name": "Roditelj",
-        "prop_name": "parent_id",
-        "in_main_table": true,
-        "in_details": true,
-        "editable": true,
-        "disabled": false,
-        "required": false,
-        "description": "",
-        "ui_prop": "settings",
-        "sortable": true,
-        "input_type": "select",
-        "options": [],
-        "fillFromApi": "admin/category_product/categories/ddl",
-        "usePropName": true
+        "options": [
+            {
+                "id": "input",
+                "name": "Text"
+            },
+            {
+                "id": "select",
+                "name": "Select"
+            },
+            {
+                "id": "date_time",
+                "name": "Date"
+            },
+            {
+                "id": "image_button",
+                "name": "Slika"
+            },
+            {
+                "id": "switch",
+                "name": "Switch"
+            },
+            {
+                "id": "radio",
+                "name": "Radio"
+            },
+            {
+                "id": "checkbox",
+                "name": "Checkbox"
+            },
+            {
+                "id": "textarea",
+                "name": "Textarea"
+            }
+        ],
+        "input_type": "select"
     },
     {
         "field_name": "Status",
@@ -78,16 +121,16 @@
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "select",
         "options": [
             {
                 "id": "on",
-                "name": "on"
+                "name": "On"
             },
             {
                 "id": "off",
-                "name": "off"
+                "name": "Off"
             }
-        ]
+        ],
+        "input_type": "select"
     }
 ]
