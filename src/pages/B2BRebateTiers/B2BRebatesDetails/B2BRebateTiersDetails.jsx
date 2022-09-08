@@ -52,7 +52,7 @@ const B2BRebateTiersDetails = () => {
         api
             .post("/admin/rebates/tiers", rebateTier)
             .then(response => {
-                setData(data => ({ ...data, rebate: { ...data.rebate, id: response.payload.id } }))
+                setData(data => ({ ...data, rebateTier: { ...data.rebateTier, id: response.payload.id } }))
                 toast.success("Uspešno sačuvano")
 
             })
