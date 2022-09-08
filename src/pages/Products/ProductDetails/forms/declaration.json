@@ -1,113 +1,87 @@
 [
-  {
-    "field_name": "ID Proizvođača",
-    "prop_name": "declaration_id_manufacture",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": true,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "select",
-    "options": [
-      {
-        "id": "1",
-        "name": "Option1"
-      },
-      {
-        "id": "2",
-        "name": "Option2"
-      }
-    ]
-  },
-  {
-    "field_name": "Proizvođač",
-    "prop_name": "declaration_manufacture_name",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": true,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
-  },
-  {
-    "field_name": "ID države",
-    "prop_name": "declaration_id_country",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "select",
-    "options": [
-      {
-        "id": "1",
-        "name": "Option1"
-      },
-      {
-        "id": "2",
-        "name": "Option2"
-      }
-    ]
-  },
-  {
-    "field_name": "Zemlja proizvodnje",
-    "prop_name": "declaration_country_name",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": true,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
-  },
-  {
-    "field_name": "Naziv proizvoda",
-    "prop_name": "declaration_name",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": true,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
-  },
-  {
-    "field_name": "Opis proizvoda",
-    "prop_name": "declaration_note",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": true,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
-  },
-  {
-    "field_name": "Godina proizvodnje",
-    "prop_name": "declaration_year",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "date_time"
-  }
+    {
+        "field_name": "Naziv",
+        "prop_name": "declaration_name",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+    },
+    {
+        "field_name": "Napomena",
+        "prop_name": "declaration_note",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "textarea"
+    },
+    {
+        "field_name": "Proizvođač",
+        "prop_name": "declaration_id_manufacture",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "select",
+        "options": [],
+        "fillFromApi": "admin/product-items/declaration/ddl",
+        "usePropName": true
+    },
+    {
+        "field_name": "Zemlja porekla",
+        "prop_name": "declaration_id_country",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "select",
+        "options": [],
+        "fillFromApi": "admin/product-items/declaration/ddl",
+        "usePropName": true
+    },
+    {
+        "field_name": "Uvoznik",
+        "prop_name": "declaration_importer_name",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+    },
+
+    {
+        "field_name": "Godina proizvodnje",
+        "prop_name": "declaration_year",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+    }
 ]
