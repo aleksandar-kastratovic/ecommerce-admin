@@ -5,6 +5,7 @@ import ImageButton from "../ImageButton/ImageButton";
 import InputMultipleImages from "../InputMultipleImages/InputMultipleImages";
 import { InputCheckbox, InputDate, InputDateTime, InputInput, InputNumber, InputRadio, InputSelect, InputSwitch, InputText } from "./FormInputs/FormInputs";
 import FileButton from "../FileButton/FileButton";
+import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
 
 const CreateForm = ({
     item = {},
@@ -166,8 +167,11 @@ const CreateForm = ({
                         />
                     );
                     break;
-                case "MultipleImages": //TODO
+                case "multiple_images": //TODO
                     formItem = <InputMultipleImages list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} />;
+                    break;
+                case "multiple_files": //TODO
+                    formItem = <InputMultipleFiles list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} />;
                     break;
                 case "file_button":
                     formItem = (

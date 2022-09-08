@@ -140,7 +140,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                                 error={inputsError[item.prop_name] ? inputsError[item.prop_name].content : null}
                                 value={Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name]}
                                 queryString={queryString}
-                                disabled={item.disabled || (item.prop_name === "slug" && data.system_required)}
+                                disabled={item.disabled || (item.prop_name === "slug" && data.system_required === 1)}
                             />
                         );
                     })}

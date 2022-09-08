@@ -1,60 +1,17 @@
-import React, { useEffect, useContext, useState, useCallback } from "react";
+import { Grid } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+import ImageDialogFullPage from "../MultipleImages/ImageDialogFullPage/ImageDialogFullPage";
+import ImageListRow from "../MultipleImages/ImageListRow/ImageListRow";
+import MultipleImages from "../MultipleImages/MultipleImages";
+import FileDialog from "../Dialogs/FileDialog/FileDialog";
 
-import { useNavigate } from "react-router-dom";
-
-import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid";
-
-import styles from "./B2Bsettings.module.scss";
-import { flatten } from "lodash";
-import fields from "./mainListFields.json";
-
-import ListTable from "../../components/shared/ListTable/ListTable";
-import ListTableTitle from "../../components/shared/ListTable/ListTableTitle";
-import ListTableToolbar from "../../components/shared/ListTable/ListTableToolbar";
-
-import { useQuery } from "react-query";
-import AuthContext from "../../store/auth-contex";
-import { getListB2Bconfig } from "./services";
-import MultipleImages from "../../components/shared/MultipleImages/MultipleImages";
-import ImageListRow from "../../components/shared/MultipleImages/ImageListRow/ImageListRow";
-import ImageDialogFullPage from "../../components/shared/MultipleImages/ImageDialogFullPage/ImageDialogFullPage";
-import InputMultipleImages from "../../components/shared/InputMultipleImages/InputMultipleImages";
-
-const B2Bsettings = ({}) => {
-    const { user } = useContext(AuthContext);
-
-    const [listData, setListData] = useState();
-
-    const { isSuccess, data: response, isLoading, isError } = useQuery(["getListB2Bconfig"], () => getListB2Bconfig(user.access_token));
-
-    const navigate = useNavigate();
-    // Main component with all frontend logic
-    // Please use destructuring
-    // Since on a project is not used strong type(for example typescript or even proptypes - deprecated)
-    // it is recommended for all properties to give an initial value
-    // In that way if you don't receive value app will not break and all developers will know what type to expect number, string or object, arr etc.
-
-    useEffect(() => {
-        if (response) {
-            setListData(response?.data?.payload);
-        }
-    }, [response]);
-
-    const handleCreateNew = (e) => {
-        // TODO handle create new
-    };
-
-    const handleActions = (module) => () => {
-        navigate(`/B2B-settings/${module}`);
-    };
-
+export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, name }) => {
     // TODO DEMO Start Multiple images drag and drop
 
     // state for openFullPageDialog and imageList single image is very similar it should be one state.
     // Here for demo purposes it is divided to two different states
     // Also setting that different states is redundant it should be one state and setter redundant part should be moved to util/helper file
-    const [imageList, setImageList] = useState();
+    const [imageList, setImageList] = useState(list);
     // TODO DEMO handle drag state
     const [dragActive, setDragActive] = useState(false);
     // initial state of image dialog and image data
@@ -77,6 +34,7 @@ const B2Bsettings = ({}) => {
 
             if (event.target.files && event.target.files[0]) {
                 const selectedFiles = event.target.files;
+
                 let len = imageList === undefined ? 0 : imageList.length;
                 // TODO redundant move to helper and one state
                 for (let i = 0; i < selectedFiles.length; i++) {
@@ -91,16 +49,17 @@ const B2Bsettings = ({}) => {
                             size: selectedFiles[i].size,
                             type: selectedFiles[i].type,
                             src: reader.result,
+                            new: true,
                         });
+                        if (Array.isArray(imageList)) {
+                            newImagesArray = [...imageList, ...newImagesArray];
+                        }
+
+                        setImageList(newImagesArray);
                     };
                     reader.readAsDataURL(file);
                 }
             }
-
-            if (Array.isArray(imageList)) {
-                newImagesArray = [...imageList, ...newImagesArray];
-            }
-            setImageList(newImagesArray);
         },
         [imageList]
     );
@@ -117,34 +76,37 @@ const B2Bsettings = ({}) => {
     };
 
     // TODO DEMO triggers when file is dropped same as upload
-    const handleDrop = function (e) {
-        e.preventDefault();
-        e.stopPropagation();
+    const handleDrop = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
         setDragActive(false);
-        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
-            const selectedFiles = e.dataTransfer.files;
+        if (event.target.files && event.target.files[0]) {
+            const selectedFiles = event.target.files;
 
-            const newImagesArray = [];
-
+            let len = imageList === undefined ? 0 : imageList.length;
             // TODO redundant move to helper and one state
             for (let i = 0; i < selectedFiles.length; i++) {
                 var file = selectedFiles[i];
                 const reader = new FileReader();
                 reader.onloadend = () => {
                     newImagesArray.push({
-                        id: i + 1,
+                        id: i + 1 + len,
                         name: selectedFiles[i].name,
-                        position: i,
+                        position: i + 1,
                         alt: selectedFiles[i].name,
                         size: selectedFiles[i].size,
                         type: selectedFiles[i].type,
                         src: reader.result,
+                        new: true,
                     });
+                    if (Array.isArray(imageList)) {
+                        newImagesArray = [...imageList, ...newImagesArray];
+                    }
+
+                    setImageList(newImagesArray);
                 };
                 reader.readAsDataURL(file);
             }
-
-            setImageList(newImagesArray);
         }
     };
 
@@ -248,35 +210,36 @@ const B2Bsettings = ({}) => {
         setImageList(newState);
     };
 
+    useEffect(() => {
+        setImageList(list);
+    }, [list]);
+
+    useEffect(() => {
+        onChangeHandler({ target: { value: imageList, name: name } });
+    }, [imageList]);
+
     return (
-        <>
-            <Paper elevation={0} className={styles.paperStyle}>
-                <ListTableTitle title="B2B eCommerce podesavanje modula" showButton={true} handleCreateNew={handleCreateNew} />
+        <Grid container spacing={1} direction="row" sx={{ mt: "2rem", ml: "1rem" }}>
+            <MultipleImages
+                handleMultipleImageUpload={handleMultipleImageUpload}
+                handleDrag={handleDrag}
+                accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf"
+                handleDrop={handleDrop}
+                dragActive={dragActive}
+            />
 
-                <ListTableToolbar showToolbar={false} />
-
-                <ListTable tableFields={flatten(fields).filter(({ in_main_table }) => in_main_table)} listData={listData} handleActions={handleActions} />
-
-                {/* TODO DEMO Start */}
-                {/* put into grid just as an example */}
-                <Grid container spacing={1} direction="row" sx={{ mt: "2rem", ml: "1rem" }}>
-                    <MultipleImages handleMultipleImageUpload={handleMultipleImageUpload} handleDrag={handleDrag} handleDrop={handleDrop} dragActive={dragActive} />
-
-                    <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} />
-                    <ImageDialogFullPage
-                        openFullPageDialog={openFullPageDialog}
-                        setOpenFullPageDialog={setOpenFullPageDialog}
-                        setImageList={setImageList}
-                        imageList={imageList}
-                        handleCloseImageDialog={handleCloseImageDialog}
-                        onImageUpload={formImageUpload}
-                        handleDeleteImage={handleDeleteImage}
-                    />
-                </Grid>
-                {/* TODO DEMO End */}
-            </Paper>
-        </>
+            <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} />
+            <FileDialog
+                openFullPageDialog={openFullPageDialog}
+                setOpenFullPageDialog={setOpenFullPageDialog}
+                setImageList={setImageList}
+                imageList={imageList}
+                handleCloseImageDialog={handleCloseImageDialog}
+                onImageUpload={formImageUpload}
+                handleDeleteImage={handleDeleteImage}
+            />
+        </Grid>
     );
 };
 
-export default B2Bsettings;
+export default InputMultipleFiles;

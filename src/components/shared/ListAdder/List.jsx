@@ -36,8 +36,8 @@ const List = ({ listFields = [], formFields = [], init = {}, addFieldLabel = "Do
                 <Button label={addFieldLabel} onClick={addFieldHandler} icon="add" variant="contained" />
 
                 <div className={styles.additionalButtonsHolder}>
-                    {additionalButtons.map((button) => {
-                        return <Button key={button.id} icon={button.icon} label={button.text} onClick={button.action} />;
+                    {additionalButtons.map((button, index) => {
+                        return <Button key={button.text + index} icon={button.icon} label={button.text} onClick={button.action} />;
                     })}
                 </div>
             </div>
