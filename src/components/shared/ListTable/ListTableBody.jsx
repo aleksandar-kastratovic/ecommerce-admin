@@ -1,11 +1,11 @@
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableRow from "@mui/material/TableRow";
-import EmptyList from "../Empty/EmptyList";
-import LoadingTableRows from "../Loading/LoadingTableRows";
-import ActionField from "./ActionField/ActionField";
-import { displayData } from "./util";
-import scss from "./ListTableBody.module.scss";
+import TableBody from "@mui/material/TableBody"
+import TableCell from "@mui/material/TableCell"
+import TableRow from "@mui/material/TableRow"
+import EmptyList from "../Empty/EmptyList"
+import LoadingTableRows from "../Loading/LoadingTableRows"
+import ActionField from "./ActionField/ActionField"
+import { displayData } from "./util"
+import scss from "./ListTableBody.module.scss"
 
 /**
  * Show the table body and handle lifecycle and events.
@@ -20,46 +20,45 @@ import scss from "./ListTableBody.module.scss";
  * @constructor
  */
 const ListTableBody = ({ items, fields, handleActions, isLoading = false, error = null }) => {
+
     // What to show
-    let content;
+    let content
     switch (true) {
         case error !== null:
-            content = <EmptyList span={fields.length} message={`Greška: ${error}`} />;
-            break;
+            content = <EmptyList span={fields.length} message={`Greška: ${error}`} />
+            break
 
         case isLoading:
-            content = <LoadingTableRows columns={fields.length} />;
-            break;
+            content = <LoadingTableRows columns={fields.length} />
+            break
 
         case (items ?? []).length === 0:
-            content = <EmptyList span={fields.length} />;
-            break;
+            content = <EmptyList span={fields.length} />
+            break
 
         default:
             content = (items ?? []).map((row) => (
                 <TableRow hover key={row.id}>
                     {fields.map(({ prop_name, input_type }) => (
                         <TableCell key={prop_name} className={scss[prop_name]}>
-                            {prop_name !== "action" ? (
-                                displayData(row[prop_name], input_type)
-                            ) : (
-                                <ActionField
+                            {prop_name !== "action"
+                                ? displayData(row[prop_name], input_type)
+                                : <ActionField
                                     fieldType={input_type}
                                     handleEdit={handleActions(row["id"], "edit")}
                                     handlePreview={handleActions(row["id"], "preview")}
                                     handleDelete={handleActions(row["id"], "delete")}
                                     handleListGroup={handleActions(row["id"], "listGroup")}
                                     handleCategoryTree={handleActions(row["id"], "categoryTree")}
-                                    systemRequired={row.system_required}
-                                />
-                            )}
+                                    systemRequired={row.system_required} />
+                            }
                         </TableCell>
                     ))}
                 </TableRow>
-            ));
+            ))
     }
 
-    return <TableBody>{content}</TableBody>;
-};
+    return <TableBody>{content}</TableBody>
+}
 
-export default ListTableBody;
+export default ListTableBody
