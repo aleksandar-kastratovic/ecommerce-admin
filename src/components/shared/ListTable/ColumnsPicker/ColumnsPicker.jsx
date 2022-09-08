@@ -1,40 +1,27 @@
-import { useState } from "react";
-import Icon from "@mui/material/Icon";
-import PickerMenu from "./PickerMenu";
+import { useState } from "react"
+import PickerMenu from "./PickerMenu"
+import Button from "../../Button/Button"
 
-import styles from "./ColumnsPicker.module.scss";
-import Button from "../../Button/Button";
+const ColumnsPicker = ({ tableFields = [], onChange }) => {
+    const [ anchor, setAnchor ] = useState(null)
 
-const ColumnsPicker = ({ tableFields = [], onChange = () => {} }) => {
-  const [anchorEl, setAnchorEl] = useState(null);
+    /** Pass changed values to parent. **/
+    const handleConfirm = (data) => {
+        onChange && onChange(data)
+        setAnchor(null)
+    }
 
-  /* open menu */
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    return (
+        <>
+            <PickerMenu
+                anchorEl={anchor}
+                tableFields={tableFields}
+                handleConfirm={handleConfirm}
+                handleClose={() => setAnchor(null)}
+            />
+            <Button icon="settings" label="Kolone" onClick={event => setAnchor(event.currentTarget)} />
+        </>
+    )
+}
 
-  /* close menu */
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  /* pass changed values to parent element */
-  const handleConfirm = (data) => {
-    onChange(data);
-    setAnchorEl(null);
-  };
-
-  return (
-    <>
-      <PickerMenu
-        anchorEl={anchorEl}
-        tableFields={tableFields}
-        handleConfirm={handleConfirm}
-        handleClose={handleClose}
-      />
-      <Button icon="settings" label="Kolone" onClick={handleClick} />
-    </>
-  );
-};
-
-export default ColumnsPicker;
+export default ColumnsPicker

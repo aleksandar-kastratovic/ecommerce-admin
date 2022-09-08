@@ -7,15 +7,7 @@ import ListTableHead from "./ListTableHead"
 import styles from "./ListTable.module.scss"
 import { getComparator } from "./util"
 
-const ListTable = ({
-                       fields = [],
-                       listData = [],
-                       handleActions = () => {
-                       },
-                       isLoading = false,
-                       onPageChange = () => {
-                       }
-                   }) => {
+const ListTable = ({ fields = [], listData = [], isLoading = false, onPageChange, handleActions }) => {
     const { items, pagination } = listData
     const [ order, setOrder ] = useState("asc")
     const [ orderBy, setOrderBy ] = useState("name")
@@ -40,7 +32,7 @@ const ListTable = ({
                         rowCount={fields.length} />
 
                     <ListTableBody
-                        items={(items ?? []).sort(getComparator(order, orderBy))}
+                        items={items ?? []}
                         fields={fields}
                         isLoading={isLoading}
                         handleActions={handleActions}

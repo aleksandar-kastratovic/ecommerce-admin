@@ -62,7 +62,6 @@ const B2BRebatesDetails = () => {
     const updateBasic = rebate =>
         submit({
             ...data.rebate,
-            id         : rebate.id,
             name       : rebate.name,
             description: rebate.description
         })
@@ -72,7 +71,8 @@ const B2BRebatesDetails = () => {
         updateStateKey(setData, "rebate", rebate)
         api
             .post("/admin/rebates", rebate)
-            .then(() => {
+            .then(response => {
+                setData(data => ({ ...data, rebate: { ...data.rebate, id: response.payload.id } }))
                 toast.success("Uspešno sačuvano")
 
             })

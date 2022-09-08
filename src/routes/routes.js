@@ -15,11 +15,13 @@ import {
     faRoad,
     faCopyright,
     faIndustry,
-    faStore,
+    faStore
 } from "@fortawesome/free-solid-svg-icons"
 import IconList from "../helpers/icons"
 import B2BRebatesDetails from "../pages/B2BRebates/B2BRebatesDetails/B2BRebatesDetails"
 import B2BRebatesListPage from "../pages/B2BRebates/B2BRebatesListPage"
+import B2BRebateTiersDetails from "../pages/B2BRebateTiers/B2BRebatesDetails/B2BRebateTiersDetails"
+import B2BRebateTiersListPage from "../pages/B2BRebateTiers/B2BRebateTiersListPage"
 import Countries from "../pages/Countries/Countries"
 import CountriesDetails from "../pages/Countries/CountriesDetails/CountriesDetails"
 import Towns from "../pages/Towns/Towns"
@@ -131,6 +133,12 @@ const screens = {
         B2B,
         Companies,
         [ [ ":comId", CompaniesDetails ] ]
+    ],
+    REBATE_TIERS     : [
+        "/b2b/rebate_tiers",
+        "Rabatne skale", IconList.barChart, B2B,
+        B2BRebateTiersListPage,
+        [ [ ":rebateTierId", B2BRebateTiersDetails ] ]
     ],
     REBATES          : [
         "/b2b/rebates",

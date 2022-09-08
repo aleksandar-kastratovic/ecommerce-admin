@@ -33,7 +33,9 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                 }
             }
         }
-        isEmpty(errors) ? onSubmit(data) : setInputsError(errors)
+        isEmpty(errors)
+            ? onSubmit(data)
+            : setInputsError(errors)
     }
 
     const formItemChangeHandler = ({ target }, type) => {

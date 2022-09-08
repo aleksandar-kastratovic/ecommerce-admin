@@ -8,17 +8,7 @@ import FilterForm from "./FilterForm/FilterForm"
 
 import styles from "./ListTableToolbar.module.scss"
 
-const ListTableToolbar = ({
-                              showDatePicker = true,
-                              fields = [],
-                              filterFields = [],
-                              onColumnsChange = () => {
-                              },
-                              onSearch = () => {
-                              },
-                              onFilterChange = () => {
-                              }
-                          }) => {
+const ListTableToolbar = ({ fields = [], filterFields = [], showDatePicker, onColumnsChange, onSearch}) => {
     const [ filterOpen, setFilterOpen ] = useState(false)
 
     return (
@@ -45,7 +35,7 @@ const ListTableToolbar = ({
                 />
             </Box>
             {filterOpen && (
-                <FilterForm filterFields={filterFields} onChange={onFilterChange} />
+                <FilterForm filterFields={filterFields} />
             )}
         </>
     )

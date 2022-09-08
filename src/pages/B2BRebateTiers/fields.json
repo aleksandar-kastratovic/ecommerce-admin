@@ -13,8 +13,8 @@
         "input_type": "input"
     },
     {
-        "field_name": "Opis",
-        "prop_name": "description",
+        "field_name": "Redosled",
+        "prop_name": "order",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
@@ -23,10 +23,13 @@
         "description": null,
         "ui_prop": null,
         "sortable": true,
-        "input_type": "textarea"
+        "input_type": "input",
+        "params": {
+            "type": "number"
+        }
     },
     {
-        "field_name": "Akcije",
+        "field_name": "",
         "prop_name": "action",
         "in_main_table": true,
         "in_details": true,

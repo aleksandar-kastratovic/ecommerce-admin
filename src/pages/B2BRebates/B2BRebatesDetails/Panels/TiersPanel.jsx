@@ -21,7 +21,6 @@ const TiersPanel = ({ rebate, tiers, onUpdate }) => {
         for (const tier of tiers) {
             initialValues[tier.id] = (rebate.tiers ?? []).find(t => t.id === tier.id)?.amount ?? 0
         }
-        console.log(initialValues)
 
         setValues(initialValues)
 
