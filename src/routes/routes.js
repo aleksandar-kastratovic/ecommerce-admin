@@ -15,7 +15,8 @@ import {
     faRoad,
     faCopyright,
     faIndustry,
-    faStore
+    faStore,
+    faBell,
 } from "@fortawesome/free-solid-svg-icons"
 import IconList from "../helpers/icons"
 import B2BRebatesDetails from "../pages/B2BRebates/B2BRebatesDetails/B2BRebatesDetails"
@@ -68,6 +69,8 @@ import RolesPage from "./../pages/RolesPage"
 import UsersPage from "./../pages/UsersPage"
 import Categories from "../pages/Categories/Categories"
 import CategoriesDetails from "../pages/Categories/CategoriesDetails/CategoriesDetails"
+import Notifications from "../pages/Notifications/Notifications"
+import NotificationsDetails from "../pages/Notifications/NotificationsDetails/NotificationsDetails"
 import { makeScreen, MenuGroup } from "./utils"
 import CategoriesList from "../pages/Categories/CategoriesList/CategoriseList"
 import CategoriesTree from "../pages/Categories/CategoriesTree/CategoriesTree"
@@ -142,7 +145,9 @@ const screens = {
     ],
     REBATES          : [
         "/b2b/rebates",
-        "Rabati", IconList.percent, B2B,
+        "Rabati",
+        IconList.percent,
+        B2B,
         B2BRebatesListPage,
         [ [ ":rebateId", B2BRebatesDetails ] ]
     ],
@@ -165,6 +170,14 @@ const screens = {
         B2B,
         SaleOfficers,
         [ [ ":id", SaleOfficersDetails ] ]
+    ],
+    B2B_NOTIFICATIONS: [
+        "/notifications",
+        "Notifikacije",
+        faBell,
+        B2B,
+        Notifications,
+        [ [ ":notifid", NotificationsDetails ] ]
     ],
 
     BANNERS_B2C      : [
@@ -304,7 +317,6 @@ const screens = {
         Manufacturers,
         [ [ ":mmid", ManufacturersDetails ] ]
     ],
-
     B2BCFG: [
         "/B2B-settings",
         "B2B podešavanja",
