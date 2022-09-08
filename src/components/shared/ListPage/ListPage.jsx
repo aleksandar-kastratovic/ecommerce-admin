@@ -25,10 +25,9 @@ import useAPI from "../../../api/api"
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons, showNewButton = true, filters = {} }) => {
-
+const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {} }) => {
     // TODO Sorting is disabled as it does not work with pagination
-    columnFields = columnFields.map(field => ({ ...field, sortable: false }))
+    columnFields = columnFields.map((field) => ({ ...field, sortable: false }))
 
     const api = useAPI()
     const navigate = useNavigate()
@@ -43,8 +42,7 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
     // Handle delete dialog
     const [ openDeleteDialog, setOpenDeleteDialog ] = useState({ show: false, id: null, mutate: null })
     const handleDeleteConfirm = async () => {
-        api
-            .delete(`${deleteUrl}/${openDeleteDialog.id}`)
+        api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
             .catch(() => toast.warning("Došlo je do greške prilikom brisanja"))
 
@@ -52,10 +50,7 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
     }
 
     // Load the data
-    const { data: response, isLoading, isError } = useQuery(
-        [ "openDeleteDialog.mutate", openDeleteDialog.mutate, search, page ],
-        () => api.list(apiUrl, { page, search, ...filters })
-    )
+    const { data: response, isLoading, isError } = useQuery([ "openDeleteDialog.mutate", openDeleteDialog.mutate, search, page ], () => api.list(apiUrl, { page, search, ...filters }))
 
     // Modify the data
     if (response?.payload && modifyItems) {
@@ -75,10 +70,9 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
     }, [ isError ])
 
     // Update the search term and reset to the first page
-    const handleSearch = value => {
-
+    const handleSearch = (value) => {
         // TODO This always triggers two request as we are changing two states in a row
-        setPage(value)
+        setPage(1)
         setSearch(value)
     }
 
@@ -106,7 +100,7 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
     }
 
     // Buttons in the page header
-    const actions = additionalButtons ?? []
+    const actions = [ ...additionalButtons ] ?? []
     if (showNewButton) {
         actions.push({
             label  : "Novi unos",
@@ -128,19 +122,16 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
                     showDatePicker={showDatePicker} />
 
                 <ListTable
-                    fields={flatten(fieldsColumns).filter(field => field.in_main_table)}
+                    fields={flatten(fieldsColumns).filter((field) => field.in_main_table)}
                     listData={response?.payload}
                     handleActions={handleActions}
                     isLoading={isLoading}
                     page={page}
-                    onPageChange={setPage} />
-
+                    onPageChange={setPage}
+                />
             </PageWrapper>
 
-            <DeleteDialog
-                handleConfirm={handleDeleteConfirm}
-                openDeleteDialog={openDeleteDialog}
-                setOpenDeleteDialog={setOpenDeleteDialog} />
+            <DeleteDialog handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
         </>
     )
 }

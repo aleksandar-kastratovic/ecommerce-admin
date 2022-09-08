@@ -16,7 +16,7 @@ import {
     faCopyright,
     faIndustry,
     faStore,
-    faBell,
+    faBell
 } from "@fortawesome/free-solid-svg-icons"
 import IconList from "../helpers/icons"
 import B2BRebatesDetails from "../pages/B2BRebates/B2BRebatesDetails/B2BRebatesDetails"
@@ -25,6 +25,8 @@ import B2BRebateTiersDetails from "../pages/B2BRebateTiers/B2BRebatesDetails/B2B
 import B2BRebateTiersListPage from "../pages/B2BRebateTiers/B2BRebateTiersListPage"
 import Countries from "../pages/Countries/Countries"
 import CountriesDetails from "../pages/Countries/CountriesDetails/CountriesDetails"
+import PricesGroupsDetails from "../pages/PricesGroups/Details/PricesGroupsDetails"
+import PricesGroupsListPage from "../pages/PricesGroups/PricesGroupsListPage"
 import Towns from "../pages/Towns/Towns"
 import TownsDetails from "../pages/Towns/TownsDetails/TownsDetails"
 import Streets from "../pages/Streets/Streets"
@@ -87,7 +89,7 @@ import B2CPositionDetails from "../pages/B2CbannersPositions/DetailsPage/B2CPosi
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup
 const screens = {
-    CATEG       : [
+    CATEG            : [
         "/categories",
         "Kategorije",
         faSitemap,
@@ -100,15 +102,19 @@ const screens = {
             [ "category/:gid/:cid", CategoriesDetails ]
         ]
     ],
-    PRODU       : [
+    PRODU            : [
         "/products",
         "Proizvodi",
         faArchive,
         PRODUCT,
         Products,
-        [ [ ":prodId", ProductDetails ] ]
+        [
+            [ ":prodId", ProductDetails ],
+            [ "prices-groups", PricesGroupsListPage ],
+            [ "prices-groups/:priceGroupId", PricesGroupsDetails ]
+        ]
     ],
-    PRODUCT_SPEC: [
+    PRODUCT_SPEC     : [
         "/product-specs",
         "Specifikacija",
         faArchive,
@@ -120,7 +126,6 @@ const screens = {
             [ "groups/:groupId", ProductGroupDetails ]
         ]
     ],
-
     ORDER            : [
         "/orders",
         "Porudžbine",
@@ -179,7 +184,6 @@ const screens = {
         Notifications,
         [ [ ":notifid", NotificationsDetails ] ]
     ],
-
     BANNERS_B2C      : [
         "/B2C-banners",
         "Baneri",
@@ -228,8 +232,7 @@ const screens = {
         ContactForm,
         [ [ ":cfid", ContactForm ] ]
     ],
-
-    ROLES         : [
+    ROLES            : [
         "/roles",
         "Uloge",
         faPeopleArrows,
@@ -237,7 +240,7 @@ const screens = {
         RolesPage,
         [ [ ":roleId", RolesPage ] ]
     ],
-    USERS         : [
+    USERS            : [
         "/users",
         "Korisnici",
         faUsers,
@@ -245,7 +248,7 @@ const screens = {
         UsersPage,
         [ [ ":userId", UsersPage ] ]
     ],
-    LOCAT         : [
+    LOCAT            : [
         "/locations",
         "Lokacije",
         faSearchLocation,
@@ -253,7 +256,7 @@ const screens = {
         LocationsPage,
         [ [ ":locId", LocationsPage ] ]
     ],
-    PARAMS        : [
+    PARAMS           : [
         "/params",
         "Parametri",
         faCog,
@@ -261,7 +264,7 @@ const screens = {
         Params,
         [ [ ":pid", DetailsParams ] ]
     ],
-    COUNTRIES     : [
+    COUNTRIES        : [
         "/countries",
         "Države",
         faFlag,
@@ -269,7 +272,7 @@ const screens = {
         Countries,
         [ [ ":cid", CountriesDetails ] ]
     ],
-    MUNICIPALITIES: [
+    MUNICIPALITIES   : [
         "/municipalities",
         "Opštine",
         faCity,
@@ -277,7 +280,7 @@ const screens = {
         Municipalities,
         [ [ ":mid", MunicipalitiesDetails ] ]
     ],
-    TOWNS         : [
+    TOWNS            : [
         "/towns",
         "Mesta",
         faBuilding,
@@ -285,7 +288,7 @@ const screens = {
         Towns,
         [ [ ":id", TownsDetails ] ]
     ],
-    STREETS       : [
+    STREETS          : [
         "/streets",
         "Ulice",
         faRoad,
@@ -293,7 +296,7 @@ const screens = {
         Streets,
         [ [ ":sid", StreetsDetails ] ]
     ],
-    BRANDS        : [
+    BRANDS           : [
         "/brands",
         "Brendovi",
         faCopyright,
@@ -301,7 +304,7 @@ const screens = {
         Brands,
         [ [ ":bid", BrandsDetails ] ]
     ],
-    STORES        : [
+    STORES           : [
         "/stores",
         "Skladišta",
         faStore,
@@ -309,7 +312,7 @@ const screens = {
         Stores,
         [ [ ":ssid", StoresDetails ] ]
     ],
-    MANUFACTURERS : [
+    MANUFACTURERS    : [
         "/manufacturers",
         "Proizvođači",
         faIndustry,
@@ -317,7 +320,7 @@ const screens = {
         Manufacturers,
         [ [ ":mmid", ManufacturersDetails ] ]
     ],
-    B2BCFG: [
+    B2BCFG           : [
         "/B2B-settings",
         "B2B podešavanja",
         faCog,
@@ -325,9 +328,14 @@ const screens = {
         B2Bsettings,
         [ [ ":B2BId", DetailsForm ] ]
     ],
-    IMPORT: [ "/import", "Uvoz podataka", faUpload, TOOLS, ImportSteps ],
-
-    B2CCFG    : [
+    IMPORT           : [
+        "/import",
+        "Uvoz podataka",
+        faUpload,
+        TOOLS,
+        ImportSteps
+    ],
+    B2CCFG           : [
         "/B2C-settings",
         "B2C podešavanja",
         faCog,
@@ -335,7 +343,7 @@ const screens = {
         B2CSettings,
         [ [ ":B2CId", B2CSettings ] ]
     ],
-    ADMIN_FORM: [
+    ADMIN_FORM       : [
         "/admin-form",
         "Admin forme",
         faList,

@@ -8,10 +8,9 @@ import formFields from "../forms/inventories.json";
 const Inventories = ({ productId }) => {
     const init = {
         id: null,
-        id_product: null,
-        id_product_variant: null,
-        id_category: null,
-        category_path: null,
+        id_product: productId,
+        quantity: 0,
+        unit: "kom",
     };
 
     const [listData, setListData] = useState([]);
