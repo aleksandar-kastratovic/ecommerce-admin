@@ -1,8 +1,8 @@
-import { Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, MenuItem, Radio, Select, Switch, TextField } from "@mui/material"
-import { DatePicker, DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers"
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
-import { useEffect, useState } from "react"
-import useAPI from "../../../../api/api"
+import { Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, MenuItem, Radio, Select, Switch, TextField } from "@mui/material";
+import { DatePicker, DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { useEffect, useState } from "react";
+import useAPI from "../../../../api/api";
 
 /**
  * Wrapper for the input element
@@ -25,8 +25,8 @@ export const InputWrapper = ({ children = null, label, required, disabled, margi
             </FormLabel>
             {children}
         </FormControl>
-    )
-}
+    );
+};
 
 /**
  * Basic text input
@@ -59,13 +59,51 @@ export const InputInput = ({ label, required, disabled, name, value, type = "tex
                 helperText={error ? error : description}
                 error={error !== null}
                 sx={{
-                    "& legend"  : { display: "none" },
-                    "& fieldset": { top: 0 }
+                    "& legend": { display: "none" },
+                    "& fieldset": { top: 0 },
                 }}
             />
         </InputWrapper>
-    )
-}
+    );
+};
+
+/**
+ * Basic number input
+ *
+ * @param {string} label Field label
+ * @param {boolean} required If field is required
+ * @param {boolean} disabled If field is disabled
+ * @param {string} error Error message
+ * @param {string} name Input field name
+ * @param {string} value Field value
+ * @param {"none"|"dense"|"normal"} margin The margin to use for FormControl.
+ * @param {function} onChange Change handler for the field
+ * @param {string} description Field description
+ * @param {string} placeholder Field placeholder
+ *
+ * @return {JSX.Element}
+ */
+
+export const InputNumber = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, placeholder }) => {
+    return (
+        <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+            <TextField
+                name={name}
+                value={value}
+                onChange={onChange}
+                placeholder={placeholder}
+                disabled={disabled}
+                helperText={error ? error : description}
+                error={error !== null}
+                type="number"
+                sx={{
+                    "& legend": { display: "none" },
+                    "& fieldset": { top: 0 },
+                }}
+            />
+        </InputWrapper>
+    );
+};
 
 /**
  * Basic checkbox input
@@ -89,8 +127,8 @@ export const InputCheckbox = ({ label, required, disabled, name, value, error = 
             <FormControlLabel control={<Checkbox name={name} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
             <FormHelperText>{error ? error : description}</FormHelperText>
         </InputWrapper>
-    )
-}
+    );
+};
 
 /**
  * Basic radio input
@@ -114,8 +152,8 @@ export const InputRadio = ({ label, required, disabled, name, value, error = nul
             <FormControlLabel control={<Radio name={name} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
             <FormHelperText>{error ? error : description}</FormHelperText>
         </InputWrapper>
-    )
-}
+    );
+};
 
 /**
  * Basic switch input
@@ -125,7 +163,7 @@ export const InputRadio = ({ label, required, disabled, name, value, error = nul
  * @param {boolean} disabled If field is disabled
  * @param {string} error Error message
  * @param {string} name Input field name
- * @param {string} value Field value
+ * @param {boolean} value Field value
  * @param {"none"|"dense"|"normal"} margin The margin to use for FormControl.
  * @param {function} onChange Change handler for the field
  * @param {string} description Field description
@@ -136,11 +174,11 @@ export const InputRadio = ({ label, required, disabled, name, value, error = nul
 export const InputSwitch = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description }) => {
     return (
         <InputWrapper required={required} disabled={disabled} margin={margin} error={error}>
-            <FormControlLabel control={<Switch name={name} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
+            <FormControlLabel control={<Switch name={name} value={value} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
             <FormHelperText>{error ? error : description}</FormHelperText>
         </InputWrapper>
-    )
-}
+    );
+};
 
 /**
  * Basic select input
@@ -163,33 +201,33 @@ export const InputSwitch = ({ label, required, disabled, name, value, error = nu
  */
 
 export const InputSelect = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, fillFromApi, usePropName, options, queryString = "" }) => {
-    const api = useAPI()
-    const [ opt, setOpt ] = useState(options)
+    const api = useAPI();
+    const [opt, setOpt] = useState(options);
 
     useEffect(() => {
-        let isMounted = true
-        let path = usePropName ? `${fillFromApi}/${name}?${queryString}` : `${fillFromApi}?${queryString}`
+        let isMounted = true;
+        let path = usePropName ? `${fillFromApi}/${name}?${queryString}` : `${fillFromApi}?${queryString}`;
         const fillDdl = async () => {
             await api
                 .get(path)
                 .then((response) => {
                     if (isMounted) {
-                        setOpt(response?.payload)
+                        setOpt(response?.payload);
                     }
                 })
                 .catch((error) => {
-                    console.warn(error)
-                })
-        }
+                    console.warn(error);
+                });
+        };
 
         if (fillFromApi) {
-            fillDdl()
+            fillDdl();
         }
 
         return () => {
-            isMounted = false
-        }
-    }, [])
+            isMounted = false;
+        };
+    }, []);
 
     return (
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
@@ -199,8 +237,8 @@ export const InputSelect = ({ label, required, disabled, error = null, name, val
                 onChange={onChange}
                 disabled={disabled}
                 sx={{
-                    "& legend"  : { display: "none" },
-                    "& fieldset": { top: 0 }
+                    "& legend": { display: "none" },
+                    "& fieldset": { top: 0 },
                 }}
             >
                 {(opt ?? []).map((item) => (
@@ -211,8 +249,8 @@ export const InputSelect = ({ label, required, disabled, error = null, name, val
             </Select>
             <FormHelperText>{error ? error : description}</FormHelperText>
         </InputWrapper>
-    )
-}
+    );
+};
 
 /**
  * Basic textarea input
@@ -245,13 +283,13 @@ export const InputText = ({ label, required, disabled, error = null, name, value
                 helperText={error ? error : description}
                 error={error !== null}
                 sx={{
-                    "& legend"  : { display: "none" },
-                    "& fieldset": { top: 0 }
+                    "& legend": { display: "none" },
+                    "& fieldset": { top: 0 },
                 }}
             />
         </InputWrapper>
-    )
-}
+    );
+};
 
 /**
  * Basic datetime input
@@ -273,12 +311,12 @@ export const InputDateTime = ({ label, required, disabled, error = null, name, v
     const handleChange = (newValue) => {
         const ev = {
             target: {
-                name : name,
-                value: newValue
-            }
-        }
-        onChange(ev, "date_time")
-    }
+                name: name,
+                value: newValue,
+            },
+        };
+        onChange(ev, "date_time");
+    };
     return (
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -293,8 +331,8 @@ export const InputDateTime = ({ label, required, disabled, error = null, name, v
                         <TextField
                             {...params}
                             sx={{
-                                "& legend"  : { display: "none" },
-                                "& fieldset": { top: 0 }
+                                "& legend": { display: "none" },
+                                "& fieldset": { top: 0 },
                             }}
                         />
                     )}
@@ -302,8 +340,8 @@ export const InputDateTime = ({ label, required, disabled, error = null, name, v
             </LocalizationProvider>
             <FormHelperText>{error ? error : description}</FormHelperText>
         </InputWrapper>
-    )
-}
+    );
+};
 
 /**
  * Basic date input
@@ -325,12 +363,12 @@ export const InputDate = ({ label, required, disabled, error = null, name, value
     const handleChange = (newValue) => {
         const ev = {
             target: {
-                name : name,
-                value: newValue
-            }
-        }
-        onChange(ev, "date")
-    }
+                name: name,
+                value: newValue,
+            },
+        };
+        onChange(ev, "date");
+    };
     return (
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
             <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -345,8 +383,8 @@ export const InputDate = ({ label, required, disabled, error = null, name, value
                         <TextField
                             {...params}
                             sx={{
-                                "& legend"  : { display: "none" },
-                                "& fieldset": { top: 0 }
+                                "& legend": { display: "none" },
+                                "& fieldset": { top: 0 },
                             }}
                         />
                     )}
@@ -354,5 +392,5 @@ export const InputDate = ({ label, required, disabled, error = null, name, value
             </LocalizationProvider>
             <FormHelperText>{error ? error : description}</FormHelperText>
         </InputWrapper>
-    )
-}
+    );
+};

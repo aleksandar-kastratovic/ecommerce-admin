@@ -8,8 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { formatDate, formatDateTime } from "../../../helpers/dateFormat";
 import ImageDialog from "../Dialogs/ImageDialog";
 import { isUrlValid } from "./util";
+import FileDialog from "../Dialogs/FileDialog/FileDialog";
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = true, queryString = "" }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, queryString = "" }) => {
     const navigate = useNavigate();
     const [data, setData] = useState(initialData);
     const [inputsError, setInputsError] = useState([]);
@@ -27,7 +28,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
 
         const errors = {};
         for (const field of formFields) {
-            if (field.required && (data[field.prop_name] === "" || data[field.prop_name] == null)) {
+            if (field.required && field.input_type !== "switch" && (data[field.prop_name] === "" || data[field.prop_name] == null)) {
                 errors[field.prop_name] = {
                     content: "Polje je obavezno, molim Vas unesite vrednost.",
                 };
@@ -43,8 +44,10 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
             setData({ ...data, [target.name]: formatDate(target.value) });
         } else if (type === "date_time") {
             setData({ ...data, [target.name]: formatDateTime(target.value) });
-        } else if (type === "swicth" || type === "checkbox") {
-            setData({ ...data, [target.name]: target.checked });
+        } else if (type === "checkbox") {
+            setData({ ...data, [target.name]: target.checked ? 1 : 0 });
+        } else if (type === "switch") {
+            setData({ ...data, [target.name]: target.checked ? 1 : 0 });
         } else {
             setData({ ...data, [target.name]: target.value });
         }
@@ -144,6 +147,16 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                     <Button type="submit" label="Sačuvaj" variant="contained" />
                 </Buttons>
             </Box>
+
+            {/* <FileDialog
+                openFullPageDialog={openImageDialog}
+                setOpenFullPageDialog={setOpenImageDialog}
+                setImageList={() => {}}
+                imageList={[]}
+                handleCloseImageDialog={handleCloseImageDialog}
+                onImageUpload={formImageUpload}
+                handleDeleteImage={handleDeleteImage}
+            /> */}
             <ImageDialog
                 title="Obrada slike"
                 openImageDialog={openImageDialog}
