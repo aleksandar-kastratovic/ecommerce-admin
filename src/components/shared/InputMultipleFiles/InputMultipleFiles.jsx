@@ -5,16 +5,31 @@ import ImageListRow from "../MultipleImages/ImageListRow/ImageListRow";
 import MultipleImages from "../MultipleImages/MultipleImages";
 import FileDialog from "../Dialogs/FileDialog/FileDialog";
 
-export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, name }) => {
-    // TODO DEMO Start Multiple images drag and drop
+const getLoadedFile = (file, i, len) => {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            let ret = {
+                id: i + 1 + len,
+                name: file.name,
+                position: i + 1 + len,
+                alt: file.name,
+                size: file.size,
+                type: file.type,
+                src: reader.result,
+                new: true,
+            };
+            resolve(ret);
+        };
 
-    // state for openFullPageDialog and imageList single image is very similar it should be one state.
-    // Here for demo purposes it is divided to two different states
-    // Also setting that different states is redundant it should be one state and setter redundant part should be moved to util/helper file
+        reader.readAsDataURL(file);
+    });
+};
+
+export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, accept = "image/*", name = "", uploadHandler = () => {}, deleteHandler = () => {} }) => {
     const [imageList, setImageList] = useState(list);
-    // TODO DEMO handle drag state
     const [dragActive, setDragActive] = useState(false);
-    // initial state of image dialog and image data
+
     const init = {
         show: false,
         image: "",
@@ -23,48 +38,10 @@ export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, name
         size: "",
         type: "",
     };
-    // handle open full page modal with image data
+
     const [openFullPageDialog, setOpenFullPageDialog] = useState(init);
 
-    // handler for uploading images, maping to array with image data for components
-    const handleMultipleImageUpload = useCallback(
-        (event) => {
-            event.preventDefault();
-            let newImagesArray = [];
-
-            if (event.target.files && event.target.files[0]) {
-                const selectedFiles = event.target.files;
-
-                let len = imageList === undefined ? 0 : imageList.length;
-                // TODO redundant move to helper and one state
-                for (let i = 0; i < selectedFiles.length; i++) {
-                    var file = selectedFiles[i];
-                    const reader = new FileReader();
-                    reader.onloadend = () => {
-                        newImagesArray.push({
-                            id: i + 1 + len,
-                            name: selectedFiles[i].name,
-                            position: i + 1,
-                            alt: selectedFiles[i].name,
-                            size: selectedFiles[i].size,
-                            type: selectedFiles[i].type,
-                            src: reader.result,
-                            new: true,
-                        });
-                        if (Array.isArray(imageList)) {
-                            newImagesArray = [...imageList, ...newImagesArray];
-                        }
-
-                        setImageList(newImagesArray);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-        },
-        [imageList]
-    );
-
-    // TODO DEMO handle drag events
+    //DRAG EVENT HANDLER
     const handleDrag = function (e) {
         e.preventDefault();
         e.stopPropagation();
@@ -75,42 +52,38 @@ export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, name
         }
     };
 
-    // TODO DEMO triggers when file is dropped same as upload
-    const handleDrop = function (event) {
-        event.preventDefault();
-        event.stopPropagation();
+    //FILES UPLOAD HANDLER
+    const handleUpload = async function (e) {
+        e.preventDefault();
+        e.stopPropagation();
         setDragActive(false);
-        if (event.target.files && event.target.files[0]) {
-            const selectedFiles = event.target.files;
+        let selectedFiles = [];
+        if (e?.dataTransfer?.files && e.dataTransfer.files[0]) {
+            selectedFiles = e.dataTransfer.files;
+        } else if (e?.target?.files && e.target.files[0]) {
+            selectedFiles = e.target.files;
+        }
+
+        if (selectedFiles.length > 0) {
+            let newImagesArray = [];
 
             let len = imageList === undefined ? 0 : imageList.length;
-            // TODO redundant move to helper and one state
+
             for (let i = 0; i < selectedFiles.length; i++) {
                 var file = selectedFiles[i];
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    newImagesArray.push({
-                        id: i + 1 + len,
-                        name: selectedFiles[i].name,
-                        position: i + 1,
-                        alt: selectedFiles[i].name,
-                        size: selectedFiles[i].size,
-                        type: selectedFiles[i].type,
-                        src: reader.result,
-                        new: true,
-                    });
-                    if (Array.isArray(imageList)) {
-                        newImagesArray = [...imageList, ...newImagesArray];
-                    }
-
-                    setImageList(newImagesArray);
-                };
-                reader.readAsDataURL(file);
+                const obj = await getLoadedFile(file, i, len);
+                await uploadHandler(obj);
+                newImagesArray.push(obj);
             }
+            if (Array.isArray(imageList)) {
+                newImagesArray = [...imageList, ...newImagesArray];
+            }
+
+            setImageList(newImagesArray);
         }
     };
 
-    // modal open handler
+    //MODAL OPEN HANDLER
     const handleModalOpen = (e, src, alt, name, size, type, id) => {
         setOpenFullPageDialog({
             show: true,
@@ -123,17 +96,16 @@ export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, name
         });
     };
 
-    // close modal back to initial state
+    //CLOSE MODAL
     const handleCloseImageDialog = () => {
         setOpenFullPageDialog(init);
     };
 
-    // single image upload in opend modal
+    //IMAGE UPLOAD FROM MODAL
     const formImageUpload = useCallback(
         (event) => {
             event.preventDefault();
             const selectedFile = event.target.files[0];
-
             const reader = new FileReader();
             reader.onloadend = () => {
                 const timeOutId = setTimeout(() => {
@@ -182,7 +154,8 @@ export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, name
         });
     };
 
-    const handleDeleteImage = (e, deleteImgId) => {
+    //TODO DELETE DIALOG
+    const handleDeleteImage = (e, deleteImgId, isNew) => {
         alert("Prikazi modal da li je siguran da zeli da obrise ili ne");
         setOpenFullPageDialog({
             ...openFullPageDialog,
@@ -191,22 +164,17 @@ export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, name
 
         // If it is an edit mode it value of property src/image should be string "DELETE"
         // but if it is a first upload it should be removed from images array
-        let imageItem = {
-            id: null,
-            position: null,
-            alt: null,
-            size: null,
-            type: null,
-            name: null,
-            src: "DELETE",
-        };
+        if (!isNew) {
+            deleteHandler(deleteImgId);
+        }
 
-        const newState = imageList.map((img) => {
-            if (img.id === deleteImgId) {
-                return { ...imageItem };
+        const newState = [];
+        for (const img of imageList) {
+            if (img.id !== deleteImgId) {
+                newState.push(img);
             }
-            return img;
-        });
+        }
+        console.log(newState);
         setImageList(newState);
     };
 
@@ -220,13 +188,7 @@ export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, name
 
     return (
         <Grid container spacing={1} direction="row" sx={{ mt: "2rem", ml: "1rem" }}>
-            <MultipleImages
-                handleMultipleImageUpload={handleMultipleImageUpload}
-                handleDrag={handleDrag}
-                accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf"
-                handleDrop={handleDrop}
-                dragActive={dragActive}
-            />
+            <MultipleImages handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} />
 
             <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} />
             <FileDialog

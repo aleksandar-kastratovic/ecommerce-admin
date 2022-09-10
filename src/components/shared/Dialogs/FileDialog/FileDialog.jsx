@@ -88,7 +88,6 @@ const FileDialog = ({
                 </Box>
             </DialogContent>
             <DialogActions>
-                (
                 <Stack direction="row" alignItems="center" spacing={2} className={styles.btnGroup}>
                     <Button variant="outlined" onClick={handleCloseImageDialog} color="success" startIcon={<CheckIcon />}>
                         Sačuvaj

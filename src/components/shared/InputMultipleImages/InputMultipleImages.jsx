@@ -11,7 +11,7 @@ const getLoadedFile = (file, i, len) => {
             let ret = {
                 id: i + 1 + len,
                 name: file.name,
-                position: i + 1,
+                position: i + 1 + len,
                 alt: file.name,
                 size: file.size,
                 type: file.type,
@@ -25,7 +25,7 @@ const getLoadedFile = (file, i, len) => {
     });
 };
 
-export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, name }) => {
+export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, accept = "image/*", name = "", uploadHandler = () => {}, deleteHandler = () => {} }) => {
     const [imageList, setImageList] = useState(list);
     const [dragActive, setDragActive] = useState(false);
 
@@ -71,6 +71,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, nam
             for (let i = 0; i < selectedFiles.length; i++) {
                 var file = selectedFiles[i];
                 const obj = await getLoadedFile(file, i, len);
+                await uploadHandler(obj);
                 newImagesArray.push(obj);
             }
             if (Array.isArray(imageList)) {
@@ -153,7 +154,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, nam
     };
 
     //TODO DELETE DIALOG
-    const handleDeleteImage = (e, deleteImgId) => {
+    const handleDeleteImage = (e, deleteImgId, isNew) => {
         alert("Prikazi modal da li je siguran da zeli da obrise ili ne");
         setOpenFullPageDialog({
             ...openFullPageDialog,
@@ -162,22 +163,17 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, nam
 
         // If it is an edit mode it value of property src/image should be string "DELETE"
         // but if it is a first upload it should be removed from images array
-        let imageItem = {
-            id: deleteImgId,
-            position: null,
-            alt: null,
-            size: null,
-            type: null,
-            name: null,
-            src: "DELETE",
-        };
+        if (!isNew) {
+            deleteHandler(deleteImgId);
+        }
 
-        const newState = imageList.map((img) => {
-            if (img.id === deleteImgId) {
-                return { ...imageItem };
+        const newState = [];
+        for (const img of imageList) {
+            if (img.id !== deleteImgId) {
+                newState.push(img);
             }
-            return img;
-        });
+        }
+        console.log(newState);
         setImageList(newState);
     };
 
@@ -191,7 +187,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, nam
 
     return (
         <Grid container spacing={1} direction="row" sx={{ mt: "2rem", ml: "1rem" }}>
-            <MultipleImages handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} />
+            <MultipleImages handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} />
 
             <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} />
             <ImageDialogFullPage
