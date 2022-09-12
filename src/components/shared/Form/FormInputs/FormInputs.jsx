@@ -205,7 +205,6 @@ export const InputSwitch = ({ label, required, disabled, name, value, error = nu
 export const InputSelect = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, fillFromApi, usePropName, options, queryString = "" }) => {
     const api = useAPI();
     const [opt, setOpt] = useState(options);
-
     useEffect(() => {
         let isMounted = true;
         let path = usePropName ? `${fillFromApi}/${name}?${queryString}` : `${fillFromApi}?${queryString}`;
@@ -229,7 +228,7 @@ export const InputSelect = ({ label, required, disabled, error = null, name, val
         return () => {
             isMounted = false;
         };
-    }, []);
+    }, [fillFromApi]);
 
     return (
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
