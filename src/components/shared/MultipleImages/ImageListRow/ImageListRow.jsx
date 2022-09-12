@@ -14,12 +14,13 @@ import IconList from "../../../../helpers/icons";
 
 // https://github.com/atlassian/react-beautiful-dnd
 
-const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}, handleDeleteImage = () => {} }) => {
+const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}, handleDeleteImage = () => {}, handleReorder = () => {} }) => {
     const onDragEnd = ({ destination, source }) => {
         // dropped outside the list
         if (!destination) return;
         const newItems = reorder(imageList, source.index, destination.index);
         setImageList(newItems);
+        handleReorder(imageList[source.index].id, destination.index + 1);
     };
 
     return (
@@ -51,7 +52,7 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}
                                                         style={{
                                                             height: "6rem",
                                                         }}
-                                                        onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id)}
+                                                        onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position)}
                                                     />
                                                 ) : (
                                                     <div
@@ -63,9 +64,9 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}
                                                             alignItems: "center",
                                                             justifyContent: "center",
                                                         }}
-                                                        onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id)}
+                                                        onClick={(e) => handleModalOpen(e, item)}
                                                     >
-                                                        <Icon fontSize="large">{IconList.editDocument}</Icon>
+                                                        {item.thumb_image ? <img src={item.thumb_image} width="100%" height="100%" /> : <Icon fontSize="large">{IconList.editDocument}</Icon>}
                                                     </div>
                                                 )}
                                                 <ImageListItemBar

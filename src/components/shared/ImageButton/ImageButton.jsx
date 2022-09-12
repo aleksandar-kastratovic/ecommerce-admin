@@ -69,9 +69,9 @@ const ImageButton = ({
     return (
         <>
             {value ? (
-                <Box sx={{ flexGrow: 1 }}>
-                    <Grid container spacing={2} alignItems="center" margin={0} padding={0}>
-                        <FormControl className={styles.formStyle}>
+                <Box sx={{ flexGrow: 1, width: "100%" }}>
+                    <Grid container spacing={2} alignItems="center" margin={0} padding={0} width="100%">
+                        <FormControl className={styles.formStyle} fullWidth>
                             <FormLabel required={required}>{label}</FormLabel>
                             <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
                             <ButtonBase focusRipple className={styles.imageButtonStyled} onClick={() => onOpenImageDialog(value, label, name, imgWidth, imgHeight)}>
@@ -117,15 +117,14 @@ const ImageButton = ({
                 <Box>
                     <Grid
                         container
-                        spacing={2}
                         alignItems="center"
                         margin={0}
                         sx={{
-                            "&>.MuiGrid-item": { padding: 0 },
+                            "&>.MuiGrid-item": { padding: 0, width: "100%" },
                         }}
                     >
-                        <Grid item xs={8} md={8} margin={0} padding={0} sx={{ padding: 0 }}>
-                            <FormControl error={error !== null}>
+                        <Grid item margin={0} padding={0} sx={{ padding: 0 }}>
+                            <FormControl error={error !== null} fullWidth sx={{ width: "auto" }}>
                                 <FormLabel required={required}>{label}</FormLabel>
                                 <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
                                 <Typography variant="caption" display="block" gutterBottom>

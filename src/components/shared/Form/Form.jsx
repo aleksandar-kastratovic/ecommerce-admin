@@ -10,7 +10,7 @@ import ImageDialog from "../Dialogs/ImageDialog";
 import { isUrlValid } from "./util";
 import FileDialog from "../Dialogs/FileDialog/FileDialog";
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, queryString = "", onChange = () => {} }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, submitButton = true, queryString = "", onChange = () => {} }) => {
     const navigate = useNavigate();
     const [data, setData] = useState(initialData);
     const [inputsError, setInputsError] = useState([]);
@@ -146,7 +146,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                     })}
                 <Buttons>
                     {cancelButton && <Button label="Odustani" onClick={() => navigate(-1)} />}
-                    <Button type="submit" label="Sačuvaj" variant="contained" />
+                    {submitButton && <Button type="submit" label="Sačuvaj" variant="contained" />}
                 </Buttons>
             </Box>
 

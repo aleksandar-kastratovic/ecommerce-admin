@@ -4,6 +4,8 @@ import ImageDialogFullPage from "../MultipleImages/ImageDialogFullPage/ImageDial
 import ImageListRow from "../MultipleImages/ImageListRow/ImageListRow";
 import MultipleImages from "../MultipleImages/MultipleImages";
 import FileDialog from "../Dialogs/FileDialog/FileDialog";
+import DeleteDialog from "../Dialogs/DeleteDialog";
+import IconList from "../../../helpers/icons";
 
 const getLoadedFile = (file, i, len) => {
     return new Promise((resolve) => {
@@ -26,17 +28,30 @@ const getLoadedFile = (file, i, len) => {
     });
 };
 
-export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, accept = "image/*", name = "", uploadHandler = () => {}, deleteHandler = () => {} }) => {
+export const InputMultipleFiles = ({
+    list = [],
+    onChangeHandler = () => {},
+    accept = "",
+    name = "",
+    uploadHandler = () => {},
+    saveDataHandler = () => {},
+    deleteHandler = () => {},
+    handleReorder,
+    dialogFormFields = [],
+    dialogGetPath,
+}) => {
     const [imageList, setImageList] = useState(list);
     const [dragActive, setDragActive] = useState(false);
 
+    const [openDeleteDialog, setOpenDeleteDialog] = useState({
+        show: false,
+        id: null,
+        mutate: null,
+    });
+
     const init = {
         show: false,
-        image: "",
-        alt: "",
-        name: "",
-        size: "",
-        type: "",
+        item: null,
     };
 
     const [openFullPageDialog, setOpenFullPageDialog] = useState(init);
@@ -84,15 +99,10 @@ export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, acce
     };
 
     //MODAL OPEN HANDLER
-    const handleModalOpen = (e, src, alt, name, size, type, id) => {
+    const handleModalOpen = (e, item) => {
         setOpenFullPageDialog({
             show: true,
-            id: id,
-            image: src,
-            alt: alt,
-            name: name,
-            size: size,
-            type: type,
+            item: item,
         });
     };
 
@@ -119,7 +129,6 @@ export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, acce
     );
 
     const imageSetter = (event, result, selectedFile) => {
-        // TODO redundant move to helper and one state
         const find = imageList.filter((item) => {
             return item.name === event.target.id;
         });
@@ -135,6 +144,8 @@ export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, acce
             src: result,
         };
 
+        uploadHandler(imageItem);
+
         const newState = imageList.map((img) => {
             if (img.id === found.id) {
                 return { ...imageItem };
@@ -144,38 +155,34 @@ export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, acce
         setImageList(newState);
 
         setOpenFullPageDialog({
-            ...openFullPageDialog,
             show: true,
-            image: result,
-            name: selectedFile.name,
-            alt: selectedFile.name,
-            size: selectedFile.size,
-            type: selectedFile.type,
+            item: { ...imageItem, file_base64: result },
         });
     };
 
-    //TODO DELETE DIALOG
     const handleDeleteImage = (e, deleteImgId, isNew) => {
-        alert("Prikazi modal da li je siguran da zeli da obrise ili ne");
-        setOpenFullPageDialog({
-            ...openFullPageDialog,
-            image: "DELETE",
-        });
+        setOpenDeleteDialog({ show: true, id: deleteImgId, isNew: isNew, mutate: null });
+    };
 
+    const handleCancel = () => {
+        setOpenDeleteDialog({ show: false, id: null, isNew: false });
+    };
+    const handleConfirm = () => {
         // If it is an edit mode it value of property src/image should be string "DELETE"
         // but if it is a first upload it should be removed from images array
-        if (!isNew) {
-            deleteHandler(deleteImgId);
+        if (!openDeleteDialog.isNew) {
+            deleteHandler(openDeleteDialog.id);
         }
 
         const newState = [];
         for (const img of imageList) {
-            if (img.id !== deleteImgId) {
+            if (img.id !== openDeleteDialog.id) {
                 newState.push(img);
             }
         }
-        console.log(newState);
         setImageList(newState);
+        setOpenFullPageDialog(init);
+        setOpenDeleteDialog({ show: false, id: null, isNew: false, mutate: 1 });
     };
 
     useEffect(() => {
@@ -188,17 +195,26 @@ export const InputMultipleFiles = ({ list = [], onChangeHandler = () => {}, acce
 
     return (
         <Grid container spacing={1} direction="row" sx={{ mt: "2rem", ml: "1rem" }}>
-            <MultipleImages handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} />
+            <MultipleImages handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} icon={IconList.uploadFile} />
 
-            <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} />
+            <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} handleReorder={handleReorder} />
             <FileDialog
                 openFullPageDialog={openFullPageDialog}
                 setOpenFullPageDialog={setOpenFullPageDialog}
-                setImageList={setImageList}
-                imageList={imageList}
                 handleCloseImageDialog={handleCloseImageDialog}
                 onImageUpload={formImageUpload}
                 handleDeleteImage={handleDeleteImage}
+                saveHandler={saveDataHandler}
+                formFields={dialogFormFields}
+                getPath={dialogGetPath}
+            />
+            <DeleteDialog
+                title="Brisanje"
+                description="Da li ste sigurni da želite da obrišete?"
+                openDeleteDialog={openDeleteDialog}
+                setOpenDeleteDialog={setOpenDeleteDialog}
+                handleConfirm={handleConfirm}
+                handleCancel={handleCancel}
             />
         </Grid>
     );

@@ -2,11 +2,12 @@ import React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 
 import styles from "./MultipleImages.module.scss";
+import { Icon } from "@mui/material";
+import IconList from "../../../helpers/icons";
 
-const MultipleImages = ({ handleMultipleImageUpload = () => {}, handleDrag = () => {}, handleDrop = () => {}, accept = "image/*", dragActive = false }) => {
+const MultipleImages = ({ handleMultipleImageUpload = () => {}, handleDrag = () => {}, handleDrop = () => {}, accept = "image/*", dragActive = false, icon = IconList.addAPhoto }) => {
     return (
         <>
             <Box className={styles.formUpload} onDragEnter={handleDrag}>
@@ -19,7 +20,7 @@ const MultipleImages = ({ handleMultipleImageUpload = () => {}, handleDrag = () 
                             <Box>
                                 <Box>
                                     <Typography variant="caption" display="block" gutterBottom />
-                                    <AddAPhotoIcon className={styles.addAPhotoIcon} />
+                                    <Icon className={styles.addAPhotoIcon}>{icon}</Icon>
                                 </Box>
                                 <Typography variant="caption" display="block" gutterBottom>
                                     klikni

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import ImageDialogFullPage from "../MultipleImages/ImageDialogFullPage/ImageDialogFullPage";
 import ImageListRow from "../MultipleImages/ImageListRow/ImageListRow";
 import MultipleImages from "../MultipleImages/MultipleImages";
+import DeleteDialog from "../Dialogs/DeleteDialog";
 
 const getLoadedFile = (file, i, len) => {
     return new Promise((resolve) => {
@@ -25,9 +26,15 @@ const getLoadedFile = (file, i, len) => {
     });
 };
 
-export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, accept = "image/*", name = "", uploadHandler = () => {}, deleteHandler = () => {} }) => {
+export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, accept = "image/*", name = "", uploadHandler = () => {}, deleteHandler = () => {}, handleReorder }) => {
     const [imageList, setImageList] = useState(list);
     const [dragActive, setDragActive] = useState(false);
+
+    const [openDeleteDialog, setOpenDeleteDialog] = useState({
+        show: false,
+        id: null,
+        mutate: null,
+    });
 
     const init = {
         show: false,
@@ -36,6 +43,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, acc
         name: "",
         size: "",
         type: "",
+        position: 0,
     };
 
     const [openFullPageDialog, setOpenFullPageDialog] = useState(init);
@@ -83,7 +91,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, acc
     };
 
     //MODAL OPEN HANDLER
-    const handleModalOpen = (e, src, alt, name, size, type, id) => {
+    const handleModalOpen = (e, src, alt, name, size, type, id, position) => {
         setOpenFullPageDialog({
             show: true,
             id: id,
@@ -92,6 +100,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, acc
             name: name,
             size: size,
             type: type,
+            position: position,
         });
     };
 
@@ -118,7 +127,6 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, acc
     );
 
     const imageSetter = (event, result, selectedFile) => {
-        // TODO redundant move to helper and one state
         const find = imageList.filter((item) => {
             return item.name === event.target.id;
         });
@@ -133,6 +141,8 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, acc
             name: selectedFile.name,
             src: result,
         };
+
+        uploadHandler(imageItem);
 
         const newState = imageList.map((img) => {
             if (img.id === found.id) {
@@ -153,28 +163,29 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, acc
         });
     };
 
-    //TODO DELETE DIALOG
     const handleDeleteImage = (e, deleteImgId, isNew) => {
-        alert("Prikazi modal da li je siguran da zeli da obrise ili ne");
-        setOpenFullPageDialog({
-            ...openFullPageDialog,
-            image: "DELETE",
-        });
+        setOpenDeleteDialog({ show: true, id: deleteImgId, isNew: isNew, mutate: null });
+    };
 
+    const handleCancel = () => {
+        setOpenDeleteDialog({ show: false, id: null, isNew: false });
+    };
+    const handleConfirm = () => {
         // If it is an edit mode it value of property src/image should be string "DELETE"
         // but if it is a first upload it should be removed from images array
-        if (!isNew) {
-            deleteHandler(deleteImgId);
+        if (!openDeleteDialog.isNew) {
+            deleteHandler(openDeleteDialog.id);
         }
 
         const newState = [];
         for (const img of imageList) {
-            if (img.id !== deleteImgId) {
+            if (img.id !== openDeleteDialog.id) {
                 newState.push(img);
             }
         }
-        console.log(newState);
         setImageList(newState);
+        setOpenFullPageDialog(init);
+        setOpenDeleteDialog({ show: false, id: null, isNew: false, mutate: 1 });
     };
 
     useEffect(() => {
@@ -189,7 +200,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, acc
         <Grid container spacing={1} direction="row" sx={{ mt: "2rem", ml: "1rem" }}>
             <MultipleImages handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} />
 
-            <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} />
+            <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} handleReorder={handleReorder} />
             <ImageDialogFullPage
                 openFullPageDialog={openFullPageDialog}
                 setOpenFullPageDialog={setOpenFullPageDialog}
@@ -198,6 +209,15 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => {}, acc
                 handleCloseImageDialog={handleCloseImageDialog}
                 onImageUpload={formImageUpload}
                 handleDeleteImage={handleDeleteImage}
+                uploadHandler={uploadHandler}
+            />
+            <DeleteDialog
+                title="Brisanje"
+                description="Da li ste sigurni da želite da obrišete?"
+                openDeleteDialog={openDeleteDialog}
+                setOpenDeleteDialog={setOpenDeleteDialog}
+                handleConfirm={handleConfirm}
+                handleCancel={handleCancel}
             />
         </Grid>
     );
