@@ -7,55 +7,45 @@ import groupForm from "../groupForm.json";
 import CreateForm from "../../../../../components/shared/Form/CreateForm";
 import { formatDate } from "../../../../../helpers/dateFormat";
 import { Button } from "@mui/material";
-import { useContext } from "react";
-import AuthContext from "../../../../../store/auth-contex";
-import { getFieldsByGroupId, getProductGroupAttributeDDL, postProductGroupAttribute } from "../../../services";
+import useAPI from "../../../../../api/api";
 
 const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, onChange = () => {}, productId, productVariantId }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [formFields, setFormFields] = useState([]);
     const [data, setData] = useState({});
 
-    const { user } = useContext(AuthContext);
+    const api = useAPI();
 
     const isOpenToggle = () => {
         setIsOpen(!isOpen);
     };
 
     const onSubmit = async () => {
-        try {
-            for (const field of formFields) {
-                if (data[field.name] !== undefined) {
-                    let repack = { id: data.id !== undefined ? data.id : null };
-                    repack = {
-                        ...repack,
-                        id_product: productId,
-                        id_set: setId,
-                        id_group: groupId,
-                        id_attribute: field.id,
-                        slug_set: slugSet,
-                        set_name: nameSet,
-                        group_name: name,
-                        slug_group: slug,
-                        slug_attribute: field.slug,
-                        id_product_variant: productVariantId ?? 1,
-                        name_attribute: field.name,
-                        id_attribute_value: null,
-                        slug_attribute_value: "",
-                        order: 0,
-                        name_attribute_value: data[field.name],
-                    };
-                    if (field.field_type === "select") {
-                        //repack
-                    }
-
-                    let response = await postProductGroupAttribute(user.access_token, repack);
-                    console.log(response);
+        for (const field of formFields) {
+            if (data[field.name] !== undefined) {
+                let repack = { id: data.id !== undefined ? data.id : null };
+                repack = {
+                    ...repack,
+                    id_product: productId,
+                    id_set: setId,
+                    id_group: groupId,
+                    id_attribute: field.id,
+                    slug_set: slugSet,
+                    set_name: nameSet,
+                    group_name: name,
+                    slug_group: slug,
+                    slug_attribute: field.slug,
+                    id_product_variant: productVariantId ?? 1,
+                    name_attribute: field.name,
+                    id_attribute_value: null,
+                    slug_attribute_value: "",
+                    order: 0,
+                    name_attribute_value: data[field.name],
+                };
+                if (field.field_type === "select") {
+                    //repack
                 }
             }
-            //let response = await postProductGroupAttribute(user.access_token);
-        } catch (error) {
-            console.warn(error);
         }
     };
 
@@ -71,23 +61,9 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
     };
 
     const groupFiledsHandler = async () => {
-        try {
-            let response = await getFieldsByGroupId(user.access_token, groupId);
-
-            console.log(response?.data?.payload);
-        } catch (error) {
-            console.warn(error);
-        }
-    };
-
-    const attributeDdlHandler = async (idAttr) => {
-        try {
-            let response = await getProductGroupAttributeDDL(user.access_token, groupId, idAttr);
-            return response?.data?.payload;
-        } catch (error) {
-            console.warn(error);
-            return [];
-        }
+        api.get(`admin/product-items/specifications/group/${groupId}`)
+            .then((response) => console.log(response))
+            .catch((error) => console.warn(error));
     };
 
     useEffect(() => {

@@ -7,125 +7,115 @@ import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import DeleteDialog from "../../../../../components/shared/Dialogs/DeleteDialog";
 
 import styles from "./SetFormFields.module.scss";
-import { Button } from "@mui/material";
+import { Button, Icon } from "@mui/material";
 import { isEmpty } from "lodash";
 import { useEffect } from "react";
 import GroupField from "./GroupField";
 import { useContext } from "react";
 import AuthContext from "../../../../../store/auth-contex";
 import { getGrupsBySetID } from "../../../services";
+import chooseSetForm from "../chooseSetForm.json";
+import IconList from "../../../../../helpers/icons";
+import useAPI from "../../../../../api/api";
 
-const ListItem = ({
-  index,
-  onDelete = () => {},
-  setFormFields = [],
-  selectedSet = undefined,
-  productId,
-  productVariantId,
-}) => {
-  const [loaded, setLoaded] = useState(false);
-  //set form
-  const [fields, setFields] = useState(setFormFields);
-  const [selected, setSetlected] = useState(selectedSet);
+const ListItem = ({ index, onDelete = () => {}, selectedSet = undefined, productId, productVariantId }) => {
+    const [loaded, setLoaded] = useState(false);
 
-  //set groups
-  const [groups, setGroups] = useState([]);
-  const [set, setSet] = useState({});
+    //delected set
+    const [selected, setSetlected] = useState(selectedSet);
 
-  const { user } = useContext(AuthContext);
-  const [ddlDisabled, setDdlDisabled] = useState(false);
+    //set groups
+    const [groups, setGroups] = useState([]);
+    const [set, setSet] = useState({});
 
-  const [openDeleteDialog, setOpenDeleteDialog] = useState({
-    show: false,
-    id: null,
-    mutate: null,
-  });
+    const { user } = useContext(AuthContext);
+    const [ddlDisabled, setDdlDisabled] = useState(false);
 
-  const formItemChangeHandler = ({ target }, type) => {
-    setSetlected(target.value);
-  };
+    const api = useAPI();
 
-  const deleteHandler = () => {
-    onDelete(index, index);
-    setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
-  };
+    const [openDeleteDialog, setOpenDeleteDialog] = useState({
+        show: false,
+        id: null,
+        mutate: null,
+    });
 
-  const onClickDelete = () => {
-    setOpenDeleteDialog({ show: true, id: null, mutate: null });
-  };
+    const formItemChangeHandler = ({ target }, type) => {
+        setSetlected(target.value);
+    };
 
-  const handleCancel = () => {
-    setOpenDeleteDialog({ show: false, id: null });
-  };
+    const deleteHandler = () => {
+        onDelete(index, index);
+        setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
+    };
 
-  const groupsChangeHandler = async () => {
-    try {
-      let response = await getGrupsBySetID(user.access_token, selected);
-      setSet(response?.data?.payload?.set);
-      setGroups(response?.data?.payload?.groups);
-    } catch (error) {
-      console.warn(error);
-    }
-  };
+    const onClickDelete = () => {
+        setOpenDeleteDialog({ show: true, id: null, mutate: null });
+    };
 
-  useEffect(() => {
-    if (loaded) {
-      groupsChangeHandler();
-    }
-  }, [selected, loaded]);
+    const handleCancel = () => {
+        setOpenDeleteDialog({ show: false, id: null });
+    };
 
-  useEffect(() => {
-    setLoaded(true);
-  }, []);
+    const groupsChangeHandler = async () => {
+        api.get(`admin/product-items/specifications/set-groups/${selected}`)
+            .then((response) => {
+                setSet(response?.payload?.set);
+                setGroups(response?.payload?.groups);
+            })
+            .catch((error) => console.warn(error));
+    };
 
-  return (
-    <div className={styles.section}>
-      <div className={styles.formFieldHeader}>
-        <Box component="form" autoComplete="off" className={styles.setField}>
-          <CreateForm
-            data-test-id="form"
-            onChangeHandler={formItemChangeHandler}
-            item={fields[0]}
-            key={index}
-            value={selected}
-            disabled={ddlDisabled}
-          />
-        </Box>
-        <Button className={styles.deleteButton} onClick={onClickDelete}>
-          <Delete />
-        </Button>
-      </div>
+    useEffect(() => {
+        if (loaded && selected) {
+            groupsChangeHandler();
+        }
+    }, [selected, loaded]);
 
-      <div>
-        {groups.map((group) => {
-          return (
-            <GroupField
-              key={group.id}
-              name={group.name}
-              groupId={group.id}
-              slug={group.slug}
-              setId={set.id}
-              slugSet={set.slug}
-              nameSet={set.name}
-              productId={productId}
-              onChange={() => {
-                setDdlDisabled(true);
-              }}
-              productVariantId={productVariantId}
+    useEffect(() => {
+        setLoaded(true);
+    }, []);
+
+    return (
+        <div className={styles.section}>
+            <div className={styles.formFieldHeader}>
+                <Box component="form" autoComplete="off" className={styles.setField}>
+                    <CreateForm data-test-id="form" onChangeHandler={formItemChangeHandler} item={chooseSetForm} key={index} value={selected} disabled={ddlDisabled} />
+                </Box>
+                <Button className={styles.deleteButton} onClick={onClickDelete}>
+                    <Icon>{IconList.delete}</Icon>
+                </Button>
+            </div>
+
+            <div>
+                {groups.map((group) => {
+                    return (
+                        <GroupField
+                            key={group.id}
+                            name={group.name}
+                            groupId={group.id}
+                            slug={group.slug}
+                            setId={set.id}
+                            slugSet={set.slug}
+                            nameSet={set.name}
+                            productId={productId}
+                            onChange={() => {
+                                setDdlDisabled(true);
+                            }}
+                            productVariantId={productVariantId}
+                        />
+                    );
+                })}
+            </div>
+            <DeleteDialog
+                title="Brisanje"
+                description="Da li ste sigurni da želite da obrišete?"
+                openDeleteDialog={openDeleteDialog}
+                setOpenDeleteDialog={setOpenDeleteDialog}
+                handleConfirm={deleteHandler}
+                handleCancel={handleCancel}
             />
-          );
-        })}
-      </div>
-      <DeleteDialog
-        title="Brisanje"
-        description="Da li ste sigurni da želite da obrišete?"
-        openDeleteDialog={openDeleteDialog}
-        setOpenDeleteDialog={setOpenDeleteDialog}
-        handleConfirm={deleteHandler}
-        handleCancel={handleCancel}
-      />
-    </div>
-  );
+        </div>
+    );
 };
 
 export default ListItem;
