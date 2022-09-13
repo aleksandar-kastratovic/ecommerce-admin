@@ -202,7 +202,22 @@ export const InputSwitch = ({ label, required, disabled, name, value, error = nu
  * @return {JSX.Element}
  */
 
-export const InputSelect = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, fillFromApi, usePropName, options, queryString = "" }) => {
+export const InputSelect = ({
+    label,
+    required,
+    disabled,
+    error = null,
+    name,
+    value,
+    margin = "dense",
+    onChange = () => null,
+    description,
+    fillFromApi,
+    usePropName,
+    options,
+    queryString = "",
+    optionsIsEmpty = () => {},
+}) => {
     const api = useAPI();
     const [opt, setOpt] = useState(options);
     useEffect(() => {
@@ -230,6 +245,14 @@ export const InputSelect = ({ label, required, disabled, error = null, name, val
         };
     }, [fillFromApi]);
 
+    useEffect(() => {
+        if (opt?.length === 0) {
+            optionsIsEmpty(true);
+        } else {
+            optionsIsEmpty(false);
+        }
+    }, [opt]);
+
     return (
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
             <Select
@@ -243,7 +266,7 @@ export const InputSelect = ({ label, required, disabled, error = null, name, val
                 }}
             >
                 {(opt ?? []).map((item) => (
-                    <MenuItem key={item.id} value={item.id} selected={item.id === value}>
+                    <MenuItem key={item.id} value={item.id} selected={item.id === value} disabled={item?.disabled ?? false}>
                         {item.name}
                     </MenuItem>
                 ))}

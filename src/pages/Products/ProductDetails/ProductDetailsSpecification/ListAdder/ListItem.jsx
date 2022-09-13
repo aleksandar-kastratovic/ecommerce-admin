@@ -1,25 +1,20 @@
-import { ConstructionOutlined, Delete } from "@mui/icons-material";
 import { Box } from "@mui/system";
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import CreateForm from "../../../../../components/shared/Form/CreateForm";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import DeleteDialog from "../../../../../components/shared/Dialogs/DeleteDialog";
 
 import styles from "./SetFormFields.module.scss";
-import { Button, Icon } from "@mui/material";
-import { isEmpty } from "lodash";
+import { Icon } from "@mui/material";
 import { useEffect } from "react";
 import GroupField from "./GroupField";
-import { useContext } from "react";
-import AuthContext from "../../../../../store/auth-contex";
-import { getGrupsBySetID } from "../../../services";
 import chooseSetForm from "../chooseSetForm.json";
 import IconList from "../../../../../helpers/icons";
 import useAPI from "../../../../../api/api";
+import { useNavigate } from "react-router-dom";
 
-const ListItem = ({ index, onDelete = () => {}, selectedSet = undefined, productId, productVariantId }) => {
+const ListItem = ({ index, onDelete = () => {}, title = "", selectedSet = undefined, productId, apiPath, listHandler }) => {
     const [loaded, setLoaded] = useState(false);
+    const [open, setOpen] = useState(false);
 
     //delected set
     const [selected, setSetlected] = useState(selectedSet);
@@ -28,8 +23,9 @@ const ListItem = ({ index, onDelete = () => {}, selectedSet = undefined, product
     const [groups, setGroups] = useState([]);
     const [set, setSet] = useState({});
 
-    const { user } = useContext(AuthContext);
     const [ddlDisabled, setDdlDisabled] = useState(false);
+    const [showEmptyMessage, setShowEmptyMessage] = useState(false);
+    const navigate = useNavigate();
 
     const api = useAPI();
 
@@ -44,7 +40,7 @@ const ListItem = ({ index, onDelete = () => {}, selectedSet = undefined, product
     };
 
     const deleteHandler = () => {
-        onDelete(index, index);
+        onDelete(index, selectedSet);
         setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
     };
 
@@ -57,7 +53,7 @@ const ListItem = ({ index, onDelete = () => {}, selectedSet = undefined, product
     };
 
     const groupsChangeHandler = async () => {
-        api.get(`admin/product-items/specifications/set-groups/${selected}`)
+        api.get(`${apiPath}/set-groups/${selected}`)
             .then((response) => {
                 setSet(response?.payload?.set);
                 setGroups(response?.payload?.groups);
@@ -75,37 +71,75 @@ const ListItem = ({ index, onDelete = () => {}, selectedSet = undefined, product
         setLoaded(true);
     }, []);
 
+    const changeHandler = (data) => {
+        const isEmpty = Object.values(data).every((x) => x === null || x === "");
+        setDdlDisabled(!isEmpty);
+    };
+
+    let setSelect = {
+        ...chooseSetForm,
+        fillFromApi: `${chooseSetForm.fillFromApi}/${productId}`,
+    };
+
     return (
-        <div className={styles.section}>
+        <div>
             <div className={styles.formFieldHeader}>
-                <Box component="form" autoComplete="off" className={styles.setField}>
-                    <CreateForm data-test-id="form" onChangeHandler={formItemChangeHandler} item={chooseSetForm} key={index} value={selected} disabled={ddlDisabled} />
-                </Box>
-                <Button className={styles.deleteButton} onClick={onClickDelete}>
-                    <Icon>{IconList.delete}</Icon>
-                </Button>
+                <div className={styles.formFieldTitle}>
+                    <div onClick={() => setOpen(!open)}>
+                        {title}
+                        <Icon>{open ? IconList.expandLess : IconList.expandMore}</Icon>
+                    </div>
+
+                    <Icon onClick={onClickDelete} className={styles.deleteButton}>
+                        {IconList.delete}
+                    </Icon>
+                </div>
+                {open && (
+                    <Box component="form" autoComplete="off" className={styles.setField}>
+                        {selectedSet === undefined && (
+                            <CreateForm
+                                data-test-id="form"
+                                onChangeHandler={formItemChangeHandler}
+                                item={setSelect}
+                                key={index}
+                                value={selected}
+                                disabled={ddlDisabled}
+                                optionsIsEmpty={(isEmpty) => {
+                                    setShowEmptyMessage(isEmpty);
+                                }}
+                            />
+                        )}
+                        {showEmptyMessage && (
+                            <p>
+                                Nema setova za prikaz. <a href="/product-specs/new">Kreiraj novi set</a>
+                            </p>
+                        )}
+                    </Box>
+                )}
             </div>
 
-            <div>
-                {groups.map((group) => {
-                    return (
-                        <GroupField
-                            key={group.id}
-                            name={group.name}
-                            groupId={group.id}
-                            slug={group.slug}
-                            setId={set.id}
-                            slugSet={set.slug}
-                            nameSet={set.name}
-                            productId={productId}
-                            onChange={() => {
-                                setDdlDisabled(true);
-                            }}
-                            productVariantId={productVariantId}
-                        />
-                    );
-                })}
-            </div>
+            {open && (
+                <>
+                    {groups.map((group) => {
+                        return (
+                            <div className={styles.section} key={group.id}>
+                                <GroupField
+                                    name={group.name}
+                                    groupId={group.id}
+                                    slug={group.slug}
+                                    setId={set.id}
+                                    slugSet={set.slug}
+                                    nameSet={set.name}
+                                    productId={productId}
+                                    onChange={changeHandler}
+                                    apiPath={apiPath}
+                                    listHandler={listHandler}
+                                />
+                            </div>
+                        );
+                    })}
+                </>
+            )}
             <DeleteDialog
                 title="Brisanje"
                 description="Da li ste sigurni da želite da obrišete?"

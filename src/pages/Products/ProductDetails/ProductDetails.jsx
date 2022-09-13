@@ -72,77 +72,77 @@ const ProductDetails = () => {
             name: "Deklaracija",
             icon: IconList.editDocument,
             enabled: data?.id,
-            component: <Declaration productId={prodId} />,
+            component: <Declaration productId={data?.id} />,
         },
         {
             name: "SEO",
             icon: IconList.search,
             enabled: data?.id,
-            component: <Seo productId={prodId} />,
+            component: <Seo productId={data?.id} />,
         },
         {
             name: "Opis",
             icon: IconList.description,
             enabled: data?.id,
-            component: <Description productId={prodId} />,
+            component: <Description productId={data?.id} />,
         },
         {
             name: "Cene",
             icon: IconList.money,
             enabled: data?.id,
-            component: <Prices productId={prodId} />,
+            component: <Prices productId={data?.id} />,
         },
         {
             name: "Lager",
             icon: IconList.inventory,
             enabled: data?.id,
-            component: <Inventories productId={prodId} />,
+            component: <Inventories productId={data?.id} />,
         },
         {
             name: "Kategorije",
             icon: IconList.category,
             enabled: data?.id,
-            component: <Categories productId={prodId} />,
+            component: <Categories productId={data?.id} />,
         },
         {
             name: "Galerija",
             icon: IconList.browseGallery,
             enabled: data?.id,
-            component: <Gallery productId={prodId} />,
+            component: <Gallery productId={data?.id} />,
         },
         {
             name: "Tehnička dokumentacija",
             icon: IconList.documentScanner,
             enabled: data?.id,
-            component: <TechnicalDoc productId={prodId} />,
+            component: <TechnicalDoc productId={data?.id} />,
         },
         {
             name: "Sertifikati",
             icon: IconList.documentScanner,
             enabled: data?.id,
-            component: <Certificate productId={prodId} />,
+            component: <Certificate productId={data?.id} />,
         },
         {
             name: "Instrukcije",
             icon: IconList.documentScanner,
             enabled: data?.id,
-            component: <Instruction productId={prodId} />,
+            component: <Instruction productId={data?.id} />,
         },
         {
             name: "Specifikacije",
             icon: IconList.documentScanner,
             enabled: data?.id,
-            component: <Specification productId={prodId} />,
+            component: <Specification productId={data?.id} />,
         },
         {
             name: "Varijacije",
             icon: IconList.difference,
             enabled: data?.id,
-            component: <ProductDetailsVariation productId={prodId} />,
+            component: <ProductDetailsVariation productId={data?.id} />,
         },
     ];
 
-    return <DetailsPage title={prodId === "new" ? "Unos novog proizvoda" : data?.name} fields={fields} ready={[prodId === "new" || data?.id]} />;
+    return <DetailsPage title={data?.id == null ? "Unos novog proizvoda" : data?.name} fields={fields} ready={[prodId === "new" || data?.id]} />;
 };
 
 export default ProductDetails;

@@ -1,58 +1,43 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
-import List from "../../../../components/shared/ListAdder/List";
-
-import formFields from "../forms/categories.json";
+import SearchableListForm from "../../../../components/shared/Form/SearchableListForm/SearchableListForm";
+import Loading from "../../../../components/shared/Loading/Loading";
 
 const Categories = ({ productId }) => {
-    const init = {
-        id: null,
-        id_product: productId,
-        id_product_variant: null,
-        id_category: null,
-        category_path: null,
-    };
-
     const [listData, setListData] = useState([]);
+
+    const [isLoading, setIsLoading] = useState([]);
+
     const api = useAPI();
     const apiPath = "admin/product-items/categories";
 
-    const handleList = () => {
-        api.list(`${apiPath}/${productId}`)
-            .then((response) => setListData(response?.payload?.items))
+    const handleAvailable = () => {
+        setIsLoading(true);
+        api.get(`${apiPath}/${productId}`)
+            .then((response) => {
+                setListData(response?.payload);
+                setIsLoading(false);
+            })
             .catch((error) => console.warn(error));
     };
 
     const handleSubmit = (data) => {
-        api.post(apiPath, data)
+        api.post(apiPath, { id_product: productId, id_categories: data })
             .then((response) => {
                 toast.success("Uspešno");
-                handleList();
             })
             .catch((error) => {
                 console.warn(error);
-                toast.warn(error);
-            });
-    };
-
-    const handleDelete = (token, id) => {
-        api.delete(`${apiPath}/${id}`)
-            .then((response) => {
-                toast.success("Uspešno");
-                handleList();
-            })
-            .catch((error) => {
-                console.warn(error);
-                toast.warn(error);
+                toast.warn("Greška");
             });
     };
 
     useEffect(() => {
-        handleList();
+        handleAvailable();
     }, []);
 
-    return <List formFields={formFields} init={init} listFields={listData} onSave={handleSubmit} onDelete={handleDelete} />;
+    return !isLoading ? <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} /> : <Loading />;
 };
 
 export default Categories;

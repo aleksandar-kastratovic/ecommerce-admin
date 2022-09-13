@@ -11,6 +11,6 @@
     "sortable": true,
     "options": [],
     "input_type": "select",
-    "fillFromApi": "admin/product-items/specifications/ddl",
-    "usePropName": true
+    "fillFromApi": "admin/product-items/specifications/sets",
+    "usePropName": false
 }

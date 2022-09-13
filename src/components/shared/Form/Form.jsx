@@ -8,7 +8,6 @@ import { useNavigate } from "react-router-dom";
 import { formatDate, formatDateTime } from "../../../helpers/dateFormat";
 import ImageDialog from "../Dialogs/ImageDialog";
 import { isUrlValid } from "./util";
-import FileDialog from "../Dialogs/FileDialog/FileDialog";
 
 const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, submitButton = true, queryString = "", onChange = () => {} }) => {
     const navigate = useNavigate();
