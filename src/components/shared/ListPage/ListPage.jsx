@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react"
-import { useNavigate, useLocation } from "react-router-dom"
-import { toast } from "react-toastify"
-import ListTable from "../ListTable/ListTable"
-import ListTableToolbar from "../ListTable/ListTableToolbar"
-import DeleteDialog from "../Dialogs/DeleteDialog"
-import PageWrapper from "../Layout/PageWrapper/PageWrapper"
-import { flatten } from "lodash"
-import { useQuery } from "react-query"
-import useAPI from "../../../api/api"
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
+import ListTable from "../ListTable/ListTable";
+import ListTableToolbar from "../ListTable/ListTableToolbar";
+import DeleteDialog from "../Dialogs/DeleteDialog";
+import PageWrapper from "../Layout/PageWrapper/PageWrapper";
+import { flatten } from "lodash";
+import { useQuery } from "react-query";
+import useAPI from "../../../api/api";
 
 /**
  * Show a standardized list.
@@ -27,99 +27,94 @@ import useAPI from "../../../api/api"
  */
 const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {} }) => {
     // TODO Sorting is disabled as it does not work with pagination
-    columnFields = columnFields.map((field) => ({ ...field, sortable: false }))
+    columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
-    const api = useAPI()
-    const navigate = useNavigate()
-    const { pathname } = useLocation()
-    const [ fieldsColumns, setFieldsColumns ] = useState(columnFields)
-    const [ search, setSearch ] = useState("")
-    const [ page, setPage ] = useState(1)
+    const api = useAPI();
+    const navigate = useNavigate();
+    const { pathname } = useLocation();
+    const [fieldsColumns, setFieldsColumns] = useState(columnFields);
+    const [search, setSearch] = useState("");
+    const [page, setPage] = useState(1);
 
     // Default delete URL is the same as the main URL
-    deleteUrl = deleteUrl ?? apiUrl
+    deleteUrl = deleteUrl ?? apiUrl;
 
     // Handle delete dialog
-    const [ openDeleteDialog, setOpenDeleteDialog ] = useState({ show: false, id: null, mutate: null })
+    const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false, id: null, mutate: null });
     const handleDeleteConfirm = async () => {
         api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
-            .catch(() => toast.warning("Došlo je do greške prilikom brisanja"))
+            .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
 
-        setOpenDeleteDialog({ show: false, id: null, mutate: 1 })
-    }
+        setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
+    };
 
     // Load the data
-    const { data: response, isLoading, isError } = useQuery([ "openDeleteDialog.mutate", openDeleteDialog.mutate, search, page ], () => api.list(apiUrl, { page, search, ...filters }))
+    const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page], () => api.list(apiUrl, { page, search, ...filters }));
 
     // Modify the data
     if (response?.payload && modifyItems) {
-        response.payload.items = modifyItems(response.payload.items)
+        response.payload.items = modifyItems(response.payload.items);
     }
 
     useEffect(() => {
         if (openDeleteDialog.mutate === 1) {
-            setOpenDeleteDialog({ show: false, id: null, mutate: 0 })
+            setOpenDeleteDialog({ show: false, id: null, mutate: 0 });
         }
-    }, [ openDeleteDialog.mutate ])
+    }, [openDeleteDialog.mutate]);
 
     useEffect(() => {
         if (isError) {
-            toast.warning("Greška")
+            toast.warning("Greška");
         }
-    }, [ isError ])
+    }, [isError]);
 
     // Update the search term and reset to the first page
     const handleSearch = (value) => {
         // TODO This always triggers two request as we are changing two states in a row
-        setPage(1)
-        setSearch(value)
-    }
+        setPage(1);
+        setSearch(value);
+    };
 
     const handleActions = (id, type) => () => {
         switch (type) {
             case "edit":
-                navigate(`${pathname}/${id}`)
-                break
+            case "preview":
+                navigate(`${pathname}/${id}`);
+                break;
 
             case "delete":
-                setOpenDeleteDialog({ show: true, id: id, mutate: null })
-                break
+                setOpenDeleteDialog({ show: true, id: id, mutate: null });
+                break;
 
             case "listGroup":
-                navigate(`${pathname}/category/${id}`)
-                break
+                navigate(`${pathname}/category/${id}`);
+                break;
 
             case "categoryTree":
-                navigate(`${pathname}/tree/${id}`)
-                break
+                navigate(`${pathname}/tree/${id}`);
+                break;
 
             default:
-                break
+                break;
         }
-    }
+    };
 
     // Buttons in the page header
-    const actions = [ ...additionalButtons ] ?? []
+    const actions = [...additionalButtons] ?? [];
     if (showNewButton) {
         actions.push({
-            label  : "Novi unos",
-            action : () => navigate("new"),
+            label: "Novi unos",
+            action: () => navigate("new"),
             variant: "contained",
-            icon   : "add"
-        })
+            icon: "add",
+        });
     }
 
     return (
         <>
             <PageWrapper title={title} actions={actions}>
-
-                <ListTableToolbar
-                    onColumnsChange={setFieldsColumns}
-                    fields={fieldsColumns}
-                    filters={filters}
-                    onSearch={handleSearch}
-                    showDatePicker={showDatePicker} />
+                <ListTableToolbar onColumnsChange={setFieldsColumns} fields={fieldsColumns} filters={filters} onSearch={handleSearch} showDatePicker={showDatePicker} />
 
                 <ListTable
                     fields={flatten(fieldsColumns).filter((field) => field.in_main_table)}
@@ -133,7 +128,7 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
 
             <DeleteDialog handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
         </>
-    )
-}
+    );
+};
 
-export default ListPage
+export default ListPage;
