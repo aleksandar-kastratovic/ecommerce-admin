@@ -1,60 +1,43 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
-import List from "../../../../components/shared/ListAdder/List";
-
-import formFields from "./formFields.json";
+import SearchableListForm from "../../../../components/shared/Form/SearchableListForm/SearchableListForm";
+import Loading from "../../../../components/shared/Loading/Loading";
 
 const DetailsSpecification = ({ gid, cid }) => {
-  const init = {
-    id: null,
-    id_category_product: cid,
-    id_set: null,
-  };
-  const [listData, setListData] = useState([]);
-  const api = useAPI();
+    const [listData, setListData] = useState([]);
 
-  const handleSave = (data) => {
-    api
-      .post(`admin/category_product/specifications/`, data)
-      .then((response) => {
+    const [isLoading, setIsLoading] = useState([]);
+
+    const api = useAPI();
+    const apiPath = "admin/category_product/specifications";
+
+    const handleList = () => {
+        setIsLoading(true);
+        api.get(`${apiPath}/${cid}`)
+            .then((response) => {
+                setListData(response?.payload);
+                setIsLoading(false);
+            })
+            .catch((error) => console.warn(error));
+    };
+
+    const handleSubmit = (data) => {
+        api.post(apiPath, { id_category_product: cid, id_sets: data })
+            .then((response) => {
+                toast.success("Uspešno");
+            })
+            .catch((error) => {
+                console.warn(error);
+                toast.warn("Greška");
+            });
+    };
+
+    useEffect(() => {
         handleList();
-        toast.success("Uspešno");
-      })
-      .catch((error) => {
-        console.warn(error);
-        toast.warn("Greška");
-      });
-  };
+    }, []);
 
-  const handleDelete = (token, id) => {
-    api
-      .delete(`admin/category_product/specifications/${id}`)
-      .then((response) => {
-        toast.success("Uspešno");
-      })
-      .catch((error) => {
-        toast.warn("Greška");
-        console.warn(error);
-      });
-  };
-
-  const handleList = () => {
-    api
-      .list(`admin/category_product/specifications/${cid}`)
-      .then((response) => {
-        setListData(response?.payload?.items);
-      })
-      .catch((error) => {
-        console.warn(error);
-      });
-  };
-
-  useEffect(() => {
-    handleList();
-  }, []);
-
-  return <List listFields={listData} formFields={formFields} init={init} onSave={handleSave} onDelete={handleDelete} />;
+    return !isLoading ? <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} /> : <Loading />;
 };
 
 export default DetailsSpecification;
