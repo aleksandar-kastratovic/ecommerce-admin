@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import ImageButton from "../ImageButton/ImageButton";
 import InputMultipleImages from "../InputMultipleImages/InputMultipleImages";
-import { InputCheckbox, InputDate, InputDateTime, InputInput, InputNumber, InputRadio, InputSelect, InputSwitch, InputText } from "./FormInputs/FormInputs";
+import { InputCheckbox, InputDate, InputDateTime, InputInput, InputMultiSelect, InputNumber, InputRadio, InputSelect, InputSwitch, InputText } from "./FormInputs/FormInputs";
 import FileButton from "../FileButton/FileButton";
 import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
 
@@ -117,6 +117,25 @@ const CreateForm = ({
                             disabled={disabled}
                             error={error}
                             value={value}
+                            onChange={onInputChangeHandler}
+                            options={item.options}
+                            description={item.description}
+                            fillFromApi={item.fillFromApi}
+                            usePropName={item.usePropName}
+                            queryString={queryString}
+                            optionsIsEmpty={optionsIsEmpty}
+                        />
+                    );
+                    break;
+                case "multi_select":
+                    formItem = (
+                        <InputMultiSelect
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            name={item.prop_name}
+                            disabled={disabled}
+                            error={error}
+                            value={Array.isArray(value) ? value : []}
                             onChange={onInputChangeHandler}
                             options={item.options}
                             description={item.description}
