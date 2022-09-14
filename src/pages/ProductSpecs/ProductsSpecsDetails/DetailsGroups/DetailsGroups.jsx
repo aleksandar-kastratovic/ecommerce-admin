@@ -13,12 +13,14 @@ const DetailsGroups = ({ specId }) => {
     const api = useAPI();
     const apiPath = "admin/product-item-specifications/set-group";
 
-    const handleList = () => {
+    const handleList = (isMounted) => {
         setIsLoading(true);
         api.get(`${apiPath}/${specId}`)
             .then((response) => {
-                setListData(response?.payload);
-                setIsLoading(false);
+                if (isMounted) {
+                    setListData(response?.payload);
+                    setIsLoading(false);
+                }
             })
             .catch((error) => console.warn(error));
     };
@@ -35,7 +37,12 @@ const DetailsGroups = ({ specId }) => {
     };
 
     useEffect(() => {
-        handleList();
+        let isMounted = true;
+        handleList(isMounted);
+
+        return () => {
+            isMounted = false;
+        };
     }, []);
 
     return !isLoading ? <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} /> : <Loading />;
