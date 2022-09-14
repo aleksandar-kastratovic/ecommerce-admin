@@ -1,55 +1,36 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
-import List from "../../../../components/shared/ListAdder/List";
-
-import formFields from "./formFields.json";
+import SearchableListForm from "../../../../components/shared/Form/SearchableListForm/SearchableListForm";
+import Loading from "../../../../components/shared/Loading/Loading";
 
 const DetailsGroups = ({ specId }) => {
-    const [listFields, setListFields] = useState([]);
-    const navigate = useNavigate();
-    const api = useAPI();
+    const [listData, setListData] = useState([]);
 
-    const listInit = {
-        id_set: specId,
-        id: null,
-        order: null,
-        status: null,
-    };
+    const [isLoading, setIsLoading] = useState([]);
+
+    const api = useAPI();
+    const apiPath = "admin/product-item-specifications/set-group";
 
     const handleList = () => {
-        api.list(`admin/product-item-specifications/set-group/${specId}`)
+        setIsLoading(true);
+        api.get(`${apiPath}/${specId}`)
             .then((response) => {
-                setListFields(response?.payload?.items);
+                setListData(response?.payload);
+                setIsLoading(false);
+            })
+            .catch((error) => console.warn(error));
+    };
+
+    const handleSubmit = (data) => {
+        api.post(apiPath, { id_set: specId, id_groups: data })
+            .then((response) => {
+                toast.success("Uspešno");
             })
             .catch((error) => {
                 console.warn(error);
-            });
-    };
-
-    const onSave = (data) => {
-        api.post("admin/product-item-specifications/set-group/", data)
-            .then((response) => {
-                handleList();
-                toast.success("Uspešno!");
-            })
-            .catch((error) => {
-                console.warn(error.response);
-                toast.warning("Greška ");
-            });
-    };
-
-    const onDelete = (token, id) => {
-        api.delete(`admin/product-item-specifications/set-group/${id}`)
-            .then((response) => {
-                handleList();
-                toast.success("Uspešno!");
-            })
-            .catch((error) => {
-                console.warn(error.response);
-                toast.warning("Greška ");
+                toast.warn("Greška");
             });
     };
 
@@ -57,30 +38,7 @@ const DetailsGroups = ({ specId }) => {
         handleList();
     }, []);
 
-    const listButtons = [
-        {
-            id: 1,
-            text: "Kreiraj grupu",
-            action: () => {
-                navigate(`/product-specs/groups/new`);
-            },
-        },
-    ];
-
-    const listActions = {
-        field_type: {
-            value: "select",
-            button: {
-                id: 1,
-                text: "Unos vrednosti",
-                action: (id) => {
-                    setAttrModal({ open: true, id: id });
-                },
-            },
-        },
-    };
-
-    return <List listFields={listFields} formFields={formFields} init={listInit} onDelete={onDelete} onSave={onSave} additionalButtons={listButtons} actions={listActions} />;
+    return !isLoading ? <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} /> : <Loading />;
 };
 
 export default DetailsGroups;
