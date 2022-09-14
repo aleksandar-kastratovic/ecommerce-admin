@@ -60,6 +60,8 @@ import B2CSettings from "./../pages/B2CSettings/B2CSettings"
 import ImportSteps from "./../pages/Import/ImportSteps"
 import LocationsPage from "./../pages/LocationsPage"
 import OrdersPage from "./../pages/OrdersPage"
+import B2COrders from "../pages/B2COrders/B2COrders"
+import B2BOrders from "../pages/B2BOrders/B2BOrders"
 import DetailsParams from "./../pages/Params/DetailsParams/DetailsParams"
 import Params from "./../pages/Params/Params"
 import Products from "./../pages/Products/Products"
@@ -171,6 +173,14 @@ const screens = {
         Notifications,
         [ [ ":notifid", NotificationsDetails ] ]
     ],
+    B2B_ORDERS   : [
+        "/b2borders",
+        "Narudžbenice",
+        faArchive,
+        B2B,
+        B2BOrders,
+        [ [ ":orbid", B2BOrders ] ]
+    ],
 
     BANNERS_B2C      : [
         "/B2C-banners",
@@ -211,6 +221,14 @@ const screens = {
         B2C,
         Newsletter,
         [ [ ":nlid", Newsletter ] ]
+    ],
+    B2C_ORDERS   : [
+        "/b2corders",
+        "Narudžbenice",
+        faArchive,
+        B2C,
+        B2COrders,
+        [ [ ":orid", B2COrders ] ]
     ],
     B2C_CONTACT_FORMS: [
         "/contactform",
