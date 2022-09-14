@@ -74,9 +74,7 @@ const ParamsDetails = () => {
         api.post(`admin/params/main/`, { ...init, ...data })
             .then((response) => {
                 toast.success("Uspešno");
-                if (pid === "new") {
-                    navigate(-1);
-                }
+                setData(response?.payload);
             })
             .catch((error) => {
                 toast.warning("Greška");
@@ -104,7 +102,6 @@ const ParamsDetails = () => {
     const handleGetList = () => {
         api.list(`admin/params/values/`, { id_param: pid })
             .then((response) => {
-                console.log(response?.payload?.items);
                 setList(response?.payload?.items);
             })
             .catch((error) => {
@@ -171,22 +168,20 @@ const ParamsDetails = () => {
 
     const fields = [
         {
-            id: 1,
             name: "Osnovno",
             icon: "settings",
-            disabled: false,
+            enabled: true,
             component: <ParamsForm onSubmit={onSubmit} data={data} onChange={onChange} subForm={getParamSubForm(true)} isLoading={isLoading} />,
         },
         {
-            id: 2,
             name: "Vrednosti",
             icon: "settings",
-            disabled: false,
+            enabled: data?.id,
             component: <List formFields={[slug, ...getParamSubForm(false), status]} listFields={list} onSave={handleListSubmit} addFieldLabel={"Dodaj polje"} onDelete={onDelete} init={listInit} />,
         },
     ];
 
-    return <DetailsPage title={pid === "new" ? "Unos novog parametra" : data?.name} fields={data?.field_is_multiple && pid !== "new" ? fields : [fields[0]]} />;
+    return <DetailsPage title={data?.id == null ? "Unos novog parametra" : data?.name} fields={fields} />;
 };
 
 export default ParamsDetails;

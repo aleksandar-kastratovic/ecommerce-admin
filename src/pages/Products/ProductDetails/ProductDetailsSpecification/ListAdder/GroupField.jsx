@@ -2,164 +2,152 @@ import { Box } from "@mui/system";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { useEffect, useState } from "react";
+import useAPI from "../../../../../api/api";
+import Form from "../../../../../components/shared/Form/Form";
+import { toast } from "react-toastify";
+import LoadingForm from "../../../../../components/shared/Loading/LoadingForm";
 
-import groupForm from "../groupForm.json";
-import CreateForm from "../../../../../components/shared/Form/CreateForm";
-import { formatDate } from "../../../../../helpers/dateFormat";
-import { Button } from "@mui/material";
-import { useContext } from "react";
-import AuthContext from "../../../../../store/auth-contex";
-import {
-  getFieldsByGroupId,
-  getProductGroupAttributeDDL,
-  postProductGroupAttribute,
-} from "../../../services";
+const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, onChange = () => {}, productId, apiPath, listHandler }) => {
+    const [isOpen, setIsOpen] = useState(false);
+    const [attributes, setAttributes] = useState([]);
+    const [attributeValues, setAttributeValues] = useState({});
 
-const GroupField = ({
-  name = "",
-  slug = "",
-  groupId,
-  setId,
-  nameSet,
-  slugSet,
-  onChange = () => {},
-  productId,
-  productVariantId,
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [formFields, setFormFields] = useState([]);
-  const [data, setData] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
 
-  const { user } = useContext(AuthContext);
+    const [data, setData] = useState({});
 
-  const isOpenToggle = () => {
-    setIsOpen(!isOpen);
-  };
+    const api = useAPI();
 
-  const onSubmit = async () => {
-    try {
-      for (const field of formFields) {
-        if (data[field.name] !== undefined) {
-          let repack = { id: data.id !== undefined ? data.id : null };
-          repack = {
-            ...repack,
-            id_product: productId,
-            id_set: setId,
-            id_group: groupId,
-            id_attribute: field.id,
-            slug_set: slugSet,
-            set_name: nameSet,
-            group_name: name,
-            slug_group: slug,
-            slug_attribute: field.slug,
-            id_product_variant: productVariantId ?? 1,
-            name_attribute: field.name,
-            id_attribute_value: null,
-            slug_attribute_value: "",
-            order: 0,
-            name_attribute_value: data[field.name],
-          };
-          if (field.field_type === "select") {
-            //repack
-          }
+    const isOpenToggle = () => {
+        setIsOpen(!isOpen);
+    };
 
-          let response = await postProductGroupAttribute(
-            user.access_token,
-            repack
-          );
-          console.log(response);
+    const onSubmit = async (data) => {
+        try {
+            for (const attribute of attributes) {
+                if (data[attribute.slug]) {
+                    let attribute_value = (attributeValues[attribute.id] ?? []).filter((item) => item.id === data[attribute.slug])[0];
+                    let req = {
+                        id: data.id[attribute.slug] ?? null,
+                        id_product: productId,
+                        id_set: setId,
+                        slug_set: slugSet,
+                        set_name: nameSet,
+                        id_group: groupId,
+                        slug_group: slug,
+                        group_name: name,
+                        id_attribute: attribute.id,
+                        slug_attribute: attribute.slug,
+                        name_attribute: attribute.name,
+                        id_attribute_value: attribute.field_type === "select" ? data[attribute.slug] : null,
+                        slug_attribute_value: attribute.field_type === "select" ? attribute_value.slug : null,
+                        name_attribute_value: attribute.field_type === "select" ? attribute_value.name : data[attribute.slug],
+                    };
+                    await api.post(`${apiPath}`, req);
+                }
+            }
+        } catch (error) {
+            toast.warn("Greška");
+            console.warn(error);
+        } finally {
+            toast.success("Uspešno");
+            listHandler();
         }
-      }
-      //let response = await postProductGroupAttribute(user.access_token);
-    } catch (error) {
-      console.warn(error);
-    }
-  };
+    };
 
-  const formItemChangeHandler = ({ target }, type) => {
-    onChange();
-    if (type === "date") {
-      setData({ ...data, [target.name]: formatDate(target.value) });
-    } else if (type) {
-      setData({ ...data, [target.name]: target.checked });
-    } else {
-      setData({ ...data, [target.name]: target.value });
-    }
-  };
+    const groupFiledsHandler = async () => {
+        api.get(`${apiPath}/group-attributes/${groupId}`)
+            .then((response) => setAttributes(response?.payload))
+            .catch((error) => console.warn(error));
+    };
 
-  const groupFiledsHandler = async () => {
-    try {
-      let response = await getFieldsByGroupId(user.access_token, groupId);
+    const groupFiledsDataHandler = async () => {
+        setIsLoading(true);
+        api.get(`${apiPath}/product/attribute-values/${productId}/${setId}/${groupId}`)
+            .then((response) => {
+                let obj = {};
+                obj.id = {};
+                for (const attr of attributes) {
+                    let item = response?.payload.filter((val) => val.id_attribute === attr.id)[0];
+                    if (item) {
+                        if (attr.field_type === "select") {
+                            obj[item.slug_attribute] = item.id_attribute_value;
+                        } else {
+                            obj[item.slug_attribute] = item.name_attribute_value;
+                        }
+                        obj.id[item.slug_attribute] = item.id;
+                    }
+                }
+                setData(obj);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                console.warn(error);
+                setIsLoading(false);
+            });
+    };
 
-      setFormFields(response?.data?.payload);
-    } catch (error) {
-      console.warn(error);
-    }
-  };
+    useEffect(() => {
+        if (open) {
+            groupFiledsHandler();
+        }
+    }, [open]);
 
-  const attributeDdlHandler = async (idAttr) => {
-    try {
-      let response = await getProductGroupAttributeDDL(
-        user.access_token,
-        groupId,
-        idAttr
-      );
-      return response?.data?.payload;
-    } catch (error) {
-      console.warn(error);
-      return [];
-    }
-  };
+    useEffect(() => {
+        groupFiledsDataHandler();
+    }, [attributes]);
 
-  useEffect(() => {
-    if (open) {
-      groupFiledsHandler();
-    }
-  }, [open]);
+    const formFields = attributes.map((item) => {
+        let additional = {};
 
-  return (
-    <Box>
-      <div onClick={isOpenToggle}>
-        {name}
-        {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-      </div>
-      {isOpen && (
-        <Box component="form" autoComplete="off">
-          {formFields &&
-            formFields.map((item, index) => {
-              let repackItem = {
-                ...item,
-                field_name: item.name,
-                prop_name: item.name,
-                input_type: item.field_type,
-                editable: true,
-                required: false,
-              };
-              if (item.field_type === "select") {
-                repackItem = {
-                  ...repackItem,
-                  options: attributeDdlHandler(item.id),
-                };
-              }
-              return (
-                <CreateForm
-                  data-test-id="admin-form"
-                  onChangeHandler={formItemChangeHandler}
-                  item={repackItem}
-                  key={index}
-                  value={
-                    Array.isArray(repackItem) && data
-                      ? data[repackItem.prop_name]
-                      : data[repackItem.prop_name]
-                  }
-                />
-              );
-            })}
-          <Button onClick={onSubmit}>Sačuvaj</Button>
+        if (item.field_type === "select") {
+            api.get(`${apiPath}/attribute-values/${item.id}`)
+                .then((response) => {
+                    setAttributeValues((attributeValues) => {
+                        attributeValues[item.id] = response?.payload;
+                        return attributeValues;
+                    });
+                })
+                .catch((error) => {
+                    console.warn(error);
+                });
+
+            additional = {
+                fillFromApi: `${apiPath}/attribute-values/${item.id}`,
+                usePropName: false,
+                options: [],
+            };
+        }
+        return {
+            field_name: item.name,
+            prop_name: item.slug,
+            in_main_table: true,
+            in_details: true,
+            editable: true,
+            disabled: false,
+            required: item.required,
+            description: "",
+            ui_prop: "xyz",
+            sortable: true,
+            input_type: item.field_type,
+            ...additional,
+        };
+    });
+
+    const changeHandler = (data) => {
+        onChange(data);
+        setData(data);
+    };
+
+    return (
+        <Box>
+            <div onClick={isOpenToggle}>
+                {name}
+                {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </div>
+            {isOpen && (!isLoading ? <Form formFields={formFields} initialData={data} onSubmit={onSubmit} onChange={changeHandler} /> : <LoadingForm fields={formFields.length} />)}
         </Box>
-      )}
-    </Box>
-  );
+    );
 };
 
 export default GroupField;

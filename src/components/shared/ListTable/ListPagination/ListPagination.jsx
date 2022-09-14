@@ -31,7 +31,7 @@ const ListPagination = ({ pagination, onPageChange }) => {
 
             <Pagination
                 count={pagination.total_pages}
-                onChange={onPageChange}
+                onChange={(event, page) => onPageChange(page)}
                 page={pagination.selected_page}
                 color={"primary"}
                 variant="outlined"

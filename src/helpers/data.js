@@ -76,3 +76,14 @@ export const updateState = (setter, values: {}) =>
  */
 export const updateStateKey = (setter, key: string, value: {}) =>
     updateState(setter, { [key]: value })
+
+/**
+ * Take an array of object and create pairs.
+ *
+ * @param {{}[]} source The array of objects to use as source.
+ *
+ * @param {string} key The key used to the key in new pairs
+ * @param {string} value The key withing the source to use for the value of the pairs.
+ */
+export const createPairs = (source: {}[], key: string, value: string): { string: * } =>
+    source.reduce((pairs, item) => ({ ...pairs, [item[key]]: item[value] }), {})

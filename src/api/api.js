@@ -1,14 +1,14 @@
-import axios from "axios"
-import { useContext, useState } from "react"
-import AuthContext from "../store/auth-contex"
+import axios from "axios";
+import { useContext, useState } from "react";
+import AuthContext from "../store/auth-contex";
 
 class ApiService {
     /** The currently logged-in user. */
-    user: ?{ access_token: string }
+    user: ?{ access_token: string };
 
     /** Prepare the service. */
     constructor(user) {
-        this.user = user
+        this.user = user;
     }
 
     /**
@@ -23,14 +23,14 @@ class ApiService {
     _execute(method, path, payload = null) {
         return new Promise((resolve, reject) => {
             axios({
-                method : method,
-                url    : localStorage.getItem("api") + path.replace(/^\//, ""),
+                method: method,
+                url: localStorage.getItem("api") + path.replace(/^\//, ""),
                 headers: { Authorization: `Bearer ${this.user?.access_token}` },
-                data   : payload
+                data: payload,
             })
                 .then((response) => resolve(response.data))
-                .catch((error) => reject(error))
-        })
+                .catch((error) => reject(error));
+        });
     }
 
     /**
@@ -41,7 +41,7 @@ class ApiService {
      * @return {Promise<APIResponse>}
      */
     get(path) {
-        return this._execute("GET", path)
+        return this._execute("GET", path);
     }
 
     /**
@@ -53,7 +53,7 @@ class ApiService {
      * @return {Promise<APIResponse>}
      */
     put(path, payload = null) {
-        return this._execute("PUT", path, payload)
+        return this._execute("PUT", path, payload);
     }
 
     /**
@@ -65,7 +65,7 @@ class ApiService {
      * @return {Promise<APIResponse>}
      */
     post(path, payload) {
-        return this._execute("POST", path, payload)
+        return this._execute("POST", path, payload);
     }
 
     /**
@@ -77,7 +77,19 @@ class ApiService {
      * @return {Promise<APIResponse>}
      */
     list(path, payload) {
-        return this._execute("LIST", path, payload)
+        return this._execute("LIST", path, payload);
+    }
+
+    /**
+     * Execute the put API call
+     *
+     * @param {string} path The path to the API, without the domain and API version suffix.
+     * @param {?{}} payload The payload to send in the request.
+     *
+     * @return {Promise<APIResponse>}
+     */
+    put(path, payload) {
+        return this._execute("PUT", path, payload);
     }
 
     /**
@@ -88,7 +100,7 @@ class ApiService {
      * @return {Promise<APIResponse>}
      */
     delete(path) {
-        return this._execute("DELETE", path)
+        return this._execute("DELETE", path);
     }
 }
 
@@ -96,8 +108,8 @@ class ApiService {
  * Get the reference to the API service.
  */
 const useAPI = () => {
-    const { user } = useContext(AuthContext)
-    return useState(new ApiService(user))[0]
-}
+    const { user } = useContext(AuthContext);
+    return useState(new ApiService(user))[0];
+};
 
-export default useAPI
+export default useAPI;

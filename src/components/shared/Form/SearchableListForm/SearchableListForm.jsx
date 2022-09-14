@@ -1,9 +1,9 @@
-import { useState } from "react"
-import Button from "../../../../components/shared/Button/Button"
-import Buttons from "../../../../components/shared/Form/Buttons/Buttons"
-import NoteBox from "../../../../components/shared/NoteBox/NoteBox"
-import useList from "../../../../hooks/useList"
-import { InputCheckbox, InputInput } from "../FormInputs/FormInputs"
+import { useEffect, useState } from "react";
+import Button from "../../../../components/shared/Button/Button";
+import Buttons from "../../../../components/shared/Form/Buttons/Buttons";
+import NoteBox from "../../../../components/shared/NoteBox/NoteBox";
+import useList from "../../../../hooks/useList";
+import { InputCheckbox, InputInput } from "../FormInputs/FormInputs";
 
 /**
  * Choose from a list.
@@ -16,18 +16,18 @@ import { InputCheckbox, InputInput } from "../FormInputs/FormInputs"
  * @constructor
  */
 const SearchableListForm = ({ available = [], selected = [], onSubmit }) => {
-    const { list, toggle, has } = useList((selected ?? []))
-    const [ search, setSearch ] = useState("")
+    const { list, toggle, has } = useList(selected ?? []);
+    const [search, setSearch] = useState("");
 
     // Filter the available
-    available = available.filter(brand => search === "" || brand.name.toLowerCase().includes(search.toLowerCase()))
+    available = available.filter((brand) => search === "" || brand.name.toLowerCase().includes(search.toLowerCase()));
 
     return (
         <>
-            <InputInput placeholder="Pretraga" value={search} onChange={event => setSearch(event.target.value)} />
+            <InputInput placeholder="Pretraga" value={search} onChange={(event) => setSearch(event.target.value)} />
 
             {/* The list of available items */}
-            {available.map(brand => (
+            {available.map((brand) => (
                 <InputCheckbox key={brand.id} value={has(brand.id)} label={brand.name} onChange={() => toggle(brand.id)} />
             ))}
 
@@ -38,7 +38,7 @@ const SearchableListForm = ({ available = [], selected = [], onSubmit }) => {
                 <Button label="Sačuvaj" variant="contained" onClick={() => onSubmit(list)} />
             </Buttons>
         </>
-    )
-}
+    );
+};
 
-export default SearchableListForm
+export default SearchableListForm;

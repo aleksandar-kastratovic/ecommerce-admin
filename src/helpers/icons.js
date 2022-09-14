@@ -1,3 +1,7 @@
+/**
+ * The list of all available MUI icons.
+ * @see https://mui.com/material-ui/material-icons/
+ */
 const IconList = {
     "123"                                  : "123",
     "360"                                  : "360",

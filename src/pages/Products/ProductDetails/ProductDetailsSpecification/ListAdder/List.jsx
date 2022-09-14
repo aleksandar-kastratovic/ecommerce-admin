@@ -1,83 +1,73 @@
-import { Button } from "@mui/material";
-import { isEmpty } from "lodash";
-import { useContext, useEffect, useState } from "react";
-import AuthContext from "../../../../../store/auth-contex";
+import { useEffect, useState } from "react";
 import ListItem from "./ListItem";
 
 import styles from "./List.module.scss";
+import useAPI from "../../../../../api/api";
+import Button from "../../../../../components/shared/Button/Button";
+import IconList from "../../../../../helpers/icons";
+import { toast } from "react-toastify";
 
-import chooseSetForm from "../chooseSetForm.json";
-import {
-  getListSetByProductID,
-  getProductSpecsSetDDL,
-} from "../../../services";
+const List = ({ productId, apiPath }) => {
+    const [fields, setFields] = useState([]);
+    const [newDisabled, setNewDisabled] = useState(false);
+    const api = useAPI();
 
-const List = ({ onDelete = () => {}, productId }) => {
-  const [fields, setFields] = useState([]);
-  const { user } = useContext(AuthContext);
-  const [chooseSet, setChooseSet] = useState(chooseSetForm[0]);
+    const setListHandler = async () => {
+        api.get(`${apiPath}/product/sets/${productId}`)
+            .then((response) => {
+                setFields(response?.payload);
+                setNewDisabled(false);
+            })
+            .catch((error) => {
+                console.warn(error);
+            });
+    };
 
-  const getSetDDL = async () => {
-    try {
-      let response = await getProductSpecsSetDDL(user.access_token);
-      setChooseSet({ ...chooseSet, options: response?.data?.payload });
-    } catch (error) {
-      console.warn(error);
-    }
-  };
+    const deleteHandler = async (id, dataId) => {
+        api.delete(`${apiPath}/${productId}/${dataId}`)
+            .then((response) => {
+                toast.success("Uspešno");
+                setListHandler();
+            })
+            .catch((error) => {
+                toast.warn("Greška");
+                console.warn(error);
+            });
 
-  const setListHandler = async () => {
-    try {
-      let response = await getListSetByProductID(user.access_token, productId);
-      setFields(response?.data?.payload);
-    } catch (error) {
-      console.warn(error);
-    }
-  };
+        /* let newFields = [...fields.slice(0, id), ...fields.slice(id + 1)];
+        setFields([...newFields]); */
+    };
 
-  const deleteHandler = async (id, dataId) => {
-    /*  if (dataId !== null) {
-      try {
-        await onDelete(user.access_token, dataId);
-      } catch (error) {
-        console.warn(error);
-      }
-    } */
-    let newFields = [...fields.slice(0, id), ...fields.slice(id + 1)];
-    setFields([...newFields]);
-  };
+    const addFieldHandler = () => {
+        setFields([...fields, { name: "Novo" }]);
+        setNewDisabled(true);
+    };
 
-  const addFieldHandler = () => {
-    setFields([...fields, { ...set }]);
-  };
+    useEffect(() => {
+        setListHandler();
+    }, []);
 
-  useEffect(() => {
-    getSetDDL();
-    setListHandler();
-  }, []);
-
-  return (
-    <div className={styles.list}>
-      <div className={styles.buttonsHolder}>
-        <Button onClick={addFieldHandler} className={styles.buttonPrimary}>
-          Add field
-        </Button>
-      </div>
-      {fields.map((field, index) => {
-        return (
-          <ListItem
-            key={field.id ? field.id : `${index}new`}
-            index={index}
-            onDelete={deleteHandler}
-            setFormFields={[chooseSet]}
-            selectedSet={field.id_set ?? undefined}
-            productId={productId}
-            productVariantId={field.id_product_variant ?? 0}
-          />
-        );
-      })}
-    </div>
-  );
+    return (
+        <div className={styles.list}>
+            <div className={styles.buttonsHolder}>
+                <Button onClick={addFieldHandler} label="Dodaj polje" icon={IconList.add} variant="contained" disabled={newDisabled} />
+            </div>
+            {fields.map((field, index) => {
+                return (
+                    <ListItem
+                        key={field.id ? field.id : `${index}new`}
+                        index={index}
+                        onDelete={deleteHandler}
+                        title={field.name}
+                        selectedSet={field.id ?? undefined}
+                        productId={productId}
+                        apiPath={apiPath}
+                        listHandler={setListHandler}
+                    />
+                );
+            })}
+        </div>
+    );
 };
 
 export default List;

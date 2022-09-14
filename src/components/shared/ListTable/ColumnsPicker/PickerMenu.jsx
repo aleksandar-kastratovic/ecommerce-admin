@@ -1,87 +1,74 @@
-import { useEffect, useState } from "react";
-import { Box } from "@mui/material";
-import Menu from "@mui/material/Menu";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
-import FormGroup from "@mui/material/FormGroup";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Stack from "@mui/material/Stack";
-import Checkbox from "@mui/material/Checkbox";
-import Button from "../../Button/Button";
+import { Box, Typography } from "@mui/material"
+import FormControl from "@mui/material/FormControl"
+import Menu from "@mui/material/Menu"
+import { useState } from "react"
+import { createPairs } from "../../../../helpers/data"
+import Button from "../../Button/Button"
+import Buttons from "../../Form/Buttons/Buttons"
+import { InputCheckbox } from "../../Form/FormInputs/FormInputs"
+import styles from "./ColumnsPicker.module.scss"
 
-import styles from "./ColumnsPicker.module.scss";
+const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClose }) => {
 
-const PickerMenu = ({
-  anchorEl = null,
-  tableFields = [],
-  handleConfirm = () => {},
-  handleClose = () => {},
-}) => {
-  const [columnsValues, setColumnsValues] = useState({});
+    // Show errors on the list
+    const [ errorInput, setErrorInput ] = useState(null)
+    const errorMessage = "Bar jedna kolona mora ostati vidljiva"
 
-  /* save changed values in state */
-  const handleChange = ({ target }) => {
-    setColumnsValues({ ...columnsValues, [target.name]: target.checked });
-  };
+    // Not all columns can be hidden
+    const [ visibleColumns, setVisibleColumns ] = useState(createPairs(tableFields, "prop_name", "in_main_table"))
 
-  const onConfirm = () => {
-    const repackToSend = tableFields.map((item, index) => {
-      const object = {
-        ...item,
-        in_main_table: columnsValues[item.prop_name],
-      };
-      return object;
-    });
-    handleConfirm(repackToSend);
-  };
+    // Handle each time a user click a checkbox
+    const handleChange = ({ target }, checked) =>
+        setVisibleColumns(visibleColumns => {
+            setErrorInput(null)
 
-  useEffect(() => {
-    const repack = tableFields?.reduce(
-      (acc, cur) => ({ ...acc, [cur.prop_name]: cur.in_main_table }),
-      {}
-    );
-    setColumnsValues(repack);
-  }, []);
-  return (
-    <Menu
-      id="basic-menu"
-      anchorEl={anchorEl}
-      open={anchorEl !== null}
-      onClose={handleClose}
-      MenuListProps={{
-        "aria-labelledby": "basic-button",
-      }}
-    >
-      <Box className={styles.formStyle}>
-        <FormControl
-          className={styles.formControl}
-          component="fieldset"
-          variant="standard"
-        >
-          <FormLabel component="legend">Odaberi kolone za prikaz</FormLabel>
-          <FormGroup>
-            {(tableFields ?? []).map((item) => (
-              <FormControlLabel
-                key={item.prop_name}
-                control={
-                  <Checkbox
-                    checked={columnsValues[item.prop_name]}
-                    onChange={handleChange}
-                    name={item.prop_name}
-                  />
-                }
-                label={item.field_name}
-              />
-            ))}
-          </FormGroup>
-          <Stack spacing={2} direction="row">
-            <Button variant="contained" label="Odaberi" onClick={onConfirm} />
-            <Button variant="outlined" label="Otkaži" onClick={handleClose} />
-          </Stack>
-        </FormControl>
-      </Box>
-    </Menu>
-  );
-};
+            // Count the number of visible columns
+            let visibleColumnsCount = 0
+            for (const column of tableFields.filter(isColumnToggleable)) {
+                visibleColumnsCount += visibleColumns[column.prop_name] ? 1 : 0
+            }
 
-export default PickerMenu;
+            // At least one column must be selected
+            if (visibleColumnsCount > 1 || checked) {
+                visibleColumns[target.name] = checked
+            } else {
+                setErrorInput(target.name)
+            }
+
+            // If returned without {} state is not refreshed
+            return { ...visibleColumns }
+        })
+
+    // Apply the selected columns
+    const onConfirm = () =>
+        handleConfirm(tableFields.map(item => ({ ...item, in_main_table: visibleColumns[item.prop_name] })))
+
+    // Check if the column is toggleable
+    const isColumnToggleable = (column: FieldSpec): boolean =>
+        column.field_name !== ""
+
+    return (
+        <Menu id="column-picker-menu" anchorEl={anchor} open={anchor !== null} onClose={handleClose}>
+            <Box className={styles.formStyle}>
+                <FormControl className={styles.formControl} component="fieldset" variant="standard">
+                    {tableFields.filter(isColumnToggleable).map(item => (
+                        <InputCheckbox
+                            key={item.prop_name}
+                            name={item.prop_name}
+                            label={item.field_name}
+                            value={visibleColumns[item.prop_name]}
+                            error={errorInput === item.prop_name ? errorMessage : null}
+                            onChange={handleChange} />
+                    ))}
+
+                    <Buttons>
+                        <Button variant="contained" label="Odaberi" onClick={onConfirm} />
+                        <Button variant="outlined" label="Otkaži" onClick={handleClose} />
+                    </Buttons>
+                </FormControl>
+            </Box>
+        </Menu>
+    )
+}
+
+export default PickerMenu

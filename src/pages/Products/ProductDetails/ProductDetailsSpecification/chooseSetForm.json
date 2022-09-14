@@ -1,5 +1,4 @@
-[
-  {
+{
     "field_name": "Set",
     "prop_name": "set",
     "in_main_table": true,
@@ -10,24 +9,8 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "options": [
-      {
-        "id": "1",
-        "name": "Set1"
-      },
-      {
-        "id": "2",
-        "name": "Set2"
-      },
-      {
-        "id": "3",
-        "name": "Set3"
-      },
-      {
-        "id": "4",
-        "name": "Set4"
-      }
-    ],
-    "input_type": "select"
-  }
-]
+    "options": [],
+    "input_type": "select",
+    "fillFromApi": "admin/product-items/specifications/sets",
+    "usePropName": false
+}

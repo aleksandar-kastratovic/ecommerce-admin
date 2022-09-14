@@ -10,22 +10,24 @@ import { useQuery } from "react-query"
 import useAPI from "../../../api/api"
 
 /**
+ * Show a standardized list.
  *
  * @param {string} apiUrl
  * @param {?string} deleteUrl
  * @param {string} title
  * @param {FieldSpec[]} columnFields
+ * @param {FieldSpec[]} filters
  * @param {[]} additionalButtons
  * @param {boolean} showDatePicker
- * @param {boolean}showNewButton
- * @param {Object} filters - additional filters for list api
+ * @param {boolean} showNewButton
+ * @param {function(*[]): []} modifyItems The function that accepts the items and return modified ones.
+ * @param {Object} filters Additional filters for list api
  *
  * @constructor
  */
-const ListPage = ({ apiUrl = "", deleteUrl = null, title = "", columnFields = [], additionalButtons = [], showDatePicker = false, showNewButton = true, filters = {} }) => {
-
+const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {} }) => {
     // TODO Sorting is disabled as it does not work with pagination
-    columnFields = columnFields.map(field => ({ ...field, sortable: false }))
+    columnFields = columnFields.map((field) => ({ ...field, sortable: false }))
 
     const api = useAPI()
     const navigate = useNavigate()
@@ -37,43 +39,22 @@ const ListPage = ({ apiUrl = "", deleteUrl = null, title = "", columnFields = []
     // Default delete URL is the same as the main URL
     deleteUrl = deleteUrl ?? apiUrl
 
-    const [ openDeleteDialog, setOpenDeleteDialog ] = useState({
-        show  : false,
-        id    : null,
-        mutate: null
-    })
+    // Handle delete dialog
+    const [ openDeleteDialog, setOpenDeleteDialog ] = useState({ show: false, id: null, mutate: null })
+    const handleDeleteConfirm = async () => {
+        api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
+            .then(() => toast.success("Zapis je uspešno obrisan"))
+            .catch(() => toast.warning("Došlo je do greške prilikom brisanja"))
 
-    const { data: response, isLoading, isError } = useQuery(
-        [ "openDeleteDialog.mutate", openDeleteDialog.mutate, search, page ],
-        () => api.list(apiUrl, { page: page, search: search, ...filters })
-    )
-
-    const handleCreateNew = () => {
-        navigate("new")
-    }
-
-    const handlePageChange = (e, value) => {
-        setPage(value)
-    }
-
-    const onColumnsChange = (newFields) => {
-        setFieldsColumns(newFields)
-    }
-
-    const handleConfirm = async () => {
-        api
-            .delete(`${deleteUrl}/${openDeleteDialog.id}`)
-            .then(() => {
-                toast.success("Uspešno")
-            })
-            .catch(() => {
-                toast.warning("Greška")
-            })
         setOpenDeleteDialog({ show: false, id: null, mutate: 1 })
     }
 
-    const handleCancel = () => {
-        setOpenDeleteDialog({ show: false, id: null })
+    // Load the data
+    const { data: response, isLoading, isError } = useQuery([ "openDeleteDialog.mutate", openDeleteDialog.mutate, search, page ], () => api.list(apiUrl, { page, search, ...filters }))
+
+    // Modify the data
+    if (response?.payload && modifyItems) {
+        response.payload.items = modifyItems(response.payload.items)
     }
 
     useEffect(() => {
@@ -89,10 +70,9 @@ const ListPage = ({ apiUrl = "", deleteUrl = null, title = "", columnFields = []
     }, [ isError ])
 
     // Update the search term and reset to the first page
-    const handleSearch = value => {
-
+    const handleSearch = (value) => {
         // TODO This always triggers two request as we are changing two states in a row
-        setPage(value)
+        setPage(1)
         setSearch(value)
     }
 
@@ -120,11 +100,11 @@ const ListPage = ({ apiUrl = "", deleteUrl = null, title = "", columnFields = []
     }
 
     // Buttons in the page header
-    const titleButtons = []
+    const actions = [ ...additionalButtons ] ?? []
     if (showNewButton) {
-        titleButtons.push({
+        actions.push({
             label  : "Novi unos",
-            action : handleCreateNew,
+            action : () => navigate("new"),
             variant: "contained",
             icon   : "add"
         })
@@ -132,28 +112,26 @@ const ListPage = ({ apiUrl = "", deleteUrl = null, title = "", columnFields = []
 
     return (
         <>
-            <PageWrapper title={title} actions={[ ...additionalButtons, ...titleButtons ]}>
+            <PageWrapper title={title} actions={actions}>
 
                 <ListTableToolbar
-                    onColumnsChange={onColumnsChange}
+                    onColumnsChange={setFieldsColumns}
                     fields={fieldsColumns}
+                    filters={filters}
                     onSearch={handleSearch}
                     showDatePicker={showDatePicker} />
 
                 <ListTable
-                    fields={flatten(fieldsColumns).filter(field => field.in_main_table)}
+                    fields={flatten(fieldsColumns).filter((field) => field.in_main_table)}
                     listData={response?.payload}
                     handleActions={handleActions}
                     isLoading={isLoading}
                     page={page}
-                    onPageChange={handlePageChange} />
-
+                    onPageChange={setPage}
+                />
             </PageWrapper>
 
-            <DeleteDialog
-                openDeleteDialog={openDeleteDialog}
-                handleConfirm={handleConfirm}
-                setOpenDeleteDialog={setOpenDeleteDialog} />
+            <DeleteDialog handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
         </>
     )
 }

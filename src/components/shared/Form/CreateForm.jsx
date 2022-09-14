@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import ImageButton from "../ImageButton/ImageButton";
 import InputMultipleImages from "../InputMultipleImages/InputMultipleImages";
-import { InputCheckbox, InputDate, InputDateTime, InputInput, InputRadio, InputSelect, InputSwitch, InputText } from "./FormInputs/FormInputs";
+import { InputCheckbox, InputDate, InputDateTime, InputInput, InputNumber, InputRadio, InputSelect, InputSwitch, InputText } from "./FormInputs/FormInputs";
 import FileButton from "../FileButton/FileButton";
+import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
 
 const CreateForm = ({
     item = {},
@@ -17,6 +18,7 @@ const CreateForm = ({
     error = null,
     disabled = false,
     queryString = "",
+    optionsIsEmpty = () => {},
 }) => {
     // depending on input type in fields you will get a control
     // value is obvious
@@ -88,35 +90,21 @@ const CreateForm = ({
                     );
                     break;
                 case "checkbox":
-                    formItem = (
-                        <InputCheckbox
-                            name={item.prop_name}
-                            value={typeof value === "string" ? true : typeof value === "number" ? value === 1 : value}
-                            onChange={(e) => onChangeHandler(e, "checkbox")}
-                            disabled={disabled}
-                            label={item.field_name}
-                        />
-                    );
+                    formItem = <InputCheckbox name={item.prop_name} value={Boolean(value)} onChange={(e) => onChangeHandler(e, "checkbox")} disabled={disabled} label={item.field_name} />;
                     break;
                 case "radio":
-                    formItem = (
-                        <InputRadio
-                            name={item.prop_name}
-                            value={typeof value === "string" ? true : typeof value === "number" ? value === 1 : value}
-                            onChange={(e) => onChangeHandler(e, "radio")}
-                            disabled={disabled}
-                            label={item.field_name}
-                        />
-                    );
+                    formItem = <InputRadio name={item.prop_name} value={Boolean(value)} onChange={(e) => onChangeHandler(e, "radio")} disabled={disabled} label={item.field_name} />;
                     break;
                 case "switch":
                     formItem = (
                         <InputSwitch
                             label={item.field_name}
                             name={item.prop_name}
-                            value={typeof value === "string" ? true : typeof value === "number" ? value === 1 : value}
+                            value={Boolean(value)}
                             onChange={(e) => onChangeHandler(e, "switch")}
                             disabled={disabled}
+                            error={error}
+                            description={item.description}
                         />
                     );
                     break;
@@ -135,6 +123,7 @@ const CreateForm = ({
                             fillFromApi={item.fillFromApi}
                             usePropName={item.usePropName}
                             queryString={queryString}
+                            optionsIsEmpty={optionsIsEmpty}
                         />
                     );
                     break;
@@ -180,8 +169,11 @@ const CreateForm = ({
                         />
                     );
                     break;
-                case "MultipleImages": //TODO
+                case "multiple_images": //TODO
                     formItem = <InputMultipleImages list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} />;
+                    break;
+                case "multiple_files": //TODO
+                    formItem = <InputMultipleFiles list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} />;
                     break;
                 case "file_button":
                     formItem = (
@@ -194,6 +186,20 @@ const CreateForm = ({
                             error={error}
                             onImageUpload={onImageUpload}
                             onOpenImageDialog={onOpenImageDialog}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                case "number":
+                    formItem = (
+                        <InputNumber
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onChange={onChangeHandler}
                             disabled={disabled}
                         />
                     );

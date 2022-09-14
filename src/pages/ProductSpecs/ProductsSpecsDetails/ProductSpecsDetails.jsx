@@ -67,7 +67,7 @@ const ProductSpecsDetails = () => {
             name: "Grupe",
             icon: IconList.group,
             enabled: data?.id,
-            component: <DetailsGroups specId={specId} />,
+            component: <DetailsGroups specId={data?.id} />,
         },
     ];
 
