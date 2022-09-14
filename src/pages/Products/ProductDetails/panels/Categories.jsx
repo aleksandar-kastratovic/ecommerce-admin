@@ -12,7 +12,7 @@ const Categories = ({ productId }) => {
     const api = useAPI();
     const apiPath = "admin/product-items/categories";
 
-    const handleAvailable = () => {
+    const handleList = () => {
         setIsLoading(true);
         api.get(`${apiPath}/${productId}`)
             .then((response) => {
@@ -34,7 +34,7 @@ const Categories = ({ productId }) => {
     };
 
     useEffect(() => {
-        handleAvailable();
+        handleList();
     }, []);
 
     return !isLoading ? <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} /> : <Loading />;

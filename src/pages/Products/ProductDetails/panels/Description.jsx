@@ -10,6 +10,9 @@ const Description = ({ productId }) => {
         id: productId,
         short_description: null,
         description: null,
+        id_manufacture: null,
+        id_brand: null,
+        stickers: null,
     };
     const [data, setData] = useState(init);
     const api = useAPI();
@@ -17,14 +20,27 @@ const Description = ({ productId }) => {
 
     const handleData = () => {
         api.get(`${apiPath}/${productId}`)
-            .then((response) => setData(response?.payload))
+            .then((response) => {
+                let stickers = [];
+                if (response?.payload.stickers) stickers = JSON.parse(response?.payload?.stickers);
+                let res = { ...response?.payload, stickers: stickers };
+                setData(res);
+            })
             .catch((error) => console.warn(error));
     };
 
     const handleSubmit = (data) => {
-        api.post(`${apiPath}`, data)
+        let req = {
+            ...data,
+            stickers: JSON.stringify(data.stickers),
+        };
+
+        api.post(`${apiPath}`, req)
             .then((response) => {
-                setData(response?.payload);
+                let stickers = [];
+                if (response?.payload.stickers) stickers = JSON.parse(response?.payload?.stickers);
+                let res = { ...response?.payload, stickers: stickers };
+                setData(res);
                 toast.success("Uspešno");
             })
             .catch((error) => {

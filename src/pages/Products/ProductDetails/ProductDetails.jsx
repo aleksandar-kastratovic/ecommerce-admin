@@ -19,6 +19,7 @@ import Gallery from "./panels/Gallery";
 import TechnicalDoc from "./panels/TechnicalDoc";
 import Instruction from "./panels/Instruction";
 import Certificate from "./panels/Certificate";
+import DisplayIn from "./panels/DisplayIn";
 
 const ProductDetails = () => {
     const { prodId } = useParams();
@@ -64,21 +65,9 @@ const ProductDetails = () => {
     const fields = [
         {
             name: "Osnovno",
-            icon: "settings",
+            icon: IconList.inventory,
             enabled: true,
             component: <Form formFields={basic_data} initialData={data} onSubmit={handleSubmit} />,
-        },
-        {
-            name: "Deklaracija",
-            icon: IconList.editDocument,
-            enabled: data?.id,
-            component: <Declaration productId={data?.id} />,
-        },
-        {
-            name: "SEO",
-            icon: IconList.search,
-            enabled: data?.id,
-            component: <Seo productId={data?.id} />,
         },
         {
             name: "Opis",
@@ -94,7 +83,7 @@ const ProductDetails = () => {
         },
         {
             name: "Lager",
-            icon: IconList.inventory,
+            icon: IconList.inventory2,
             enabled: data?.id,
             component: <Inventories productId={data?.id} />,
         },
@@ -109,6 +98,24 @@ const ProductDetails = () => {
             icon: IconList.browseGallery,
             enabled: data?.id,
             component: <Gallery productId={data?.id} />,
+        },
+        {
+            name: "Deklaracija",
+            icon: IconList.editDocument,
+            enabled: data?.id,
+            component: <Declaration productId={data?.id} />,
+        },
+        {
+            name: "SEO",
+            icon: IconList.search,
+            enabled: data?.id,
+            component: <Seo productId={data?.id} />,
+        },
+        {
+            name: "Prikaz",
+            icon: IconList.displaySettings,
+            enabled: data?.id,
+            component: <DisplayIn productId={data?.id} />,
         },
         {
             name: "Tehnička dokumentacija",
@@ -130,7 +137,7 @@ const ProductDetails = () => {
         },
         {
             name: "Specifikacije",
-            icon: IconList.documentScanner,
+            icon: IconList.checklist,
             enabled: data?.id,
             component: <Specification productId={data?.id} />,
         },
