@@ -39,14 +39,19 @@ const DetailsBanners = ({}) => {
 
     const api = useAPI();
     const [data, setData] = useState(init);
+    const [bannerName, setBannerName] = useState(null);
+    const [idPos, setIdPos] = useState(null);
+
     const [subFields, setSubFields] = useState([]);
 
     const { data: response, isLoading } = useQuery([], () => api.get(`admin/banners-b2b/main/${B2BId}`));
 
     const saveData = (data) => {
-        api.post(`admin/banners-b2b/main/`, data)
+        api.post(`admin/banners-b2b/main/`, { ...data, id_position: idPos, name: bannerName })
             .then((response) => {
                 setData(response?.payload);
+                setBannerName(response?.payload.name);
+                setIdPos(response?.payload.id_position);
                 toast.success(`Uspešno`);
             })
             .catch((error) => {
@@ -57,13 +62,15 @@ const DetailsBanners = ({}) => {
 
     useEffect(() => {
         setData(response?.payload);
+        setBannerName(response?.payload.name);
+        setIdPos(response?.payload.id_position);
     }, [response]);
 
     useEffect(() => {
         const getForm = async () => {
             let res;
             await api
-                .get(`admin/banners-b2b/positions/slug/${data.id_position}`)
+                .get(`admin/banners-b2b/positions/slug/${idPos}`)
                 .then((response) => {
                     res = response?.payload;
                 })
@@ -98,22 +105,16 @@ const DetailsBanners = ({}) => {
                 setSubFields(arr);
             }
         };
-        if (data && data.id_position !== null) {
+        if (idPos != null) {
             getForm();
         }
-    }, [data]);
+    }, [idPos]);
 
     return (
-        <FormWrapper title={B2BId == "new" ? "Unos novog banera" : data?.name} back={() => navigate(-1)}>
-            {!isLoading ? (
-                <>
-                    <CreateForm onChangeHandler={({ target }) => setData({ ...data, name: target.value })} item={name} value={data ? data.name : ""} />
-                    <CreateForm onChangeHandler={({ target }) => setData({ ...data, id_position: target.value })} item={positionForm} value={data ? data.id_position : ""} />
-                    <Form formFields={[...subFields, status]} initialData={data} onSubmit={saveData} />
-                </>
-            ) : (
-                <LoadingForm fields={5} />
-            )}
+        <FormWrapper title={data?.id == null ? "Unos novog banera" : data?.name} back={() => navigate(-1)} ready={!isLoading}>
+            <CreateForm onChangeHandler={({ target }) => setBannerName(target.value)} item={name} value={bannerName} />
+            <CreateForm onChangeHandler={({ target }) => setIdPos(target.value)} item={positionForm} value={idPos} />
+            <Form formFields={[...subFields, status]} initialData={data} onSubmit={saveData} onChange={(data) => setData(data)} />
         </FormWrapper>
     );
 };
