@@ -5,7 +5,21 @@ import Form from "../../../../components/shared/Form/Form";
 import formFields from "../forms/head_office_address.json";
 
 const HeadOffice = ({ companyId }) => {
-    const init = {};
+    const init = {
+        id: null,
+        id_company: null,
+        address: null,
+        object_number: null,
+        floor: null,
+        apartment_number: null,
+        id_town: null,
+        town_name: null,
+        zip_code: null,
+        municipality_name: null,
+        id_country: null,
+        country_name: null,
+        note: null,
+    };
     const [data, setData] = useState(init);
     const api = useAPI();
 

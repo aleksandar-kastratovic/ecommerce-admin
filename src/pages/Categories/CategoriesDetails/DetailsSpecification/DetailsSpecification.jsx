@@ -19,7 +19,10 @@ const DetailsSpecification = ({ gid, cid }) => {
                 setListData(response?.payload);
                 setIsLoading(false);
             })
-            .catch((error) => console.warn(error));
+            .catch((error) => {
+                console.warn(error);
+                setIsLoading(false);
+            });
     };
 
     const handleSubmit = (data) => {

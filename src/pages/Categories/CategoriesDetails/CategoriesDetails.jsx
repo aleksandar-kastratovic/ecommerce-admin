@@ -6,7 +6,6 @@ import useAPI from "../../../api/api";
 import Form from "../../../components/shared/Form/Form";
 import IconList from "../../../helpers/icons";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
-import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import DetailsSeo from "./DetailsSeo/DetailsSeo";
 import DetailsSpecification from "./DetailsSpecification/DetailsSpecification";
 
@@ -26,9 +25,10 @@ const CategoriesDetails = () => {
     const [data, setData] = useState(init);
     const [isLoading, setIsLoading] = useState(false);
     const api = useAPI();
+    const apiPath = "admin/category_product/categories";
 
     const handleSubmit = (data) => {
-        api.post("admin/category_product/categories/", { ...data, id_category_product_groups: gid })
+        api.post(apiPath, { ...data, id_category_product_groups: gid })
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
@@ -42,14 +42,15 @@ const CategoriesDetails = () => {
     const handleData = async () => {
         setIsLoading(true);
         await api
-            .get(`admin/category_product/categories/${cid}`)
+            .get(`${apiPath}/${cid}`)
             .then((response) => {
                 setData(response?.payload);
+                setIsLoading(false);
             })
             .catch((error) => {
                 console.warn(error);
+                setIsLoading(false);
             });
-        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -61,15 +62,7 @@ const CategoriesDetails = () => {
             name: "Osnovno",
             icon: IconList.category,
             enabled: true,
-            component: (
-                <div>
-                    {!isLoading ? (
-                        <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}&id_category_product=${cid}`} />
-                    ) : (
-                        <LoadingForm fields={formFields.length} />
-                    )}
-                </div>
-            ),
+            component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}&id_category_product=${cid}`} />,
         },
         {
             name: "Seo",
@@ -85,7 +78,7 @@ const CategoriesDetails = () => {
         },
     ];
 
-    return <DetailsPage title={data?.id == null ? "Unos nove kategorije" : data?.name} fields={fields} />;
+    return <DetailsPage title={data?.id == null ? "Unos nove kategorije" : data?.name} fields={fields} ready={!isLoading} />;
 };
 
 export default CategoriesDetails;

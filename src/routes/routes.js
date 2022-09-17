@@ -69,12 +69,12 @@ import Params from "./../pages/Params/Params";
 import Products from "./../pages/Products/Products";
 import RolesPage from "./../pages/RolesPage";
 import UsersPage from "./../pages/UsersPage";
-import Categories from "../pages/Categories/Categories";
+import CategoriesGroupsListPage from "../pages/Categories/CategoriesGroupsListPage";
 import CategoriesDetails from "../pages/Categories/CategoriesDetails/CategoriesDetails";
 import Notifications from "../pages/Notifications/Notifications";
 import NotificationsDetails from "../pages/Notifications/NotificationsDetails/NotificationsDetails";
 import { makeScreen, MenuGroup } from "./utils";
-import CategoriesList from "../pages/Categories/CategoriesList/CategoriseList";
+import CategoriesListPage from "../pages/Categories/CategoriesList/CategoriseListPage";
 import CategoriesTree from "../pages/Categories/CategoriesTree/CategoriesTree";
 import GroupDetails from "../pages/Categories/GroupDetails/GroupDetails";
 import Companies from "../pages/Companies/Companies";
@@ -87,6 +87,10 @@ import B2CbannersPositions from "../pages/B2CbannersPositions/B2CbannersPosition
 import B2CPositionDetails from "../pages/B2CbannersPositions/DetailsPage/B2CPositionDetails";
 import B2BOrders from "../pages/B2BOrders/B2BOrders";
 import B2BOrdersDetails from "../pages/B2BOrders/Details/B2BOrdersDetails";
+import RolesListPage from "../pages/Roles/RolesListPage";
+import RolesDetailsPage from "../pages/Roles/Details/RolesDetailsPage";
+import Users from "../pages/Users/Users";
+import UsersDetils from "../pages/Users/Details/UsersDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -96,11 +100,11 @@ const screens = {
         "Kategorije",
         faSitemap,
         PRODUCT,
-        Categories,
+        CategoriesGroupsListPage,
         [
             [":gid", GroupDetails],
             ["tree/:gid", CategoriesTree],
-            ["category/:gid", CategoriesList],
+            ["category/:gid", CategoriesListPage],
             ["category/:gid/:cid", CategoriesDetails],
         ],
     ],
@@ -174,8 +178,8 @@ const screens = {
     B2C_STATIC_PAGES: ["/staticpages", "Statičke strane", faArchive, B2C, StaticPages, [[":spid", StaticPagesDetails]]],
     B2C_NEWSLETTER: ["/newsletter", "Newsletter", faArchive, B2C, Newsletter, [[":nlid", Newsletter]]],
     B2C_CONTACT_FORMS: ["/contactform", "Kontakt forma", faArchive, B2C, ContactForm, [[":cfid", ContactForm]]],
-    ROLES: ["/roles", "Uloge", faPeopleArrows, SETTINGS, RolesPage, [[":roleId", RolesPage]]],
-    USERS: ["/users", "Korisnici", faUsers, SETTINGS, UsersPage, [[":userId", UsersPage]]],
+    ROLES: ["/roles", "Uloge", faPeopleArrows, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
+    USERS: ["/users", "Korisnici", faUsers, SETTINGS, Users, [[":userId", UsersDetils]]],
     LOCAT: ["/locations", "Lokacije", faSearchLocation, SETTINGS, LocationsPage, [[":locId", LocationsPage]]],
     PARAMS: ["/params", "Parametri", faCog, SETTINGS, Params, [[":pid", DetailsParams]]],
     COUNTRIES: ["/countries", "Države", faFlag, SETTINGS, Countries, [[":cid", CountriesDetails]]],

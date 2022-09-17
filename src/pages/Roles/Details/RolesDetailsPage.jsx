@@ -1,38 +1,30 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+
+import fields from "./formField.json";
 import { toast } from "react-toastify";
 import Form from "../../../components/shared/Form/Form";
+import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import useAPI from "../../../api/api";
 import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
+import SearchableListForm from "../../../components/shared/Form/SearchableListForm/SearchableListForm";
 
-import fields from "./formFields.json";
-
-const GroupDetails = () => {
-    const { gid } = useParams();
+const RolesDetailsPage = () => {
+    const { roleId } = useParams();
     const api = useAPI();
     const init = {
         id: null,
-        slug: null,
+        screen: null,
         name: null,
-        display_name: null,
-        zip_code: null,
-        id_municipality: null,
-        id_country: null,
-        delivery_center: null,
-        delivery_days: null,
-        source: null,
-        id_source: null,
-        status: null,
     };
     const navigate = useNavigate();
     const [data, setData] = useState(init);
     const [isLoading, setIsLoading] = useState(false);
-    const apiPath = "admin/category_product/groups";
 
     const handleData = async () => {
         setIsLoading(true);
         await api
-            .get(`${apiPath}/${gid}`)
+            .get(`admin/roles/${roleId}`)
             .then((response) => {
                 setData(response?.payload);
                 setIsLoading(false);
@@ -44,7 +36,7 @@ const GroupDetails = () => {
     };
 
     const saveData = async (data) => {
-        api.post(apiPath, data)
+        api.post(`admin/roles`, data)
             .then((response) => {
                 setData(response?.payload);
                 toast.success(`Uspešno`);
@@ -60,10 +52,11 @@ const GroupDetails = () => {
     }, []);
 
     return (
-        <FormWrapper title={data?.id == null ? "Unos nove grupe" : data?.name} back={() => navigate(-1)} ready={!isLoading}>
+        <FormWrapper title={data?.id == null ? "Unos novog mesta" : data?.name} back={() => navigate(-1)} ready={!isLoading}>
             <Form formFields={fields} initialData={data} onSubmit={saveData} />
+            <SearchableListForm />
         </FormWrapper>
     );
 };
 
-export default GroupDetails;
+export default RolesDetailsPage;

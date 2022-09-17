@@ -100,7 +100,7 @@ const ParamsDetails = () => {
     };
 
     const handleGetList = () => {
-        api.list(`admin/params/values/`, { id_param: pid })
+        api.list(`admin/params/values/`, { id_param: data.id })
             .then((response) => {
                 setList(response?.payload?.items);
             })
@@ -121,9 +121,9 @@ const ParamsDetails = () => {
             });
     };
 
-    const handleListSubmit = async (data) => {
+    const handleListSubmit = async (listData) => {
         await api
-            .post("admin/params/values/", { ...data, id_params: pid })
+            .post("admin/params/values/", { ...listData, id_params: data.id })
             .then((response) => {
                 handleGetList();
                 toast.success("Uspešno");

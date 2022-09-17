@@ -3,7 +3,6 @@ import { useParams } from "react-router-dom";
 import IconList from "../../../helpers/icons";
 import DetailsGroups from "./DetailsGroups/DetailsGroups";
 import Form from "../../../components/shared/Form/Form";
-import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import useAPI from "../../../api/api";
 import { useEffect } from "react";
@@ -26,8 +25,10 @@ const ProductSpecsDetails = () => {
     const [isLoading, setIsLoading] = useState(false);
     const api = useAPI();
 
+    const apiPath = "admin/product-item-specifications/set";
+
     const handleSubmit = (data) => {
-        api.post(`admin/product-item-specifications/set/`, data)
+        api.post(apiPath, data)
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
@@ -41,15 +42,15 @@ const ProductSpecsDetails = () => {
     const getData = async () => {
         setIsLoading(true);
         await api
-            .get(`admin/product-item-specifications/set/${specId}`)
+            .get(`${apiPath}/${specId}`)
             .then((response) => {
                 setData(response?.payload);
+                setIsLoading(false);
             })
             .catch((error) => {
                 console.warn(error);
+                setIsLoading(false);
             });
-
-        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -61,7 +62,7 @@ const ProductSpecsDetails = () => {
             name: "Osnovno",
             icon: IconList.dataThresholding,
             enabled: true,
-            component: <div>{!isLoading ? <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} /> : <LoadingForm fields={formFields.length} />}</div>,
+            component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} />,
         },
         {
             name: "Grupe",
@@ -71,7 +72,7 @@ const ProductSpecsDetails = () => {
         },
     ];
 
-    return <DetailsPage title={data?.id == null ? "Unos novog seta" : data?.name} fields={fields} />;
+    return <DetailsPage title={data?.id == null ? "Unos novog seta" : data?.name} fields={fields} ready={!isLoading} />;
 };
 
 export default ProductSpecsDetails;

@@ -24,9 +24,10 @@ const ProductGroupDetails = () => {
     const [data, setData] = useState(init);
     const [isLoading, setIsLoading] = useState(false);
     const api = useAPI();
+    const apiPath = "admin/product-item-specifications/group";
 
     const handleSubmit = (data) => {
-        api.post(`admin/product-item-specifications/group/`, data)
+        api.post(apiPath, data)
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
@@ -40,15 +41,15 @@ const ProductGroupDetails = () => {
     const getData = async () => {
         setIsLoading(true);
         await api
-            .get(`admin/product-item-specifications/group/${groupId}`)
+            .get(`${apiPath}/${groupId}`)
             .then((response) => {
                 setData(response?.payload);
+                setIsLoading(false);
             })
             .catch((error) => {
                 console.warn(error);
+                setIsLoading(false);
             });
-
-        setIsLoading(false);
     };
 
     useEffect(() => {
@@ -60,7 +61,7 @@ const ProductGroupDetails = () => {
             name: "Osnovno",
             icon: IconList.dataThresholding,
             enabled: true,
-            component: <div>{!isLoading ? <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} /> : <LoadingForm fields={formFields.length} />}</div>,
+            component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} />,
         },
         {
             name: "Atributi",
@@ -70,7 +71,7 @@ const ProductGroupDetails = () => {
         },
     ];
 
-    return <DetailsPage title={data?.id == null ? "Unos nove grupe" : data?.name} fields={fields} />;
+    return <DetailsPage title={data?.id == null ? "Unos nove grupe" : data?.name} fields={fields} ready={!isLoading} />;
 };
 
 export default ProductGroupDetails;
