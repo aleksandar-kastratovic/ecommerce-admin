@@ -35,13 +35,13 @@ const CompaniesDetails = () => {
     const api = useAPI();
 
     const handleData = () => {
-        api.get(`admin/customers-b2b/basic_data/${comId}`)
+        api.get(`admin/customers-b2b/basic-data/${comId}`)
             .then((response) => setData(response?.payload))
             .catch((error) => console.warn(error));
     };
 
     const saveData = (data) => {
-        api.post(`admin/customers-b2b/basic_data`, data)
+        api.post(`admin/customers-b2b/basic-data`, data)
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
@@ -73,31 +73,68 @@ const CompaniesDetails = () => {
             name: "Adresa dostave",
             icon: IconList.locationCity,
             enabled: data?.id,
-            component: <ListPanel companyId={comId} apiPath="admin/customers-b2b/delivery_address" formFields={delivery_address} init={{}} />,
+            component: (
+                <ListPanel
+                    key="addr"
+                    companyId={comId}
+                    apiPath="admin/customers-b2b/delivery-address"
+                    formFields={delivery_address}
+                    init={{
+                        id: null,
+                        id_company: null,
+                        name: null,
+                        address: null,
+                        object_number: null,
+                        floor: null,
+                        apartment_number: null,
+                        id_town: null,
+                        town_name: null,
+                        zip_code: null,
+                        municipality_name: null,
+                        id_country: null,
+                        country_name: null,
+                        note: null,
+                    }}
+                />
+            ),
         },
         {
             name: "Kontakt",
             icon: IconList.contactPage,
             enabled: data?.id,
-            component: <ListPanel companyId={comId} apiPath="admin/customers-b2b/contact" formFields={contact} init={{}} />,
+            component: (
+                <ListPanel
+                    key="cnt"
+                    companyId={comId}
+                    apiPath="admin/customers-b2b/contact"
+                    formFields={contact}
+                    init={{ id: null, id_company: null, type: null, first_name: null, last_name: null, phone: null, email: null, send_order_invoice_mail: null, note: null, status: null }}
+                />
+            ),
+        },
+        {
+            name: "Analitika",
+            icon: IconList.analytics,
+            enabled: data?.id,
+            component: <div>Analitika</div>,
         },
         {
             name: "Napomene",
             icon: IconList.note,
             enabled: data?.id,
-            component: <ListPanel companyId={comId} apiPath="admin/customers-b2b/notes" formFields={notes} init={{}} />,
+            component: <ListPanel key="nap" companyId={comId} apiPath="admin/customers-b2b/notes" formFields={notes} init={{}} />,
         },
         {
             name: "Komercijalista",
-            icon: IconList.locationCity,
+            icon: IconList.person,
             enabled: data?.id,
-            component: <ListPanel companyId={comId} apiPath="admin/customers-b2b/sales_officer" formFields={sales} init={{}} />,
+            component: <ListPanel key="komerc" companyId={comId} apiPath="admin/customers-b2b/sales_officer" formFields={sales} init={{}} />,
         },
         {
             name: "Korisnici",
-            icon: IconList.locationCity,
+            icon: IconList.naturePeople,
             enabled: data?.id,
-            component: <ListPanel companyId={comId} apiPath="admin/customers-b2b/users" formFields={users} init={{}} />,
+            component: <ListPanel key="user" companyId={comId} apiPath="admin/customers-b2b/users" formFields={users} init={{}} />,
         },
     ];
 
