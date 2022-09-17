@@ -69,12 +69,12 @@ import Params from "./../pages/Params/Params";
 import Products from "./../pages/Products/Products";
 import RolesPage from "./../pages/RolesPage";
 import UsersPage from "./../pages/UsersPage";
-import Categories from "../pages/Categories/Categories";
+import CategoriesGroupsListPage from "../pages/Categories/CategoriesGroupsListPage";
 import CategoriesDetails from "../pages/Categories/CategoriesDetails/CategoriesDetails";
 import Notifications from "../pages/Notifications/Notifications";
 import NotificationsDetails from "../pages/Notifications/NotificationsDetails/NotificationsDetails";
 import { makeScreen, MenuGroup } from "./utils";
-import CategoriesList from "../pages/Categories/CategoriesList/CategoriseList";
+import CategoriesListPage from "../pages/Categories/CategoriesList/CategoriseListPage";
 import CategoriesTree from "../pages/Categories/CategoriesTree/CategoriesTree";
 import GroupDetails from "../pages/Categories/GroupDetails/GroupDetails";
 import Companies from "../pages/Companies/Companies";
@@ -100,11 +100,11 @@ const screens = {
         "Kategorije",
         faSitemap,
         PRODUCT,
-        Categories,
+        CategoriesGroupsListPage,
         [
             [":gid", GroupDetails],
             ["tree/:gid", CategoriesTree],
-            ["category/:gid", CategoriesList],
+            ["category/:gid", CategoriesListPage],
             ["category/:gid/:cid", CategoriesDetails],
         ],
     ],
