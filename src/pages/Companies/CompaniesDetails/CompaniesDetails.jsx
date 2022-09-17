@@ -1,9 +1,14 @@
-import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-
 import useAPI from "../../../api/api";
+import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
+import Form from "../../../components/shared/Form/Form";
+import { toast } from "react-toastify";
+import IconList from "../../../helpers/icons";
+
+import ListPanel from "./panels/ListPanel";
+import HeadOffice from "./panels/HeadOffice";
 
 import basic_data from "./forms/basic_data.json";
 import contact from "./forms/contact.json";
@@ -11,12 +16,6 @@ import delivery_address from "./forms/delivery_address.json";
 import notes from "./forms/notes.json";
 import sales from "./forms/sales_officer.json";
 import users from "./forms/users.json";
-import IconList from "../../../helpers/icons";
-import HeadOffice from "./panels/HeadOffice";
-import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
-import ListPanel from "./panels/ListPanel";
-import Form from "../../../components/shared/Form/Form";
-import { toast } from "react-toastify";
 
 const CompaniesDetails = () => {
     const { comId } = useParams();
@@ -33,15 +32,16 @@ const CompaniesDetails = () => {
 
     const [data, setData] = useState(init);
     const api = useAPI();
+    const apiPath = "admin/customers-b2b";
 
     const handleData = () => {
-        api.get(`admin/customers-b2b/basic-data/${comId}`)
+        api.get(`${apiPath}/basic-data/${comId}`)
             .then((response) => setData(response?.payload))
             .catch((error) => console.warn(error));
     };
 
     const saveData = (data) => {
-        api.post(`admin/customers-b2b/basic-data`, data)
+        api.post(`${apiPath}/basic-data`, data)
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
@@ -77,7 +77,7 @@ const CompaniesDetails = () => {
                 <ListPanel
                     key="addr"
                     companyId={comId}
-                    apiPath="admin/customers-b2b/delivery-address"
+                    apiPath="${apiPath}/delivery-address"
                     formFields={delivery_address}
                     init={{
                         id: null,
@@ -106,7 +106,7 @@ const CompaniesDetails = () => {
                 <ListPanel
                     key="cnt"
                     companyId={comId}
-                    apiPath="admin/customers-b2b/contact"
+                    apiPath="${apiPath}/contact"
                     formFields={contact}
                     init={{ id: null, id_company: null, type: null, first_name: null, last_name: null, phone: null, email: null, send_order_invoice_mail: null, note: null, status: null }}
                 />
@@ -122,19 +122,19 @@ const CompaniesDetails = () => {
             name: "Napomene",
             icon: IconList.note,
             enabled: data?.id,
-            component: <ListPanel key="nap" companyId={comId} apiPath="admin/customers-b2b/notes" formFields={notes} init={{}} />,
+            component: <ListPanel key="nap" companyId={comId} apiPath={`${apiPath}/notes`} formFields={notes} init={{}} />,
         },
         {
             name: "Komercijalista",
             icon: IconList.person,
             enabled: data?.id,
-            component: <ListPanel key="komerc" companyId={comId} apiPath="admin/customers-b2b/sales_officer" formFields={sales} init={{}} />,
+            component: <ListPanel key="komerc" companyId={comId} apiPath={`${apiPath}/sales_officer`} formFields={sales} init={{}} />,
         },
         {
             name: "Korisnici",
             icon: IconList.naturePeople,
             enabled: data?.id,
-            component: <ListPanel key="user" companyId={comId} apiPath="admin/customers-b2b/users" formFields={users} init={{}} />,
+            component: <ListPanel key="user" companyId={comId} apiPath={`${apiPath}/users`} formFields={users} init={{}} />,
         },
     ];
 
