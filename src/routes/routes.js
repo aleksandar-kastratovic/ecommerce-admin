@@ -87,6 +87,10 @@ import B2CbannersPositions from "../pages/B2CbannersPositions/B2CbannersPosition
 import B2CPositionDetails from "../pages/B2CbannersPositions/DetailsPage/B2CPositionDetails";
 import B2BOrders from "../pages/B2BOrders/B2BOrders";
 import B2BOrdersDetails from "../pages/B2BOrders/Details/B2BOrdersDetails";
+import RolesListPage from "../pages/Roles/RolesListPage";
+import RolesDetailsPage from "../pages/Roles/Details/RolesDetailsPage";
+import Users from "../pages/Users/Users";
+import UsersDetils from "../pages/Users/Details/UsersDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -174,8 +178,8 @@ const screens = {
     B2C_STATIC_PAGES: ["/staticpages", "Statičke strane", faArchive, B2C, StaticPages, [[":spid", StaticPagesDetails]]],
     B2C_NEWSLETTER: ["/newsletter", "Newsletter", faArchive, B2C, Newsletter, [[":nlid", Newsletter]]],
     B2C_CONTACT_FORMS: ["/contactform", "Kontakt forma", faArchive, B2C, ContactForm, [[":cfid", ContactForm]]],
-    ROLES: ["/roles", "Uloge", faPeopleArrows, SETTINGS, RolesPage, [[":roleId", RolesPage]]],
-    USERS: ["/users", "Korisnici", faUsers, SETTINGS, UsersPage, [[":userId", UsersPage]]],
+    ROLES: ["/roles", "Uloge", faPeopleArrows, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
+    USERS: ["/users", "Korisnici", faUsers, SETTINGS, Users, [[":userId", UsersDetils]]],
     LOCAT: ["/locations", "Lokacije", faSearchLocation, SETTINGS, LocationsPage, [[":locId", LocationsPage]]],
     PARAMS: ["/params", "Parametri", faCog, SETTINGS, Params, [[":pid", DetailsParams]]],
     COUNTRIES: ["/countries", "Države", faFlag, SETTINGS, Countries, [[":cid", CountriesDetails]]],
