@@ -24,7 +24,7 @@ const GroupAttributes = ({ groupId }) => {
     };
 
     const api = useAPI();
-
+    const apiPath = "admin/product-item-specifications/group-attribute";
     const listActions = {
         field_type: {
             value: "select",
@@ -39,7 +39,7 @@ const GroupAttributes = ({ groupId }) => {
     };
 
     const handleList = () => {
-        api.list(`admin/product-item-specifications/group-attribute/${groupId}`)
+        api.list(`${apiPath}/${groupId}`)
             .then((response) => {
                 setListFields(response?.payload?.items);
             })
@@ -49,7 +49,7 @@ const GroupAttributes = ({ groupId }) => {
     };
 
     const onSave = (data) => {
-        api.post("admin/product-item-specifications/group-attribute/", { id_group: groupId, ...data })
+        api.post(apiPath, { id_group: groupId, ...data })
             .then((response) => {
                 console.log(response);
                 handleList();
@@ -62,7 +62,7 @@ const GroupAttributes = ({ groupId }) => {
     };
 
     const onDelete = (token, id) => {
-        api.delete(`admin/product-item-specifications/group-attribute/${id}`)
+        api.delete(`${apiPath}/${id}`)
             .then((response) => {
                 console.log(response);
                 handleList();
