@@ -12,7 +12,7 @@
         "sortable": true,
         "input_type": "select",
         "options": [],
-        "fillFromApi": "admin/customers-b2b/sales_officer/ddl/",
+        "fillFromApi": "admin/customers-b2b/sales-officer/ddl",
         "usePropName": true
     }
 ]
