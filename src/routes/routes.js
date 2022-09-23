@@ -132,7 +132,6 @@ const screens = {
             ["groups/:groupId", ProductGroupDetails],
         ],
     ],
-    ORDER: ["/orders", "Porudžbine", faFileAlt, B2B, OrdersPage, [[":ordId", OrdersPage]]],
     B2B_ORDERS: ["/b2b-orders", "Porudžbine", IconList.fileOpen, B2B, B2BOrders, [[":orderId", B2BOrdersDetails]]],
     COMPN: ["/companies", "Kompanije", faCity, B2B, Companies, [[":comId", CompaniesDetails]]],
     REBATE_TIERS: ["/b2b/rebate_tiers", "Rabatne skale", IconList.barChart, B2B, B2BRebateTiersListPage, [[":rebateTierId", B2BRebateTiersDetails]]],

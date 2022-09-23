@@ -13,21 +13,8 @@
         "input_type": "input"
     },
     {
-        "field_name": "Token za narudžbenicu",
-        "prop_name": "order_token",
-        "in_main_table": true,
-        "in_details": true,
-        "editable": true,
-        "disabled": false,
-        "required": false,
-        "description": "255",
-        "ui_prop": "xyz",
-        "sortable": true,
-        "input_type": "input"
-    },
-    {
-        "field_name": "Token kupca",
-        "prop_name": "customer_token",
+        "field_name": "Vreme kreiranje",
+        "prop_name": "created_at",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
@@ -106,7 +93,7 @@
     {
         "field_name": "Ukupno bez pdv-a",
         "prop_name": "total_with_out_vat",
-        "in_main_table": true,
+        "in_main_table": false,
         "in_details": true,
         "editable": true,
         "disabled": false,
@@ -119,7 +106,7 @@
     {
         "field_name": "Ukupno pdv",
         "prop_name": "total_vat",
-        "in_main_table": true,
+        "in_main_table": false,
         "in_details": true,
         "editable": true,
         "disabled": false,
@@ -132,7 +119,7 @@
     {
         "field_name": "Ukupno sa pdv-om",
         "prop_name": "total_with_vat",
-        "in_main_table": true,
+        "in_main_table": false,
         "in_details": true,
         "editable": true,
         "disabled": false,
@@ -145,7 +132,7 @@
     {
         "field_name": "Ukupan popust",
         "prop_name": "total_discount",
-        "in_main_table": true,
+        "in_main_table": false,
         "in_details": true,
         "editable": true,
         "disabled": false,
@@ -158,7 +145,7 @@
     {
         "field_name": "Ukupno promo kod",
         "prop_name": "total_promo_code",
-        "in_main_table": true,
+        "in_main_table": false,
         "in_details": true,
         "editable": true,
         "disabled": false,
@@ -171,7 +158,7 @@
     {
         "field_name": "Ukupno dostava",
         "prop_name": "total_delivery",
-        "in_main_table": true,
+        "in_main_table": false,
         "in_details": true,
         "editable": true,
         "disabled": false,
@@ -197,7 +184,7 @@
     {
         "field_name": "Valuta",
         "prop_name": "currency",
-        "in_main_table": true,
+        "in_main_table": false,
         "in_details": true,
         "editable": true,
         "disabled": false,
@@ -221,22 +208,9 @@
         "input_type": "input"
     },
     {
-        "field_name": "Pravila prihvatanja",
-        "prop_name": "accept_rules",
-        "in_main_table": true,
-        "in_details": true,
-        "editable": true,
-        "disabled": false,
-        "required": true,
-        "description": "255",
-        "ui_prop": "xyz",
-        "sortable": true,
-        "input_type": "input"
-    },
-    {
         "field_name": "Ip adresa",
         "prop_name": "ip_address",
-        "in_main_table": true,
+        "in_main_table": false,
         "in_details": true,
         "editable": true,
         "disabled": false,
@@ -283,6 +257,6 @@
         "description": "255",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "preview_delete"
+        "input_type": "preview"
     }
 ]

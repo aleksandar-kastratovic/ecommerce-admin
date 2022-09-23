@@ -1,7 +1,67 @@
+@import "../../../variables.scss";
+
+.orderData {
+    display: flex;
+    width: 100%;
+    gap: 2rem;
+}
+
 .orderSectionTitle {
     font-weight: 400;
     padding: 0.5rem;
+
     font-size: 17px;
-    background-color: #ecf0fa;
+    background-color: $lightGrey;
     border-radius: 0.25rem;
+}
+
+.orderSectionBody {
+    padding: 1rem;
+}
+
+.orderSection {
+    width: 100%;
+    p {
+        margin: 0;
+        padding: 0;
+        font-size: 1rem;
+    }
+}
+
+.orderSection50 {
+    width: 50%;
+}
+
+.orderDataSection {
+    display: flex;
+    gap: 2rem;
+}
+
+.orderDataDisplay {
+    width: 50%;
+}
+
+.priceRow {
+    display: flex;
+    justify-content: space-between;
+    color: $middleGrey;
+}
+
+.totalPriceRow {
+    display: flex;
+    justify-content: space-between;
+    color: $black;
+}
+
+.priceValue {
+    font-weight: bold;
+}
+
+.dataLabel {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.productCell {
+    font-weight: bold !important;
 }
