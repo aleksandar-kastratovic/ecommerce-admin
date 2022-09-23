@@ -2,28 +2,18 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
 import Form from "../../../../components/shared/Form/Form";
-import formFields from "../forms/head_office_address.json";
+import formFields from "../forms/analitics.json";
 
-const HeadOffice = ({ companyId }) => {
+const AnalitycsData = ({ companyId }) => {
     const init = {
-        id: null,
         id_company: companyId,
-        address: null,
-        object_number: null,
-        floor: null,
-        apartment_number: null,
-        id_town: null,
-        town_name: null,
-        zip_code: null,
-        municipality_name: null,
-        id_country: null,
-        country_name: null,
-        note: null,
+        credit_limit: null,
+        debt_days: null,
     };
     const [data, setData] = useState(init);
     const api = useAPI();
 
-    const apiPath = "admin/customers-b2b/head-office-address";
+    const apiPath = "admin/customers-b2b/analytics-data";
 
     const handleData = () => {
         api.get(`${apiPath}/${companyId}`)
@@ -49,4 +39,4 @@ const HeadOffice = ({ companyId }) => {
     return <Form formFields={formFields} initialData={data} onSubmit={saveData} />;
 };
 
-export default HeadOffice;
+export default AnalitycsData;

@@ -14,8 +14,9 @@ import basic_data from "./forms/basic_data.json";
 import contact from "./forms/contact.json";
 import delivery_address from "./forms/delivery_address.json";
 import notes from "./forms/notes.json";
-import sales from "./forms/sales_officer.json";
 import users from "./forms/users.json";
+import AnalitycsData from "./panels/AnalitycsData";
+import SalesOfficers from "./panels/SalesOfficers";
 
 const CompaniesDetails = () => {
     const { comId } = useParams();
@@ -67,7 +68,7 @@ const CompaniesDetails = () => {
             name: "Sedište",
             icon: IconList.locationCity,
             enabled: data?.id,
-            component: <HeadOffice companyId={comId} />,
+            component: <HeadOffice companyId={data?.id} />,
         },
         {
             name: "Adresa dostave",
@@ -76,12 +77,12 @@ const CompaniesDetails = () => {
             component: (
                 <ListPanel
                     key="addr"
-                    companyId={comId}
-                    apiPath="${apiPath}/delivery-address"
+                    companyId={data?.id}
+                    apiPath={`${apiPath}/delivery-address`}
                     formFields={delivery_address}
                     init={{
                         id: null,
-                        id_company: null,
+                        id_company: data?.id,
                         name: null,
                         address: null,
                         object_number: null,
@@ -105,10 +106,10 @@ const CompaniesDetails = () => {
             component: (
                 <ListPanel
                     key="cnt"
-                    companyId={comId}
-                    apiPath="${apiPath}/contact"
+                    companyId={data?.id}
+                    apiPath={`${apiPath}/contact`}
                     formFields={contact}
-                    init={{ id: null, id_company: null, type: null, first_name: null, last_name: null, phone: null, email: null, send_order_invoice_mail: null, note: null, status: null }}
+                    init={{ id: null, id_company: data?.id, type: null, first_name: null, last_name: null, phone: null, email: null, send_order_invoice_mail: null, note: null, status: null }}
                 />
             ),
         },
@@ -116,25 +117,33 @@ const CompaniesDetails = () => {
             name: "Analitika",
             icon: IconList.analytics,
             enabled: data?.id,
-            component: <div>Analitika</div>,
+            component: <AnalitycsData companyId={data?.id} />,
         },
         {
             name: "Napomene",
             icon: IconList.note,
             enabled: data?.id,
-            component: <ListPanel key="nap" companyId={comId} apiPath={`${apiPath}/notes`} formFields={notes} init={{}} />,
+            component: <ListPanel key="nap" companyId={data?.id} apiPath={`${apiPath}/notes`} formFields={notes} init={{ id: null, id_company: data?.id, title: null, description: null }} />,
         },
         {
             name: "Komercijalista",
             icon: IconList.person,
             enabled: data?.id,
-            component: <ListPanel key="komerc" companyId={comId} apiPath={`${apiPath}/sales_officer`} formFields={sales} init={{}} />,
+            component: <SalesOfficers companyId={data?.id} />,
         },
         {
             name: "Korisnici",
             icon: IconList.naturePeople,
             enabled: data?.id,
-            component: <ListPanel key="user" companyId={comId} apiPath={`${apiPath}/users`} formFields={users} init={{}} />,
+            component: (
+                <ListPanel
+                    key="user"
+                    companyId={data?.id}
+                    apiPath={`${apiPath}/users`}
+                    formFields={users}
+                    init={{ id: null, id_company: data?.id, first_name: null, last_name: null, email: null, phone: null, status: null }}
+                />
+            ),
         },
     ];
 

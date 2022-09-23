@@ -41,8 +41,7 @@ const CategoriesDetails = () => {
 
     const handleData = async () => {
         setIsLoading(true);
-        await api
-            .get(`${apiPath}/${cid}`)
+        api.get(`${apiPath}/${cid}`)
             .then((response) => {
                 setData(response?.payload);
                 setIsLoading(false);
@@ -62,19 +61,19 @@ const CategoriesDetails = () => {
             name: "Osnovno",
             icon: IconList.category,
             enabled: true,
-            component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}&id_category_product=${cid}`} />,
+            component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}&id_category_product=${data?.id}`} />,
         },
         {
             name: "Seo",
             icon: IconList.search,
             enabled: data?.id,
-            component: <DetailsSeo cid={cid} gid={gid} />,
+            component: <DetailsSeo cid={data?.id} gid={gid} />,
         },
         {
             name: "Specifikacija",
             icon: "settings",
             enabled: data?.id,
-            component: <DetailsSpecification cid={cid} gid={gid} />,
+            component: <DetailsSpecification cid={data?.id} gid={gid} />,
         },
     ];
 

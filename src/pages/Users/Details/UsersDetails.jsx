@@ -53,7 +53,7 @@ const UsersDetils = () => {
     }, []);
 
     return (
-        <FormWrapper title={data?.id == null ? "Unos novog mesta" : data?.full_name} back={() => navigate(-1)} ready={!isLoading}>
+        <FormWrapper title={data?.id == null ? "Unos novog korisnika" : data?.first_name + " " + data?.last_name} back={() => navigate(-1)} ready={!isLoading}>
             <Form formFields={fields} initialData={data} onSubmit={saveData} />
         </FormWrapper>
     );
