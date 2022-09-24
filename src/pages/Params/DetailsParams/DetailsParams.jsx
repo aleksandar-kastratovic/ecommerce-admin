@@ -166,20 +166,31 @@ const ParamsDetails = () => {
         }
     };
 
-    const fields = [
-        {
-            name: "Osnovno",
-            icon: "settings",
-            enabled: true,
-            component: <ParamsForm onSubmit={onSubmit} data={data} onChange={onChange} subForm={getParamSubForm(true)} isLoading={isLoading} />,
-        },
-        {
-            name: "Vrednosti",
-            icon: "settings",
-            enabled: data?.id,
-            component: <List formFields={[slug, ...getParamSubForm(false), status]} listFields={list} onSave={handleListSubmit} addFieldLabel={"Dodaj polje"} onDelete={onDelete} init={listInit} />,
-        },
-    ];
+    const fields = data.field_is_multiple
+        ? [
+              {
+                  name: "Osnovno",
+                  icon: "settings",
+                  enabled: true,
+                  component: <ParamsForm onSubmit={onSubmit} data={data} onChange={onChange} subForm={getParamSubForm(true)} isLoading={isLoading} />,
+              },
+              {
+                  name: "Vrednosti",
+                  icon: "settings",
+                  enabled: data?.id,
+                  component: (
+                      <List formFields={[slug, ...getParamSubForm(false), status]} listFields={list} onSave={handleListSubmit} addFieldLabel={"Dodaj polje"} onDelete={onDelete} init={listInit} />
+                  ),
+              },
+          ]
+        : [
+              {
+                  name: "Osnovno",
+                  icon: "settings",
+                  enabled: true,
+                  component: <ParamsForm onSubmit={onSubmit} data={data} onChange={onChange} subForm={getParamSubForm(true)} isLoading={isLoading} />,
+              },
+          ];
 
     return <DetailsPage title={data?.id == null ? "Unos novog parametra" : data?.name} fields={fields} />;
 };

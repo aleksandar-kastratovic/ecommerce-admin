@@ -10,7 +10,6 @@ import Unicon from "./shared/Unicon/Unicon";
 const SideNavigation = ({ activeTheme, userName }) => {
     const { userScreens } = useContext(AuthContext);
 
-    console.log(userScreens);
     // Populate the menu
     let menu = [];
     for (const allowedScreen of userScreens ?? []) {
