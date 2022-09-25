@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
 import Form from "../../../components/shared/Form/Form";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
+import IconList from "../../../helpers/icons";
 
 import formFields from "./formFields.json";
 import SeoPanel from "./panels/SeoPanel";
@@ -16,7 +17,7 @@ const NewsCategoryListDetails = () => {
     const { data, isLoading } = useQuery(["newsCategory"], () => api.get(`${apiPath}/${cid}`).then((response) => response?.payload));
 
     const submitHandler = (data) => {
-        api.post(apiPath, { ...data, id: null, slug: "aaa" })
+        api.post(apiPath, data)
             .then((response) => toast.success("Uspešno"))
             .catch((error) => {
                 console.warn(error);
@@ -26,20 +27,20 @@ const NewsCategoryListDetails = () => {
     const fields = [
         {
             name: "Osnovno",
-            icon: "settings",
+            icon: IconList.category,
             enabled: true,
             component: <Form formFields={formFields} initialData={data} onSubmit={submitHandler} />,
         },
         {
-            name: "Vrednosti",
-            icon: "settings",
+            name: "Seo",
+            icon: IconList.search,
             enabled: data?.id,
             component: <SeoPanel categoryId={data?.id} apiPath={apiPath} />,
         },
     ];
     console.log(data);
 
-    return <DetailsPage title={data?.id == null ? "Unos nove vesti" : data?.title} fields={fields} ready={!isLoading} />;
+    return <DetailsPage title={data?.id == null ? "Unos nove kategorije" : data?.title} fields={fields} ready={!isLoading} />;
 };
 
 export default NewsCategoryListDetails;
