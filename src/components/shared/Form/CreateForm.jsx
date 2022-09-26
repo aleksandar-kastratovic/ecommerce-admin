@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import ImageButton from "../ImageButton/ImageButton";
 import InputMultipleImages from "../InputMultipleImages/InputMultipleImages";
-import { InputCheckbox, InputDate, InputDateTime, InputInput, InputMultiSelect, InputNumber, InputRadio, InputSelect, InputSwitch, InputText } from "./FormInputs/FormInputs";
+import { InputCheckbox, InputDate, InputDateTime, InputHtml, InputInput, InputMultiSelect, InputNumber, InputRadio, InputSelect, InputSwitch, InputText } from "./FormInputs/FormInputs";
 import FileButton from "../FileButton/FileButton";
 import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
 
@@ -212,6 +212,20 @@ const CreateForm = ({
                 case "number":
                     formItem = (
                         <InputNumber
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onChange={onChangeHandler}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                case "html_editor":
+                    formItem = (
+                        <InputHtml
                             name={item.prop_name}
                             label={item.field_name}
                             required={typeof item.required === "number" ? item.required === 1 : item.required}

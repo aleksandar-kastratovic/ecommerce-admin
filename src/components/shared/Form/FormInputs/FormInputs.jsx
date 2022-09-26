@@ -3,6 +3,7 @@ import { DatePicker, DateTimePicker, LocalizationProvider } from "@mui/x-date-pi
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useEffect, useState } from "react";
 import useAPI from "../../../../api/api";
+import HtmlEditor from "../../HtmlEditor/HtmlEditor";
 
 /**
  * Wrapper for the input element
@@ -522,6 +523,32 @@ export const InputDate = ({ label, required, disabled, error = null, name, value
                     )}
                 />
             </LocalizationProvider>
+            <FormHelperText>{error ? error : description}</FormHelperText>
+        </InputWrapper>
+    );
+};
+
+/**
+ * Input that returns html
+ *
+ * @param {string} label Field label
+ * @param {boolean} required If field is required
+ * @param {boolean} disabled If field is disabled
+ * @param {string} error Error message
+ * @param {string} name Input field name
+ * @param {string} value Field value
+ * @param {"none"|"dense"|"normal"} margin The margin to use for FormControl.
+ * @param {function} onChange Change handler for the field
+ * @param {string} description Field description
+ * @param {string} placeholder Field placeholder
+ *
+ * @return {JSX.Element}
+ */
+
+export const InputHtml = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description }) => {
+    return (
+        <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+            <HtmlEditor name={name} value={value} onChange={onChange} />
             <FormHelperText>{error ? error : description}</FormHelperText>
         </InputWrapper>
     );
