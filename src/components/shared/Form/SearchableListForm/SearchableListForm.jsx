@@ -5,6 +5,8 @@ import NoteBox from "../../../../components/shared/NoteBox/NoteBox";
 import useList from "../../../../hooks/useList";
 import { InputCheckbox, InputInput } from "../FormInputs/FormInputs";
 
+import styles from "./SearchableListForm.module.scss";
+
 /**
  * Choose from a list.
  *
@@ -27,9 +29,11 @@ const SearchableListForm = ({ available = [], selected = [], onSubmit }) => {
             <InputInput placeholder="Pretraga" value={search} onChange={(event) => setSearch(event.target.value)} />
 
             {/* The list of available items */}
-            {available.map((brand) => (
-                <InputCheckbox key={brand.id} value={has(brand.id)} label={brand.name} onChange={() => toggle(brand.id)} />
-            ))}
+            <div className={styles.optionsList}>
+                {available.map((brand) => (
+                    <InputCheckbox key={brand.id} value={has(brand.id)} label={brand.name} onChange={() => toggle(brand.id)} />
+                ))}
+            </div>
 
             {/* There are no available to show */}
             {available.length === 0 && <NoteBox message="Lista je prazna" className="mt" />}
