@@ -70,3 +70,9 @@ pipelines:
           <<: *execute
           name: Maximon
           deployment: maximon
+
+    prod-ringzandtingz:
+      - step:
+          <<: *execute
+          name: RingzAndThingz
+          deployment: ringzandthingz
