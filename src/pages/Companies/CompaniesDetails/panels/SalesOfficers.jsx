@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
+import Button from "../../../../components/shared/Button/Button";
+import Buttons from "../../../../components/shared/Form/Buttons/Buttons";
 import SearchableListForm from "../../../../components/shared/Form/SearchableListForm/SearchableListForm";
 import Loading from "../../../../components/shared/Loading/Loading";
 
@@ -8,6 +11,8 @@ const SalesOfficers = ({ companyId }) => {
     const [listData, setListData] = useState([]);
 
     const [isLoading, setIsLoading] = useState([]);
+
+    const navigate = useNavigate();
 
     const api = useAPI();
     const apiPath = "admin/customers-b2b/sales-officer";
@@ -40,7 +45,16 @@ const SalesOfficers = ({ companyId }) => {
         handleList();
     }, []);
 
-    return !isLoading ? <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} /> : <Loading />;
+    return !isLoading ? (
+        <>
+            <Buttons>
+                <Button label="Dodaj komercijalistu" variant="contained" onClick={() => navigate("/B2B-sales-officers/new")} />
+            </Buttons>
+            <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} />
+        </>
+    ) : (
+        <Loading />
+    );
 };
 
 export default SalesOfficers;
