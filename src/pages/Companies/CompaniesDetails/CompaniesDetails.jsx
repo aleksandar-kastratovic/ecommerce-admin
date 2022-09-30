@@ -6,17 +6,17 @@ import DetailsPage from "../../../components/shared/ListPage/DetailsPage/Details
 import Form from "../../../components/shared/Form/Form";
 import { toast } from "react-toastify";
 import IconList from "../../../helpers/icons";
-
 import ListPanel from "./panels/ListPanel";
 import HeadOffice from "./panels/HeadOffice";
-
 import basic_data from "./forms/basic_data.json";
+import rebateFields from "./forms/rebate.json";
 import contact from "./forms/contact.json";
 import delivery_address from "./forms/delivery_address.json";
 import notes from "./forms/notes.json";
 import users from "./forms/users.json";
 import AnalitycsData from "./panels/AnalitycsData";
 import SalesOfficers from "./panels/SalesOfficers";
+import UsersPanel from "./panels/UsersPanel";
 
 const CompaniesDetails = () => {
     const { comId } = useParams();
@@ -53,8 +53,28 @@ const CompaniesDetails = () => {
             });
     };
 
+    const [rebate, setRebate] = useState({ rebate_tier_id: null });
+    const loadRebate = () => {
+        api.get(`${apiPath}/rebate/${comId}`)
+            .then((response) => setRebate(response?.payload))
+            .catch((error) => console.warn(error));
+    };
+
+    const saveRebate = (data) => {
+        api.post(`${apiPath}/rebate/${comId}`, data)
+            .then((response) => {
+                setRebate(response?.payload);
+                toast.success("Uspešno");
+            })
+            .catch((error) => {
+                console.warn(error);
+                toast.warn("Greška");
+            });
+    };
+
     useEffect(() => {
         handleData();
+        loadRebate();
     }, []);
 
     const fields = [
@@ -114,6 +134,12 @@ const CompaniesDetails = () => {
             ),
         },
         {
+            name: "Rabat",
+            icon: IconList.percent,
+            enabled: data?.id,
+            component: <Form formFields={rebateFields} initialData={rebate} onSubmit={saveRebate} />,
+        },
+        {
             name: "Analitika",
             icon: IconList.analytics,
             enabled: data?.id,
@@ -136,7 +162,7 @@ const CompaniesDetails = () => {
             icon: IconList.naturePeople,
             enabled: data?.id,
             component: (
-                <ListPanel
+                <UsersPanel
                     key="user"
                     companyId={data?.id}
                     apiPath={`${apiPath}/users`}

@@ -67,7 +67,7 @@ const ProductGroupDetails = () => {
             name: "Atributi",
             icon: IconList.attribution,
             enabled: data?.id,
-            component: <GroupAttributes groupId={groupId} />,
+            component: <GroupAttributes groupId={data?.id} />,
         },
     ];
 

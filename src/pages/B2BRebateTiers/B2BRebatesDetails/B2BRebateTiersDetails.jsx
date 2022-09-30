@@ -65,7 +65,7 @@ const B2BRebateTiersDetails = () => {
     // The panels for the form
     const panels = [
         {
-            name     : "Rabat",
+            name     : "Rabatna skala",
             icon     : IconList.barChart,
             loading  : data.rebateTier,
             component: <BasicPanel data={data.rebateTier} updateData={updateBasic} />

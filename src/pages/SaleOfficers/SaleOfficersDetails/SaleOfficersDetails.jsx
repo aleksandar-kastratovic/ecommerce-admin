@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
+import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
 
 import fields from "./formFields.json";
 import { toast } from "react-toastify";
@@ -14,6 +15,7 @@ const init = {
     last_name: "",
     phone: "",
     email: "",
+    status: "on",
     order: 0,
 };
 const SaleOfficersDetails = () => {
@@ -38,7 +40,7 @@ const SaleOfficersDetails = () => {
     };
 
     const saveData = async (data) => {
-        api.post(`admin/referents-b2b`, data)
+        api.post(`admin/referents-b2b`, {...init,...data})
             .then((response) => {
                 setData(response?.payload);
                 toast.success(`Uspešno ${id === "new" ? "dodati" : "izmenjeni"} podaci`);
@@ -50,15 +52,13 @@ const SaleOfficersDetails = () => {
     };
 
     useEffect(() => {
-        if (id !== "new") {
-            handleData();
-        }
+        handleData();
     }, []);
 
     return (
-        <PageWrapper title={data?.id == null ? "Unos novog komercijaliste" : data?.name} back={() => navigate(-1)}>
+        <FormWrapper title={data?.id == null ? "Unos novog komercijaliste" : `${data?.first_name} ${data?.last_name}`} back={() => navigate(-1)}>
             {!isLoading ? <Form formFields={fields} initialData={data} onSubmit={saveData} /> : <LoadingForm fields={fields.length} />}
-        </PageWrapper>
+        </FormWrapper>
     );
 };
 
