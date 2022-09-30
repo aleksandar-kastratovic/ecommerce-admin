@@ -22,10 +22,11 @@ import useAPI from "../../../api/api";
  * @param {boolean} showNewButton
  * @param {function(*[]): []} modifyItems The function that accepts the items and return modified ones.
  * @param {Object} filters Additional filters for list api
+ * @param {string default:"id"} error Column value that is sent to preview page
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {} }) => {
+const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {}, previewColumn = "id" }) => {
     // TODO Sorting is disabled as it does not work with pagination
     columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
@@ -123,6 +124,7 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
                     isLoading={isLoading}
                     page={page}
                     onPageChange={setPage}
+                    previewColumn={previewColumn}
                 />
             </PageWrapper>
 

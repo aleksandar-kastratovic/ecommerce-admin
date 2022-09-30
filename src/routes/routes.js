@@ -91,6 +91,7 @@ import RolesListPage from "../pages/Roles/RolesListPage";
 import RolesDetailsPage from "../pages/Roles/Details/RolesDetailsPage";
 import Users from "../pages/Users/Users";
 import UsersDetils from "../pages/Users/Details/UsersDetails";
+import B2BSettingsDetails from "../pages/B2Bsettings/SettingsDetails/B2BSettingsDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -188,7 +189,7 @@ const screens = {
     BRANDS: ["/brands", "Brendovi", faCopyright, SETTINGS, Brands, [[":bid", BrandsDetails]]],
     STORES: ["/stores", "Skladišta", faStore, SETTINGS, Stores, [[":ssid", StoresDetails]]],
     MANUFACTURERS: ["/manufacturers", "Proizvođači", faIndustry, SETTINGS, Manufacturers, [[":mmid", ManufacturersDetails]]],
-    B2BCFG: ["/B2B-settings", "B2B podešavanja", faCog, TOOLS, B2Bsettings, [[":B2BId", DetailsForm]]],
+    B2BCFG: ["/B2B-settings", "B2B podešavanja", faCog, TOOLS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
     IMPORT: ["/import", "Uvoz podataka", faUpload, TOOLS, ImportSteps],
     B2CCFG: ["/B2C-settings", "B2C podešavanja", faCog, TOOLS, B2CSettings, [[":B2CId", B2CSettings]]],
     ADMIN_FORM: ["/admin-form", "Admin forme", faList, TOOLS, AdminForms, [[":FormId", DetailsAdminForm]]],
