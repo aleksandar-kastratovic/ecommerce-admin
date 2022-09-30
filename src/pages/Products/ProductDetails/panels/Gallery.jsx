@@ -50,13 +50,15 @@ const Gallery = ({ productId }) => {
             });
     };
 
-    let list = data.map((item) => {
-        let base64 = item.file_base64;
-        const type = base64.split(";")[0].split(":")[1];
-        let y = base64[base64.length - 2] === "=" ? 2 : 1;
-        const size = base64.length * (3 / 4) - y;
-        return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64 };
-    });
+    let list = (data ?? [])
+        .filter((item) => item.file_base64 != null)
+        .map((item) => {
+            let base64 = item.file_base64;
+            const type = base64.split(";")[0].split(":")[1];
+            let y = base64[base64.length - 2] === "=" ? 2 : 1;
+            const size = base64.length * (3 / 4) - y;
+            return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64 };
+        });
 
     useEffect(() => {
         handleData();
