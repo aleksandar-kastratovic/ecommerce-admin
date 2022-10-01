@@ -9,7 +9,7 @@ import { formatDate, formatDateTime } from "../../../helpers/dateFormat";
 import ImageDialog from "../Dialogs/ImageDialog";
 import { isUrlValid } from "./util";
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, submitButton = true, queryString = "", onChange = () => {} }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, submitButton = true, queryString = "", onChange = () => {}, validateData = (data) => data }) => {
     const navigate = useNavigate();
     const [data, setData] = useState(initialData);
     const [inputsError, setInputsError] = useState([]);
@@ -37,17 +37,20 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
     };
 
     const formItemChangeHandler = ({ target }, type) => {
+        let newData;
         if (type === "date") {
-            setData({ ...data, [target.name]: formatDate(target.value) });
+            newData = { ...data, [target.name]: formatDate(target.value) };
         } else if (type === "date_time") {
-            setData({ ...data, [target.name]: formatDateTime(target.value) });
+            newData = { ...data, [target.name]: formatDateTime(target.value) };
         } else if (type === "checkbox") {
-            setData({ ...data, [target.name]: target.checked ? 1 : 0 });
+            newData = { ...data, [target.name]: target.checked ? 1 : 0 };
         } else if (type === "switch") {
-            setData({ ...data, [target.name]: target.checked ? 1 : 0 });
+            newData = { ...data, [target.name]: target.checked ? 1 : 0 };
         } else {
-            setData({ ...data, [target.name]: target.value });
+            newData = { ...data, [target.name]: target.value };
         }
+        setData(validateData(newData, target.name));
+
         setInputsError((inputsError) => {
             delete inputsError[target.name];
             return inputsError;

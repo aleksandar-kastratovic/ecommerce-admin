@@ -103,6 +103,7 @@ export const InputNumber = ({ label, required, disabled, error = null, name, val
                     "& legend": { display: "none" },
                     "& fieldset": { top: 0 },
                 }}
+                onWheel={(e) => e.target.blur()}
             />
         </InputWrapper>
     );
