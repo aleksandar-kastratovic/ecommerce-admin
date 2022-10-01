@@ -1,5 +1,8 @@
-const B2CSettings = () => {
-  return <div>B2C</div>;
+import ListPage from "../../components/shared/ListPage/ListPage";
+import fields from "./mainListFields.json";
+
+const B2Csettings = () => {
+    return <ListPage apiUrl="admin/configuration-b2c/main" title="B2C podešavanja" columnFields={fields} previewColumn="module" />;
 };
 
-export default B2CSettings;
+export default B2Csettings;

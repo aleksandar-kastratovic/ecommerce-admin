@@ -57,18 +57,14 @@ import StaticPagesDetails from "../pages/StaticPages/StaticPagesDetails/StaticPa
 import Newsletter from "../pages/Newsletter/Newsletter";
 import ContactForm from "../pages/ContactForm/ContactForm";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
-import DetailsForm from "./../pages/B2Bsettings/DetailsForm/DetailsForm";
 import B2Cbanners from "./../pages/B2Cbanners/B2Cbanners";
 import DetailsBannersB2C from "./../pages/B2Cbanners/DetailsBanners/DetailsBannersB2C";
 import B2CSettings from "./../pages/B2CSettings/B2CSettings";
 import ImportSteps from "./../pages/Import/ImportSteps";
 import LocationsPage from "./../pages/LocationsPage";
-import OrdersPage from "./../pages/OrdersPage";
 import DetailsParams from "./../pages/Params/DetailsParams/DetailsParams";
 import Params from "./../pages/Params/Params";
 import Products from "./../pages/Products/Products";
-import RolesPage from "./../pages/RolesPage";
-import UsersPage from "./../pages/UsersPage";
 import CategoriesGroupsListPage from "../pages/Categories/CategoriesGroupsListPage";
 import CategoriesDetails from "../pages/Categories/CategoriesDetails/CategoriesDetails";
 import Notifications from "../pages/Notifications/Notifications";
@@ -92,6 +88,7 @@ import RolesDetailsPage from "../pages/Roles/Details/RolesDetailsPage";
 import Users from "../pages/Users/Users";
 import UsersDetils from "../pages/Users/Details/UsersDetails";
 import B2BSettingsDetails from "../pages/B2Bsettings/SettingsDetails/B2BSettingsDetails";
+import B2CSettingsDetails from "../pages/B2CSettings/SettingsDetails/B2CSettingsDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -191,7 +188,7 @@ const screens = {
     MANUFACTURERS: ["/manufacturers", "Proizvođači", faIndustry, SETTINGS, Manufacturers, [[":mmid", ManufacturersDetails]]],
     B2BCFG: ["/B2B-settings", "B2B podešavanja", faCog, TOOLS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
     IMPORT: ["/import", "Uvoz podataka", faUpload, TOOLS, ImportSteps],
-    B2CCFG: ["/B2C-settings", "B2C podešavanja", faCog, TOOLS, B2CSettings, [[":B2CId", B2CSettings]]],
+    B2CCFG: ["/B2C-settings", "B2C podešavanja", faCog, TOOLS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
     ADMIN_FORM: ["/admin-form", "Admin forme", faList, TOOLS, AdminForms, [[":FormId", DetailsAdminForm]]],
 };
 

@@ -1,21 +1,22 @@
 import { useEffect, useState } from "react";
+import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
 import useAPI from "../../../api/api";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import IconList from "../../../helpers/icons";
-import B2BSettingsForm from "./panels/B2BSettingsForm";
+import B2CSettingsForm from "./panels/B2CSettingsForm";
 
-const B2BSettingsDetails = () => {
-    const { B2BId } = useParams();
+const B2CSettingsDetails = () => {
+    const { B2CId } = useParams();
 
     const api = useAPI();
-    const apiPath = "admin/configuration-b2b/main";
+    const apiPath = "admin/configuration-b2c/main";
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
         setIsLoading(true);
-        api.list(`${apiPath}/${B2BId}`)
+        api.list(`${apiPath}/${B2CId}`)
             .then((response) => {
                 setData(response);
                 setIsLoading(false);
@@ -31,11 +32,11 @@ const B2BSettingsDetails = () => {
             name: panel?.name,
             icon: IconList.settings,
             enabled: true,
-            component: <B2BSettingsForm key={panel?.id} form_slug={panel?.form_slug} module={panel?.module} submodule={panel?.submodule} config_module_id={panel?.id} />,
+            component: <B2CSettingsForm key={panel?.id} form_slug={panel?.form_slug} module={panel?.module} submodule={panel?.submodule} config_module_id={panel?.id} />,
         };
     });
 
-    return <DetailsPage title={B2BId} fields={fields.length > 0 ? fields : [{}]} ready={!isLoading} />;
+    return <DetailsPage title={B2CId} fields={fields.length > 0 ? fields : [{}]} ready={!isLoading} />;
 };
 
-export default B2BSettingsDetails;
+export default B2CSettingsDetails;
