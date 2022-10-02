@@ -1,21 +1,19 @@
 @import "../../../variables.scss";
 
-
 .formStyle {
     margin-top: 2rem !important;
-    margin-left: 1.5rem !important;
 }
 
 .imageButtonStyled {
     position: relative;
     height: 10rem;
-    width: 35rem !important;
+    width: 100% !important;
 }
 
 .imageButtonStyled:hover {
     z-index: 1 !important;
     opacity: 1 !important;
-    background-color: $white  !important;
+    background-color: $white !important;
 
     .imageBackdrop {
         opacity: 0.15 !important;
@@ -64,13 +62,13 @@
 // Image Upload start
 
 .buttonStyle {
-    background-color: $lightGrey  !important;
-    width: 33rem !important;
+    background-color: $lightGrey !important;
+    width: 100% !important;
     height: 10rem;
 }
 
 .buttonStyle:hover {
-    background-color: $lightGreen  !important;
+    background-color: $lightGreen !important;
     opacity: 0.9, 0.8, 0.7;
 }
 
@@ -85,7 +83,7 @@
 }
 
 .visibilityOutlinedIcon {
-    color: $white  !important;
+    color: $white !important;
 }
 
 .avatarBoxStyle {
@@ -96,7 +94,7 @@
 }
 
 .loadingImage {
-    color: $lightGreen  !important;
+    color: $lightGreen !important;
     position: absolute;
     top: 0 !important;
     left: 50%;

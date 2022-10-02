@@ -3,31 +3,31 @@ import BootstrapTable from "react-bootstrap-table-next";
 import paginationFactory from "react-bootstrap-table2-paginator";
 import { companyListService } from "../helpers/services";
 import useHttp from "../hooks/use-http";
+import ListTable from "./shared/ListTable/ListTable";
 import Loader from "./UI/Loader";
 
 const CompaniesList = ({ addTab }) => {
-
   const { isLoading, sendRequest: companiesRequest } = useHttp();
 
   const [companiesList, setCompaniesList] = useState([]);
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
 
   const setCompanies = async () => {
-    const data = await companyListService({search: search}, companiesRequest);
+    const data = await companyListService({ search: search }, companiesRequest);
     setCompaniesList(data ?? []);
   };
 
   const rowEvents = {
     onClick: (e, row) => {
-      addTab(            {
+      addTab({
         eventKey: row.id,
         title: row.company_name,
-        order: row.id + 1
+        order: row.id + 1,
       });
-    }
+    },
   };
-   
+
   const columns = [
     {
       dataField: "id",
@@ -35,12 +35,12 @@ const CompaniesList = ({ addTab }) => {
       sort: true,
       headerStyle: () => {
         return { width: "7%" };
-      }
+      },
     },
     {
       dataField: "company_name",
       text: "Naziv firme",
-      sort: true
+      sort: true,
     },
     {
       dataField: "tin",
@@ -57,7 +57,7 @@ const CompaniesList = ({ addTab }) => {
     {
       dataField: "registry_number",
       text: "MB",
-    }
+    },
   ];
 
   useEffect(() => {
@@ -75,7 +75,9 @@ const CompaniesList = ({ addTab }) => {
               <div className="col-xl-3">
                 <div className="form-group">
                   <input
-                    onChange={ (e) => { setSearch(e.target.value) }}
+                    onChange={(e) => {
+                      setSearch(e.target.value);
+                    }}
                     type="text"
                     className="form-control"
                     id="searchInput"
@@ -93,16 +95,17 @@ const CompaniesList = ({ addTab }) => {
           keyField="id"
           data={companiesList}
           columns={columns}
-          rowEvents={ rowEvents }
-          pagination={paginationFactory({ sizePerPage: 10, paginationSize: 14 })}
+          rowEvents={rowEvents}
+          pagination={paginationFactory({
+            sizePerPage: 10,
+            paginationSize: 14,
+          })}
           noDataIndication="Nema kompanija!"
         />
       </div>
-      {isLoading && (
-        <Loader />
-      )}
+      {isLoading && <Loader />}
     </>
   );
-}
+};
 
 export default CompaniesList;

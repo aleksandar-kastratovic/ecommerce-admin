@@ -173,11 +173,9 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
       </div>
       <div className="row">
         <div className="col-xl-12">
-          <Accordion defaultActiveKey="0">
-            <Accordion.Item eventKey="0">
-              <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faUserTag} />Podaci o kupcu:</Accordion.Header>
-              <Accordion.Body>
-                <div className="row">
+            <div className="orders-item-holder">
+              <h5>Podaci o kupcu:</h5>
+                <div className="row buyers">
                   <div className="col-6">
                     <Input
                       inputValue={firstNameValue}
@@ -300,9 +298,7 @@ const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, compan
                     />
                   </div>
                 </div>
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
+            </div>
         </div>
       </div>
       <ConfirmModal confirmWhat={confirmWhat} confirm={confirm} />

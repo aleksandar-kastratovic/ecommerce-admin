@@ -1,234 +1,122 @@
-import React, { useEffect, useContext, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
-// material-ui components
-import Box from "@mui/material/Box";
-import CreateForm from "../../../components/shared/Form/CreateForm";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
-import Alert from "@mui/material/Alert";
-
-// components
-import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
-
-// config
-import TwoColumnDetails from "../../../components/shared/Layout/Details/TwoColumnDetails/TwoColumnDetails";
-import fields from "./fieldsDetails.json";
-
-// other
-import { isEmpty } from "lodash";
-import AuthContext from "../../../store/auth-contex";
+import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
+import useAPI from "../../../api/api";
+import LoadingForm from "../../../components/shared/Loading/LoadingForm";
+import Form from "../../../components/shared/Form/Form";
+import { toast } from "react-toastify";
 import { useQuery } from "react-query";
-import { getDetailsB2Bbanners, createBanner } from "../services";
-import ImagePreview from "../../../components/shared/ImagePreview/ImagePreview";
+import CreateForm from "../../../components/shared/Form/CreateForm";
+
+import name from "../forms/name.json";
+import positionForm from "../forms/position.json";
+import image from "../forms/image.json";
+import image_description from "../forms/image_description.json";
+import status from "../forms/status.json";
 
 const DetailsBanners = ({}) => {
-  const { B2BId } = useParams();
-  const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
-  const [imagePreviewList, setImagePreviewList] = useState([]);
+    const { B2BId } = useParams();
+    const navigate = useNavigate();
 
-  const init = {
-    active_from: null,
-    active_to: null,
-    button: "",
-    download: null,
-    duration: 0,
-    image: null,
-    is_active: true,
-    name: "",
-    position: "primary",
-    priority: 76,
-    subtitle: "",
-    target: "blank",
-    text: "",
-    title: "AI",
-    url: null,
-    video: null,
-  };
-
-  const {
-    isSuccess,
-    data: response,
-    isLoading,
-    isError,
-  } = useQuery(["B2BId", B2BId], () =>
-    getDetailsB2Bbanners(user.access_token, B2BId)
-  );
-
-  const [newItem, setNewItem] = useState(B2BId === "new" ? init : {});
-  const [inputsError, setInputsError] = useState({});
-
-  useEffect(() => {
-    if (response) {
-      const resp = response?.data?.payload;
-      const repack = {
-        ...resp,
-        is_active: resp.is_active === 1 ? true : false,
-      };
-      setNewItem(repack);
-    }
-  }, [response]);
-
-  useEffect(() => {
-    const errors = { ...inputsError };
-    Object.keys(errors).forEach((prop_name) => {
-      if (!isEmpty(newItem[prop_name])) {
-        delete errors[prop_name];
-      }
-    });
-    setInputsError(errors);
-  }, [newItem]);
-
-  useEffect(() => {
-    const errors = { ...inputsError };
-    Object.keys(errors).forEach((prop_name) => {
-      if (!isEmpty(newItem[prop_name])) {
-        delete errors[prop_name];
-      }
-    });
-    setInputsError(errors);
-  }, [newItem]);
-
-  const handleBackToList = () => {
-    navigate(`/B2B-banners`);
-  };
-
-  const formItemChangeHandler = ({ target }, type) => {
-    if (type) {
-      setNewItem({ ...newItem, [target.name]: target.checked });
-    } else {
-      setNewItem({ ...newItem, [target.name]: target.value });
-    }
-  };
-
-  const onSubmit = () => {
-    const errors = {};
-    Object.keys(newItem).forEach((prop_name) => {
-      if (isEmpty(newItem[prop_name])) {
-        if (prop_name === "name") {
-          errors[prop_name] = {
-            content: "Polje je obavezno, molim vas unesite vrednost.",
-          };
-        }
-      }
-    });
-    isEmpty(errors) ? saveData() : setInputsError(errors);
-  };
-
-  const saveData = () => {
-    // TODO image and rest of base 64 repack if it is not a type URL
-    const repackToSend = {
-      ...newItem,
-      priority: parseInt(newItem.priority),
+    const init = {
+        active_from: null,
+        active_to: null,
+        button: null,
+        download: null,
+        duration: null,
+        image: null,
+        is_active: true,
+        name: null,
+        id_position: null,
+        priority: null,
+        subtitle: null,
+        target: null,
+        text: null,
+        title: null,
+        url: null,
+        video: null,
     };
-    try {
-      createBanner(user.access_token, repackToSend);
-      handleBackToList();
-    } catch (error) {
-      console.warn(error);
-    }
-  };
 
-  const formImageUpload = useCallback(
-    (event) => {
-      event.preventDefault();
-      const selectedFile = event.target.files[0];
+    const api = useAPI();
+    const [data, setData] = useState(init);
+    const [bannerName, setBannerName] = useState(null);
+    const [idPos, setIdPos] = useState(null);
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // setNewItem({ ...newItem, [event.target.name]: reader.result });
-        const timeOutId = setTimeout(() => {
-          setter(event, reader.result);
-        }, 500);
-        return () => clearTimeout(timeOutId);
-      };
-      reader.readAsDataURL(selectedFile);
-    },
-    [newItem]
-  );
+    const [subFields, setSubFields] = useState([]);
 
-  const setter = (event, result) => {
-    setNewItem({ ...newItem, [event.target.name]: result });
-  };
+    const { data: response, isLoading } = useQuery([], () => api.get(`admin/banners-b2b/main/${B2BId}`));
 
-  const formImagePreview = useCallback(
-    (img, label) => {
-      const found = imagePreviewList.some((el) => el.image === img);
-      if (!found) {
-        setImagePreviewList([
-          ...imagePreviewList,
-          { image: img, label: label },
-        ]);
-      }
-    },
-    [imagePreviewList]
-  );
+    const saveData = (data) => {
+        api.post(`admin/banners-b2b/main/`, { ...data, id_position: idPos, name: bannerName })
+            .then((response) => {
+                setData(response?.payload);
+                setBannerName(response?.payload.name);
+                setIdPos(response?.payload.id_position);
+                toast.success(`Uspešno`);
+            })
+            .catch((error) => {
+                console.warn(error);
+                toast.warning("Greška");
+            });
+    };
 
-  return (
-    <>
-      <DetailsBasic
-        handleBackToList={handleBackToList}
-        list={<div />}
-        main={
-          <TwoColumnDetails
-            middle={
-              <>
-                {!isLoading ? (
-                  <Box component="form" autoComplete="off">
-                    {fields &&
-                      fields
-                        .filter(({ in_details }) => in_details)
-                        .map((item, index) => (
-                          <CreateForm
-                            data-test-id="B2B-banners-form"
-                            onChangeHandler={formItemChangeHandler}
-                            onImageUpload={formImageUpload}
-                            onImagePreview={formImagePreview}
-                            item={item}
-                            key={index}
-                            error={inputsError[item.prop_name]}
-                            value={
-                              Array.isArray(item) && newItem
-                                ? newItem[item.prop_name]
-                                : newItem[item.prop_name]
-                            }
-                          />
-                        ))}
-                  </Box>
-                ) : (
-                  <Stack spacing={1}>
-                    <Skeleton variant="text" height={60} />
-                    <Skeleton variant="text" height={60} />
-                    <Stack spacing={1}>
-                      <Skeleton variant="text" />
-                      <Skeleton variant="circular" width={40} height={40} />
-                      <Skeleton
-                        variant="rectangular"
-                        width={210}
-                        height={118}
-                      />
-                    </Stack>
-                    <Skeleton variant="text" height={60} />
-                  </Stack>
-                )}
-              </>
+    useEffect(() => {
+        setData(response?.payload);
+        setBannerName(response?.payload.name);
+        setIdPos(response?.payload.id_position);
+    }, [response]);
+
+    useEffect(() => {
+        const getForm = async () => {
+            let res;
+            await api
+                .get(`admin/banners-b2b/positions/slug/${idPos}`)
+                .then((response) => {
+                    res = response?.payload;
+                })
+                .catch((error) => {
+                    console.warn(error);
+                });
+            if (res) {
+                let dimensions = { width: res.width, height: res.height };
+                let fields;
+
+                switch (res.type) {
+                    case "image":
+                        fields = image;
+                        break;
+                    case "image_description":
+                        fields = image_description;
+                        break;
+
+                    default:
+                        fields = [];
+                        break;
+                }
+
+                let arr = [];
+                for (const item of fields) {
+                    if (item.prop_name === "image") {
+                        arr.push({ ...item, dimensions: dimensions });
+                    } else {
+                        arr.push(item);
+                    }
+                }
+                setSubFields(arr);
             }
-            right={<ImagePreview imagePreviewList={imagePreviewList} />}
-            onSubmit={onSubmit}
-            buttonText="Sacuvaj"
-          />
+        };
+        if (idPos != null) {
+            getForm();
         }
-      />
-      {false && (
-        <Stack sx={{ width: "100%" }}>
-          <Alert severity="error">
-            Doslo je do greske. Molim Vas pokusajte kasnije.
-          </Alert>
-        </Stack>
-      )}
-    </>
-  );
+    }, [idPos]);
+
+    return (
+        <FormWrapper title={data?.id == null ? "Unos novog banera" : data?.name} back={() => navigate(-1)} ready={!isLoading}>
+            <CreateForm onChangeHandler={({ target }) => setBannerName(target.value)} item={name} value={bannerName} />
+            <CreateForm onChangeHandler={({ target }) => setIdPos(target.value)} item={positionForm} value={idPos} />
+            <Form formFields={[...subFields, status]} initialData={data} onSubmit={saveData} onChange={(data) => setData(data)} />
+        </FormWrapper>
+    );
 };
 
 export default DetailsBanners;

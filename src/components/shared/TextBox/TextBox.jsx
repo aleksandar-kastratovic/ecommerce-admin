@@ -13,6 +13,7 @@ const TextBox = ({
   description = "",
   required = false,
   width = "100%",
+  margin = "0",
   placeholder = "",
   size = "small",
   fontWeight = "normal",
@@ -25,7 +26,7 @@ const TextBox = ({
     <FormControl
       sx={{
         width: width,
-        margin: "0.5rem",
+        margin: margin,
       }}
     >
       <FormLabel

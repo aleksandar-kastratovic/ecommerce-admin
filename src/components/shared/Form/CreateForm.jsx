@@ -1,177 +1,248 @@
 import React, { useState } from "react";
-import TextBox from "../TextBox/TextBox";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import FormLabel from "@mui/material/FormLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
-import Switch from "@mui/material/Switch";
 
 import ImageUpload from "../ImageUpload/ImageUpload";
-import BasicDateTimePicker from "../BasicDateTimePicker/BasicDateTimePicker";
 import ImageButton from "../ImageButton/ImageButton";
+import InputMultipleImages from "../InputMultipleImages/InputMultipleImages";
+import { InputCheckbox, InputDate, InputDateTime, InputHtml, InputInput, InputMultiSelect, InputNumber, InputRadio, InputSelect, InputSwitch, InputText } from "./FormInputs/FormInputs";
+import FileButton from "../FileButton/FileButton";
+import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
 
 const CreateForm = ({
-  item = {},
-  onChangeHandler = () => {},
-  onImageUpload = () => {},
-  onImagePreview = () => {},
-  value = "",
-  error = "",
+    item = {},
+    onChangeHandler = () => {},
+    onImageUpload = () => {},
+    // TODO remove onImagePreview
+    onImagePreview = () => {},
+    onOpenImageDialog = () => {},
+    value = "",
+    error = null,
+    disabled = false,
+    queryString = "",
+    optionsIsEmpty = () => {},
 }) => {
-  // depending on input type in fields you will get a control
-  // value is obvious
-  // onChangeHandler change handler
-  // error is for validations backend and frontend
+    // depending on input type in fields you will get a control
+    // value is obvious
+    // onChangeHandler change handler
+    // error is for validations backend and frontend
+    value = value === null ? "" : value;
+    const [inputValue, setInputValue] = useState(value);
+    const onInputChangeHandler = (event) => {
+        onChangeHandler(event);
+        setInputValue(event.target.value);
+    };
 
-  const [inputValue, setInputValue] = useState(value);
-  const onInputChangeHandler = (event) => {
-    onChangeHandler(event);
-    setInputValue(event.target.value);
-  };
-
-  let formItem = null;
-  if (Array.isArray(item)) {
-    formItem = (
-      <>
-        {item.map((itemUnit, index) => (
-          <CreateForm
-            item={itemUnit}
-            key={itemUnit.prop_name}
-            onChangeHandler={onChangeHandler}
-            error={error[index]}
-            value={value}
-          />
-        ))}
-      </>
-    );
-  } else {
-    if (item.editable) {
-      switch (item.input_type) {
-        case "input":
-          formItem = (
-            <TextBox
-              name={item.prop_name}
-              label={item.field_name}
-              required={item.required}
-              description={item.description}
-              value={value}
-              error={error}
-              onChange={onChangeHandler}
-            />
-          );
-          break;
-        case "image_upload":
-          formItem = (
-            <ImageUpload
-              name={item.prop_name}
-              label={item.field_name}
-              required={item.required}
-              description={item.description}
-              value={value}
-              error={error}
-              onImageUpload={onImageUpload}
-              onImagePreview={onImagePreview}
-            />
-          );
-          break;
-        case "image_button":
-          formItem = (
-            <ImageButton
-              name={item.prop_name}
-              label={item.field_name}
-              required={item.required}
-              description={item.description}
-              value={value}
-              error={error}
-              onImageUpload={onImageUpload}
-              onImagePreview={onImagePreview}
-            />
-          );
-          break;
-        case "checkbox":
-          formItem = (
-            <FormControlLabel control={<Checkbox />} label={item.field_name} />
-          );
-          break;
-        case "radio":
-          formItem = (
-            <FormControlLabel
-              value=""
-              control={<Radio />}
-              label={item.field_name}
-            />
-          );
-          break;
-        case "switch":
-          formItem = (
-            <FormControlLabel
-              sx={{ ml: "0rem" }}
-              control={
-                <Switch
-                  name={item.prop_name}
-                  checked={typeof value === "string" ? true : value}
-                  onChange={(e) => onChangeHandler(e, "switch")}
-                />
-              }
-              label={item.field_name}
-            />
-          );
-          break;
-        case "select":
-          formItem = (
-            <FormControl
-              fullWidth
-              size="small"
-              sx={{ ml: "0.5rem", mt: "0.5rem" }}
-            >
-              <FormLabel required={item.required}>{item.field_name}</FormLabel>
-              <Select
-                labelId={`select-label-${item.field_name}`}
-                id={`select-label-${item.field_name}`}
-                name={item.prop_name}
-                value={inputValue}
-                label={item.field_name}
-                onChange={onInputChangeHandler}
-              >
-                {item.options.map((itemUnit, index) => (
-                  <MenuItem key={itemUnit.id} value={itemUnit.id}>
-                    {itemUnit.name}
-                  </MenuItem>
+    let formItem = null;
+    if (Array.isArray(item)) {
+        formItem = (
+            <>
+                {item.map((itemUnit, index) => (
+                    <CreateForm item={itemUnit} key={itemUnit.prop_name} onChangeHandler={onChangeHandler} error={error[index]} value={value} disabled={disabled} />
                 ))}
-              </Select>
-            </FormControl>
-          );
-          break;
-        case "textarea":
-          formItem = (
-            <TextareaAutosize
-              aria-label="minimum height"
-              minRows={3}
-              placeholder="Minimum 3 rows"
-            />
-          );
-          break;
-        case "date_time":
-          formItem = (
-            <BasicDateTimePicker
-              value={value}
-              label={item.field_name}
-              name={item.prop_name}
-              onChangeHandler={onChangeHandler}
-            />
-          );
-          break;
-
-        default:
-          formItem = null;
-      }
+            </>
+        );
+    } else {
+        if (item.editable) {
+            switch (item.input_type) {
+                case "input":
+                    formItem = (
+                        <InputInput
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onChange={onChangeHandler}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                case "image_upload": //TODO
+                    formItem = (
+                        <ImageUpload
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onImageUpload={onImageUpload}
+                            onImagePreview={onImagePreview}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                case "image_button": //TODO
+                    formItem = (
+                        <ImageButton
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            imgWidth={item.dimensions ? item.dimensions.width : 300}
+                            imgHeight={item.dimensions ? item.dimensions.height : 200}
+                            onImageUpload={onImageUpload}
+                            onOpenImageDialog={onOpenImageDialog}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                case "checkbox":
+                    formItem = <InputCheckbox name={item.prop_name} value={Boolean(value)} onChange={(e) => onChangeHandler(e, "checkbox")} disabled={disabled} label={item.field_name} />;
+                    break;
+                case "radio":
+                    formItem = <InputRadio name={item.prop_name} value={Boolean(value)} onChange={(e) => onChangeHandler(e, "radio")} disabled={disabled} label={item.field_name} />;
+                    break;
+                case "switch":
+                    formItem = (
+                        <InputSwitch
+                            label={item.field_name}
+                            name={item.prop_name}
+                            value={Boolean(value)}
+                            onChange={(e) => onChangeHandler(e, "switch")}
+                            disabled={disabled}
+                            error={error}
+                            description={item.description}
+                        />
+                    );
+                    break;
+                case "select":
+                    formItem = (
+                        <InputSelect
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            name={item.prop_name}
+                            disabled={disabled}
+                            error={error}
+                            value={value}
+                            onChange={onInputChangeHandler}
+                            options={item.options}
+                            description={item.description}
+                            fillFromApi={item.fillFromApi}
+                            usePropName={item.usePropName}
+                            queryString={queryString}
+                            optionsIsEmpty={optionsIsEmpty}
+                        />
+                    );
+                    break;
+                case "multi_select":
+                    formItem = (
+                        <InputMultiSelect
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            name={item.prop_name}
+                            disabled={disabled}
+                            error={error}
+                            value={Array.isArray(value) ? value : []}
+                            onChange={onInputChangeHandler}
+                            options={item.options}
+                            description={item.description}
+                            fillFromApi={item.fillFromApi}
+                            usePropName={item.usePropName}
+                            queryString={queryString}
+                            optionsIsEmpty={optionsIsEmpty}
+                        />
+                    );
+                    break;
+                case "textarea":
+                    formItem = (
+                        <InputText
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onChange={onChangeHandler}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                case "date_time":
+                    formItem = (
+                        <InputDateTime
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onChange={onChangeHandler}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                case "date":
+                    formItem = (
+                        <InputDate
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onChange={onChangeHandler}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                case "multiple_images": //TODO
+                    formItem = <InputMultipleImages list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} />;
+                    break;
+                case "multiple_files": //TODO
+                    formItem = <InputMultipleFiles list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} />;
+                    break;
+                case "file_button":
+                    formItem = (
+                        <FileButton
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onImageUpload={onImageUpload}
+                            onOpenImageDialog={onOpenImageDialog}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                case "number":
+                    formItem = (
+                        <InputNumber
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onChange={onChangeHandler}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                case "html_editor":
+                    formItem = (
+                        <InputHtml
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onChange={onChangeHandler}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                default:
+                    formItem = null;
+            }
+        }
     }
-  }
-  return formItem;
+    return formItem;
 };
 
 export default CreateForm;

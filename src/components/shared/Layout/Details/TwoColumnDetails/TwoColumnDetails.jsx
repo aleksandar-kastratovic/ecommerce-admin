@@ -13,6 +13,7 @@ const TwoColumnDetails = ({
   right = <div />,
   onSubmit = () => {},
   buttonText = "",
+  hasButton = true,
   ...props
 }) => {
   return (
@@ -25,14 +26,16 @@ const TwoColumnDetails = ({
           {right}
         </Grid>
       </Grid>
-      <Button
-        className={styles.saveButton}
-        variant="contained"
-        endIcon={<CheckIcon />}
-        onClick={onSubmit}
-      >
-        {buttonText}
-      </Button>
+      {hasButton && (
+        <Button
+          className={styles.saveButton}
+          variant="contained"
+          endIcon={<CheckIcon />}
+          onClick={onSubmit}
+        >
+          {buttonText}
+        </Button>
+      )}
     </Box>
   );
 };

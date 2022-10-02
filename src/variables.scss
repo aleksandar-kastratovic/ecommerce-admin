@@ -1,10 +1,18 @@
-$white: #fff;
-$black: #000;
+$white:      #ffffff;
+$black:      #000000;
 $lightGreen: #42b732;
-$lightGrey: #ecf0fa;
-$lightBlue: #17a2b8;
-$blue: #bbdefb;
-$red: #f50057;
+$darkGreen:  #225f43;
+$middleGrey: #989898;
+$lightGrey:  #ecf0fa;
+$lightBlue:  #17a2b8;
+$blue:       #bbdefb;
+$red:        #f50057;
+$theme:      #28a86e;
+$danger:     #d32f2f;
 
-// All palette color should be available on one place, here 
-// or it is a good practice as now in global css but global css has more then 2000 ln
+$gap:        0.5em;
+
+:export {
+	gap:   $gap;
+	theme: $theme;
+}

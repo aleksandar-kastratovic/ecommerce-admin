@@ -1,0 +1,236 @@
+[
+    {
+      "field_name": "Slug",
+      "prop_name": "slug",
+      "in_main_table": true,
+      "in_details": true,
+      "editable": true,
+      "disabled": false,
+      "required": true,
+      "description": "255",
+      "ui_prop": "xyz",
+      "sortable": false,
+      "input_type": "input"
+    },
+    {
+      "field_name": "Ime",
+      "prop_name": "name",
+      "in_main_table": true,
+      "in_details": true,
+      "editable": true,
+      "disabled": false,
+      "required": false,
+      "description": "255",
+      "ui_prop": "xyz",
+      "sortable": true,
+      "input_type": "input"
+    },
+    {
+      "field_name": "Sekcija na strani",
+      "prop_name": "page_section",
+      "in_main_table": true,
+      "in_details": true,
+      "editable": true,
+      "disabled": false,
+      "required": true,
+      "description": "255",
+      "ui_prop": "xyz",
+      "sortable": true,
+      "input_type": "input"
+    },
+    {
+      "field_name": "Ime",
+      "prop_name": "first_name",
+      "in_main_table": true,
+      "in_details": true,
+      "editable": true,
+      "disabled": false,
+      "required": true,
+      "description": "255",
+      "ui_prop": "xyz",
+      "sortable": true,
+      "input_type": "input"
+    },
+    {
+      "field_name": "Prezime",
+      "prop_name": "last_name",
+      "in_main_table": true,
+      "in_details": true,
+      "editable": true,
+      "disabled": false,
+      "required": true,
+      "description": "255",
+      "ui_prop": "xyz",
+      "sortable": true,
+      "input_type": "input"
+    },
+    {
+      "field_name": "Kompanija",
+      "prop_name": "company",
+      "in_main_table": true,
+      "in_details": true,
+      "editable": true,
+      "disabled": false,
+      "required": true,
+      "description": "255",
+      "ui_prop": "xyz",
+      "sortable": true,
+      "input_type": "input"
+    },
+    {
+        "field_name": "PIB",
+        "prop_name": "pib",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+      },
+      {
+        "field_name": "MB",
+        "prop_name": "maticni_broj",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+      }, {
+        "field_name": "Telefon",
+        "prop_name": "phone",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+      }, {
+        "field_name": "Email",
+        "prop_name": "email",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+      }
+      , {
+        "field_name": "Adresa",
+        "prop_name": "address",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+      }
+      , {
+        "field_name": "Poruka",
+        "prop_name": "message",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+      }
+      , {
+        "field_name": "Prihvati uslove",
+        "prop_name": "accept_terms",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+      }
+      , {
+        "field_name": "Longituda",
+        "prop_name": "longitude",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+      }
+      , {
+        "field_name": "Latituda",
+        "prop_name": "latitude",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+      }
+      , {
+        "field_name": "Datum vreme od:",
+        "prop_name": "datetime_from",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+      }
+      , {
+        "field_name": "Datum vreme do:",
+        "prop_name": "datetime_to",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+      },
+      {
+        "field_name": "",
+        "prop_name": "action",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "255",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "preview"
+      }
+
+
+  ]
