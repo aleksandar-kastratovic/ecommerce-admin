@@ -4,7 +4,7 @@ import useAPI from "../../../../api/api";
 import Form from "../../../../components/shared/Form/Form";
 import Loading from "../../../../components/shared/Loading/Loading";
 
-const B2CSettingsForm = ({ form_slug, module, submodule }) => {
+const B2CSettingsForm = ({ form_slug, config_module_id, module, submodule }) => {
     const api = useAPI();
 
     const [isLoading, setIsLoading] = useState(false);
@@ -17,10 +17,11 @@ const B2CSettingsForm = ({ form_slug, module, submodule }) => {
         api.get(`admin/form/data/${form_slug}`)
             .then((response) => {
                 setFormFields(response?.payload);
+
                 setIsLoading(false);
             })
             .catch((error) => console.warn(error));
-        api.get(`admin/configuration-b2b/main/${module}/${submodule}`)
+        api.get(`admin/configuration-b2c/main/${module}/${submodule}`)
             .then((response) => setFormData(response?.payload))
             .catch((error) => console.warn(error));
     };
@@ -35,7 +36,7 @@ const B2CSettingsForm = ({ form_slug, module, submodule }) => {
     }
 
     const submitHandler = (data) => {
-        api.post(`admin/configuration-b2b/main/${module}/${submodule}`, data)
+        api.post(`admin/configuration-b2c/main/${module}/${submodule}`, data)
             .then((response) => console.log(response))
             .catch((error) => console.warn(error));
     };

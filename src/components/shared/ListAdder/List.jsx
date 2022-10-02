@@ -5,13 +5,24 @@ import ListItem from "./ListItem";
 import styles from "./List.module.scss";
 import Button from "../Button/Button";
 
-const List = ({ listFields = [], formFields = [], init = {}, addFieldLabel = "Dodaj polje", required = [], onSave = () => {}, onDelete = () => {}, additionalButtons = [], actions = {} }) => {
+const List = ({
+    listFields = [],
+    formFields = [],
+    init = {},
+    addFieldLabel = "Dodaj polje",
+    required = [],
+    onSave = () => {},
+    onDelete = () => {},
+    additionalButtons = [],
+    actions = {},
+    onChange,
+    validateData,
+}) => {
     const [fields, setFields] = useState(listFields);
-    const [load, setLoad] = useState(false);
     const { user } = useContext(AuthContext);
 
     const deleteHandler = async (id, dataId) => {
-        if (dataId !== null && dataId !== undefined) {
+        if (dataId != null) {
             try {
                 await onDelete(user.access_token, dataId);
             } catch (error) {
@@ -54,6 +65,8 @@ const List = ({ listFields = [], formFields = [], init = {}, addFieldLabel = "Do
                             required={required}
                             formFields={formFields}
                             actions={actions}
+                            onChange={onChange}
+                            validateData={validateData}
                         />
                     );
                 })}

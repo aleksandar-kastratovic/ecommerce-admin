@@ -9,7 +9,7 @@ import { useEffect } from "react";
 import Form from "../Form/Form";
 import Button from "../Button/Button";
 
-const ListItem = ({ data, index, onDelete = () => {}, saveData = () => {}, formFields, actions = {} }) => {
+const ListItem = ({ data, index, onDelete = () => {}, saveData = () => {}, formFields, actions = {}, onChange = () => null, validateData }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [fieldData, setFieldData] = useState(data);
     const [fields, setFields] = useState(formFields);
@@ -74,7 +74,7 @@ const ListItem = ({ data, index, onDelete = () => {}, saveData = () => {}, formF
             </div>
             {isOpen && (
                 <>
-                    <Form formFields={formFields} initialData={fieldData} onSubmit={onSubmit} cancelButton={false} />
+                    <Form formFields={formFields} initialData={fieldData} onSubmit={onSubmit} cancelButton={false} onChange={onChange} validateData={validateData} />
                     <div className={styles.actionButtons}>
                         {Object.values(buttons).map((button) => {
                             return (
