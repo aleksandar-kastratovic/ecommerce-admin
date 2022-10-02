@@ -35,7 +35,6 @@ const B2CSettingsForm = ({ form_slug, module, submodule }) => {
     }
 
     const submitHandler = (data) => {
-        console.log(data);
         api.post(`admin/configuration-b2b/main/${module}/${submodule}`, data)
             .then((response) => console.log(response))
             .catch((error) => console.warn(error));
