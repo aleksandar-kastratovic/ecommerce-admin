@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -15,13 +15,13 @@ import Stack from "@mui/material/Stack";
 import { useQuery } from "react-query";
 import useAPI from "../../../api/api";
 
-import SortableTree from "react-sortable-tree";
+import SortableTree, { addNodeUnderParent, removeNodeAtPath, changeNodeAtPath, toggleExpandedForAll } from "react-sortable-tree";
 import "react-sortable-tree/style.css";
 
 import scss from "./TreeView.module.scss";
 
-const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {} }) => {
-    const [treeDataAdapt, setTreeDataAdapt] = useState([]);
+const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {} }) => {
+    const [treeData, setTreeData] = useState([]);
 
     // TODO data adapt parent child
     // TODO add new in tree
@@ -90,9 +90,38 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         });
     }
 
+    const seed = [
+        {
+            id: "123",
+            title: "Company",
+            subtitle: "zzz",
+            isDirectory: true,
+            expanded: true,
+            children: [
+                { id: "456", title: "Human Resource", subtitle: "zzz" },
+                {
+                    id: "789",
+                    title: "Bussiness",
+                    subtitle: "zzz",
+                    expanded: true,
+                    children: [
+                        {
+                            id: "234",
+                            title: "Store A",
+                            subtitle: "zzz",
+                        },
+                        { id: "567", title: "Store B", subtitle: "zzz" },
+                    ],
+                },
+            ],
+        },
+    ];
+
     useEffect(() => {
         if (response?.payload.items) {
-            setTreeDataAdapt(response?.payload.items);
+            // setTreeData(response?.payload.items);
+            // setTreeData(seed);
+            setTreeData(mockData);
         }
     }, [isLoading]);
 
@@ -114,6 +143,59 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         navigate(-1);
     };
 
+    // ODAVDE
+    const [searchString, setSearchString] = useState("");
+    const [searchFocusIndex, setSearchFocusIndex] = useState(0);
+    const inputEl = useRef();
+
+    const handleChange = (treeData) => {
+        setTreeData(treeData);
+    };
+
+    const createNode = () => {
+        const value = inputEl.current.value;
+
+        if (value === "") {
+            inputEl.current.focus();
+            return;
+        }
+
+        let newTree = addNodeUnderParent({
+            treeData: treeData,
+            parentKey: null,
+            expandParent: true,
+            getNodeKey,
+            newNode: {
+                id: "123",
+                title: value,
+            },
+        });
+
+        setTreeData(newTree.treeData);
+
+        inputEl.current.value = "";
+    };
+
+    const getNodeKey = ({ treeIndex }) => treeIndex;
+
+    // Expand/collapse
+    const expand = (expanded) => {
+        setTreeData(
+            toggleExpandedForAll({
+                treeData,
+                expanded,
+            })
+        );
+    };
+
+    const expandAll = () => {
+        expand(true);
+    };
+
+    const collapseAll = () => {
+        expand(false);
+    };
+
     return (
         <>
             <PageWrapper title={title} actions={actions}>
@@ -121,25 +203,63 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                 <Button sx={{ mt: "1rem" }} icon={"arrow_back"} label="Nazad" onClick={backToCategories} />
 
                 {!isLoading ? (
-                    <SortableTree
-                        isVirtualized={false}
-                        treeData={treeDataAdapt}
-                        onChange={(treeData) => console.log(treeData)}
-                        getNodeKey={({ node }) => node.id}
-                        generateNodeProps={({ node }) => ({
-                            buttons: [
-                                <div>
-                                    {node.name}
-                                    <span className={scss.button} onClick={() => handleEdit(node.id)}>
-                                        <Icon className={scss.button}>edit</Icon>
-                                    </span>
-                                    <span className={scss.button} onClick={() => handleDelete(node.id)}>
-                                        <Icon className={scss.button}>delete</Icon>
-                                    </span>
-                                </div>,
-                            ],
-                        })}
-                    />
+                    <>
+                        <br />
+                        <label htmlFor="find-box">
+                            Pretraga:
+                            <input id="find-box" type="text" value={searchString} onChange={(event) => setSearchString(event.target.value)} />
+                        </label>
+                        <br />
+                        <span className={scss.button} onClick={expandAll}>
+                            <Icon className={scss.button}>
+                                <span class="material-symbols-outlined">keyboard_double_arrow_down</span>
+                            </Icon>
+                        </span>
+                        Proširi sve
+                        <span className={scss.button} onClick={collapseAll}>
+                            <Icon className={scss.button}>
+                                <span class="material-symbols-outlined">
+                                    <span class="material-symbols-outlined">keyboard_double_arrow_up</span>
+                                </span>
+                            </Icon>
+                        </span>
+                        Skupi sve
+                        <br />
+                        <input ref={inputEl} type="text" placeholder="Dodaj novi" />
+                        <span className={scss.button} onClick={createNode}>
+                            <Icon className={scss.button}>
+                                <span class="material-symbols-outlined">
+                                    <span class="material-symbols-outlined">add</span>
+                                </span>
+                            </Icon>
+                        </span>
+                        <SortableTree
+                            treeData={treeData}
+                            onChange={(treeData) => handleChange(treeData)}
+                            isVirtualized={false}
+                            searchQuery={searchString}
+                            searchFocusOffset={searchFocusIndex}
+                            searchFinishCallback={(matches) => {
+                                setSearchFocusIndex(matches.length > 0 ? searchFocusIndex % matches.length : 0);
+                            }}
+                            canDrag={({ node }) => !node.dragDisabled}
+                            getNodeKey={({ node }) => node.id}
+                            generateNodeProps={({ node }) => ({
+                                buttons: [
+                                    <div>
+                                        {node.name}
+
+                                        <span className={scss.button} onClick={() => handleEdit(node.id)}>
+                                            <Icon className={scss.button}>edit</Icon>
+                                        </span>
+                                        <span className={scss.button} onClick={() => handleDelete(node.id)}>
+                                            <Icon className={scss.button}>delete</Icon>
+                                        </span>
+                                    </div>,
+                                ],
+                            })}
+                        />
+                    </>
                 ) : (
                     renderTreeSkeletons()
                 )}
