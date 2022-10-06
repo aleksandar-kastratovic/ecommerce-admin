@@ -20,6 +20,8 @@ const CategoriesDetails = () => {
         parent_id: null,
         image: null,
         icon: null,
+        description: null,
+        short_description: null,
         status: "on",
     };
     const [data, setData] = useState(init);

@@ -7,6 +7,9 @@ import formFields from "../forms/analitics.json";
 const AnalitycsData = ({ companyId }) => {
     const init = {
         id_company: companyId,
+        saldo: null,
+        debt_in_currency: null,
+        debt_out_currency: null,
         credit_limit: null,
         debt_days: null,
     };
