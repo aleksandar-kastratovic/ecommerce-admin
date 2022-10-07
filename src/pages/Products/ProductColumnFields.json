@@ -27,7 +27,7 @@
     },
     {
         "field_name": "Kategorija",
-        "prop_name": "category",
+        "prop_name": "category_name",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
@@ -40,7 +40,7 @@
     },
     {
         "field_name": "B2B cena",
-        "prop_name": "b2b_price",
+        "prop_name": "b2b_prices",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
@@ -53,7 +53,7 @@
     },
     {
         "field_name": "B2C cena",
-        "prop_name": "b2c_price",
+        "prop_name": "b2c_prices",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
