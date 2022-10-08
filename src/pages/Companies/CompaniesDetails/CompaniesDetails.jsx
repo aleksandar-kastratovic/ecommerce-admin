@@ -167,7 +167,7 @@ const CompaniesDetails = () => {
                     companyId={data?.id}
                     apiPath={`${apiPath}/users`}
                     formFields={users}
-                    init={{ id: null, id_company: data?.id, first_name: null, last_name: null, email: null, phone: null, status: null }}
+                    init={{ id: null, id_company: data?.id, first_name: null, last_name: null, email: null, phone: null, status: "on" }}
                 />
             ),
         },
