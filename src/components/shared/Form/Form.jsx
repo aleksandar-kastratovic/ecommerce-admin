@@ -17,8 +17,8 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
         show: false,
         image: null,
         label: "",
-        width: 300,
-        height: 200,
+        width: 800,
+        height: 600,
         name: "",
     });
 

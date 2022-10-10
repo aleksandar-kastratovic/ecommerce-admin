@@ -28,8 +28,8 @@ const ImageButton = ({
     description = "",
     value = "",
     error = "",
-    imgWidth = 300,
-    imgHeight = 200,
+    imgWidth = 800,
+    imgHeight = 600,
     onImageUpload = () => {},
     onOpenImageDialog = () => {},
 }) => {
