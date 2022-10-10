@@ -15,7 +15,7 @@ import Stack from "@mui/material/Stack";
 import { useQuery } from "react-query";
 import useAPI from "../../../api/api";
 
-import SortableTree, { addNodeUnderParent, removeNodeAtPath, changeNodeAtPath, toggleExpandedForAll } from "react-sortable-tree";
+import SortableTree, { addNodeUnderParent, toggleExpandedForAll } from "react-sortable-tree";
 import "react-sortable-tree/style.css";
 
 import scss from "./TreeView.module.scss";
@@ -23,15 +23,14 @@ import scss from "./TreeView.module.scss";
 const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {} }) => {
     const [treeData, setTreeData] = useState([]);
 
-    // TODO data adapt parent child
-    // TODO add new in tree
-    // TODO search
-    // TODO drag and drop functionality save to db?
-
     const api = useAPI();
     const navigate = useNavigate();
     const { gid } = useParams();
     const [search, setSearch] = useState("");
+
+    const [searchString, setSearchString] = useState("");
+    const [searchFocusIndex, setSearchFocusIndex] = useState(0);
+    const inputEl = useRef();
 
     // Default delete URL is the same as the main URL
     deleteUrl = deleteUrl ?? apiUrl;
@@ -67,7 +66,7 @@ const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyIt
     }, [isError]);
 
     const handleSearch = (value) => {
-        // TODO This always triggers two request as we are changing two states in a row
+        setSearchString(value);
     };
 
     const handleDelete = (id) => {
@@ -90,37 +89,9 @@ const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyIt
         });
     }
 
-    const seed = [
-        {
-            id: "123",
-            title: "Company",
-            subtitle: "zzz",
-            isDirectory: true,
-            expanded: true,
-            children: [
-                { id: "456", title: "Human Resource", subtitle: "zzz" },
-                {
-                    id: "789",
-                    title: "Bussiness",
-                    subtitle: "zzz",
-                    expanded: true,
-                    children: [
-                        {
-                            id: "234",
-                            title: "Store A",
-                            subtitle: "zzz",
-                        },
-                        { id: "567", title: "Store B", subtitle: "zzz" },
-                    ],
-                },
-            ],
-        },
-    ];
-
     useEffect(() => {
         if (response?.payload.items) {
             // setTreeData(response?.payload.items);
-            // setTreeData(seed);
             setTreeData(mockData);
         }
     }, [isLoading]);
@@ -142,11 +113,6 @@ const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyIt
     const backToCategories = () => {
         navigate(-1);
     };
-
-    // ODAVDE
-    const [searchString, setSearchString] = useState("");
-    const [searchFocusIndex, setSearchFocusIndex] = useState(0);
-    const inputEl = useRef();
 
     const handleChange = (treeData) => {
         setTreeData(treeData);
@@ -205,21 +171,16 @@ const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyIt
                 {!isLoading ? (
                     <>
                         <br />
-                        <label htmlFor="find-box">
-                            Pretraga:
-                            <input id="find-box" type="text" value={searchString} onChange={(event) => setSearchString(event.target.value)} />
-                        </label>
-                        <br />
                         <span className={scss.button} onClick={expandAll}>
                             <Icon className={scss.button}>
-                                <span class="material-symbols-outlined">keyboard_double_arrow_down</span>
+                                <span className="material-symbols-outlined">keyboard_double_arrow_down</span>
                             </Icon>
                         </span>
                         Proširi sve
                         <span className={scss.button} onClick={collapseAll}>
                             <Icon className={scss.button}>
-                                <span class="material-symbols-outlined">
-                                    <span class="material-symbols-outlined">keyboard_double_arrow_up</span>
+                                <span className="material-symbols-outlined">
+                                    <span className="material-symbols-outlined">keyboard_double_arrow_up</span>
                                 </span>
                             </Icon>
                         </span>
@@ -228,8 +189,8 @@ const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyIt
                         <input ref={inputEl} type="text" placeholder="Dodaj novi" />
                         <span className={scss.button} onClick={createNode}>
                             <Icon className={scss.button}>
-                                <span class="material-symbols-outlined">
-                                    <span class="material-symbols-outlined">add</span>
+                                <span className="material-symbols-outlined">
+                                    <span className="material-symbols-outlined">add</span>
                                 </span>
                             </Icon>
                         </span>
