@@ -17,6 +17,7 @@ import {
     faIndustry,
     faStore,
     faBell,
+    faEnvelope,
 } from "@fortawesome/free-solid-svg-icons";
 import IconList from "../helpers/icons";
 import B2BRebatesDetails from "../pages/B2BRebates/B2BRebatesDetails/B2BRebatesDetails";
@@ -89,6 +90,8 @@ import Users from "../pages/Users/Users";
 import UsersDetils from "../pages/Users/Details/UsersDetails";
 import B2BSettingsDetails from "../pages/B2Bsettings/SettingsDetails/B2BSettingsDetails";
 import B2CSettingsDetails from "../pages/B2CSettings/SettingsDetails/B2CSettingsDetails";
+import B2BContactForm from "../pages/B2BContactForm/B2BContactForm";
+import B2BContactFormDetails from "../pages/B2BContactForm/Details/B2BContactFormDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -148,6 +151,8 @@ const screens = {
     ],
     B2B_SALES_OFFICER: ["/B2B-sales-officers", "Komercijalisti", faCog, B2B, SaleOfficers, [[":id", SaleOfficersDetails]]],
     B2B_NOTIFICATIONS: ["/notifications", "Notifikacije", faBell, B2B, Notifications, [[":notifid", NotificationsDetails]]],
+    B2B_CONTACT_FORMS: ["/B2B-contact", "Kontakt forma", faEnvelope, B2B, B2BContactForm, [[":id", B2BContactFormDetails]]],
+
     BANNERS_B2C: [
         "/B2C-banners",
         "Baneri",
@@ -174,7 +179,7 @@ const screens = {
     ],
     B2C_STATIC_PAGES: ["/staticpages", "Statičke strane", faArchive, B2C, StaticPages, [[":spid", StaticPagesDetails]]],
     B2C_NEWSLETTER: ["/newsletter", "Newsletter", faArchive, B2C, Newsletter, [[":nlid", Newsletter]]],
-    B2C_CONTACT_FORMS: ["/contactform", "Kontakt forma", faArchive, B2C, ContactForm, [[":cfid", ContactForm]]],
+    B2C_CONTACT_FORMS: ["/contactform", "Kontakt forma", faEnvelope, B2C, ContactForm, [[":cfid", ContactForm]]],
     ROLES: ["/roles", "Uloge", faPeopleArrows, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
     USERS: ["/users", "Korisnici", faUsers, SETTINGS, Users, [[":userId", UsersDetils]]],
     LOCAT: ["/locations", "Lokacije", faSearchLocation, SETTINGS, LocationsPage, [[":locId", LocationsPage]]],

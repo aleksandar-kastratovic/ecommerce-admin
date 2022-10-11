@@ -1,4 +1,4 @@
-import SearchableListForm from "../../../../components/shared/Form/SearchableListForm/SearchableListForm"
+import SearchableListForm from "../../../../components/shared/Form/SearchableListForm/SearchableListForm";
 
 /**
  * Choose which categories are assigned to a rebate.
@@ -6,7 +6,6 @@ import SearchableListForm from "../../../../components/shared/Form/SearchableLis
  * @return {JSX.Element}
  * @constructor
  */
-const CategoriesPanel = ({ rebate, categories, onUpdate }) =>
-    <SearchableListForm available={categories} selected={rebate.categories} onSubmit={onUpdate} />
+const CategoriesPanel = ({ rebate, categories, onUpdate }) => <SearchableListForm available={categories} selected={rebate.categories} onSubmit={onUpdate} selectAll={true} />;
 
-export default CategoriesPanel
+export default CategoriesPanel;

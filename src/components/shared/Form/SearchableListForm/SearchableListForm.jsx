@@ -13,16 +13,27 @@ import styles from "./SearchableListForm.module.scss";
  * @param {{id: string|number, name: string}[]} available The list of available items.
  * @param {(string|number)[]} selected The list of selected ids from the available list.
  * @param {function((string|number)[])} onSubmit Submit the list of selected ids from the available list.
+ * @param {boolean} selectAll If select all options should be displayed
  *
  * @return {JSX.Element}
  * @constructor
  */
-const SearchableListForm = ({ available = [], selected = [], onSubmit }) => {
-    const { list, toggle, has } = useList(selected ?? []);
+const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll = false }) => {
+    const { list, toggle, has, set, clear } = useList(selected ?? []);
     const [search, setSearch] = useState("");
 
     // Filter the available
     available = available.filter((brand) => search === "" || brand.name.toLowerCase().includes(search.toLowerCase()));
+
+    const toggleSelectAll = (selected) => {
+        if (!selected) {
+            clear();
+        } else {
+            for (const item of available) {
+                set(item.id);
+            }
+        }
+    };
 
     return (
         <>
@@ -30,6 +41,7 @@ const SearchableListForm = ({ available = [], selected = [], onSubmit }) => {
 
             {/* The list of available items */}
             <div className={styles.optionsList}>
+                {selectAll && <InputCheckbox label="Izaberi sve" value={available.length === list.length} onChange={({ target }) => toggleSelectAll(target.checked)} />}
                 {available.map((brand) => (
                     <InputCheckbox key={brand.id} value={has(brand.id)} label={brand.name} onChange={() => toggle(brand.id)} />
                 ))}

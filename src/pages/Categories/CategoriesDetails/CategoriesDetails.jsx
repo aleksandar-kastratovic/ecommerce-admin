@@ -20,12 +20,14 @@ const CategoriesDetails = () => {
         parent_id: null,
         image: null,
         icon: null,
+        description: null,
+        short_description: null,
         status: "on",
     };
     const [data, setData] = useState(init);
     const [isLoading, setIsLoading] = useState(false);
     const api = useAPI();
-    const apiPath = "admin/category_product/categories";
+    const apiPath = "admin/category-product/categories";
 
     const handleSubmit = (data) => {
         api.post(apiPath, { ...data, id_category_product_groups: gid })
