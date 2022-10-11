@@ -16,7 +16,7 @@ const CategoriesListPage = () => {
         },
     ];
 
-    return <ListPage apiUrl={`admin/category_product/categories`} title="Kategorije" columnFields={tblFields} additionalButtons={buttons} filters={{ id_category_product_group: gid }} />;
+    return <ListPage apiUrl={`admin/category-product/categories`} title="Kategorije" columnFields={tblFields} additionalButtons={buttons} filters={{ id_category_product_group: gid }} />;
 };
 
 export default CategoriesListPage;
