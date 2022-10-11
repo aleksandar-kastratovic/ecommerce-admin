@@ -46,7 +46,7 @@ const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyIt
     };
 
     // Load the data
-    const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search], () => api.list(apiUrl, { search, ...filters }));
+    const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search], () => api.get(apiUrl, { search, ...filters }));
 
     // Modify the data
     if (response?.payload && modifyItems) {
@@ -90,9 +90,9 @@ const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyIt
     }
 
     useEffect(() => {
-        if (response?.payload.items) {
-            // setTreeData(response?.payload.items);
-            setTreeData(mockData);
+        if (response?.payload) {
+            setTreeData(response?.payload);
+            // setTreeData(mockData);
         }
     }, [isLoading]);
 

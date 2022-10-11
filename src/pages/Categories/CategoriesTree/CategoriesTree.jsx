@@ -18,10 +18,13 @@ const CategoriesTree = () => {
         },
     ];
 
+    const api = "https://api.staging.croonus.com/api/v1/admin/category-product/tree?group=2";
+
     return (
         <TreeView
             mockData={mockData}
-            apiUrl={`admin/category_product/categories`}
+            // apiUrl={`admin/category_product/categories`}
+            apiUrl={`admin/category-product/tree`}
             title="Kategorije"
             columnFields={tblFields}
             additionalButtons={buttons}
