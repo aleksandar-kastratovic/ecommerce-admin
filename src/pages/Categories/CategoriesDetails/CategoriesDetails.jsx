@@ -27,7 +27,7 @@ const CategoriesDetails = () => {
     const [data, setData] = useState(init);
     const [isLoading, setIsLoading] = useState(false);
     const api = useAPI();
-    const apiPath = "admin/category_product/categories";
+    const apiPath = "admin/category-product/categories";
 
     const handleSubmit = (data) => {
         api.post(apiPath, { ...data, id_category_product_groups: gid })

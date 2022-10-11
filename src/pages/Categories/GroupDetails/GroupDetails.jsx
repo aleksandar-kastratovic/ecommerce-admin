@@ -27,7 +27,7 @@ const GroupDetails = () => {
     const navigate = useNavigate();
     const [data, setData] = useState(init);
     const [isLoading, setIsLoading] = useState(false);
-    const apiPath = "admin/category_product/groups";
+    const apiPath = "admin/category-product/groups";
 
     const handleData = async () => {
         setIsLoading(true);

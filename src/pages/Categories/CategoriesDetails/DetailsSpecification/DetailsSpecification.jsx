@@ -10,7 +10,7 @@ const DetailsSpecification = ({ gid, cid }) => {
     const [isLoading, setIsLoading] = useState([]);
 
     const api = useAPI();
-    const apiPath = "admin/category_product/specifications";
+    const apiPath = "admin/category-product/specifications";
 
     const handleList = () => {
         setIsLoading(true);

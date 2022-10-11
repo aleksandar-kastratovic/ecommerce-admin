@@ -24,7 +24,7 @@ const DetailsSeo = ({ gid, cid }) => {
     const api = useAPI();
 
     const handleSave = (data) => {
-        api.post(`admin/category_product/seo/`, data)
+        api.post(`admin/category-product/seo/`, data)
             .then((response) => {
                 handleList();
                 toast.success("Uspešno");
@@ -36,7 +36,7 @@ const DetailsSeo = ({ gid, cid }) => {
     };
 
     const handleDelete = (token, id) => {
-        api.delete(`admin/category_product/seo/${id}`)
+        api.delete(`admin/category-product/seo/${id}`)
             .then((response) => {
                 handleList();
                 toast.success("Uspešno");
@@ -49,7 +49,7 @@ const DetailsSeo = ({ gid, cid }) => {
 
     const handleList = () => {
         setIsLoading(true);
-        api.list(`admin/category_product/seo/${cid}`)
+        api.list(`admin/category-product/seo/${cid}`)
             .then((response) => {
                 setListData(response?.payload?.items);
                 setIsLoading(false);
