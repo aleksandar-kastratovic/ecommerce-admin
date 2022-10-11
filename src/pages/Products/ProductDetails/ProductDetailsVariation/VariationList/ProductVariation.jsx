@@ -67,8 +67,8 @@ const ProductVariation = ({ title = "", idProduct, idProductVariant }) => {
                         title="Osnovni podaci"
                         formFields={basicData}
                         type="form"
-                        getUrl={`admin/productitems/variants/basic_data/${idProduct}/${idProductVariant}`}
-                        postUrl="admin/productitems/variants/basic_data/"
+                        getUrl={`admin/product-items/variants/basic_data/${idProduct}/${idProductVariant}`}
+                        postUrl="admin/product-items/variants/basic_data/"
                         idProduct={idProduct}
                         idProductVariant={idProductVariant}
                     />
@@ -76,9 +76,9 @@ const ProductVariation = ({ title = "", idProduct, idProductVariant }) => {
                         title="Cena"
                         formFields={prices}
                         type="list"
-                        listUrl={`admin/productitems/variants/prices/${idProduct}/${idProductVariant}`}
-                        postUrl={"admin/productitems/variants/prices/"}
-                        deleteUrl={"admin/productitems/variants/prices"}
+                        listUrl={`admin/product-items/variants/prices/${idProduct}/${idProductVariant}`}
+                        postUrl={"admin/product-items/variants/prices/"}
+                        deleteUrl={"admin/product-items/variants/prices"}
                         init={pricesInit}
                         idProduct={idProduct}
                         idProductVariant={idProductVariant}
@@ -87,9 +87,9 @@ const ProductVariation = ({ title = "", idProduct, idProductVariant }) => {
                         title="Lager"
                         formFields={lager}
                         type="list"
-                        listUrl={`admin/productitems/variants/inventory/${idProduct}/${idProductVariant}`}
-                        postUrl={"admin/productitems/variants/inventory/"}
-                        deleteUrl={"admin/productitems/variants/inventory"}
+                        listUrl={`admin/product-items/variants/inventory/${idProduct}/${idProductVariant}`}
+                        postUrl={"admin/product-items/variants/inventory/"}
+                        deleteUrl={"admin/product-items/variants/inventory"}
                         init={lagerInit}
                         idProduct={idProduct}
                         idProductVariant={idProductVariant}
@@ -98,9 +98,9 @@ const ProductVariation = ({ title = "", idProduct, idProductVariant }) => {
                         title="Seo"
                         formFields={seo}
                         type="list"
-                        listUrl={`admin/productitems/variants/seo/${idProduct}/${idProductVariant}`}
-                        postUrl={"admin/productitems/variants/seo/"}
-                        deleteUrl={"admin/productitems/variants/seo"}
+                        listUrl={`admin/product-items/variants/seo/${idProduct}/${idProductVariant}`}
+                        postUrl={"admin/product-items/variants/seo/"}
+                        deleteUrl={"admin/product-items/variants/seo"}
                         init={seoInit}
                         idProduct={idProduct}
                         idProductVariant={idProductVariant}
