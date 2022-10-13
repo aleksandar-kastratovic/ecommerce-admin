@@ -9,27 +9,43 @@ import lager from "../../forms/inventories.json";
 import basicData from "../../forms/product_variant_basic.json";
 
 import styles from "./VariationList.module.scss";
+import { InputSwitch } from "../../../../../components/shared/Form/FormInputs/FormInputs";
+import useAPI from "../../../../../api/api";
+import { priceValidate } from "../../../utils/PriceValidate";
+import VariationGallery from "./VariationGallery";
 
-const ProductVariation = ({ title = "", idProduct, idProductVariant }) => {
+const ProductVariation = ({ title = "", idProduct, idProductVariant, status }) => {
     const [open, setOpen] = useState(false);
+    const api = useAPI();
+
+    const [variantStatus, setVariantStatus] = useState(status);
+
+    const basicInit = {
+        id_product: idProduct,
+        id_product_variant: idProductVariant,
+        name: null,
+        sku: null,
+        barcode: null,
+        short_description: null,
+    };
 
     const pricesInit = {
         id: null,
         id_product: idProduct,
         id_product_variant: idProductVariant,
+        id_price_structure: null,
         system: "",
-        country: 1,
+        country: "",
         currency: "",
         type: "",
         group: "",
-        price_single_with_out_vat: 0,
-        price_single_with_vat: 0,
-        price_vat_procent: 0,
-        price_quantity: null,
-        price_unit: "",
-        active_to: "",
-        price_with_out_vat: 0,
-        price_with_vat: 0,
+        price_single_with_out_vat: null,
+        price_single_with_vat: null,
+        price_vat_procent: "20.00",
+        price_quantity: 1,
+        price_unit: "kom",
+        price_with_out_vat: null,
+        price_with_vat: null,
     };
 
     const seoInit = {
@@ -56,10 +72,35 @@ const ProductVariation = ({ title = "", idProduct, idProductVariant }) => {
         unit: "",
     };
 
+    const setStatus = (status) => {
+        api.post(`admin/product-items/variants/main/change-status/${idProduct}/${idProductVariant}`, { status })
+            .then((response) => console.log(response))
+            .catch((error) => console.warn(error));
+    };
+
     return (
         <Box className={styles.productVariation}>
-            <Box className={styles.productVariationTitle} onClick={() => setOpen(!open)}>
-                {title} {open ? <Icon>expand_less</Icon> : <Icon>expand_more</Icon>}
+            <Box
+                className={styles.productVariationHeading}
+                onClick={(event) => {
+                    if (event.target.name !== "status") {
+                        setOpen(!open);
+                    }
+                }}
+            >
+                <span className={styles.productVariationTitle}>{title}</span>
+
+                <InputSwitch
+                    label="Status"
+                    fullWidth={false}
+                    name="status"
+                    value={variantStatus ?? false}
+                    onChange={({ target }) => {
+                        setVariantStatus(target.checked);
+                        setStatus(target.checked);
+                    }}
+                />
+                {open ? <Icon>expand_less</Icon> : <Icon>expand_more</Icon>}
             </Box>
             {open && (
                 <Box className={styles.productVariationBody}>
@@ -67,29 +108,31 @@ const ProductVariation = ({ title = "", idProduct, idProductVariant }) => {
                         title="Osnovni podaci"
                         formFields={basicData}
                         type="form"
-                        getUrl={`admin/productitems/variants/basic_data/${idProduct}/${idProductVariant}`}
-                        postUrl="admin/productitems/variants/basic_data/"
+                        getUrl={`admin/product-items/variants/basic-data/${idProduct}/${idProductVariant}`}
+                        postUrl="admin/product-items/variants/basic-data/"
                         idProduct={idProduct}
                         idProductVariant={idProductVariant}
+                        init={basicInit}
                     />
                     <VariationSection
                         title="Cena"
                         formFields={prices}
                         type="list"
-                        listUrl={`admin/productitems/variants/prices/${idProduct}/${idProductVariant}`}
-                        postUrl={"admin/productitems/variants/prices/"}
-                        deleteUrl={"admin/productitems/variants/prices"}
+                        listUrl={`admin/product-items/variants/prices/${idProduct}/${idProductVariant}`}
+                        postUrl={"admin/product-items/variants/prices/"}
+                        deleteUrl={"admin/product-items/variants/prices"}
                         init={pricesInit}
                         idProduct={idProduct}
                         idProductVariant={idProductVariant}
+                        validateData={priceValidate}
                     />
                     <VariationSection
                         title="Lager"
                         formFields={lager}
                         type="list"
-                        listUrl={`admin/productitems/variants/inventory/${idProduct}/${idProductVariant}`}
-                        postUrl={"admin/productitems/variants/inventory/"}
-                        deleteUrl={"admin/productitems/variants/inventory"}
+                        listUrl={`admin/product-items/variants/inventory/${idProduct}/${idProductVariant}`}
+                        postUrl={"admin/product-items/variants/inventory/"}
+                        deleteUrl={"admin/product-items/variants/inventory"}
                         init={lagerInit}
                         idProduct={idProduct}
                         idProductVariant={idProductVariant}
@@ -98,14 +141,16 @@ const ProductVariation = ({ title = "", idProduct, idProductVariant }) => {
                         title="Seo"
                         formFields={seo}
                         type="list"
-                        listUrl={`admin/productitems/variants/seo/${idProduct}/${idProductVariant}`}
-                        postUrl={"admin/productitems/variants/seo/"}
-                        deleteUrl={"admin/productitems/variants/seo"}
+                        listUrl={`admin/product-items/variants/seo/${idProduct}/${idProductVariant}`}
+                        postUrl={"admin/product-items/variants/seo/"}
+                        deleteUrl={"admin/product-items/variants/seo"}
                         init={seoInit}
                         idProduct={idProduct}
                         idProductVariant={idProductVariant}
                     />
-                    <VariationSection title="Galerija" formFields={gallery} type="form" idProduct={idProduct} idProductVariant={idProductVariant} />
+                    <VariationSection title="Galerija" formFields={gallery} type="children" idProduct={idProduct} idProductVariant={idProductVariant}>
+                        <VariationGallery productId={idProduct} idProductVariant={idProductVariant} />
+                    </VariationSection>
                 </Box>
             )}
         </Box>
