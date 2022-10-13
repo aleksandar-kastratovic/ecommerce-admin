@@ -18,9 +18,9 @@ import HtmlEditor from "../../HtmlEditor/HtmlEditor";
  * @return {JSX.Element}
  */
 
-export const InputWrapper = ({ children = null, label, required, disabled, margin = "dense", error = null }) => {
+export const InputWrapper = ({ children = null, label, required, disabled, margin = "dense", error = null, fullWidth = true }) => {
     return (
-        <FormControl fullWidth margin={margin} error={error !== null}>
+        <FormControl fullWidth={fullWidth} margin={margin} error={error !== null}>
             <FormLabel required={required} disabled={disabled}>
                 {label}
             </FormLabel>
@@ -175,9 +175,9 @@ export const InputRadio = ({ label, required, disabled, name, value, error = nul
  * @return {JSX.Element}
  */
 
-export const InputSwitch = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description }) => {
+export const InputSwitch = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, fullWidth = true }) => {
     return (
-        <InputWrapper required={required} disabled={disabled} margin={margin} error={error}>
+        <InputWrapper required={required} disabled={disabled} margin={margin} error={error} fullWidth={fullWidth}>
             <FormControlLabel control={<Switch name={name} value={value} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
             <FormHelperText>{error ? error : description}</FormHelperText>
         </InputWrapper>
