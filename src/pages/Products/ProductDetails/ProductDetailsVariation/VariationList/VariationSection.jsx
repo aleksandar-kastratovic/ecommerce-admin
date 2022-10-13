@@ -21,6 +21,7 @@ const VariationSection = ({
     idProduct,
     idProductVariant,
     validateData = (data) => data,
+    children,
 }) => {
     const [open, setOpen] = useState(false);
     const [data, setData] = useState([]);
@@ -102,6 +103,8 @@ const VariationSection = ({
         switch (type) {
             case "list":
                 return <List formFields={formFields} listFields={data} init={init} onDelete={onDelete} onSave={onSubmit} validateData={validateData} />;
+            case "children":
+                return children;
             case "form":
             default:
                 return <Form formFields={formFields} initialData={data} onSubmit={onSubmit} />;

@@ -15,7 +15,6 @@ const VariationGallery = ({ productId, idProductVariant }) => {
     };
 
     const handleSubmit = (data) => {
-        console.log(data);
         let req = {
             id: data.new ? null : data.id,
             id_product: productId,
