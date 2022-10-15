@@ -7,6 +7,7 @@ import ListTableToolbar from "../ListTable/ListTableToolbar";
 import DeleteDialog from "../Dialogs/DeleteDialog";
 import PageWrapper from "../Layout/PageWrapper/PageWrapper";
 import Button from "../Button/Button";
+import TextBoxSingle from "../TextBoxSingle/TextBoxSingle";
 
 import Icon from "@mui/material/Icon";
 import Skeleton from "@mui/material/Skeleton";
@@ -20,23 +21,33 @@ import "react-sortable-tree/style.css";
 
 import scss from "./TreeView.module.scss";
 
-const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {} }) => {
+const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {} }) => {
     const [treeData, setTreeData] = useState([]);
-
     const api = useAPI();
     const navigate = useNavigate();
     const { gid } = useParams();
     const [search, setSearch] = useState("");
 
     const [searchString, setSearchString] = useState("");
+    const [openTextBox, setOpenTextBox] = useState({ open: false, id: null });
     const [searchFocusIndex, setSearchFocusIndex] = useState(0);
     const inputEl = useRef();
+
+    const init = {
+        id: null,
+        id_category_product_groups: gid,
+        name: "",
+        parent_id: null,
+        order: 1,
+    };
 
     // Default delete URL is the same as the main URL
     deleteUrl = deleteUrl ?? apiUrl;
 
     // Handle delete dialog
     const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false, id: null, mutate: null });
+    const [addParent, setAddParent] = useState(init);
+    const [addChild, setAddChild] = useState(init);
     const handleDeleteConfirm = async () => {
         api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
@@ -114,25 +125,101 @@ const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyIt
         navigate(-1);
     };
 
-    const handleChange = (treeData) => {
+    const handleChangeTreeData = (treeData) => {
         setTreeData(treeData);
     };
 
-    const createNode = () => {
-        const value = inputEl.current.value;
+    const handleParent = (e) => {
+        setAddParent({ ...addParent, name: e.target.value });
+    };
 
-        if (value === "") {
-            inputEl.current.focus();
+    const handleChild = (e, id) => {
+        setAddChild({ ...addChild, parent_id: id, name: e.target.value });
+    };
+
+    const cancelParent = () => {
+        setAddParent(init);
+    };
+
+    const cancelChild = () => {
+        setOpenTextBox({ open: false, id: null });
+        setAddChild(init);
+    };
+
+    const handleOpenTextBox = (id) => {
+        setOpenTextBox({ open: true, id: id });
+    };
+
+    const saveChild = (path) => {
+        if (addChild.name === "") {
             return;
         }
+        let newTree = addNodeUnderParent({
+            treeData: treeData,
+            parentKey: path.length,
+            expandParent: true,
+            getNodeKey,
+            newNode: {
+                id: Math.floor(Math.random() * 100) + 1,
+                title: addChild.name,
+            },
+        });
 
+        saveData(addChild);
+        setTreeData(newTree.treeData);
+    };
+
+    const saveParent = () => {
+        if (addParent.name === "") {
+            return;
+        }
         let newTree = addNodeUnderParent({
             treeData: treeData,
             parentKey: null,
             expandParent: true,
             getNodeKey,
             newNode: {
-                id: "123",
+                id: Math.floor(Math.random() * 100) + 1,
+                title: addParent.name,
+            },
+        });
+
+        saveData(addParent);
+        setTreeData(newTree.treeData);
+    };
+
+    const saveData = async (data) => {
+        api.post(`admin/category-product/tree`, data)
+            .then((response) => {
+                // setTreeData(response?.payload);
+                cancelChild();
+                setAddParent(init);
+                toast.success(`Uspešno ${id === "new" ? "dodati" : "izmenjeni"} podaci`);
+            })
+            .catch((error) => {
+                console.warn(error);
+                toast.warning("Greška");
+            });
+    };
+
+    const addNodeSibling = (rowInfo) => {
+        let { path } = rowInfo;
+
+        const value = inputEl.current.value;
+        // const value = inputEls.current[treeIndex].current.value;
+
+        if (value === "") {
+            inputEl.current.focus();
+            // inputEls.current[treeIndex].current.focus();
+            return;
+        }
+
+        let newTree = addNodeUnderParent({
+            treeData: treeData,
+            parentKey: path[path.length - 2],
+            expandParent: true,
+            getNodeKey,
+            newNode: {
                 title: value,
             },
         });
@@ -140,7 +227,32 @@ const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyIt
         setTreeData(newTree.treeData);
 
         inputEl.current.value = "";
+        // inputEls.current[treeIndex].current.value = "";
     };
+
+    // const createNode = () => {
+    //     const value = inputEl.current.value;
+
+    //     if (value === "") {
+    //         inputEl.current.focus();
+    //         return;
+    //     }
+
+    //     let newTree = addNodeUnderParent({
+    //         treeData: treeData,
+    //         parentKey: null,
+    //         expandParent: true,
+    //         getNodeKey,
+    //         newNode: {
+    //             id: "123",
+    //             title: value,
+    //         },
+    //     });
+
+    //     setTreeData(newTree.treeData);
+
+    //     inputEl.current.value = "";
+    // };
 
     const getNodeKey = ({ treeIndex }) => treeIndex;
 
@@ -186,17 +298,28 @@ const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyIt
                         </span>
                         Skupi sve
                         <br />
-                        <input ref={inputEl} type="text" placeholder="Dodaj novi" />
+                        {/* <input ref={inputEl} type="text" placeholder="Dodaj novi" />
                         <span className={scss.button} onClick={createNode}>
                             <Icon className={scss.button}>
                                 <span className="material-symbols-outlined">
                                     <span className="material-symbols-outlined">add</span>
                                 </span>
                             </Icon>
-                        </span>
+                        </span> */}
+                        <TextBoxSingle
+                            name="parent"
+                            label="Dodaj novog roditelja"
+                            value={addParent.name}
+                            onSaveClick={saveParent}
+                            onCancelClick={cancelParent}
+                            onChange={handleParent}
+                            saveIcon="check_circle"
+                            cancelIcon="cancel"
+                            width="30%"
+                        />
                         <SortableTree
                             treeData={treeData}
-                            onChange={(treeData) => handleChange(treeData)}
+                            onChange={(treeData) => handleChangeTreeData(treeData)}
                             isVirtualized={false}
                             searchQuery={searchString}
                             searchFocusOffset={searchFocusIndex}
@@ -205,17 +328,34 @@ const TreeView = ({ mockData, apiUrl, deleteUrl, title, showDatePicker, modifyIt
                             }}
                             canDrag={({ node }) => !node.dragDisabled}
                             getNodeKey={({ node }) => node.id}
-                            generateNodeProps={({ node }) => ({
+                            generateNodeProps={({ node, path }) => ({
                                 buttons: [
                                     <div>
                                         {node.name}
-
                                         <span className={scss.button} onClick={() => handleEdit(node.id)}>
                                             <Icon className={scss.button}>edit</Icon>
                                         </span>
                                         <span className={scss.button} onClick={() => handleDelete(node.id)}>
                                             <Icon className={scss.button}>delete</Icon>
                                         </span>
+                                        {openTextBox.open && openTextBox.id === node.id ? (
+                                            <TextBoxSingle
+                                                name="child"
+                                                value={addChild.name}
+                                                // onSaveClick={saveChild}
+                                                onSaveClick={(event) => saveChild(path)}
+                                                onCancelClick={cancelChild}
+                                                onChange={(e) => handleChild(e, node.id)}
+                                                saveIcon="check_circle"
+                                                cancelIcon="cancel"
+                                                width="100%"
+                                                className={scss.treeInput}
+                                            />
+                                        ) : (
+                                            <span className={scss.button} onClick={() => handleOpenTextBox(node.id)}>
+                                                <Icon className={scss.button}>add</Icon>
+                                            </span>
+                                        )}
                                     </div>,
                                 ],
                             })}
