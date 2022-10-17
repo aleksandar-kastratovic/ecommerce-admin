@@ -10,6 +10,16 @@ const ProductDetailsVariation = ({ productId }) => {
     const [variants, setVariants] = useState([]);
     const api = useAPI();
 
+    const getVariants = () => {
+        api.get(`admin/product-items/variants/main/product/${productId}`)
+            .then((response) => {
+                setVariants(response?.payload);
+            })
+            .catch((error) => {
+                console.warn(error);
+            });
+    };
+
     useEffect(() => {
         api.get(`admin/product-items/variants/main/product-attributes/${productId}`)
             .then((response) => {
@@ -18,14 +28,7 @@ const ProductDetailsVariation = ({ productId }) => {
             .catch((error) => {
                 console.warn(error);
             });
-
-        api.get(`admin/product-items/variants/main/product/${productId}`)
-            .then((response) => {
-                setVariants(response?.payload);
-            })
-            .catch((error) => {
-                console.warn(error);
-            });
+        getVariants();
     }, []);
 
     const onSubmit = (data) => {
@@ -48,6 +51,7 @@ const ProductDetailsVariation = ({ productId }) => {
         api.post("admin/product-items/variants/main/save", req)
             .then((response) => {
                 console.log(response);
+                getVariants();
             })
             .catch((error) => {
                 console.warn(error);
@@ -60,7 +64,7 @@ const ProductDetailsVariation = ({ productId }) => {
             <Box>
                 <h4>Lista varijanti</h4>
                 {variants.map((variant) => {
-                    return <ProductVariation title={variant.attributes_text} key={variant.id} idProduct={productId} idProductVariant={variant.id} />;
+                    return <ProductVariation title={variant.attributes_text} key={variant.id} idProduct={productId} idProductVariant={variant.id} status={variant.status === "on"} />;
                 })}
             </Box>
         </Box>

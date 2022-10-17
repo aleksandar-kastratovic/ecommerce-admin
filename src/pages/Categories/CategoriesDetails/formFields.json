@@ -64,7 +64,7 @@
         "sortable": true,
         "input_type": "select",
         "options": [],
-        "fillFromApi": "admin/category_product/categories/ddl",
+        "fillFromApi": "admin/category-product/categories/ddl",
         "usePropName": true
     },
     {
