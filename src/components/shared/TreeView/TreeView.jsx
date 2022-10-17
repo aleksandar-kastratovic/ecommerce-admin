@@ -49,7 +49,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     const [addParent, setAddParent] = useState(init);
     const [addChild, setAddChild] = useState(init);
     const handleDeleteConfirm = async () => {
-        api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
+        api.delete(deleteUrl + openDeleteDialog.id)
             .then(() => toast.success("Zapis je uspešno obrisan"))
             .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
 
@@ -57,7 +57,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     };
 
     // Load the data
-    const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search], () => api.get(apiUrl, { search, ...filters }));
+    const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search], () => api.get(apiUrl + gid, { search, ...filters }));
 
     // Modify the data
     if (response?.payload && modifyItems) {

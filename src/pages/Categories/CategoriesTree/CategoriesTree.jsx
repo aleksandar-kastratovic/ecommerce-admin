@@ -16,10 +16,7 @@ const CategoriesTree = () => {
         },
     ];
 
-    // TODO remove const
-    const api = "https://api.staging.croonus.com/api/v1/admin/category-product/tree?group=2";
-
-    return <TreeView apiUrl={`admin/category-product/tree/${gid}`} title="Kategorije" columnFields={tblFields} additionalButtons={buttons} filters={{ id_category_product_group: gid }} />;
+    return <TreeView apiUrl={`admin/category-product/tree/`} title="Kategorije" columnFields={tblFields} additionalButtons={buttons} filters={{ id_category_product_group: gid }} />;
 };
 
 export default CategoriesTree;
