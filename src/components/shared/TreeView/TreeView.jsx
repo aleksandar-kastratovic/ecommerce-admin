@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -16,7 +16,7 @@ import Stack from "@mui/material/Stack";
 import { useQuery } from "react-query";
 import useAPI from "../../../api/api";
 
-import SortableTree, { addNodeUnderParent, toggleExpandedForAll } from "react-sortable-tree";
+import SortableTree, { addNodeUnderParent, toggleExpandedForAll, changeNodeAtPath } from "react-sortable-tree";
 import "react-sortable-tree/style.css";
 
 import scss from "./TreeView.module.scss";
@@ -27,11 +27,11 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     const navigate = useNavigate();
     const { gid } = useParams();
     const [search, setSearch] = useState("");
+    const [refetch, setRefetch] = useState(false);
 
     const [searchString, setSearchString] = useState("");
     const [openTextBox, setOpenTextBox] = useState({ open: false, id: null });
     const [searchFocusIndex, setSearchFocusIndex] = useState(0);
-    const inputEl = useRef();
 
     const init = {
         id: null,
@@ -57,7 +57,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     };
 
     // Load the data
-    const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search], () => api.get(apiUrl + gid, { search, ...filters }));
+    const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, refetch, search], () => api.get(apiUrl + gid, { search, ...filters }));
 
     // Modify the data
     if (response?.payload && modifyItems) {
@@ -75,6 +75,12 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             toast.warning("Greška");
         }
     }, [isError]);
+
+    useEffect(() => {
+        if (response?.payload) {
+            setTreeData(response?.payload);
+        }
+    }, [isLoading]);
 
     const handleSearch = (value) => {
         setSearchString(value);
@@ -99,13 +105,6 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             icon: "add",
         });
     }
-
-    useEffect(() => {
-        if (response?.payload) {
-            setTreeData(response?.payload);
-            // setTreeData(mockData);
-        }
-    }, [isLoading]);
 
     const renderTreeSkeletons = () => {
         let skeletons = [];
@@ -154,105 +153,53 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         if (addChild.name === "") {
             return;
         }
-        let newTree = addNodeUnderParent({
-            treeData: treeData,
-            parentKey: path.length,
-            expandParent: true,
-            getNodeKey,
-            newNode: {
-                id: Math.floor(Math.random() * 100) + 1,
-                title: addChild.name,
-            },
-        });
+        // in case that you only update UI use this method
+        // let newTree = addNodeUnderParent({
+        //     treeData: treeData,
+        //     parentKey: path.length,
+        //     expandParent: true,
+        //     getNodeKey,
+        //     newNode: {
+        //         id: Math.floor(Math.random() * 100) + 1,
+        //         title: addChild.name,
+        //     },
+        // });
 
-        saveData(addChild);
-        setTreeData(newTree.treeData);
+        saveData(addChild, "post");
     };
 
     const saveParent = () => {
         if (addParent.name === "") {
             return;
         }
-        let newTree = addNodeUnderParent({
-            treeData: treeData,
-            parentKey: null,
-            expandParent: true,
-            getNodeKey,
-            newNode: {
-                id: Math.floor(Math.random() * 100) + 1,
-                title: addParent.name,
-            },
-        });
+        // in case that you only update UI
+        // let newTree = addNodeUnderParent({
+        //     treeData: treeData,
+        //     parentKey: null,
+        //     expandParent: true,
+        //     getNodeKey,
+        //     newNode: {
+        //         id: Math.floor(Math.random() * 100) + 1,
+        //         title: addParent.name,
+        //     },
+        // });
 
-        saveData(addParent);
-        setTreeData(newTree.treeData);
+        saveData(addParent, "post");
     };
 
-    const saveData = async (data) => {
-        api.post(`admin/category-product/tree`, data)
+    const saveData = async (data, method) => {
+        api[method](`admin/category-product/tree`, data)
             .then((response) => {
-                // setTreeData(response?.payload);
                 cancelChild();
                 setAddParent(init);
-                toast.success(`Uspešno ${id === "new" ? "dodati" : "izmenjeni"} podaci`);
+                toast.success(`Uspešno ${method === "put" ? "izmenjeni" : "dodati"} podaci`);
             })
             .catch((error) => {
                 console.warn(error);
                 toast.warning("Greška");
-            });
+            })
+            .finally(setRefetch(true));
     };
-
-    const addNodeSibling = (rowInfo) => {
-        let { path } = rowInfo;
-
-        const value = inputEl.current.value;
-        // const value = inputEls.current[treeIndex].current.value;
-
-        if (value === "") {
-            inputEl.current.focus();
-            // inputEls.current[treeIndex].current.focus();
-            return;
-        }
-
-        let newTree = addNodeUnderParent({
-            treeData: treeData,
-            parentKey: path[path.length - 2],
-            expandParent: true,
-            getNodeKey,
-            newNode: {
-                title: value,
-            },
-        });
-
-        setTreeData(newTree.treeData);
-
-        inputEl.current.value = "";
-        // inputEls.current[treeIndex].current.value = "";
-    };
-
-    // const createNode = () => {
-    //     const value = inputEl.current.value;
-
-    //     if (value === "") {
-    //         inputEl.current.focus();
-    //         return;
-    //     }
-
-    //     let newTree = addNodeUnderParent({
-    //         treeData: treeData,
-    //         parentKey: null,
-    //         expandParent: true,
-    //         getNodeKey,
-    //         newNode: {
-    //             id: "123",
-    //             title: value,
-    //         },
-    //     });
-
-    //     setTreeData(newTree.treeData);
-
-    //     inputEl.current.value = "";
-    // };
 
     const getNodeKey = ({ treeIndex }) => treeIndex;
 
@@ -272,6 +219,19 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
 
     const collapseAll = () => {
         expand(false);
+    };
+
+    const handleDragNode = (node, nextParentNode, nextTreeIndex) => {
+        // check documentation for aditional info
+        // treeData, node, nextParentNode, prevPath, prevTreeIndex, nextPath, nextTreeIndex
+        let updateNode = {
+            id: node.id,
+            id_category_product_groups: gid,
+            name: node.name,
+            parent_id: nextParentNode?.id ? nextParentNode?.id : null,
+            order: nextTreeIndex,
+        };
+        saveData(updateNode, "put");
     };
 
     return (
@@ -298,14 +258,6 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                         </span>
                         Skupi sve
                         <br />
-                        {/* <input ref={inputEl} type="text" placeholder="Dodaj novi" />
-                        <span className={scss.button} onClick={createNode}>
-                            <Icon className={scss.button}>
-                                <span className="material-symbols-outlined">
-                                    <span className="material-symbols-outlined">add</span>
-                                </span>
-                            </Icon>
-                        </span> */}
                         <TextBoxSingle
                             name="parent"
                             label="Dodaj novog roditelja"
@@ -328,6 +280,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                             }}
                             canDrag={({ node }) => !node.dragDisabled}
                             getNodeKey={({ node }) => node.id}
+                            onMoveNode={({ node, nextParentNode, nextTreeIndex }) => handleDragNode(node, nextParentNode, nextTreeIndex)}
                             generateNodeProps={({ node, path }) => ({
                                 buttons: [
                                     <div>
@@ -342,7 +295,6 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                                             <TextBoxSingle
                                                 name="child"
                                                 value={addChild.name}
-                                                // onSaveClick={saveChild}
                                                 onSaveClick={(event) => saveChild(path)}
                                                 onCancelClick={cancelChild}
                                                 onChange={(e) => handleChild(e, node.id)}
