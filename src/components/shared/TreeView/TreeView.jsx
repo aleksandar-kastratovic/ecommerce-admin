@@ -18,6 +18,8 @@ import useAPI from "../../../api/api";
 
 import SortableTree, { addNodeUnderParent, toggleExpandedForAll, changeNodeAtPath } from "react-sortable-tree";
 import "react-sortable-tree/style.css";
+// https://github.com/frontend-collective/react-sortable-tree
+// https://frontend-collective.github.io/react-sortable-tree/?path=/story/basics--minimal-implementation
 
 import scss from "./TreeView.module.scss";
 
