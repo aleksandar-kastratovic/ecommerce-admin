@@ -76,4 +76,10 @@ pipelines:
           <<: *execute
           name: RingzAndThingz
           deployment: ringzandthingz
+
+    prod-mobs:
+      - step:
+          <<: *execute
+          name: Mobs
+          deployment: mobs
           
