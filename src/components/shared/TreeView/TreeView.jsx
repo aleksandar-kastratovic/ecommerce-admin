@@ -80,9 +80,81 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
 
     useEffect(() => {
         if (response?.payload) {
-            setTreeData(response?.payload);
+            // let id = 89;
+
+            // let lastModified = localStorage.getItem("lastModified");
+            // let lastModifiedParsed = parseInt(lastModified);
+            // console.log(lastModified);
+
+            // const repacker = (arr) => {
+            //     return arr.map((element) => {
+            //         return {
+            //             ...element,
+            //             expanded: element.id === lastModifiedParsed ? callAgain(arr, element) : false,
+            //         };
+            //     });
+            // };
+
+            // na plus otvori stavi expaned
+            // const repack = response?.payload.map((element) => {
+            //     return {
+            //         ...element,
+            //         expanded: element.id === lastModifiedParsed ? callAgain(element) : false,
+            //     };
+            // });
+
+            // const callAgain = (arr, id) => {
+            //     if (element.parent_id) {
+            //         repacker(arr, id - 1);
+            //         // lastModifiedParsed = parent_id;
+            //     } else {
+            //         return true;
+            //     }
+            // };
+            // console.log(repack);
+            // setTreeData(response?.payload);
+            setTreeData(repacker(response?.payload));
+
+            // const anotherArray = [{ id: 89, id: 27 }];
+            // const r = response?.payload.filter((element) => {
+            //     !anotherArray.find(({ id }) => {
+            //         element.id === id ? (element.expanded = true) : (element.expanded = false);
+            //     });
+            // });
+
+            // console.log(r);
+
+            // function findById(array, ids) {
+            //     for (let i = 0; i < ids.length; i++) {
+            //         // const element = array[i];
+
+            //         for (const item of array) {
+            //             if (item.id === ids[i]) return (item.expanded = true);
+            //             if (item.children?.length) {
+            //                 const innerResult = findById(item.children, ids[i]);
+            //                 if (innerResult) return (innerResult.expanded = true);
+            //             }
+            //         }
+            //     }
+            // }
+
+            // const foundItem = findById(response?.payload, [27, 89]);
+            // console.log(foundItem);
         }
     }, [isLoading]);
+
+    // function findById(array, id) {
+    //     for (const item of array) {
+    //         if (item.id === id) return item;
+    //         if (item.children?.length) {
+    //             const innerResult = findById(item.children, id);
+    //             if (innerResult) return innerResult;
+    //         }
+    //     }
+    // }
+
+    // const foundItem = findById(x, "2.2");
+    // console.log(foundItem);
 
     const handleSearch = (value) => {
         setSearchString(value);
@@ -131,7 +203,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     };
 
     const handleParent = (e) => {
-        setAddParent({ ...addParent, name: e.target.value });
+        setAddParent({ ...addParent, name: e.target.value, order: treeData.length + 1 });
     };
 
     const handleChild = (e, id) => {
@@ -151,21 +223,30 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         setOpenTextBox({ open: true, id: id });
     };
 
-    const saveChild = (path) => {
+    const saveChild = (path, node) => {
         if (addChild.name === "") {
             return;
         }
+
+        // sacuvas kao arr u local storage nadjes na fetch i zamenis prop
+        // expanded: false
+        // id: 90
+
+        localStorage.setItem("lastModified", node.id);
+
         // in case that you only update UI use this method
-        // let newTree = addNodeUnderParent({
-        //     treeData: treeData,
-        //     parentKey: path.length,
-        //     expandParent: true,
-        //     getNodeKey,
-        //     newNode: {
-        //         id: Math.floor(Math.random() * 100) + 1,
-        //         title: addChild.name,
-        //     },
-        // });
+        let newTree = addNodeUnderParent({
+            treeData: treeData,
+            parentKey: path.length - 1,
+            expandParent: true,
+            getNodeKey,
+            newNode: {
+                id: Math.floor(Math.random() * 100) + 1,
+                title: addChild.name,
+            },
+        });
+
+        console.log("newTree", node, newTree.treeData, path.length);
 
         saveData(addChild, "post");
     };
@@ -297,7 +378,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                                             <TextBoxSingle
                                                 name="child"
                                                 value={addChild.name}
-                                                onSaveClick={(event) => saveChild(path)}
+                                                onSaveClick={(event) => saveChild(path, node)}
                                                 onCancelClick={cancelChild}
                                                 onChange={(e) => handleChild(e, node.id)}
                                                 saveIcon="check_circle"
