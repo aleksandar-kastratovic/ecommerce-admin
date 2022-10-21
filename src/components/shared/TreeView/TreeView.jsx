@@ -112,8 +112,8 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             //     }
             // };
             // console.log(repack);
-            // setTreeData(response?.payload);
-            setTreeData(repacker(response?.payload));
+            setTreeData(response?.payload);
+            // setTreeData(repacker(response?.payload));
 
             // const anotherArray = [{ id: 89, id: 27 }];
             // const r = response?.payload.filter((element) => {
