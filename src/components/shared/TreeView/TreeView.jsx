@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -15,8 +15,11 @@ import Icon from "@mui/material/Icon";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 
-import { useQuery } from "react-query";
+// import { useQuery } from "react-query";
 import useAPI from "../../../api/api";
+import { deleteByPath, getByPathAndParams, postPutByPathAndData } from "../../../api/services";
+import useFetching from "../../../hooks/fetching";
+import AuthContext from "../../../store/auth-contex";
 
 import SortableTree, { addNodeUnderParent, toggleExpandedForAll, changeNodeAtPath } from "react-sortable-tree";
 import "react-sortable-tree/style.css";
@@ -24,14 +27,27 @@ import "react-sortable-tree/style.css";
 // https://frontend-collective.github.io/react-sortable-tree/?path=/story/basics--minimal-implementation
 
 import scss from "./TreeView.module.scss";
+import { deepRemove, handleExpandedElements } from "./helper";
 
 const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {} }) => {
+    const { user } = useContext(AuthContext);
     const [treeData, setTreeData] = useState([]);
     const api = useAPI();
     const navigate = useNavigate();
     const { gid } = useParams();
-    const [search, setSearch] = useState("");
-    const [refetch, setRefetch] = useState(false);
+
+    const defaultHeaders = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user?.access_token}`,
+    };
+
+    const [treeList, isLoadingTreeList, reFetchTreeList, setTreeList] = useFetching(
+        getByPathAndParams.bind(null, {
+            path: apiUrl + gid,
+            headers: defaultHeaders,
+        }),
+        false
+    );
 
     const [searchString, setSearchString] = useState("");
     const [openTextBox, setOpenTextBox] = useState({ open: false, id: null });
@@ -52,21 +68,30 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false, id: null, mutate: null });
     const [addParent, setAddParent] = useState(init);
     const [addChild, setAddChild] = useState(init);
+
     const handleDeleteConfirm = async () => {
-        api.delete(deleteUrl + openDeleteDialog.id)
-            .then(() => toast.success("Zapis je uspešno obrisan"))
-            .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+        try {
+            const response = await deleteByPath({
+                path: deleteUrl + openDeleteDialog.id,
+                pathVariables: { id: openDeleteDialog.id },
+                headers: defaultHeaders,
+            });
+            // condition response or response.status === 200 for example
+            if (response) {
+                let tmp = JSON.parse(sessionStorage.getItem("treeItems"));
 
-        setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
+                let newArr = tmp ? deepRemove(tmp, openDeleteDialog.id) : null;
+                sessionStorage.setItem("treeItems", JSON.stringify(newArr));
+            }
+        } catch (error) {
+            console.warn(error);
+            // customize message for example
+            toast.warning("Greška nastala prilikom brisanja.");
+        } finally {
+            await reFetchTreeList();
+            setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
+        }
     };
-
-    // Load the data
-    const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, refetch, search], () => api.get(apiUrl + gid, { search, ...filters }));
-
-    // Modify the data
-    if (response?.payload && modifyItems) {
-        response.payload.items = modifyItems(response.payload.items);
-    }
 
     useEffect(() => {
         if (openDeleteDialog.mutate === 1) {
@@ -75,17 +100,14 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     }, [openDeleteDialog.mutate]);
 
     useEffect(() => {
-        if (isError) {
-            toast.warning("Greška");
-        }
-    }, [isError]);
-
-    useEffect(() => {
-        if (response?.payload) {
+        if (treeList) {
             let expandedTreeItems = JSON.parse(sessionStorage.getItem("treeItems") || "[]");
 
             if (expandedTreeItems) {
-                const merge = mergeWith({}, response?.payload, expandedTreeItems, function (a, b) {
+                const merge = mergeWith({}, treeList, expandedTreeItems, (a, b) => {
+                    if (!b) {
+                        return;
+                    }
                     if (isArray(a)) {
                         let concated = b.concat(a);
                         return uniqBy(concated, "id");
@@ -93,10 +115,12 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                 });
                 setTreeData(values(merge));
             } else {
-                setTreeData(response?.payload);
+                setTreeData(treeList);
             }
+        } else {
+            reFetchTreeList();
         }
-    }, [isLoading]);
+    }, [isLoadingTreeList]);
 
     const handleSearch = (value) => {
         setSearchString(value);
@@ -142,27 +166,8 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     };
 
     const handleChangeTreeData = (treeData) => {
-        helper(treeData);
+        handleExpandedElements(treeData);
         setTreeData(treeData);
-    };
-
-    const helper = (treeData) => {
-        let expandedElements = treeData.map((element) => {
-            return {
-                ...element,
-                expanded: element.expanded === true ? true : false,
-                children: element?.children
-                    ? element?.children.map((subElement) => {
-                          return {
-                              ...subElement,
-                              expanded: subElement.expanded === true ? true : false,
-                          };
-                      })
-                    : null,
-            };
-        });
-
-        sessionStorage.setItem("treeItems", JSON.stringify(expandedElements));
     };
 
     const handleParent = (e) => {
@@ -203,6 +208,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         // });
 
         saveData(addChild, "post");
+        setOpenTextBox({ open: false, id: null });
     };
 
     const saveParent = () => {
@@ -225,17 +231,26 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     };
 
     const saveData = async (data, method) => {
-        api[method](`admin/category-product/tree`, data)
-            .then((response) => {
-                cancelChild();
-                setAddParent(init);
+        try {
+            const response = await postPutByPathAndData({
+                path: apiUrl,
+                headers: defaultHeaders,
+                data: data,
+                method: method,
+            });
+            // condition response or response.status === 200 for example
+            if (response) {
+                // TODO instead of cleaning storage keep the state from storage and compare with existing to expand all childs
+                sessionStorage.clear();
                 toast.success(`Uspešno ${method === "put" ? "izmenjeni" : "dodati"} podaci`);
-            })
-            .catch((error) => {
-                console.warn(error);
-                toast.warning("Greška");
-            })
-            .finally(setRefetch(true));
+            }
+        } catch (error) {
+            console.warn(error);
+            // customize message for example
+            toast.warning(`Greška nastala prilikom ${method === "put" ? "izmene" : "dodavanja"} podataka`);
+        } finally {
+            await reFetchTreeList();
+        }
     };
 
     const getNodeKey = ({ treeIndex }) => treeIndex;
@@ -279,7 +294,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                 <ListTableToolbar onSearch={handleSearch} showDatePicker={showDatePicker} />
                 <Button sx={{ mt: "1rem" }} icon={"arrow_back"} label="Nazad" onClick={backToCategories} />
 
-                {!isLoading ? (
+                {!isLoadingTreeList ? (
                     <>
                         <br />
                         <span className={scss.button} onClick={expandAll}>
