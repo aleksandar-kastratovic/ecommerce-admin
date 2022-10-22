@@ -3,6 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
+import { values, mergeWith, isArray, uniqBy } from "lodash";
+
 import ListTableToolbar from "../ListTable/ListTableToolbar";
 import DeleteDialog from "../Dialogs/DeleteDialog";
 import PageWrapper from "../Layout/PageWrapper/PageWrapper";
@@ -80,81 +82,21 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
 
     useEffect(() => {
         if (response?.payload) {
-            // let id = 89;
+            let expandedTreeItems = JSON.parse(sessionStorage.getItem("treeItems") || "[]");
 
-            // let lastModified = localStorage.getItem("lastModified");
-            // let lastModifiedParsed = parseInt(lastModified);
-            // console.log(lastModified);
-
-            // const repacker = (arr) => {
-            //     return arr.map((element) => {
-            //         return {
-            //             ...element,
-            //             expanded: element.id === lastModifiedParsed ? callAgain(arr, element) : false,
-            //         };
-            //     });
-            // };
-
-            // na plus otvori stavi expaned
-            // const repack = response?.payload.map((element) => {
-            //     return {
-            //         ...element,
-            //         expanded: element.id === lastModifiedParsed ? callAgain(element) : false,
-            //     };
-            // });
-
-            // const callAgain = (arr, id) => {
-            //     if (element.parent_id) {
-            //         repacker(arr, id - 1);
-            //         // lastModifiedParsed = parent_id;
-            //     } else {
-            //         return true;
-            //     }
-            // };
-            // console.log(repack);
-            setTreeData(response?.payload);
-            // setTreeData(repacker(response?.payload));
-
-            // const anotherArray = [{ id: 89, id: 27 }];
-            // const r = response?.payload.filter((element) => {
-            //     !anotherArray.find(({ id }) => {
-            //         element.id === id ? (element.expanded = true) : (element.expanded = false);
-            //     });
-            // });
-
-            // console.log(r);
-
-            // function findById(array, ids) {
-            //     for (let i = 0; i < ids.length; i++) {
-            //         // const element = array[i];
-
-            //         for (const item of array) {
-            //             if (item.id === ids[i]) return (item.expanded = true);
-            //             if (item.children?.length) {
-            //                 const innerResult = findById(item.children, ids[i]);
-            //                 if (innerResult) return (innerResult.expanded = true);
-            //             }
-            //         }
-            //     }
-            // }
-
-            // const foundItem = findById(response?.payload, [27, 89]);
-            // console.log(foundItem);
+            if (expandedTreeItems) {
+                const merge = mergeWith({}, response?.payload, expandedTreeItems, function (a, b) {
+                    if (isArray(a)) {
+                        let concated = b.concat(a);
+                        return uniqBy(concated, "id");
+                    }
+                });
+                setTreeData(values(merge));
+            } else {
+                setTreeData(response?.payload);
+            }
         }
     }, [isLoading]);
-
-    // function findById(array, id) {
-    //     for (const item of array) {
-    //         if (item.id === id) return item;
-    //         if (item.children?.length) {
-    //             const innerResult = findById(item.children, id);
-    //             if (innerResult) return innerResult;
-    //         }
-    //     }
-    // }
-
-    // const foundItem = findById(x, "2.2");
-    // console.log(foundItem);
 
     const handleSearch = (value) => {
         setSearchString(value);
@@ -167,6 +109,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     const handleEdit = (id) => {
         // TODO make a dynamic path
         navigate(`/categories/category/${gid}/${id}`);
+        sessionStorage.clear();
     };
 
     // Buttons in the page header
@@ -199,7 +142,27 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     };
 
     const handleChangeTreeData = (treeData) => {
+        helper(treeData);
         setTreeData(treeData);
+    };
+
+    const helper = (treeData) => {
+        let expandedElements = treeData.map((element) => {
+            return {
+                ...element,
+                expanded: element.expanded === true ? true : false,
+                children: element?.children
+                    ? element?.children.map((subElement) => {
+                          return {
+                              ...subElement,
+                              expanded: subElement.expanded === true ? true : false,
+                          };
+                      })
+                    : null,
+            };
+        });
+
+        sessionStorage.setItem("treeItems", JSON.stringify(expandedElements));
     };
 
     const handleParent = (e) => {
@@ -227,26 +190,17 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         if (addChild.name === "") {
             return;
         }
-
-        // sacuvas kao arr u local storage nadjes na fetch i zamenis prop
-        // expanded: false
-        // id: 90
-
-        localStorage.setItem("lastModified", node.id);
-
         // in case that you only update UI use this method
-        let newTree = addNodeUnderParent({
-            treeData: treeData,
-            parentKey: path.length - 1,
-            expandParent: true,
-            getNodeKey,
-            newNode: {
-                id: Math.floor(Math.random() * 100) + 1,
-                title: addChild.name,
-            },
-        });
-
-        console.log("newTree", node, newTree.treeData, path.length);
+        // let newTree = addNodeUnderParent({
+        //     treeData: treeData,
+        //     parentKey: path.length - 1,
+        //     expandParent: true,
+        //     getNodeKey,
+        //     newNode: {
+        //         id: Math.floor(Math.random() * 100) + 1,
+        //         title: addChild.name,
+        //     },
+        // });
 
         saveData(addChild, "post");
     };
@@ -298,10 +252,12 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
 
     const expandAll = () => {
         expand(true);
+        sessionStorage.clear();
     };
 
     const collapseAll = () => {
         expand(false);
+        sessionStorage.clear();
     };
 
     const handleDragNode = (node, nextParentNode, nextTreeIndex) => {
