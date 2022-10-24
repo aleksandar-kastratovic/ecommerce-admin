@@ -16,8 +16,8 @@ import { Icon } from "@mui/material";
  * @return {JSX.Element}
  * @constructor
  */
-const Button = ({ icon, label, onClick, type = "button", variant = "outlined", disabled = false }) => (
-    <MaterialButton onClick={onClick} variant={variant} className={scss.button} type={type} disabled={disabled}>
+const Button = ({ icon, label, onClick, type = "button", variant = "outlined", disabled = false, sx = {} }) => (
+    <MaterialButton onClick={onClick} variant={variant} className={scss.button} type={type} disabled={disabled} sx={sx}>
         {icon && <Icon className={scss.icon}>{icon}</Icon>}
         {label}
     </MaterialButton>
