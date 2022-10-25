@@ -82,4 +82,10 @@ pipelines:
           <<: *execute
           name: Mobs
           deployment: mobs
-          
+
+    prod-ukusnoizdravo:
+      - step:
+          <<: *execute
+          name: Ukusnoizdravo
+          deployment: ukusnoizdravo
+                    
