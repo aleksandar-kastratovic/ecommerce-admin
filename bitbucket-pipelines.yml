@@ -89,3 +89,8 @@ pipelines:
           name: Ukusnoizdravo
           deployment: ukusnoizdravo
                     
+    prod-tiffany:
+      - step:
+          <<: *execute
+          name: Tiffany
+          deployment: tiffany
