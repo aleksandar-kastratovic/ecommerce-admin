@@ -10,7 +10,7 @@
     "ui_prop": "xyz",
     "sortable": true,
     "fillFromApi": "admin/banners-b2b/main/ddl",
-    "usePropName": "true",
+    "usePropName": true,
     "options": [],
     "input_type": "select"
 }
