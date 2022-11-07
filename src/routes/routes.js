@@ -92,6 +92,7 @@ import B2BSettingsDetails from "../pages/B2Bsettings/SettingsDetails/B2BSettings
 import B2CSettingsDetails from "../pages/B2CSettings/SettingsDetails/B2CSettingsDetails";
 import B2BContactForm from "../pages/B2BContactForm/B2BContactForm";
 import B2BContactFormDetails from "../pages/B2BContactForm/Details/B2BContactFormDetails";
+import B2COrders from "../pages/B2COrders/B2COrders";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -180,6 +181,8 @@ const screens = {
     B2C_STATIC_PAGES: ["/staticpages", "Statičke strane", faArchive, B2C, StaticPages, [[":spid", StaticPagesDetails]]],
     B2C_NEWSLETTER: ["/newsletter", "Newsletter", faArchive, B2C, Newsletter, [[":nlid", Newsletter]]],
     B2C_CONTACT_FORMS: ["/contactform", "Kontakt forma", faEnvelope, B2C, ContactForm, [[":cfid", ContactForm]]],
+    B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2BOrdersDetails]]],
+
     ROLES: ["/roles", "Uloge", faPeopleArrows, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
     USERS: ["/users", "Korisnici", faUsers, SETTINGS, Users, [[":userId", UsersDetils]]],
     LOCAT: ["/locations", "Lokacije", faSearchLocation, SETTINGS, LocationsPage, [[":locId", LocationsPage]]],
