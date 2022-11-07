@@ -94,3 +94,9 @@ pipelines:
           <<: *execute
           name: Tiffany
           deployment: tiffany
+                              
+    prod-zenit:
+      - step:
+          <<: *execute
+          name: Zenit
+          deployment: zenit
