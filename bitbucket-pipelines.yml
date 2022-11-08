@@ -100,3 +100,9 @@ pipelines:
           <<: *execute
           name: Zenit
           deployment: zenit
+
+    prod-nimaco:
+      - step:
+          <<: *execute
+          name: Nimaco
+          deployment: nimaco
