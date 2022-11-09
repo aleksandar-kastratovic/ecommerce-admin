@@ -11,7 +11,7 @@ import { isUrlValid } from "./util";
 
 const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, submitButton = true, queryString = "", onChange = () => {}, validateData = (data) => data }) => {
     const navigate = useNavigate();
-    const [data, setData] = useState(initialData);
+    const [data, setData] = useState(initialData ?? {});
     const [inputsError, setInputsError] = useState([]);
     const [openImageDialog, setOpenImageDialog] = useState({
         show: false,
