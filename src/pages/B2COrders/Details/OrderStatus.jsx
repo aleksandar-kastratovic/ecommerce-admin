@@ -10,9 +10,9 @@ import HistoryModal from "./HistoryModal";
 
 const OrderStatus = ({ orderId, status }) => {
     const api = useAPI();
-    const apiPath = "admin/orders-b2b/status";
+    const apiPath = "admin/orders-b2c/status";
 
-    const init = { id_order: orderId, status, send_to_customer: null, send_default_message: null, title: null, description: "" };
+    const init = { id_order: orderId, status, send_to_customer: null, send_default_message: null, title: null, description: "", mail_to_customer: null, mail_to_admin: null };
 
     const [data, setData] = useState(init);
     const [originalMessage, setOriginalMessage] = useState(data.message);

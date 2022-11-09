@@ -26,11 +26,11 @@ const OrderItemsTable = ({ items, fields }) => {
             </TableHead>
             <TableBody>
                 {items.map((item) => (
-                    <TableRow key={item.item.id}>
+                    <TableRow key={item.id}>
                         {fields.map((field) => {
                             let value = null;
-                            if (item.item != null && item.item.hasOwnProperty(field.prop_name)) {
-                                value = item.item[field.prop_name];
+                            if (item != null && item.hasOwnProperty(field.prop_name)) {
+                                value = item[field.prop_name];
                             } else if (item.price != null && item.price.hasOwnProperty(field.prop_name)) {
                                 value = item.price[field.prop_name];
                             } else {
