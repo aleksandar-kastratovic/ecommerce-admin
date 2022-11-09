@@ -70,7 +70,7 @@ const UsersDetils = () => {
                     />
                 </Buttons>
             )}
-            <ChangePasswordDialog openDialog={openDialog} setOpenDialog={setOpenDialog} />
+            <ChangePasswordDialog openDialog={openDialog} setOpenDialog={setOpenDialog} apiPath="admin/users/reset-password" />
         </FormWrapper>
     );
 };

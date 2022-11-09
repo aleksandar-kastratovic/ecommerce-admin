@@ -237,6 +237,21 @@ const CreateForm = ({
                         />
                     );
                     break;
+                case "password":
+                    formItem = (
+                        <InputInput
+                            type="password"
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onChange={onChangeHandler}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
                 default:
                     formItem = null;
             }

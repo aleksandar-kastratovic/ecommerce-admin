@@ -16,16 +16,17 @@ const B2COrdersDetails = () => {
     const navigate = useNavigate();
     const { orderId } = useParams();
     const api = useAPI();
-    const apiPathOrderData = "admin/orders-b2b/order";
-    const apiPathBilling = "admin/orders-b2b/billing-address";
-    const apiPathShipping = "admin/orders-b2b/shipping-address";
-    const apiPathItems = "admin/orders-b2b/items";
+    const apiPathOrderData = "admin/orders-b2c/order";
+    const apiPathBilling = "admin/orders-b2c/billing-address";
+    const apiPathShipping = "admin/orders-b2c/shipping-address";
+    const apiPathItems = "admin/orders-b2c/items";
 
     const { isLoading: isOrderLoading, data: orderData } = useQuery(["data"], () => api.get(`${apiPathOrderData}/${orderId}`).then((response) => response?.payload));
     const { isLoading: isBillingLoading, data: billingData } = useQuery(["billing"], () => api.list(`${apiPathBilling}/${orderId}`).then((response) => response?.payload?.items[0]));
     const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
     const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
 
+    console.log(orderItems);
     return (
         <PageWrapper
             title={"Porudžbina"}

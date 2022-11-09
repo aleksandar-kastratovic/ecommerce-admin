@@ -26,7 +26,7 @@ import useAPI from "../../../api/api";
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {}, previewColumn = "id" }) => {
+const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {}, previewColumn = "id", customActions = {} }) => {
     // TODO Sorting is disabled as it does not work with pagination
     columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
@@ -98,6 +98,9 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
 
             default:
                 break;
+        }
+        if (customActions[type] != null) {
+            customActions[type].action(id);
         }
     };
 

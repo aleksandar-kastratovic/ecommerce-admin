@@ -51,6 +51,7 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
                                     handleDelete={handleActions(row["id"], "delete")}
                                     handleListGroup={handleActions(row["id"], "listGroup")}
                                     handleCategoryTree={handleActions(row["id"], "categoryTree")}
+                                    handleChangePassword={handleActions(row["id"], "changePassword")}
                                     systemRequired={row.system_required}
                                 />
                             )}

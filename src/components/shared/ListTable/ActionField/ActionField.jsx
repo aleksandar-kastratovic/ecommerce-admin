@@ -15,7 +15,7 @@ import scss from "./ActionField.module.scss";
  * @return {JSX.Element}
  * @constructor
  */
-const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree }) => {
+const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree, handleChangePassword }) => {
     /**
      * Parse action into button parameters.
      *
@@ -23,10 +23,6 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
      *
      * @return {(string|function)[]|null} Tuple of "icon" and the action for the onClick listener.
      */
-
-    {
-        /* TODO isto i u ListTableBody, typeannotation sluzi samo u typescript, da li je ovde podrebna anotacija i cemu sluzi? */
-    }
     const parseButton = (action): ?[string, function] => {
         switch (action) {
             case "edit":
@@ -44,6 +40,8 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
             case "categoryTree":
                 return ["account_tree", handleCategoryTree];
 
+            case "changePassword":
+                return ["key", handleChangePassword];
             default:
                 return null;
         }
