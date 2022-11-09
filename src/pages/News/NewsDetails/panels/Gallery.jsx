@@ -3,19 +3,29 @@ import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
 import InputMultipleImages from "../../../../components/shared/InputMultipleImages/InputMultipleImages";
 
-const Gallery = ({ productId }) => {
+const Gallery = ({ newsId }) => {
     const [data, setData] = useState([]);
     const api = useAPI();
-    const apiPath = "admin/product-items/gallery";
+    const apiPath = "admin/news-b2c/news/gallery";
 
     const handleData = () => {
-        api.list(`${apiPath}/${productId}`)
-            .then((response) => setData(response?.payload?.items))
+        api.list(`${apiPath}/${newsId}`)
+            .then((response) => console.log(setData(response?.payload?.items)))
             .catch((error) => console.warn(error));
     };
 
     const handleSubmit = (data) => {
-        let req = { id: data.new ? null : data.id, id_product: productId, file_base64: data.src, order: data.position ?? 0, title: null, subtitle: null, short_description: null, description: null };
+        let req = {
+            id: data.id,
+            id_news: newsId,
+            file_base64: data.src,
+            order: data.position ?? 0,
+            title: null,
+            subtitle: null,
+            short_description: null,
+            description: null,
+        };
+        
         api.post(`${apiPath}`, req)
             .then((response) => {
                 toast.success("Uspešno");

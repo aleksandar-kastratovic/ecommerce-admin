@@ -12,13 +12,15 @@ import SeoPanel from "./panels/SeoPanel";
 const NewsCategoryListDetails = () => {
     const { cid } = useParams();
     const api = useAPI();
-    const apiPath = "admin/news-b2c/category";
+    const apiPath = "admin/news-b2c/category/basic-data";
 
     const { data, isLoading } = useQuery(["newsCategory"], () => api.get(`${apiPath}/${cid}`).then((response) => response?.payload));
 
     const submitHandler = (data) => {
         api.post(apiPath, data)
-            .then((response) => toast.success("Uspešno"))
+            .then((response) => {
+                toast.success("Uspešno");
+            })
             .catch((error) => {
                 console.warn(error);
                 toast.warn("Greška");
@@ -38,9 +40,8 @@ const NewsCategoryListDetails = () => {
             component: <SeoPanel categoryId={data?.id} apiPath={apiPath} />,
         },
     ];
-    console.log(data);
 
-    return <DetailsPage title={data?.id == null ? "Unos nove kategorije" : data?.title} fields={fields} ready={!isLoading} />;
+    return <DetailsPage title={data?.id == null ? "Unos nove kategorije" : data?.name} fields={fields} ready={!isLoading} />;
 };
 
 export default NewsCategoryListDetails;

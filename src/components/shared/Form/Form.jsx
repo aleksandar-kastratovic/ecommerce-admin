@@ -151,16 +151,6 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                     {submitButton && <Button type="submit" label="Sačuvaj" variant="contained" />}
                 </Buttons>
             </Box>
-
-            {/* <FileDialog
-                openFullPageDialog={openImageDialog}
-                setOpenFullPageDialog={setOpenImageDialog}
-                setImageList={() => {}}
-                imageList={[]}
-                handleCloseImageDialog={handleCloseImageDialog}
-                onImageUpload={formImageUpload}
-                handleDeleteImage={handleDeleteImage}
-            /> */}
             <ImageDialog
                 title="Obrada slike"
                 openImageDialog={openImageDialog}

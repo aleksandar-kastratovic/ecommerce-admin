@@ -12,7 +12,7 @@
         "sortable": true,
         "input_type": "select",
         "options": [],
-        "fillFromApi": "admin/news-b2c/news/ddl/categories",
+        "fillFromApi": "admin/news-b2c/news/basic-data/ddl/categories",
         "usePropName": false
     },
     {
@@ -104,6 +104,6 @@
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "input"
+        "input_type": "textarea"
     }
 ]
