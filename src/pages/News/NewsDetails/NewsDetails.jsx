@@ -6,10 +6,14 @@ import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
 import basic_data from "./forms/basic_data.json";
 import Gallery from "./panels/Gallery";
+import Categories from "./panels/Categories";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
+import Seo from "./panels/Seo";
+import TechnicalDoc from "./panels/TechnicalDoc";
 
 const NewsDetails = () => {
     const { nid } = useParams();
+    console.log(nid);
     const api = useAPI();
     const apiPath = "admin/news-b2c/news/basic-data";
 
@@ -43,7 +47,7 @@ const NewsDetails = () => {
     };
 
     const saveData = async (data) => {
-        api.post(apiPath, data)
+        api.post(apiPath, { ...data, image: data.thumb_image })
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
@@ -70,6 +74,24 @@ const NewsDetails = () => {
             icon: IconList.browseGallery,
             enabled: data?.id,
             component: <Gallery newsId={data?.id} />,
+        },
+        {
+            name: "Kategorije",
+            icon: IconList.category,
+            enabled: data?.id,
+            component: <Categories newsId={data?.id} />,
+        },
+        {
+            name: "Seo",
+            icon: IconList.search,
+            enabled: data?.id,
+            component: <Seo newsId={data?.id} />,
+        },
+        {
+            name: "Dokumentacija",
+            icon: IconList.documentScanner,
+            enabled: data?.id,
+            component: <TechnicalDoc newsId={data?.id} />,
         },
     ];
 
