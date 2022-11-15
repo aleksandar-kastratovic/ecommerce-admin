@@ -10,24 +10,7 @@ import formFields from "./formFields.json";
 import Seo from "./panels/Seo";
 
 const NewsCategoryListDetails = () => {
-    // const { cid } = useParams();
-    // const api = useAPI();
-    // const apiPath = "admin/news-b2c/category/basic-data";
-
-    // const { data, isLoading } = useQuery(["newsCategory"], () => api.get(`${apiPath}/${cid}`).then((response) => response?.payload));
-
-    // const submitHandler = (data) => {
-    //     api.post(apiPath, { ...data, image: data.thumb_image })
-    //         .then((response) => {
-    //             toast.success("Uspešno");
-    //         })
-    //         .catch((error) => {
-    //             console.warn(error);
-    //             toast.warn("Greška");
-    //         });
-    // };
     const { cid } = useParams();
-    // console.log(cid);
     const api = useAPI();
     const apiPath = "admin/news-b2c/category/basic-data";
 
