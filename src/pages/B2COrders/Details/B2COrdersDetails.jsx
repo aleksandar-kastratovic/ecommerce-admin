@@ -26,7 +26,7 @@ const B2COrdersDetails = () => {
     const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
     const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
 
-    console.log(orderItems);
+    console.log(orderData);
     return (
         <PageWrapper
             title={"Porudžbina"}
@@ -145,8 +145,6 @@ const B2COrdersDetails = () => {
                     total_delivery={orderData?.total_delivery}
                     total_discount={orderData?.total_discount}
                     total_promo_code={orderData?.total_promo_code}
-                    total_rabat_1={orderData?.total_rabat_1}
-                    total_rabat_2={orderData?.total_rabat_2}
                     total_vat={orderData?.total_vat}
                     total_with_vat={orderData?.total_with_vat}
                     total={orderData?.total}
