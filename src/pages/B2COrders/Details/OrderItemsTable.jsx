@@ -1,4 +1,5 @@
 import { Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material";
+import { Link } from "react-router-dom";
 import { currencyFormat } from "../../../helpers/functions";
 
 import styles from "./B2COrdersDetails.module.scss";
@@ -26,11 +27,11 @@ const OrderItemsTable = ({ items, fields }) => {
             </TableHead>
             <TableBody>
                 {items.map((item) => (
-                    <TableRow key={item.id}>
+                    <TableRow key={item.item.id}>
                         {fields.map((field) => {
                             let value = null;
-                            if (item != null && item.hasOwnProperty(field.prop_name)) {
-                                value = item[field.prop_name];
+                            if (item.item != null && item.item.hasOwnProperty(field.prop_name)) {
+                                value = item.item[field.prop_name];
                             } else if (item.price != null && item.price.hasOwnProperty(field.prop_name)) {
                                 value = item.price[field.prop_name];
                             } else {
@@ -38,7 +39,9 @@ const OrderItemsTable = ({ items, fields }) => {
                             }
                             return (
                                 <TableCell key={field.prop_name} className={styles.productCell}>
-                                    {getField(field.input_type, value)}
+                                    <Link to={`/products/${item.item.id_product}`}>
+                                        <a className={styles.productCellLink}>{getField(field.input_type, value)}</a>
+                                    </Link>
                                 </TableCell>
                             );
                         })}

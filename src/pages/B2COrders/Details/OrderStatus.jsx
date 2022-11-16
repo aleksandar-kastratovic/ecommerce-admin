@@ -17,11 +17,13 @@ const OrderStatus = ({ orderId, status }) => {
     const [data, setData] = useState(init);
     const [originalMessage, setOriginalMessage] = useState(data.message);
     const [openDialog, setOpenDialog] = useState({ show: false });
+    const [sendMail, setSendMail] = useState("0");
 
     const getMessage = (statusCode) => {
         api.get(`${apiPath}/message/${orderId}/${statusCode}`)
             .then((response) => {
                 setOriginalMessage(response?.payload.message);
+                setSendMail(response?.payload.send_mail);
                 setData({ ...data, description: response?.payload.message });
             })
             .catch((error) => console.warn(error));
@@ -57,23 +59,27 @@ const OrderStatus = ({ orderId, status }) => {
                 usePropName={true}
                 options={[]}
             />
-            <InputCheckbox
-                label="Pošalji poruku kupcu"
-                name="send_to_customer"
-                value={data.send_to_customer ?? false}
-                onChange={({ target }) => {
-                    setData({ ...data, [target.name]: target.checked });
-                }}
-            />
-            {data.send_to_customer && (
-                <InputText
-                    label="Poruka"
-                    name="description"
-                    value={data.description ?? false}
-                    onChange={({ target }) => {
-                        setData({ ...data, [target.name]: target.value });
-                    }}
-                />
+            {sendMail === "1" && (
+                <>
+                    <InputCheckbox
+                        label="Pošalji poruku kupcu"
+                        name="send_to_customer"
+                        value={data.send_to_customer ?? false}
+                        onChange={({ target }) => {
+                            setData({ ...data, [target.name]: target.checked });
+                        }}
+                    />
+                    {data.send_to_customer && (
+                        <InputText
+                            label="Poruka"
+                            name="description"
+                            value={data.description ?? ""}
+                            onChange={({ target }) => {
+                                setData({ ...data, [target.name]: target.value });
+                            }}
+                        />
+                    )}
+                </>
             )}
             <Buttons>
                 <Button label="Istorija" onClick={() => setOpenDialog({ show: true })} />
