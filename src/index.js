@@ -23,3 +23,4 @@ if (process.env.REACT_APP_URL || net) {
 } else {
     ReactDOM.render(<h1>Required env variable is not set: REACT_APP_URL</h1>, document.getElementById("root"));
 }
+
