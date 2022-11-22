@@ -26,7 +26,7 @@ const NewsDetails = () => {
         short_description: null,
         description: null,
         id_news_category: null,
-        thumb_image: null,
+        image: null,
     };
 
     const [data, setData] = useState(init);
@@ -47,7 +47,7 @@ const NewsDetails = () => {
     };
 
     const saveData = async (data) => {
-        api.post(apiPath, { ...data, image: data.thumb_image })
+        api.post(apiPath, { ...data, image: data.image })
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
