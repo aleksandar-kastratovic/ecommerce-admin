@@ -36,7 +36,6 @@ const NewsCategoryListDetails = () => {
         slug: null,
         name: null,
         image: null,
-        thumb_image: null,
         short_description: null,
         description: null,
         parent_id: null,
@@ -61,7 +60,7 @@ const NewsCategoryListDetails = () => {
     };
 
     const saveData = async (data) => {
-        api.post(apiPath, { ...data, image: data.thumb_image })
+        api.post(apiPath, { ...data, image: data.image })
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
