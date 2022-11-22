@@ -40,7 +40,7 @@
     },
     {
         "field_name": "Thumb slika",
-        "prop_name": "image",
+        "prop_name": "thumb_image",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
