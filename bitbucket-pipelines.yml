@@ -106,8 +106,15 @@ pipelines:
           <<: *execute
           name: Nimaco
           deployment: nimaco
+
     prod-timcards:
       - step:
           <<: *execute
           name: Timcards
           deployment: timcards
+
+    prod-kruska:
+      - step:
+          <<: *execute
+          name: Kruska
+          deployment: kruska
