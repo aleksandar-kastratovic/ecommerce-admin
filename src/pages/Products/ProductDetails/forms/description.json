@@ -23,7 +23,7 @@
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "textarea"
+        "input_type": "html_editor"
     },
     {
         "field_name": "Proizvodjač",
