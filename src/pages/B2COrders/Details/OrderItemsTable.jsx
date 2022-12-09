@@ -39,8 +39,8 @@ const OrderItemsTable = ({ items, fields }) => {
                             }
                             return (
                                 <TableCell key={field.prop_name} className={styles.productCell}>
-                                    <Link to={`/products/${item.item.id_product}`}>
-                                        <a className={styles.productCellLink}>{getField(field.input_type, value)}</a>
+                                    <Link to={`/products/${item.item.id_product}`} className={styles.productCellLink}>
+                                        {getField(field.input_type, value)}
                                     </Link>
                                 </TableCell>
                             );

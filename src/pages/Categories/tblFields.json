@@ -101,6 +101,6 @@
         "description": "255",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "listGroup_edit_delete"
+        "input_type": "categoryTree_listGroup_edit_delete"
     }
 ]
