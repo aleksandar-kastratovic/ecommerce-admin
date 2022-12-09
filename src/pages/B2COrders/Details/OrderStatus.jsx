@@ -18,6 +18,7 @@ const OrderStatus = ({ orderId, status }) => {
     const [originalMessage, setOriginalMessage] = useState(data.content);
     const [openDialog, setOpenDialog] = useState({ show: false });
     const [sendMail, setSendMail] = useState("0");
+    const [oldStatus, setOldStatus] = useState(status);
 
     const [loaded, setLoaded] = useState(false);
 
@@ -26,7 +27,7 @@ const OrderStatus = ({ orderId, status }) => {
             .then((response) => {
                 setOriginalMessage(response?.payload.content);
                 setSendMail(response?.payload.send_mail);
-                setData({ ...data, ...response?.payload });
+                setData({ ...data, ...response?.payload, send_to_customer: response?.payload.send_mail === "1" });
             })
             .catch((error) => console.warn(error));
     };
@@ -36,7 +37,7 @@ const OrderStatus = ({ orderId, status }) => {
     }, [data.status]);
 
     const formSubmitHandler = () => {
-        const ret = {};
+        let ret = {};
         if (data.send_to_customer) {
             ret = { ...data, send_default_message: data.content === originalMessage };
         } else {
@@ -46,6 +47,7 @@ const OrderStatus = ({ orderId, status }) => {
             .then((response) => {
                 setData({ ...data, content: originalMessage, send_to_customer: false });
                 toast.success("Uspešno!");
+                setOldStatus(data.status);
             })
             .catch((error) => {
                 toast.warn("Greška");
@@ -67,7 +69,7 @@ const OrderStatus = ({ orderId, status }) => {
                 usePropName={true}
                 options={[]}
             />
-            {sendMail === "1" && (
+            {sendMail === "1" && data.status !== oldStatus && (
                 <>
                     <InputCheckbox
                         label="Pošalji poruku kupcu"
@@ -95,7 +97,7 @@ const OrderStatus = ({ orderId, status }) => {
             )}
             <Buttons>
                 <Button label="Istorija" onClick={() => setOpenDialog({ show: true })} />
-                <Button label="Sačuvaj" variant="contained" onClick={formSubmitHandler} />
+                <Button label="Sačuvaj" variant="contained" onClick={formSubmitHandler} disabled={data.status === oldStatus} />
             </Buttons>
             <HistoryModal openDialog={openDialog} setOpenDialog={setOpenDialog} apiPath={`${apiPath}/${orderId}`} />
         </Box>
