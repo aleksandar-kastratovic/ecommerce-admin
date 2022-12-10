@@ -90,17 +90,17 @@ const CreateForm = ({
                     );
                     break;
                 case "checkbox":
-                    formItem = <InputCheckbox name={item.prop_name} value={Boolean(value)} onChange={(e) => onChangeHandler(e, "checkbox")} disabled={disabled} label={item.field_name} />;
+                    formItem = <InputCheckbox name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "checkbox")} disabled={disabled} label={item.field_name} />;
                     break;
                 case "radio":
-                    formItem = <InputRadio name={item.prop_name} value={Boolean(value)} onChange={(e) => onChangeHandler(e, "radio")} disabled={disabled} label={item.field_name} />;
+                    formItem = <InputRadio name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "radio")} disabled={disabled} label={item.field_name} />;
                     break;
                 case "switch":
                     formItem = (
                         <InputSwitch
                             label={item.field_name}
                             name={item.prop_name}
-                            value={Boolean(value)}
+                            value={Boolean(Number(value))}
                             onChange={(e) => onChangeHandler(e, "switch")}
                             disabled={disabled}
                             error={error}
