@@ -13,18 +13,32 @@ const ListTableTitle = ({
   title = "",
   showButton = false,
   handleCreateNew = () => {},
+  additionalButtons = [],
 }) => {
   return (
     <Box>
       <Typography variant="h5" component="div" className={styles.titleStyle}>
         {title}
       </Typography>
+
       {showButton && (
         <Button onClick={handleCreateNew} className={styles.buttonCreate}>
+          <AddIcon className={styles.AddIcon} />
           Kreiraj novi
-          <AddIcon />
         </Button>
       )}
+      {additionalButtons.map((button) => {
+        return (
+          <Button
+            key={button.id}
+            onClick={button.action}
+            className={`${styles.buttonAdditional} ${button.className}`}
+          >
+            {button.icon}
+            {button.text}
+          </Button>
+        );
+      })}
     </Box>
   );
 };

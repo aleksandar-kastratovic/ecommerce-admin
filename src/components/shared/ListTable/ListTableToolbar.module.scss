@@ -1,23 +1,18 @@
-@import '../../../variables.scss';
+@import "../../../variables.scss";
 
 .toolBarStyle {
-    text-align: left;
-}
-
-.toolbarButtonsGroup {
-    display: flex;
+  text-align: left;
 }
 
 .toolbarButtons {
-    background-color: $lightGrey  !important;
-    color: $black  !important;
-    margin-left: 1rem !important;
+  display: flex;
+  gap: $gap;
 }
 
 .formStyle {
-    display: flex !important;
+  display: flex !important;
 }
 
 .formControl {
-    margin: 1rem !important;
+  margin: 1rem !important;
 }

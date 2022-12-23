@@ -1,0 +1,188 @@
+[
+    {
+        "field_name": "Naziv",
+        "prop_name": "name",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+    },
+    {
+        "field_name": "Kod",
+        "prop_name": "slug",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+    },
+
+    {
+        "field_name": "Opis",
+        "prop_name": "description",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "textarea"
+    },
+
+    {
+        "field_name": "Atribut za definisanje varijanti proizvoda",
+        "prop_name": "use_in_variants",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "options": [
+            {
+                "id": 1,
+                "name": "Da"
+            },
+            {
+                "id": 0,
+                "name": "Ne"
+            }
+        ],
+        "input_type": "select"
+    },
+    {
+        "field_name": "Input type",
+        "prop_name": "field_type",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "options": [
+            {
+                "id": "input",
+                "name": "Text"
+            },
+            {
+                "id": "select",
+                "name": "Select"
+            },
+            {
+                "id": "date_time",
+                "name": "Date"
+            },
+            {
+                "id": "image_button",
+                "name": "Slika"
+            },
+            {
+                "id": "switch",
+                "name": "Switch"
+            },
+            {
+                "id": "radio",
+                "name": "Radio"
+            },
+            {
+                "id": "checkbox",
+                "name": "Checkbox"
+            },
+            {
+                "id": "textarea",
+                "name": "Textarea"
+            }
+        ],
+        "input_type": "select"
+    },
+    {
+        "field_name": "Obavezno polje",
+        "prop_name": "required",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "switch"
+    },
+    {
+        "field_name": "Prikaz u filterima",
+        "prop_name": "filter_display",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "switch"
+    },
+    {
+        "field_name": "Naziv u filterima",
+        "prop_name": "filter_name",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+    },
+    {
+        "field_name": "Opis",
+        "prop_name": "description",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "textarea"
+    },
+    {
+        "field_name": "Status",
+        "prop_name": "status",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "options": [
+            {
+                "id": "on",
+                "name": "On"
+            },
+            {
+                "id": "off",
+                "name": "Off"
+            }
+        ],
+        "input_type": "select"
+    }
+]

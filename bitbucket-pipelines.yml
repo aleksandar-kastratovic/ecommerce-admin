@@ -70,3 +70,57 @@ pipelines:
           <<: *execute
           name: Akt
           deployment: akt
+    
+    prod-maximon:
+      - step:
+          <<: *execute
+          name: Maximon
+          deployment: maximon
+
+    prod-ringzandtingz:
+      - step:
+          <<: *execute
+          name: RingzAndThingz
+          deployment: ringzandthingz
+
+    prod-mobs:
+      - step:
+          <<: *execute
+          name: Mobs
+          deployment: mobs
+
+    prod-ukusnoizdravo:
+      - step:
+          <<: *execute
+          name: Ukusnoizdravo
+          deployment: ukusnoizdravo
+                    
+    prod-tiffany:
+      - step:
+          <<: *execute
+          name: Tiffany
+          deployment: tiffany
+                              
+    prod-zenit:
+      - step:
+          <<: *execute
+          name: Zenit
+          deployment: zenit
+
+    prod-nimaco:
+      - step:
+          <<: *execute
+          name: Nimaco
+          deployment: nimaco
+
+    prod-timcards:
+      - step:
+          <<: *execute
+          name: Timcards
+          deployment: timcards
+
+    prod-kruska:
+      - step:
+          <<: *execute
+          name: Kruska
+          deployment: kruska

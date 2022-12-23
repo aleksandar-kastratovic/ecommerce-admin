@@ -1,0 +1,27 @@
+import { Skeleton, TableCell, TableRow } from "@mui/material"
+
+/**
+ * Show loading table rows.
+ *
+ * @param {columns} columns The number of columns to show.
+ * @param {number} rows The number of rows to show.
+ * @param {number} height The height of the skeleton, in pixels.
+ *
+ * @return {JSX.Element}
+ * @constructor
+ */
+const LoadingTableRows = ({ columns, rows = 30, height = 22 }) => (
+    <>
+        {Array(+rows).fill(null).map((val, key) => (
+            <TableRow key={key}>
+                {Array(+columns).fill(null).map((val, key) => (
+                    <TableCell key={key}>
+                        <Skeleton variant="text" height={height} key={key} />
+                    </TableCell>
+                ))}
+            </TableRow>
+        ))}
+    </>
+)
+
+export default LoadingTableRows

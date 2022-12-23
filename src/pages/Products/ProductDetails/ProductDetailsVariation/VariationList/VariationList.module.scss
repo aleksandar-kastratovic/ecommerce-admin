@@ -1,0 +1,39 @@
+@import "../../../../../variables.scss";
+
+.variationSectionTitle {
+    width: 100%;
+    border: 2px solid $lightGrey;
+    padding: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.variationSectionBody {
+    padding: 1em;
+}
+
+.productVariation {
+    width: 100%;
+    border: 2px solid $lightGrey;
+}
+.productVariationHeading {
+    padding: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.productVariationTitle {
+    width: 30%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.productVariationBody {
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7em;
+}

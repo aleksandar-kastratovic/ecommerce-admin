@@ -1,0 +1,69 @@
+import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+
+import fields from "./formField.json";
+import { toast } from "react-toastify";
+import Form from "../../../components/shared/Form/Form";
+import LoadingForm from "../../../components/shared/Loading/LoadingForm";
+import useAPI from "../../../api/api";
+import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
+
+const TownsDetails = () => {
+    const { id } = useParams();
+    const api = useAPI();
+    const apiPath = "admin/towns";
+    const init = {
+        id: null,
+        slug: null,
+        name: null,
+        display_name: null,
+        zip_code: null,
+        id_municipality: null,
+        id_country: null,
+        delivery_center: null,
+        delivery_days: null,
+        source: null,
+        id_source: null,
+        status: null,
+    };
+    const navigate = useNavigate();
+    const [data, setData] = useState(init);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleData = async () => {
+        setIsLoading(true);
+        await api
+            .get(`${apiPath}/${id}`)
+            .then((response) => {
+                setData(response?.payload);
+            })
+            .catch((error) => {
+                console.warn(error);
+            });
+        setIsLoading(false);
+    };
+
+    const saveData = async (data) => {
+        api.post(apiPath, data)
+            .then((response) => {
+                setData(response?.payload);
+                toast.success(`Uspešno`);
+            })
+            .catch((error) => {
+                console.warn(error);
+                toast.warning("Greška");
+            });
+    };
+
+    useEffect(() => {
+        handleData();
+    }, []);
+
+    return (
+        <FormWrapper title={id === "new" ? "Unos novog mesta" : data.name} back={() => navigate(-1)}>
+            {!isLoading ? <Form formFields={fields} initialData={data} onSubmit={saveData} /> : <LoadingForm fields={fields.length} />}
+        </FormWrapper>
+    );
+};
+
+export default TownsDetails;
