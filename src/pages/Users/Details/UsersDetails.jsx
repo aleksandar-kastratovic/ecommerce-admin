@@ -6,6 +6,9 @@ import { toast } from "react-toastify";
 import Form from "../../../components/shared/Form/Form";
 import useAPI from "../../../api/api";
 import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
+import Buttons from "../../../components/shared/Form/Buttons/Buttons";
+import Button from "../../../components/shared/Button/Button";
+import ChangePasswordDialog from "../../../components/shared/ChangePasswordDialog/ChangePasswordDialog";
 
 const UsersDetils = () => {
     const { userId } = useParams();
@@ -22,6 +25,8 @@ const UsersDetils = () => {
     const [data, setData] = useState(init);
     const [isLoading, setIsLoading] = useState(false);
     const apiPath = "admin/users";
+
+    const [openDialog, setOpenDialog] = useState({ show: false, userId });
 
     const handleData = async () => {
         setIsLoading(true);
@@ -55,6 +60,17 @@ const UsersDetils = () => {
     return (
         <FormWrapper title={data?.id == null ? "Unos novog korisnika" : data?.first_name + " " + data?.last_name} back={() => navigate(-1)} ready={!isLoading}>
             <Form formFields={fields} initialData={data} onSubmit={saveData} />
+            {data?.id != null && (
+                <Buttons>
+                    <Button
+                        onClick={() => {
+                            setOpenDialog({ show: true, userId: data?.id });
+                        }}
+                        label="Promeni lozinku"
+                    />
+                </Buttons>
+            )}
+            <ChangePasswordDialog openDialog={openDialog} setOpenDialog={setOpenDialog} apiPath="admin/users/reset-password" />
         </FormWrapper>
     );
 };

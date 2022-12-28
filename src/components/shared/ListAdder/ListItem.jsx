@@ -46,6 +46,14 @@ const ListItem = ({ data, index, onDelete = () => {}, saveData = () => {}, formF
         fields
             .filter(({ in_details }) => in_details)
             .map((item, index) => {
+                if (actions.type === "any") {
+                    let anyButtons = {};
+                    actions.buttons.map((item) => {
+                        anyButtons = { ...anyButtons, [item.id]: item };
+                    });
+                    setButtons({ ...buttons, ...anyButtons });
+                }
+
                 if (actions[item.prop_name] && actions[item.prop_name].value === data[item.prop_name]) {
                     let name = item.prop_name;
                     let button = actions[item.prop_name].button;

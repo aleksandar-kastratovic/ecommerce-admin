@@ -94,3 +94,27 @@ pipelines:
           <<: *execute
           name: Tiffany
           deployment: tiffany
+                              
+    prod-zenit:
+      - step:
+          <<: *execute
+          name: Zenit
+          deployment: zenit
+
+    prod-nimaco:
+      - step:
+          <<: *execute
+          name: Nimaco
+          deployment: nimaco
+
+    prod-timcards:
+      - step:
+          <<: *execute
+          name: Timcards
+          deployment: timcards
+
+    prod-kruska:
+      - step:
+          <<: *execute
+          name: Kruska
+          deployment: kruska

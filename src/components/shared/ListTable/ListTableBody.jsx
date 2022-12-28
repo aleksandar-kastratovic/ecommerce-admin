@@ -38,6 +38,7 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
         default:
             content = (items ?? []).map((row) => (
                 <TableRow hover key={row.id}>
+                    {/* TODO typeannotation sluzi samo u typescript, da li je ovde podrebna anotacija i cemu sluzi? */}
                     {fields.map((column: FieldSpec) => (
                         <TableCell {...columnProps(column)}>
                             {column.prop_name !== "action" ? (
@@ -50,6 +51,7 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
                                     handleDelete={handleActions(row["id"], "delete")}
                                     handleListGroup={handleActions(row["id"], "listGroup")}
                                     handleCategoryTree={handleActions(row["id"], "categoryTree")}
+                                    handleChangePassword={handleActions(row["id"], "changePassword")}
                                     systemRequired={row.system_required}
                                 />
                             )}

@@ -16,10 +16,10 @@ const B2COrdersDetails = () => {
     const navigate = useNavigate();
     const { orderId } = useParams();
     const api = useAPI();
-    const apiPathOrderData = "admin/orders-b2b/order";
-    const apiPathBilling = "admin/orders-b2b/billing-address";
-    const apiPathShipping = "admin/orders-b2b/shipping-address";
-    const apiPathItems = "admin/orders-b2b/items";
+    const apiPathOrderData = "admin/orders-b2c/order";
+    const apiPathBilling = "admin/orders-b2c/billing-address";
+    const apiPathShipping = "admin/orders-b2c/shipping-address";
+    const apiPathItems = "admin/orders-b2c/items";
 
     const { isLoading: isOrderLoading, data: orderData } = useQuery(["data"], () => api.get(`${apiPathOrderData}/${orderId}`).then((response) => response?.payload));
     const { isLoading: isBillingLoading, data: billingData } = useQuery(["billing"], () => api.list(`${apiPathBilling}/${orderId}`).then((response) => response?.payload?.items[0]));
@@ -144,8 +144,6 @@ const B2COrdersDetails = () => {
                     total_delivery={orderData?.total_delivery}
                     total_discount={orderData?.total_discount}
                     total_promo_code={orderData?.total_promo_code}
-                    total_rabat_1={orderData?.total_rabat_1}
-                    total_rabat_2={orderData?.total_rabat_2}
                     total_vat={orderData?.total_vat}
                     total_with_vat={orderData?.total_with_vat}
                     total={orderData?.total}

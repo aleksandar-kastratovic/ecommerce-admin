@@ -90,17 +90,17 @@ const CreateForm = ({
                     );
                     break;
                 case "checkbox":
-                    formItem = <InputCheckbox name={item.prop_name} value={Boolean(value)} onChange={(e) => onChangeHandler(e, "checkbox")} disabled={disabled} label={item.field_name} />;
+                    formItem = <InputCheckbox name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "checkbox")} disabled={disabled} label={item.field_name} />;
                     break;
                 case "radio":
-                    formItem = <InputRadio name={item.prop_name} value={Boolean(value)} onChange={(e) => onChangeHandler(e, "radio")} disabled={disabled} label={item.field_name} />;
+                    formItem = <InputRadio name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "radio")} disabled={disabled} label={item.field_name} />;
                     break;
                 case "switch":
                     formItem = (
                         <InputSwitch
                             label={item.field_name}
                             name={item.prop_name}
-                            value={Boolean(value)}
+                            value={Boolean(Number(value))}
                             onChange={(e) => onChangeHandler(e, "switch")}
                             disabled={disabled}
                             error={error}
@@ -226,6 +226,21 @@ const CreateForm = ({
                 case "html_editor":
                     formItem = (
                         <InputHtml
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            error={error}
+                            onChange={onChangeHandler}
+                            disabled={disabled}
+                        />
+                    );
+                    break;
+                case "password":
+                    formItem = (
+                        <InputInput
+                            type="password"
                             name={item.prop_name}
                             label={item.field_name}
                             required={typeof item.required === "number" ? item.required === 1 : item.required}

@@ -1,5 +1,5 @@
-import { Icon } from "@mui/material"
-import scss from "./ActionField.module.scss"
+import { Icon } from "@mui/material";
+import scss from "./ActionField.module.scss";
 
 /**
  * A standardized button with an optional icon.
@@ -15,8 +15,7 @@ import scss from "./ActionField.module.scss"
  * @return {JSX.Element}
  * @constructor
  */
-const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree }) => {
-
+const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree, handleChangePassword }) => {
     /**
      * Parse action into button parameters.
      *
@@ -24,44 +23,45 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
      *
      * @return {(string|function)[]|null} Tuple of "icon" and the action for the onClick listener.
      */
-    const parseButton = (action): ?[ string, function ] => {
+    const parseButton = (action): ?[string, function] => {
         switch (action) {
             case "edit":
-                return [ "edit", handleEdit ]
+                return ["edit", handleEdit];
 
             case "preview":
-                return [ "preview", handlePreview ]
+                return ["preview", handlePreview];
 
             case "delete":
-                return !systemRequired
-                    ? [ "delete", handleDelete ]
-                    : null
+                return !systemRequired ? ["delete", handleDelete] : null;
 
             case "listGroup":
-                return [ "list", handleListGroup ]
+                return ["list", handleListGroup];
 
             case "categoryTree":
-                return [ "account_tree", handleCategoryTree ]
+                return ["account_tree", handleCategoryTree];
 
+            case "changePassword":
+                return ["key", handleChangePassword];
             default:
-                return null
+                return null;
         }
-    }
+    };
 
     // Actions are joined with '_', extract them and make sure we can parse then into button parameters
-    const actions = fieldType.split("_")
-        .map(action => parseButton(action))
-        .filter(action => action)
+    const actions = fieldType
+        .split("_")
+        .map((action) => parseButton(action))
+        .filter((action) => action);
 
     return (
         <div className={scss.wrapper}>
-            {actions.map(button => (
+            {actions.map((button) => (
                 <span key={button[0]} className={`${scss.button} ${scss[button[0]]}`} onClick={button[1]}>
                     <Icon className={button[0]}>{button[0]}</Icon>
                 </span>
             ))}
         </div>
-    )
-}
+    );
+};
 
-export default ActionField
+export default ActionField;

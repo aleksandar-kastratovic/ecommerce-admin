@@ -1,0 +1,26 @@
+@import "../../../variables.scss";
+
+.button {
+    color: var(--light-silver);
+    cursor: pointer;
+
+    :hover {
+        color: $theme;
+    }
+
+    span {
+        transition: .3s;
+    }
+}
+
+// The following is per field type
+
+.delete {
+    :hover {
+        color: $danger !important;
+    }
+}
+
+.treeInput {
+    margin-left: 1rem !important;
+}

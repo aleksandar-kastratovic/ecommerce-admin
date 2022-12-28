@@ -3,7 +3,6 @@ import { useRef } from "react";
 
 const HtmlEditor = ({ name, value, onChange, disabled }) => {
     const changeHandler = (data) => {
-        console.log(data);
         onChange({ target: { name: name, value: data } });
     };
     return (
