@@ -56,7 +56,7 @@ import DetailsBanners from "./../pages/B2Bbanners/DetailsBanners/DetailsBanners"
 import StaticPages from "../pages/StaticPages/StaticPages";
 import StaticPagesDetails from "../pages/StaticPages/StaticPagesDetails/StaticPagesDetails";
 import Newsletter from "../pages/Newsletter/Newsletter";
-import ContactForm from "../pages/ContactForm/ContactForm";
+import B2CContactForm from "../pages/B2CContactForm/B2CContactForm";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
 import B2Cbanners from "./../pages/B2Cbanners/B2Cbanners";
 import DetailsBannersB2C from "./../pages/B2Cbanners/DetailsBanners/DetailsBannersB2C";
@@ -94,6 +94,7 @@ import B2BContactForm from "../pages/B2BContactForm/B2BContactForm";
 import B2BContactFormDetails from "../pages/B2BContactForm/Details/B2BContactFormDetails";
 import B2COrders from "../pages/B2COrders/B2COrders";
 import B2COrdersDetails from "../pages/B2COrders/Details/B2COrdersDetails";
+import B2CContactFormDetails from "../pages/B2CContactForm/B2CContacFormDetails/B2CContactFormDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
@@ -181,7 +182,7 @@ const screens = {
     ],
     B2C_STATIC_PAGES: ["/staticpages", "Statičke strane", faArchive, B2C, StaticPages, [[":spid", StaticPagesDetails]]],
     B2C_NEWSLETTER: ["/newsletter", "Newsletter", faArchive, B2C, Newsletter, [[":nlid", Newsletter]]],
-    B2C_CONTACT_FORMS: ["/contactform", "Kontakt forma", faEnvelope, B2C, ContactForm, [[":cfid", ContactForm]]],
+    B2C_CONTACT_FORMS: ["/contactform", "Kontakt forma", faEnvelope, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],
 
     ROLES: ["/roles", "Uloge", faPeopleArrows, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],

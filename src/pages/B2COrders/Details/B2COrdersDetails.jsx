@@ -26,7 +26,6 @@ const B2COrdersDetails = () => {
     const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
     const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
 
-    console.log(orderData);
     return (
         <PageWrapper
             title={"Porudžbina"}

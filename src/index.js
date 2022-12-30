@@ -4,13 +4,13 @@ import "./assets/scss/index.scss";
 import { BrowserRouter } from "react-router-dom";
 import { AuthContextProvider } from "./store/auth-contex";
 
-const local = "http://192.168.1.174:4400/api/v1/";
+const local = "http://192.168.1.46:4400/api/v1/";
 const net = "http://25.19.215.162:4400/api/v1/";
 const staging = "https://api.staging.croonus.com/api/v1/";
 
 // Assert sure base URL for the API set
-if (process.env.REACT_APP_URL || net) {
-    localStorage.setItem("api", process.env.REACT_APP_URL || net);
+if (process.env.REACT_APP_URL || staging) {
+    localStorage.setItem("api", process.env.REACT_APP_URL || staging);
 
     ReactDOM.render(
         <AuthContextProvider>

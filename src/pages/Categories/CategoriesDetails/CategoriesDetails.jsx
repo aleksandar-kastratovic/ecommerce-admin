@@ -10,6 +10,7 @@ import DetailsSeo from "./DetailsSeo/DetailsSeo";
 import DetailsSpecification from "./DetailsSpecification/DetailsSpecification";
 
 import formFields from "./formFields.json";
+import DetailsDisplayIn from "./DetailsDisplayIn/DetailsDisplayIn";
 
 const CategoriesDetails = () => {
     const { gid, cid } = useParams();
@@ -72,11 +73,19 @@ const CategoriesDetails = () => {
             component: <DetailsSeo cid={data?.id} gid={gid} />,
         },
         {
+            name: "Prikaz",
+            icon: IconList.displaySettings,
+            enabled: data?.id,
+            component: <DetailsDisplayIn cid={data?.id} />,
+        },
+        /* 
+            Specifikacija za kategoriju se ne koristi pa je zbog toga sakrivena
+        {
             name: "Specifikacija",
             icon: "settings",
             enabled: data?.id,
             component: <DetailsSpecification cid={data?.id} gid={gid} />,
-        },
+        }, */
     ];
 
     return <DetailsPage title={data?.id == null ? "Unos nove kategorije" : data?.name} fields={fields} ready={!isLoading} />;

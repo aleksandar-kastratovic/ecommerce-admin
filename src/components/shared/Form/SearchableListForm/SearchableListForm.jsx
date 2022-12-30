@@ -18,12 +18,14 @@ import styles from "./SearchableListForm.module.scss";
  * @return {JSX.Element}
  * @constructor
  */
-const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll = false }) => {
+const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll = false, toggleShowSelected = true }) => {
     const { list, toggle, has, set, clear } = useList(selected ?? []);
     const [search, setSearch] = useState("");
 
+    const [showSelected, setShowSelected] = useState(false);
+
     // Filter the available
-    available = available.filter((brand) => search === "" || brand.name.toLowerCase().includes(search.toLowerCase()));
+    available = available.filter((item) => search === "" || item.name.toLowerCase().includes(search.toLowerCase()));
 
     const toggleSelectAll = (selected) => {
         if (!selected) {
@@ -35,13 +37,20 @@ const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll
         }
     };
 
+    if (showSelected) {
+        available = available.filter((item) => list.includes(item.id));
+    }
+
     return (
         <>
-            <InputInput placeholder="Pretraga" value={search} onChange={(event) => setSearch(event.target.value)} />
+            {/* show only selected options */}
+            {toggleShowSelected && <InputCheckbox label="Prikaži samo izabrane" value={showSelected} onChange={({ target }) => setShowSelected(target.checked)} />}
+            {/* select all options */}
+            {selectAll && <InputCheckbox label="Izaberi sve" value={available.length === list.length && available.length > 0} onChange={({ target }) => toggleSelectAll(target.checked)} />}
 
+            <InputInput placeholder="Pretraga" value={search} onChange={(event) => setSearch(event.target.value)} />
             {/* The list of available items */}
             <div className={styles.optionsList}>
-                {selectAll && <InputCheckbox label="Izaberi sve" value={available.length === list.length} onChange={({ target }) => toggleSelectAll(target.checked)} />}
                 {available.map((brand) => (
                     <InputCheckbox key={brand.id} value={has(brand.id)} label={brand.name} onChange={() => toggle(brand.id)} />
                 ))}
