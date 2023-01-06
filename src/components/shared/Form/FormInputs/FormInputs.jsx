@@ -1,4 +1,4 @@
-import { Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, ListItemIcon, MenuItem, Radio, Select, Switch, TextField } from "@mui/material";
+import { Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, ListItemIcon, MenuItem, Radio, Select, Switch, TextField, Autocomplete } from "@mui/material";
 import { DatePicker, DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { useEffect, useState } from "react";
@@ -258,7 +258,6 @@ export const InputSelect = ({
     return (
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
             <Select
-                name={name}
                 value={(opt ?? []).length === 0 ? "" : value}
                 onChange={onChange}
                 disabled={disabled}
@@ -273,6 +272,94 @@ export const InputSelect = ({
                     </MenuItem>
                 ))}
             </Select>
+            <FormHelperText>{error ? error : description}</FormHelperText>
+        </InputWrapper>
+    );
+};
+
+/**
+ * Basic select input
+ *
+ * @param {string} label Field label
+ * @param {boolean} required If field is required
+ * @param {boolean} disabled If field is disabled
+ * @param {string} error Error message
+ * @param {string} name Input field name
+ * @param {string} value Field value
+ * @param {"none"|"dense"|"normal"} margin The margin to use for FormControl.
+ * @param {function} onChange Change handler for the field
+ * @param {string} description Field description
+ * @param {string} fillFromApi Path to get select options from
+ * @param {boolean} usePropName If api call should use prop name at the end of the path
+ * @param {array} options Select options if there is no api call
+ * @param {string} queryString Additional queryString for api call
+ *
+ * @return {JSX.Element}
+ */
+
+export const AutocompleteInput = ({
+    label,
+    required,
+    disabled,
+    error = null,
+    name,
+    value,
+    margin = "dense",
+    onChange = () => null,
+    description,
+    fillFromApi,
+    usePropName,
+    options,
+    queryString = "",
+    optionsIsEmpty = () => {},
+}) => {
+    const api = useAPI();
+    const [opt, setOpt] = useState(options);
+
+    useEffect(() => {
+        let isMounted = true;
+        let path = usePropName ? `${fillFromApi}/${name}?${queryString}` : `${fillFromApi}?${queryString}`;
+        const fillDdl = async () => {
+            await api
+                .get(path)
+                .then((response) => {
+                    if (isMounted) {
+                        setOpt(response?.payload);
+                    }
+                })
+                .catch((error) => {
+                    console.warn(error);
+                });
+        };
+
+        if (fillFromApi) {
+            fillDdl();
+        }
+
+        return () => {
+            isMounted = false;
+        };
+    }, [fillFromApi]);
+
+    useEffect(() => {
+        if (opt?.length === 0) {
+            optionsIsEmpty(true);
+        } else {
+            optionsIsEmpty(false);
+        }
+    }, [opt]);
+
+    return (
+        <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+            <Autocomplete
+                onChange={onChange}
+                options={opt.map((option) => option.name)}
+                sx={{
+                    "& legend": { display: "none" },
+                    "& fieldset": { top: 0 },
+                }}
+                renderInput={(params) => <TextField {...params} />}
+            />
             <FormHelperText>{error ? error : description}</FormHelperText>
         </InputWrapper>
     );
