@@ -24,12 +24,13 @@ const CreateForm = ({
     // value is obvious
     // onChangeHandler change handler
     // error is for validations backend and frontend
-    value = value === null ? "" : value;
+
     const [inputValue, setInputValue] = useState(value);
     const onInputChangeHandler = (event) => {
         onChangeHandler(event);
         setInputValue(event.target.value);
     };
+    value = value === null ? "" : inputValue;
 
     let formItem = null;
     if (Array.isArray(item)) {
