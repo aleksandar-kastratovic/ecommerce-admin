@@ -36,6 +36,11 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
         isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
     };
 
+    const formItemAutoCompleteChangeHandler = (name, value) => {
+        let newData = { ...data, [name]: value };
+        setData(validateData(newData, name));
+    };
+
     const formItemChangeHandler = ({ target }, type) => {
         let newData;
         if (type === "date") {
@@ -49,7 +54,10 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
         } else {
             newData = { ...data, [target.name]: target.value };
         }
+        
         setData(validateData(newData, target.name));
+
+        console.log(validateData(newData, target.name))
 
         setInputsError((inputsError) => {
             delete inputsError[target.name];
@@ -135,6 +143,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                             <CreateForm
                                 data-test-id="admin-form"
                                 onChangeHandler={formItemChangeHandler}
+                                onChangeAutoHandler={formItemAutoCompleteChangeHandler}
                                 onImageUpload={formImageUpload}
                                 onOpenImageDialog={onOpenImageDialog}
                                 item={item}

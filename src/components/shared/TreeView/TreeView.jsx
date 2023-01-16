@@ -290,28 +290,29 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
 
     return (
         <>
-            <PageWrapper title={title} actions={actions}>
+            <PageWrapper back={true} title={title} actions={actions}>
                 <ListTableToolbar onSearch={handleSearch} showDatePicker={showDatePicker} />
-                <Button sx={{ mt: "1rem" }} icon={"arrow_back"} label="Nazad" onClick={backToCategories} />
+                {/* <Button sx={{ mt: "1rem" }} icon={"arrow_back"} label="Nazad" onClick={backToCategories} /> */}
 
                 {!isLoadingTreeList ? (
                     <>
-                        <br />
-                        <span className={scss.button} onClick={expandAll}>
-                            <Icon className={scss.button}>
-                                <span className="material-symbols-outlined">keyboard_double_arrow_down</span>
-                            </Icon>
-                        </span>
-                        Proširi sve
-                        <span className={scss.button} onClick={collapseAll}>
-                            <Icon className={scss.button}>
-                                <span className="material-symbols-outlined">
-                                    <span className="material-symbols-outlined">keyboard_double_arrow_up</span>
-                                </span>
-                            </Icon>
-                        </span>
-                        Skupi sve
-                        <br />
+                        <div className={scss.buttonsDownUp}>
+                            <span className={scss.button} onClick={expandAll}>
+                                <Icon className={scss.button}>
+                                    <span className="material-symbols-outlined">keyboard_double_arrow_down</span>
+                                </Icon>
+                                Proširi sve
+                            </span>
+
+                            <span className={scss.button} onClick={collapseAll}>
+                                <Icon className={scss.button}>
+                                    <span className="material-symbols-outlined">
+                                        <span className="material-symbols-outlined">keyboard_double_arrow_up</span>
+                                    </span>
+                                </Icon>
+                                Skupi sve
+                            </span>
+                        </div>
                         <TextBoxSingle
                             name="parent"
                             label="Dodaj novog roditelja"
@@ -337,8 +338,9 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                             onMoveNode={({ node, nextParentNode, nextTreeIndex }) => handleDragNode(node, nextParentNode, nextTreeIndex)}
                             generateNodeProps={({ node, path }) => ({
                                 buttons: [
-                                    <div>
-                                        {node.name}
+                                    <div className={scss.wrappEditDeleteAdd}>
+                                        <div className={scss.name}>{node.name}</div>
+
                                         <span className={scss.button} onClick={() => handleEdit(node.id)}>
                                             <Icon className={scss.button}>edit</Icon>
                                         </span>
