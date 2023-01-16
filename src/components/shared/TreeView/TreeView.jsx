@@ -275,7 +275,15 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         sessionStorage.clear();
     };
 
-    const handleDragNode = (node, nextParentNode, nextTreeIndex) => {
+    const handleDragNode = (node, nextParentNode) => {
+
+        let tOrder = 0;
+        nextParentNode.children.map((item, index)=>{
+            if(item.id === node.id) {
+              tOrder = index;
+            }
+        })
+
         // check documentation for aditional info
         // treeData, node, nextParentNode, prevPath, prevTreeIndex, nextPath, nextTreeIndex
         let updateNode = {
@@ -283,7 +291,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             id_category_product_groups: gid,
             name: node.name,
             parent_id: nextParentNode?.id ? nextParentNode?.id : null,
-            order: nextTreeIndex,
+            order: tOrder + 1,
         };
         saveData(updateNode, "put");
     };
@@ -335,7 +343,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                             }}
                             canDrag={({ node }) => !node.dragDisabled}
                             getNodeKey={({ node }) => node.id}
-                            onMoveNode={({ node, nextParentNode, nextTreeIndex }) => handleDragNode(node, nextParentNode, nextTreeIndex)}
+                            onMoveNode={({ node, nextParentNode }) => handleDragNode(node, nextParentNode)}
                             generateNodeProps={({ node, path }) => ({
                                 buttons: [
                                     <div className={scss.wrappEditDeleteAdd}>
