@@ -318,8 +318,6 @@ export const AutocompleteInput = ({
     const api = useAPI();
     const [opt, setOpt] = useState(options);
     const [myValue, setMyValue] = useState(null);
-    // const [id, setId] = useState(value);
-    // const ref0 = useRef();
 
     useEffect(() => {
         let isMounted = true;
@@ -364,20 +362,22 @@ export const AutocompleteInput = ({
             <Autocomplete
                 value={myValue}
                 onInputChange={(event, newInputValue) => {
-                    setMyValue(newInputValue);
+                    let newIval = newInputValue ? newInputValue : "";
+                    setMyValue(newIval);
                     if (opt.length > 0 && typeof value === "number") {
                         let selectedCity = opt.find((o) => o.name === newInputValue);
                         if (selectedCity) {
-                            onChange(name, selectedCity.id);
+                            newIval = selectedCity.id;
                         }
                     }
+                    onChange(name, newIval);
                 }}
                 options={opt.map((option) => option.name)}
                 sx={{
                     "& legend": { display: "none" },
                     "& fieldset": { top: 0 },
                 }}
-                renderInput={(params) => <TextField {...params} label="" />}
+                renderInput={(params) => <TextField {...params} />}
             />
             <FormHelperText>{error ? error : description}</FormHelperText>
         </InputWrapper>

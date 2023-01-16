@@ -22,6 +22,13 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
         name: "",
     });
 
+    function setInputErrors(name) {
+       setInputsError((inputsError) => {
+          delete inputsError[name];
+          return inputsError;
+      });
+    }
+
     const submitHandler = (event) => {
         event.preventDefault && event.preventDefault();
 
@@ -39,7 +46,10 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
     const formItemAutoCompleteChangeHandler = (name, value) => {
         let newData = { ...data, [name]: value };
         setData(validateData(newData, name));
+        setInputErrors(name)
     };
+
+
 
     const formItemChangeHandler = ({ target }, type) => {
         let newData;
@@ -54,15 +64,10 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
         } else {
             newData = { ...data, [target.name]: target.value };
         }
-        
+
         setData(validateData(newData, target.name));
 
-        console.log(validateData(newData, target.name))
-
-        setInputsError((inputsError) => {
-            delete inputsError[target.name];
-            return inputsError;
-        });
+        setInputErrors(target.name)
     };
 
     useEffect(() => {
