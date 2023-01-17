@@ -118,3 +118,9 @@ pipelines:
           <<: *execute
           name: Kruska
           deployment: kruska
+
+    prod-lucani:
+      - step:
+          <<: *execute
+          name: Lucani
+          deployment: lucani
