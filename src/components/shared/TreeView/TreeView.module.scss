@@ -3,14 +3,24 @@
 .button {
     color: var(--light-silver);
     cursor: pointer;
-
+   
     :hover {
         color: $theme;
     }
 
     span {
-        transition: .3s;
+        transition: 0.3s;
     }
+
+    &.add {
+      span{
+        background-color: var(--light-silver);
+        border-radius: 100%;
+        color: $white;
+        width: 21px;
+        height: 21px;
+      }
+    } 
 }
 
 // The following is per field type
@@ -21,6 +31,39 @@
     }
 }
 
-.treeInput {
-    margin-left: 1rem !important;
+.buttonsDownUp {
+  display: flex;
+  margin-bottom: 1rem;
 }
+
+.wrappEditDeleteAdd {
+    width: 100%;
+    display: flex;
+    .name {
+      margin-right: auto;
+
+    }
+    .button {
+     margin-left: 0.5rem;
+    }
+    .button, .name {
+      display: flex;
+      align-items: center;
+    }
+}
+
+.sortableTree {
+  margin-top: 1rem;
+}
+
+
+
+
+
+
+
+
+
+
+
+

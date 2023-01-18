@@ -350,10 +350,10 @@ export const AutocompleteInput = ({
         } else {
             optionsIsEmpty(false);
         }
-        let selectedCity = null;
+        let selectedOption = null;
         if (opt.length > 0 && typeof value === "number") {
-            selectedCity = opt.find((o) => o.id === value).name;
-            setMyValue(selectedCity);
+            selectedOption = opt.find((o) => o.id === value).name;
+            setMyValue(selectedOption);
         }
     }, [opt]);
 
@@ -365,9 +365,9 @@ export const AutocompleteInput = ({
                     let newIval = newInputValue ? newInputValue : "";
                     setMyValue(newIval);
                     if (opt.length > 0 && typeof value === "number") {
-                        let selectedCity = opt.find((o) => o.name === newInputValue);
-                        if (selectedCity) {
-                            newIval = selectedCity.id;
+                        let selectedOption = opt.find((o) => o.name === newInputValue);
+                        if (selectedOption) {
+                            newIval = selectedOption.id;
                         }
                     }
                     onChange(name, newIval);

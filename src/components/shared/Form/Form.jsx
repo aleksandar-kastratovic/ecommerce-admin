@@ -23,10 +23,10 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
     });
 
     function setInputErrors(name) {
-       setInputsError((inputsError) => {
-          delete inputsError[name];
-          return inputsError;
-      });
+        setInputsError((inputsError) => {
+            delete inputsError[name];
+            return inputsError;
+        });
     }
 
     const submitHandler = (event) => {
@@ -46,28 +46,29 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
     const formItemAutoCompleteChangeHandler = (name, value) => {
         let newData = { ...data, [name]: value };
         setData(validateData(newData, name));
-        setInputErrors(name)
+        setInputErrors(name);
     };
-
-
-
+ 
     const formItemChangeHandler = ({ target }, type) => {
         let newData;
-        if (type === "date") {
-            newData = { ...data, [target.name]: formatDate(target.value) };
-        } else if (type === "date_time") {
-            newData = { ...data, [target.name]: formatDateTime(target.value) };
-        } else if (type === "checkbox") {
-            newData = { ...data, [target.name]: target.checked ? 1 : 0 };
-        } else if (type === "switch") {
-            newData = { ...data, [target.name]: target.checked ? 1 : 0 };
-        } else {
-            newData = { ...data, [target.name]: target.value };
+        switch (type) {
+            case "date":
+                newData = { ...data, [target.name]: formatDate(target.value) };
+                break;
+            case "date_time":
+                newData = { ...data, [target.name]: formatDateTime(target.value) };
+                break;
+            case "checkbox":
+            case "switch":
+                newData = { ...data, [target.name]: target.checked ? 1 : 0 };
+                break;
+            default:
+                newData = { ...data, [target.name]: target.value };
         }
 
         setData(validateData(newData, target.name));
 
-        setInputErrors(target.name)
+        setInputErrors(target.name);
     };
 
     useEffect(() => {

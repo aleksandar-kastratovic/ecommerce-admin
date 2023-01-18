@@ -3,6 +3,7 @@
 @import "react-bootstrap-table2-paginator/dist/react-bootstrap-table2-paginator.min.css";
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap");
 @import "react-dropdown-tree-select/dist/styles.css";
+@import "react-sortable-tree/style.css";
 
 .theme-light {
     --login-img-background: #d9e8fc;
@@ -105,6 +106,27 @@ body {
 .main-wrapper {
     padding: 6rem 2rem 2rem;
 }
+
+/*---------------------- SORTABLE TREE START -----------------*/
+.rst__rowWrapper {
+    .rst__row {
+        height: 3rem;
+        .rst__rowContents {
+            justify-content: flex-start;
+            min-width: 60%;
+            .rst__rowToolbar,
+            .rst__toolbarButton {
+                width: 100%;
+            }
+        }
+    }
+}
+
+.rst__node,
+.rst__nodeContent {
+    min-width: 60%;
+}
+/*---------------------- SORTABLE TREE END -----------------*/
 
 /*---------------- COMMON STYLES START -----------------*/
 .accordion-button:not(.collapsed)::after {
@@ -518,17 +540,6 @@ a {
     }
 }
 /*---------------- COMMON STYLES END -----------------*/
-
-/*---------------------- AUTOCOMPLETE MUI START -----------------*/
-// .MuiAutocomplete-root {
-//     input {
-//         &::placeholder {
-//             color: rgba(0, 0, 0, 0.87);
-//             opacity: 1;
-//         }
-//     }
-// }
-/*---------------------- AUTOCOMPLETE MUI END -----------------*/
 
 /*---------------------- LOGIN START -----------------*/
 .signin-wrapper {
@@ -1700,6 +1711,10 @@ a[data-toggle="collapse"] {
     .tree-button:first-letter {
         text-transform: uppercase;
     }
+}
+
+div.rowContents {
+    background-color: yellow;
 }
 /*---------------- CATEGORIES END ----------------*/
 .bootstrap-demo .dropdown-trigger {
