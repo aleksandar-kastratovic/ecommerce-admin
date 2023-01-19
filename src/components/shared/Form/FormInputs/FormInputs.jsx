@@ -222,6 +222,7 @@ export const InputSelect = ({
 }) => {
     const api = useAPI();
     const [opt, setOpt] = useState(options);
+
     useEffect(() => {
         let isMounted = true;
         let path = usePropName ? `${fillFromApi}/${name}?${queryString}` : `${fillFromApi}?${queryString}`;
@@ -258,6 +259,7 @@ export const InputSelect = ({
     return (
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
             <Select
+                name={name}
                 value={(opt ?? []).length === 0 ? "" : value}
                 onChange={onChange}
                 disabled={disabled}
@@ -305,7 +307,7 @@ export const AutocompleteInput = ({
     name,
     value,
     margin = "dense",
-    onChange = () => null,
+    onChange = () => {},
     description,
     fillFromApi,
     usePropName,
@@ -315,6 +317,7 @@ export const AutocompleteInput = ({
 }) => {
     const api = useAPI();
     const [opt, setOpt] = useState(options);
+    const [myValue, setMyValue] = useState(null);
 
     useEffect(() => {
         let isMounted = true;
@@ -347,12 +350,28 @@ export const AutocompleteInput = ({
         } else {
             optionsIsEmpty(false);
         }
+        let selectedOption = null;
+        if (opt.length > 0 && typeof value === "number") {
+            selectedOption = opt.find((o) => o.id === value).name;
+            setMyValue(selectedOption);
+        }
     }, [opt]);
 
     return (
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
             <Autocomplete
-                onChange={onChange}
+                value={myValue}
+                onInputChange={(event, newInputValue) => {
+                    let newIval = newInputValue ? newInputValue : "";
+                    setMyValue(newIval);
+                    if (opt.length > 0 && typeof value === "number") {
+                        let selectedOption = opt.find((o) => o.name === newInputValue);
+                        if (selectedOption) {
+                            newIval = selectedOption.id;
+                        }
+                    }
+                    onChange(name, newIval);
+                }}
                 options={opt.map((option) => option.name)}
                 sx={{
                     "& legend": { display: "none" },
@@ -547,7 +566,7 @@ export const InputDateTime = ({ label, required, disabled, error = null, name, v
                     ampm={false}
                     showToolbar
                     disabled={disabled}
-                    inputFormat="dd/MM/yyyy hh:mm"
+                    inputFormat="dd/MM/yyyy HH:mm"
                     renderInput={(params) => (
                         <TextField
                             {...params}

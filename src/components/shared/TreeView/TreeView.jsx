@@ -191,10 +191,11 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         setOpenTextBox({ open: true, id: id });
     };
 
-    const saveChild = (path, node) => {
+    const saveChild = (node) => {
         if (addChild.name === "") {
             return;
         }
+
         // in case that you only update UI use this method
         // let newTree = addNodeUnderParent({
         //     treeData: treeData,
@@ -207,14 +208,22 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         //     },
         // });
 
+        let tOrder = 0;
+        if (node.children) {
+            tOrder = node.children.length;
+        }
+        addChild.order = tOrder + 1;
+
         saveData(addChild, "post");
         setOpenTextBox({ open: false, id: null });
+        setAddChild({ ...addChild, name: "" });
     };
 
     const saveParent = () => {
         if (addParent.name === "") {
             return;
         }
+
         // in case that you only update UI
         // let newTree = addNodeUnderParent({
         //     treeData: treeData,
@@ -228,6 +237,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         // });
 
         saveData(addParent, "post");
+        setAddParent({ ...addParent, name: "" });
     };
 
     const saveData = async (data, method) => {
@@ -275,7 +285,22 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         sessionStorage.clear();
     };
 
-    const handleDragNode = (node, nextParentNode, nextTreeIndex) => {
+    const handleDragNode = (node, nextParentNode, treeData) => {
+        let tOrder = 0;
+        if (nextParentNode) {
+            nextParentNode.children.map((item, index) => {
+                if (item.id === node.id) {
+                    tOrder = index;
+                }
+            });
+        } else {
+            treeData.map((item, index) => {
+                if (item.id === node.id) {
+                    tOrder = index;
+                }
+            });
+        }
+
         // check documentation for aditional info
         // treeData, node, nextParentNode, prevPath, prevTreeIndex, nextPath, nextTreeIndex
         let updateNode = {
@@ -283,35 +308,37 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             id_category_product_groups: gid,
             name: node.name,
             parent_id: nextParentNode?.id ? nextParentNode?.id : null,
-            order: nextTreeIndex,
+            order: tOrder + 1,
         };
+
         saveData(updateNode, "put");
     };
 
+    const customSearchMethod = ({ node, searchQuery }) => searchQuery && node.name.toLowerCase().indexOf(searchQuery.toLowerCase()) > -1;
+
     return (
         <>
-            <PageWrapper title={title} actions={actions}>
-                <ListTableToolbar onSearch={handleSearch} showDatePicker={showDatePicker} />
-                <Button sx={{ mt: "1rem" }} icon={"arrow_back"} label="Nazad" onClick={backToCategories} />
-
+            <PageWrapper back={true} title={title} actions={actions}>
                 {!isLoadingTreeList ? (
                     <>
-                        <br />
-                        <span className={scss.button} onClick={expandAll}>
-                            <Icon className={scss.button}>
-                                <span className="material-symbols-outlined">keyboard_double_arrow_down</span>
-                            </Icon>
-                        </span>
-                        Proširi sve
-                        <span className={scss.button} onClick={collapseAll}>
-                            <Icon className={scss.button}>
-                                <span className="material-symbols-outlined">
-                                    <span className="material-symbols-outlined">keyboard_double_arrow_up</span>
-                                </span>
-                            </Icon>
-                        </span>
-                        Skupi sve
-                        <br />
+                        <div className={scss.buttonsDownUp}>
+                            <span className={scss.button}>
+                                <Button icon={"keyboard_double_arrow_down"} label="Proširi sve" onClick={expandAll} sx={{ mr: "1rem" }} />
+                            </span>
+
+                            <span className={scss.button}>
+                                <Button icon={"keyboard_double_arrow_up"} label="Skupi sve" onClick={collapseAll} sx={{ mr: "1rem" }} />
+                            </span>
+                            {/* <ListTableToolbar  /> */}
+                            <input
+                                type="search"
+                                value={searchString}
+                                onChange={(event) => {
+                                    console.log(event.target.value);
+                                    setSearchString(event.target.value);
+                                }}
+                            />
+                        </div>
                         <TextBoxSingle
                             name="parent"
                             label="Dodaj novog roditelja"
@@ -324,21 +351,24 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                             width="30%"
                         />
                         <SortableTree
+                            className={scss.sortableTree}
+                            searchMethod={customSearchMethod}
+                            searchQuery={searchString}
                             treeData={treeData}
                             onChange={(treeData) => handleChangeTreeData(treeData)}
-                            isVirtualized={false}
-                            searchQuery={searchString}
                             searchFocusOffset={searchFocusIndex}
+                            isVirtualized={false}
                             searchFinishCallback={(matches) => {
                                 setSearchFocusIndex(matches.length > 0 ? searchFocusIndex % matches.length : 0);
                             }}
                             canDrag={({ node }) => !node.dragDisabled}
                             getNodeKey={({ node }) => node.id}
-                            onMoveNode={({ node, nextParentNode, nextTreeIndex }) => handleDragNode(node, nextParentNode, nextTreeIndex)}
+                            onMoveNode={({ node, nextParentNode, treeData }) => handleDragNode(node, nextParentNode, treeData)}
                             generateNodeProps={({ node, path }) => ({
                                 buttons: [
-                                    <div>
-                                        {node.name}
+                                    <div className={scss.wrappEditDeleteAdd}>
+                                        <div className={scss.name}>{node.name}</div>
+
                                         <span className={scss.button} onClick={() => handleEdit(node.id)}>
                                             <Icon className={scss.button}>edit</Icon>
                                         </span>
@@ -349,13 +379,12 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                                             <TextBoxSingle
                                                 name="child"
                                                 value={addChild.name}
-                                                onSaveClick={(event) => saveChild(path, node)}
+                                                onSaveClick={(event) => saveChild(node)}
                                                 onCancelClick={cancelChild}
                                                 onChange={(e) => handleChild(e, node.id)}
                                                 saveIcon="check_circle"
                                                 cancelIcon="cancel"
-                                                width="100%"
-                                                className={scss.treeInput}
+                                                width="auto"
                                             />
                                         ) : (
                                             <span className={scss.button} onClick={() => handleOpenTextBox(node.id)}>

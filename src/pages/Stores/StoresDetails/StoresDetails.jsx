@@ -35,6 +35,7 @@ const StoresDetails = () => {
     };
     const navigate = useNavigate();
     const [data, setData] = useState(init);
+ 
     const [isLoading, setIsLoading] = useState(false);
 
     const handleData = async () => {

@@ -124,3 +124,9 @@ pipelines:
           <<: *execute
           name: Lucani
           deployment: lucani
+
+    prod-heklanisvet:
+      - step:
+          <<: *execute
+          name: HeklaniSvet
+          deployment: heklanisvet

@@ -3,7 +3,20 @@ import React, { useState } from "react";
 import ImageUpload from "../ImageUpload/ImageUpload";
 import ImageButton from "../ImageButton/ImageButton";
 import InputMultipleImages from "../InputMultipleImages/InputMultipleImages";
-import { InputCheckbox, InputDate, InputDateTime, InputHtml, InputInput, InputMultiSelect, InputNumber, InputRadio, InputSelect, InputSwitch, InputText, AutocompleteInput } from "./FormInputs/FormInputs";
+import {
+    InputCheckbox,
+    InputDate,
+    InputDateTime,
+    InputHtml,
+    InputInput,
+    InputMultiSelect,
+    InputNumber,
+    InputRadio,
+    InputSelect,
+    InputSwitch,
+    InputText,
+    AutocompleteInput,
+} from "./FormInputs/FormInputs";
 import FileButton from "../FileButton/FileButton";
 import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
 
@@ -11,6 +24,7 @@ const CreateForm = ({
     item = {},
     onChangeHandler = () => {},
     onImageUpload = () => {},
+    onChangeAutoHandler = () => {},
     // TODO remove onImagePreview
     onImagePreview = () => {},
     onOpenImageDialog = () => {},
@@ -24,12 +38,15 @@ const CreateForm = ({
     // value is obvious
     // onChangeHandler change handler
     // error is for validations backend and frontend
-    value = value === null ? "" : value;
+
     const [inputValue, setInputValue] = useState(value);
+
     const onInputChangeHandler = (event) => {
         onChangeHandler(event);
         setInputValue(event.target.value);
     };
+   
+    value = value === null ? "" : value;
 
     let formItem = null;
     if (Array.isArray(item)) {
@@ -116,7 +133,7 @@ const CreateForm = ({
                             name={item.prop_name}
                             disabled={disabled}
                             error={error}
-                            value={value}
+                            value={inputValue}
                             onChange={onInputChangeHandler}
                             options={item.options}
                             description={item.description}
@@ -136,9 +153,9 @@ const CreateForm = ({
                             name={item.prop_name}
                             disabled={disabled}
                             error={error}
-                            value={value}
-                            onChange={onInputChangeHandler}
+                            value={inputValue}
                             options={item.options}
+                            onChange={onChangeAutoHandler}
                             description={item.description}
                             fillFromApi={item.fillFromApi}
                             usePropName={item.usePropName}

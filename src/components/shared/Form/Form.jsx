@@ -22,6 +22,13 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
         name: "",
     });
 
+    function setInputErrors(name) {
+        setInputsError((inputsError) => {
+            delete inputsError[name];
+            return inputsError;
+        });
+    }
+
     const submitHandler = (event) => {
         event.preventDefault && event.preventDefault();
 
@@ -36,25 +43,32 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
         isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
     };
 
+    const formItemAutoCompleteChangeHandler = (name, value) => {
+        let newData = { ...data, [name]: value };
+        setData(validateData(newData, name));
+        setInputErrors(name);
+    };
+ 
     const formItemChangeHandler = ({ target }, type) => {
         let newData;
-        if (type === "date") {
-            newData = { ...data, [target.name]: formatDate(target.value) };
-        } else if (type === "date_time") {
-            newData = { ...data, [target.name]: formatDateTime(target.value) };
-        } else if (type === "checkbox") {
-            newData = { ...data, [target.name]: target.checked ? 1 : 0 };
-        } else if (type === "switch") {
-            newData = { ...data, [target.name]: target.checked ? 1 : 0 };
-        } else {
-            newData = { ...data, [target.name]: target.value };
+        switch (type) {
+            case "date":
+                newData = { ...data, [target.name]: formatDate(target.value) };
+                break;
+            case "date_time":
+                newData = { ...data, [target.name]: formatDateTime(target.value) };
+                break;
+            case "checkbox":
+            case "switch":
+                newData = { ...data, [target.name]: target.checked ? 1 : 0 };
+                break;
+            default:
+                newData = { ...data, [target.name]: target.value };
         }
+
         setData(validateData(newData, target.name));
 
-        setInputsError((inputsError) => {
-            delete inputsError[target.name];
-            return inputsError;
-        });
+        setInputErrors(target.name);
     };
 
     useEffect(() => {
@@ -135,6 +149,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                             <CreateForm
                                 data-test-id="admin-form"
                                 onChangeHandler={formItemChangeHandler}
+                                onChangeAutoHandler={formItemAutoCompleteChangeHandler}
                                 onImageUpload={formImageUpload}
                                 onOpenImageDialog={onOpenImageDialog}
                                 item={item}

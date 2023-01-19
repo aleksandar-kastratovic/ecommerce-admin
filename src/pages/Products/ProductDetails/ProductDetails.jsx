@@ -45,6 +45,7 @@ const ProductDetails = () => {
             .then((response) => {
                 toast.success("Uspešno");
                 setData(response?.payload);
+                console.log(setData)
             })
             .catch((error) => {
                 console.warn(error);
