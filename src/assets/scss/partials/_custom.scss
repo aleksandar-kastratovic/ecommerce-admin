@@ -126,6 +126,14 @@ body {
 .rst__nodeContent {
     min-width: 60%;
 }
+
+.rst__rowSearchMatch {
+    outline: 2px solid rgba(50, 155, 235, 0.6);
+}
+.rst__rowSearchFocus {
+    outline: 2px solid rgba(96, 192, 133, 0.6);
+}
+
 /*---------------------- SORTABLE TREE END -----------------*/
 
 /*---------------- COMMON STYLES START -----------------*/
