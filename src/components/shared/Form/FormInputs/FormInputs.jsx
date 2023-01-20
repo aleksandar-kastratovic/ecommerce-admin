@@ -351,7 +351,7 @@ export const AutocompleteInput = ({
             optionsIsEmpty(false);
         }
         let selectedOption = null;
-        if (opt.length > 0 && typeof value === "number") {
+        if (opt.length > 0) {
             selectedOption = opt.find((o) => o.id === value).name;
             setMyValue(selectedOption);
         }
@@ -364,7 +364,7 @@ export const AutocompleteInput = ({
                 onInputChange={(event, newInputValue) => {
                     let newIval = newInputValue ? newInputValue : "";
                     setMyValue(newIval);
-                    if (opt.length > 0 && typeof value === "number") {
+                    if (opt.length > 0) {
                         let selectedOption = opt.find((o) => o.name === newInputValue);
                         if (selectedOption) {
                             newIval = selectedOption.id;

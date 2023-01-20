@@ -100,7 +100,6 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     }, [openDeleteDialog.mutate]);
 
     useEffect(async () => {
-        // let scrollPosition = getScrollPosition();
         const asyncFetch = async () => {
             if (treeList) {
                 let tempTreeList = treeList;
@@ -116,7 +115,6 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                 handleExpandedElements(storageName, tempTreeList);
             } else {
                 await reFetchTreeList();
-                // setScrollPosition(scrollPosition);
             }
         };
         await asyncFetch();
@@ -271,8 +269,8 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     };
 
     //Save data
-    let scrollPosition = getScrollPosition();
     const saveData = async (data, method) => {
+        let scrollPosition = getScrollPosition();
         try {
             const response = await postPutByPathAndData({
                 path: apiUrl,
