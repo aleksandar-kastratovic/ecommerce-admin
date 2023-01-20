@@ -6,21 +6,10 @@ export const deepRemove = (data, id) => {
         });
 };
 
-export const handleExpandedElements = (treeData) => {
-    let expandedElements = treeData.map((element) => {
-        return {
-            ...element,
-            expanded: element.expanded === true ? true : false,
-            children: element?.children
-                ? element?.children.map((subElement) => {
-                      return {
-                          ...subElement,
-                          expanded: subElement.expanded === true ? true : false,
-                      };
-                  })
-                : null,
-        };
-    });
+export const handleExpandedElements = (storageName, treeData) => {
+    let expandedElements = treeData;
 
-    sessionStorage.setItem("treeItems", JSON.stringify(expandedElements));
+    if (expandedElements.length) {
+        sessionStorage.setItem(storageName, JSON.stringify(expandedElements));
+    }
 };

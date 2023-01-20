@@ -3,7 +3,7 @@
 .button {
     color: var(--light-silver);
     cursor: pointer;
-   
+
     :hover {
         color: $theme;
     }
@@ -13,14 +13,14 @@
     }
 
     &.add {
-      span{
-        background-color: var(--light-silver);
-        border-radius: 100%;
-        color: $white;
-        width: 21px;
-        height: 21px;
-      }
-    } 
+        span {
+            background-color: var(--light-silver);
+            border-radius: 100%;
+            color: $white;
+            width: 21px;
+            height: 21px;
+        }
+    }
 }
 
 // The following is per field type
@@ -32,38 +32,42 @@
 }
 
 .buttonsDownUp {
-  display: flex;
-  margin-bottom: 1rem;
+    display: flex;
+    margin-bottom: 1rem;
 }
 
 .wrappEditDeleteAdd {
     width: 100%;
     display: flex;
     .name {
-      margin-right: auto;
-
+        margin-right: auto;
     }
-    .button {
-     margin-left: 0.5rem;
+    span.button {
+        margin-left: 0.5rem;
+        border-radius: 0.2rem;
+        span {
+            margin-left: 0;
+            border: 0;
+        }
     }
-    .button, .name {
-      display: flex;
-      align-items: center;
+    .button,
+    .name {
+        display: flex;
+        align-items: center;
     }
 }
 
 .sortableTree {
-  margin-top: 1rem;
+    margin-top: 1rem;
 }
 
-
-
-
-
-
-
-
-
-
-
-
+.searchCategory {
+    min-width: 30%;
+    border: 1px solid rgba(40, 168, 110, 0.5);
+    padding: 0 1rem;
+    border-radius: 0.25rem;
+    &:focus {
+        outline: none;
+        border: 2px solid $theme;
+    }
+}

@@ -3,9 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
 
-import { values, mergeWith, isArray, uniqBy } from "lodash";
-
-import ListTableToolbar from "../ListTable/ListTableToolbar";
 import DeleteDialog from "../Dialogs/DeleteDialog";
 import PageWrapper from "../Layout/PageWrapper/PageWrapper";
 import Button from "../Button/Button";
@@ -15,26 +12,29 @@ import Icon from "@mui/material/Icon";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 
-// import { useQuery } from "react-query";
 import useAPI from "../../../api/api";
 import { deleteByPath, getByPathAndParams, postPutByPathAndData } from "../../../api/services";
 import useFetching from "../../../hooks/fetching";
 import AuthContext from "../../../store/auth-contex";
 
-import SortableTree, { addNodeUnderParent, toggleExpandedForAll, changeNodeAtPath } from "react-sortable-tree";
+import SortableTree, { toggleExpandedForAll } from "react-sortable-tree";
 import "react-sortable-tree/style.css";
 // https://github.com/frontend-collective/react-sortable-tree
 // https://frontend-collective.github.io/react-sortable-tree/?path=/story/basics--minimal-implementation
 
 import scss from "./TreeView.module.scss";
-import { deepRemove, handleExpandedElements } from "./helper";
+import { handleExpandedElements } from "./helper";
+import { height } from "@mui/system";
+import { addConsoleHandler } from "selenium-webdriver/lib/logging";
 
-const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {} }) => {
+const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, additionalButtons = [], showNewButton = false, filters = {} }) => {
     const { user } = useContext(AuthContext);
     const [treeData, setTreeData] = useState([]);
     const api = useAPI();
     const navigate = useNavigate();
     const { gid } = useParams();
+
+    const [storageName, ,] = useState("categoryProductTreeData_" + gid);
 
     const defaultHeaders = {
         "Content-Type": "application/json",
@@ -63,13 +63,13 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
 
     // Default delete URL is the same as the main URL
     deleteUrl = deleteUrl ?? apiUrl;
-
-    // Handle delete dialog
+    storageName;
     const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false, id: null, mutate: null });
     const [addParent, setAddParent] = useState(init);
     const [addChild, setAddChild] = useState(init);
 
     const handleDeleteConfirm = async () => {
+        let scrollPosition = getScrollPosition();
         try {
             const response = await deleteByPath({
                 path: deleteUrl + openDeleteDialog.id,
@@ -78,10 +78,9 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             });
             // condition response or response.status === 200 for example
             if (response) {
-                let tmp = JSON.parse(sessionStorage.getItem("treeItems"));
-
-                let newArr = tmp ? deepRemove(tmp, openDeleteDialog.id) : null;
-                sessionStorage.setItem("treeItems", JSON.stringify(newArr));
+                let tmp = JSON.parse(sessionStorage.getItem(storageName));
+                let newArr = tmp ? removeTreeNode(tmp, openDeleteDialog.id) : null;
+                sessionStorage.setItem(storageName, JSON.stringify(newArr));
             }
         } catch (error) {
             console.warn(error);
@@ -90,6 +89,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         } finally {
             await reFetchTreeList();
             setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
+            setScrollPosition(scrollPosition);
         }
     };
 
@@ -99,27 +99,27 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         }
     }, [openDeleteDialog.mutate]);
 
-    useEffect(() => {
-        if (treeList) {
-            let expandedTreeItems = JSON.parse(sessionStorage.getItem("treeItems") || "[]");
+    useEffect(async () => {
+        // let scrollPosition = getScrollPosition();
+        const asyncFetch = async () => {
+            if (treeList) {
+                let tempTreeList = treeList;
+                let expandedTreeItems = JSON.parse(sessionStorage.getItem(storageName) || "[]");
 
-            if (expandedTreeItems) {
-                const merge = mergeWith({}, treeList, expandedTreeItems, (a, b) => {
-                    if (!b) {
-                        return;
-                    }
-                    if (isArray(a)) {
-                        let concated = b.concat(a);
-                        return uniqBy(concated, "id");
-                    }
-                });
-                setTreeData(values(merge));
+                if (expandedTreeItems) {
+                    let expendIds = getExpendsIds(expandedTreeItems);
+
+                    tempTreeList = setExpendsIds(tempTreeList, expendIds);
+                }
+                setTreeData(tempTreeList);
+
+                handleExpandedElements(storageName, tempTreeList);
             } else {
-                setTreeData(treeList);
+                await reFetchTreeList();
+                // setScrollPosition(scrollPosition);
             }
-        } else {
-            reFetchTreeList();
-        }
+        };
+        await asyncFetch();
     }, [isLoadingTreeList]);
 
     const handleSearch = (value) => {
@@ -133,7 +133,6 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     const handleEdit = (id) => {
         // TODO make a dynamic path
         navigate(`/categories/category/${gid}/${id}`);
-        sessionStorage.clear();
     };
 
     // Buttons in the page header
@@ -161,13 +160,66 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         return skeletons;
     };
 
+    const getExpendsIds = (expends, expendIds = []) => {
+        expends.map((item) => {
+            if (item?.children) {
+                if (item.expanded === true) {
+                    expendIds.push(item.id);
+                    // If parent is not open, then the children can not show up
+                    expendIds = getExpendsIds(item.children, expendIds);
+                }
+            }
+        });
+        return expendIds;
+    };
+
+    const setExpendsIds = (tree, expendIds = []) => {
+        tree.map((item) => {
+            if (item?.children) {
+                if (expendIds.includes(item.id)) {
+                    item.expanded = true;
+                    // If parent is open, then the children can show up
+                    item.children = setExpendsIds(item.children, expendIds);
+                }
+            }
+        });
+        return tree;
+    };
+
+    const removeTreeNode = (tree, id) => {
+        tree.map((item, index) => {
+            if (item.id === id) {
+                tree.splice(index, 1);
+            } else {
+                if (item?.children) {
+                    item.children = removeTreeNode(item.children, id);
+                }
+            }
+        });
+        return tree;
+    };
+
+    const getScrollPosition = () => {
+        return parseInt(window.pageYOffset);
+    };
+
+    const setScrollPosition = (top = 0) => {
+        top = window.innerHeight > top ? top : window.innerHeight;
+        setTimeout(() => {
+            window.scrollTo({
+                top: top,
+                behavior: "instant",
+            });
+        }, 300);
+    };
+
     const backToCategories = () => {
         navigate(-1);
     };
 
     const handleChangeTreeData = (treeData) => {
-        handleExpandedElements(treeData);
         setTreeData(treeData);
+        handleExpandedElements(storageName, treeData);
     };
 
     const handleParent = (e) => {
@@ -191,22 +243,11 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         setOpenTextBox({ open: true, id: id });
     };
 
+    // Save child
     const saveChild = (node) => {
         if (addChild.name === "") {
             return;
         }
-
-        // in case that you only update UI use this method
-        // let newTree = addNodeUnderParent({
-        //     treeData: treeData,
-        //     parentKey: path.length - 1,
-        //     expandParent: true,
-        //     getNodeKey,
-        //     newNode: {
-        //         id: Math.floor(Math.random() * 100) + 1,
-        //         title: addChild.name,
-        //     },
-        // });
 
         let tOrder = 0;
         if (node.children) {
@@ -219,27 +260,18 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         setAddChild({ ...addChild, name: "" });
     };
 
+    //Save parent
     const saveParent = () => {
         if (addParent.name === "") {
             return;
         }
 
-        // in case that you only update UI
-        // let newTree = addNodeUnderParent({
-        //     treeData: treeData,
-        //     parentKey: null,
-        //     expandParent: true,
-        //     getNodeKey,
-        //     newNode: {
-        //         id: Math.floor(Math.random() * 100) + 1,
-        //         title: addParent.name,
-        //     },
-        // });
-
         saveData(addParent, "post");
         setAddParent({ ...addParent, name: "" });
     };
 
+    //Save data
+    let scrollPosition = getScrollPosition();
     const saveData = async (data, method) => {
         try {
             const response = await postPutByPathAndData({
@@ -251,7 +283,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             // condition response or response.status === 200 for example
             if (response) {
                 // TODO instead of cleaning storage keep the state from storage and compare with existing to expand all childs
-                sessionStorage.clear();
+
                 toast.success(`Uspešno ${method === "put" ? "izmenjeni" : "dodati"} podaci`);
             }
         } catch (error) {
@@ -260,6 +292,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             toast.warning(`Greška nastala prilikom ${method === "put" ? "izmene" : "dodavanja"} podataka`);
         } finally {
             await reFetchTreeList();
+            setScrollPosition(scrollPosition);
         }
     };
 
@@ -267,22 +300,21 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
 
     // Expand/collapse
     const expand = (expanded) => {
-        setTreeData(
-            toggleExpandedForAll({
-                treeData,
-                expanded,
-            })
-        );
+        let tempTreeData = toggleExpandedForAll({
+            treeData,
+            expanded,
+        });
+
+        setTreeData(tempTreeData);
+        handleExpandedElements(storageName, tempTreeData);
     };
 
     const expandAll = () => {
         expand(true);
-        sessionStorage.clear();
     };
 
     const collapseAll = () => {
         expand(false);
-        sessionStorage.clear();
     };
 
     const handleDragNode = (node, nextParentNode, treeData) => {
@@ -329,12 +361,13 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                             <span className={scss.button}>
                                 <Button icon={"keyboard_double_arrow_up"} label="Skupi sve" onClick={collapseAll} sx={{ mr: "1rem" }} />
                             </span>
-                            {/* <ListTableToolbar  /> */}
+
                             <input
+                                className={scss.searchCategory}
+                                placeholder="Pretraga po ključnoj reči"
                                 type="search"
                                 value={searchString}
                                 onChange={(event) => {
-                                    console.log(event.target.value);
                                     setSearchString(event.target.value);
                                 }}
                             />

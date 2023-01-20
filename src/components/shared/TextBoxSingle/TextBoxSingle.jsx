@@ -1,5 +1,5 @@
 import React from "react";
-import "../../../variables.scss"
+import "../../../variables.scss";
 
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
