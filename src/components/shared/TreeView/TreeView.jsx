@@ -70,7 +70,6 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
 
     const handleDeleteConfirm = async () => {
         let scrollPosition = getScrollPosition();
-
         try {
             const response = await deleteByPath({
                 path: deleteUrl + openDeleteDialog.id,
@@ -101,6 +100,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     }, [openDeleteDialog.mutate]);
 
     useEffect(async () => {
+        // let scrollPosition = getScrollPosition();
         const asyncFetch = async () => {
             if (treeList) {
                 let tempTreeList = treeList;
@@ -116,6 +116,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                 handleExpandedElements(storageName, tempTreeList);
             } else {
                 await reFetchTreeList();
+                // setScrollPosition(scrollPosition);
             }
         };
         await asyncFetch();
@@ -164,7 +165,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             if (item?.children) {
                 if (item.expanded === true) {
                     expendIds.push(item.id);
-                    // Ako nije otvoren roditelj ne mogu ni deca da se vide
+                    // If parent is not open, then the children can not show up
                     expendIds = getExpendsIds(item.children, expendIds);
                 }
             }
@@ -177,7 +178,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             if (item?.children) {
                 if (expendIds.includes(item.id)) {
                     item.expanded = true;
-                    // Ako je otvoren roditelj mogu i deca da se vide
+                    // If parent is open, then the children can show up
                     item.children = setExpendsIds(item.children, expendIds);
                 }
             }
@@ -270,6 +271,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     };
 
     //Save data
+    let scrollPosition = getScrollPosition();
     const saveData = async (data, method) => {
         try {
             const response = await postPutByPathAndData({
@@ -290,6 +292,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             toast.warning(`Greška nastala prilikom ${method === "put" ? "izmene" : "dodavanja"} podataka`);
         } finally {
             await reFetchTreeList();
+            setScrollPosition(scrollPosition);
         }
     };
 
