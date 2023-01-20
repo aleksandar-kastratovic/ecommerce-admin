@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
 import Form from "../../../components/shared/Form/Form";
@@ -29,12 +29,19 @@ const CategoriesDetails = () => {
     const [isLoading, setIsLoading] = useState(false);
     const api = useAPI();
     const apiPath = "admin/category-product/categories";
+    const navigate = useNavigate();
 
     const handleSubmit = (data) => {
+        let oldId = data.id;
         api.post(apiPath, { ...data, id_category_product_groups: gid })
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
+                
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/categories/category/${gid}/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 console.warn(error);

@@ -6,6 +6,7 @@ import VariationForm from "./VariationForm/VariationForm";
 import ProductVariation from "./VariationList/ProductVariation";
 
 const ProductDetailsVariation = ({ productId }) => {
+  console.log(productId)
     const [variationAttributes, setVariationAttributes] = useState([]);
     const [variants, setVariants] = useState([]);
     const api = useAPI();

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Specification from "./ProductDetailsSpecification/Specification";
@@ -23,6 +23,7 @@ import DisplayIn from "./panels/DisplayIn";
 
 const ProductDetails = () => {
     const { prodId } = useParams();
+    const navigate = useNavigate();
 
     const init = {
         id: null,
@@ -41,11 +42,16 @@ const ProductDetails = () => {
     const api = useAPI();
 
     const handleSubmit = (data) => {
+        let oldId = data.id;
         api.post(`admin/product-items/basic-data/`, data)
             .then((response) => {
                 toast.success("Uspešno");
                 setData(response?.payload);
-                console.log(setData)
+
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/products/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 console.warn(error);

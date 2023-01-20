@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import IconList from "../../../helpers/icons";
 import DetailsGroups from "./DetailsGroups/DetailsGroups";
 import Form from "../../../components/shared/Form/Form";
@@ -12,6 +12,7 @@ import formFields from "./formFields.json";
 
 const ProductSpecsDetails = () => {
     const { specId } = useParams();
+    const navigate = useNavigate();
 
     const init = {
         id: null,
@@ -28,10 +29,15 @@ const ProductSpecsDetails = () => {
     const apiPath = "admin/product-item-specifications/set";
 
     const handleSubmit = (data) => {
+        let oldId = data.id;
         api.post(apiPath, data)
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/product-specs/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 console.warn(error);
