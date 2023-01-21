@@ -38,7 +38,7 @@ const CreateForm = ({
     // value is obvious
     // onChangeHandler change handler
     // error is for validations backend and frontend
-
+    value = value === null ? "" : value;
     const [inputValue, setInputValue] = useState(value);
 
     const onInputChangeHandler = (event) => {
@@ -46,14 +46,12 @@ const CreateForm = ({
         setInputValue(event.target.value);
     };
    
-    value = value === null ? "" : value;
-
     let formItem = null;
     if (Array.isArray(item)) {
         formItem = (
             <>
                 {item.map((itemUnit, index) => (
-                    <CreateForm item={itemUnit} key={itemUnit.prop_name} onChangeHandler={onChangeHandler} error={error[index]} value={value} disabled={disabled} />
+                    <CreateForm item={itemUnit} key={itemUnit.prop_name} onChangeHandler={onChangeHandler} onChangeAutoHandler={onChangeAutoHandler} error={error[index]} value={value} disabled={disabled} />
                 ))}
             </>
         );
@@ -133,7 +131,7 @@ const CreateForm = ({
                             name={item.prop_name}
                             disabled={disabled}
                             error={error}
-                            value={inputValue}
+                            value={value}
                             onChange={onInputChangeHandler}
                             options={item.options}
                             description={item.description}
@@ -144,7 +142,6 @@ const CreateForm = ({
                         />
                     );
                     break;
-
                 case "autocomplete":
                     formItem = (
                         <AutocompleteInput

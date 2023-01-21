@@ -352,7 +352,10 @@ export const AutocompleteInput = ({
         }
         let selectedOption = null;
         if (opt.length > 0) {
-            selectedOption = opt.find((o) => o.id === value).name;
+            selectedOption = opt.find((o) => o.id === value)?.name;
+            if(selectedOption === undefined) {
+                selectedOption = null;
+            }
             setMyValue(selectedOption);
         }
     }, [opt]);
