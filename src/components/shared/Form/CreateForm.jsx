@@ -39,11 +39,9 @@ const CreateForm = ({
     // onChangeHandler change handler
     // error is for validations backend and frontend
     value = value === null ? "" : value;
-    const [inputValue, setInputValue] = useState(value);
 
     const onInputChangeHandler = (event) => {
         onChangeHandler(event);
-        setInputValue(event.target.value);
     };
    
     let formItem = null;
@@ -150,7 +148,7 @@ const CreateForm = ({
                             name={item.prop_name}
                             disabled={disabled}
                             error={error}
-                            value={inputValue}
+                            value={value}
                             options={item.options}
                             onChange={onChangeAutoHandler}
                             description={item.description}
