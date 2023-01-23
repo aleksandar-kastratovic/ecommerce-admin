@@ -44,10 +44,17 @@ const TownsDetails = () => {
     };
 
     const saveData = async (data) => {
+        console.log(data);
+        // let oldId = data.id;
         api.post(apiPath, data)
             .then((response) => {
                 setData(response?.payload);
                 toast.success(`Uspešno`);
+
+                // if (oldId === null) {
+                //     let tId = response?.payload?.id;
+                //     navigate(`/towns/${tId}`, { replace: true });
+                // }
             })
             .catch((error) => {
                 console.warn(error);

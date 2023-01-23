@@ -44,10 +44,16 @@ const NotificationsDetails = () => {
     };
 
     const saveData = async (data) => {
+        let oldId = data.id;
         api.post(`admin/notifications`, { ...data, id_company: selectedCompany, id_company_user: selectedUser })
             .then((response) => {
                 setData(response?.payload);
                 toast.success(`Uspešno`);
+
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/notifications/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 console.warn(error);

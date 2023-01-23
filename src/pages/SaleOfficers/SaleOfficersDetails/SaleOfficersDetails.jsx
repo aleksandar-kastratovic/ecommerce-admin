@@ -40,10 +40,15 @@ const SaleOfficersDetails = () => {
     };
 
     const saveData = async (data) => {
-        api.post(`admin/referents-b2b`, {...init,...data})
+        let oldId = data.id;
+        api.post(`admin/referents-b2b`, { ...init, ...data })
             .then((response) => {
                 setData(response?.payload);
                 toast.success(`Uspešno ${id === "new" ? "dodati" : "izmenjeni"} podaci`);
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/B2B-sales-officers/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 console.warn(error);

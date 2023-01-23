@@ -71,10 +71,16 @@ const ParamsDetails = () => {
     const api = useAPI();
 
     const onSubmit = (data) => {
+        let oldId = data.id;
         api.post(`admin/params/main/`, { ...init, ...data })
             .then((response) => {
                 toast.success("Uspešno");
                 setData(response?.payload);
+
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/params/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 toast.warning("Greška");

@@ -16,6 +16,7 @@ const NewsDetails = () => {
     console.log(nid);
     const api = useAPI();
     const apiPath = "admin/news-b2c/news/basic-data";
+    const navigate = useNavigate();
 
     const init = {
         id: null,
@@ -47,10 +48,16 @@ const NewsDetails = () => {
     };
 
     const saveData = async (data) => {
+        let oldId = data.id;
         api.post(apiPath, { ...data, image: data.thumb_image })
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
+
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/news/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 console.warn(error);

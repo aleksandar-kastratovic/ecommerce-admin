@@ -47,12 +47,17 @@ const DetailsBanners = ({}) => {
     const { data: response, isLoading } = useQuery([], () => api.get(`admin/banners-b2b/main/${B2BId}`));
 
     const saveData = (data) => {
+        let oldId = data.id;
         api.post(`admin/banners-b2b/main/`, { ...data, id_position: idPos, name: bannerName })
             .then((response) => {
                 setData(response?.payload);
                 setBannerName(response?.payload.name);
                 setIdPos(response?.payload.id_position);
                 toast.success(`Uspešno`);
+                if (oldId === null) {
+                  let tId = response?.payload?.id;
+                  navigate(`/B2B-banners/${tId}`, { replace: true });
+              }
             })
             .catch((error) => {
                 console.warn(error);
