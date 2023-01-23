@@ -3,13 +3,13 @@ import { toast } from "react-toastify";
 import useAPI from "../../../../../api/api";
 import InputMultipleImages from "../../../../../components/shared/InputMultipleImages/InputMultipleImages";
 
-const VariationGallery = ({ productId, idProductVariant }) => {
+const VariationGallery = ({ productParentId, productId }) => {
     const [data, setData] = useState([]);
     const api = useAPI();
     const apiPath = "admin/product-items/variants/gallery";
 
     const handleData = () => {
-        api.list(`${apiPath}/${productId}/${idProductVariant}`)
+        api.list(`${apiPath}/${productParentId}/${productId}`)
             .then((response) => setData(response?.payload?.items))
             .catch((error) => console.warn(error));
     };
@@ -17,8 +17,8 @@ const VariationGallery = ({ productId, idProductVariant }) => {
     const handleSubmit = (data) => {
         let req = {
             id: data.new ? null : data.id,
+            id_product_parent: productParentId,
             id_product: productId,
-            id_product_variant: idProductVariant,
             file_base64: data.src,
             order: data.position ?? 0,
             title: null,

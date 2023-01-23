@@ -152,7 +152,7 @@ const ProductDetails = () => {
             name: "Varijacije",
             icon: IconList.difference,
             enabled: data?.id,
-            component: <ProductDetailsVariation productId={data?.id} />,
+            component: <ProductDetailsVariation parentId={data?.id} />,
         },
     ];
 
