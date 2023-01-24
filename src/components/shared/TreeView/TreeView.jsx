@@ -130,7 +130,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
 
     const handleEdit = (id) => {
         // TODO make a dynamic path
-        navigate(`/categories/category/${gid}/${id}`);
+        navigate(`/product-categories/category/${gid}/${id}`);
     };
 
     // Buttons in the page header

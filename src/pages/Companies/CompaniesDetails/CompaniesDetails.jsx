@@ -51,7 +51,7 @@ const CompaniesDetails = () => {
 
                 if (oldId === null) {
                     let tId = response?.payload?.id;
-                    navigate(`/companies/${tId}`, { replace: true });
+                    navigate(`/b2b-companies/${tId}`, { replace: true });
                 }
             })
             .catch((error) => {

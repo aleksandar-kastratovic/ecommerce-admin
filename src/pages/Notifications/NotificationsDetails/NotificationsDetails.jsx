@@ -52,7 +52,7 @@ const NotificationsDetails = () => {
 
                 if (oldId === null) {
                     let tId = response?.payload?.id;
-                    navigate(`/notifications/${tId}`, { replace: true });
+                    navigate(`/b2b-notifications/${tId}`, { replace: true });
                 }
             })
             .catch((error) => {

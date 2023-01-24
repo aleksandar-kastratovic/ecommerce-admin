@@ -56,7 +56,7 @@ const B2BRebateTiersDetails = () => {
 
                 if (oldId === null) {
                     let tId = response?.payload?.id;
-                    navigate(`/b2b/rebate_tiers/${tId}`, { replace: true });
+                    navigate(`/b2b-rebate-tiers/${tId}`, { replace: true });
                 }
             })
             .catch((error) => {

@@ -52,7 +52,7 @@ const GroupDetails = () => {
 
                 if (oldId === null) {
                   let tId = response?.payload?.id;
-                  navigate(`/categories/${tId}`, { replace: true });
+                  navigate(`/product-categories/${tId}`, { replace: true });
               }
             })
             .catch((error) => {

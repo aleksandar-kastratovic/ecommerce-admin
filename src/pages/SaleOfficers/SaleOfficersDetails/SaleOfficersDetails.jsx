@@ -47,7 +47,7 @@ const SaleOfficersDetails = () => {
                 toast.success(`Uspešno ${id === "new" ? "dodati" : "izmenjeni"} podaci`);
                 if (oldId === null) {
                     let tId = response?.payload?.id;
-                    navigate(`/B2B-sales-officers/${tId}`, { replace: true });
+                    navigate(`/b2b-sales-officers/${tId}`, { replace: true });
                 }
             })
             .catch((error) => {

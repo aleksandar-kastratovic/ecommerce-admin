@@ -75,7 +75,7 @@ const B2BRebatesDetails = () => {
                 toast.success("Uspešno sačuvano");
                 if (oldId === null) {
                     let tId = response?.payload?.id;
-                    navigate(`/b2b/rebates/${tId}`, { replace: true });
+                    navigate(`/b2b-rebates/${tId}`, { replace: true });
                 }
             })
             .catch((error) => {

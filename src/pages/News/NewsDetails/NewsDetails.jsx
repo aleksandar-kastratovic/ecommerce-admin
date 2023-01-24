@@ -56,7 +56,7 @@ const NewsDetails = () => {
 
                 if (oldId === null) {
                     let tId = response?.payload?.id;
-                    navigate(`/news/${tId}`, { replace: true });
+                    navigate(`/b2c-news/${tId}`, { replace: true });
                 }
             })
             .catch((error) => {

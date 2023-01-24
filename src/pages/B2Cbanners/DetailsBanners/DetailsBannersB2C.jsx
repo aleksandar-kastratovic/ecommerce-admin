@@ -56,7 +56,7 @@ const DetailsBannersB2C = ({}) => {
 
                 if (oldId === null) {
                     let tId = response?.payload?.id;
-                    navigate(`/B2C-banners/${tId}`, { replace: true });
+                    navigate(`/b2c-banners/${tId}`, { replace: true });
                 }
             })
             .catch((error) => {

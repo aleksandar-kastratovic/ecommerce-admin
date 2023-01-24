@@ -56,7 +56,7 @@ const DetailsBanners = ({}) => {
                 toast.success(`Uspešno`);
                 if (oldId === null) {
                   let tId = response?.payload?.id;
-                  navigate(`/B2B-banners/${tId}`, { replace: true });
+                  navigate(`/b2b-banners/${tId}`, { replace: true });
               }
             })
             .catch((error) => {

@@ -48,7 +48,7 @@ const SalesOfficers = ({ companyId }) => {
     return !isLoading ? (
         <>
             <Buttons>
-                <Button label="Dodaj komercijalistu" variant="contained" onClick={() => navigate("/B2B-sales-officers/new")} />
+                <Button label="Dodaj komercijalistu" variant="contained" onClick={() => navigate("/b2b-sales-officers/new")} />
             </Buttons>
             <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} />
         </>
