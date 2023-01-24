@@ -37,7 +37,7 @@ const B2CPositionDetails = () => {
 
                 if (oldId === null) {
                     let tId = response?.payload?.id;
-                    navigate(`/B2B-banners/positions/${tId}`, { replace: true });
+                    navigate(`/B2C-banners/positions/${tId}`, { replace: true });
                 }
             })
             .catch((error) => {
