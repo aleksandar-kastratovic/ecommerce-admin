@@ -40,7 +40,7 @@ const CategoriesDetails = () => {
                 
                 if (oldId === null) {
                     let tId = response?.payload?.id;
-                    navigate(`/categories/category/${gid}/${tId}`, { replace: true });
+                    navigate(`/product-categories/category/${gid}/${tId}`, { replace: true });
                 }
             })
             .catch((error) => {

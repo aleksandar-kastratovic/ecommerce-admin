@@ -6,7 +6,7 @@ import tblFields from "./tblFields.json";
 const Brands = () => {
   return (
     <ListPage
-      apiUrl="admin/brands/"
+      apiUrl="admin/brands"
       title="Brendovi"
       columnFields={tblFields}
     />

@@ -46,12 +46,18 @@ const DetailsBannersB2C = ({}) => {
     const { data: response, isLoading } = useQuery([], () => api.get(`admin/banners-b2c/main/${B2CId}`));
 
     const saveData = (data) => {
+        let oldId = data.id;
         api.post(`admin/banners-b2c/main/`, { ...data, id_position: idPos, name: bannerName })
             .then((response) => {
                 setData(response?.payload);
                 setBannerName(response?.payload.name);
                 setIdPos(response?.payload.id_position);
                 toast.success(`Uspešno`);
+
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/b2c-banners/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 console.warn(error);

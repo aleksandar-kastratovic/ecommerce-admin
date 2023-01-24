@@ -11,7 +11,7 @@ const CategoriesListPage = () => {
             id: 1,
             label: "Grupe",
             action: () => {
-                navigate("/categories");
+                navigate("/product-categories");
             },
         },
     ];

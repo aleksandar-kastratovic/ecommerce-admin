@@ -5,14 +5,13 @@ import useAPI from "../../../../api/api";
 import VariationForm from "./VariationForm/VariationForm";
 import ProductVariation from "./VariationList/ProductVariation";
 
-const ProductDetailsVariation = ({ productId }) => {
-  console.log(productId)
+const ProductDetailsVariation = ({ parentId }) => {
     const [variationAttributes, setVariationAttributes] = useState([]);
     const [variants, setVariants] = useState([]);
     const api = useAPI();
 
     const getVariants = () => {
-        api.get(`admin/product-items/variants/main/product/${productId}`)
+        api.get(`admin/product-items/variants/main/product/${parentId}`)
             .then((response) => {
                 setVariants(response?.payload);
             })
@@ -22,7 +21,7 @@ const ProductDetailsVariation = ({ productId }) => {
     };
 
     useEffect(() => {
-        api.get(`admin/product-items/variants/main/product-attributes/${productId}`)
+        api.get(`admin/product-items/variants/main/product-attributes/${parentId}`)
             .then((response) => {
                 setVariationAttributes(response?.payload);
             })
@@ -33,12 +32,12 @@ const ProductDetailsVariation = ({ productId }) => {
     }, []);
 
     const onSubmit = (data) => {
-        const req = { data: [], values: { id_product: Number(productId) } };
+        const req = { data: [], values: { id_parent: Number(parentId) } };
         for (const field of data) {
             for (const value of field.values) {
                 if (value.selected) {
                     req.data.push({
-                        id_product: Number(productId),
+                        id_product_parent: Number(parentId),
                         id_attribute: value.id_group_attribute,
                         slug_attribute: field.attr.slug,
                         name_attribute: field.attr.name,
@@ -65,7 +64,7 @@ const ProductDetailsVariation = ({ productId }) => {
             <Box>
                 <h4>Lista varijanti</h4>
                 {variants.map((variant) => {
-                    return <ProductVariation title={variant.attributes_text} key={variant.id} idProduct={productId} idProductVariant={variant.id} status={variant.status === "on"} />;
+                    return <ProductVariation title={variant.attributes_text} key={variant.id} productParentId={parentId} productId={variant.id} status={variant.status === "on"} />;
                 })}
             </Box>
         </Box>
