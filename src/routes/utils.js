@@ -6,8 +6,9 @@ export const MenuGroup = {
   PRODUCT: { order: 0, name: "Katalog" },
   B2B: { order: 1, name: "B2B" },
   B2C: { order: 2, name: "B2C" },
-  SETTINGS: { order: 3, name: "Podešavanja" },
-  TOOLS: { order: 4, name: "Alati" },
+  PROMOTIONS: { order: 3, name: "Promocije" },
+  SETTINGS: { order: 4, name: "Podešavanja" },
+  TOOLS: { order: 5, name: "Alati" },
 };
 
 /**
