@@ -11,6 +11,7 @@ import {
     faUpload,
     faList,
     faFlag,
+    faParking,
     faBuilding,
     faRoad,
     faCopyright,
@@ -55,6 +56,8 @@ import B2Bbanners from "./../pages/B2Bbanners/B2Bbanners";
 import DetailsBanners from "./../pages/B2Bbanners/DetailsBanners/DetailsBanners";
 import StaticPages from "../pages/StaticPages/StaticPages";
 import StaticPagesDetails from "../pages/StaticPages/StaticPagesDetails/StaticPagesDetails";
+import PromotionsCatalogCampaigns from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaigns";
+import PromotionsCatalogCampaignsPageDetails from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaignsPageDetails/PromotionsCatalogCampaignsPageDetails";
 import Newsletter from "../pages/Newsletter/Newsletter";
 import B2CContactForm from "../pages/B2CContactForm/B2CContactForm";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
@@ -97,7 +100,7 @@ import B2COrdersDetails from "../pages/B2COrders/Details/B2COrdersDetails";
 import B2CContactFormDetails from "../pages/B2CContactForm/B2CContacFormDetails/B2CContactFormDetails";
 
 /** The list of available screens. */
-const { PRODUCT, B2B, B2C, SETTINGS, TOOLS } = MenuGroup;
+const { PRODUCT, B2B, B2C, PROMOTIONS, SETTINGS, TOOLS } = MenuGroup;
 const screens = {
     CATEG: [
         "/product-categories",
@@ -184,6 +187,8 @@ const screens = {
     B2C_NEWSLETTER: ["/b2c-newsletter", "Newsletter", faArchive, B2C, Newsletter, [[":nlid", Newsletter]]],
     B2C_CONTACT_FORMS: ["/b2c-contactform", "Kontakt forma", faEnvelope, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],
+
+    PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Kampanje kataloga", faParking, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
 
     ROLES: ["/roles", "Uloge", faPeopleArrows, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
     USERS: ["/users", "Korisnici", faUsers, SETTINGS, Users, [[":userId", UsersDetils]]],

@@ -130,3 +130,9 @@ pipelines:
           <<: *execute
           name: HeklaniSvet
           deployment: heklanisvet
+          
+    prod-magnetic:
+      - step:
+          <<: *execute
+          name: Magnetic
+          deployment: magnetic

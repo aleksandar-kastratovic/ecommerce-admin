@@ -1,12 +1,14 @@
 import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
 import VariationForm from "./VariationForm/VariationForm";
 import ProductVariation from "./VariationList/ProductVariation";
 
 const ProductDetailsVariation = ({ parentId }) => {
     const [variationAttributes, setVariationAttributes] = useState([]);
+    const [initSelected, setInitSelected] = useState([]);
     const [variants, setVariants] = useState([]);
     const api = useAPI();
 
@@ -20,14 +22,19 @@ const ProductDetailsVariation = ({ parentId }) => {
             });
     };
 
-    useEffect(() => {
+    const getVariationAttributes = () => {
         api.get(`admin/product-items/variants/main/product-attributes/${parentId}`)
             .then((response) => {
                 setVariationAttributes(response?.payload);
+                setInitSelectedKeys(response?.payload);
             })
             .catch((error) => {
                 console.warn(error);
             });
+    };
+
+    useEffect(() => {
+        getVariationAttributes();
         getVariants();
     }, []);
 
@@ -50,16 +57,35 @@ const ProductDetailsVariation = ({ parentId }) => {
         }
         api.post("admin/product-items/variants/main/save", req)
             .then((response) => {
-                console.log(response);
+                getVariationAttributes();
                 getVariants();
+                toast.success(`Uspešno`);
             })
             .catch((error) => {
                 console.warn(error);
             });
     };
+
+    const setInitSelectedKeys = (values) => {
+        let keys = [];
+        values.map((row) => {
+            row.values.map((r) => {
+                if (r.selected) {
+                    keys.push({
+                        key: r.id_group + "_" + r.id_group_attribute + "_" + r.id,
+                        attr: row.attr.name,
+                        val: r.name,
+                        selected: r.selected,
+                    });
+                }
+            });
+        });
+        setInitSelected(keys);
+    };
+
     return (
         <Box>
-            <VariationForm fields={variationAttributes} onSumbit={onSubmit} />
+            <VariationForm fields={variationAttributes} initSelected={initSelected} onSumbit={onSubmit} />
 
             <Box>
                 <h4>Lista varijanti</h4>
