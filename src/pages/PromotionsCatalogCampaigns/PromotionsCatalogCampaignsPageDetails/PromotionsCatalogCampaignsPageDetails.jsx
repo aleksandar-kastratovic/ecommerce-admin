@@ -6,7 +6,7 @@ import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
 import basic_data from "./forms/basic_data.json";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
-import TechnicalDoc from "./panels/TechnicalDoc";
+import InfoConditions from "./panels/InfoConditions";
 
 const PromotionsCatalogCampaignsPageDetails = () => {
     const { nid } = useParams();
@@ -71,7 +71,7 @@ const PromotionsCatalogCampaignsPageDetails = () => {
             name: "Informacije o uslovima",
             icon: IconList.settings,
             enabled: data?.id,
-            component: <TechnicalDoc newsId={data?.id} />,
+            component: <InfoConditions newsId={data?.id} />,
         },
     ];
 

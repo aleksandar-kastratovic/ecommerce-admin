@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/static/css/main.28aee1ab.css",
+    "main.js": "/static/js/main.42270ae7.js",
+    "static/media/signin-background.png": "/static/media/signin-background.c2348c05aaed8499f74e.png",
+    "static/media/croonus-sidebar-logo-light.svg": "/static/media/croonus-sidebar-logo-light.a3b3f4e01b7c9a68912766bc4edc321c.svg",
+    "static/media/login-logo.svg": "/static/media/login-logo.e95c4e80516e0d8177742d6f9c43c5a8.svg",
+    "static/media/croonus-sidebar-logo-dark.svg": "/static/media/croonus-sidebar-logo-dark.b221d86e0716013e0a483a4b6bdd68d5.svg",
+    "static/media/croonus-sidebar-icon.svg": "/static/media/croonus-sidebar-icon.c6f214b702624e30506238533b9accf9.svg",
+    "index.html": "/index.html",
+    "main.28aee1ab.css.map": "/static/css/main.28aee1ab.css.map",
+    "main.42270ae7.js.map": "/static/js/main.42270ae7.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.28aee1ab.css",
+    "static/js/main.42270ae7.js"
+  ]
+}
