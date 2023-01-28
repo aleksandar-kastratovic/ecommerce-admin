@@ -14,15 +14,15 @@ import useAPI from "../../../../../api/api";
 import { priceValidate } from "../../../utils/PriceValidate";
 import VariationGallery from "./VariationGallery";
 
-const ProductVariation = ({ title = "", idProduct, idProductVariant, status }) => {
+const ProductVariation = ({ title = "", productParentId, productId, status }) => {
     const [open, setOpen] = useState(false);
     const api = useAPI();
 
     const [variantStatus, setVariantStatus] = useState(status);
 
     const basicInit = {
-        id_product: idProduct,
-        id_product_variant: idProductVariant,
+        id_product_parent: productParentId,
+        id_product: productId,
         name: null,
         sku: null,
         barcode: null,
@@ -31,8 +31,8 @@ const ProductVariation = ({ title = "", idProduct, idProductVariant, status }) =
 
     const pricesInit = {
         id: null,
-        id_product: idProduct,
-        id_product_variant: idProductVariant,
+        id_product_parent: productParentId,
+        id_product: productId,
         id_price_structure: null,
         system: "",
         country: "",
@@ -50,8 +50,8 @@ const ProductVariation = ({ title = "", idProduct, idProductVariant, status }) =
 
     const seoInit = {
         id: null,
-        id_product: idProduct,
-        id_product_variant: idProductVariant,
+        id_product_parent: productParentId,
+        id_product: productId,
         id_country: 0,
         lang: "",
         slug: "",
@@ -65,15 +65,15 @@ const ProductVariation = ({ title = "", idProduct, idProductVariant, status }) =
 
     const lagerInit = {
         id: null,
-        id_product: idProduct,
-        id_product_variant: idProductVariant,
+        id_product_parent: productParentId,
+        id_product: productId,
         id_store: null,
         quantity: 0,
         unit: "",
     };
 
     const setStatus = (status) => {
-        api.post(`admin/product-items/variants/main/change-status/${idProduct}/${idProductVariant}`, { status })
+        api.post(`admin/product-items/variants/main/change-status/${productParentId}/${productId}`, { status })
             .then((response) => console.log(response))
             .catch((error) => console.warn(error));
     };
@@ -108,48 +108,48 @@ const ProductVariation = ({ title = "", idProduct, idProductVariant, status }) =
                         title="Osnovni podaci"
                         formFields={basicData}
                         type="form"
-                        getUrl={`admin/product-items/variants/basic-data/${idProduct}/${idProductVariant}`}
+                        getUrl={`admin/product-items/variants/basic-data/${productParentId}/${productId}`}
                         postUrl="admin/product-items/variants/basic-data/"
-                        idProduct={idProduct}
-                        idProductVariant={idProductVariant}
+                        productParentId={productParentId}
+                        productId={productId}
                         init={basicInit}
                     />
                     <VariationSection
                         title="Cena"
                         formFields={prices}
                         type="list"
-                        listUrl={`admin/product-items/variants/prices/${idProduct}/${idProductVariant}`}
+                        listUrl={`admin/product-items/variants/prices/${productParentId}/${productId}`}
                         postUrl={"admin/product-items/variants/prices/"}
                         deleteUrl={"admin/product-items/variants/prices"}
                         init={pricesInit}
-                        idProduct={idProduct}
-                        idProductVariant={idProductVariant}
+                        productParentId={productParentId}
+                        productId={productId}
                         validateData={priceValidate}
                     />
                     <VariationSection
                         title="Lager"
                         formFields={lager}
                         type="list"
-                        listUrl={`admin/product-items/variants/inventory/${idProduct}/${idProductVariant}`}
+                        listUrl={`admin/product-items/variants/inventory/${productParentId}/${productId}`}
                         postUrl={"admin/product-items/variants/inventory/"}
                         deleteUrl={"admin/product-items/variants/inventory"}
                         init={lagerInit}
-                        idProduct={idProduct}
-                        idProductVariant={idProductVariant}
+                        productParentId={productParentId}
+                        productId={productId}
                     />
                     <VariationSection
                         title="Seo"
                         formFields={seo}
                         type="list"
-                        listUrl={`admin/product-items/variants/seo/${idProduct}/${idProductVariant}`}
+                        listUrl={`admin/product-items/variants/seo/${productParentId}/${productId}`}
                         postUrl={"admin/product-items/variants/seo/"}
                         deleteUrl={"admin/product-items/variants/seo"}
                         init={seoInit}
-                        idProduct={idProduct}
-                        idProductVariant={idProductVariant}
+                        productParentId={productParentId}
+                        productId={productId}
                     />
-                    <VariationSection title="Galerija" formFields={gallery} type="children" idProduct={idProduct} idProductVariant={idProductVariant}>
-                        <VariationGallery productId={idProduct} idProductVariant={idProductVariant} />
+                    <VariationSection title="Galerija" formFields={gallery} type="children" productParentId={productParentId} productId={productId}>
+                        <VariationGallery productParentId={productParentId} productId={productId} />
                     </VariationSection>
                 </Box>
             )}

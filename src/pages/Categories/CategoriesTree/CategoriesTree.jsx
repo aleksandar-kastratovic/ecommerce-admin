@@ -11,12 +11,13 @@ const CategoriesTree = () => {
             id: 1,
             label: "Grupe",
             action: () => {
-                navigate("/categories");
+                navigate("/product-categories");
             },
         },
     ];
 
-    return <TreeView apiUrl={`admin/category-product/tree/`} title="Kategorije" columnFields={tblFields} additionalButtons={buttons} filters={{ id_category_product_group: gid }} />;
+    return <TreeView apiUrl={`admin/category-product/tree/`} title="Kategorije" columnFields={tblFields}  filters={{ id_category_product_group: gid }} />;
+    // additionalButtons={buttons}
 };
 
 export default CategoriesTree;

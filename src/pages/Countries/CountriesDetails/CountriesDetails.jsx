@@ -9,62 +9,66 @@ import useAPI from "../../../api/api";
 import formFields from "./formField.json";
 
 const CountriesDetails = () => {
-  const { cid } = useParams();
-  const navigate = useNavigate();
-  const api = useAPI();
+    const { cid } = useParams();
+    const navigate = useNavigate();
+    const api = useAPI();
 
-  const init = {
-    id: null,
-    slug: null,
-    name: null,
-    id_country: null,
-    phone_code: null,
-    source: null,
-    id_source: null,
-    status: null,
-  };
+    const init = {
+        id: null,
+        slug: null,
+        name: null,
+        id_country: null,
+        phone_code: null,
+        source: null,
+        id_source: null,
+        status: null,
+    };
 
-  const [data, setData] = useState(init);
-  const [isLoading, setIsLoading] = useState(false);
+    const [data, setData] = useState(init);
+    const [isLoading, setIsLoading] = useState(false);
 
-  const submitHandler = (data) => {
-    api
-      .post("admin/countries", data)
-      .then((response) => {
-        toast.success("Uspešno");
-        setData(response?.payload);
-      })
-      .catch((error) => {
-        toast.warning("Greška");
-        console.warn(error);
-      });
-  };
+    const submitHandler = (data) => {
+        let oldId = data.id;
+        api.post("admin/countries", data)
+            .then((response) => {
+                toast.success("Uspešno");
+                setData(response?.payload);
 
-  useEffect(() => {
-    setIsLoading(true);
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/countries/${tId}`, { replace: true });
+                }
+            })
+            .catch((error) => {
+                toast.warning("Greška");
+                console.warn(error);
+            });
+    };
 
-    api
-      .get(`admin/countries/${cid}`)
-      .then((response) => {
-        setData(response?.payload);
-      })
-      .catch((error) => {
-        console.warn(error);
-      });
+    useEffect(() => {
+        setIsLoading(true);
 
-    setIsLoading(false);
-  }, []);
+        api.get(`admin/countries/${cid}`)
+            .then((response) => {
+                setData(response?.payload);
+            })
+            .catch((error) => {
+                console.warn(error);
+            });
 
-  return (
-    <FormWrapper
-      title={cid === "new" ? "Unos nove države" : data?.name}
-      back={() => {
-        navigate(-1);
-      }}
-    >
-      {!isLoading ? <Form formFields={formFields} initialData={data} onSubmit={submitHandler} /> : <LoadingForm fields={formFields.length} />}
-    </FormWrapper>
-  );
+        setIsLoading(false);
+    }, []);
+
+    return (
+        <FormWrapper
+            title={cid === "new" ? "Unos nove države" : data?.name}
+            back={() => {
+                navigate(-1);
+            }}
+        >
+            {!isLoading ? <Form formFields={formFields} initialData={data} onSubmit={submitHandler} /> : <LoadingForm fields={formFields.length} />}
+        </FormWrapper>
+    );
 };
 
 export default CountriesDetails;

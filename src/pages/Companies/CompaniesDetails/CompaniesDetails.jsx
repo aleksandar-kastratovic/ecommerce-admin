@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useAPI from "../../../api/api";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Form from "../../../components/shared/Form/Form";
@@ -20,6 +20,7 @@ import UsersPanel from "./panels/UsersPanel";
 
 const CompaniesDetails = () => {
     const { comId } = useParams();
+    const navigate = useNavigate();
 
     const init = {
         id: null,
@@ -42,10 +43,16 @@ const CompaniesDetails = () => {
     };
 
     const saveData = (data) => {
+        let oldId = data.id;
         api.post(`${apiPath}/basic-data`, data)
             .then((response) => {
                 setData(response?.payload);
                 toast.success("Uspešno");
+
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/b2b-companies/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 console.warn(error);

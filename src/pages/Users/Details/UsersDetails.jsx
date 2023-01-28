@@ -42,10 +42,16 @@ const UsersDetils = () => {
     };
 
     const saveData = async (data) => {
+        let oldId = data.id;
         api.post(apiPath, data)
             .then((response) => {
                 setData(response?.payload);
                 toast.success(`Uspešno`);
+
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/users/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 console.warn(error);

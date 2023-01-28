@@ -18,8 +18,8 @@ const VariationSection = ({
     listUrl = "",
     deleteUrl = "",
     init = {},
-    idProduct,
-    idProductVariant,
+    productParentId,
+    productId,
     validateData = (data) => data,
     children,
 }) => {
@@ -59,8 +59,8 @@ const VariationSection = ({
 
     const onSubmit = (data) => {
         const req = {
-            id_product: idProduct,
-            id_product_variant: idProductVariant,
+            id_product_parent: productParentId,
+            id_product: productId,
             ...init,
             ...data,
         };
@@ -83,7 +83,7 @@ const VariationSection = ({
 
     const onDelete = (token, id) => {
         if (deleteUrl !== "") {
-            api.delete(`${deleteUrl}/${id}/${idProduct}/${idProductVariant}`)
+            api.delete(`${deleteUrl}/${id}`)
                 .then((response) => {
                     console.log(response);
                     toast.success("Uspešno");

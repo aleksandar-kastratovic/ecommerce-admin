@@ -13,6 +13,8 @@ const Inventories = ({ productId }) => {
         unit: "kom",
     };
 
+    console.log(productId)
+
     const [listData, setListData] = useState([]);
     const api = useAPI();
     const apiPath = "admin/product-items/inventories";

@@ -35,6 +35,7 @@ const StoresDetails = () => {
     };
     const navigate = useNavigate();
     const [data, setData] = useState(init);
+
     const [isLoading, setIsLoading] = useState(false);
 
     const handleData = async () => {
@@ -51,10 +52,16 @@ const StoresDetails = () => {
     };
 
     const saveData = async (data) => {
+        let oldId = data.id;
         api.post(`admin/stores`, data)
             .then((response) => {
                 setData(response?.payload);
                 toast.success(`Uspešno`);
+
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/stores/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 console.warn(error);

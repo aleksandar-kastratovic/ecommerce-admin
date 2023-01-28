@@ -1,4 +1,5 @@
 import React from "react";
+import "../../../variables.scss";
 
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
@@ -40,7 +41,7 @@ const TextBoxSingle = ({
             >
                 {label}
             </FormLabel>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div style={{ display: "flex", alignItems: "flex-end" }}>
                 <TextField
                     name={name}
                     size={size}
@@ -54,11 +55,11 @@ const TextBoxSingle = ({
                     }}
                     helperText={error?.content ? error.content : description}
                 />
-                <IconButton onClick={onSaveClick} aria-label="plus" style={{ marginTop: 15 }}>
+                <IconButton onClick={onSaveClick} aria-label="plus" style={{ color: "#28a86e", padding: "4px" }}>
                     {/* <AddCircleOutlineIcon fontSize="inherit" /> */}
                     <Icon>{saveIcon}</Icon>
                 </IconButton>
-                <IconButton onClick={onCancelClick} aria-label="minus" style={{ marginTop: 15 }}>
+                <IconButton onClick={onCancelClick} aria-label="minus" style={{ color: "#d32f2f", padding: "4px" }}>
                     <Icon>{cancelIcon}</Icon>
                 </IconButton>
             </div>

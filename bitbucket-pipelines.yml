@@ -124,3 +124,21 @@ pipelines:
           <<: *execute
           name: Kruska
           deployment: kruska
+
+    prod-lucani:
+      - step:
+          <<: *execute
+          name: Lucani
+          deployment: lucani
+
+    prod-heklanisvet:
+      - step:
+          <<: *execute
+          name: HeklaniSvet
+          deployment: heklanisvet
+          
+    prod-magnetic:
+      - step:
+          <<: *execute
+          name: Magnetic
+          deployment: magnetic

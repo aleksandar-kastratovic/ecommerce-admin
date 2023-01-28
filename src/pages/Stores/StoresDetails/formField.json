@@ -94,7 +94,7 @@
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "select",
+        "input_type": "autocomplete",
         "fillFromApi": "admin/stores/ddl",
         "usePropName": true,
         "options": []

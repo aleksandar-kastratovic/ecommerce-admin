@@ -5,7 +5,7 @@ import tblFields from "./tblFields.json";
 const NewsCategorylist = () => {
     const navigate = useNavigate();
     const newsPage = () => {
-        navigate("/news");
+        navigate("/b2c-news");
     };
 
     const newsButtons = [{ id: 1, label: "Vesti", action: newsPage }];

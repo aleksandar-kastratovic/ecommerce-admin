@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
 import NoteBox from "../../../components/shared/NoteBox/NoteBox";
@@ -23,6 +23,7 @@ const B2BRebatesDetails = () => {
         categories: null,
         tiers: null,
     });
+    const navigate = useNavigate()
 
     // Check if this is a new record, or we are modifying an existing one
     const isNew = params["rebateId"] === NEW;
@@ -66,11 +67,16 @@ const B2BRebatesDetails = () => {
 
     // Send to API
     const submit = (rebate) => {
+        let oldId = rebate.id;
         updateStateKey(setData, "rebate", rebate);
         api.post("/admin/rebates", rebate)
             .then((response) => {
                 setData((data) => ({ ...data, rebate: { ...data.rebate, id: response.payload.id } }));
                 toast.success("Uspešno sačuvano");
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/b2b-rebates/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 toast.warning("Došlo je do greške");
@@ -107,7 +113,7 @@ const B2BRebatesDetails = () => {
     ];
 
     // The title of the page
-    const title = !isNew ? `Izmena: ${data.rebate?.name ? `"${data.rebate.name}"` : ""}` : "Novi unos";
+    const title = !isNew ? `${data.rebate?.name ? `${data.rebate?.name}` : ""}` : "Novi unos rabata";
 
     return <DetailsPage title={title} fields={panels} ready={[data.rebate, data.tiers, data.categories, data.categories]} />;
 };

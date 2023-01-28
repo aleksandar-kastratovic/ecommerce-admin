@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 import formFields from "./formField.json";
@@ -20,6 +20,7 @@ const RolesDetailsPage = () => {
     const apiPath = "admin/roles/main";
     const [data, setData] = useState(init);
     const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
     const handleData = async () => {
         setIsLoading(true);
@@ -36,10 +37,16 @@ const RolesDetailsPage = () => {
     };
 
     const saveData = async (data) => {
+        let oldId = data.id;
         api.post(apiPath, data)
             .then((response) => {
                 setData(response?.payload);
                 toast.success(`Uspešno`);
+
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/roles/${tId}`, { replace: true });
+                }
             })
             .catch((error) => {
                 console.warn(error);

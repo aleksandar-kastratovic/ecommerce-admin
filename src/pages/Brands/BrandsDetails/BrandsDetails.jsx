@@ -29,11 +29,17 @@ const BrandsDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const submitHandler = (data) => {
+    let oldId = data.id;
     api
       .post("admin/brands/", data)
       .then((response) => {
         toast.success("Uspešno");
         setData(response?.payload);
+
+        if (oldId === null) {
+          let tId = response?.payload?.id;
+          navigate(`/brands/${tId}`, { replace: true });
+      }
       })
       .catch((error) => {
         toast.warning("Greška");

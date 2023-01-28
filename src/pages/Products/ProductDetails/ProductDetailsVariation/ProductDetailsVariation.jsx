@@ -1,17 +1,19 @@
 import { Box } from "@mui/material";
 import { useEffect } from "react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
 import VariationForm from "./VariationForm/VariationForm";
 import ProductVariation from "./VariationList/ProductVariation";
 
-const ProductDetailsVariation = ({ productId }) => {
+const ProductDetailsVariation = ({ parentId }) => {
     const [variationAttributes, setVariationAttributes] = useState([]);
+    const [initSelected, setInitSelected] = useState([]);
     const [variants, setVariants] = useState([]);
     const api = useAPI();
 
     const getVariants = () => {
-        api.get(`admin/product-items/variants/main/product/${productId}`)
+        api.get(`admin/product-items/variants/main/product/${parentId}`)
             .then((response) => {
                 setVariants(response?.payload);
             })
@@ -20,24 +22,29 @@ const ProductDetailsVariation = ({ productId }) => {
             });
     };
 
-    useEffect(() => {
-        api.get(`admin/product-items/variants/main/product-attributes/${productId}`)
+    const getVariationAttributes = () => {
+        api.get(`admin/product-items/variants/main/product-attributes/${parentId}`)
             .then((response) => {
                 setVariationAttributes(response?.payload);
+                setInitSelectedKeys(response?.payload);
             })
             .catch((error) => {
                 console.warn(error);
             });
+    };
+
+    useEffect(() => {
+        getVariationAttributes();
         getVariants();
     }, []);
 
     const onSubmit = (data) => {
-        const req = { data: [], values: { id_product: Number(productId) } };
+        const req = { data: [], values: { id_parent: Number(parentId) } };
         for (const field of data) {
             for (const value of field.values) {
                 if (value.selected) {
                     req.data.push({
-                        id_product: Number(productId),
+                        id_product_parent: Number(parentId),
                         id_attribute: value.id_group_attribute,
                         slug_attribute: field.attr.slug,
                         name_attribute: field.attr.name,
@@ -50,21 +57,40 @@ const ProductDetailsVariation = ({ productId }) => {
         }
         api.post("admin/product-items/variants/main/save", req)
             .then((response) => {
-                console.log(response);
+                getVariationAttributes();
                 getVariants();
+                toast.success(`Uspešno`);
             })
             .catch((error) => {
                 console.warn(error);
             });
     };
+
+    const setInitSelectedKeys = (values) => {
+        let keys = [];
+        values.map((row) => {
+            row.values.map((r) => {
+                if (r.selected) {
+                    keys.push({
+                        key: r.id_group + "_" + r.id_group_attribute + "_" + r.id,
+                        attr: row.attr.name,
+                        val: r.name,
+                        selected: r.selected,
+                    });
+                }
+            });
+        });
+        setInitSelected(keys);
+    };
+
     return (
         <Box>
-            <VariationForm fields={variationAttributes} onSumbit={onSubmit} />
+            <VariationForm fields={variationAttributes} initSelected={initSelected} onSumbit={onSubmit} />
 
             <Box>
                 <h4>Lista varijanti</h4>
                 {variants.map((variant) => {
-                    return <ProductVariation title={variant.attributes_text} key={variant.id} idProduct={productId} idProductVariant={variant.id} status={variant.status === "on"} />;
+                    return <ProductVariation title={variant.attributes_text} key={variant.id} productParentId={parentId} productId={variant.id} status={variant.status === "on"} />;
                 })}
             </Box>
         </Box>
