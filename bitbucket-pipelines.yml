@@ -136,3 +136,9 @@ pipelines:
           <<: *execute
           name: Magnetic
           deployment: magnetic
+          
+    prod-karat:
+      - step:
+          <<: *execute
+          name: Karat
+          deployment: karat
