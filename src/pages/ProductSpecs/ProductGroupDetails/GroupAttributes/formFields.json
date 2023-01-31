@@ -84,6 +84,10 @@
                 "name": "Select"
             },
             {
+                "id": "multi_select",
+                "name": "Multi select"
+            },
+            {
                 "id": "date_time",
                 "name": "Date"
             },

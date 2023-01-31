@@ -54,7 +54,41 @@ const ListItem = ({ data, index, onDelete = () => {}, saveData = () => {}, formF
                     setButtons({ ...buttons, ...anyButtons });
                 }
 
-                if (actions[item.prop_name] && actions[item.prop_name].value === data[item.prop_name]) {
+                if (actions[item.prop_name]) {
+                    let name = item.prop_name;
+                    let t_val = actions[item.prop_name].value;
+                    let button_add = false;
+                    if (t_val) {
+                        switch (typeof t_val) {
+                            case "array":
+                            case "object":
+                                t_val.map((t_v) => {
+                                    if (t_v == data[item.prop_name]) {
+                                        button_add = true;
+                                    }
+                                });
+                                break;
+                            default:
+                                if (t_val === data[item.prop_name]) {
+                                    button_add = true;
+                                }
+                                break;
+                        }
+                    }
+
+                    if (button_add) {
+                        let button = actions[item.prop_name].button;
+                        setButtons({ ...buttons, [name]: button });
+                    } else {
+                        setButtons((buttons) => {
+                            delete buttons[name];
+                            return buttons;
+                        });
+                    }
+                }
+
+                // This is the old way of writing code, not good for transparency, needs more functionality
+                /* if (actions[item.prop_name] && actions[item.prop_name].value === data[item.prop_name]) {
                     let name = item.prop_name;
                     let button = actions[item.prop_name].button;
                     setButtons({ ...buttons, [name]: button });
@@ -64,7 +98,7 @@ const ListItem = ({ data, index, onDelete = () => {}, saveData = () => {}, formF
                         delete buttons[name];
                         return buttons;
                     });
-                }
+                } */
             });
     }, [data]);
     return (

@@ -70,7 +70,9 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
                 for (const attr of attributes) {
                     let item = response?.payload.filter((val) => val.id_attribute === attr.id)[0];
                     if (item) {
-                        if (attr.field_type === "select") {
+                        if (attr.field_type === "multi_select") {
+                            obj[item.slug_attribute] = typeof item.id_attribute_value !== "object" ? [item.id_attribute_value] : item.id_attribute_value;
+                        } else if (attr.field_type === "select") {
                             obj[item.slug_attribute] = item.id_attribute_value;
                         } else {
                             obj[item.slug_attribute] = item.name_attribute_value;
@@ -100,7 +102,7 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
     const formFields = attributes.map((item) => {
         let additional = {};
 
-        if (item.field_type === "select") {
+        if (item.field_type === "multi_select" || item.field_type === "select") {
             api.get(`${apiPath}/attribute-values/${item.id}`)
                 .then((response) => {
                     setAttributeValues((attributeValues) => {
