@@ -27,7 +27,7 @@ const GroupAttributes = ({ groupId }) => {
     const apiPath = "admin/product-item-specifications/group-attribute";
     const listActions = {
         field_type: {
-            value: "select",
+            value: ["select", "multi_select"],
             button: {
                 id: 1,
                 text: "Unos vrednosti",
@@ -53,6 +53,7 @@ const GroupAttributes = ({ groupId }) => {
             .then((response) => {
                 console.log(response);
                 handleList();
+
                 toast.success("Uspešno!");
             })
             .catch((error) => {
