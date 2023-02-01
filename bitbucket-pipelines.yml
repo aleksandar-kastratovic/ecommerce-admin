@@ -142,3 +142,9 @@ pipelines:
           <<: *execute
           name: Karat
           deployment: karat
+                    
+    prod-marela:
+      - step:
+          <<: *execute
+          name: Marela
+          deployment: marela
