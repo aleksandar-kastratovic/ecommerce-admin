@@ -160,3 +160,9 @@ pipelines:
           <<: *execute
           name: Realmaverse
           deployment: realmaverse
+
+    prod-adnetics:
+      - step:
+          <<: *execute
+          name: Adnetics
+          deployment: adnetics
