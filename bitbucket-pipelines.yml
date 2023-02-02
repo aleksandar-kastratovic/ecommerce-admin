@@ -148,3 +148,9 @@ pipelines:
           <<: *execute
           name: Marela
           deployment: marela
+                    
+    prod-whollywear:
+      - step:
+          <<: *execute
+          name: WhollyWear
+          deployment: whollywear
