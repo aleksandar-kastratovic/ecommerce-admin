@@ -166,3 +166,9 @@ pipelines:
           <<: *execute
           name: Adnetics
           deployment: adnetics
+
+    prod-agropremium:
+      - step:
+          <<: *execute
+          name: AgroPremium
+          deployment: agropremium
