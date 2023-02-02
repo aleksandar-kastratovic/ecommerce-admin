@@ -172,3 +172,9 @@ pipelines:
           <<: *execute
           name: AgroPremium
           deployment: agropremium
+                                                
+    prod-elestra:
+      - step:
+          <<: *execute
+          name: Elestra
+          deployment: elestra
