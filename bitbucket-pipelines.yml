@@ -184,3 +184,9 @@ pipelines:
           <<: *execute
           name: Velvet
           deployment: velvet
+                                                
+    prod-klimatrade:
+      - step:
+          <<: *execute
+          name: KlimaTrade
+          deployment: klimatrade
