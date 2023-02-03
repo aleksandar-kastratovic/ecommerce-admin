@@ -178,3 +178,9 @@ pipelines:
           <<: *execute
           name: Elestra
           deployment: elestra
+                                                
+    prod-velvet:
+      - step:
+          <<: *execute
+          name: Velvet
+          deployment: velvet
