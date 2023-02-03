@@ -190,3 +190,9 @@ pipelines:
           <<: *execute
           name: KlimaTrade
           deployment: klimatrade
+                                                
+    prod-migservis:
+      - step:
+          <<: *execute
+          name: MigServis
+          deployment: migservis
