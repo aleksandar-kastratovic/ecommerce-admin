@@ -196,3 +196,9 @@ pipelines:
           <<: *execute
           name: MigServis
           deployment: migservis
+                                                
+    prod-ristictrade:
+      - step:
+          <<: *execute
+          name: RisticTrade
+          deployment: ristictrade
