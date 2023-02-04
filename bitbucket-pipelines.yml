@@ -142,3 +142,69 @@ pipelines:
           <<: *execute
           name: Magnetic
           deployment: magnetic
+          
+    prod-karat:
+      - step:
+          <<: *execute
+          name: Karat
+          deployment: karat
+                    
+    prod-marela:
+      - step:
+          <<: *execute
+          name: Marela
+          deployment: marela
+                    
+    prod-whollywear:
+      - step:
+          <<: *execute
+          name: WhollyWear
+          deployment: whollywear
+                              
+    prod-realmaverse:
+      - step:
+          <<: *execute
+          name: Realmaverse
+          deployment: realmaverse
+
+    prod-adnetics:
+      - step:
+          <<: *execute
+          name: Adnetics
+          deployment: adnetics
+
+    prod-agropremium:
+      - step:
+          <<: *execute
+          name: AgroPremium
+          deployment: agropremium
+                                                
+    prod-elestra:
+      - step:
+          <<: *execute
+          name: Elestra
+          deployment: elestra
+                                                
+    prod-velvet:
+      - step:
+          <<: *execute
+          name: Velvet
+          deployment: velvet
+                                                
+    prod-klimatrade:
+      - step:
+          <<: *execute
+          name: KlimaTrade
+          deployment: klimatrade
+                                                
+    prod-migservis:
+      - step:
+          <<: *execute
+          name: MigServis
+          deployment: migservis
+                                                
+    prod-ristictrade:
+      - step:
+          <<: *execute
+          name: RisticTrade
+          deployment: ristictrade
