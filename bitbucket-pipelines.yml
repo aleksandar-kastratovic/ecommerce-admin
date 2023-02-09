@@ -202,3 +202,9 @@ pipelines:
           <<: *execute
           name: RisticTrade
           deployment: ristictrade
+                                     
+    prod-zutilist:
+      - step:
+          <<: *execute
+          name: ZutiList
+          deployment: zutilist
