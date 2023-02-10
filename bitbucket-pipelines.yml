@@ -232,3 +232,9 @@ pipelines:
           <<: *execute
           name: OrginalTd
           deployment: orginaltd
+                                                                   
+    prod-rover:
+      - step:
+          <<: *execute
+          name: Rover
+          deployment: rover
