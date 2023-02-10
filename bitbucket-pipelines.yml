@@ -214,3 +214,9 @@ pipelines:
           <<: *execute
           name: Raika
           deployment: raika
+                                     
+    prod-psihum:
+      - step:
+          <<: *execute
+          name: Psihum
+          deployment: psihum
