@@ -226,3 +226,9 @@ pipelines:
           <<: *execute
           name: HeliVez
           deployment: helivez
+                                                                   
+    prod-orginaltd:
+      - step:
+          <<: *execute
+          name: OrginalTd
+          deployment: orginaltd
