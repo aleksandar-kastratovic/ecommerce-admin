@@ -208,3 +208,9 @@ pipelines:
           <<: *execute
           name: ZutiList
           deployment: zutilist
+                                     
+    prod-raika:
+      - step:
+          <<: *execute
+          name: Raika
+          deployment: raika
