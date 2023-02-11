@@ -14,13 +14,10 @@
 #                                                                                                                      #
 ########################################################################################################################
 
-PROJECT='${BITBUCKET_DEPLOYMENT_ENVIRONMENT}'
-            BITBUCKET_BRANCH_1='${BITBUCKET_BRANCH}'
-            BITBUCKET_REPO_SLUG_1='${BITBUCKET_REPO_SLUG}'
-            BITBUCKET_EXIT_CODE_1='${BITBUCKET_EXIT_CODE}'
-            TEMP_STATUS='Pocelo'
+echo "First arg: $1"
+echo "Second arg: $2"
 
 
-curl -X POST https://roverkonfigurator.croonus.com/backend/save.php?test=${PROJECT}
+curl -X POST https://roverkonfigurator.croonus.com/backend/save.php?test=$1
    -H "Content-Type: application/json"
-   -d "{\"PROJECT\":\"${PROJECT}\",\"BITBUCKET_BRANCH_1\":\"${BITBUCKET_BRANCH_1}\",\"BITBUCKET_REPO_SLUG_1\":\"${BITBUCKET_REPO_SLUG_1}\",\"BITBUCKET_EXIT_CODE_1\":\"${BITBUCKET_EXIT_CODE_1}\",\"TEMP_STATUS\":\"${TEMP_STATUS}\"}"
+   -d "{\"BITBUCKET_EXIT_CODE\":\"$1\",\"BITBUCKET_EXIT_CODE\":\"$2\"}"
