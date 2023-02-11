@@ -15,7 +15,7 @@
 ########################################################################################################################
 
 
-curl -X POST https://roverkonfigurator.croonus.com/backend/save.php
+curl -X POST https://roverkonfigurator.croonus.com/backend/save.php?test=dasda&bit=$BITBUCKET_REPO_SLUG
    -H "Content-Type: application/json"
    -d "[\"$BITBUCKET_BOOKMARK\",\"$BITBUCKET_BRANCH\",\"$BITBUCKET_BUILD_NUMBER\",\"$BITBUCKET_COMMIT\",\"$BITBUCKET_REPO_SLUG\",\"$BITBUCKET_EXIT_CODE\"]"
 
