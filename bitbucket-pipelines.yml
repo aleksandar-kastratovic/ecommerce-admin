@@ -15,7 +15,7 @@ definitions:
           - docker
         script:
           - export DEPLOY_STATUS="deploy-$DOCKER_IMAGE-$BITBUCKET_DEPLOYMENT_ENVIRONMENT-$RANDOM-proba.sh"
-          - scp -o StrictHostKeyChecking=no -P ${SERVER_PORT} deploy/deploy_status.sh $SERVER_USER@$SERVER_HOST:"
+          - scp -o StrictHostKeyChecking=no -P ${SERVER_PORT} deploy/deploy_status.sh $SERVER_USER@$SERVER_HOST "
             PROJECT='${BITBUCKET_DEPLOYMENT_ENVIRONMENT}'
             BITBUCKET_BRANCH_1='${BITBUCKET_BRANCH}'
             BITBUCKET_REPO_SLUG_1='${BITBUCKET_REPO_SLUG}'
