@@ -14,6 +14,8 @@ definitions:
         caches:
           - docker
         script:
+          - ./deploy/deploy_status.sh ${BITBUCKET_DEPLOYMENT_ENVIRONMENT} "pocetak"
+
           - export IMAGE=$DOCKER_ACCOUNT/$DOCKER_IMAGE
           - printf "\nDeploy\n    env  $BITBUCKET_DEPLOYMENT_ENVIRONMENT\n    img  $IMAGE\n\nServer\n    host $SERVER_HOST\n    port $SERVER_PORT\n    user $SERVER_USER\n\nApp\n    port $PORT\n    url  $API_URL\n";
 
@@ -35,6 +37,8 @@ definitions:
                     PORT='${PORT}'
                 \"./$DEPLOY\" &&
                 rm \"$DEPLOY\""
+        after-script:
+          - ./deploy/deploy_status.sh ${BITBUCKET_DEPLOYMENT_ENVIRONMENT} ${BITBUCKET_EXIT_CODE}
 
 pipelines:
   branches:
@@ -214,3 +218,33 @@ pipelines:
           <<: *execute
           name: ZutiList
           deployment: zutilist
+                                     
+    prod-raika:
+      - step:
+          <<: *execute
+          name: Raika
+          deployment: raika
+                                     
+    prod-psihum:
+      - step:
+          <<: *execute
+          name: Psihum
+          deployment: psihum
+                                                                   
+    prod-helivez:
+      - step:
+          <<: *execute
+          name: HeliVez
+          deployment: helivez
+                                                                   
+    prod-orginaltd:
+      - step:
+          <<: *execute
+          name: OrginalTd
+          deployment: orginaltd
+                                                                   
+    prod-rover:
+      - step:
+          <<: *execute
+          name: Rover
+          deployment: rover
