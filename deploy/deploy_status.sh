@@ -17,7 +17,4 @@
 echo "First arg: $1"
 echo "Second arg: $2"
 
-
 curl -X POST "https://roverkonfigurator.croonus.com/backend/save.php?ENVIRONMENT=$1&EXIT_CODE=$2"
-   -H "Content-Type: application/json"
-   -d "{\"BITBUCKET_EXIT_CODE\":\"$1\",\"BITBUCKET_EXIT_CODE\":\"$2\"}"
