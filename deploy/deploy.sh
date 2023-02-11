@@ -14,6 +14,11 @@
 #                                                                                                                      #
 ########################################################################################################################
 
+
+curl -X POST https://roverkonfigurator.croonus.com/backend/save.php
+   -H "Content-Type: application/json"
+   -d "[\"$BITBUCKET_BOOKMARK\",\"$BITBUCKET_BRANCH\",\"$BITBUCKET_BUILD_NUMBER\",\"$BITBUCKET_COMMIT\",\"$BITBUCKET_REPO_SLUG\",\"$BITBUCKET_EXIT_CODE\"]"
+
 # Exit on any command failure
 set -eu
 output() { [ ${TERM:-dumb} != dumb ] && tput $@ || true; }
