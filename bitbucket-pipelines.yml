@@ -45,6 +45,12 @@ pipelines:
     master:
       - step: *execute
 
+    demo:
+      - step:
+          <<: *execute
+          name: Demo
+          deployment: demo
+
     prod-stojic:
       - step:
           <<: *execute
