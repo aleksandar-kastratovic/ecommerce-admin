@@ -248,3 +248,9 @@ pipelines:
           <<: *execute
           name: Rover
           deployment: rover
+                                                                             
+    prod-gojkovicmed:
+      - step:
+          <<: *execute
+          name: GojkovicMed
+          deployment: gojkovicmed
