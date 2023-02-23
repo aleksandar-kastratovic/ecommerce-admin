@@ -254,3 +254,9 @@ pipelines:
           <<: *execute
           name: GojkovicMed
           deployment: gojkovicmed
+                                                                             
+    prod-zlataranova:
+      - step:
+          <<: *execute
+          name: ZlataraNova
+          deployment: zlataranova
