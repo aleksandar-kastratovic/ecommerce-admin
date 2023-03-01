@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import useAPI from "../../../../api/api";
 import Form from "../../../../components/shared/Form/Form";
 import Loading from "../../../../components/shared/Loading/Loading";
+import { toast } from "react-toastify";
 
 const B2CSettingsForm = ({ form_slug, config_module_id, module, submodule }) => {
     const api = useAPI();
@@ -37,7 +38,10 @@ const B2CSettingsForm = ({ form_slug, config_module_id, module, submodule }) => 
 
     const submitHandler = (data) => {
         api.post(`admin/configuration-b2c/main/${module}/${submodule}`, data)
-            .then((response) => console.log(response))
+            .then((response) => {
+              setFormData(response?.payload)
+              toast.success("Uspešno");
+            } )
             .catch((error) => console.warn(error));
     };
     return !isLoading ? <Form formFields={formFields} onSubmit={submitHandler} initialData={initialData} /> : <Loading />;
