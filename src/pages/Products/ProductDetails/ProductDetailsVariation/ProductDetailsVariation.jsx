@@ -85,13 +85,17 @@ const ProductDetailsVariation = ({ parentId }) => {
 
     return (
         <Box>
-            <VariationForm fields={variationAttributes} initSelected={initSelected} onSumbit={onSubmit} />
+            {variationAttributes.length > 0 ? <VariationForm fields={variationAttributes} initSelected={initSelected} onSumbit={onSubmit} /> : <p>Nema definisanih atributa za kreiranje varijanti.</p>}
 
             <Box>
                 <h4>Lista varijanti</h4>
-                {variants.map((variant) => {
-                    return <ProductVariation title={variant.attributes_text} key={variant.id} productParentId={parentId} productId={variant.id} status={variant.status === "on"} />;
-                })}
+                {variants.length > 0 ? (
+                    variants.map((variant) => {
+                        return <ProductVariation title={variant.attributes_text} key={variant.id} productParentId={parentId} productId={variant.id} status={variant.status === "on"} />;
+                    })
+                ) : (
+                    <p>Trenutno ne postoje varijante za prikaz.</p>
+                )}
             </Box>
         </Box>
     );

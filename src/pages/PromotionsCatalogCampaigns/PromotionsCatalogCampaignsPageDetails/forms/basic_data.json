@@ -1,5 +1,21 @@
 [
     {
+        "field_name": "Sistem",
+        "prop_name": "system",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "select",
+        "options": [],
+        "fillFromApi": "admin/campaigns-product-catalog/basic-data/ddl",
+        "usePropName": true
+    },
+    {
         "field_name": "Naziv akcije",
         "prop_name": "name",
         "in_main_table": true,
@@ -13,18 +29,18 @@
         "input_type": "input"
     },
     {
-      "field_name": "Slug",
-      "prop_name": "slug",
-      "in_main_table": true,
-      "in_details": true,
-      "editable": true,
-      "disabled": false,
-      "required": true,
-      "description": "Maximum file size: 2MB, Allowed file types: Not all browsers support all these formats!",
-      "ui_prop": "xyz",
-      "sortable": true,
-      "input_type": "input"
-  },
+        "field_name": "Slug",
+        "prop_name": "slug",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "Maximum file size: 2MB, Allowed file types: Not all browsers support all these formats!",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+    },
     {
         "field_name": "Opis akcije",
         "prop_name": "description",
@@ -41,33 +57,7 @@
 
     {
         "field_name": "Datum početka akcije",
-        "prop_name": "new_from",
-        "in_main_table": true,
-        "in_details": true,
-        "editable": true,
-        "disabled": false,
-        "required": false,
-        "description": "",
-        "ui_prop": "xyz",
-        "sortable": true,
-        "input_type": "date_time"
-    },
-    {
-        "field_name": "Datum prekida akcije",
-        "prop_name": "new_to",
-        "in_main_table": true,
-        "in_details": true,
-        "editable": true,
-        "disabled": false,
-        "required": false,
-        "description": "",
-        "ui_prop": "xyz",
-        "sortable": true,
-        "input_type": "date_time"
-    },
-    {
-        "field_name": "Akcija se odnosi na grupu kupaca",
-        "prop_name": "stickers",
+        "prop_name": "from",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
@@ -76,14 +66,38 @@
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
+        "input_type": "date_time"
+    },
+    {
+        "field_name": "Datum prekida akcije",
+        "prop_name": "to",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": true,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "date_time"
+    },
+    {
+        "field_name": "Akcija se odnosi na grupu kupaca",
+        "prop_name": "",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
         "input_type": "multi_select",
-        "options": [],
-        "fillFromApi": "admin/product-items/description/ddl",
         "usePropName": true
     },
     {
         "field_name": "Akcija aktivna",
-        "prop_name": "use_in_variants",
+        "prop_name": "status",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
@@ -102,22 +116,20 @@
                 "name": "Ne"
             }
         ],
-        "input_type": "multi_select"
+        "input_type": "select"
     },
     {
         "field_name": "Država",
-        "prop_name": "id_country",
+        "prop_name": "",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
         "disabled": false,
-        "required": true,
+        "required": false,
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
         "input_type": "multi_select",
-        "options": [],
-        "fillFromApi": "admin/towns/ddl",
         "usePropName": true
     },
     {
@@ -135,23 +147,23 @@
     },
     {
         "field_name": "Način obračuna popusta",
-        "prop_name": "id_country",
+        "prop_name": "discount_type",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
         "disabled": false,
-        "required": true,
+        "required": false,
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
         "input_type": "select",
         "options": [],
-        "fillFromApi": "admin/towns/ddl",
+        "fillFromApi": "admin/campaigns-product-catalog/basic-data/ddl",
         "usePropName": true
     },
     {
         "field_name": "Iznos popusta",
-        "prop_name": "order",
+        "prop_name": "discount_value",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
@@ -164,12 +176,12 @@
     },
     {
         "field_name": "Primeni i na ostale akcije",
-        "prop_name": "use_in_variants",
+        "prop_name": "",
         "in_main_table": true,
         "in_details": true,
         "editable": true,
         "disabled": false,
-        "required": true,
+        "required": false,
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,

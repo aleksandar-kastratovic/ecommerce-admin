@@ -6,20 +6,28 @@ import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
 import basic_data from "./forms/basic_data.json";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
-import InfoConditions from "./panels/InfoConditions";
+import Conditions from "./panels/Conditions";
 
 const PromotionsCatalogCampaignsPageDetails = () => {
     const { nid } = useParams();
     const api = useAPI();
-    const apiPath = "admin/product-item-specifications/set";
+    const apiPath = "admin/campaigns-product-catalog/basic-data";
     const navigate = useNavigate();
 
     const init = {
         id: null,
+        description: null,
+        discount_type: null,
+        discount_value: null,
         slug: null,
         name: null,
         description: null,
+        from: null,
+        to: null,
+        order: null,
         status: "on",
+        system: null,
+        id_country: null,
     };
 
     const [data, setData] = useState(init);
@@ -71,7 +79,7 @@ const PromotionsCatalogCampaignsPageDetails = () => {
             name: "Informacije o uslovima",
             icon: IconList.settings,
             enabled: data?.id,
-            component: <InfoConditions newsId={data?.id} />,
+            component: <Conditions campaignId={data?.id} />,
         },
     ];
 
