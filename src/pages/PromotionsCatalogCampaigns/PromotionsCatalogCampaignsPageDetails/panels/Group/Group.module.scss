@@ -1,0 +1,44 @@
+@import "../../../../../variables.scss";
+
+.groupBox {
+    position: relative;
+    border-top: 1px solid rgba($black, 0.06);
+    border-bottom: 1px solid rgba($black, 0.06);
+    padding-bottom: 0.5rem;
+    &:not(:first-child) {
+        margin: 1rem 0;
+        transform: translateX(2rem);
+    }
+    .removeGroup {
+        position: absolute;
+        right: 0;
+        top: -0.2rem;
+        color: $danger;
+    }
+
+    .groupHolder {
+        margin-bottom: 0.8rem;
+        span {
+            margin: 0 1rem;
+        }
+    }
+
+    .buttonHolder {
+        display: flex;
+        column-gap: 0.5rem;
+        margin-top: 0.4rem;
+        button {
+            // background: rgba($black, 0.04);
+            // border: none;
+            text-transform: inherit;
+            font-size: 1rem;
+            // color: rgba($black, 0.74);
+            &::first-letter {
+                text-transform: uppercase;
+            }
+            // span {
+            //     color: rgba($black, 0.54);
+            // }
+        }
+    }
+}

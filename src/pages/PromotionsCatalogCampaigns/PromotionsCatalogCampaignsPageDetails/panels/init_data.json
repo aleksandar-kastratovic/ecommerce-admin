@@ -1,0 +1,22 @@
+[
+    {
+        "type": "group",
+        "fields": [
+            {
+                "field": "condition",
+                "selected": {
+                    "id": "and",
+                    "name": "and"
+                }
+            },
+            {
+                "field": "value",
+                "selected": {
+                    "id": "true",
+                    "name": "true"
+                }
+            }
+        ],
+        "rules": []
+    }
+]

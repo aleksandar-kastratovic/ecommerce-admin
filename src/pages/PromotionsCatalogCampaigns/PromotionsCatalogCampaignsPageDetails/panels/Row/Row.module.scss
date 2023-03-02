@@ -1,0 +1,33 @@
+@import "../../../../../variables.scss";
+
+.rowHolder {
+    display: flex;
+    align-items: center;
+    column-gap: 0.5rem;
+
+    p {
+        display: none;
+    }
+
+    // .removeRow {
+    //   display: none;
+    // }
+    // &:hover .removeRow {
+    //   display: flex;
+    // }
+    // .inputField {
+    //   width: 100px;
+    // }
+    .valueIcon {
+        display: flex;
+        align-items: center;
+        input {
+            width: 100px;
+        }
+    }
+
+    .removeRow {
+        color: $danger;
+    }
+    
+}

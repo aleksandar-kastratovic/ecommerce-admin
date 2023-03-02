@@ -1,0 +1,42 @@
+{
+  "id": null,
+  "type": "row_select",
+  "fields": [
+    {
+      "field": "entity",
+      "selected": {
+        "id": 0,
+        "name": 0
+      }
+    },
+    {
+      "field": "group",
+      "selected": {
+        "id": null,
+        "name": null
+      }
+    },
+    {
+      "field": "field",
+      "selected": {
+        "id": null,
+        "name": null
+      }
+    },
+    {
+      "field": "condition",
+      "selected": {
+        "id": null,
+        "name": null
+      }
+    },
+    {
+      "field": "value",
+      "selected": {
+        "id": null,
+        "name": null
+      }
+    }
+  ],
+  "rules": []
+}
