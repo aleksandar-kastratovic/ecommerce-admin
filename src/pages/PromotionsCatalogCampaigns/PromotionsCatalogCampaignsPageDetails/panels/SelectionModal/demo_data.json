@@ -1,0 +1,19 @@
+{
+  "available": [
+    {
+      "id": 0,
+      "name": "Srbija"
+    },
+    {
+      "id": 1,
+      "name": "Bosna"
+    },
+    {
+      "id": 2,
+      "name": "Crna Gora"
+    }
+  ],
+  "selected": [
+    1
+  ]
+}

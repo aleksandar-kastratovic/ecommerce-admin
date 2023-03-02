@@ -19,51 +19,52 @@ import styles from "./SearchableListForm.module.scss";
  * @constructor
  */
 const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll = false, toggleShowSelected = true }) => {
-    const { list, toggle, has, set, clear } = useList(selected ?? []);
-    const [search, setSearch] = useState("");
+  const { list, toggle, has, set, clear } = useList(selected ?? []);
+  const [search, setSearch] = useState("");
 
-    const [showSelected, setShowSelected] = useState(false);
+  const [showSelected, setShowSelected] = useState(false);
 
-    // Filter the available
-    available = available.filter((item) => search === "" || item.name.toLowerCase().includes(search.toLowerCase()));
+  // Filter the available
+  available = available.filter((item) => search === "" || item.name.toLowerCase().includes(search.toLowerCase()));
 
-    const toggleSelectAll = (selected) => {
-        if (!selected) {
-            clear();
-        } else {
-            for (const item of available) {
-                set(item.id);
-            }
-        }
-    };
-
-    if (showSelected) {
-        available = available.filter((item) => list.includes(item.id));
+  const toggleSelectAll = (selected) => {
+    if (!selected) {
+      clear();
+    } else {
+      for (const item of available) {
+        set(item.id);
+      }
     }
+  };
 
-    return (
-        <>
-            {/* show only selected options */}
-            {toggleShowSelected && <InputCheckbox label="Prikaži samo izabrane" value={showSelected} onChange={({ target }) => setShowSelected(target.checked)} />}
-            {/* select all options */}
-            {selectAll && <InputCheckbox label="Izaberi sve" value={available.length === list.length && available.length > 0} onChange={({ target }) => toggleSelectAll(target.checked)} />}
+  if (showSelected) {
+    available = available.filter((item) => list.includes(item.id));
+  }
 
-            <InputInput placeholder="Pretraga" value={search} onChange={(event) => setSearch(event.target.value)} />
-            {/* The list of available items */}
-            <div className={styles.optionsList}>
-                {available.map((brand) => (
-                    <InputCheckbox key={brand.id} value={has(brand.id)} label={brand.name} onChange={() => toggle(brand.id)} />
-                ))}
-            </div>
+  return (
+    <>
+      {/* show only selected options */}
+      {toggleShowSelected && <InputCheckbox label="Prikaži samo izabrane" value={showSelected} onChange={({ target }) => setShowSelected(target.checked)} />}
+      {/* select all options */}
+      {selectAll && <InputCheckbox label="Izaberi sve" value={available.length === list.length && available.length > 0} onChange={({ target }) => toggleSelectAll(target.checked)} />}
 
-            {/* There are no available to show */}
-            {available.length === 0 && <NoteBox message="Lista je prazna" className="mt" />}
+      <InputInput placeholder="Pretraga" value={search} onChange={(event) => setSearch(event.target.value)} />
+      {/* The list of available items */}
+      <div className={styles.optionsList}>
+        {available.map((brand) => (
+          <InputCheckbox key={brand.id} value={has(brand.id)} label={brand.name} onChange={() => toggle(brand.id)} />
+        ))}
+      </div>
 
-            <Buttons>
-                <Button label="Sačuvaj" variant="contained" onClick={() => onSubmit(list)} />
-            </Buttons>
-        </>
-    );
+      {/* There are no available to show */}
+      {available.length === 0 && <NoteBox message="Lista je prazna" className="mt" />}
+
+
+      <Buttons>
+        <Button label="Sačuvaj" variant="contained" onClick={() => onSubmit(list)} />
+      </Buttons>
+    </>
+  );
 };
 
 export default SearchableListForm;
