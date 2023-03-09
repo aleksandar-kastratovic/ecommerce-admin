@@ -260,3 +260,9 @@ pipelines:
           <<: *execute
           name: ZlataraNova
           deployment: zlataranova
+                                                                             
+    prod-absolem:
+      - step:
+          <<: *execute
+          name: Absolem
+          deployment: absolem
