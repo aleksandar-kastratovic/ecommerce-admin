@@ -69,9 +69,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
           {/* {id} */}
           Ako su
           <span className={style.span}>
-            <InputSelect sx={{
-              color: "red"
-            }} label="" required={false} name="condition" fillFromApi={`${apiPath}/group/ddl/condition`} usePropName={false} value={fieldCondition} options={[]}
+            <InputSelect className={style.inputConditionValue} label="" required={false} name="condition" fillFromApi={`${apiPath}/group/ddl/condition`} usePropName={false} value={fieldCondition} options={[]}
               onChange={({ target }) => {
                 setFieldCondition(target.value);
                 setValueField("condition", target.value, target.name);
@@ -80,7 +78,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
           </span>
           navedeni uslovi
           <span className={style.span}>
-            <InputSelect label="" required={false} name="value" fillFromApi={`${apiPath}/group/ddl/value`} usePropName={false} value={fieldValue} options={[]}
+            <InputSelect className={style.inputConditionValue} label="" required={false} name="value" fillFromApi={`${apiPath}/group/ddl/value`} usePropName={false} value={fieldValue} options={[]}
               onChange={({ target }) => {
                 setFieldValue(target.value);
                 setValueField("value", target.value, target.name);
@@ -100,7 +98,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
             sx={{ width: "100%" }}
             disabled={!isLastSelected}
             onClick={() => {
-              handleAddComponent(id, "row_select");
+              handleAddComponent(id, "row");
             }}
           />
         </Buttons>

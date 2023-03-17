@@ -52,9 +52,13 @@ const Conditions = ({ campaignId }) => {
             rules = renderContent(t_row.rules);
           }
 
-          return <Group key={t_row.id} id={t_row.id} data={t_row} rules={rules} handleAddComponent={handleAddComponent} handleRemoveComponent={handleRemoveComponent}
-          />;
-        } else if (t_row.type === "row_select") {
+          switch (t_row?.type_component) {
+            case "default":
+            default: return <Group key={t_row.id} id={t_row.id} data={t_row} rules={rules} handleAddComponent={handleAddComponent} handleRemoveComponent={handleRemoveComponent} />;
+          }
+
+        } else if (t_row.type === "row") {
+
           return <Row key={t_row.id} id={t_row.id} data={t_row} handleRemoveComponent={handleRemoveComponent} />;
         }
       } else {
@@ -65,7 +69,7 @@ const Conditions = ({ campaignId }) => {
   };
 
   function onSubmit() {
-    api.post(apiPath, data)
+    api.post(apiPath, { "id_campaign": campaignId, "conditions": data })
       .then((response) => {
         setData({ ...data });
         toast.success("Uspešno!");
@@ -87,16 +91,16 @@ const Conditions = ({ campaignId }) => {
         if (componentType === "group") {
           const newRules = [{ ...cloneDeep(group_file), id: v4() }];
           return { ...t_row, rules: [...t_row.rules, ...newRules] };
-        } else if (componentType === "row_select") {
+        } else if (componentType === "row") {
           let isLastSelected = true;
           for (let i = t_row.rules.length - 1; i >= 0; i++) {
-            if (t_row.rules[i].type === "row_select") {
-              console.log(t_row.rules);
+            if (t_row.rules[i].type === "row") {
+              // console.log(t_row.rules);
               isLastSelected = t_row.rules[i].fields[t_row.rules[i].fields.length - 2].selected.id != null && t_row.rules[i].fields[t_row.rules[i].fields.length - 2].selected.id != 0;
               break;
             }
           }
-          console.log(isLastSelected);
+          // console.log(isLastSelected);
           if (!isLastSelected) {
             toast.warn("Selektujte sva input polja!");
             return t_row;

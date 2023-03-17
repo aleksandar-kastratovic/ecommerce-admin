@@ -1,6 +1,7 @@
 {
   "id": null,
   "type": "group",
+  "type_component": "default",
   "fields": [
     {
       "field": "condition",

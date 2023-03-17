@@ -1,6 +1,7 @@
 {
   "id": null,
-  "type": "row_select",
+  "type": "row",
+  "type_component": "default",
   "fields": [
     {
       "field": "entity",

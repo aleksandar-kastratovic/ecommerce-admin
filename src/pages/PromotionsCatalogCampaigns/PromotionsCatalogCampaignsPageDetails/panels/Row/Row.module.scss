@@ -5,6 +5,23 @@
     align-items: center;
     column-gap: 0.5rem;
 
+    div {
+        width: auto;
+        min-width: min-content;
+        .inputSelect {
+            font-size: 0.875rem;
+            padding: 0;
+            div {
+              padding: 0;
+            }
+            fieldset {
+              border: 0;
+              border-bottom: 1px solid rgba($black, 0.2);
+              border-radius: 0;
+            }
+        }
+    }
+
     p {
         display: none;
     }
@@ -18,6 +35,7 @@
     // .inputField {
     //   width: 100px;
     // }
+
     .valueIcon {
         display: flex;
         align-items: center;
@@ -28,6 +46,6 @@
 
     .removeRow {
         color: $danger;
+        margin-left: auto;
     }
-    
 }

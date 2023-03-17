@@ -1,47 +1,61 @@
+import ListPage from "../../../../../components/shared/ListPage/ListPage";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import { useState } from "react";
-import { InputCheckbox } from "../../../../../components/shared/Form/FormInputs/FormInputs";
+import { useState, useEffect } from "react";
+import { toast } from "react-toastify";
+import useAPI from "../../../../../api/api";
 import SearchableListForm from "../../../../../components/shared/Form/SearchableListForm/SearchableListForm";
+import CampaignTable from "../CampaignTable/CampaignTable";
 
-//DELETE demo data
-import demo from "./demo_data.json";
 
-const SelectionModal = ({ openDialog, setOpenDialog, apiPath, data, selectedValues }) => {
+const SelectionModal = ({ openDialog, setOpenDialog, selectedValues, component, opt, options, setOptions }) => {
 
-  console.log(selectedValues)
+  const handleList = () => {
+    // api.get(`${apiPath}/row/ddl/value`)
+    //   .then((response) => {
+    //     setListData(response?.payload);
+    //   })
+    //   .catch((error) => {
+    //     console.warn(error);
+    //   });
+  };
+
   const onSubmit = (selected) => {
     //proslediti izabrane id-eve na api ili roditeljskun komponentu
+    // api.post(apiPath, selected)
+    //   .then((response) => {
+    //     toast.success("Uspešno");
+    //   })
+    //   .catch((error) => {
+    //     console.warn(error);
+    //     toast.warn("Greška");
+    //   });
     console.log(selected);
   }
-  /*
-    = - jednako jednoj vrednosti "selec ili text"
-    IN - jednak je jednom ili vise iz neke liste "multichoice ili searchableform"
-    <= - manje ili jednako
-    >= - veće ili jednako
-    <> - različito
-    BETWEEN - izmedju dve vrednosti - moze se resiti sa dva reda sa >= i <=
-    LIKE - sličan sa nekim - npr sifra
 
-    Za value bi bilo potrebno - tip polja (unos, izbor jedne vrednosti ili vise vrednosti) 
-                              -i tip vrednosti (ako je polje za unos da li je broj ili string)
-    {
-      type:"select",
-      value:"number"
+  // useEffect(() => {
+  //   handleList();
+  // }, []);
+
+  const ComponentToRender = () => {
+    switch (component) {
+      case "list": return <SearchableListForm
+        available={opt?.available}
+        selected={opt?.selected}
+        onSubmit={onSubmit}
+      />;
+      case "table": return <CampaignTable data={opt?.data} columns={opt?.format} options={options} setOptions={setOptions}/>;
+
+      default: return null;
     }
-  */
+  }
 
   return <Dialog open={openDialog.show ?? false}>
     <DialogContent>
       <p>{selectedValues}</p>
-      <SearchableListForm
-        available={demo.available}
-        selected={demo.selected}
-        onSubmit={onSubmit}
-      />
-
+      {opt && ComponentToRender()}
     </DialogContent>
 
     <DialogActions>

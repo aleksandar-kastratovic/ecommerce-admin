@@ -9,81 +9,81 @@ import DetailsPage from "../../../components/shared/ListPage/DetailsPage/Details
 import Conditions from "./panels/Conditions";
 
 const PromotionsCatalogCampaignsPageDetails = () => {
-    const { nid } = useParams();
-    const api = useAPI();
-    const apiPath = "admin/campaigns-product-catalog/basic-data";
-    const navigate = useNavigate();
+  const { nid } = useParams();
+  const api = useAPI();
+  const apiPath = "admin/campaigns-product-catalog/basic-data";
+  const navigate = useNavigate();
 
-    const init = {
-        id: null,
-        description: null,
-        discount_type: null,
-        discount_value: null,
-        slug: null,
-        name: null,
-        description: null,
-        from: null,
-        to: null,
-        order: null,
-        status: "on",
-        system: null,
-        id_country: null,
-    };
+  const init = {
+    id: null,
+    description: null,
+    discount_type: null,
+    discount_value: null,
+    slug: null,
+    name: null,
+    description: null,
+    from: null,
+    to: null,
+    order: null,
+    status: "on",
+    system: null,
+    id_country: null,
+  };
 
-    const [data, setData] = useState(init);
-    const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState(init);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleData = async () => {
-        setIsLoading(true);
-        api.get(`${apiPath}/${nid}`)
-            .then((response) => {
-                setData(response?.payload);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                console.warn(error);
-                setIsLoading(false);
-            });
-    };
+  const handleData = async () => {
+    setIsLoading(true);
+    api.get(`${apiPath}/${nid}`)
+      .then((response) => {
+        setData(response?.payload);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.warn(error);
+        setIsLoading(false);
+      });
+  };
 
-    const saveData = async (data) => {
-        let oldId = data.id;
-        api.post(apiPath, data)
-            .then((response) => {
-                setData(response?.payload);
-                toast.success("Uspešno");
+  const saveData = async (data) => {
+    let oldId = data.id;
+    api.post(apiPath, data)
+      .then((response) => {
+        setData(response?.payload);
+        toast.success("Uspešno");
 
-                if (oldId === null) {
-                    let tId = response?.payload?.id;
-                    navigate(`/promotions-catalog-campaigns/${tId}`, { replace: true });
-                }
-            })
-            .catch((error) => {
-                console.warn(error);
-                toast.warning("Greška");
-            });
-    };
+        if (oldId === null) {
+          let tId = response?.payload?.id;
+          navigate(`/promotions-catalog-campaigns/${tId}`, { replace: true });
+        }
+      })
+      .catch((error) => {
+        console.warn(error);
+        toast.warning("Greška");
+      });
+  };
 
-    useEffect(() => {
-        handleData();
-    }, []);
+  useEffect(() => {
+    handleData();
+  }, []);
 
-    const fields = [
-        {
-            name: "Informacije o akciji",
-            icon: IconList.settings,
-            enabled: true,
-            component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} />,
-        },
-        {
-            name: "Informacije o uslovima",
-            icon: IconList.settings,
-            enabled: data?.id,
-            component: <Conditions campaignId={data?.id} />,
-        },
-    ];
+  const fields = [
+    {
+      name: "Informacije o akciji",
+      icon: IconList.settings,
+      enabled: true,
+      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} />,
+    },
+    {
+      name: "Informacije o uslovima",
+      icon: IconList.settings,
+      enabled: data?.id,
+      component: <Conditions campaignId={data?.id} />,
+    },
+  ];
 
-    return <DetailsPage title={data?.id == null ? "Akcija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
+  return <DetailsPage title={data?.id == null ? "Akcija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
 };
 
 export default PromotionsCatalogCampaignsPageDetails;
