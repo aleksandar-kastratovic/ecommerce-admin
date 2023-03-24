@@ -13,7 +13,11 @@
         position: absolute;
         right: 0;
         top: -0.2rem;
-        color: $danger;
+        color: var(--light-silver);
+        transition: all 0.2s ease-in-out;
+        &:hover {
+            color: $danger;
+        }
     }
 
     .groupHolder {
@@ -34,6 +38,12 @@
             &::first-letter {
                 text-transform: uppercase;
             }
+        }
+    }
+
+    button {
+        span {
+            font-size: 1.188rem;
         }
     }
 }

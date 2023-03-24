@@ -208,6 +208,20 @@ a {
         color: white !important;
     }
 }
+
+.MuiDataGrid-toolbarContainer button {
+    display: none !important;
+}
+
+.MuiDataGrid-footerContainer {
+    display: flex;
+    flex-direction: column;
+    padding-top: 0.7rem;
+    p {
+        margin-bottom: 0;
+    }
+}
+
 .remember-checkbox {
     .form-check {
         input {

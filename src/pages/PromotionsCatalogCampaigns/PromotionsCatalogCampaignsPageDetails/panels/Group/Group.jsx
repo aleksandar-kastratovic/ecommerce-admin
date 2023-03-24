@@ -19,7 +19,6 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   const apiPath = "admin/campaigns-product-catalog/conditions";
 
   useEffect(() => {
-    // Set default field values
     setFieldCondition(getValueField("condition"));
     setFieldValue(getValueField("value"));
   }, []);
@@ -45,12 +44,6 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   };
 
   let isLastSelected = true;
-  /* for (let i = data.rules.length - 1; i >= 0; i++) {
-    if (data.rules[i].type === "row_select") {
-      isLastSelected = data.rules[i].fields[data.rules[i].fields.length - 1].selected.id != null && data.rules[i].fields[data.rules[i].fields.length - 1].selected.id != 0;
-      break;
-    }
-  } */
 
   return (
     <div className={style.groupBox}>
@@ -66,22 +59,21 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
 
       <div className={style.groupHolder}>
         <Box className={"d-flex align-items-center"}>
-          {/* {id} */}
           Ako su
           <span className={style.span}>
-            <InputSelect className={style.inputConditionValue} label="" required={false} name="condition" fillFromApi={`${apiPath}/group/ddl/condition`} usePropName={false} value={fieldCondition} options={[]}
-              onChange={({ target }) => {
+            <InputSelect className={style.inputConditionValue} label="" required={false} name="" fillFromApi={`${apiPath}/group/ddl/condition`} usePropName={false} value={fieldCondition} options={[]}
+              onChange={({ target }, { props }) => {
                 setFieldCondition(target.value);
-                setValueField("condition", target.value, target.name);
+                setValueField("condition", target.value, props.valuename);
               }}
             />
           </span>
           navedeni uslovi
           <span className={style.span}>
-            <InputSelect className={style.inputConditionValue} label="" required={false} name="value" fillFromApi={`${apiPath}/group/ddl/value`} usePropName={false} value={fieldValue} options={[]}
-              onChange={({ target }) => {
+            <InputSelect className={style.inputConditionValue} label="" required={false} name="" fillFromApi={`${apiPath}/group/ddl/value`} usePropName={false} value={fieldValue} options={[]}
+              onChange={({ target }, { props }) => {
                 setFieldValue(target.value);
-                setValueField("value", target.value, target.name);
+                setValueField("value", target.value, props.valuename);
               }}
             />
           </span>

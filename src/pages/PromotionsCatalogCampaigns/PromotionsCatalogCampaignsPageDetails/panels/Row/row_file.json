@@ -28,15 +28,16 @@
       "field": "condition",
       "selected": {
         "id": null,
-        "name": null
+        "name": null,
+        "props": {
+          "component": null,
+          "input_type": null
+        }
       }
     },
     {
       "field": "value",
-      "selected": {
-        "id": null,
-        "name": null
-      }
+      "selected": null
     }
   ],
   "rules": []

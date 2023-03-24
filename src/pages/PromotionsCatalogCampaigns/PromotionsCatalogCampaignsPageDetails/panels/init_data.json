@@ -7,14 +7,14 @@
                 "field": "condition",
                 "selected": {
                     "id": "and",
-                    "name": "and"
+                    "name": "SVI"
                 }
             },
             {
                 "field": "value",
                 "selected": {
                     "id": "true",
-                    "name": "true"
+                    "name": "TAČNO"
                 }
             }
         ],

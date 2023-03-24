@@ -44,11 +44,12 @@ export const InputWrapper = ({ children = null, label, required, disabled, margi
  * @param {function} onChange Change handler for the field
  * @param {string} description Field description
  * @param {string} placeholder Field placeholder
+ * @param {boolean} readOnly If input is read only
  *
  * @return {JSX.Element}
  */
 
-export const InputInput = ({ label, required, disabled, name, value, autoFocus, type = "text", error = null, margin = "dense", onChange = () => null, description, placeholder }) => {
+export const InputInput = ({ label, required, disabled, name, value, autoFocus, type = "text", error = null, margin = "dense", onChange = () => null, description, placeholder, readOnly }) => {
   return (
     <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
       <TextField
@@ -58,6 +59,7 @@ export const InputInput = ({ label, required, disabled, name, value, autoFocus, 
         onChange={onChange}
         placeholder={placeholder}
         disabled={disabled}
+        readOnly={readOnly}
         autoFocus={autoFocus}
         helperText={error ? error : description}
         error={error !== null}
@@ -87,7 +89,7 @@ export const InputInput = ({ label, required, disabled, name, value, autoFocus, 
  * @return {JSX.Element}
  */
 
-export const InputNumber = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, placeholder }) => {
+export const InputNumber = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, placeholder, autoFocus }) => {
   return (
     <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
       <TextField
@@ -98,6 +100,7 @@ export const InputNumber = ({ label, required, disabled, error = null, name, val
         disabled={disabled}
         helperText={error ? error : description}
         error={error !== null}
+        autoFocus={autoFocus}
         type="number"
         sx={{
           "& legend": { display: "none" },
@@ -272,7 +275,7 @@ export const InputSelect = ({
 
       >
         {(opt ?? []).map((item) => (
-          <MenuItem key={item.id} value={item.id} selected={item.id === value} disabled={item?.disabled ?? false} props={item.props}>
+          <MenuItem key={item.id} value={item.id} selected={item.id === value} disabled={item?.disabled ?? false} props={item.props} valuename={item.name}>
             {item.name}
           </MenuItem>
         ))}
