@@ -8,16 +8,11 @@ const Row = ({ data, id, handleRemoveComponent }) => {
   const apiPath = 'admin/campaigns-product-catalog/conditions';
 
   const [rowData, setRowData] = useState(data);
-
-  console.log('rowData', rowData);
-
   const [openDialog, setOpenDialog] = useState({ show: false });
-
   const [valueOptions, setValueOptions] = useState(rowData.fields.find((item) => item.field === "condition")?.selected?.props ?? {
     component: null,
     input_type: null,
   });
-
 
   const checkIfAllFieldsSelected = () => {
     const fields = rowData.fields;
@@ -33,7 +28,6 @@ const Row = ({ data, id, handleRemoveComponent }) => {
       setOpenDialog({ show: true });
     }
   };
-
 
   return (
     <div className={style.rowHolder}>
@@ -70,7 +64,6 @@ const Row = ({ data, id, handleRemoveComponent }) => {
               value={item?.selected?.id ?? 0}
               onChange={({ target }, { props }) => {
                 if (item.field === 'condition' && props.props != null) {
-                  console.log(props.props)
                   setValueOptions(props.props);
                 }
                 let tmp = { ...rowData };
