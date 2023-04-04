@@ -1,6 +1,7 @@
-import { Box } from "@mui/material";
-import { useEffect } from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+import Box from "@mui/material/Box";
+
 import Button from "../../../../../components/shared/Button/Button";
 import Buttons from "../../../../../components/shared/Form/Buttons/Buttons";
 import CreateForm from "../../../../../components/shared/Form/CreateForm";

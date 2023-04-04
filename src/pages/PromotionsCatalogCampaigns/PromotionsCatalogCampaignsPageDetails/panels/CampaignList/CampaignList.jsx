@@ -1,5 +1,5 @@
-import React from 'react';
-import SearchableListForm from '../../../../../components/shared/Form/SearchableListForm/SearchableListForm';
+import React from "react";
+import SearchableListForm from "../../../../../components/shared/Form/SearchableListForm/SearchableListForm";
 
 const CampaignList = ({
   selected,

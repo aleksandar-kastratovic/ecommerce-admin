@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import LocationDetails from "../components/LocationDetails";
 import LocationsList from "../components/LocationsList";
 import AddActionModal from "../components/UI/AddActionModal";
-import AddLocationModal from "../components/UI/AddLocationModal";
 import Loader from "../components/UI/Loader";
 import Tabs from "../components/UI/Tabs";
 import { addTabName } from "../helpers/functions";
@@ -11,26 +11,25 @@ import { getLocationService, removeLocationsService, saveLocationService } from 
 import useHttp from "../hooks/use-http";
 
 const ActionsPage = () => {
-
     let initTab = [
         {
             eventKey: 0,
             title: "Lista Akcija",
-            order: 1
-        }
+            order: 1,
+        },
     ];
     let { locId } = useParams();
     if (+locId > 0) {
         initTab.push({
             eventKey: +locId,
-            title: ' ',
-            order: +locId + 1
+            title: " ",
+            order: +locId + 1,
         });
-    };
+    }
 
     let navigate = useNavigate();
     const { isLoading, sendRequest: locationsRequest } = useHttp();
-    const [activeTab, setActiveTab] = useState((initTab[1] && initTab[1].eventKey) ? initTab[1].eventKey : initTab[0].eventKey);
+    const [activeTab, setActiveTab] = useState(initTab[1] && initTab[1].eventKey ? initTab[1].eventKey : initTab[0].eventKey);
     const [show, setShow] = useState(false);
     const [tabsList, setTabsList] = useState(initTab);
     const [locationsDetailsData, setLocationsDetailsData] = useState({});
@@ -41,42 +40,42 @@ const ActionsPage = () => {
                 if (tabsList[elem].eventKey === tabData.eventKey) {
                     if (tabData.eventKey !== activeTab) {
                         setActiveTab(tabData.eventKey);
-                        navigate(`/locations/`+ tabData.eventKey);
+                        navigate(`/locations/` + tabData.eventKey);
                     }
                     return;
                 }
             }
         }
-        tabData.order = tabsList[tabsList.length -1].order + 1;
-        setTabsList(oldArray => [...oldArray, tabData]);
+        tabData.order = tabsList[tabsList.length - 1].order + 1;
+        setTabsList((oldArray) => [...oldArray, tabData]);
         setActiveTab(tabData.eventKey);
-        navigate(`/locations/`+ tabData.eventKey);
-    }
+        navigate(`/locations/` + tabData.eventKey);
+    };
 
     const addLocationTabName = (tabData) => {
         const data = addTabName(tabsList, tabData);
         if (data) {
             setTabsList(data);
         }
-    }
+    };
 
     const removeTabData = (tabEventKey) => {
-        setTabsList(tabsList.filter(item => item.eventKey !== tabEventKey));
+        setTabsList(tabsList.filter((item) => item.eventKey !== tabEventKey));
         if (tabEventKey === activeTab) {
             setActiveTab(initTab[0].eventKey);
-            navigate(`/locations/`+ initTab[0].eventKey);
+            navigate(`/locations/` + initTab[0].eventKey);
         }
-    }
+    };
 
     const saveLocationResponse = (locationData) => {
         if (locationData.id === activeTab) {
             setLocationsDetailsData(locationData);
         }
-        if ( locationData.id && locationData.name) {
+        if (locationData.id && locationData.name) {
             const tabData = {
                 eventKey: locationData.id,
                 title: locationData.name,
-                order: locationData.id + 1
+                order: locationData.id + 1,
             };
             addTabData(tabData);
         } else {
@@ -94,7 +93,6 @@ const ActionsPage = () => {
 
     useEffect(() => {
         if (activeTab > 0) {
-    
             const setLocationData = (locationData) => {
                 let setCorrectly = false;
                 for (const item in tabsList) {
@@ -109,12 +107,12 @@ const ActionsPage = () => {
             };
 
             const getLocations = async () => {
-                const data = await getLocationService({id: activeTab}, locationsRequest);
+                const data = await getLocationService({ id: activeTab }, locationsRequest);
                 if (data) {
                     setLocationData(data);
                 }
             };
-          
+
             getLocations();
         }
     }, [activeTab]);
@@ -124,7 +122,7 @@ const ActionsPage = () => {
             removeTabData(locationId);
         };
 
-        const data = await removeLocationsService({id: activeTab}, locationsRequest);
+        const data = await removeLocationsService({ id: activeTab }, locationsRequest);
 
         removeLocationResponse(data);
     };
@@ -136,32 +134,55 @@ const ActionsPage = () => {
                     <Tabs
                         tabsData={tabsList}
                         activeTabKey={activeTab}
-                        onTabChange={ (activeTabKey) => { setActiveTab(activeTabKey); navigate(`/locations/`+ activeTabKey); }}
-                        removeTab={ (tabEventKey) => { removeTabData(tabEventKey) }}
+                        onTabChange={(activeTabKey) => {
+                            setActiveTab(activeTabKey);
+                            navigate(`/locations/` + activeTabKey);
+                        }}
+                        removeTab={(tabEventKey) => {
+                            removeTabData(tabEventKey);
+                        }}
                     />
-                    <button type="button" className="btn-control button-add" onClick={() => {setShow(true)}}>Nova akcija</button>
+                    <button
+                        type="button"
+                        className="btn-control button-add"
+                        onClick={() => {
+                            setShow(true);
+                        }}
+                    >
+                        Nova akcija
+                    </button>
                 </div>
                 <AddActionModal
                     openModal={show}
-                    handleClose={() => {setShow(false)}}
-                    saveLocation={(dataForSave) => { saveLocation(dataForSave); }}
+                    handleClose={() => {
+                        setShow(false);
+                    }}
+                    saveLocation={(dataForSave) => {
+                        saveLocation(dataForSave);
+                    }}
                 />
-                { activeTab === initTab[0].eventKey && (
-                    <LocationsList addTab={ (tabData) => { addTabData(tabData) }} />
+                {activeTab === initTab[0].eventKey && (
+                    <LocationsList
+                        addTab={(tabData) => {
+                            addTabData(tabData);
+                        }}
+                    />
                 )}
-                { activeTab !== initTab[0].eventKey && (
+                {activeTab !== initTab[0].eventKey && (
                     <LocationDetails
                         locationData={locationsDetailsData}
-                        saveLocation={(dataForSave) => { saveLocation(dataForSave); }}
-                        removeLocation={(id) => { removeLocation(id); }}
+                        saveLocation={(dataForSave) => {
+                            saveLocation(dataForSave);
+                        }}
+                        removeLocation={(id) => {
+                            removeLocation(id);
+                        }}
                     />
                 )}
             </section>
-            {isLoading  && (
-                <Loader />
-            )}
+            {isLoading && <Loader />}
         </>
     );
-}
+};
 
 export default ActionsPage;

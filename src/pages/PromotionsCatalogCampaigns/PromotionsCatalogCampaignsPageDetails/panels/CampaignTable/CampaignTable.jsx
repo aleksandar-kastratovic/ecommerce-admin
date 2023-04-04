@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import DataTable from '../../../../../components/shared/DataTable/DataTable';
-import { v4 } from 'uuid';
-import { InputCheckbox } from '../../../../../components/shared/Form/FormInputs/FormInputs';
-import style from "./CampaignTable.module.scss"
+import React, { useState, useEffect } from "react";
+import DataTable from "../../../../../components/shared/DataTable/DataTable";
+import { v4 } from "uuid";
+import { InputCheckbox } from "../../../../../components/shared/Form/FormInputs/FormInputs";
+import scss from "./CampaignTable.module.scss"
 
 const campaignTableStyles = {
   height: '400px',
@@ -34,7 +34,7 @@ const CampaignTable = ({
   };
 
   const changeSortHandler = (data) => {
-    setOptions({ ...options, sort: data.map(item => { return { name: item.name, type: item.sort } }) })
+    setOptions({ ...options, sort: data.map(item => { return { field: item.field, direction: item.sort } }) })
   }
 
   const onChangeHandler = (value) => {
@@ -102,7 +102,7 @@ const CampaignTable = ({
 
   return (
     <>
-      <div className={style.showAllCheckedSearch}>
+      <div className={scss.showAllCheckedSearch}>
         <InputCheckbox label="Prikaži samo izabrane" value={showSelected} onChange={({ target }) => setShowSelected(target.checked)} />
 
         <input

@@ -1,15 +1,11 @@
 import React from "react";
 
-// mui imports
 import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
 import AddPhotoAlternateOutlinedIcon from "@mui/icons-material/AddPhotoAlternateOutlined";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import Input from "@mui/material/Input";
 
-// other imports
 import styles from "./UploadForm.module.scss";
 
 const UploadForm = ({ title = "" }) => {

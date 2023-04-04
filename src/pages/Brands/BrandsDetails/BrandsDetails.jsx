@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+
 import { toast } from "react-toastify";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import Form from "../../../components/shared/Form/Form";
@@ -39,7 +40,7 @@ const BrandsDetails = () => {
         if (oldId === null) {
           let tId = response?.payload?.id;
           navigate(`/brands/${tId}`, { replace: true });
-      }
+        }
       })
       .catch((error) => {
         toast.warning("Greška");

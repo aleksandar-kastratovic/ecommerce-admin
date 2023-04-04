@@ -1,50 +1,35 @@
+import { useEffect, useState } from "react";
+
+import { toast } from "react-toastify";
 import { Accordion, Modal } from "react-bootstrap";
 import useInput from "../../hooks/use-input";
 import Input from "./Input";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faImages, faMoneyBill, faBoxes, faLayerGroup } from "@fortawesome/free-solid-svg-icons";
-import { useEffect, useState } from "react";
+
 import { inventoryOptions } from "../../helpers/const";
-import { toast } from "react-toastify";
 
 const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant, gallery, locationsMulti, checkVariantCombination }) => {
+    let { value: priceValue, valueChangeHandler: priceChangeHandler, reset: resetPrice } = useInput((value) => value);
 
-    let {
-        value: priceValue,
-        valueChangeHandler: priceChangeHandler,
-        reset: resetPrice
-    } = useInput((value) => value);
+    let { value: purchasePriceValue, valueChangeHandler: purchasePriceChangeHandler, reset: resetPurchasePrice } = useInput((value) => value);
 
-    let {
-        value: purchasePriceValue,
-        valueChangeHandler: purchasePriceChangeHandler,
-        reset: resetPurchasePrice
-    } = useInput((value) => value);
+    let { value: skuValue, valueChangeHandler: skuChangeHandler, reset: resetSku } = useInput((value) => value);
 
-    let {
-        value: skuValue,
-        valueChangeHandler: skuChangeHandler,
-        reset: resetSku
-    } = useInput((value) => value);
-
-    let {
-        value: barcodeValue,
-        valueChangeHandler: barcodeChangeHandler,
-        reset: resetBarcode
-    } = useInput((value) => value);
+    let { value: barcodeValue, valueChangeHandler: barcodeChangeHandler, reset: resetBarcode } = useInput((value) => value);
 
     const [selectedImages, setSelectedImages] = useState([]);
     const [selectedInventoryOptions, setSelectedInventoryOptions] = useState(inventoryOptions[1].id ?? null);
     const [locationsMultiQuantityList, setLocationsMultiQuantityList] = useState(locationsMulti ?? []);
-    const [locationsQuantityList, setLocationsQuantityList] = useState({location_id: null, quantity: 0});
+    const [locationsQuantityList, setLocationsQuantityList] = useState({ location_id: null, quantity: 0 });
     const [selectedProductAttributesModal, setSelectedProductAttributesModal] = useState([]);
     const [variant, setVariant] = useState([]);
     const [variantError, setVariantError] = useState(false);
     const [variantBlur, setVariantBlur] = useState(false);
 
     useEffect(() => {
-        priceChangeHandler({target: {value : (selectedVariant?.price ?? '') }});
-        purchasePriceChangeHandler({target: {value : (selectedVariant?.purchase_price ?? '') }});
+        priceChangeHandler({ target: { value: selectedVariant?.price ?? "" } });
+        purchasePriceChangeHandler({ target: { value: selectedVariant?.purchase_price ?? "" } });
         if (selectedVariant?.images) {
             setSelectedImages(JSON.parse(JSON.stringify(selectedVariant.images)));
         } else {
@@ -57,7 +42,7 @@ const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant
             setLocationsQuantityList(JSON.parse(JSON.stringify(selectedVariant.locations)));
             setSelectedInventoryOptions(inventoryOptions[1].id);
         }
-        skuChangeHandler({target: {value : (selectedVariant?.sku ?? '') }});
+        skuChangeHandler({ target: { value: selectedVariant?.sku ?? "" } });
         if (selectedVariant?.selectedProductAttributes) {
             setSelectedProductAttributesModal(JSON.parse(JSON.stringify(selectedVariant?.selectedProductAttributes)));
         }
@@ -77,28 +62,27 @@ const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant
         if (!idExsist) {
             setSelectedImages([...selectedImages, id]);
         }
-    }
+    };
 
     const quantityMultiChange = (ev, index) => {
         let data = [...locationsMultiQuantityList];
         data[index].quantity = ev.target.value;
         setLocationsMultiQuantityList(data);
-    }
+    };
 
     const quantityChange = (ev) => {
-        let data = {...locationsQuantityList};
+        let data = { ...locationsQuantityList };
         data.quantity = ev.target.value;
         setLocationsQuantityList(data);
-    }
+    };
 
     const submitHandler = () => {
-
-        if ((!variant.length > 0) || variantError) {
+        if (!variant.length > 0 || variantError) {
             toast.warning("Forma nije validna!");
             return;
         }
 
-        let locationsForSave = []; 
+        let locationsForSave = [];
         if (selectedInventoryOptions) {
             locationsForSave = JSON.parse(JSON.stringify(locationsMultiQuantityList));
         } else {
@@ -112,7 +96,7 @@ const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant
             sku: skuValue,
             barcode: barcodeValue,
             locations: locationsForSave,
-            variant_combinations: variant
+            variant_combinations: variant,
         });
         handleClose();
         resetForm();
@@ -129,12 +113,12 @@ const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant
 
         data.map((item, index) => {
             if (item) {
-                item.valueIds.map(value => {
+                item.valueIds.map((value) => {
                     if (value) {
                         variants[index] = value;
                         variantsForCheck.push(value);
                     }
-                })
+                });
             }
         });
 
@@ -150,13 +134,13 @@ const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant
         resetSku();
         resetBarcode();
         setLocationsMultiQuantityList(locationsMulti ?? []);
-        setLocationsQuantityList(({location_id: null, quantity: 0}));
+        setLocationsQuantityList({ location_id: null, quantity: 0 });
         setSelectedInventoryOptions(inventoryOptions[1].id);
         setSelectedProductAttributesModal([]);
         setVariantError(false);
         setVariantBlur(false);
         setVariant([]);
-    }
+    };
 
     const checkImageIsSelected = (imageId) => {
         return selectedImages?.includes(imageId);
@@ -167,7 +151,7 @@ const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant
             setVariantBlur(true);
             checkVariantError(variant);
         }
-    }
+    };
 
     const checkVariantError = (data) => {
         if (data.length < 1) {
@@ -175,12 +159,15 @@ const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant
         } else {
             setVariantError(checkVariantCombination(data));
         }
-    }
+    };
 
     return (
         <Modal
             show={openModal}
-            onHide={ () => { handleClose(); resetForm(); }}
+            onHide={() => {
+                handleClose();
+                resetForm();
+            }}
             backdrop="static"
             keyboard={false}
             centered
@@ -194,10 +181,12 @@ const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant
             <Modal.Body>
                 <div className="row">
                     <div className="col-xl-6">
-
                         <Accordion defaultActiveKey="1">
                             <Accordion.Item eventKey="1">
-                                <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faMoneyBill} />Cena:</Accordion.Header>
+                                <Accordion.Header className="alert-warning">
+                                    <FontAwesomeIcon icon={faMoneyBill} />
+                                    Cena:
+                                </Accordion.Header>
                                 <Accordion.Body>
                                     <Input
                                         inputValue={priceValue}
@@ -223,7 +212,10 @@ const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant
 
                         <Accordion defaultActiveKey="1">
                             <Accordion.Item eventKey="1">
-                                <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faBoxes} />Inventar:</Accordion.Header>
+                                <Accordion.Header className="alert-warning">
+                                    <FontAwesomeIcon icon={faBoxes} />
+                                    Inventar:
+                                </Accordion.Header>
                                 <Accordion.Body>
                                     <Input
                                         value={selectedInventoryOptions}
@@ -270,28 +262,30 @@ const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant
                                         </div>
                                     </div>
                                     <hr className="form-field-separation"></hr>
-                                    { (locationsMultiQuantityList && selectedInventoryOptions) && ( locationsMultiQuantityList.map(function(object, index) {
-                                        return (
-                                            <div key={index} className="row row-m0 align-items-center no-error-text">
-                                                <div className="col-6 ps-0">
-                                                    <p className="warehouse-item-name">{object.name}</p>
+                                    {locationsMultiQuantityList &&
+                                        selectedInventoryOptions &&
+                                        locationsMultiQuantityList.map(function (object, index) {
+                                            return (
+                                                <div key={index} className="row row-m0 align-items-center no-error-text">
+                                                    <div className="col-6 ps-0">
+                                                        <p className="warehouse-item-name">{object.name}</p>
+                                                    </div>
+                                                    <div className="col-6 pe-0">
+                                                        <Input
+                                                            inputValue={object.quantity}
+                                                            onInputChange={(ev) => quantityMultiChange(ev, index)}
+                                                            disabled={false}
+                                                            inputType="input"
+                                                            type="number"
+                                                            class={"form-control input-style form-control-lg form-control-6"}
+                                                        />
+                                                    </div>
+                                                    <hr className="form-field-separation"></hr>
                                                 </div>
-                                                <div className="col-6 pe-0">
-                                                    <Input
-                                                        inputValue={object.quantity}
-                                                        onInputChange={(ev) => quantityMultiChange(ev, index)}
-                                                        disabled={false}
-                                                        inputType="input"
-                                                        type="number"
-                                                        class={"form-control input-style form-control-lg form-control-6"}
-                                                    />
-                                                </div>
-                                                <hr className="form-field-separation"></hr>
-                                            </div>
-                                        )
-                                    }))}
+                                            );
+                                        })}
 
-                                    {(!selectedInventoryOptions) && (
+                                    {!selectedInventoryOptions && (
                                         <div className="row row-m0 align-items-center no-error-text">
                                             <div className="col-6 ps-0">
                                                 <p className="warehouse-item-name">Jedna Lokacija</p>
@@ -312,68 +306,92 @@ const EditVariantModal = ({ openModal, handleClose, saveVariant, selectedVariant
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>
-
                     </div>
 
                     <div className="col-xl-6">
                         <Accordion defaultActiveKey="1">
                             <Accordion.Item eventKey="1">
-                                <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faImages} />Galerija:</Accordion.Header>
+                                <Accordion.Header className="alert-warning">
+                                    <FontAwesomeIcon icon={faImages} />
+                                    Galerija:
+                                </Accordion.Header>
                                 <Accordion.Body>
                                     <div className="galley-container galley-container-select">
-
-                                        {gallery && ( gallery.map(function(object, index) {
-                                            return (
-                                                <div className={"selected-img-container" + (checkImageIsSelected(object.id) ? ' selected-img-var' : '') + ( selectedImages?.length > 0 && object.id === selectedImages[0] ? ' main-img-var' : '')} key={index} onClick={() => {checkImage(object.id)}}>
-                                                    <img alt={object.image_url} src={object.image_url} />
-                                                </div>
-                                            );
-                                        }))}
-                                        
+                                        {gallery &&
+                                            gallery.map(function (object, index) {
+                                                return (
+                                                    <div
+                                                        className={
+                                                            "selected-img-container" +
+                                                            (checkImageIsSelected(object.id) ? " selected-img-var" : "") +
+                                                            (selectedImages?.length > 0 && object.id === selectedImages[0] ? " main-img-var" : "")
+                                                        }
+                                                        key={index}
+                                                        onClick={() => {
+                                                            checkImage(object.id);
+                                                        }}
+                                                    >
+                                                        <img alt={object.image_url} src={object.image_url} />
+                                                    </div>
+                                                );
+                                            })}
                                     </div>
                                 </Accordion.Body>
                             </Accordion.Item>
                         </Accordion>
 
-                        { selectedProductAttributesModal.length > 0 && (
-                        <Accordion defaultActiveKey="1">
-                            <Accordion.Item eventKey="1">
-                                <Accordion.Header className="alert-warning"><FontAwesomeIcon icon={faLayerGroup} />Opcije:</Accordion.Header>
-                                <Accordion.Body>
-                                    {selectedProductAttributesModal.map(function(object, index) {
-                                        return (
-                                            <Input
-                                                values={selectedProductAttributesModal[index].valueIds}
-                                                isMulti={false}
-                                                handleChange={(ev) => attributeValuesChangeHandler(ev, index)}
-                                                onInputBlur={variantBlurHandler}
-                                                data={selectedProductAttributesModal[index].data}
-                                                disabled={false}
-                                                inputType="select-react"
-                                                hasInputError={variantError}
-                                                type="text"
-                                                class={"form-control input-style form-control-lg select-style form-control-8 " + (variantError ? 'invalid' : '')}
-                                                text={"Vrednost opcije " + (index + 1)}
-                                                key={index}
-                                                text_class="m-0 required"
-                                                inputErrorText={variant.length > 0 ? "nije jedinstvena!" : "je obavezna!"}
-                                            />  
-                                        )
-                                    })}
-                                </Accordion.Body>
-                            </Accordion.Item>
-                        </Accordion>
+                        {selectedProductAttributesModal.length > 0 && (
+                            <Accordion defaultActiveKey="1">
+                                <Accordion.Item eventKey="1">
+                                    <Accordion.Header className="alert-warning">
+                                        <FontAwesomeIcon icon={faLayerGroup} />
+                                        Opcije:
+                                    </Accordion.Header>
+                                    <Accordion.Body>
+                                        {selectedProductAttributesModal.map(function (object, index) {
+                                            return (
+                                                <Input
+                                                    values={selectedProductAttributesModal[index].valueIds}
+                                                    isMulti={false}
+                                                    handleChange={(ev) => attributeValuesChangeHandler(ev, index)}
+                                                    onInputBlur={variantBlurHandler}
+                                                    data={selectedProductAttributesModal[index].data}
+                                                    disabled={false}
+                                                    inputType="select-react"
+                                                    hasInputError={variantError}
+                                                    type="text"
+                                                    class={"form-control input-style form-control-lg select-style form-control-8 " + (variantError ? "invalid" : "")}
+                                                    text={"Vrednost opcije " + (index + 1)}
+                                                    key={index}
+                                                    text_class="m-0 required"
+                                                    inputErrorText={variant.length > 0 ? "nije jedinstvena!" : "je obavezna!"}
+                                                />
+                                            );
+                                        })}
+                                    </Accordion.Body>
+                                </Accordion.Item>
+                            </Accordion>
                         )}
-
                     </div>
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <button type="button" className="btn-control cancel-btn" onClick={() => {handleClose(); resetForm();}}>Odustanite</button>
-                <button disabled={(!variant.length > 0) || variantError} type="button" className="btn-control save-btn" onClick={submitHandler}>Sačuvajte</button>
+                <button
+                    type="button"
+                    className="btn-control cancel-btn"
+                    onClick={() => {
+                        handleClose();
+                        resetForm();
+                    }}
+                >
+                    Odustanite
+                </button>
+                <button disabled={!variant.length > 0 || variantError} type="button" className="btn-control save-btn" onClick={submitHandler}>
+                    Sačuvajte
+                </button>
             </Modal.Footer>
         </Modal>
     );
-}
-  
+};
+
 export default EditVariantModal;

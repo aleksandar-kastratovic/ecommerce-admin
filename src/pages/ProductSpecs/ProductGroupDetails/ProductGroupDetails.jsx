@@ -11,67 +11,67 @@ import { toast } from "react-toastify";
 import formFields from "./DetailsFields.json";
 
 const ProductGroupDetails = () => {
-    const init = {
-        id: null,
-        slug: null,
-        name: null,
-        description: null,
-        order: null,
-        status: "on",
-    };
+  const init = {
+    id: null,
+    slug: null,
+    name: null,
+    description: null,
+    order: null,
+    status: "on",
+  };
 
-    const { groupId } = useParams();
-    const [data, setData] = useState(init);
-    const [isLoading, setIsLoading] = useState(false);
-    const api = useAPI();
-    const apiPath = "admin/product-item-specifications/group";
+  const { groupId } = useParams();
+  const [data, setData] = useState(init);
+  const [isLoading, setIsLoading] = useState(false);
+  const api = useAPI();
+  const apiPath = "admin/product-item-specifications/group";
 
-    const handleSubmit = (data) => {
-        api.post(apiPath, data)
-            .then((response) => {
-                setData(response?.payload);
-                toast.success("Uspešno");
-            })
-            .catch((error) => {
-                console.warn(error);
-                toast.success("Greška");
-            });
-    };
+  const handleSubmit = (data) => {
+    api.post(apiPath, data)
+      .then((response) => {
+        setData(response?.payload);
+        toast.success("Uspešno");
+      })
+      .catch((error) => {
+        console.warn(error);
+        toast.success("Greška");
+      });
+  };
 
-    const getData = async () => {
-        setIsLoading(true);
-        await api
-            .get(`${apiPath}/${groupId}`)
-            .then((response) => {
-                setData(response?.payload);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                console.warn(error);
-                setIsLoading(false);
-            });
-    };
+  const getData = async () => {
+    setIsLoading(true);
+    await api
+      .get(`${apiPath}/${groupId}`)
+      .then((response) => {
+        setData(response?.payload);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.warn(error);
+        setIsLoading(false);
+      });
+  };
 
-    useEffect(() => {
-        getData();
-    }, []);
+  useEffect(() => {
+    getData();
+  }, []);
 
-    const fields = [
-        {
-            name: "Osnovno",
-            icon: IconList.dataThresholding,
-            enabled: true,
-            component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} />,
-        },
-        {
-            name: "Atributi",
-            icon: IconList.attribution,
-            enabled: data?.id,
-            component: <GroupAttributes groupId={data?.id} />,
-        },
-    ];
+  const fields = [
+    {
+      name: "Atributi",
+      icon: IconList.attribution,
+      enabled: data?.id,
+      component: <GroupAttributes groupId={data?.id} />,
+    },
+    {
+      name: "Filteri",
+      icon: IconList.filterList,
+      enabled: true,
+      component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} />,
+    },
+  ];
 
-    return <DetailsPage title={data?.id == null ? "Unos nove grupe" : data?.name} fields={fields} ready={!isLoading} />;
+  return <DetailsPage title={data?.id == null ? "Unos nove grupe" : data?.name} fields={fields} ready={!isLoading} />;
 };
 
 export default ProductGroupDetails;

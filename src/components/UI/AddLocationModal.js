@@ -1,38 +1,25 @@
+import { toast } from "react-toastify";
 import { Accordion, Modal } from "react-bootstrap";
 import useInput from "../../hooks/use-input";
 import Input from "./Input";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'
-import { toast } from 'react-toastify';
+import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 
 const AddLocationModal = ({ openModal, handleClose, saveLocation }) => {
-
     let {
         value: nameValue,
         isValid: nameIsValid,
         hasError: nameHasError,
         valueChangeHandler: nameChangeHandler,
         inputBlurHandler: nameBlurHandler,
-        reset: resetName
-      } = useInput((value) => value.trim() !== '');
-    
-      let {
-        value: cityValue,
-        valueChangeHandler: cityChangeHandler,
-        reset: resetCity
-      } = useInput((value) => value);
-    
-      let {
-        value: zipValue,
-        valueChangeHandler: zipChangeHandler,
-        reset: resetZip
-      } = useInput((value) => value);
-    
-      let {
-        value: addressValue,
-        valueChangeHandler: addressChangeHandler,
-        reset: resetAddress
-      } = useInput((value) => value);
+        reset: resetName,
+    } = useInput((value) => value.trim() !== "");
+
+    let { value: cityValue, valueChangeHandler: cityChangeHandler, reset: resetCity } = useInput((value) => value);
+
+    let { value: zipValue, valueChangeHandler: zipChangeHandler, reset: resetZip } = useInput((value) => value);
+
+    let { value: addressValue, valueChangeHandler: addressChangeHandler, reset: resetAddress } = useInput((value) => value);
 
     const submitHandler = () => {
         if (!nameIsValid) {
@@ -43,7 +30,7 @@ const AddLocationModal = ({ openModal, handleClose, saveLocation }) => {
             name: nameValue,
             city: cityValue,
             zip: zipValue,
-            address: addressValue
+            address: addressValue,
         });
         handleClose();
         resetName();
@@ -53,16 +40,7 @@ const AddLocationModal = ({ openModal, handleClose, saveLocation }) => {
     };
 
     return (
-        <Modal
-          show={openModal}
-          onHide={handleClose}
-          backdrop="static"
-          keyboard={false}
-          centered
-          size="xl"
-          scrollable={true}
-          className="add-role-modal"
-        >
+        <Modal show={openModal} onHide={handleClose} backdrop="static" keyboard={false} centered size="xl" scrollable={true} className="add-role-modal">
             <Modal.Header closeButton>
                 <Modal.Title>Nova lokacija</Modal.Title>
             </Modal.Header>
@@ -71,7 +49,10 @@ const AddLocationModal = ({ openModal, handleClose, saveLocation }) => {
                     <div className="col-12">
                         <Accordion defaultActiveKey="0">
                             <Accordion.Item eventKey="0">
-                                <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faMapMarkerAlt} />Podaci lokacije:</Accordion.Header>
+                                <Accordion.Header className="alert-info">
+                                    <FontAwesomeIcon icon={faMapMarkerAlt} />
+                                    Podaci lokacije:
+                                </Accordion.Header>
                                 <Accordion.Body>
                                     <div className="row">
                                         <div className="col-6">
@@ -83,7 +64,7 @@ const AddLocationModal = ({ openModal, handleClose, saveLocation }) => {
                                                 disabled={false}
                                                 inputType="input"
                                                 type="text"
-                                                class={"form-control input-style form-control-lg " + (nameHasError ? 'invalid' : '')}
+                                                class={"form-control input-style form-control-lg " + (nameHasError ? "invalid" : "")}
                                                 text="Naziv"
                                                 text_class="m-0 required"
                                                 inputErrorText="je obavezan!"
@@ -130,11 +111,15 @@ const AddLocationModal = ({ openModal, handleClose, saveLocation }) => {
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <button type="button" className="btn-control cancel-btn" onClick={handleClose}>Odustanite</button>
-                <button disabled={ !nameIsValid } type="button" className="btn-control save-btn" onClick={submitHandler}>Sačuvajte</button>
+                <button type="button" className="btn-control cancel-btn" onClick={handleClose}>
+                    Odustanite
+                </button>
+                <button disabled={!nameIsValid} type="button" className="btn-control save-btn" onClick={submitHandler}>
+                    Sačuvajte
+                </button>
             </Modal.Footer>
         </Modal>
     );
-}
-  
+};
+
 export default AddLocationModal;

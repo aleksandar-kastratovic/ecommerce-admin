@@ -1,18 +1,20 @@
-import { Delete } from "@mui/icons-material";
-import { Box } from "@mui/system";
 import { useContext, useState } from "react";
-import CreateForm from "../../../../components/shared/Form/CreateForm";
+
+import Delete from "@mui/icons-material/Delete";
+import Box from "@mui/system/Box";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import Button from "@mui/material/Button";
+
+import CreateForm from "../../../../components/shared/Form/CreateForm";
 import DeleteDialog from "../../../../components/shared/Dialogs/DeleteDialog";
 import { toast } from "react-toastify";
-
 import fields from "./SetterFields.json";
-import styles from "./SetFormFields.module.scss";
-import { Button } from "@mui/material";
 import { isEmpty } from "lodash";
 import { saveFormField } from "../../services";
 import AuthContext from "../../../../store/auth-contex";
+
+import styles from "./SetFormFields.module.scss";
 
 const SetFormField = ({ data, index, onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);

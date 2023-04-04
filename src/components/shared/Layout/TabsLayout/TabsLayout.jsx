@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 
-// material-ui components
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
 import Paper from "@mui/material/Paper";
@@ -17,10 +16,10 @@ const TabsLayout = ({
   detailsTitle = "",
   list = {},
   details = {},
-  handleTabChange = () => {},
+  handleTabChange = () => { },
   selectedTab,
-  handleCreateNew = () => {},
-  handleBackToList = () => {},
+  handleCreateNew = () => { },
+  handleBackToList = () => { },
 }) => {
   // Note you can not just add a button or other element in tabs,
   // because tabs re-render all components and wrap them, you will

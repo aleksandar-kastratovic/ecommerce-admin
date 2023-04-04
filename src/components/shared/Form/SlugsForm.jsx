@@ -1,16 +1,9 @@
 import React from "react";
+
 import TextBox from "../TextBox/TextBox";
-import Checkbox from "@mui/material/Checkbox";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Radio from "@mui/material/Radio";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import TextareaAutosize from "@mui/material/TextareaAutosize";
 
 const SlugsForm = ({
-  onChangeHandler = () => {},
+  onChangeHandler = () => { },
   error = "",
   type,
   name,

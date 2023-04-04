@@ -19,6 +19,7 @@ import {
     faStore,
     faBell,
     faEnvelope,
+    faShoppingCart,
 } from "@fortawesome/free-solid-svg-icons";
 import IconList from "../helpers/icons";
 import B2BRebatesDetails from "../pages/B2BRebates/B2BRebatesDetails/B2BRebatesDetails";
@@ -58,6 +59,8 @@ import StaticPages from "../pages/StaticPages/StaticPages";
 import StaticPagesDetails from "../pages/StaticPages/StaticPagesDetails/StaticPagesDetails";
 import PromotionsCatalogCampaigns from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaigns";
 import PromotionsCatalogCampaignsPageDetails from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaignsPageDetails/PromotionsCatalogCampaignsPageDetails";
+import CartSummary from "../pages/CartSummary/CartSummary";
+import CartSummaryDetails from "../pages/CartSummary/CartSummaryDetails/CartSummaryDetails";
 import Newsletter from "../pages/Newsletter/Newsletter";
 import B2CContactForm from "../pages/B2CContactForm/B2CContactForm";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
@@ -189,6 +192,7 @@ const screens = {
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],
 
     PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Kampanje kataloga", faParking, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
+    PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Kampanje za korpu", faShoppingCart, PROMOTIONS, CartSummary, [[":nid", CartSummaryDetails]]],
 
     ROLES: ["/roles", "Uloge", faPeopleArrows, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
     USERS: ["/users", "Korisnici", faUsers, SETTINGS, Users, [[":userId", UsersDetils]]],

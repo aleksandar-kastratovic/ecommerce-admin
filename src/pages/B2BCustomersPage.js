@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import B2BCustomerDetails from "../components/B2BCustomerDetails";
 import B2BCustomersList from "../components/B2BCustomersList";
 import AddB2BCustomerModal from "../components/UI/AddB2BCustomerModal";
@@ -10,27 +11,26 @@ import { companiesIdName, getCustomerService, removeCustomerService, saveCustome
 import useHttp from "../hooks/use-http";
 
 const B2BCustomersPage = () => {
-
     let initTab = [
         {
             eventKey: 0,
             title: "Lista B2B Kupaca",
-            order: 1
-        }
+            order: 1,
+        },
     ];
     let { cusId } = useParams();
     if (+cusId > 0) {
         initTab.push({
             eventKey: +cusId,
-            title: ' ',
-            order: +cusId + 1
+            title: " ",
+            order: +cusId + 1,
         });
-    };
+    }
 
     let navigate = useNavigate();
     const [companyList, setCompanyList] = useState([]);
     const { isLoading, sendRequest: customersRequest } = useHttp();
-    const [activeTab, setActiveTab] = useState((initTab[1] && initTab[1].eventKey) ? initTab[1].eventKey : initTab[0].eventKey);
+    const [activeTab, setActiveTab] = useState(initTab[1] && initTab[1].eventKey ? initTab[1].eventKey : initTab[0].eventKey);
     const [show, setShow] = useState(false);
     const [tabsList, setTabsList] = useState(initTab);
     const [customerDetailsData, setCustomerDetailsData] = useState({});
@@ -46,42 +46,42 @@ const B2BCustomersPage = () => {
                 if (tabsList[elem].eventKey === tabData.eventKey) {
                     if (tabData.eventKey !== activeTab) {
                         setActiveTab(tabData.eventKey);
-                        navigate(`/b2b-customers/`+ tabData.eventKey);
+                        navigate(`/b2b-customers/` + tabData.eventKey);
                     }
                     return;
                 }
             }
         }
-        tabData.order = tabsList[tabsList.length -1].order + 1;
-        setTabsList(oldArray => [...oldArray, tabData]);
+        tabData.order = tabsList[tabsList.length - 1].order + 1;
+        setTabsList((oldArray) => [...oldArray, tabData]);
         setActiveTab(tabData.eventKey);
-        navigate(`/b2b-customers/`+ tabData.eventKey);
-    }
+        navigate(`/b2b-customers/` + tabData.eventKey);
+    };
 
     const addCustomerTabName = (tabData) => {
         const data = addTabName(tabsList, tabData);
         if (data) {
             setTabsList(data);
         }
-    }
+    };
 
     const removeTabData = (tabEventKey) => {
-        setTabsList(tabsList.filter(item => item.eventKey !== tabEventKey));
+        setTabsList(tabsList.filter((item) => item.eventKey !== tabEventKey));
         if (tabEventKey === activeTab) {
             setActiveTab(initTab[0].eventKey);
-            navigate(`/b2b-customers/`+ initTab[0].eventKey);
+            navigate(`/b2b-customers/` + initTab[0].eventKey);
         }
-    }
+    };
 
     const saveCustomerResponse = (customerData) => {
         if (customerData.id === activeTab) {
             setCustomerDetailsData(customerData);
         }
-        if ( customerData.id && customerData.full_name) {
+        if (customerData.id && customerData.full_name) {
             const tabData = {
                 eventKey: customerData.id,
                 title: customerData.full_name,
-                order: customerData.id + 1
+                order: customerData.id + 1,
             };
             addTabData(tabData);
         } else {
@@ -99,7 +99,6 @@ const B2BCustomersPage = () => {
 
     useEffect(() => {
         if (activeTab > 0) {
-    
             const setCustomerData = (customerData) => {
                 let setCorrectly = false;
                 for (const item in tabsList) {
@@ -114,12 +113,12 @@ const B2BCustomersPage = () => {
             };
 
             const getCustomer = async () => {
-                const data = await getCustomerService({id: activeTab}, customersRequest);
+                const data = await getCustomerService({ id: activeTab }, customersRequest);
                 if (data) {
                     setCustomerData(data);
                 }
             };
-          
+
             getCustomer();
         }
     }, [activeTab]);
@@ -129,7 +128,7 @@ const B2BCustomersPage = () => {
             removeTabData(customerId);
         };
 
-        const data = await removeCustomerService({id: activeTab}, customersRequest);
+        const data = await removeCustomerService({ id: activeTab }, customersRequest);
 
         removeCustomerResponse(data);
     };
@@ -141,36 +140,66 @@ const B2BCustomersPage = () => {
                     <Tabs
                         tabsData={tabsList}
                         activeTabKey={activeTab}
-                        onTabChange={ (activeTabKey) => { setActiveTab(activeTabKey); navigate(`/b2b-customers/`+ activeTabKey); }}
-                        removeTab={ (tabEventKey) => { removeTabData(tabEventKey) }}
+                        onTabChange={(activeTabKey) => {
+                            setActiveTab(activeTabKey);
+                            navigate(`/b2b-customers/` + activeTabKey);
+                        }}
+                        removeTab={(tabEventKey) => {
+                            removeTabData(tabEventKey);
+                        }}
                     />
-                    <button type="button" className="btn-control button-add" onClick={() => {setShow(true)}}>Novi B2B kupac</button>
+                    <button
+                        type="button"
+                        className="btn-control button-add"
+                        onClick={() => {
+                            setShow(true);
+                        }}
+                    >
+                        Novi B2B kupac
+                    </button>
                 </div>
                 <AddB2BCustomerModal
                     openModal={show}
-                    handleClose={() => {setShow(false); setCompanyList([]); }}
+                    handleClose={() => {
+                        setShow(false);
+                        setCompanyList([]);
+                    }}
                     companyList={companyList}
-                    filterCompanies={(inputValue) => { getCompanies(inputValue)}}
-                    saveCustomer={(dataForSave) => { saveCustomer(dataForSave); }}
+                    filterCompanies={(inputValue) => {
+                        getCompanies(inputValue);
+                    }}
+                    saveCustomer={(dataForSave) => {
+                        saveCustomer(dataForSave);
+                    }}
                 />
-                { activeTab === initTab[0].eventKey && (
-                    <B2BCustomersList addTab={ (tabData) => { addTabData(tabData) }} />
+                {activeTab === initTab[0].eventKey && (
+                    <B2BCustomersList
+                        addTab={(tabData) => {
+                            addTabData(tabData);
+                        }}
+                    />
                 )}
-                { activeTab !== initTab[0].eventKey && (
+                {activeTab !== initTab[0].eventKey && (
                     <B2BCustomerDetails
                         companyList={companyList}
-                        filterCompanies={(inputValue) => { getCompanies(inputValue)}}
+                        filterCompanies={(inputValue) => {
+                            getCompanies(inputValue);
+                        }}
                         customerData={customerDetailsData}
-                        saveCustomer={(dataForSave) => { saveCustomer(dataForSave); setCompanyList([]); }}
-                        removeCustomer={(id) => { removeCustomer(id); setCompanyList([]);}}
+                        saveCustomer={(dataForSave) => {
+                            saveCustomer(dataForSave);
+                            setCompanyList([]);
+                        }}
+                        removeCustomer={(id) => {
+                            removeCustomer(id);
+                            setCompanyList([]);
+                        }}
                     />
                 )}
             </section>
-            {isLoading  && (
-                <Loader />
-            )}
+            {isLoading && <Loader />}
         </>
     );
-}
+};
 
 export default B2BCustomersPage;

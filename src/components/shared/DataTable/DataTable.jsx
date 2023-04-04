@@ -1,5 +1,5 @@
-import React from 'react'
-import { DataGrid } from '@mui/x-data-grid';
+import React from "react";
+import { DataGrid } from "@mui/x-data-grid/";
 
 const DataTable = ({
   getRowId,
@@ -45,6 +45,18 @@ const DataTable = ({
       onRowSelectionModelChange={onChange}
       sortingMode={sortingMode}
       onSortModelChange={onSortChange}
+      onCol
+      localeText={{
+        noRowsLabel: 'Ne postoji tražena vrednost.',
+        MuiTablePagination: {
+          labelRowsPerPage: "Redova po stranici",
+        },
+        footerRowSelected: (count) =>
+          count !== 1
+            ? `${count.toLocaleString()} izabrane vrednosti`
+            : `${count.toLocaleString()} izabrana vrednost`,
+      }}
+
       keepNonExistentRowsSelected
     />
   );

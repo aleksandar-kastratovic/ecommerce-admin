@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 
-// material-ui components
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -18,7 +17,7 @@ import fields from "./DetailsListFields.json";
 import styles from "./DetailsList.module.scss";
 
 const DetailsList = ({
-  handleSelectInDetails = () => {},
+  handleSelectInDetails = () => { },
   detailsList = [],
   selected = "",
   isLoadingList,

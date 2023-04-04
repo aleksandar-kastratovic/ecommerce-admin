@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 
-// mui imports
 import Typography from "@mui/material/Typography";
-
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Input from "@mui/material/Input";
@@ -24,7 +22,6 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
 
-// other imports
 import styles from "./ImageUpload.module.scss";
 
 const ImageUpload = ({
@@ -34,8 +31,8 @@ const ImageUpload = ({
   description = "",
   value = "",
   error = "",
-  onImageUpload = () => {},
-  onImagePreview = () => {},
+  onImageUpload = () => { },
+  onImagePreview = () => { },
 }) => {
   const [loadingImage, setLoadingImage] = useState(false);
 

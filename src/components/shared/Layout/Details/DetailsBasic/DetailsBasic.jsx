@@ -1,7 +1,7 @@
 import React from "react";
+
 import ListTableTitle from "../../../ListTable/ListTableTitle";
 
-// material-ui components
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -10,12 +10,12 @@ import UTurnLeftIcon from "@mui/icons-material/UTurnLeft";
 import styles from "./DetailsBasic.module.scss";
 
 const DetailsBasic = ({
-                        list,
-                        handleBackToList,
-                        title,
-                        main,
-                        children,
-                      }) => {
+  list,
+  handleBackToList,
+  title,
+  main,
+  children,
+}) => {
 
   return (
     <Paper elevation={0} className={styles.paperStyle}>

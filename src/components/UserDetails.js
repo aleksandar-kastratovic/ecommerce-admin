@@ -1,9 +1,10 @@
+import { useEffect, useState } from "react";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faUser } from '@fortawesome/free-solid-svg-icons'
-import { faSave, faTrashAlt  } from "@fortawesome/free-regular-svg-icons";
+import { faUser } from ";@fortawesome/free-solid-svg-icons";
+import { faSave, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
 import { Accordion } from "react-bootstrap";
 import Input from "./UI/Input";
-import { useEffect, useState } from "react";
 import useInput from "../hooks/use-input";
 import { toast } from "react-toastify";
 import { regax } from "../helpers/const";
@@ -13,7 +14,6 @@ import Loader from "./UI/Loader";
 import ConfirmModal from "./UI/ConfirmModal";
 
 const UserDetails = ({ userData, saveUser, removeUser }) => {
-
     const regex = regax;
     const [selectedScreenId, setSelectedScreenId] = useState(null);
     const { isLoading, sendRequest: rolesListRequest } = useHttp();
@@ -25,8 +25,8 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
         hasError: nameHasError,
         valueChangeHandler: nameChangeHandler,
         inputBlurHandler: nameBlurHandler,
-        reset: resetName
-    } = useInput((value) => value.trim() !== '');
+        reset: resetName,
+    } = useInput((value) => value.trim() !== "");
 
     const {
         value: lastnameValue,
@@ -34,8 +34,8 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
         hasError: lastnameHasError,
         valueChangeHandler: lastnameChangeHandler,
         inputBlurHandler: lastnameBlurHandler,
-        reset: resetLastname
-    } = useInput((value) => value.trim() !== '');
+        reset: resetLastname,
+    } = useInput((value) => value.trim() !== "");
 
     const {
         value: emailValue,
@@ -43,14 +43,10 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
         hasError: emailHasError,
         valueChangeHandler: emailChangeHandler,
         inputBlurHandler: emailBlurHandler,
-        reset: resetEmail
-    } = useInput((value) => (!value && value.trim() !== '') || regex.test(value) !== false);
+        reset: resetEmail,
+    } = useInput((value) => (!value && value.trim() !== "") || regex.test(value) !== false);
 
-    const {
-        value: phoneValue,
-        valueChangeHandler: phoneChangeHandler,
-        reset: resetPhone
-    } = useInput((value) => value);
+    const { value: phoneValue, valueChangeHandler: phoneChangeHandler, reset: resetPhone } = useInput((value) => value);
 
     const {
         value: passwordValue,
@@ -58,8 +54,8 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
         hasError: passwordHasError,
         valueChangeHandler: passwordChangeHandler,
         inputBlurHandler: passwordBlurHandler,
-        reset: resetPassword
-    } = useInput((value) => value.length > 5 || value.trim() === '');
+        reset: resetPassword,
+    } = useInput((value) => value.length > 5 || value.trim() === "");
 
     const {
         value: passwordConfirmValue,
@@ -67,7 +63,7 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
         hasError: passwordConfirmHasError,
         valueChangeHandler: passwordConfirmChangeHandler,
         inputBlurHandler: passwordConfirmBlurHandler,
-        reset: resetPasswordConfirm
+        reset: resetPasswordConfirm,
     } = useInput((value) => value === passwordValue);
 
     let {
@@ -76,13 +72,12 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
         inputBlurHandler: roleBlurHandler,
         valueChangeHandler: roleValueChangeHandler,
         hasError: roleHasError,
-        reset: resetRole
-    } = useInput((value) => value !== undefined && value !== null && value != '');
+        reset: resetRole,
+    } = useInput((value) => value !== undefined && value !== null && value != "");
 
     const [rolesList, setRolesList] = useState([]);
 
     useEffect(() => {
-  
         const setRoles = async () => {
             const data = await rolesListService(rolesListRequest);
             setRolesList(data);
@@ -92,15 +87,15 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
     }, [rolesListRequest]);
 
     useEffect(() => {
-        nameChangeHandler({target: {value : (userData?.first_name ?? '') }});
+        nameChangeHandler({ target: { value: userData?.first_name ?? "" } });
         nameBlurHandler(null);
-        lastnameChangeHandler({target: {value : (userData?.last_name ?? '') }});
+        lastnameChangeHandler({ target: { value: userData?.last_name ?? "" } });
         lastnameBlurHandler(null);
-        emailChangeHandler({target: {value : (userData?.email ?? '') }});
+        emailChangeHandler({ target: { value: userData?.email ?? "" } });
         emailBlurHandler(null);
-        roleValueChangeHandler({target: {value : (userData?.role_id ?? '') }});
+        roleValueChangeHandler({ target: { value: userData?.role_id ?? "" } });
         roleBlurHandler(null);
-        phoneChangeHandler({target: {value : (userData?.phone ?? '') }});
+        phoneChangeHandler({ target: { value: userData?.phone ?? "" } });
 
         setSelectedScreenId(userData?.id ?? null);
     }, [userData]);
@@ -118,7 +113,7 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
             phone: phoneValue,
             password: passwordValue,
             password_confirmation: passwordConfirmValue,
-            role_id: roleValue
+            role_id: roleValue,
         });
         resetName();
         resetLastname();
@@ -135,37 +130,35 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
     };
 
     const roleChangeHandler = (ev) => {
-        const valueInput = {target: {value : (ev && ev.id !== null) ? ev.id : ev}};
+        const valueInput = { target: { value: ev && ev.id !== null ? ev.id : ev } };
         roleValueChangeHandler(valueInput);
     };
-
 
     return (
         <div className="add-role-modal">
             <div className="btn-group mb-4" role="group" aria-label="Basic example">
-            <button
-                disabled={ !nameIsValid || !lastnameIsValid || !emailIsValid || !passwordIsValid || !passwordConfirmIsValid || !roleIsValid }
-                onClick={submitHandler}
-                type="button"
-                className="btn-control btn btn-add-details"
-            >
-                <FontAwesomeIcon className="me-1" icon={faSave} />
-                Sačuvajte
-            </button>
-            <button
-                type="button"
-                className="btn-control btn btn-delete-details"
-                onClick={() => confirm(["Da li ste sigurni?", ()=> removeUserHandler() ])}
-            >
-                <FontAwesomeIcon className="me-1" icon={faTrashAlt} />
-                Izbrišite
-            </button>
+                <button
+                    disabled={!nameIsValid || !lastnameIsValid || !emailIsValid || !passwordIsValid || !passwordConfirmIsValid || !roleIsValid}
+                    onClick={submitHandler}
+                    type="button"
+                    className="btn-control btn btn-add-details"
+                >
+                    <FontAwesomeIcon className="me-1" icon={faSave} />
+                    Sačuvajte
+                </button>
+                <button type="button" className="btn-control btn btn-delete-details" onClick={() => confirm(["Da li ste sigurni?", () => removeUserHandler()])}>
+                    <FontAwesomeIcon className="me-1" icon={faTrashAlt} />
+                    Izbrišite
+                </button>
             </div>
             <div className="row">
                 <div className="col-xl-12">
                     <Accordion defaultActiveKey="0">
                         <Accordion.Item eventKey="0">
-                            <Accordion.Header className="alert-info"><FontAwesomeIcon icon={faUser} />Podaci o korisniku:</Accordion.Header>
+                            <Accordion.Header className="alert-info">
+                                <FontAwesomeIcon icon={faUser} />
+                                Podaci o korisniku:
+                            </Accordion.Header>
                             <Accordion.Body>
                                 <div className="row">
                                     <div className="col-6">
@@ -177,7 +170,7 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
                                             disabled={false}
                                             inputType="input"
                                             type="text"
-                                            class={"form-control input-style form-control-lg " + (nameHasError ? 'invalid' : '')}
+                                            class={"form-control input-style form-control-lg " + (nameHasError ? "invalid" : "")}
                                             text="Ime"
                                             text_class="m-0 required"
                                             inputErrorText="je obavezno!"
@@ -192,7 +185,7 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
                                             disabled={false}
                                             inputType="input"
                                             type="text"
-                                            class={"form-control input-style form-control-lg " + (lastnameHasError ? 'invalid' : '')}
+                                            class={"form-control input-style form-control-lg " + (lastnameHasError ? "invalid" : "")}
                                             text="Prezime"
                                             text_class="m-0 required"
                                             inputErrorText="je obavezno!"
@@ -207,7 +200,7 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
                                             disabled={false}
                                             inputType="input"
                                             type="text"
-                                            class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
+                                            class={"form-control input-style form-control-lg " + (emailHasError ? "invalid" : "")}
                                             text="Mail"
                                             text_class="m-0 required"
                                             inputErrorText="je obavezan!"
@@ -236,7 +229,7 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
                                             offAutoComplete={true}
                                             inputType="input"
                                             type="password"
-                                            class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}
+                                            class={"form-control input-style form-control-lg " + (passwordHasError ? "invalid" : "")}
                                             text="Lozinka"
                                             text_class="m-0 required"
                                             inputErrorText="je obavezna!"
@@ -251,7 +244,7 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
                                             disabled={false}
                                             inputType="input"
                                             type="password"
-                                            class={"form-control input-style form-control-lg " + (passwordConfirmHasError ? 'invalid' : '')}
+                                            class={"form-control input-style form-control-lg " + (passwordConfirmHasError ? "invalid" : "")}
                                             text="Potvrdite lozinku"
                                             text_class="m-0 required"
                                             inputErrorText="je obavezno!"
@@ -268,7 +261,7 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
                                             data={rolesList}
                                             inputType="select-react"
                                             type="text"
-                                            class={"form-control input-style form-control-lg select-style " + (roleHasError ? 'invalid' : '')}
+                                            class={"form-control input-style form-control-lg select-style " + (roleHasError ? "invalid" : "")}
                                             text="Uloga"
                                             text_class="m-0 required"
                                             inputErrorText="je obavezna!"
@@ -280,12 +273,10 @@ const UserDetails = ({ userData, saveUser, removeUser }) => {
                     </Accordion>
                 </div>
             </div>
-            {isLoading && (
-                <Loader />
-            )}
+            {isLoading && <Loader />}
             <ConfirmModal confirmWhat={confirmWhat} confirm={confirm} />
         </div>
     );
-}
+};
 
 export default UserDetails;

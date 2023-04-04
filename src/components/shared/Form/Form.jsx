@@ -1,14 +1,14 @@
-import { Box } from "@mui/material";
-import { isEmpty } from "lodash";
 import { useCallback, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import Box from "@mui/material/Box";
 import Button from "../Button/Button";
 import CreateForm from "./CreateForm";
 import Buttons from "./Buttons/Buttons";
-import { useNavigate } from "react-router-dom";
 import { formatDate, formatDateTime } from "../../../helpers/dateFormat";
 import ImageDialog from "../Dialogs/ImageDialog";
 import { isUrlValid } from "./util";
-import axios from "axios";
+import { isEmpty } from "lodash";
 
 const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, submitButton = true, queryString = "", onChange = () => { }, validateData = (data) => data }) => {
   const navigate = useNavigate();

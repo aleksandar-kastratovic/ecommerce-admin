@@ -1,309 +1,300 @@
-import { faSave, faTrashAlt  } from "@fortawesome/free-regular-svg-icons";
-import { faUserTag } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Accordion } from "react-bootstrap";
-import Input from "./UI/Input";
 import { useEffect, useState } from "react";
-import useInput from "../hooks/use-input";
+
 import { toast } from "react-toastify";
+import { faSave, faTrashAlt } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Input from "./UI/Input";
+import useInput from "../hooks/use-input";
 import ConfirmModal from "./UI/ConfirmModal";
 
 const B2BCustomerDetails = ({ customerData, saveCustomer, removeCustomer, companyList, filterCompanies }) => {
+    const [selectedCustomerId, setSelectedCustomerId] = useState(null);
+    const [confirmWhat, confirm] = useState();
+    const [search, setSearch] = useState("");
 
-  const [selectedCustomerId, setSelectedCustomerId] = useState(null);
-  const [confirmWhat, confirm] = useState();
-  const [search, setSearch] = useState('');
+    let {
+        value: firstNameValue,
+        isValid: firstNameIsValid,
+        hasError: firstNameHasError,
+        valueChangeHandler: firstNameChangeHandler,
+        inputBlurHandler: firstNameBlurHandler,
+        reset: resetFirstName,
+    } = useInput((value) => value.trim() !== "");
 
-  let {
-    value: firstNameValue,
-    isValid: firstNameIsValid,
-    hasError: firstNameHasError,
-    valueChangeHandler: firstNameChangeHandler,
-    inputBlurHandler: firstNameBlurHandler,
-    reset: resetFirstName
-  } = useInput((value) => value.trim() !== '');
+    let {
+        value: lastNameValue,
+        isValid: lastNameIsValid,
+        hasError: lastNameHasError,
+        valueChangeHandler: lastNameChangeHandler,
+        inputBlurHandler: lastNameBlurHandler,
+        reset: resetLastName,
+    } = useInput((value) => value.trim() !== "");
 
-  let {
-    value: lastNameValue,
-    isValid: lastNameIsValid,
-    hasError: lastNameHasError,
-    valueChangeHandler: lastNameChangeHandler,
-    inputBlurHandler: lastNameBlurHandler,
-    reset: resetLastName
-  } = useInput((value) => value.trim() !== '');
+    let {
+        value: companyValue,
+        isValid: companyIsValid,
+        hasError: companyHasError,
+        valueChangeHandler: companyChangeHandler,
+        inputBlurHandler: companyBlurHandler,
+        reset: resetCompany,
+    } = useInput((value) => value > 0);
 
-  let {
-    value: companyValue,
-    isValid: companyIsValid,
-    hasError: companyHasError,
-    valueChangeHandler: companyChangeHandler,
-    inputBlurHandler: companyBlurHandler,
-    reset: resetCompany
-  } = useInput((value) => value > 0);
+    let {
+        value: phoneValue,
+        isValid: phoneIsValid,
+        hasError: phoneHasError,
+        valueChangeHandler: phoneChangeHandler,
+        inputBlurHandler: phoneBlurHandler,
+        reset: resetPhone,
+    } = useInput((value) => value.trim() !== "");
 
-  let {
-    value: phoneValue,
-    isValid: phoneIsValid,
-    hasError: phoneHasError,
-    valueChangeHandler: phoneChangeHandler,
-    inputBlurHandler: phoneBlurHandler,
-    reset: resetPhone
-  } = useInput((value) => value.trim() !== '');
+    let { value: mobilePhoneValue, valueChangeHandler: mobilePhoneChangeHandler, reset: resetMobilePhone } = useInput((value) => value);
 
-  let {
-    value: mobilePhoneValue,
-    valueChangeHandler: mobilePhoneChangeHandler,
-    reset: resetMobilePhone
-  } = useInput((value) => value);
+    let {
+        value: emailValue,
+        isValid: emailIsValid,
+        hasError: emailHasError,
+        valueChangeHandler: emailChangeHandler,
+        inputBlurHandler: emailBlurHandler,
+        reset: resetEmail,
+    } = useInput((value) => value.trim() !== "");
 
-  let {
-    value: emailValue,
-    isValid: emailIsValid,
-    hasError: emailHasError,
-    valueChangeHandler: emailChangeHandler,
-    inputBlurHandler: emailBlurHandler,
-    reset: resetEmail
-  } = useInput((value) => value.trim() !== '');
+    const {
+        value: passwordValue,
+        isValid: passwordIsValid,
+        hasError: passwordHasError,
+        valueChangeHandler: passwordChangeHandler,
+        inputBlurHandler: passwordBlurHandler,
+        reset: resetPassword,
+    } = useInput((value) => value.length > 5 || value.trim() === "");
 
-  const {
-    value: passwordValue,
-    isValid: passwordIsValid,
-    hasError: passwordHasError,
-    valueChangeHandler: passwordChangeHandler,
-    inputBlurHandler: passwordBlurHandler,
-    reset: resetPassword
-  } = useInput((value) => value.length > 5 || value.trim() === '');
+    const {
+        value: passwordConfirmValue,
+        isValid: passwordConfirmIsValid,
+        hasError: passwordConfirmHasError,
+        valueChangeHandler: passwordConfirmChangeHandler,
+        inputBlurHandler: passwordConfirmBlurHandler,
+        reset: resetPasswordConfirm,
+    } = useInput((value) => value === passwordValue);
 
-  const {
-    value: passwordConfirmValue,
-    isValid: passwordConfirmIsValid,
-    hasError: passwordConfirmHasError,
-    valueChangeHandler: passwordConfirmChangeHandler,
-    inputBlurHandler: passwordConfirmBlurHandler,
-    reset: resetPasswordConfirm
-  } = useInput((value) => value === passwordValue);
+    useEffect(() => {
+        firstNameChangeHandler({ target: { value: customerData?.first_name ?? "" } });
+        lastNameChangeHandler({ target: { value: customerData?.last_name ?? "" } });
+        companyChangeHandler({ target: { value: customerData?.company_id ?? "" } });
+        if (customerData?.company_id && customerData?.company_id > 0) {
+            filterCompanies({ id: customerData?.company_id });
+        }
+        emailChangeHandler({ target: { value: customerData?.email ?? "" } });
+        phoneChangeHandler({ target: { value: customerData?.phone ?? "" } });
+        mobilePhoneChangeHandler({ target: { value: customerData?.mobile_phone ?? "" } });
+        setSelectedCustomerId(customerData?.id ?? null);
+    }, [customerData]);
 
-  useEffect(() => {
-    firstNameChangeHandler({target: {value : (customerData?.first_name ?? '') }});
-    lastNameChangeHandler({target: {value : (customerData?.last_name ?? '') }});
-    companyChangeHandler({target: {value : (customerData?.company_id ?? '') }});
-    if (customerData?.company_id && customerData?.company_id > 0) {
-      filterCompanies({id: customerData?.company_id});
-    }
-    emailChangeHandler({target: {value : (customerData?.email ?? '') }});
-    phoneChangeHandler({target: {value : (customerData?.phone ?? '') }});
-    mobilePhoneChangeHandler({target: {value : (customerData?.mobile_phone ?? '') }});
-    setSelectedCustomerId(customerData?.id ?? null);
-  }, [customerData]);
+    const submitHandler = () => {
+        if (!firstNameIsValid || !lastNameIsValid || !companyIsValid || !emailIsValid || !phoneIsValid || !passwordIsValid || !passwordConfirmIsValid) {
+            toast.warning("Forma nije validna!");
+            return;
+        }
 
-  const submitHandler = () => {
-    if (
-      !firstNameIsValid || !lastNameIsValid || !companyIsValid || !emailIsValid || !phoneIsValid
-      || !passwordIsValid || !passwordConfirmIsValid
-    ) {
-      toast.warning("Forma nije validna!");
-      return;
-    }
+        saveCustomer({
+            id: selectedCustomerId,
+            first_name: firstNameValue,
+            last_name: lastNameValue,
+            company_id: companyValue,
+            email: emailValue,
+            phone: phoneValue,
+            password: passwordValue,
+            password_confirmation: passwordConfirmValue,
+            mobile_phone: mobilePhoneValue,
+        });
 
-    saveCustomer({
-      id: selectedCustomerId,
-      first_name: firstNameValue,
-      last_name: lastNameValue,
-      company_id: companyValue,
-      email: emailValue,
-      phone: phoneValue,
-      password: passwordValue,
-      password_confirmation: passwordConfirmValue,
-      mobile_phone: mobilePhoneValue
-    });
+        resetForm();
+    };
 
-    resetForm();
-  };
+    const resetForm = () => {
+        resetFirstName();
+        resetLastName();
+        resetCompany();
+        resetEmail();
+        resetPhone();
+        resetMobilePhone();
+        resetPassword();
+        resetPasswordConfirm();
+        setSelectedCustomerId(null);
+        setSearch("");
+    };
 
-  const resetForm = () => {
-    resetFirstName();
-    resetLastName();
-    resetCompany();
-    resetEmail();
-    resetPhone();
-    resetMobilePhone();
-    resetPassword();
-    resetPasswordConfirm();
-    setSelectedCustomerId(null);
-    setSearch('');
-  }
+    const companyChanged = (ev) => {
+        const valueInput = { target: { value: ev && ev.id !== null ? ev.id : ev } };
+        companyChangeHandler(valueInput);
+    };
 
-  const companyChanged = (ev) => {
-    const valueInput = {target: {value : (ev && ev.id !== null) ? ev.id : ev}};
-    companyChangeHandler(valueInput);
-  };
+    const removeCustomerHandler = () => {
+        removeCustomer(selectedCustomerId);
+    };
 
-  const removeCustomerHandler = () => {
-    removeCustomer(selectedCustomerId);
-  };
+    useEffect(() => {
+        const timeOutId = setTimeout(() => {
+            if (search.trim().length > 2) {
+                filterCompanies({ company_name: search });
+            }
+        }, 700);
+        return () => clearTimeout(timeOutId);
+    }, [search]);
 
-  useEffect(() => {
-    const timeOutId = setTimeout(() => {if (search.trim().length > 2) {filterCompanies({company_name: search})}}, 700);
-    return () => clearTimeout(timeOutId);
-  }, [search]);
-
-  return (
-    <div className="add-role-modal">
-      <div className="btn-group mb-4" role="group" aria-label="Basic example">
-        <button
-          disabled={
-            !firstNameIsValid || !lastNameIsValid || !companyIsValid || !emailIsValid || !phoneIsValid
-            || !passwordIsValid || !passwordConfirmIsValid
-          }
-          onClick={submitHandler}
-          type="button"
-          className="btn-control btn btn-add-details"
-        >
-          <FontAwesomeIcon className="me-1" icon={faSave} />
-          Sačuvajte
-        </button>
-        <button
-          type="button"
-          className="btn-control btn btn-delete-details"
-          onClick={() => confirm(["Da li ste sigurni?", ()=> removeCustomerHandler() ])}
-        >
-          <FontAwesomeIcon className="me-1" icon={faTrashAlt} />
-          Izbrišite
-        </button>
-      </div>
-      <div className="row">
-        <div className="col-xl-12">
-            <div className="orders-item-holder">
-              <h5>Podaci o kupcu:</h5>
-                <div className="row buyers">
-                  <div className="col-6">
-                    <Input
-                      inputValue={firstNameValue}
-                      onInputChange={firstNameChangeHandler}
-                      onInputBlur={firstNameBlurHandler}
-                      hasInputError={firstNameHasError}
-                      disabled={false}
-                      inputType="input"
-                      type="text"
-                      class={"form-control input-style form-control-lg " + (firstNameHasError ? 'invalid' : '')}
-                      text="Ime"
-                      text_class="m-0 required"
-                      inputErrorText="je obavezno!"
-                    />
-                  </div>
-                  <div className="col-6">
-                    <Input
-                      inputValue={lastNameValue}
-                      onInputChange={lastNameChangeHandler}
-                      onInputBlur={lastNameBlurHandler}
-                      hasInputError={lastNameHasError}
-                      disabled={false}
-                      inputType="input"
-                      type="text"
-                      class={"form-control input-style form-control-lg " + (lastNameHasError ? 'invalid' : '')}
-                      text="Prezime"
-                      text_class="m-0 required"
-                      inputErrorText="je obavezno!"
-                    />
-                  </div>
-                  <div className="col-6">
-                    <Input
-                      value={companyValue}
-                      isMulti={false}
-                      handleChange={companyChanged}
-                      onInputBlur={(e, action) => { setSearch(e); companyBlurHandler}}
-                      hasInputError={companyHasError}
-                      placeHolder={"Minimalno 3 karaktera"}
-                      disabled={false}
-                      isSearchable
-                      data={companyList ?? []}
-                      inputType="select-react"
-                      type="text"
-                      class={"form-control input-style form-control-lg select-style " + (companyHasError ? 'invalid' : '')}
-                      text="Naziv firme"
-                      text_class="m-0 required"
-                      inputErrorText="je obavezna!"
-                    />
-                  </div>
-                  <div className="col-6">
-                    <Input
-                      inputValue={emailValue}
-                      onInputChange={emailChangeHandler}
-                      onInputBlur={emailBlurHandler}
-                      hasInputError={emailHasError}
-                      disabled={false}
-                      inputType="input"
-                      type="text"
-                      class={"form-control input-style form-control-lg " + (emailHasError ? 'invalid' : '')}
-                      text="Email"
-                      text_class="m-0 required"
-                      inputErrorText="je obavezan!"
-                    />
-                  </div>
-                  <div className="col-6">
-                    <Input
-                      inputValue={phoneValue}
-                      onInputChange={phoneChangeHandler}
-                      onInputBlur={phoneBlurHandler}
-                      hasInputError={phoneHasError}
-                      disabled={false}
-                      inputType="input"
-                      type="text"
-                      class={"form-control input-style form-control-lg " + (phoneHasError ? 'invalid' : '')}
-                      text="Telefon"
-                      text_class="m-0 required"
-                      inputErrorText="je obavezan!"
-                    />
-                  </div>
-                  <div className="col-6">
-                    <Input
-                      inputValue={mobilePhoneValue}
-                      onInputChange={mobilePhoneChangeHandler}
-                      disabled={false}
-                      inputType="input"
-                      type="text"
-                      class="form-control input-style form-control-lg "
-                      text="Mobilni telefon"
-                    />
-                  </div>
-                  <div className="col-6">
-                    <Input
-                      inputValue={passwordValue}
-                      onInputChange={passwordChangeHandler}
-                      onInputBlur={passwordBlurHandler}
-                      hasInputError={passwordHasError}
-                      disabled={false}
-                      offAutoComplete={true}
-                      inputType="input"
-                      type="password"
-                      class={"form-control input-style form-control-lg " + (passwordHasError ? 'invalid' : '')}
-                      text="Lozinka"
-                      text_class="m-0"
-                      inputErrorText="mora da ima minimalno 6 karaktera!"
-                    />
-                  </div>
-                  <div className="col-6">
-                    <Input
-                      inputValue={passwordConfirmValue}
-                      onInputChange={passwordConfirmChangeHandler}
-                      onInputBlur={passwordConfirmBlurHandler}
-                      hasInputError={passwordConfirmHasError}
-                      disabled={false}
-                      inputType="input"
-                      type="password"
-                      class={"form-control input-style form-control-lg " + (passwordConfirmHasError ? 'invalid' : '')}
-                      text="Potvrdite lozinku"
-                      text_class="m-0"
-                      inputErrorText="mora da se poklapa sa lozinkom!"
-                    />
-                  </div>
+    return (
+        <div className="add-role-modal">
+            <div className="btn-group mb-4" role="group" aria-label="Basic example">
+                <button
+                    disabled={!firstNameIsValid || !lastNameIsValid || !companyIsValid || !emailIsValid || !phoneIsValid || !passwordIsValid || !passwordConfirmIsValid}
+                    onClick={submitHandler}
+                    type="button"
+                    className="btn-control btn btn-add-details"
+                >
+                    <FontAwesomeIcon className="me-1" icon={faSave} />
+                    Sačuvajte
+                </button>
+                <button type="button" className="btn-control btn btn-delete-details" onClick={() => confirm(["Da li ste sigurni?", () => removeCustomerHandler()])}>
+                    <FontAwesomeIcon className="me-1" icon={faTrashAlt} />
+                    Izbrišite
+                </button>
+            </div>
+            <div className="row">
+                <div className="col-xl-12">
+                    <div className="orders-item-holder">
+                        <h5>Podaci o kupcu:</h5>
+                        <div className="row buyers">
+                            <div className="col-6">
+                                <Input
+                                    inputValue={firstNameValue}
+                                    onInputChange={firstNameChangeHandler}
+                                    onInputBlur={firstNameBlurHandler}
+                                    hasInputError={firstNameHasError}
+                                    disabled={false}
+                                    inputType="input"
+                                    type="text"
+                                    class={"form-control input-style form-control-lg " + (firstNameHasError ? "invalid" : "")}
+                                    text="Ime"
+                                    text_class="m-0 required"
+                                    inputErrorText="je obavezno!"
+                                />
+                            </div>
+                            <div className="col-6">
+                                <Input
+                                    inputValue={lastNameValue}
+                                    onInputChange={lastNameChangeHandler}
+                                    onInputBlur={lastNameBlurHandler}
+                                    hasInputError={lastNameHasError}
+                                    disabled={false}
+                                    inputType="input"
+                                    type="text"
+                                    class={"form-control input-style form-control-lg " + (lastNameHasError ? "invalid" : "")}
+                                    text="Prezime"
+                                    text_class="m-0 required"
+                                    inputErrorText="je obavezno!"
+                                />
+                            </div>
+                            <div className="col-6">
+                                <Input
+                                    value={companyValue}
+                                    isMulti={false}
+                                    handleChange={companyChanged}
+                                    onInputBlur={(e, action) => {
+                                        setSearch(e);
+                                        companyBlurHandler;
+                                    }}
+                                    hasInputError={companyHasError}
+                                    placeHolder={"Minimalno 3 karaktera"}
+                                    disabled={false}
+                                    isSearchable
+                                    data={companyList ?? []}
+                                    inputType="select-react"
+                                    type="text"
+                                    class={"form-control input-style form-control-lg select-style " + (companyHasError ? "invalid" : "")}
+                                    text="Naziv firme"
+                                    text_class="m-0 required"
+                                    inputErrorText="je obavezna!"
+                                />
+                            </div>
+                            <div className="col-6">
+                                <Input
+                                    inputValue={emailValue}
+                                    onInputChange={emailChangeHandler}
+                                    onInputBlur={emailBlurHandler}
+                                    hasInputError={emailHasError}
+                                    disabled={false}
+                                    inputType="input"
+                                    type="text"
+                                    class={"form-control input-style form-control-lg " + (emailHasError ? "invalid" : "")}
+                                    text="Email"
+                                    text_class="m-0 required"
+                                    inputErrorText="je obavezan!"
+                                />
+                            </div>
+                            <div className="col-6">
+                                <Input
+                                    inputValue={phoneValue}
+                                    onInputChange={phoneChangeHandler}
+                                    onInputBlur={phoneBlurHandler}
+                                    hasInputError={phoneHasError}
+                                    disabled={false}
+                                    inputType="input"
+                                    type="text"
+                                    class={"form-control input-style form-control-lg " + (phoneHasError ? "invalid" : "")}
+                                    text="Telefon"
+                                    text_class="m-0 required"
+                                    inputErrorText="je obavezan!"
+                                />
+                            </div>
+                            <div className="col-6">
+                                <Input
+                                    inputValue={mobilePhoneValue}
+                                    onInputChange={mobilePhoneChangeHandler}
+                                    disabled={false}
+                                    inputType="input"
+                                    type="text"
+                                    class="form-control input-style form-control-lg "
+                                    text="Mobilni telefon"
+                                />
+                            </div>
+                            <div className="col-6">
+                                <Input
+                                    inputValue={passwordValue}
+                                    onInputChange={passwordChangeHandler}
+                                    onInputBlur={passwordBlurHandler}
+                                    hasInputError={passwordHasError}
+                                    disabled={false}
+                                    offAutoComplete={true}
+                                    inputType="input"
+                                    type="password"
+                                    class={"form-control input-style form-control-lg " + (passwordHasError ? "invalid" : "")}
+                                    text="Lozinka"
+                                    text_class="m-0"
+                                    inputErrorText="mora da ima minimalno 6 karaktera!"
+                                />
+                            </div>
+                            <div className="col-6">
+                                <Input
+                                    inputValue={passwordConfirmValue}
+                                    onInputChange={passwordConfirmChangeHandler}
+                                    onInputBlur={passwordConfirmBlurHandler}
+                                    hasInputError={passwordConfirmHasError}
+                                    disabled={false}
+                                    inputType="input"
+                                    type="password"
+                                    class={"form-control input-style form-control-lg " + (passwordConfirmHasError ? "invalid" : "")}
+                                    text="Potvrdite lozinku"
+                                    text_class="m-0"
+                                    inputErrorText="mora da se poklapa sa lozinkom!"
+                                />
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+            <ConfirmModal confirmWhat={confirmWhat} confirm={confirm} />
         </div>
-      </div>
-      <ConfirmModal confirmWhat={confirmWhat} confirm={confirm} />
-    </div>
-  );
-}
+    );
+};
 
 export default B2BCustomerDetails;

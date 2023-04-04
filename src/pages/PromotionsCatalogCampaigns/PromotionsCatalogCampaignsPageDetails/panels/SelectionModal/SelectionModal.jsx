@@ -1,9 +1,9 @@
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import CampaignList from '../CampaignList/CampaignList';
-import CampaignTable from '../CampaignTable/CampaignTable';
+import Button from "@mui/material/Button";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import CampaignList from "../CampaignList/CampaignList";
+import CampaignTable from "../CampaignTable/CampaignTable";
 
 const SelectionModal = ({
   openDialog,

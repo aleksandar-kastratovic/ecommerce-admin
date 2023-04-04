@@ -1,15 +1,25 @@
-import { Check } from "@mui/icons-material"
-import { TableHead, TableBody, TableRow, FormControl, Select, MenuItem, TableCell, FormLabel, Checkbox } from "@mui/material"
-import React, { useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
-import { toast } from "react-toastify"
-import Button from "../../components/shared/Button/Button"
-import Buttons from "../../components/shared/Form/Buttons/Buttons"
-import LoadingTableRows from "../../components/shared/Loading/LoadingTableRows"
-import Table from "../../components/shared/Table/Table"
-import Loader from "../../components/UI/Loader"
-import { rotateMatrix } from "../../helpers/data"
-import useImportAPI from "./api"
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+import Check from "@mui/icons-material/Check";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+import TableCell from "@mui/material/TableCell";
+import Checkbox from "@mui/material/Checkbox";
+import FormControl from "@mui/material/FormControl";
+import FormLabel from "@mui/material/FormLabel";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+
+import { toast } from "react-toastify";
+import Button from "../../components/shared/Button/Button";
+import Buttons from "../../components/shared/Form/Buttons/Buttons";
+import LoadingTableRows from "../../components/shared/Loading/LoadingTableRows";
+import Table from "../../components/shared/Table/Table";
+import Loader from "../../components/UI/Loader";
+import { rotateMatrix } from "../../helpers/data";
+import useImportAPI from "./api";
 
 /**
  * Show the available options for the
@@ -25,12 +35,12 @@ const ImportStep2 = ({ filename, payload }) => {
   const api = useImportAPI()
 
   // Handle both error and success when uploading the file
-  const [ error: { response: {} }, setError ] = useState()
-  const [ response: {}, setResponse ] = useState()
+  const [error, setError] = useState()
+  const [response, setResponse] = useState()
   const { uuid, preview, targets, columns } = response?.payload ?? { preview: [], keys: [], options: [] }
 
   // The selected mapping by the user
-  const [ mapping, setMapping ] = useState({})
+  const [mapping, setMapping] = useState({})
   const updateMapping = event => setMapping({ ...mapping, [event.target.name]: event.target.value })
 
   // Send the file over the API
@@ -38,12 +48,12 @@ const ImportStep2 = ({ filename, payload }) => {
     api.putProductsImport(filename, payload)
       .then(setResponse)
       .catch(setError)
-  }, [ filename, payload ])
+  }, [filename, payload])
 
   // Confirm import
-  const [ insert, setInsert ] = useState(false)
-  const [ offset, setOffset ] = useState(1)
-  const [ execute, setExecute ] = useState(false)
+  const [insert, setInsert] = useState(false)
+  const [offset, setOffset] = useState(1)
+  const [execute, setExecute] = useState(false)
   const onSubmit = () => {
 
     // Show loading

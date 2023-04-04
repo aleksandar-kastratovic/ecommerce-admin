@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import {
-  InputInput,
-  InputNumber,
-} from '../../../../../components/shared/Form/FormInputs/FormInputs';
-import style from './InputValue.module.scss';
-import { Icon, IconButton, Tooltip } from '@mui/material';
-import useAPI from '../../../../../api/api';
-import SelectionModal from '../SelectionModal/SelectionModal';
-import Loading from '../../../../../components/shared/Loading/Loading';
+import React, { useEffect, useState } from "react";
+
+import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+
+import { InputInput, InputNumber } from "../../../../../components/shared/Form/FormInputs/FormInputs";
+import useAPI from "../../../../../api/api";
+import SelectionModal from "../SelectionModal/SelectionModal";
+import Loading from "../../../../../components/shared/Loading/Loading";
+
+import scss from "./InputValue.module.scss";
 
 const InputValue = ({
   fillFromApi,
@@ -110,7 +112,7 @@ const InputValue = ({
   };
 
   return !isLoading ? (
-    <div className={style.valueIcon}>
+    <div className={scss.valueIcon}>
       {InputComponent()}
 
       {inputType !== 'text' && inputType !== 'number' && (
@@ -123,7 +125,7 @@ const InputValue = ({
             arrow
           >
             <IconButton
-              className={style.showValues}
+              className={scss.showValues}
               onClick={() => {
                 setOpenDialog({ show: true });
               }}

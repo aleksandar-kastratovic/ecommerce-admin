@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+
 import useAPI from "../../../api/api";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import IconList from "../../../helpers/icons";
