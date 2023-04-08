@@ -7,14 +7,17 @@
     &:not(:last-child) {
         margin-bottom: 0.8rem;
     }
+
     div {
         width: 100px;
         .inputSelect {
             font-size: 0.875rem;
             padding: 0;
+
             div {
                 padding: 0;
             }
+
             fieldset {
                 border: 0;
                 border-bottom: 1px solid rgba($black, 0.2);

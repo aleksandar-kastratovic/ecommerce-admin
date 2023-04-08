@@ -8,10 +8,15 @@ import Input from "./UI/Input";
 import useInput from "../hooks/use-input";
 import AuthContext from "../store/auth-contex";
 import useHttp from "../hooks/use-http";
-import Loader from "./UI/Loader";
+import Loader from "./shared/Loading/Loading";
 import { regax } from "../helpers/const";
 import { forgotPasswordService, loginService } from "../helpers/services";
 import ForgotPasswordModal from "./UI/ForgotPasswordModal";
+
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 const AuthForm = () => {
     const { isLoading, sendRequest: loginRequest } = useHttp();
@@ -61,6 +66,7 @@ const AuthForm = () => {
         };
 
         const data = await loginService(loignData, loginRequest);
+
         if (data) {
             setLoginData(data);
         }
@@ -71,76 +77,122 @@ const AuthForm = () => {
     };
 
     return (
-        <div className="container-fluid signin-wrapper">
-            <div className="row">
-                <div className="col-7">
-                    <img src={singinBackground} className="login-background-image" alt={singinBackground} />
-                </div>
-                <div className="col-5">
-                    <div className="row login-form-container">
-                        <img src={logo} alt={logo} />
-                        <h5>Dobrodošli na Croonus CMS.</h5>
-                        <p className="login-from-text">Molimo prijavite se za pristup administraciji.</p>
-                        <form onSubmit={submitHandler} className="login-form">
-                            <Input
-                                inputValue={emailValue}
-                                onInputChange={emailChangeHandler}
-                                onInputBlur={emailBlurHandler}
-                                hasInputError={emailHasError}
-                                disabled={false}
-                                inputType="input"
-                                type="text"
-                                class={"form-control login-form-control form-control-lg " + (emailHasError ? "invalid" : "")}
-                                text="Email adresa"
-                                text_class="m-0 required"
-                            />
-                            <Input
-                                inputValue={passwordValue}
-                                onInputChange={passwordChangeHandler}
-                                onInputBlur={passwordBlurHandler}
-                                hasInputError={passwordHasError}
-                                disabled={false}
-                                inputType="input"
-                                type="password"
-                                class={"form-control login-form-control form-control-lg " + (passwordHasError ? "invalid" : "")}
-                                text="Lozinka"
-                                text_class="m-0 required"
-                                inputErrorText="je obavezna!"
-                            />
-                            {/* <Form.Group className="remember-checkbox" controlId="formBasicCheckbox">
-                                <Form.Check type="checkbox" label="Zapamti me na ovom uređaju." />
-                            </Form.Group> */}
-                            <button disabled={!formIsValid} className="button-outline-black btn-control" type="submit">
-                                Prijavite se
-                            </button>
-                        </form>
-                        <div className="login-form-links-wrapper">
-                            {/* <a className="font-14" href="/">Zaboravili ste lozinku?</a> */}
-                            <button
-                                type="button"
-                                className="btn-control auth-transparent-button"
-                                onClick={() => {
-                                    setShow(true);
+        <Box
+            sx={{
+                width: "100%",
+                height: "100vh",
+                overflow: "auto",
+            }}
+        >
+            <Grid container sx={{ height: "100%" }}>
+                <Grid
+                    item
+                    md={12}
+                    lg={7}
+                    sx={{
+                        display: { xs: "none", md: "flex" },
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "var(--login-img-background)",
+                    }}
+                >
+                    <img src={singinBackground} alt={singinBackground} style={{ maxHeight: "100%", width: "100%" }} />
+                </Grid>
+                <Grid
+                    item
+                    xs={12}
+                    md={12}
+                    lg={5}
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: { xs: "center", md: "start" },
+                        justifyContent: "center",
+                        padding: { xs: "2rem", md: "0 3rem", lg: "0 5rem" },
+                    }}
+                >
+                    <Box sx={{ display: "flex", flexDirection: "column", mb: 2 }}>
+                        <img src={logo} alt={logo} width="90%" />
+                        <Typography
+                            variant="h5"
+                            sx={{
+                                fontWeight: "600",
+                                paddingTop: "3rem",
+                                fontSize: "1.6875rem",
+                            }}
+                        >
+                            Dobrodošli na Croonus CMS.
+                        </Typography>
+
+                        <Typography variant="body1" sx={{ mt: 1, mb: 3 }}>
+                            Molimo prijavite se za pristup administraciji.
+                        </Typography>
+                        <Box sx={{ maxWidth: "28.125rem" }}>
+                            <Box onSubmit={submitHandler} component="form" sx={{ display: "flex", flexDirection: "column" }}>
+                                <Input
+                                    inputValue={emailValue}
+                                    onInputChange={emailChangeHandler}
+                                    onInputBlur={emailBlurHandler}
+                                    hasInputError={emailHasError}
+                                    disabled={false}
+                                    inputType="input"
+                                    type="text"
+                                    text="Email adresa"
+                                />
+                                <Input
+                                    inputValue={passwordValue}
+                                    onInputChange={passwordChangeHandler}
+                                    onInputBlur={passwordBlurHandler}
+                                    hasInputError={passwordHasError}
+                                    disabled={false}
+                                    inputType="input"
+                                    type="password"
+                                    text="Lozinka"
+                                    inputErrorText="Lozinka je obavezna!"
+                                />
+                                <Button disabled={!formIsValid} type="submit" className="buttonLogin">
+                                    {isLoading ? <Loader size={20} sx={{ color: "white" }} /> : "Prijavite se"}
+                                </Button>
+                            </Box>
+                            <Box
+                                sx={{
+                                    mt: 2,
                                 }}
                             >
-                                Zaboravili ste lozinku?
-                            </button>
-                            {/* <p className="font-14">Ukoliko nemate nalog, <a href="/">pišite nam</a>.</p> */}
-                        </div>
-                        {isLoading && <Loader />}
-                        <ForgotPasswordModal
-                            openModal={show}
-                            handleClose={() => {
-                                setShow(false);
-                            }}
-                            forgotPassword={(dataForSave) => {
-                                forgotPassword(dataForSave);
-                            }}
-                        />
-                    </div>
-                </div>
-            </div>
-        </div>
+                                <Button
+                                    type="button"
+                                    onClick={() => {
+                                        setShow(true);
+                                    }}
+                                    sx={{
+                                        backgroundColor: "transparent",
+                                        "&:hover": {
+                                            backgroundColor: "rgba(0, 0, 0, 0)",
+                                        },
+                                        textTransform: "none",
+                                        padding: "0",
+                                        fontWeight: "600",
+                                        color: "inherit",
+                                    }}
+                                >
+                                    Zaboravili ste lozinku?
+                                </Button>
+                            </Box>
+
+                            <ForgotPasswordModal
+                                openModal={show}
+                                handleClose={() => {
+                                    setShow(false);
+                                }}
+                                forgotPassword={(dataForSave) => {
+                                    forgotPassword(dataForSave);
+                                }}
+                            />
+                        </Box>
+                    </Box>
+                </Grid>
+            </Grid>
+        </Box>
     );
 };
 

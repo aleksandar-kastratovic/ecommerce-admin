@@ -72,7 +72,7 @@ const FileDialog = ({ openFullPageDialog, title = "", onImageUpload = () => { },
         <Box>
           {loadingImage ? (
             <div>
-              <CircularProgress size="6rem" sx={{ ml: "45%", mt: "15%" }} disableShrink />
+              <CircularProgress size={50} sx={{ ml: "45%", mt: "15%" }} disableShrink />
             </div>
           ) : (
             <Box sx={{ flexGrow: 1 }}>

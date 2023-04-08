@@ -24,7 +24,7 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
    *
    * @return {(string|function)[]|null} Tuple of "icon" and the action for the onClick listener.
    */
-  const parseButton = (action): ?[string, function] => {
+  const parseButton = (action) => {
     switch (action) {
       case "edit":
         return ["edit", handleEdit];

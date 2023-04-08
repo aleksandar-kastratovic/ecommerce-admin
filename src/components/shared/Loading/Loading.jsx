@@ -1,5 +1,5 @@
 import CircularProgress from "@mui/material/CircularProgress";
-import Grid from "@mui/material/Grid";
+import Box from "@mui/material/Box";
 
 /**
  * Basic loading 
@@ -7,10 +7,10 @@ import Grid from "@mui/material/Grid";
  * @param {"string"|number} size The size of the component. If using a number, the pixel unit is assumed. If using a string, you need to provide the CSS unit, e.g '3rem'.
  */
 
-const Loading = ({ size }) => (
-  <Grid container justifyContent="center" >
-    <CircularProgress size={size} />
-  </Grid>
+const Loading = ({ size, sx }) => (
+  <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+    <CircularProgress size={size} sx={sx} />
+  </Box>
 )
 
 export default Loading

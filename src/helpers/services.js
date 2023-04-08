@@ -1,10 +1,9 @@
 import { apiLocal } from "./const";
 
-
 const api = () => {
-    return localStorage.getItem('api');
+    return localStorage.getItem("api");
     // return apiLocal;
-}
+};
 
 export const saveUserService = async (saveData, saveUserRequest) => {
     let data;
@@ -15,10 +14,11 @@ export const saveUserService = async (saveData, saveUserRequest) => {
 
     await saveUserRequest(
         {
-            url: api() + 'user/register',
-            method: 'PUT',
-            body: saveData
-        }, saveUserResponse
+            url: api() + "user/register",
+            method: "PUT",
+            body: saveData,
+        },
+        saveUserResponse
     );
     return data;
 };
@@ -32,13 +32,13 @@ export const userListService = async (userListRequest) => {
 
     await userListRequest(
         {
-            url: api() + 'user/list',
-            method: 'PUT'
-        }, userListResponse
+            url: api() + "user/list",
+            method: "PUT",
+        },
+        userListResponse
     );
     return data;
 };
-
 
 export const categoryListService = async (categoryListRequest) => {
     let data;
@@ -49,9 +49,10 @@ export const categoryListService = async (categoryListRequest) => {
 
     await categoryListRequest(
         {
-            url: api() + 'category/list',
-            method: 'PUT'
-        }, categoryListResponse
+            url: api() + "category/list",
+            method: "PUT",
+        },
+        categoryListResponse
     );
     return data;
 };
@@ -65,10 +66,11 @@ export const saveCategoryService = async (saveData, saveCategoryRequest) => {
 
     await saveCategoryRequest(
         {
-            url: api() + 'category/save',
-            method: 'PUT',
-            body: saveData
-        }, saveCategoryResponse
+            url: api() + "category/save",
+            method: "PUT",
+            body: saveData,
+        },
+        saveCategoryResponse
     );
     return data;
 };
@@ -82,13 +84,14 @@ export const saveCategoryImageService = async (saveData, saveCategoryImageReques
 
     await saveCategoryImageRequest(
         {
-            url: api() + 'category/image/upload',
-            method: 'POST',
+            url: api() + "category/image/upload",
+            method: "POST",
             headers: {
-                'Content-Type': 'multipart/form-data'
+                "Content-Type": "multipart/form-data",
             },
-            body: saveData
-        }, saveCategoryImageResponse
+            body: saveData,
+        },
+        saveCategoryImageResponse
     );
     return data;
 };
@@ -102,10 +105,11 @@ export const removeCategoryService = async (requestData, removeCategoryRequest) 
 
     await removeCategoryRequest(
         {
-            url: api() + 'category/delete',
-            method: 'PUT',
-            body: requestData
-        }, removeCategoryResponse
+            url: api() + "category/delete",
+            method: "PUT",
+            body: requestData,
+        },
+        removeCategoryResponse
     );
     return data;
 };
@@ -119,9 +123,10 @@ export const rolesListService = async (rolesListRequest) => {
 
     await rolesListRequest(
         {
-            url: api() + 'role/list',
-            method: 'PUT'
-        }, rolesListResponse
+            url: api() + "role/list",
+            method: "PUT",
+        },
+        rolesListResponse
     );
     return data;
 };
@@ -135,13 +140,14 @@ export const loginService = async (loginData, loginRequest) => {
 
     await loginRequest(
         {
-            url: api() + 'user/login',
-            method: 'PUT',
+            url: api() + "user/login",
+            method: "PUT",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
-            body: loginData
-        }, loginResponse
+            body: loginData,
+        },
+        loginResponse
     );
     return data;
 };
@@ -155,13 +161,14 @@ export const forgotPasswordService = async (forgotData, forgotRequest) => {
 
     await forgotRequest(
         {
-            url: api() + 'password/forgot',
-            method: 'PUT',
+            url: api() + "password/forgot",
+            method: "PUT",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
-            body: forgotData
-        }, forgotResponse
+            body: forgotData,
+        },
+        forgotResponse
     );
     return data;
 };
@@ -175,13 +182,14 @@ export const resetPasswordService = async (resetData, resetRequest) => {
 
     await resetRequest(
         {
-            url: api() + 'password/reset',
-            method: 'PUT',
+            url: api() + "password/reset",
+            method: "PUT",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
-            body: resetData
-        }, resetResponse
+            body: resetData,
+        },
+        resetResponse
     );
     return data;
 };
@@ -195,9 +203,10 @@ export const logoutService = async (logoutRequest) => {
 
     await logoutRequest(
         {
-            url: api() + 'user/logout',
-            method: 'PUT'
-        }, logoutResponse
+            url: api() + "user/logout",
+            method: "PUT",
+        },
+        logoutResponse
     );
     return data;
 };
@@ -211,10 +220,11 @@ export const removeRoleService = async (requestData, removeRoleRequest) => {
 
     await removeRoleRequest(
         {
-            url: api() + 'role/delete',
-            method: 'PUT',
-            body: requestData
-        }, removeRoleResponse
+            url: api() + "role/delete",
+            method: "PUT",
+            body: requestData,
+        },
+        removeRoleResponse
     );
     return data;
 };
@@ -228,10 +238,11 @@ export const saveRoleService = async (saveData, saveRoleRequest) => {
 
     await saveRoleRequest(
         {
-            url: api() + 'role/save',
-            method: 'PUT',
-            body: saveData
-        }, saveRoleResponse
+            url: api() + "role/save",
+            method: "PUT",
+            body: saveData,
+        },
+        saveRoleResponse
     );
     return data;
 };
@@ -245,10 +256,11 @@ export const getRoleService = async (getData, getRoleRequest) => {
 
     await getRoleRequest(
         {
-            url: api() + 'role/get',
-            method: 'PUT',
-            body: getData
-        }, getRoleResponse
+            url: api() + "role/get",
+            method: "PUT",
+            body: getData,
+        },
+        getRoleResponse
     );
     return data;
 };
@@ -262,10 +274,11 @@ export const getUserService = async (getData, getUserRequest) => {
 
     await getUserRequest(
         {
-            url: api() + 'user/get',
-            method: 'PUT',
-            body: getData
-        }, getUserResponse
+            url: api() + "user/get",
+            method: "PUT",
+            body: getData,
+        },
+        getUserResponse
     );
     return data;
 };
@@ -279,10 +292,11 @@ export const removeUserService = async (requestData, removeUserRequest) => {
 
     await removeUserRequest(
         {
-            url: api() + 'user/delete',
-            method: 'PUT',
-            body: requestData
-        }, removeUserResponse
+            url: api() + "user/delete",
+            method: "PUT",
+            body: requestData,
+        },
+        removeUserResponse
     );
     return data;
 };
@@ -296,9 +310,10 @@ export const refreshTokenService = async (refreshRequest) => {
 
     await refreshRequest(
         {
-            url: api() + 'user/refresh',
-            method: 'PUT'
-        }, refreshResponse
+            url: api() + "user/refresh",
+            method: "PUT",
+        },
+        refreshResponse
     );
     return data;
 };
@@ -312,9 +327,10 @@ export const userScreensService = async (screensRequest) => {
 
     await screensRequest(
         {
-            url: api() + 'user/screens',
-            method: 'PUT'
-        }, screensResponse
+            url: api() + "user/screens",
+            method: "PUT",
+        },
+        screensResponse
     );
     return data;
 };
@@ -328,8 +344,9 @@ export const referenceDataService = async (referenceRequest) => {
 
     await referenceRequest(
         {
-            url: api() + 'reference-data'
-        }, referenceResponse
+            url: api() + "reference-data",
+        },
+        referenceResponse
     );
     return data;
 };
@@ -343,10 +360,11 @@ export const getCategoryService = async (getData, getCategoryRequest) => {
 
     await getCategoryRequest(
         {
-            url: api() + 'category/get',
-            method: 'PUT',
-            body: getData
-        }, getCategoryResponse
+            url: api() + "category/get",
+            method: "PUT",
+            body: getData,
+        },
+        getCategoryResponse
     );
     return data;
 };
@@ -360,10 +378,11 @@ export const saveProductAttributeService = async (saveData, saveProductAttribute
 
     await saveProductAttributeRequest(
         {
-            url: api() + 'products/attribute-values/save',
-            method: 'PUT',
-            body: saveData
-        }, saveProductAttributeResponse
+            url: api() + "products/attribute-values/save",
+            method: "PUT",
+            body: saveData,
+        },
+        saveProductAttributeResponse
     );
     return data;
 };
@@ -377,10 +396,11 @@ export const getProductAttributeService = async (getData, getProductAttributeReq
 
     await getProductAttributeRequest(
         {
-            url: api() + 'products/attribute-values/get',
-            method: 'PUT',
-            body: getData
-        }, getProductAttributeResponse
+            url: api() + "products/attribute-values/get",
+            method: "PUT",
+            body: getData,
+        },
+        getProductAttributeResponse
     );
     return data;
 };
@@ -394,10 +414,11 @@ export const removeProductAttributeService = async (requestData, removeProductAt
 
     await removeProductAttributeRequest(
         {
-            url: api() + 'products/attribute-values/delete',
-            method: 'PUT',
-            body: requestData
-        }, removeProductAttributeResponse
+            url: api() + "products/attribute-values/delete",
+            method: "PUT",
+            body: requestData,
+        },
+        removeProductAttributeResponse
     );
     return data;
 };
@@ -411,9 +432,10 @@ export const productAttributesListService = async (productAttributesListRequest)
 
     await productAttributesListRequest(
         {
-            url: api() + 'products/attribute-values/list',
-            method: 'PUT'
-        }, productAttributesListResponse
+            url: api() + "products/attribute-values/list",
+            method: "PUT",
+        },
+        productAttributesListResponse
     );
     return data;
 };
@@ -427,9 +449,10 @@ export const attributesListService = async (attributesListRequest) => {
 
     await attributesListRequest(
         {
-            url: api() + 'products/attributes/list',
-            method: 'PUT'
-        }, attributesListResponse
+            url: api() + "products/attributes/list",
+            method: "PUT",
+        },
+        attributesListResponse
     );
     return data;
 };
@@ -443,10 +466,11 @@ export const attributeValuesListService = async (requestData, attributeValuesLis
 
     await attributeValuesListRequest(
         {
-            url: api() + 'products/variants/list',
-            method: 'PUT',
-            body: requestData
-        }, attributeValuesListResponse
+            url: api() + "products/variants/list",
+            method: "PUT",
+            body: requestData,
+        },
+        attributeValuesListResponse
     );
     return data;
 };
@@ -460,9 +484,10 @@ export const locationsListService = async (locationsListRequest) => {
 
     await locationsListRequest(
         {
-            url: api() + 'location/list',
-            method: 'PUT'
-        }, locationsListResponse
+            url: api() + "location/list",
+            method: "PUT",
+        },
+        locationsListResponse
     );
     return data;
 };
@@ -476,10 +501,11 @@ export const saveProductService = async (saveData, saveProductRequest) => {
 
     await saveProductRequest(
         {
-            url: api() + 'products/save',
-            method: 'PUT',
-            body: saveData
-        }, saveProductResponse
+            url: api() + "products/save",
+            method: "PUT",
+            body: saveData,
+        },
+        saveProductResponse
     );
     return data;
 };
@@ -493,10 +519,11 @@ export const removeProductService = async (requestData, removeProductRequest) =>
 
     await removeProductRequest(
         {
-            url: api() + 'products/delete',
-            method: 'PUT',
-            body: requestData
-        }, removeProductResponse
+            url: api() + "products/delete",
+            method: "PUT",
+            body: requestData,
+        },
+        removeProductResponse
     );
     return data;
 };
@@ -510,13 +537,14 @@ export const saveProductImagesService = async (saveData, saveProductImagesReques
 
     await saveProductImagesRequest(
         {
-            url: api() + 'products/images/upload',
-            method: 'POST',
+            url: api() + "products/images/upload",
+            method: "POST",
             headers: {
-                'Content-Type': 'multipart/form-data'
+                "Content-Type": "multipart/form-data",
             },
-            body: saveData
-        }, saveProductImagesResponse
+            body: saveData,
+        },
+        saveProductImagesResponse
     );
     return data;
 };
@@ -530,10 +558,11 @@ export const getProductService = async (getData, getProductRequest) => {
 
     await getProductRequest(
         {
-            url: api() + 'products/get',
-            method: 'PUT',
-            body: getData
-        }, getProductResponse
+            url: api() + "products/get",
+            method: "PUT",
+            body: getData,
+        },
+        getProductResponse
     );
     return data;
 };
@@ -547,10 +576,11 @@ export const productsListService = async (getData, productsListRequest) => {
 
     await productsListRequest(
         {
-            url: api() + 'products/list',
-            method: 'PUT',
-            body: getData
-        }, productsListResponse
+            url: api() + "products/list",
+            method: "PUT",
+            body: getData,
+        },
+        productsListResponse
     );
     return data;
 };
@@ -564,10 +594,11 @@ export const saveLocationService = async (saveData, saveLocationRequest) => {
 
     await saveLocationRequest(
         {
-            url: api() + 'location/save',
-            method: 'PUT',
-            body: saveData
-        }, saveLocationResponse
+            url: api() + "location/save",
+            method: "PUT",
+            body: saveData,
+        },
+        saveLocationResponse
     );
     return data;
 };
@@ -581,10 +612,11 @@ export const getLocationService = async (getData, getLocationRequest) => {
 
     await getLocationRequest(
         {
-            url: api() + 'location/get',
-            method: 'PUT',
-            body: getData
-        }, getLocationResponse
+            url: api() + "location/get",
+            method: "PUT",
+            body: getData,
+        },
+        getLocationResponse
     );
     return data;
 };
@@ -598,10 +630,11 @@ export const removeLocationsService = async (requestData, removeLocationsRequest
 
     await removeLocationsRequest(
         {
-            url: api() + 'location/delete',
-            method: 'PUT',
-            body: requestData
-        }, removeLocationsResponse
+            url: api() + "location/delete",
+            method: "PUT",
+            body: requestData,
+        },
+        removeLocationsResponse
     );
     return data;
 };
@@ -615,10 +648,11 @@ export const customersListService = async (getData, customersListRequest) => {
 
     await customersListRequest(
         {
-            url: api() + 'customer/b2b/list',
-            method: 'PUT',
-            body: getData
-        }, customersListResponse
+            url: api() + "customer/b2b/list",
+            method: "PUT",
+            body: getData,
+        },
+        customersListResponse
     );
     return data;
 };
@@ -632,10 +666,11 @@ export const saveCustomerService = async (saveData, saveCustomerRequest) => {
 
     await saveCustomerRequest(
         {
-            url: api() + 'customer/b2b/save',
-            method: 'PUT',
-            body: saveData
-        }, saveCustomerResponse
+            url: api() + "customer/b2b/save",
+            method: "PUT",
+            body: saveData,
+        },
+        saveCustomerResponse
     );
     return data;
 };
@@ -649,10 +684,11 @@ export const getCustomerService = async (getData, getCustomerRequest) => {
 
     await getCustomerRequest(
         {
-            url: api() + 'customer/b2b/get',
-            method: 'PUT',
-            body: getData
-        }, getCustomerResponse
+            url: api() + "customer/b2b/get",
+            method: "PUT",
+            body: getData,
+        },
+        getCustomerResponse
     );
     return data;
 };
@@ -666,10 +702,11 @@ export const removeCustomerService = async (requestData, removeCustomerRequest) 
 
     await removeCustomerRequest(
         {
-            url: api() + 'customer/b2b/delete',
-            method: 'PUT',
-            body: requestData
-        }, removeCustomerResponse
+            url: api() + "customer/b2b/delete",
+            method: "PUT",
+            body: requestData,
+        },
+        removeCustomerResponse
     );
     return data;
 };
@@ -683,10 +720,11 @@ export const companyListService = async (getData, companyListRequest) => {
 
     await companyListRequest(
         {
-            url: api() + 'customer/companies/list',
-            method: 'PUT',
-            body: getData
-        }, companyListResponse
+            url: api() + "customer/companies/list",
+            method: "PUT",
+            body: getData,
+        },
+        companyListResponse
     );
     return data;
 };
@@ -700,10 +738,11 @@ export const saveCompanyService = async (saveData, saveCompanyRequest) => {
 
     await saveCompanyRequest(
         {
-            url: api() + 'customer/companies/save',
-            method: 'PUT',
-            body: saveData
-        }, saveCompanyResponse
+            url: api() + "customer/companies/save",
+            method: "PUT",
+            body: saveData,
+        },
+        saveCompanyResponse
     );
     return data;
 };
@@ -717,10 +756,11 @@ export const getCompanyService = async (getData, getCompanyRequest) => {
 
     await getCompanyRequest(
         {
-            url: api() + 'customer/companies/get',
-            method: 'PUT',
-            body: getData
-        }, getCompanyResponse
+            url: api() + "customer/companies/get",
+            method: "PUT",
+            body: getData,
+        },
+        getCompanyResponse
     );
     return data;
 };
@@ -734,10 +774,11 @@ export const removeCompanyService = async (requestData, removeCompanyRequest) =>
 
     await removeCompanyRequest(
         {
-            url: api() + 'customer/companies/delete',
-            method: 'PUT',
-            body: requestData
-        }, removeCompanyResponse
+            url: api() + "customer/companies/delete",
+            method: "PUT",
+            body: requestData,
+        },
+        removeCompanyResponse
     );
     return data;
 };
@@ -751,10 +792,11 @@ export const ordersListService = async (getData, ordersListRequest) => {
 
     await ordersListRequest(
         {
-            url: api() + 'order/list',
-            method: 'PUT',
-            body: getData
-        }, ordersListResponse
+            url: api() + "order/list",
+            method: "PUT",
+            body: getData,
+        },
+        ordersListResponse
     );
     return data;
 };
@@ -768,10 +810,11 @@ export const getOrderService = async (getData, getOrderRequest) => {
 
     await getOrderRequest(
         {
-            url: api() + 'order/get',
-            method: 'PUT',
-            body: getData
-        }, getOrderResponse
+            url: api() + "order/get",
+            method: "PUT",
+            body: getData,
+        },
+        getOrderResponse
     );
     return data;
 };
@@ -785,10 +828,11 @@ export const saveOrderStatusService = async (getData, saveOrderRequest) => {
 
     await saveOrderRequest(
         {
-            url: api() + 'order/status/update',
-            method: 'PUT',
-            body: getData
-        }, saveOrderResponse
+            url: api() + "order/status/update",
+            method: "PUT",
+            body: getData,
+        },
+        saveOrderResponse
     );
     return data;
 };
@@ -802,9 +846,10 @@ export const categoriesSynchroListService = async (categoriesSynchroRequest) => 
 
     await categoriesSynchroRequest(
         {
-            url: api() + 'category/import/list',
-            method: 'PUT'
-        }, categoriesSynchroResponse
+            url: api() + "category/import/list",
+            method: "PUT",
+        },
+        categoriesSynchroResponse
     );
     return data;
 };
@@ -818,10 +863,11 @@ export const companiesIdName = async (getData, comapniesRequest) => {
 
     await comapniesRequest(
         {
-            url: api() + 'customer/companies/all',
-            method: 'PUT',
-            body: getData
-        }, comapniesResponse
+            url: api() + "customer/companies/all",
+            method: "PUT",
+            body: getData,
+        },
+        comapniesResponse
     );
     return data;
 };

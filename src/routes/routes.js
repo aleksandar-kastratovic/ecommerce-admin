@@ -1,26 +1,3 @@
-import {
-    faFileAlt,
-    faCity,
-    faCog,
-    faSitemap,
-    faArchive,
-    faSearchLocation,
-    faUsers,
-    faPeopleArrows,
-    faImage,
-    faUpload,
-    faList,
-    faFlag,
-    faParking,
-    faBuilding,
-    faRoad,
-    faCopyright,
-    faIndustry,
-    faStore,
-    faBell,
-    faEnvelope,
-    faShoppingCart,
-} from "@fortawesome/free-solid-svg-icons";
 import IconList from "../helpers/icons";
 import B2BRebatesDetails from "../pages/B2BRebates/B2BRebatesDetails/B2BRebatesDetails";
 import B2BRebatesListPage from "../pages/B2BRebates/B2BRebatesListPage";
@@ -68,7 +45,6 @@ import B2Cbanners from "./../pages/B2Cbanners/B2Cbanners";
 import DetailsBannersB2C from "./../pages/B2Cbanners/DetailsBanners/DetailsBannersB2C";
 import B2CSettings from "./../pages/B2CSettings/B2CSettings";
 import ImportSteps from "./../pages/Import/ImportSteps";
-import LocationsPage from "./../pages/LocationsPage";
 import DetailsParams from "./../pages/Params/DetailsParams/DetailsParams";
 import Params from "./../pages/Params/Params";
 import Products from "./../pages/Products/Products";
@@ -108,7 +84,7 @@ const screens = {
     CATEG: [
         "/product-categories",
         "Kategorije",
-        faSitemap,
+        IconList.accountTree,
         PRODUCT,
         CategoriesGroupsListPage,
         [
@@ -121,7 +97,7 @@ const screens = {
     PRODU: [
         "/products",
         "Proizvodi",
-        faArchive,
+        IconList.inventory,
         PRODUCT,
         Products,
         [
@@ -133,7 +109,7 @@ const screens = {
     PRODUCT_SPEC: [
         "/product-specs",
         "Specifikacija",
-        faArchive,
+        IconList.inventory,
         PRODUCT,
         ProductSpecs,
         [
@@ -143,13 +119,13 @@ const screens = {
         ],
     ],
     B2B_ORDERS: ["/b2b-orders", "Porudžbine", IconList.fileOpen, B2B, B2BOrders, [[":orderId", B2BOrdersDetails]]],
-    COMPN: ["/b2b-companies", "Kompanije", faCity, B2B, Companies, [[":comId", CompaniesDetails]]],
+    COMPN: ["/b2b-companies", "Kompanije", IconList.locationCity, B2B, Companies, [[":comId", CompaniesDetails]]],
     REBATE_TIERS: ["/b2b-rebate-tiers", "Rabatne skale", IconList.barChart, B2B, B2BRebateTiersListPage, [[":rebateTierId", B2BRebateTiersDetails]]],
     REBATES: ["/b2b-rebates", "Rabati", IconList.percent, B2B, B2BRebatesListPage, [[":rebateId", B2BRebatesDetails]]],
     BANNERS_B2B: [
         "/b2b-banners",
         "Baneri",
-        faImage,
+        IconList.image,
         B2B,
         B2Bbanners,
         [
@@ -158,14 +134,14 @@ const screens = {
             ["positions/:id", B2BPositionDetails],
         ],
     ],
-    B2B_SALES_OFFICER: ["/b2b-sales-officers", "Komercijalisti", faCog, B2B, SaleOfficers, [[":id", SaleOfficersDetails]]],
-    B2B_NOTIFICATIONS: ["/b2b-notifications", "Notifikacije", faBell, B2B, Notifications, [[":notifid", NotificationsDetails]]],
-    B2B_CONTACT_FORMS: ["/b2b-contact", "Kontakt forma", faEnvelope, B2B, B2BContactForm, [[":id", B2BContactFormDetails]]],
+    B2B_SALES_OFFICER: ["/b2b-sales-officers", "Komercijalisti", IconList.manageAccounts, B2B, SaleOfficers, [[":id", SaleOfficersDetails]]],
+    B2B_NOTIFICATIONS: ["/b2b-notifications", "Notifikacije", IconList.notifications, B2B, Notifications, [[":notifid", NotificationsDetails]]],
+    B2B_CONTACT_FORMS: ["/b2b-contact", "Kontakt forma", IconList.markunreadMailbox, B2B, B2BContactForm, [[":id", B2BContactFormDetails]]],
 
     BANNERS_B2C: [
         "/b2c-banners",
         "Baneri",
-        faCog,
+        IconList.image,
         B2C,
         B2Cbanners,
         [
@@ -177,7 +153,7 @@ const screens = {
     B2C_NEWS: [
         "/b2c-news",
         "Vesti",
-        faArchive,
+        IconList.article,
         B2C,
         News,
         [
@@ -186,29 +162,28 @@ const screens = {
             ["category/:cid", NewsCategoryListDetails],
         ],
     ],
-    B2C_STATIC_PAGES: ["/b2c-staticpages", "Statičke strane", faArchive, B2C, StaticPages, [[":spid", StaticPagesDetails]]],
-    B2C_NEWSLETTER: ["/b2c-newsletter", "Newsletter", faArchive, B2C, Newsletter, [[":nlid", Newsletter]]],
-    B2C_CONTACT_FORMS: ["/b2c-contactform", "Kontakt forma", faEnvelope, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
+    B2C_STATIC_PAGES: ["/b2c-staticpages", "Statičke strane", IconList.article, B2C, StaticPages, [[":spid", StaticPagesDetails]]],
+    B2C_NEWSLETTER: ["/b2c-newsletter", "Newsletter", IconList.article, B2C, Newsletter, [[":nlid", Newsletter]]],
+    B2C_CONTACT_FORMS: ["/b2c-contactform", "Kontakt forma", IconList.contactPhone, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],
 
-    PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Kampanje kataloga", faParking, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
-    PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Kampanje za korpu", faShoppingCart, PROMOTIONS, CartSummary, [[":nid", CartSummaryDetails]]],
+    PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Kampanje kataloga", IconList.campaign, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
+    PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Kampanje za korpu", IconList.campaign, PROMOTIONS, CartSummary, [[":nid", CartSummaryDetails]]],
 
-    ROLES: ["/roles", "Uloge", faPeopleArrows, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
-    USERS: ["/users", "Korisnici", faUsers, SETTINGS, Users, [[":userId", UsersDetils]]],
-    LOCAT: ["/locations", "Lokacije", faSearchLocation, SETTINGS, LocationsPage, [[":locId", LocationsPage]]],
-    PARAMS: ["/params", "Parametri", faCog, SETTINGS, Params, [[":pid", DetailsParams]]],
-    COUNTRIES: ["/countries", "Države", faFlag, SETTINGS, Countries, [[":cid", CountriesDetails]]],
-    MUNICIPALITIES: ["/municipalities", "Opštine", faCity, SETTINGS, Municipalities, [[":mid", MunicipalitiesDetails]]],
-    TOWNS: ["/towns", "Mesta", faBuilding, SETTINGS, Towns, [[":id", TownsDetails]]],
-    STREETS: ["/streets", "Ulice", faRoad, SETTINGS, Streets, [[":sid", StreetsDetails]]],
-    BRANDS: ["/brands", "Brendovi", faCopyright, SETTINGS, Brands, [[":bid", BrandsDetails]]],
-    STORES: ["/stores", "Skladišta", faStore, SETTINGS, Stores, [[":ssid", StoresDetails]]],
-    MANUFACTURERS: ["/manufacturers", "Proizvođači", faIndustry, SETTINGS, Manufacturers, [[":mmid", ManufacturersDetails]]],
-    B2BCFG: ["/b2b-settings", "B2B podešavanja", faCog, TOOLS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
-    IMPORT: ["/import", "Uvoz podataka", faUpload, TOOLS, ImportSteps],
-    B2CCFG: ["/b2c-settings", "B2C podešavanja", faCog, TOOLS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
-    ADMIN_FORM: ["/admin-form", "Admin forme", faList, TOOLS, AdminForms, [[":FormId", DetailsAdminForm]]],
+    ROLES: ["/roles", "Uloge", IconList.reduceCapacity, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
+    USERS: ["/users", "Korisnici", IconList.group, SETTINGS, Users, [[":userId", UsersDetils]]],
+    PARAMS: ["/params", "Parametri", IconList.settings, SETTINGS, Params, [[":pid", DetailsParams]]],
+    COUNTRIES: ["/countries", "Države", IconList.flag, SETTINGS, Countries, [[":cid", CountriesDetails]]],
+    MUNICIPALITIES: ["/municipalities", "Opštine", IconList.locationCity, SETTINGS, Municipalities, [[":mid", MunicipalitiesDetails]]],
+    TOWNS: ["/towns", "Mesta", IconList.apartment, SETTINGS, Towns, [[":id", TownsDetails]]],
+    STREETS: ["/streets", "Ulice", IconList.addRoad, SETTINGS, Streets, [[":sid", StreetsDetails]]],
+    BRANDS: ["/brands", "Brendovi", IconList.copyright, SETTINGS, Brands, [[":bid", BrandsDetails]]],
+    STORES: ["/stores", "Skladišta", IconList.store, SETTINGS, Stores, [[":ssid", StoresDetails]]],
+    MANUFACTURERS: ["/manufacturers", "Proizvođači", IconList.factory, SETTINGS, Manufacturers, [[":mmid", ManufacturersDetails]]],
+    B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, TOOLS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
+    IMPORT: ["/import", "Uvoz podataka", IconList.upload, TOOLS, ImportSteps],
+    B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, TOOLS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
+    ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, TOOLS, AdminForms, [[":FormId", DetailsAdminForm]]],
 };
 
 /**

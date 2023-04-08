@@ -82,7 +82,6 @@ const ResetForm = () => {
                     <div className="row login-form-container">
                         <img src={logo} alt={logo} />
                         <h5>Dobrodošli na Croonus CMS.</h5>
-                        {/* <p className="login-from-text">Molimo prijavite se za pristup administraciji.</p> */}
                         <form onSubmit={submitHandler} className="login-form">
                             <Input
                                 inputValue={emailValue}
