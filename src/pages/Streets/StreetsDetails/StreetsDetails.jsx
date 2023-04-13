@@ -1,12 +1,13 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 
-import fields from "./formField.json";
 import { toast } from "react-toastify";
 import Form from "../../../components/shared/Form/Form";
 import LoadingForm from "../../../components/shared/Loading/LoadingForm";
 import useAPI from "../../../api/api";
 import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
+
+import fields from "./formField.json";
 
 const StreetsDetails = () => {
   const { sid } = useParams();

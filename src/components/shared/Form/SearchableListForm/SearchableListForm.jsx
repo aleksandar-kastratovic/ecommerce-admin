@@ -13,12 +13,13 @@ import styles from "./SearchableListForm.module.scss";
  * @param {{id: string|number, name: string}[]} available The list of available items.
  * @param {(string|number)[]} selected The list of selected ids from the available list.
  * @param {function((string|number)[])} onSubmit Submit the list of selected ids from the available list.
- * @param {boolean} selectAll If select all options should be displayed
+ * @param {boolean} selectAll If select all options should be displayed.
+ * @param {boolean} selectOne Select one field within the list.
  *
  * @return {JSX.Element}
  * @constructor
  */
-const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll = false, toggleShowSelected = true }) => {
+const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll = false, toggleShowSelected = true, sx, onChange = () => null, selectOne = false }) => {
   const { list, toggle, has, set, clear } = useList(selected ?? []);
   const [search, setSearch] = useState("");
 
@@ -41,6 +42,10 @@ const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll
     available = available.filter((item) => list.includes(item.id));
   }
 
+  useEffect(() => {
+    onChange(list);
+  }, [list])
+
   return (
     <>
       {/* show only selected options */}
@@ -52,7 +57,7 @@ const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll
       {/* The list of available items */}
       <div className={styles.optionsList}>
         {available.map((brand) => (
-          <InputCheckbox key={brand.id} value={has(brand.id)} label={brand.name} onChange={() => toggle(brand.id)} />
+          <InputCheckbox key={brand.id} value={has(brand.id)} label={brand.name} onChange={() => { if (selectOne) { clear(); } toggle(brand.id); }} />
         ))}
       </div>
 
@@ -61,7 +66,7 @@ const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll
 
 
       <Buttons>
-        <Button label="Sačuvaj" variant="contained" onClick={() => onSubmit(list)} />
+        <Button sx={sx} label="Sačuvaj" variant="contained" onClick={() => onSubmit(list)} />
       </Buttons>
     </>
   );

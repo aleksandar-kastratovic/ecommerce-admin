@@ -1,6 +1,5 @@
 import React from "react";
 
-// material-ui components
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -12,7 +11,7 @@ const ThreeColumnDetails = ({
   left = <div />,
   middle = <div />,
   right = <div />,
-  onSubmit = () => {},
+  onSubmit = () => { },
   buttonText = "",
 }) => {
   return (

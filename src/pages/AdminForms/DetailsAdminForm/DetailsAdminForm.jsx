@@ -1,26 +1,25 @@
-import { Box, Button } from "@mui/material";
-import { useContext, useEffect } from "react";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import DetailsBasic from "../../../components/shared/Layout/Details/DetailsBasic/DetailsBasic";
 import AuthContext from "../../../store/auth-contex";
 import { getFormData, getListFormFields, saveForm } from "../services";
-import Skeleton from "@mui/material/Skeleton";
-import Stack from "@mui/material/Stack";
-import { isEmpty } from "lodash";
-import { toast } from "react-toastify";
-
-import styles from "./DetailsAdminForm.module.scss";
 import DetailsList from "./DetailsList";
-
 import listData from "./DetailsListData.json";
 import fields from "./DetailsFields.json";
 import CreateForm from "../../../components/shared/Form/CreateForm";
 import TwoColumnDetails from "../../../components/shared/Layout/Details/TwoColumnDetails/TwoColumnDetails";
 import SetFormFields from "./SetFormFields/SetFormFields";
-import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 
-import detailsFields from "./DetailsListFields.json";
+import Skeleton from "@mui/material/Skeleton";
+import Stack from "@mui/material/Stack";
+import Box from "@mui/material/Box";
+
+import { isEmpty } from "lodash";
+import { toast } from "react-toastify";
+
+import styles from "./DetailsAdminForm.module.scss";
+
 
 const DetailsAdminForm = () => {
   const { FormId } = useParams();

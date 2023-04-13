@@ -1,9 +1,10 @@
+import React, { useContext } from "react";
+import { NavLink } from "react-router-dom";
+
 import { availableScreens } from "../routes/routes";
 import sideNavLogoDark from "./../assets/images/croonus-sidebar-logo-dark.svg";
 import sideNavLogoLight from "./../assets/images/croonus-sidebar-logo-light.svg";
 import sideNavIcon from "./../assets/images/croonus-sidebar-icon.svg";
-import { NavLink } from "react-router-dom";
-import React, { useContext } from "react";
 import AuthContext from "../store/auth-contex";
 import Unicon from "./shared/Unicon/Unicon";
 

@@ -1,12 +1,11 @@
-import { faUserTag, faFlag, faFileAlt, faTruck, faArchive, faInfoCircle, faEye } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Input from "./UI/Input";
 import { useContext, useEffect, useState } from "react";
+
+import { toast } from "react-toastify";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import AuthContext from "../store/auth-contex";
 import useInput from "../hooks/use-input";
-import { Accordion, Form } from "react-bootstrap";
 import { currencyFormat } from "../helpers/functions";
-import { toast } from "react-toastify";
 import { InputSelect } from "./shared/Form/FormInputs/FormInputs";
 
 const OrderDetails = ({ orderData, saveOrderStatus }) => {

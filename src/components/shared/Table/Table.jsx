@@ -1,6 +1,8 @@
-import Paper from "@mui/material/Paper"
-import { Table as MaterialTable, TableContainer } from "@mui/material"
-import scss from "./Table.module.scss"
+import Paper from "@mui/material/Paper";
+import { Table as MaterialTable } from "@mui/material";
+import TableContainer from "@mui/material/TableContainer";
+
+import scss from "./Table.module.scss";
 
 /**
  * A universal table.

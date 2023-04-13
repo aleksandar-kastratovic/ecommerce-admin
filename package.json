@@ -46,6 +46,7 @@
 		"@fortawesome/react-fontawesome": "^0.1.16",
 		"@mui/icons-material": "^5.8.4",
 		"@mui/material": "^5.8.4",
+		"@mui/x-data-grid": "^6.0.1",
 		"@mui/x-date-pickers": "^5.0.0-alpha.7",
 		"@testing-library/jest-dom": "^5.16.4",
 		"@tinymce/tinymce-react": "^4.2.0",

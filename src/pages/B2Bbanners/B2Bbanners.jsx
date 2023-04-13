@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
+
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./mainListFields.json";
 
-const B2Bbanners = ({}) => {
+const B2Bbanners = ({ }) => {
   const navigate = useNavigate();
   const buttons = [
     {

@@ -1,10 +1,11 @@
-import { TextareaAutosize } from "@mui/material";
+import TextareaAutosize from "@mui/material/TextareaAutosize";
+
 import styles from "./Textarea.module.scss";
 
 const Textarea = ({
   placeholder = "",
   name = "",
-  onChange = () => {},
+  onChange = () => { },
   value = "",
   disabled = false,
 }) => {

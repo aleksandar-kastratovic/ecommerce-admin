@@ -1,4 +1,5 @@
-import { Skeleton, Stack } from "@mui/material";
+import Stack from "@mui/material/Stack";
+import Skeleton from "@mui/material/Skeleton";
 
 const LoadingForm = ({ fields = 0 }) => {
   let stack = [];

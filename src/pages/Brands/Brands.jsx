@@ -1,4 +1,3 @@
-import { deleteBrand, getListBrands } from "./services";
 import ListPage from "../../components/shared/ListPage/ListPage";
 
 import tblFields from "./tblFields.json";

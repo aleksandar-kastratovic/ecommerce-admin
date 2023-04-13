@@ -1,6 +1,7 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Icon } from "@mui/material"
-import React from "react"
+import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Icon from "@mui/material/Icon";
+
 
 /**
  * Support for both MUI (as string) and FontAwesome icons (imported from @fortawesome/free-solid-svg-icons).
@@ -12,9 +13,9 @@ import React from "react"
  * @constructor
  */
 const Unicon = ({ icon }) => (
-    typeof icon === "object"
-        ? <FontAwesomeIcon icon={icon} />
-        : <Icon>{icon}</Icon>
+  typeof icon === "object"
+    ? <FontAwesomeIcon icon={icon} />
+    : <Icon>{icon}</Icon>
 )
 
 export default Unicon

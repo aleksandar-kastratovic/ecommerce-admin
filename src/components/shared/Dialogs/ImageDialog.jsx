@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState } from "react";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -20,10 +20,10 @@ import styles from "./ImageDialog.module.scss";
 const ImageDialog = ({
   openImageDialog,
   title = "",
-  onImageUpload = () => {},
-  handleCloseImageDialog = () => {},
-  handleSaveEditImage = () => {},
-  handleDeleteImage = () => {},
+  onImageUpload = () => { },
+  handleCloseImageDialog = () => { },
+  handleSaveEditImage = () => { },
+  handleDeleteImage = () => { },
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);

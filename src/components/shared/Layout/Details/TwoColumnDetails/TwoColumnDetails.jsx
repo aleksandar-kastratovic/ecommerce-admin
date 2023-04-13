@@ -1,6 +1,5 @@
 import React from "react";
 
-// material-ui components
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Button from "@mui/material/Button";
@@ -11,7 +10,7 @@ import styles from "./TwoColumnDetails.module.scss";
 const TwoColumnDetails = ({
   middle = <div />,
   right = <div />,
-  onSubmit = () => {},
+  onSubmit = () => { },
   buttonText = "",
   hasButton = true,
   ...props

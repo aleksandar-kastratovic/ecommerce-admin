@@ -1,5 +1,7 @@
-import Box from "@mui/material/Box"
-import React from "react"
+import React from "react";
+
+import Box from "@mui/material/Box";
+
 
 /** Standardized grid with 12 columns. */
 const Grid12 = ({ children }) => (

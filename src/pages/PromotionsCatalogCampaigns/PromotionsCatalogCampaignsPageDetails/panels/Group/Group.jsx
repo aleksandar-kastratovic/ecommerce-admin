@@ -1,10 +1,16 @@
+import { useState, useEffect } from "react";
+
+import Box from "@mui/material/Box";
+import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+
 import Button from "../../../../../components/shared/Button/Button";
 import Buttons from "../../../../../components/shared/Form/Buttons/Buttons";
 import { InputSelect } from "../../../../../components/shared/Form/FormInputs/FormInputs";
-import { Box, Icon, IconButton, Tooltip } from "@mui/material";
-import { useState, useEffect } from "react";
 import useAPI from "../../../../../api/api";
-import style from "./Group.module.scss";
+
+import scss from "./Group.module.scss";
 
 
 const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) => {
@@ -19,7 +25,6 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   const apiPath = "admin/campaigns-product-catalog/conditions";
 
   useEffect(() => {
-    // Set default field values
     setFieldCondition(getValueField("condition"));
     setFieldValue(getValueField("value"));
   }, []);
@@ -45,18 +50,12 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   };
 
   let isLastSelected = true;
-  /* for (let i = data.rules.length - 1; i >= 0; i++) {
-    if (data.rules[i].type === "row_select") {
-      isLastSelected = data.rules[i].fields[data.rules[i].fields.length - 1].selected.id != null && data.rules[i].fields[data.rules[i].fields.length - 1].selected.id != 0;
-      break;
-    }
-  } */
 
   return (
-    <div className={style.groupBox}>
+    <div className={scss.groupBox}>
       <Tooltip title={"Obrišite grupu"} placement="top" arrow>
         <IconButton
-          className={style.removeGroup}
+          className={scss.removeGroup}
           onClick={() => {
             handleRemoveComponent(id, "group");
           }}>
@@ -64,35 +63,32 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
         </IconButton>
       </Tooltip>
 
-      <div className={style.groupHolder}>
+      <div className={scss.groupHolder}>
         <Box className={"d-flex align-items-center"}>
-          {/* {id} */}
           Ako su
-          <span className={style.span}>
-            <InputSelect sx={{
-              color: "red"
-            }} label="" required={false} name="condition" fillFromApi={`${apiPath}/group/ddl/condition`} usePropName={false} value={fieldCondition} options={[]}
-              onChange={({ target }) => {
+          <span className={scss.span}>
+            <InputSelect className={scss.inputConditionValue} label="" required={false} name="" fillFromApi={`${apiPath}/group/ddl/condition`} usePropName={false} value={fieldCondition} options={[]}
+              onChange={({ target }, { props }) => {
                 setFieldCondition(target.value);
-                setValueField("condition", target.value, target.name);
+                setValueField("condition", target.value, props.valuename);
               }}
             />
           </span>
           navedeni uslovi
-          <span className={style.span}>
-            <InputSelect label="" required={false} name="value" fillFromApi={`${apiPath}/group/ddl/value`} usePropName={false} value={fieldValue} options={[]}
-              onChange={({ target }) => {
+          <span className={scss.span}>
+            <InputSelect className={scss.inputConditionValue} label="" required={false} name="" fillFromApi={`${apiPath}/group/ddl/value`} usePropName={false} value={fieldValue} options={[]}
+              onChange={({ target }, { props }) => {
                 setFieldValue(target.value);
-                setValueField("value", target.value, target.name);
+                setValueField("value", target.value, props.valuename);
               }}
             />
           </span>
         </Box>
       </div>
 
-      <div className={style.rulesHolder}>{rules}</div>
+      <div className={scss.rulesHolder}>{rules}</div>
 
-      <div className={`${style.buttonHolder}`}>
+      <div className={`${scss.buttonHolder}`}>
         <Buttons>
           <Button
             label="Dodajte novi uslov za akciju"
@@ -100,7 +96,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
             sx={{ width: "100%" }}
             disabled={!isLastSelected}
             onClick={() => {
-              handleAddComponent(id, "row_select");
+              handleAddComponent(id, "row");
             }}
           />
         </Buttons>
