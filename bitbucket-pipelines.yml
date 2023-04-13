@@ -266,3 +266,9 @@ pipelines:
           <<: *execute
           name: Absolem
           deployment: absolem
+
+    prod-pazarishop:
+      - step:
+          <<: *execute
+          name: PazariShop
+          deployment: pazarishop
