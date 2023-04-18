@@ -272,3 +272,9 @@ pipelines:
           <<: *execute
           name: PazariShop
           deployment: pazarishop
+
+    prod-hunnybunny:
+      - step:
+          <<: *execute
+          name: HunnyBunny
+          deployment: hunnybunny
