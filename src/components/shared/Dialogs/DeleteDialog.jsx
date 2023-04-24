@@ -18,25 +18,25 @@ import Icon from "@mui/material/Icon";
  * @return {JSX.Element}
  * @constructor
  */
-const DeleteModal = ({ openDeleteDialog, title, description, handleConfirm, setOpenDeleteDialog, nameOfButton, deafultDeleteIcon = true, sx={} }) => {
-    return (
-        <Dialog open={openDeleteDialog.show ?? false}>
-            <DialogTitle>{title ?? "Brisanje"}</DialogTitle>
+const DeleteModal = ({ openDeleteDialog, title, description, handleConfirm, setOpenDeleteDialog, nameOfButton, deafultDeleteIcon = true, sx = {} }) => {
+  return (
+    <Dialog open={openDeleteDialog.show ?? false}>
+      <DialogTitle>{title ?? "Brisanje"}</DialogTitle>
 
-            <DialogContent>
-                <DialogContentText>{description ?? "Da li ste sigurni da želite da obrišete ovaj zapis?"}</DialogContentText>
-            </DialogContent>
+      <DialogContent>
+        <DialogContentText>{description ?? "Da li ste sigurni da želite da obrišete ovaj zapis?"}</DialogContentText>
+      </DialogContent>
 
-            <DialogActions>
-                <Button variant="outlined" onClick={() => setOpenDeleteDialog({ ...openDeleteDialog, show: false })} data-test-id="btn-cancel">
-                    odustani
-                </Button>
-                <Button variant="contained" color="error" startIcon={deafultDeleteIcon ? <Icon>delete</Icon> : null} onClick={handleConfirm} data-test-id="btn-confirm" sx={sx}>
-                    {nameOfButton ?? "obriši"}
-                </Button>
-            </DialogActions>
-        </Dialog>
-    );
+      <DialogActions>
+        <Button variant="outlined" onClick={() => setOpenDeleteDialog({ ...openDeleteDialog, show: false })} data-test-id="btn-cancel">
+          odustani
+        </Button>
+        <Button variant="contained" color="error" startIcon={deafultDeleteIcon ? <Icon>delete</Icon> : null} onClick={handleConfirm} data-test-id="btn-confirm" sx={sx}>
+          {nameOfButton ?? "obriši"}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 };
 
 export default DeleteModal;

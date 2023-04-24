@@ -1,6 +1,9 @@
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
+import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
 
 import { columnCell, columnProps } from "../../../helpers/table";
 import EmptyList from "../Empty/EmptyList";
@@ -20,7 +23,7 @@ import ActionField from "./ActionField/ActionField";
  * @return {JSX.Element}
  * @constructor
  */
-const ListTableBody = ({ items, fields, handleActions, isLoading = false, error = null, previewColumn = "id" }) => {
+const ListTableBody = ({ items, fields, handleActions, isLoading = false, error = null, previewColumn = "id", showAddButtonTableRow = false, tooltipAddButtonTableRow, customActions }) => {
   // What to show
   let content;
   switch (true) {
@@ -38,10 +41,10 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
 
     default:
       content = (items ?? []).map((row) => (
-        <TableRow hover key={row.id}>
+        <TableRow hover key={row.id} >
           {/* TODO typeannotation sluzi samo u typescript, da li je ovde podrebna anotacija i cemu sluzi? */}
           {fields.map((column) => (
-            <TableCell {...columnProps(column)}>
+            <TableCell key={`${row.id}-${column.prop_name}`} {...columnProps(column)}>
               {column.prop_name !== "action" ? (
                 columnCell(row[column.prop_name], column.input_type)
               ) : (
@@ -53,13 +56,33 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
                   handleListGroup={handleActions(row["id"], "listGroup")}
                   handleCategoryTree={handleActions(row["id"], "categoryTree")}
                   handleChangePassword={handleActions(row["id"], "changePassword")}
+                  // handleAttributes={handleActions(row["id"], "attributes")}
                   systemRequired={row.system_required}
+                  customActions={customActions}
+                  rowData={row}
                 />
               )}
             </TableCell>
           ))}
         </TableRow>
       ));
+
+      if (showAddButtonTableRow) {
+        content.push(
+          <TableRow hover key="add">
+            <TableCell colSpan={fields.length} align="center">
+              <Tooltip title={tooltipAddButtonTableRow} placement="top" arrow>
+                <IconButton
+                  size="small"
+                >
+                  <Icon>add</Icon>
+                </IconButton>
+              </Tooltip>
+            </TableCell>
+          </TableRow>
+        );
+      }
+
   }
 
   return <TableBody>{content}</TableBody>;

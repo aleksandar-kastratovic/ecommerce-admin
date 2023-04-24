@@ -41,7 +41,11 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
         };
       }
     }
+    if (!isEmpty(errors)) {
+      console.error("Nisu popunjena sva obavezna polja. ", errors);
+    }
     isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
+
   };
 
   const formItemAutoCompleteChangeHandler = (name, value) => {

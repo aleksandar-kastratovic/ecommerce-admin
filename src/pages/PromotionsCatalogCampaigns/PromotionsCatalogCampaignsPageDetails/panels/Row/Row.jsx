@@ -17,6 +17,8 @@ const Row = ({ data, id, handleRemoveComponent }) => {
   const [valueOptions, setValueOptions] = useState(rowData.fields.find((item) => item.field === "condition")?.selected?.props ?? {
     component: null,
     input_type: null,
+    query_tbl: null,
+    query_col: null,
   });
 
   const checkIfAllFieldsSelected = () => {

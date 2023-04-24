@@ -12,11 +12,14 @@ import scss from "./ActionField.module.scss";
  * @param {function} handleEdit The callback to invoke when the edit button is clicked.
  * @param {function} handleListGroup The callback to invoke when the edit button is clicked.
  * @param {function} handleCategoryTree The callback to invoke when the edit button is clicked.
+ * @param {function} handleChangePassword The callback to invoke when the password button is clicked.
+ * @param {Object{type: {handler:function, icon: ""}}} customActions To display icons.
+ * @param rowData Values ​​of row.
  *
  * @return {JSX.Element}
  * @constructor
  */
-const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree, handleChangePassword }) => {
+const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree, handleChangePassword, customActions, rowData }) => {
   /**
    * Parse action into button parameters.
    *
@@ -53,12 +56,17 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
     .split("_")
     .map((action) => parseButton(action))
     .filter((action) => action);
-
+  console.log(customActions)
   return (
     <div className={scss.wrapper}>
       {actions.map((button) => (
         <span key={button[0]} className={`${scss.button} ${scss[button[0]]}`} onClick={button[1]}>
           <Icon className={button[0]}>{button[0]}</Icon>
+        </span>
+      ))}
+      {Object.entries(customActions).map((item) => (
+        <span key={item[0]} className={`${scss.icon}`} onClick={() => { item[1].handler(rowData) }}>
+          <Icon className={item[1].icon}>{item[1].icon}</Icon>
         </span>
       ))}
     </div>

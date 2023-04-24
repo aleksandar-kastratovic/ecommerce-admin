@@ -157,7 +157,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
                     </Grid>
                 </Grid>
             </StyledNav>
-            {isLoading && <Loader size={100} />}
+            {isLoading && <Loader size={50} />}
         </>
     );
 };

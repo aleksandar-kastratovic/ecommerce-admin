@@ -21,9 +21,9 @@ import Manufacturers from "../pages/Manufacturers/Manufacturers";
 import ManufacturersDetails from "../pages/Manufacturers/ManufacturersDetails/ManufacturersDetails";
 import ProductDetails from "../pages/Products/ProductDetails/ProductDetails";
 import ProductGroupDetails from "../pages/ProductSpecs/ProductGroupDetails/ProductGroupDetails";
-import ProductSpecs from "../pages/ProductSpecs/ProductSpecs";
+// import ProductSpecs from "../pages/ProductSpecs/ProductSpecs";
 import ProductSpecsGroups from "../pages/ProductSpecs/ProductSpecsGroups";
-import ProductSpecsDetails from "../pages/ProductSpecs/ProductsSpecsDetails/ProductSpecsDetails";
+// import ProductSpecsDetails from "../pages/ProductSpecs/ProductsSpecsDetails/ProductSpecsDetails";
 import AdminForms from "./../pages/AdminForms/AdminForms";
 import DetailsAdminForm from "./../pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
 import News from "./../pages/News/News";
@@ -107,15 +107,15 @@ const screens = {
         ],
     ],
     PRODUCT_SPEC: [
-        "/product-specs",
+        "/product-specs/groups",
         "Specifikacija",
         IconList.inventory,
         PRODUCT,
-        ProductSpecs,
+        ProductSpecsGroups,
         [
-            [":specId", ProductSpecsDetails],
-            ["groups", ProductSpecsGroups],
-            ["groups/:groupId", ProductGroupDetails],
+            // [":specId", ProductSpecsDetails],
+            // ["groups", ProductSpecsGroups],
+            [":groupId", ProductGroupDetails],
         ],
     ],
     B2B_ORDERS: ["/b2b-orders", "Porudžbine", IconList.fileOpen, B2B, B2BOrders, [[":orderId", B2BOrdersDetails]]],
