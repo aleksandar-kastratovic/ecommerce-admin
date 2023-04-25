@@ -19,6 +19,9 @@ import ActionField from "./ActionField/ActionField";
  * @param {boolean} isLoading True if the table is still loading, false otherwise.
  * @param {?string} error An error message to show, or null if there is no error.
  * @param {string default:"id"} error Column value that is sent to preview page
+ * @param {boolean} showAddButtonTableRow Add a button "add row" to the table (if needed in the future).
+ * @param {string} tooltipAddButtonTableRow Add title to tooltip (if needed in the future).
+ * @param {Object{type: {handler:function, icon: ""}}} customActions To display icons.
  *
  * @return {JSX.Element}
  * @constructor
@@ -53,10 +56,6 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
                   handleEdit={handleActions(row[previewColumn], "edit")}
                   handlePreview={handleActions(row["id"], "preview")}
                   handleDelete={handleActions(row["id"], "delete")}
-                  handleListGroup={handleActions(row["id"], "listGroup")}
-                  handleCategoryTree={handleActions(row["id"], "categoryTree")}
-                  handleChangePassword={handleActions(row["id"], "changePassword")}
-                  // handleAttributes={handleActions(row["id"], "attributes")}
                   systemRequired={row.system_required}
                   customActions={customActions}
                   rowData={row}

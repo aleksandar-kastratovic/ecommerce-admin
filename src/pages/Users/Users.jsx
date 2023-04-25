@@ -8,14 +8,11 @@ import tblFields from "./tblFields.json";
 const Users = () => {
   const [openDialog, setOpenDialog] = useState({ show: false, userId: null });
 
-  const actions = {
-    changePassword: {
-      action: (id) => setOpenDialog({ show: true, userId: id }),
-    },
-  };
+  const customActions = { type1: { handler: (rowData) => setOpenDialog({ show: true, userId: rowData.id }), icon: "key" } };
+
   return (
     <>
-      <ListPage apiUrl="admin/users" title="Korisnici" columnFields={tblFields} customActions={actions} />
+      <ListPage apiUrl="admin/users" title="Korisnici" columnFields={tblFields} customActions={customActions} />
       <ChangePasswordDialog openDialog={openDialog} setOpenDialog={setOpenDialog} apiPath="admin/users/reset-password" />
     </>
   );

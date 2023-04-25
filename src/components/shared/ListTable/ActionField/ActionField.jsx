@@ -12,14 +12,13 @@ import scss from "./ActionField.module.scss";
  * @param {function} handleEdit The callback to invoke when the edit button is clicked.
  * @param {function} handleListGroup The callback to invoke when the edit button is clicked.
  * @param {function} handleCategoryTree The callback to invoke when the edit button is clicked.
- * @param {function} handleChangePassword The callback to invoke when the password button is clicked.
  * @param {Object{type: {handler:function, icon: ""}}} customActions To display icons.
  * @param rowData Values ​​of row.
  *
  * @return {JSX.Element}
  * @constructor
  */
-const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree, handleChangePassword, customActions, rowData }) => {
+const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree, customActions, rowData }) => {
   /**
    * Parse action into button parameters.
    *
@@ -38,14 +37,6 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
       case "delete":
         return !systemRequired ? ["delete", handleDelete] : null;
 
-      case "listGroup":
-        return ["list", handleListGroup];
-
-      case "categoryTree":
-        return ["account_tree", handleCategoryTree];
-
-      case "changePassword":
-        return ["key", handleChangePassword];
       default:
         return null;
     }
@@ -56,7 +47,7 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
     .split("_")
     .map((action) => parseButton(action))
     .filter((action) => action);
-  console.log(customActions)
+
   return (
     <div className={scss.wrapper}>
       {actions.map((button) => (

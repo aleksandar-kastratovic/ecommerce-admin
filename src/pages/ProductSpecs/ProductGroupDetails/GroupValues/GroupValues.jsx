@@ -15,6 +15,7 @@ const GroupValues = ({ groupId }) => {
         actionNewButton="modal"
         addFieldLabel="Dodajte novu vrednost"
         showAddButton={true}
+        initialData={{ id_group: groupId }}
       />
     </>
   );

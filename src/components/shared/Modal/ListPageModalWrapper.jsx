@@ -1,0 +1,23 @@
+
+
+import React from 'react';
+
+import Drawer from "@mui/material/Drawer";
+import Box from "@mui/material/Box";
+import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+
+const ListPageModalWrapper = ({ children, anchor, open, sx, variant, onClose, onCloseButtonClick }) => {
+  return (
+    <Drawer anchor={anchor} open={open} onClose={onClose} sx={sx} variant={variant}>
+      <IconButton sx={{ display: "flex", alignItems: "flex-start", width: "fit-content" }} onClick={onCloseButtonClick}>
+        <Icon>close</Icon>
+      </IconButton>
+      <Box width="50rem">
+        {children}
+      </Box>
+    </Drawer >
+  )
+}
+
+export default ListPageModalWrapper

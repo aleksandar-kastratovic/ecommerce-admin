@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-import Drawer from "@mui/material/Drawer";
-import Box from "@mui/material/Box";
-import Icon from "@mui/material/Icon";
-import IconButton from "@mui/material/IconButton";
-
 import Form from "../Form/Form";
 import useAPI from "../../../api/api";
 import { toast } from "react-toastify";
 import FormWrapper from "../Layout/FormWrapper/FormWrapper";
+import ListPageModalWrapper from "./ListPageModalWrapper";
 
 /**
  * Modal.
@@ -25,7 +21,7 @@ import FormWrapper from "../Layout/FormWrapper/FormWrapper";
  * @constructor
  */
 
-const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields }) => {
+const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData }) => {
 
   const { id } = openModal;
   const api = useAPI();
@@ -47,7 +43,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
 
   const saveData = async (data) => {
 
-    api.post(`${apiPathFormModal}`, data)
+    api.post(`${apiPathFormModal}`, { ...data, ...initialData })
       .then((response) => {
         setData(response?.payload);
         toast.success(`Uspešno`);
@@ -66,17 +62,11 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
   }, [openModal.show]);
 
   return (
-
-    <Drawer anchor={anchor} open={openModal.show ?? false} onClose={() => setOpenModal({ ...openModal, show: false })} sx={sx} variant={variant}>
-      <IconButton sx={{ display: "flex", alignItems: "flex-start", width: "fit-content" }} onClick={() => setOpenModal({ ...openModal, show: false })}>
-        <Icon>close</Icon>
-      </IconButton>
-      <Box width="50rem">
-        <FormWrapper title={data?.id == null ? "Novi unos" : data?.name}>
-          <Form formFields={formFields} initialData={data} onSubmit={saveData} />
-        </FormWrapper>
-      </Box>
-    </Drawer >
+    <ListPageModalWrapper anchor={anchor} open={openModal.show ?? false} onClose={() => setOpenModal({ ...openModal, show: false })} sx={sx} variant={variant} onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}>
+      <FormWrapper title={data?.id == null ? "Novi unos" : data?.name}>
+        <Form formFields={formFields} initialData={data} onSubmit={saveData} />
+      </FormWrapper>
+    </ListPageModalWrapper>
   )
 }
 

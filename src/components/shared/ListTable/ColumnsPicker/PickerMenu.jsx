@@ -22,21 +22,29 @@ const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClos
   const { pathname } = useLocation();
 
   // Check if is localStorage empty
+  let visible = createPairs(tableFields, "prop_name", "in_main_table");
   const isLocalStorage = localStorage.getItem(`columnPickerState${pathname}`);
   if (!isLocalStorage) {
-    localStorage.setItem(`columnPickerState${pathname}`, JSON.stringify(createPairs(tableFields, "prop_name", "in_main_table")));
+    localStorage.setItem(`columnPickerState${pathname}`, JSON.stringify(visible));
+  } else {
+    visible = JSON.parse(isLocalStorage);
   }
 
-  // Local storage
-  const getItemsLocalStorage = JSON.parse(localStorage.getItem(`columnPickerState${pathname}`));
-
   // Not all columns can be hidden
-  const [visibleColumns, setVisibleColumns] = useState(getItemsLocalStorage);
+  const [visibleColumns, setVisibleColumns] = useState(visible);
 
   useEffect(() => {
+    const getItemsLocalStorage = JSON.parse(localStorage.getItem(`columnPickerState${pathname}`));
+    setVisibleColumns(getItemsLocalStorage);
     handleConfirm(tableFields.map((item) => ({ ...item, in_main_table: visibleColumns[item.prop_name] })));
     setVisibleColumns(visibleColumns);
   }, []);
+
+  useEffect(() => {
+    if (visibleColumns != null) {
+      localStorage.setItem(`columnPickerState${pathname}`, JSON.stringify(visibleColumns));
+    }
+  }, [visibleColumns])
 
   // Handle each time a user click a checkbox
   const handleChange = ({ target }, checked) =>
@@ -62,7 +70,6 @@ const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClos
 
   // Apply the selected columns
   const onConfirm = () => {
-    localStorage.setItem(`columnPickerState${pathname}`, JSON.stringify(visibleColumns));
     handleConfirm(tableFields.map((item) => ({ ...item, in_main_table: visibleColumns[item.prop_name] })));
   };
 

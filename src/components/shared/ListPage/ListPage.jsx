@@ -28,10 +28,15 @@ import Button from "../Button/Button";
  * @param {Object} filters Additional filters for list api
  * @param {string default:"id"} error Column value that is sent to preview page
  * @param {Object{type: {handler:function, icon: ""}}} customActions 
+ * @param {boolean} showAddButtonTableRow Add a button "add row" to the table (if needed in the future).
+ * @param {string} tooltipAddButtonTableRow Add title to tooltip (if needed in the future).
+ * @param {string} addFieldLabel Name of the button.
+ * @param {boolean} showAddButton By default, the button is hidden. If we pass true, button will be shown below the table.
+ * 
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, formFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false }) => {
+const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {} }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
@@ -104,14 +109,6 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, formFields,
         setOpenDeleteDialog({ show: true, id: id, mutate: null });
         break;
 
-      case "listGroup":
-        navigate(`${pathname}/category/${id}`);
-        break;
-
-      case "categoryTree":
-        navigate(`${pathname}/tree/${id}`);
-        break;
-
       default:
         break;
     }
@@ -132,6 +129,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, formFields,
   }
 
 
+
   return (
     <>
       <PageWrapper title={title} actions={actions}>
@@ -150,11 +148,11 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, formFields,
           customActions={customActions}
         />
 
-        {showAddButton && <Button onClick={() => setOpenModal({ show: true, id: "new" })} label={addFieldLabel} icon="add" sx={{ display: "flex", margin: "0 auto", marginTop: "2rem", textTransform: "inherit", width: "30%" }} />}
+        {showAddButton && <Button onClick={() => setOpenModal({ show: true, id: "new" })} label={addFieldLabel} icon="add" sx={{ display: "flex", margin: "0 auto", marginTop: "2rem", textTransform: "inherit" }} />}
 
       </PageWrapper>
 
-      <ModalForm anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} />
+      <ModalForm anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} />
       <DeleteDialog handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );

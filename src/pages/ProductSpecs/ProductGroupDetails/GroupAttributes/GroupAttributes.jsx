@@ -15,6 +15,7 @@ const GroupAttributes = ({ groupId }) => {
         actionNewButton="modal"
         addFieldLabel="Dodajte novi atribut"
         showAddButton={true}
+        initialData={{ id_group: groupId }}
       />
     </>
   );
