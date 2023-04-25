@@ -12,11 +12,13 @@ import scss from "./ActionField.module.scss";
  * @param {function} handleEdit The callback to invoke when the edit button is clicked.
  * @param {function} handleListGroup The callback to invoke when the edit button is clicked.
  * @param {function} handleCategoryTree The callback to invoke when the edit button is clicked.
+ * @param {Object{type: {handler:function, icon: ""}}} customActions To display icons.
+ * @param rowData Values ​​of row.
  *
  * @return {JSX.Element}
  * @constructor
  */
-const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree, handleChangePassword }) => {
+const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree, customActions, rowData }) => {
   /**
    * Parse action into button parameters.
    *
@@ -24,7 +26,7 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
    *
    * @return {(string|function)[]|null} Tuple of "icon" and the action for the onClick listener.
    */
-  const parseButton = (action): ?[string, function] => {
+  const parseButton = (action) => {
     switch (action) {
       case "edit":
         return ["edit", handleEdit];
@@ -35,14 +37,6 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
       case "delete":
         return !systemRequired ? ["delete", handleDelete] : null;
 
-      case "listGroup":
-        return ["list", handleListGroup];
-
-      case "categoryTree":
-        return ["account_tree", handleCategoryTree];
-
-      case "changePassword":
-        return ["key", handleChangePassword];
       default:
         return null;
     }
@@ -59,6 +53,11 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
       {actions.map((button) => (
         <span key={button[0]} className={`${scss.button} ${scss[button[0]]}`} onClick={button[1]}>
           <Icon className={button[0]}>{button[0]}</Icon>
+        </span>
+      ))}
+      {Object.entries(customActions).map((item) => (
+        <span key={item[0]} className={`${scss.icon}`} onClick={() => { item[1].handler(rowData) }}>
+          <Icon className={item[1].icon}>{item[1].icon}</Icon>
         </span>
       ))}
     </div>

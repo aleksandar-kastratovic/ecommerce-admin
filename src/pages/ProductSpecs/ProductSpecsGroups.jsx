@@ -1,20 +1,24 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import ListPage from "../../components/shared/ListPage/ListPage";
-import ProductSpecsFields from "./ProductSpecsFields.json";
+import columnFields from "./tblFields.json";
 
 const ProductSpecsGroups = () => {
-  const navigate = useNavigate();
-  const buttons = [
-    {
-      id: 1,
-      label: "Setovi",
-      action: () => {
-        navigate("/product-specs");
-      },
-    },
-  ];
 
-  return <ListPage apiUrl="admin/product-item-specifications/group" title="Speifikacije proizvoda - Grupe" columnFields={ProductSpecsFields} additionalButtons={buttons} />;
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const customActions = { type1: { handler: (rowData) => { navigate(`${pathname}/${rowData.id}`) }, icon: "attribution" } };
+
+  return (
+    <ListPage
+      apiUrl="admin/product-item-specifications/group"
+      title="Specifikacije"
+      columnFields={columnFields}
+      showNewButton={true}
+      actionNewButton="modal"
+      customActions={customActions}
+    />
+  );
 };
 
 export default ProductSpecsGroups;

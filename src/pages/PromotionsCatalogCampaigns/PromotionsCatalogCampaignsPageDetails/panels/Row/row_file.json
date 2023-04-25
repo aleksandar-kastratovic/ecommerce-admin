@@ -31,7 +31,9 @@
         "name": null,
         "props": {
           "component": null,
-          "input_type": null
+          "input_type": null,
+          "query_tbl": null,
+          "query_col": null
         }
       }
     },

@@ -17,7 +17,7 @@ import Button from "../../components/shared/Button/Button";
 import Buttons from "../../components/shared/Form/Buttons/Buttons";
 import LoadingTableRows from "../../components/shared/Loading/LoadingTableRows";
 import Table from "../../components/shared/Table/Table";
-import Loader from "../../components/UI/Loader";
+import Loader from "../../components/shared/Loading/Loading";
 import { rotateMatrix } from "../../helpers/data";
 import useImportAPI from "./api";
 
@@ -162,7 +162,7 @@ const ImportStep2 = ({ filename, payload }) => {
     )}
 
     {/* Execution is loading */}
-    {execute && <Loader />}
+    {execute && <Loader size={50} />}
   </>
 }
 

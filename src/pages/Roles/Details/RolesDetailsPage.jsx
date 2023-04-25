@@ -10,70 +10,70 @@ import IconList from "../../../helpers/icons";
 import RolesListPanel from "./RolesListPanel";
 
 const RolesDetailsPage = () => {
-    const { roleId } = useParams();
-    const api = useAPI();
-    const init = {
-        id: null,
-        screen: null,
-        name: null,
-    };
-    const apiPath = "admin/roles/main";
-    const [data, setData] = useState(init);
-    const [isLoading, setIsLoading] = useState(false);
-    const navigate = useNavigate();
+  const { roleId } = useParams();
+  const api = useAPI();
+  const init = {
+    id: null,
+    screen: null,
+    name: null,
+  };
+  const apiPath = "admin/roles/main";
+  const [data, setData] = useState(init);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-    const handleData = async () => {
-        setIsLoading(true);
-        await api
-            .get(`${apiPath}/${roleId}`)
-            .then((response) => {
-                setData(response?.payload);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                console.warn(error);
-                setIsLoading(false);
-            });
-    };
+  const handleData = async () => {
+    setIsLoading(true);
+    await api
+      .get(`${apiPath}/${roleId}`)
+      .then((response) => {
+        setData(response?.payload);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.warn(error);
+        setIsLoading(false);
+      });
+  };
 
-    const saveData = async (data) => {
-        let oldId = data.id;
-        api.post(apiPath, data)
-            .then((response) => {
-                setData(response?.payload);
-                toast.success(`Uspešno`);
+  const saveData = async (data) => {
+    let oldId = data.id;
+    api.post(apiPath, data)
+      .then((response) => {
+        setData(response?.payload);
+        toast.success(`Uspešno`);
 
-                if (oldId === null) {
-                    let tId = response?.payload?.id;
-                    navigate(`/roles/${tId}`, { replace: true });
-                }
-            })
-            .catch((error) => {
-                console.warn(error);
-                toast.warning("Greška");
-            });
-    };
+        if (oldId === null) {
+          let tId = response?.payload?.id;
+          navigate(`/roles/${tId}`, { replace: true });
+        }
+      })
+      .catch((error) => {
+        console.warn(error);
+        toast.warning("Greška");
+      });
+  };
 
-    useEffect(() => {
-        handleData();
-    }, []);
+  useEffect(() => {
+    handleData();
+  }, []);
 
-    const fields = [
-        {
-            name: "Osnovne informacije",
-            icon: IconList.dataThresholding,
-            enabled: true,
-            component: <Form formFields={formFields} initialData={data} onSubmit={saveData} />,
-        },
-        {
-            name: "Stranice",
-            icon: IconList.screenShare,
-            enabled: data?.id,
-            component: <RolesListPanel roleId={data?.id} />,
-        },
-    ];
+  const fields = [
+    {
+      name: "Osnovne informacije",
+      icon: IconList.dataThresholding,
+      enabled: true,
+      component: <Form formFields={formFields} initialData={data} onSubmit={saveData} />,
+    },
+    {
+      name: "Stranice",
+      icon: IconList.screenShare,
+      enabled: data?.id,
+      component: <RolesListPanel roleId={data?.id} />,
+    },
+  ];
 
-    return <DetailsPage title={data?.id == null ? "Unos nove uloge" : data?.name} fields={fields} ready={!isLoading} />;
+  return <DetailsPage title={data?.id == null ? "Unos nove uloge" : data?.name} fields={fields} ready={!isLoading} />;
 };
 
 export default RolesDetailsPage;

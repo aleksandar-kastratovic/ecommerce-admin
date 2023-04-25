@@ -64,7 +64,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
       </Tooltip>
 
       <div className={scss.groupHolder}>
-        <Box className={"d-flex align-items-center"}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           Ako su
           <span className={scss.span}>
             <InputSelect className={scss.inputConditionValue} label="" required={false} name="" fillFromApi={`${apiPath}/group/ddl/condition`} usePropName={false} value={fieldCondition} options={[]}

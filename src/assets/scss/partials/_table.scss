@@ -1,31 +1,32 @@
 @import "../../../variables";
 
 .list-page-toolbar {
-	input {
-		padding: 0.45em 1em !important
-	}
+    input {
+        padding: 0.6em 1em !important;
+        font-size: 0.875rem;
+    }
 }
 
 .list-page-table-head {
-	font-weight:      bold !important;
-	font-size:        0.85em;
-	background-color: var(--main-bg-color);
-	padding:          0.5em 1em !important;
-	border-bottom:    none !important;;
+    font-weight: bold !important;
+    font-size: 0.85em;
+    background-color: var(--main-bg-color);
+    padding: 0.5em 1em !important;
+    border-bottom: none !important;
 }
 
 .list-page-table-cell {
-	padding: 0.5em 1em !important;
+    padding: 0.5em 1em !important;
 }
 
 .list-page-table-align-left {
-	text-align: left !important;
+    text-align: left !important;
 }
 
 .list-page-table-align-center {
-	text-align: center !important;
+    text-align: center !important;
 }
 
 .list-page-table-align-right {
-	text-align: right !important;
+    text-align: right !important;
 }

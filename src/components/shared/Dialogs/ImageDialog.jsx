@@ -84,7 +84,7 @@ const ImageDialog = ({
             {loadingImage ? (
               <div>
                 <CircularProgress
-                  size="4rem"
+                  size={50}
                   sx={{ ml: "45%" }}
                   disableShrink
                 />

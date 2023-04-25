@@ -9,12 +9,15 @@ import PageWrapper from "../Layout/PageWrapper/PageWrapper";
 import { flatten } from "lodash";
 import { useQuery } from "react-query";
 import useAPI from "../../../api/api";
+import ModalForm from "../Modal/ModalForm";
+import Button from "../Button/Button";
 
 /**
  * Show a standardized list.
  *
  * @param {string} apiUrl
  * @param {?string} deleteUrl
+ * @param {?string} editUrl
  * @param {string} title
  * @param {FieldSpec[]} columnFields
  * @param {FieldSpec[]} filters
@@ -24,10 +27,16 @@ import useAPI from "../../../api/api";
  * @param {function(*[]): []} modifyItems The function that accepts the items and return modified ones.
  * @param {Object} filters Additional filters for list api
  * @param {string default:"id"} error Column value that is sent to preview page
+ * @param {Object{type: {handler:function, icon: ""}}} customActions 
+ * @param {boolean} showAddButtonTableRow Add a button "add row" to the table (if needed in the future).
+ * @param {string} tooltipAddButtonTableRow Add title to tooltip (if needed in the future).
+ * @param {string} addFieldLabel Name of the button.
+ * @param {boolean} showAddButton By default, the button is hidden. If we pass true, button will be shown below the table.
+ * 
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, filters = {}, previewColumn = "id", customActions = {} }) => {
+const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {} }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
@@ -38,11 +47,16 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
+  const [openModal, setOpenModal] = useState({ show: false, id: null });
+
   // Default delete URL is the same as the main URL
   deleteUrl = deleteUrl ?? apiUrl;
 
+  editUrl = editUrl ?? apiUrl;
+
   // Handle delete dialog
   const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false, id: null, mutate: null });
+
   const handleDeleteConfirm = async () => {
     api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
       .then(() => toast.success("Zapis je uspešno obrisan"))
@@ -52,7 +66,7 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
   };
 
   // Load the data
-  const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page], () => api.list(apiUrl, { page, search, ...filters }));
+  const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, openModal.show], () => api.list(apiUrl, { page, search, ...filters }));
 
   // Modify the data
   if (response?.payload && modifyItems) {
@@ -81,20 +95,18 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
   const handleActions = (id, type) => () => {
     switch (type) {
       case "edit":
+        if (actionNewButton === "modal") {
+          setOpenModal({ show: true, id: id });
+        } else {
+          navigate(`${pathname}/${id}`);
+        }
+        break;
       case "preview":
         navigate(`${pathname}/${id}`);
         break;
 
       case "delete":
         setOpenDeleteDialog({ show: true, id: id, mutate: null });
-        break;
-
-      case "listGroup":
-        navigate(`${pathname}/category/${id}`);
-        break;
-
-      case "categoryTree":
-        navigate(`${pathname}/tree/${id}`);
         break;
 
       default:
@@ -110,11 +122,13 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
   if (showNewButton) {
     actions.push({
       label: "Novi unos",
-      action: () => navigate("new"),
+      action: () => actionNewButton === "modal" ? setOpenModal({ show: true, id: "new" }) : navigate("new"),
       variant: "contained",
       icon: "add",
     });
   }
+
+
 
   return (
     <>
@@ -129,9 +143,16 @@ const ListPage = ({ apiUrl, deleteUrl, title, columnFields, showDatePicker, modi
           page={page}
           onPageChange={setPage}
           previewColumn={previewColumn}
+          showAddButtonTableRow={showAddButtonTableRow}
+          tooltipAddButtonTableRow={tooltipAddButtonTableRow}
+          customActions={customActions}
         />
+
+        {showAddButton && <Button onClick={() => setOpenModal({ show: true, id: "new" })} label={addFieldLabel} icon="add" sx={{ display: "flex", margin: "0 auto", marginTop: "2rem", textTransform: "inherit" }} />}
+
       </PageWrapper>
 
+      <ModalForm anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} />
       <DeleteDialog handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );
