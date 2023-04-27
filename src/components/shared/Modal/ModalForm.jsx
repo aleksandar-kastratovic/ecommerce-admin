@@ -21,7 +21,7 @@ import ListPageModalWrapper from "./ListPageModalWrapper";
  * @constructor
  */
 
-const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData }) => {
+const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData, label, customTitle }) => {
 
   const { id } = openModal;
   const api = useAPI();
@@ -63,8 +63,8 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
 
   return (
     <ListPageModalWrapper anchor={anchor} open={openModal.show ?? false} onClose={() => setOpenModal({ ...openModal, show: false })} sx={sx} variant={variant} onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}>
-      <FormWrapper title={data?.id == null ? "Novi unos" : data?.name}>
-        <Form formFields={formFields} initialData={data} onSubmit={saveData} />
+      <FormWrapper title={data?.id == null ? "Novi unos" : customTitle ? `${customTitle}: ${data?.name}?` : data?.name}>
+        <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} />
       </FormWrapper>
     </ListPageModalWrapper>
   )

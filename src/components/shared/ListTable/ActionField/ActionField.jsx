@@ -18,7 +18,7 @@ import scss from "./ActionField.module.scss";
  * @return {JSX.Element}
  * @constructor
  */
-const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, handleListGroup, handleCategoryTree, customActions, rowData }) => {
+const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, customActions, rowData }) => {
   /**
    * Parse action into button parameters.
    *

@@ -10,7 +10,7 @@ import ImageDialog from "../Dialogs/ImageDialog";
 import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, submitButton = true, queryString = "", onChange = () => { }, validateData = (data) => data }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, submitButton = true, queryString = "", onChange = () => { }, validateData = (data) => data, label }) => {
   const navigate = useNavigate();
   const [data, setData] = useState(initialData ?? {});
   const [inputsError, setInputsError] = useState([]);
@@ -168,7 +168,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
           })}
         <Buttons>
           {cancelButton && <Button label="Odustani" onClick={() => navigate(-1)} />}
-          {submitButton && <Button type="submit" label="Sačuvaj" variant="contained" />}
+          {submitButton && <Button type="submit" label={label ? label : "Sačuvaj"} variant="contained" />}
         </Buttons>
       </Box>
       <ImageDialog

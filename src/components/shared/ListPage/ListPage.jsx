@@ -11,6 +11,7 @@ import { useQuery } from "react-query";
 import useAPI from "../../../api/api";
 import ModalForm from "../Modal/ModalForm";
 import Button from "../Button/Button";
+// import ModalCheckboxList from "../Modal/ModalCheckboxList";
 
 /**
  * Show a standardized list.
@@ -152,7 +153,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
 
       </PageWrapper>
 
-      <ModalForm anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} />
+      <ModalForm anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} />
       <DeleteDialog handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );
