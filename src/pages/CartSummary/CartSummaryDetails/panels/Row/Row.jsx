@@ -10,7 +10,7 @@ import InputValue from "../InputValue/InputValue";
 import scss from "./Row.module.scss";
 
 const Row = ({ data, id, handleRemoveComponent }) => {
-  const apiPath = 'admin/campaigns-product-catalog/conditions';
+  const apiPath = 'admin/campaigns/product-catalog/conditions';
 
   const [rowData, setRowData] = useState(data);
   const [openDialog, setOpenDialog] = useState({ show: false });

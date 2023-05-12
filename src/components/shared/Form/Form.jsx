@@ -71,14 +71,13 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
         newData = { ...data, [target.name]: target.value };
     }
 
-    setData(validateData(newData, target.name));
-
+    newData = validateData(newData, target.name);
+    setData(newData);
+    onChange(newData, target.name)
     setInputErrors(target.name);
   };
 
-  useEffect(() => {
-    onChange(data);
-  }, [data]);
+
 
   const formImageUpload = useCallback(
     (event) => {

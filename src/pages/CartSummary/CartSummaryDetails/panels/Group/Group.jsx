@@ -22,7 +22,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   const [fieldValue, setFieldValue] = useState(null);
 
   const api = useAPI();
-  const apiPath = "admin/campaigns-product-catalog/conditions";
+  const apiPath = "admin/campaigns/product-catalog/conditions";
 
   useEffect(() => {
     setFieldCondition(getValueField("condition"));
@@ -91,7 +91,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
       <div className={`${scss.buttonHolder}`}>
         <Buttons>
           <Button
-            label="Dodajte novi uslov za akciju"
+            label="Novi uslov"
             icon={<Icon>difference</Icon>}
             sx={{ width: "100%" }}
             disabled={!isLastSelected}

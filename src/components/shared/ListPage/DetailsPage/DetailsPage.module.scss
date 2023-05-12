@@ -8,10 +8,33 @@
 
 .list {
     width: 100%;
-    max-width: 360px;
+    max-width: 250px;
+    ul li div {
+        div {
+            &:nth-child(1) {
+                min-width: 1.875rem;
+                span {
+                    font-size: 1rem;
+                }
+            }
+            &:nth-child(2) {
+                span {
+                    font-size: 0.875rem;
+                }
+            }
+        }
+        svg {
+            font-size: 1rem;
+        }
+    }
 }
 
 .main {
     width: 100%;
     max-width: 100%;
+    form {
+        label {
+            font-size: 0.875rem;
+        }
+    }
 }

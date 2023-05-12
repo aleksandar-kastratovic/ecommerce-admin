@@ -9,6 +9,7 @@ import { columnCell, columnProps } from "../../../helpers/table";
 import EmptyList from "../Empty/EmptyList";
 import LoadingTableRows from "../Loading/LoadingTableRows";
 import ActionField from "./ActionField/ActionField";
+import { useState } from "react";
 
 /**
  * Show the table body and handle lifecycle and events.
@@ -27,6 +28,25 @@ import ActionField from "./ActionField/ActionField";
  * @constructor
  */
 const ListTableBody = ({ items, fields, handleActions, isLoading = false, error = null, previewColumn = "id", showAddButtonTableRow = false, tooltipAddButtonTableRow, customActions }) => {
+  const [editingCell, setEditingCell] = useState(null); // stanje koje se koristi da se pamti koji je redak i kolona trenutno u procesu uređivanja
+  const handleCellDoubleClick = (event, rowId, columnPropName, currentValue) => {
+    setEditingCell({ rowId, columnPropName }); // pamti koji se ćelija trenutno uređuje
+  };
+  const handleCellBlur = (event, rowId, columnPropName, currentValue) => {
+    setEditingCell(null); // resetuje stanje kada korisnik završi sa uređivanjem ćelije
+
+    // Pronađi ćeliju u state-u
+    const editedRow = tableData.find((data) => data.id === rowId);
+    const editedCell = editedRow[columnPropName];
+
+    // Ako se vrednost ćelije promenila, sačuvaj promene na backendu
+    if (currentValue !== editedCell.value) {
+      const newData = [...tableData];
+      editedCell.value = currentValue;
+      setTableData(newData);
+      handleActions(rowId, "edit", { [columnPropName]: currentValue });
+    }
+  };
   // What to show
   let content;
   switch (true) {
@@ -47,9 +67,21 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
         <TableRow hover key={row.id} >
           {/* TODO typeannotation sluzi samo u typescript, da li je ovde podrebna anotacija i cemu sluzi? */}
           {fields.map((column) => (
-            <TableCell key={`${row.id}-${column.prop_name}`} {...columnProps(column)}>
+            <TableCell
+              key={`${row.id}-${column.prop_name}`}
+              {...columnProps(column)}
+              onDoubleClick={(event) => handleCellDoubleClick(event, row.id, column.prop_name, row[column.prop_name])}
+
+            >
               {column.prop_name !== "action" ? (
+                // columnCell(row[column.prop_name], column.input_type)
+                // editingCell?.rowId === row.id && editingCell?.columnPropName === column.prop_name ? (
+                //   // ako je ćelija u procesu uređivanja, prikazuje se input polje sa trenutnom vrednošću
+                //   <input type={column.input_type} defaultValue={row[column.prop_name]} />
+                // ) : (
+                // inače, prikazuje se samo trenutna vrednost ćelije
                 columnCell(row[column.prop_name], column.input_type)
+
               ) : (
                 <ActionField
                   fieldType={column.input_type}

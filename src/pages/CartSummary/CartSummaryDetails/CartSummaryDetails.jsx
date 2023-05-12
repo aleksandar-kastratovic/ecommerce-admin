@@ -9,12 +9,13 @@ import DetailsPage from "../../../components/shared/ListPage/DetailsPage/Details
 import Conditions from "./panels/Conditions";
 
 import basic_data from "./forms/basic_data.json";
+import calc from "./forms/calc.json"
 
 
 const CartSummaryDetails = () => {
   const { nid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/campaigns-product-catalog/basic-data";
+  const apiPath = "admin/campaigns/product-catalog/basic-data";
   const navigate = useNavigate();
 
   const init = {
@@ -22,6 +23,7 @@ const CartSummaryDetails = () => {
     description: null,
     discount_type: null,
     discount_value: null,
+    currency: null,
     slug: null,
     name: null,
     description: null,
@@ -67,22 +69,42 @@ const CartSummaryDetails = () => {
       });
   };
 
+  const validateData = (data, field) => {
+    let ret = data;
+    console.log("data", data);
+    console.log("field", field);
+    switch (field) {
+      case "discount_type":
+        ret.currency = "ruzaaa";
+        return ret;
+        console.log("aaaaaaaaaaaaaaaaaa");
+      default:
+        return ret;
+    }
+  };
+
   useEffect(() => {
     handleData();
   }, []);
 
   const fields = [
     {
-      name: "Informacije o akciji",
-      icon: IconList.settings,
+      name: "Osnovno",
+      icon: IconList.inventory,
       enabled: true,
       component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} />,
     },
     {
-      name: "Informacije o uslovima",
+      name: "Uslovi",
       icon: IconList.settings,
       enabled: data?.id,
       component: <Conditions campaignId={data?.id} />,
+    },
+    {
+      name: "Obračun",
+      icon: IconList.calculate,
+      enabled: true,
+      component: <Form formFields={calc} initialData={data} onSubmit={saveData} validateData={validateData} />,
     },
   ];
 

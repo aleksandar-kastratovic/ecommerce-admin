@@ -7,18 +7,19 @@ import Form from "../../../components/shared/Form/Form";
 import basic_data from "./forms/basic_data.json";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Conditions from "./panels/Conditions";
+import CalculateForm from "./panels/CalculateForm/CalculateForm";
+import { deepClone } from "@mui/x-data-grid/utils/utils";
 
 const PromotionsCatalogCampaignsPageDetails = () => {
   const { nid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/campaigns-product-catalog/basic-data";
+  const apiPath = "admin/campaigns/product-catalog/basic-data";
   const navigate = useNavigate();
 
   const init = {
     id: null,
+    calculation_type: null,
     description: null,
-    discount_type: null,
-    discount_value: null,
     slug: null,
     name: null,
     description: null,
@@ -32,6 +33,10 @@ const PromotionsCatalogCampaignsPageDetails = () => {
 
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [formFields, setFormFields] = useState(basic_data);
+  let newFields = deepClone(formFields);
+  let slugField = newFields.filter((field) => !(field.prop_name === "slug" && nid === "new"));
 
   const handleData = async () => {
     setIsLoading(true);
@@ -68,18 +73,26 @@ const PromotionsCatalogCampaignsPageDetails = () => {
     handleData();
   }, []);
 
+
+
   const fields = [
     {
-      name: "Informacije o akciji",
-      icon: IconList.settings,
+      name: "Osnovno",
+      icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} />,
+      component: <Form formFields={slugField} initialData={data} onSubmit={saveData} />,
     },
     {
-      name: "Informacije o uslovima",
+      name: "Uslovi",
       icon: IconList.settings,
       enabled: data?.id,
       component: <Conditions campaignId={data?.id} />,
+    },
+    {
+      name: "Obračun",
+      icon: IconList.calculate,
+      enabled: data?.id,
+      component: <CalculateForm campaignId={data?.id} />,
     },
   ];
 

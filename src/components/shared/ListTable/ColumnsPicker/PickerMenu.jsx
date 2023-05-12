@@ -88,6 +88,11 @@ const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClos
               value={visibleColumns[item.prop_name]}
               error={errorInput === item.prop_name ? errorMessage : null}
               onChange={handleChange}
+              labelStyle={{
+                '& .MuiFormControlLabel-label': {
+                  fontSize: '0.875rem',
+                },
+              }}
             />
           ))}
 
