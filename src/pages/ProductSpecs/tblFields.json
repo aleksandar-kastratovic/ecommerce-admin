@@ -72,7 +72,7 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "autocomplete",
+    "input_type": "multi_select",
     "fillFromApi": "admin/stores/ddl",
     "usePropName": true,
     "options": []
