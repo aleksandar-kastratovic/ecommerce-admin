@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import FormWrapper from "../Layout/FormWrapper/FormWrapper";
 import ListPageModalWrapper from "./ListPageModalWrapper";
 import Typography from '@mui/material/Typography';
+import { Box, CircularProgress } from "@mui/material";
 
 /**
  * Modal.
@@ -17,6 +18,13 @@ import Typography from '@mui/material/Typography';
  * @param {'permanent'|'persistent'|'temporary'} variant The variant to use.
  * @param {string} apiPathFormModal Api path.
  * @param {FieldSpec[]} formFields
+ * @param initialData
+ * @param label
+ * @param customTitle
+ * @param shortText
+ * @param cancelButton
+ * @param withoutSetterFunction
+ * @param styleCheckbox
  *
  * @return {JSX.Element}
  * @constructor
@@ -36,25 +44,28 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
       .then((response) => {
         setData(response?.payload);
         console.log(data);
+        setIsLoading(false);
       })
       .catch((error) => {
         console.warn(error);
+        setIsLoading(false);
       });
-    setIsLoading(false);
   };
 
   const saveData = async (data) => {
-
+    setIsLoading(true);
     if (!withoutSetterFunction) {
       api.post(`${apiPathFormModal}`, { ...data, ...initialData })
         .then((response) => {
           setData(response?.payload);
           toast.success(`Uspešno`);
           setOpenModal({ ...openModal, show: false });
+          setIsLoading(false);
         })
         .catch((error) => {
           console.warn(error);
           toast.warning("Greška");
+          setIsLoading(false);
         });
 
     } else {
@@ -62,10 +73,12 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
         .then((response) => {
           toast.success(`Uspešno`);
           setOpenModal({ ...openModal, show: false });
+          setIsLoading(false);
         })
         .catch((error) => {
           console.warn(error);
           toast.warning("Greška");
+          setIsLoading(false);
         });
     }
   };
@@ -80,7 +93,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
     <ListPageModalWrapper anchor={anchor} open={openModal.show ?? false} onClose={() => setOpenModal({ ...openModal, show: false })} sx={sx} variant={variant} onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}>
       <FormWrapper title={customTitle ? customTitle : (data?.id == null ? "Novi unos" : data?.name)}>
         {shortText ? <Typography variant="body2" sx={{ marginBottom: "0.8rem" }}>{shortText}</Typography> : null}
-        <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} />
+        {!isLoading ? <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} /> : <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}><CircularProgress size="2rem" sx={{ marginTop: "15%" }} /></Box>}
       </FormWrapper>
     </ListPageModalWrapper>
   )
