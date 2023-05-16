@@ -5,6 +5,7 @@ import useAPI from "../../../api/api";
 import { toast } from "react-toastify";
 import FormWrapper from "../Layout/FormWrapper/FormWrapper";
 import ListPageModalWrapper from "./ListPageModalWrapper";
+import Typography from '@mui/material/Typography';
 
 /**
  * Modal.
@@ -21,7 +22,7 @@ import ListPageModalWrapper from "./ListPageModalWrapper";
  * @constructor
  */
 
-const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData, label, customTitle }) => {
+const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData, label, customTitle, shortText, cancelButton, withoutSetterFunction = false, styleCheckbox }) => {
 
   const { id } = openModal;
   const api = useAPI();
@@ -34,6 +35,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
       .get(`${apiPathFormModal}/${id}`)
       .then((response) => {
         setData(response?.payload);
+        console.log(data);
       })
       .catch((error) => {
         console.warn(error);
@@ -43,16 +45,29 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
 
   const saveData = async (data) => {
 
-    api.post(`${apiPathFormModal}`, { ...data, ...initialData })
-      .then((response) => {
-        setData(response?.payload);
-        toast.success(`Uspešno`);
-        setOpenModal({ ...openModal, show: false });
-      })
-      .catch((error) => {
-        console.warn(error);
-        toast.warning("Greška");
-      });
+    if (!withoutSetterFunction) {
+      api.post(`${apiPathFormModal}`, { ...data, ...initialData })
+        .then((response) => {
+          setData(response?.payload);
+          toast.success(`Uspešno`);
+          setOpenModal({ ...openModal, show: false });
+        })
+        .catch((error) => {
+          console.warn(error);
+          toast.warning("Greška");
+        });
+
+    } else {
+      api.post(`${apiPathFormModal}`, { ...data, ...initialData })
+        .then((response) => {
+          toast.success(`Uspešno`);
+          setOpenModal({ ...openModal, show: false });
+        })
+        .catch((error) => {
+          console.warn(error);
+          toast.warning("Greška");
+        });
+    }
   };
 
   useEffect(() => {
@@ -63,8 +78,9 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
 
   return (
     <ListPageModalWrapper anchor={anchor} open={openModal.show ?? false} onClose={() => setOpenModal({ ...openModal, show: false })} sx={sx} variant={variant} onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}>
-      <FormWrapper title={data?.id == null ? "Novi unos" : customTitle ? `${customTitle}: ${data?.name}?` : data?.name}>
-        <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} />
+      <FormWrapper title={customTitle ? customTitle : (data?.id == null ? "Novi unos" : data?.name)}>
+        {shortText ? <Typography variant="body2" sx={{ marginBottom: "0.8rem" }}>{shortText}</Typography> : null}
+        <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} />
       </FormWrapper>
     </ListPageModalWrapper>
   )

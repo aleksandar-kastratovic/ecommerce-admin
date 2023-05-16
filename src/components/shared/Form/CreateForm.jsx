@@ -33,6 +33,7 @@ const CreateForm = ({
   disabled = false,
   queryString = "",
   optionsIsEmpty = () => { },
+  styleCheckbox
 }) => {
   // depending on input type in fields you will get a control
   // value is obvious
@@ -103,7 +104,7 @@ const CreateForm = ({
           );
           break;
         case "checkbox":
-          formItem = <InputCheckbox name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "checkbox")} disabled={disabled} label={item.field_name} />;
+          formItem = <InputCheckbox styleCheckbox={styleCheckbox} name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "checkbox")} disabled={disabled} label={item.field_name} />;
           break;
         case "radio":
           formItem = <InputRadio name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "radio")} disabled={disabled} label={item.field_name} />;

@@ -7,12 +7,11 @@ import ModalForm from "../../components/shared/Modal/ModalForm";
 
 const Products = () => {
 
-  const [openModal, setOpenModal] = useState({ show: false, id: null });
+  const [openModal, setOpenModal] = useState({ show: false, id: null, name: null });
 
   const customActions = {
-    type1: { handler: (rowData) => { console.log(rowData.id); setOpenModal({ show: true, id: rowData.id }) }, icon: "content_copy" }
+    type1: { handler: (rowData) => { console.log(rowData.name); setOpenModal({ show: true, id: rowData.id, name: rowData.name }) }, icon: "content_copy" }
   };
-
 
   return (
     <>
@@ -23,7 +22,21 @@ const Products = () => {
         columnFields={tblFields}
         customActions={customActions}
       />
-      <ModalForm anchor="right" openModal={openModal} setOpenModal={setOpenModal} formFields={listCheckbox} sx={{ padding: "2rem" }} apiPathFormModal="admin/product-items/basic-data" label="Dupliraj" customTitle="Da li ste sigurni da želite da duplirate za proizvod" />
+      <ModalForm
+        anchor="right"
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        formFields={listCheckbox}
+        sx={{ padding: "2rem" }}
+        apiPathFormModal="admin/product-items/list/clone"
+        initialData={{ id_product: openModal.id }}
+        withoutSetterFunction
+        cancelButton
+        label="Dupliraj"
+        styleCheckbox={{ padding: "0 0.563rem 0 0.563rem" }}
+        customTitle={`Da li ste sigurni da želite da duplirate proizvod ${openModal.name}?`}
+        shortText="Dupliranjem se automatski dupliraju sledeći podaci proizvoda: Osnovno, Opis, Deklarijacija. Pored navedenih podataka možete odabrati koje još podatke želite da duplirate za novi proizvod."
+      />
     </>
   );
 };
