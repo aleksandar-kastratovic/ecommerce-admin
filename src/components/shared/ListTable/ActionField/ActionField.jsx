@@ -1,6 +1,7 @@
 import Icon from "@mui/material/Icon";
 
 import scss from "./ActionField.module.scss";
+import Tooltip from '@mui/material/Tooltip';
 
 /**
  * A standardized button with an optional icon.
@@ -26,16 +27,23 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
    *
    * @return {(string|function)[]|null} Tuple of "icon" and the action for the onClick listener.
    */
+  const actionTitle = {
+    edit: "Izmeni",
+    preview: "Pregledaj",
+    delete: "Obriši",
+  };
+
   const parseButton = (action) => {
+    const titleTooltip = actionTitle[action];
     switch (action) {
       case "edit":
-        return ["edit", handleEdit];
+        return ["edit", handleEdit, titleTooltip];
 
       case "preview":
-        return ["preview", handlePreview];
+        return ["preview", handlePreview, titleTooltip];
 
       case "delete":
-        return !systemRequired ? ["delete", handleDelete] : null;
+        return !systemRequired ? ["delete", handleDelete, titleTooltip] : null;
 
       default:
         return null;
@@ -51,16 +59,26 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
   return (
     <div className={scss.wrapper}>
       {actions.map((button) => (
-        <span key={button[0]} className={`${scss.button} ${scss[button[0]]}`} onClick={button[1]}>
-          <Icon className={button[0]}>{button[0]}</Icon>
-        </span>
+        <Tooltip key={button[0]} title={button[2]} placement="top" arrow>
+          <span key={button[0]} className={`${scss.button} ${scss[button[0]]}`} onClick={button[1]}>
+            <Icon className={button[0]}>{button[0]}</Icon>
+          </span>
+        </Tooltip>
       ))}
       {Object.entries(customActions).map((item) => (
-        <span key={item[0]} className={`${scss.icon}`} onClick={() => { item[1].handler(rowData) }}>
-          <Icon className={item[1].icon}>{item[1].icon}</Icon>
-        </span>
+        item[1]?.title ? (
+          <Tooltip key={item[0]} title={item[1].title} placement="top" arrow>
+            <span key={item[0]} className={`${scss.icon}`} onClick={() => { item[1].handler(rowData) }}>
+              <Icon className={item[1].icon}>{item[1].icon} </Icon>
+            </span>
+          </Tooltip>
+        ) : (
+          <span key={item[0]} className={`${scss.icon}`} onClick={() => { item[1].handler(rowData) }}>
+            <Icon className={item[1].icon}>{item[1].icon} </Icon>
+          </span>
+        )
       ))}
-    </div>
+    </div >
   );
 };
 

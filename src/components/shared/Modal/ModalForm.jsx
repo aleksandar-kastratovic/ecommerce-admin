@@ -6,7 +6,8 @@ import { toast } from "react-toastify";
 import FormWrapper from "../Layout/FormWrapper/FormWrapper";
 import ListPageModalWrapper from "./ListPageModalWrapper";
 import Typography from '@mui/material/Typography';
-import { Box, CircularProgress } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box"
 
 /**
  * Modal.
