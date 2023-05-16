@@ -6,7 +6,7 @@ import Loading from "../../Loading/Loading";
 import PageTitle from "../PageTitle/PageTitle";
 import scss from "./PageWrapper.module.scss";
 
-const PageWrapper = ({ title, back, children, actions, ready = true }) => {
+const PageWrapper = ({ title, back, children, actions, ready = true, innerWrapper = true }) => {
   let content = children
 
   // Make sure the content is ready to be shown
@@ -17,7 +17,10 @@ const PageWrapper = ({ title, back, children, actions, ready = true }) => {
   }
 
   return (
-    <Paper elevation={0} className={scss.wrapper}>
+    <Paper
+      elevation={0}
+      className={`${scss.wrapper}`}
+    >
 
       {/* Page title */}
       {title && <PageTitle title={title} back={back} actions={actions} />}
