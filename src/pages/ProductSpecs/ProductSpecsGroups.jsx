@@ -7,7 +7,7 @@ const ProductSpecsGroups = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const customActions = { type1: { handler: (rowData) => { navigate(`${pathname}/${rowData.id}`) }, icon: "attribution" } };
+  const customActions = { type1: { handler: (rowData) => { navigate(`${pathname}/${rowData.id}`) }, icon: "queue_play_next", title: "Atributi i njene vrednosti" } };
 
   return (
     <ListPage

@@ -12,6 +12,7 @@ import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
+import Chip from "@mui/material/Chip";
 
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -407,6 +408,142 @@ export const AutocompleteInput = ({
           "& fieldset": { top: 0 },
         }}
         renderInput={(params) => <TextField {...params} />}
+      />
+      <FormHelperText>{error ? error : description}</FormHelperText>
+    </InputWrapper>
+  );
+};
+
+
+/**
+ * Basic select input
+ *
+ * @param {string} label Field label
+ * @param {boolean} required If field is required
+ * @param {boolean} disabled If field is disabled
+ * @param {string} error Error message
+ * @param {string} name Input field name
+ * @param {string} value Field value
+ * @param {"none"|"dense"|"normal"} margin The margin to use for FormControl.
+ * @param {function} onChange Change handler for the field
+ * @param {string} description Field description
+ * @param {string} fillFromApi Path to get select options from
+ * @param {boolean} usePropName If api call should use prop name at the end of the path
+ * @param {array} options Select options if there is no api call
+ * @param {string} queryString Additional queryString for api call
+ *
+ * @return {JSX.Element}
+ */
+
+// Component that allows you to select more values, as well as add new values
+export const AutocompleteTagsFilled = ({
+  label,
+  required,
+  disabled,
+  error = null,
+  name,
+  value,
+  margin = "dense",
+  onChange = () => { },
+  description,
+  fillFromApi,
+  usePropName,
+  options,
+  queryString = "",
+  optionsIsEmpty = () => { }
+}) => {
+  const api = useAPI();
+  const [opt, setOpt] = useState(options);
+  const [myValue, setMyValue] = useState([]);
+
+  useEffect(() => {
+    let isMounted = true;
+    let path = usePropName ? `${fillFromApi}/${name}?${queryString}` : `${fillFromApi}?${queryString}`;
+    const fillDdl = async () => {
+      await api
+        .get(path)
+        .then((response) => {
+          if (isMounted) {
+            setOpt(response?.payload);
+          }
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
+    };
+
+    if (fillFromApi) {
+      fillDdl();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [fillFromApi]);
+
+  useEffect(() => {
+    if (opt?.length === 0) {
+      optionsIsEmpty(true);
+    } else {
+      optionsIsEmpty(false);
+    }
+
+    let selectedOptions = [];
+    if (opt.length > 0) {
+      if (typeof value === 'object') {
+        value.map((item) => {
+          let selectedOption = opt.find((o) => o.id === item)?.name;
+          if (selectedOption !== undefined) {
+            selectedOptions.push(selectedOption);
+          }
+        });
+      }
+
+      setMyValue(selectedOptions);
+    }
+  }, [opt]);
+
+  return (
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+      <Autocomplete
+        multiple
+        value={myValue}
+        onChange={(event, newInputValue, reason) => {
+          let newIval = newInputValue ? newInputValue : [];
+          setMyValue(newIval);
+
+          let for_save = {
+            'exist': [],
+            'new': [],
+          };
+          if (opt.length > 0) {
+            newInputValue.map((item) => {
+              let selectedOption = opt.find((o) => o.name === item);
+              if (selectedOption) {
+                for_save.exist.push(selectedOption.id);
+              } else {
+                for_save.new.push(item);
+              }
+            });
+          }
+          onChange(name, for_save); // Global save data change
+        }}
+        options={opt.map((option) => option.name)}
+        sx={{
+          "& legend": { display: "none" },
+          "& fieldset": { top: 0 },
+        }}
+        freeSolo
+        renderTags={(value, getTagProps) =>
+          value.map((option, index) => (
+            <Chip variant="outlined" label={option} {...getTagProps({ index })} />
+          ))
+        }
+        renderInput={(params) => (
+          < TextField
+            {...params}
+          />
+        )}
       />
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>

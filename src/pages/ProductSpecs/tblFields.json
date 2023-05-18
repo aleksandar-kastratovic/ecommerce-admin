@@ -23,7 +23,9 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "input",
+    "in_details_new_display": false,
+    "in_details_edit_display": true
   },
   {
     "field_name": "Opis",
@@ -63,7 +65,7 @@
   },
   {
     "field_name": "Klasifikacija",
-    "prop_name": "id_town",
+    "prop_name": "sets",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -72,13 +74,13 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "multi_select",
-    "fillFromApi": "admin/stores/ddl",
+    "input_type": "autocomplete_tags_filled",
+    "fillFromApi": "admin/product-item-specifications/group/ddl",
     "usePropName": true,
     "options": []
   },
   {
-    "field_name": "Akcija",
+    "field_name": "",
     "prop_name": "action",
     "in_main_table": true,
     "in_details": false,

@@ -16,6 +16,7 @@ import {
   InputSwitch,
   InputText,
   AutocompleteInput,
+  AutocompleteTagsFilled,
 } from "./FormInputs/FormInputs";
 import FileButton from "../FileButton/FileButton";
 import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
@@ -144,6 +145,25 @@ const CreateForm = ({
         case "autocomplete":
           formItem = (
             <AutocompleteInput
+              label={item.field_name}
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
+              name={item.prop_name}
+              disabled={disabled}
+              error={error}
+              value={value}
+              options={item.options}
+              onChange={onChangeAutoHandler}
+              description={item.description}
+              fillFromApi={item.fillFromApi}
+              usePropName={item.usePropName}
+              queryString={queryString}
+              optionsIsEmpty={optionsIsEmpty}
+            />
+          );
+          break;
+        case "autocomplete_tags_filled":
+          formItem = (
+            <AutocompleteTagsFilled
               label={item.field_name}
               required={typeof item.required === "number" ? item.required === 1 : item.required}
               name={item.prop_name}

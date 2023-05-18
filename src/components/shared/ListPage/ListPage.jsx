@@ -133,7 +133,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
 
   return (
     <>
-      <PageWrapper title={title} actions={actions} innerWrapper={false}>
+      <PageWrapper title={title} actions={actions}>
         <ListTableToolbar onColumnsChange={setFieldsColumns} fields={fieldsColumns} filters={filters} onSearch={handleSearch} showDatePicker={showDatePicker} />
 
         <ListTable

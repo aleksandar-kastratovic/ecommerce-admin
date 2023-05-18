@@ -143,11 +143,34 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
     setData(initialData);
   }, [initialData]);
 
+
+  const filteredFields = formFields.filter((field) => {
+
+    // Default value for display field in form
+    field.croonus_use_in_details = field.in_details;
+
+    // Check if field need to display on new or edit form
+    if (field?.in_details) {
+      if ('id' in data) {
+        if (data.id === null) {
+          if ('in_details_new_display' in field) {
+            field.croonus_use_in_details = field.in_details_new_display;
+          }
+        } else {
+          if ('in_details_edit_display' in field) {
+            field.croonus_use_in_details = field.in_details_edit_display;
+          }
+        }
+      }
+    }
+    return field;
+  });
+
   return (
     <>
       <Box component="form" autoComplete="off" onSubmit={submitHandler}>
-        {(formFields ?? [])
-          .filter((field) => field.in_details)
+        {(filteredFields ?? [])
+          .filter((field) => field.croonus_use_in_details)
           .map((item, index) => {
             return (
               <CreateForm
