@@ -17,9 +17,9 @@ const ProductSpecsGroups = () => {
     }
   };
 
-  const renderDeleteModalContent = (row_data) => {
+  const renderDeleteModalContent = (rowData) => {
 
-    console.log('row_data', row_data)
+    console.log('row_data', rowData)
 
     return (
       <>

@@ -98,6 +98,9 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
   const handleActions = (id, type, rowData, inputOpts = {}) => () => {
     setSelectedRowData(rowData);
 
+    console.log('handleActions')
+    console.log(rowData)
+
     switch (type) {
       case "edit":
         if (actionNewButton === "modal") {

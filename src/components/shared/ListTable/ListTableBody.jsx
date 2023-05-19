@@ -85,9 +85,9 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
               ) : (
                 <ActionField
                   fieldType={column.input_type}
-                  handleEdit={handleActions(row[previewColumn], "edit")}
-                  handlePreview={handleActions(row["id"], "preview")}
-                  handleDelete={handleActions(row["id"], "delete")}
+                  handleEdit={handleActions(row[previewColumn], "edit", row)}
+                  handlePreview={handleActions(row["id"], "preview", row)}
+                  handleDelete={handleActions(row["id"], "delete", row)}
                   systemRequired={row.system_required}
                   customActions={customActions}
                   handleActions={handleActions}
