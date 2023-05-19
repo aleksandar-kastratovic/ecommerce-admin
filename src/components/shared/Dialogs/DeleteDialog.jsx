@@ -18,13 +18,13 @@ import Icon from "@mui/material/Icon";
  * @return {JSX.Element}
  * @constructor
  */
-const DeleteModal = ({ openDeleteDialog, title, description, handleConfirm, setOpenDeleteDialog, nameOfButton, deafultDeleteIcon = true, sx = {} }) => {
+const DeleteModal = ({ openDeleteDialog, selectedRowData, title, description, handleConfirm, setOpenDeleteDialog, nameOfButton, deafultDeleteIcon = true, sx = {}, children }) => {
   return (
     <Dialog open={openDeleteDialog.show ?? false}>
       <DialogTitle>{title ?? "Brisanje"}</DialogTitle>
 
       <DialogContent>
-        <DialogContentText>{description ?? "Da li ste sigurni da želite da obrišete ovaj zapis?"}</DialogContentText>
+        <DialogContentText>{children ? children(selectedRowData) : (description ?? "Da li ste sigurni da želite da obrišete ovaj zapis?")}</DialogContentText>
       </DialogContent>
 
       <DialogActions>

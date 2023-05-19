@@ -1,5 +1,18 @@
 [
   {
+    "field_name": "Atributi",
+    "prop_name": "attributes",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
     "field_name": "Naziv",
     "prop_name": "name",
     "in_main_table": true,
@@ -19,103 +32,47 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": false,
+    "required": true,
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input",
-    "in_details_new_display": false,
-    "in_details_edit_display": true
+    "input_type": "input"
   },
   {
-    "field_name": "Tip vrednosti",
-    "prop_name": "field_type",
+    "field_name": "Slika",
+    "prop_name": "image",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": true,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "image_button"
+  },
+  {
+    "field_name": "Atribut za definisanje varijanti proizvoda",
+    "prop_name": "use_in_variants",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "options": [
       {
-        "id": "input",
-        "name": "Text"
+        "id": 1,
+        "name": "Da"
       },
       {
-        "id": "select",
-        "name": "Select"
-      },
-      {
-        "id": "multi_select",
-        "name": "Multi select"
-      },
-      {
-        "id": "date_time",
-        "name": "Date"
-      },
-      {
-        "id": "image_button",
-        "name": "Slika"
-      },
-      {
-        "id": "switch",
-        "name": "Switch"
-      },
-      {
-        "id": "radio",
-        "name": "Radio"
-      },
-      {
-        "id": "checkbox",
-        "name": "Checkbox"
-      },
-      {
-        "id": "textarea",
-        "name": "Textarea"
+        "id": 0,
+        "name": "Ne"
       }
     ],
     "input_type": "select"
-  },
-  {
-    "field_name": "Obavezno polje",
-    "prop_name": "required",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "switch"
-  },
-  {
-    "field_name": "Prikaz u filterima",
-    "prop_name": "filter_display",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "switch"
-  },
-  {
-    "field_name": "Naziv u filterima",
-    "prop_name": "filter_name",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
   },
   {
     "field_name": "Status",
@@ -131,24 +88,24 @@
     "options": [
       {
         "id": "on",
-        "name": "On"
+        "name": "on"
       },
       {
         "id": "off",
-        "name": "Off"
+        "name": "off"
       }
     ],
     "input_type": "select"
   },
   {
-    "field_name": "",
+    "field_name": "Akcija",
     "prop_name": "action",
     "in_main_table": true,
     "in_details": false,
     "editable": true,
     "disabled": false,
     "required": false,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "edit_delete"

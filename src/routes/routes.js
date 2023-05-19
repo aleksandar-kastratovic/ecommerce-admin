@@ -22,6 +22,8 @@ import ManufacturersDetails from "../pages/Manufacturers/ManufacturersDetails/Ma
 import ProductDetails from "../pages/Products/ProductDetails/ProductDetails";
 import ProductGroupDetails from "../pages/ProductSpecs/ProductGroupDetails/ProductGroupDetails";
 import ProductSpecsGroups from "../pages/ProductSpecs/ProductSpecsGroups";
+import ProductVariantsAttributes from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
+import ProductVariantsAttributesDetails from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
 import AdminForms from "./../pages/AdminForms/AdminForms";
 import DetailsAdminForm from "./../pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
 import News from "./../pages/News/News";
@@ -36,8 +38,8 @@ import PromotionsCatalogCampaigns from "../pages/PromotionsCatalogCampaigns/Prom
 import PromotionsCatalogCampaignsPageDetails from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaignsPageDetails/PromotionsCatalogCampaignsPageDetails";
 import CartSummary from "../pages/CartSummary/CartSummary";
 import CartSummaryDetails from "../pages/CartSummary/CartSummaryDetails/CartSummaryDetails";
-// import CartItems from "../pages/PromotionsCartItems/PromotionsCartItems";
-// import CartItemsDetails from "../pages/PromotionsCartItems/PromotionsCartItemsPageDetails/PromotionsCartItemsPageDetails";
+import PromotionsCartItems from "../pages/PromotionsCartItems/PromotionsCartItems";
+import PromotionsCartItemsPageDetails from "../pages/PromotionsCartItems/PromotionsCartItemsPageDetails/PromotionsCartItemsPageDetails";
 import Newsletter from "../pages/Newsletter/Newsletter";
 import B2CContactForm from "../pages/B2CContactForm/B2CContactForm";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
@@ -107,6 +109,15 @@ const screens = {
         ],
     ],
     PRODUCT_SPEC: ["/product-specs/groups", "Specifikacija", IconList.inventory, PRODUCT, ProductSpecsGroups, [[":groupId", ProductGroupDetails]]],
+
+    VARIANTS_ATTRIBUTES: [
+        "/product-items-variants-attributes/group-attribute",
+        "Atributi za varijacije",
+        IconList.addToQueue,
+        PRODUCT,
+        ProductVariantsAttributes,
+        [[":groupId", ProductVariantsAttributesDetails]],
+    ],
     B2B_ORDERS: ["/b2b-orders", "Porudžbine", IconList.fileOpen, B2B, B2BOrders, [[":orderId", B2BOrdersDetails]]],
     COMPN: ["/b2b-companies", "Kompanije", IconList.locationCity, B2B, Companies, [[":comId", CompaniesDetails]]],
     REBATE_TIERS: ["/b2b-rebate-tiers", "Rabatne skale", IconList.barChart, B2B, B2BRebateTiersListPage, [[":rebateTierId", B2BRebateTiersDetails]]],
@@ -157,8 +168,8 @@ const screens = {
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],
 
     PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Kampanje kataloga", IconList.campaign, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
-    PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Kampanje za korpu", IconList.campaign, PROMOTIONS, CartSummary, [[":nid", CartSummaryDetails]]],
-    // PROMOTIONS_CART_ITEMS_CAMPAIGNS: ["promotions-cart-items-campaigns", "Kampanje za artikle", IconList.campaign, PROMOTIONS, PromotionsCartItems, [[":nid", PromotionsCartItemsPageDetails]]],
+    PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Iznos korpe", IconList.campaign, PROMOTIONS, CartSummary, [[":nid", CartSummaryDetails]]],
+    PROMOTIONS_CART_ITEMS_CAMPAIGNS: ["promotions-cart-items-campaigns", "Stavke u korpi", IconList.campaign, PROMOTIONS, PromotionsCartItems, [[":nid", PromotionsCartItemsPageDetails]]],
 
     ROLES: ["/roles", "Uloge", IconList.reduceCapacity, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
     USERS: ["/users", "Korisnici", IconList.group, SETTINGS, Users, [[":userId", UsersDetils]]],

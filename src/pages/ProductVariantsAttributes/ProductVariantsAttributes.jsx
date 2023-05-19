@@ -2,31 +2,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import columnFields from "./tblFields.json";
 
-const ProductSpecsGroups = () => {
+const ProductVariantsAttributes = () => {
 
   const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const customActions = {
-    type1: {
-      handler: (rowData) => {
-        navigate(`${pathname}/${rowData.id}`)
-      },
-      icon: "queue_play_next",
-      title: "Atributi i njene vrednosti"
-    }
-  };
-
-  const renderDeleteModalContent = (row_data) => {
-
-    console.log('row_data', row_data)
-
-    return (
-      <>
-        <p>sda</p>
-      </>
-    );
-  };
+  const customActions = { type1: { handler: (rowData) => { navigate(`${pathname}/${rowData.id}`) }, icon: "attribution" } };
 
   return (
     <ListPage
@@ -36,9 +17,8 @@ const ProductSpecsGroups = () => {
       showNewButton={true}
       actionNewButton="modal"
       customActions={customActions}
-      deleteModalChildren={renderDeleteModalContent}
     />
   );
 };
 
-export default ProductSpecsGroups;
+export default ProductVariantsAttributes;

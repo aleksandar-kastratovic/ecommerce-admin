@@ -434,7 +434,6 @@ export const AutocompleteInput = ({
  *
  * @return {JSX.Element}
  */
-
 // Component that allows you to select more values, as well as add new values
 export const AutocompleteTagsFilled = ({
   label,
