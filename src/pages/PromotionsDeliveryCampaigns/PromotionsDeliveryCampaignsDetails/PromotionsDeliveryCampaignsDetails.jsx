@@ -1,18 +1,16 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-
 import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
 import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
+import basic_data from "./forms/basic_data.json";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Conditions from "./panels/Conditions";
+import CalculateForm from "./panels/CalculateForm/CalculateForm";
+import { deepClone } from "@mui/x-data-grid/utils/utils";
 
-import basic_data from "./forms/basic_data.json";
-import calc from "./forms/calc.json"
-
-
-const CartSummaryDetails = () => {
+const PromotionsDeliveryCampaignsDetails = () => {
   const { nid } = useParams();
   const api = useAPI();
   const apiPath = "admin/campaigns/product-catalog/basic-data";
@@ -20,10 +18,8 @@ const CartSummaryDetails = () => {
 
   const init = {
     id: null,
+    calculation_type: null,
     description: null,
-    discount_type: null,
-    discount_value: null,
-    currency: null,
     slug: null,
     name: null,
     description: null,
@@ -37,6 +33,10 @@ const CartSummaryDetails = () => {
 
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [formFields, setFormFields] = useState(basic_data);
+  let newFields = deepClone(formFields);
+  let slugField = newFields.filter((field) => !(field.prop_name === "slug" && nid === "new"));
 
   const handleData = async () => {
     setIsLoading(true);
@@ -69,30 +69,18 @@ const CartSummaryDetails = () => {
       });
   };
 
-  const validateData = (data, field) => {
-    let ret = data;
-    console.log("data", data);
-    console.log("field", field);
-    switch (field) {
-      case "discount_type":
-        ret.currency = "ruzaaa";
-        return ret;
-        console.log("aaaaaaaaaaaaaaaaaa");
-      default:
-        return ret;
-    }
-  };
-
   useEffect(() => {
     handleData();
   }, []);
+
+
 
   const fields = [
     {
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} />,
+      component: <Form formFields={slugField} initialData={data} onSubmit={saveData} />,
     },
     {
       name: "Uslovi",
@@ -103,12 +91,12 @@ const CartSummaryDetails = () => {
     {
       name: "Obračun",
       icon: IconList.calculate,
-      enabled: true,
-      component: <Form formFields={calc} initialData={data} onSubmit={saveData} validateData={validateData} />,
+      enabled: data?.id,
+      component: <CalculateForm campaignId={data?.id} />,
     },
   ];
 
-  return <DetailsPage title={data?.id == null ? "Akcija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
+  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
 };
 
-export default CartSummaryDetails;
+export default PromotionsDeliveryCampaignsDetails;

@@ -1,26 +1,29 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+
 import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
 import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
-import basic_data from "./forms/basic_data.json";
-import calc from "./forms/calc.json"
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Conditions from "./panels/Conditions";
 
-const PromotionsCartItemsPageDetails = () => {
+import basic_data from "./forms/basic_data.json";
+import calc from "./forms/calc.json"
+
+
+const PromotionsCartSummaryDetails = () => {
   const { nid } = useParams();
   const api = useAPI();
   const apiPath = "admin/campaigns/product-catalog/basic-data";
   const navigate = useNavigate();
-
 
   const init = {
     id: null,
     description: null,
     discount_type: null,
     discount_value: null,
+    currency: null,
     slug: null,
     name: null,
     description: null,
@@ -34,7 +37,6 @@ const PromotionsCartItemsPageDetails = () => {
 
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
-  const [currency, setCurrency] = useState("");
 
   const handleData = async () => {
     setIsLoading(true);
@@ -67,30 +69,23 @@ const PromotionsCartItemsPageDetails = () => {
       });
   };
 
-  useEffect(() => {
-    handleData();
-  }, []);
-
-
   const validateData = (data, field) => {
     let ret = data;
-    console.log("data", ret);
+    console.log("data", data);
     console.log("field", field);
     switch (field) {
       case "discount_type":
-        if (ret.discount_type === "percentage") {
-          console.log("percentagepercentagepercentage")
-        }
-        if (ret.discount_type === "amount") {
-          console.log("amountamountamountamount")
-        }
-        if (ret.discount_type === "fix_amount") {
-          console.log("fix_amountfix_amountfix_amountfix_amount")
-        }
+        ret.currency = "ruzaaa";
+        return ret;
+        console.log("aaaaaaaaaaaaaaaaaa");
       default:
         return ret;
     }
   };
+
+  useEffect(() => {
+    handleData();
+  }, []);
 
   const fields = [
     {
@@ -116,4 +111,4 @@ const PromotionsCartItemsPageDetails = () => {
   return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
 };
 
-export default PromotionsCartItemsPageDetails;
+export default PromotionsCartSummaryDetails;

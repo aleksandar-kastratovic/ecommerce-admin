@@ -36,10 +36,12 @@ import StaticPages from "../pages/StaticPages/StaticPages";
 import StaticPagesDetails from "../pages/StaticPages/StaticPagesDetails/StaticPagesDetails";
 import PromotionsCatalogCampaigns from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaigns";
 import PromotionsCatalogCampaignsPageDetails from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaignsPageDetails/PromotionsCatalogCampaignsPageDetails";
-import CartSummary from "../pages/CartSummary/CartSummary";
-import CartSummaryDetails from "../pages/CartSummary/CartSummaryDetails/CartSummaryDetails";
+import PromotionsCartSummary from "../pages/PromotionsCartSummary/PromotionsCartSummary";
+import PromotionsCartSummaryDetails from "../pages/PromotionsCartSummary/PromotionsCartSummaryDetails/PromotionsCartSummaryDetails";
 import PromotionsCartItems from "../pages/PromotionsCartItems/PromotionsCartItems";
 import PromotionsCartItemsPageDetails from "../pages/PromotionsCartItems/PromotionsCartItemsPageDetails/PromotionsCartItemsPageDetails";
+import PromotionsDeliveryCampaigns from "../pages/PromotionsDeliveryCampaigns/PromotionsDeliveryCampaigns";
+import PromotionsDeliveryCampaignsDetails from "../pages/PromotionsDeliveryCampaigns/PromotionsDeliveryCampaignsDetails/PromotionsDeliveryCampaignsDetails";
 import Newsletter from "../pages/Newsletter/Newsletter";
 import B2CContactForm from "../pages/B2CContactForm/B2CContactForm";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
@@ -168,8 +170,9 @@ const screens = {
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],
 
     PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Proizvodi", IconList.campaign, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
-    PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Iznos korpe", IconList.campaign, PROMOTIONS, CartSummary, [[":nid", CartSummaryDetails]]],
+    PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Iznos korpe", IconList.campaign, PROMOTIONS, PromotionsCartSummary, [[":nid", PromotionsCartSummaryDetails]]],
     PROMOTIONS_CART_ITEMS_CAMPAIGNS: ["promotions-cart-items-campaigns", "Stavke u korpi", IconList.campaign, PROMOTIONS, PromotionsCartItems, [[":nid", PromotionsCartItemsPageDetails]]],
+    PROMOTIONS_DELIVERY_CAMPAIGNS: ["promotions-delivery-campaigns", "Dostava", IconList.campaign, PROMOTIONS, PromotionsDeliveryCampaigns, [[":nid", PromotionsDeliveryCampaignsDetails]]],
 
     ROLES: ["/roles", "Uloge", IconList.reduceCapacity, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
     USERS: ["/users", "Korisnici", IconList.group, SETTINGS, Users, [[":userId", UsersDetils]]],

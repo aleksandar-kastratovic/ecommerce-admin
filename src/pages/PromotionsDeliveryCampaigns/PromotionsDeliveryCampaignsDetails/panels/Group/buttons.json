@@ -1,0 +1,18 @@
+[
+  {
+    "id": "product",
+    "name": "Proizvod"
+  },
+  {
+    "id": "customer",
+    "name": "Kupac"
+  },
+  {
+    "id": "cart_items",
+    "name": "Stavke u korpi"
+  },
+  {
+    "id": "cart_summary",
+    "name": "Iznos korpe"
+  }
+]

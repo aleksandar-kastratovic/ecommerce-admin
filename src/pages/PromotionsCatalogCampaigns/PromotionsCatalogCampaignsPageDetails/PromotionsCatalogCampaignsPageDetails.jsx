@@ -96,7 +96,7 @@ const PromotionsCatalogCampaignsPageDetails = () => {
     },
   ];
 
-  return <DetailsPage title={data?.id == null ? "Akcija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
+  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
 };
 
 export default PromotionsCatalogCampaignsPageDetails;
