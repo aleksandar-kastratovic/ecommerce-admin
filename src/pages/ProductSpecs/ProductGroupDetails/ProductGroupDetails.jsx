@@ -12,7 +12,6 @@ const ProductGroupDetails = () => {
     id: null,
     slug: null,
     name: null,
-    // description: null,
     order: null,
     status: "on",
   };

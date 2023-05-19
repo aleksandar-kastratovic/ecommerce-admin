@@ -9,7 +9,7 @@ import ListTableHead from "./ListTableHead";
 
 import styles from "./ListTable.module.scss";
 
-const ListTable = ({ fields = [], listData = [], setSelectedRowData, isLoading = false, onPageChange, handleActions, previewColumn, showAddButtonTableRow, tooltipAddButtonTableRow, customActions }) => {
+const ListTable = ({ fields = [], listData = [], isLoading = false, onPageChange, handleActions, previewColumn, showAddButtonTableRow, tooltipAddButtonTableRow, customActions }) => {
   const { items, pagination } = listData;
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");

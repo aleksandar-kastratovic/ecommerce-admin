@@ -90,6 +90,7 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
                   handleDelete={handleActions(row["id"], "delete")}
                   systemRequired={row.system_required}
                   customActions={customActions}
+                  handleActions={handleActions}
                   rowData={row}
                 />
               )}

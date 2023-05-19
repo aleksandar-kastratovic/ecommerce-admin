@@ -23,7 +23,8 @@ const ProductSpecsGroups = () => {
 
     return (
       <>
-        <p>sda</p>
+        {/* <p>sda</p> */}
+        fd
       </>
     );
   };
