@@ -37,7 +37,7 @@ import Button from "../Button/Button";
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {} }) => {
+const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
@@ -57,6 +57,8 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
 
   // Handle delete dialog
   const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false, id: null, mutate: null });
+
+  const [selectedRowData, setSelectedRowData] = useState({});
 
   const handleDeleteConfirm = async () => {
     api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
@@ -93,7 +95,9 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
     setSearch(value);
   };
 
-  const handleActions = (id, type) => () => {
+  const handleActions = (id, type, rowData, inputOpts = {}) => () => {
+    setSelectedRowData(rowData);
+
     switch (type) {
       case "edit":
         if (actionNewButton === "modal") {
@@ -105,9 +109,15 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
       case "preview":
         navigate(`${pathname}/${id}`);
         break;
-
       case "delete":
-        setOpenDeleteDialog({ show: true, id: id, mutate: null });
+        if (deleteNewButton === "modal") {
+          setOpenModal({ show: true, id: id });
+        } else {
+          setOpenDeleteDialog({ show: true, id: id, mutate: null });
+        }
+        break;
+      case "custom":
+        inputOpts?.handler(rowData);
         break;
 
       default:
@@ -133,7 +143,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
 
   return (
     <>
-      <PageWrapper title={title} actions={actions} innerWrapper={false}>
+      <PageWrapper title={title} actions={actions}>
         <ListTableToolbar onColumnsChange={setFieldsColumns} fields={fieldsColumns} filters={filters} onSearch={handleSearch} showDatePicker={showDatePicker} />
 
         <ListTable
@@ -153,8 +163,8 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
 
       </PageWrapper>
 
-      <ModalForm anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} />
-      <DeleteDialog handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
+      <ModalForm children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} />
+      <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );
 };

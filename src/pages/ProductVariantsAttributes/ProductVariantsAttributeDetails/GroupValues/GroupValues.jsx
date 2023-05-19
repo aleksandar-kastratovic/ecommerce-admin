@@ -1,20 +1,7 @@
 import formFields from "./formFields.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
-import { deepClone } from "@mui/x-data-grid/utils/utils";
 
 const GroupValues = ({ groupId }) => {
-
-  let newFields = deepClone(formFields);
-
-  let currencyField = newFields.find((item) => item.prop_name === "id_group_attribute")
-  if (currencyField == undefined) {
-    console.warn("Polje currency nije pronadjeno!");
-    return;
-  }
-
-  const queryString = `id_group=${groupId}`;
-
-  currencyField.queryString = queryString
 
   return (
     <>
@@ -24,7 +11,7 @@ const GroupValues = ({ groupId }) => {
         editUrl={`admin/product-item-specifications/group-attribute-values`}
         deleteUrl={`admin/product-item-specifications/group-attribute-values`}
         title=""
-        columnFields={newFields}
+        columnFields={formFields}
         actionNewButton="modal"
         addFieldLabel="Dodajte novu vrednost"
         showAddButton={true}

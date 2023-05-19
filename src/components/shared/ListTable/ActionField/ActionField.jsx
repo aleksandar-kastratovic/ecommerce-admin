@@ -19,7 +19,7 @@ import Tooltip from '@mui/material/Tooltip';
  * @return {JSX.Element}
  * @constructor
  */
-const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, customActions, rowData }) => {
+const ActionField = ({ fieldType, systemRequired, handleActions, handlePreview, handleDelete, handleEdit, customActions, rowData }) => {
   /**
    * Parse action into button parameters.
    *
@@ -68,12 +68,12 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
       {Object.entries(customActions).map((item) => (
         item[1]?.title ? (
           <Tooltip key={item[0]} title={item[1].title} placement="top" arrow>
-            <span key={item[0]} className={`${scss.icon}`} onClick={() => { item[1].handler(rowData) }}>
+            <span key={item[0]} className={`${scss.icon}`} onClick={handleActions(rowData.id, "custom", rowData, item[1])}>
               <Icon className={item[1].icon}>{item[1].icon} </Icon>
             </span>
           </Tooltip>
         ) : (
-          <span key={item[0]} className={`${scss.icon}`} onClick={() => { item[1].handler(rowData) }}>
+          <span key={item[0]} className={`${scss.icon}`} onClick={handleActions(rowData.id, "custom", rowData, item[1])}>
             <Icon className={item[1].icon}>{item[1].icon} </Icon>
           </span>
         )
