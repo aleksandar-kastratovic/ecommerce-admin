@@ -144,10 +144,10 @@ export const InputNumber = ({ label, required, disabled, error = null, name, val
  * @return {JSX.Element}
  */
 
-export const InputCheckbox = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description }) => {
+export const InputCheckbox = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, labelStyle, styleCheckbox }) => {
   return (
     <InputWrapper required={required} disabled={disabled} margin={margin} error={error}>
-      <FormControlLabel control={<Checkbox name={name} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
+      <FormControlLabel control={<Checkbox name={name} checked={value} onChange={onChange} disabled={disabled} sx={styleCheckbox} />} label={label} sx={labelStyle} />
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>
   );
@@ -238,7 +238,8 @@ export const InputSelect = ({
   options,
   queryString = "",
   optionsIsEmpty = () => { },
-  className
+  className,
+  onDataReceived = () => null,
 }) => {
   const api = useAPI();
   const [opt, setOpt] = useState(options);
@@ -251,7 +252,9 @@ export const InputSelect = ({
         .get(path)
         .then((response) => {
           if (isMounted) {
-            setOpt(response?.payload);
+            let res = response?.payload;
+            setOpt(res);
+            onDataReceived(res);
           }
         })
         .catch((error) => {
@@ -266,7 +269,7 @@ export const InputSelect = ({
     return () => {
       isMounted = false;
     };
-  }, [fillFromApi]);
+  }, [fillFromApi, queryString]);
 
   useEffect(() => {
     if (opt?.length === 0) {
@@ -275,6 +278,7 @@ export const InputSelect = ({
       optionsIsEmpty(false);
     }
   }, [opt]);
+
 
   return (
     <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
@@ -335,7 +339,7 @@ export const AutocompleteInput = ({
   usePropName,
   options,
   queryString = "",
-  optionsIsEmpty = () => { },
+  optionsIsEmpty = () => { }
 }) => {
   const api = useAPI();
   const [opt, setOpt] = useState(options);

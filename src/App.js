@@ -11,7 +11,7 @@ import "react-toastify/dist/ReactToastify.css";
 import SideNavigation from "./components/SideNavigation";
 import Header from "./components/Header";
 import useHttp from "./hooks/use-http";
-import Loader from "./components/UI/Loader";
+import Loader from "./components/shared/Loading/Loading";
 import { referenceDataService, refreshTokenService, userScreensService } from "./helpers/services";
 import CroonusTheme from "./theme";
 
@@ -119,7 +119,7 @@ function App() {
                     {/* Toast */}
                     <ToastContainer position="top-center" theme="colored" transition={Flip} autoClose={800} newestOnTop={false} draggable={false} closeOnClick hideProgressBar pauseOnHover />
 
-                    {(isLoading || isLoading2) && <Loader />}
+                    {(isLoading || isLoading2) && <Loader size={50} />}
                 </div>
             </ThemeProvider>
         </QueryClientProvider>

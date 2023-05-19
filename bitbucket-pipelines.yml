@@ -278,3 +278,9 @@ pipelines:
           <<: *execute
           name: HunnyBunny
           deployment: hunnybunny
+
+    prod-winea:
+      - step:
+          <<: *execute
+          name: Winea
+          deployment: winea

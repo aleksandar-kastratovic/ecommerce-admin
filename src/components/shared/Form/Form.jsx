@@ -10,7 +10,7 @@ import ImageDialog from "../Dialogs/ImageDialog";
 import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancelButton = false, submitButton = true, queryString = "", onChange = () => { }, validateData = (data) => data }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), cancelButton = false, submitButton = true, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox }) => {
   const navigate = useNavigate();
   const [data, setData] = useState(initialData ?? {});
   const [inputsError, setInputsError] = useState([]);
@@ -41,7 +41,11 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
         };
       }
     }
+    if (!isEmpty(errors)) {
+      console.error("Nisu popunjena sva obavezna polja. ", errors);
+    }
     isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
+
   };
 
   const formItemAutoCompleteChangeHandler = (name, value) => {
@@ -67,14 +71,13 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
         newData = { ...data, [target.name]: target.value };
     }
 
-    setData(validateData(newData, target.name));
-
+    newData = validateData(newData, target.name);
+    setData(newData);
+    onChange(newData, target.name)
     setInputErrors(target.name);
   };
 
-  useEffect(() => {
-    onChange(data);
-  }, [data]);
+
 
   const formImageUpload = useCallback(
     (event) => {
@@ -159,12 +162,13 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, cancel
                 value={Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name]}
                 queryString={queryString}
                 disabled={item.disabled || (item.prop_name === "slug" && data.system_required === 1)}
+                styleCheckbox={styleCheckbox}
               />
             );
           })}
         <Buttons>
-          {cancelButton && <Button label="Odustani" onClick={() => navigate(-1)} />}
-          {submitButton && <Button type="submit" label="Sačuvaj" variant="contained" />}
+          {cancelButton && <Button label="Odustani" onClick={onCancel} />}
+          {submitButton && <Button type="submit" label={label ? label : "Sačuvaj"} variant="contained" />}
         </Buttons>
       </Box>
       <ImageDialog

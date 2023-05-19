@@ -22,7 +22,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   const [fieldValue, setFieldValue] = useState(null);
 
   const api = useAPI();
-  const apiPath = "admin/campaigns-product-catalog/conditions";
+  const apiPath = "admin/campaigns/product-catalog/conditions";
 
   useEffect(() => {
     setFieldCondition(getValueField("condition"));
@@ -64,7 +64,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
       </Tooltip>
 
       <div className={scss.groupHolder}>
-        <Box className={"d-flex align-items-center"}>
+        <Box sx={{ display: "flex", alignItems: "center" }}>
           Ako su
           <span className={scss.span}>
             <InputSelect className={scss.inputConditionValue} label="" required={false} name="" fillFromApi={`${apiPath}/group/ddl/condition`} usePropName={false} value={fieldCondition} options={[]}
@@ -91,7 +91,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
       <div className={`${scss.buttonHolder}`}>
         <Buttons>
           <Button
-            label="Dodajte novi uslov za akciju"
+            label="Novi uslov"
             icon={<Icon>difference</Icon>}
             sx={{ width: "100%" }}
             disabled={!isLastSelected}

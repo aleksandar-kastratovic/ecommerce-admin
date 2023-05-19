@@ -10,13 +10,15 @@ import InputValue from "../InputValue/InputValue";
 import scss from "./Row.module.scss";
 
 const Row = ({ data, id, handleRemoveComponent }) => {
-  const apiPath = 'admin/campaigns-product-catalog/conditions';
+  const apiPath = 'admin/campaigns/product-catalog/conditions';
 
   const [rowData, setRowData] = useState(data);
   const [openDialog, setOpenDialog] = useState({ show: false });
   const [valueOptions, setValueOptions] = useState(rowData.fields.find((item) => item.field === "condition")?.selected?.props ?? {
     component: null,
     input_type: null,
+    query_tbl: null,
+    query_col: null,
   });
 
   const checkIfAllFieldsSelected = () => {
@@ -56,58 +58,64 @@ const Row = ({ data, id, handleRemoveComponent }) => {
           }
         }
 
-        if (item.field !== 'value') {
-          return (
-            <InputSelect
-              className={scss.inputSelect}
-              key={item.field + queryString}
-              required={false}
-              name={item.field}
-              fillFromApi={`${apiPath}/row/ddl`}
-              usePropName={true}
-              queryString={queryString}
-              value={item?.selected?.id ?? 0}
-              onChange={({ target }, { props }) => {
-                if (item.field === 'condition' && props.props != null) {
-                  setValueOptions(props.props);
-                }
-                let tmp = { ...rowData };
-                tmp.fields[index].selected.id = target.value;
-                tmp.fields[index].selected.name = props.valuename;
-                if (item.field === 'condition' && props.props != null) {
-                  tmp.fields[index].selected.props = props.props;
-                }
-                for (let i = index + 1; i < tmp.fields.length; i++) {
-                  tmp.fields[i].selected = { id: null, name: null };
-                  if (tmp.fields[i].field === "value")
-                    tmp.fields[i].selected = null;
+        switch (item.field) {
+          case "entity_group":
+            return null;
+            break;
+          case "value":
+            return (
+              <InputValue
+                key={item.field + queryString}
+                selectedValues={item.selected}
+                setOpenDialog={setOpenDialog}
+                openDialog={openDialog}
+                fillFromApi={`${apiPath}/row/ddl`}
+                queryString={queryString}
+                usePropName={true}
+                name={item.field}
+                component={valueOptions.component}
+                inputType={valueOptions.input_type}
+                onChange={(selected) => {
+                  let tmp = { ...rowData };
+                  tmp.fields[index].selected = selected;
+                  setRowData(tmp);
+                }}
+              />
+            );
+            break;
+          default:
+            return (
+              <InputSelect
+                className={scss.inputSelect}
+                key={item.field + queryString}
+                required={false}
+                name={item.field}
+                fillFromApi={`${apiPath}/row/ddl`}
+                usePropName={true}
+                queryString={queryString}
+                value={item?.selected?.id ?? 0}
+                onChange={({ target }, { props }) => {
+                  if (item.field === 'condition' && props.props != null) {
+                    setValueOptions(props.props);
+                  }
+                  let tmp = { ...rowData };
+                  tmp.fields[index].selected.id = target.value;
+                  tmp.fields[index].selected.name = props.valuename;
+                  if (item.field === 'condition' && props.props != null) {
+                    tmp.fields[index].selected.props = props.props;
+                  }
+                  for (let i = index + 1; i < tmp.fields.length; i++) {
+                    tmp.fields[i].selected = { id: null, name: null };
+                    if (tmp.fields[i].field === "value")
+                      tmp.fields[i].selected = null;
 
-                }
-                setRowData(tmp);
-                checkIfAllFieldsSelected();
-              }}
-            />
-          );
-        } else {
-          return (
-            <InputValue
-              key={item.field + queryString}
-              selectedValues={item.selected}
-              setOpenDialog={setOpenDialog}
-              openDialog={openDialog}
-              fillFromApi={`${apiPath}/row/ddl`}
-              queryString={queryString}
-              usePropName={true}
-              name={item.field}
-              component={valueOptions.component}
-              inputType={valueOptions.input_type}
-              onChange={(selected) => {
-                let tmp = { ...rowData };
-                tmp.fields[index].selected = selected;
-                setRowData(tmp);
-              }}
-            />
-          );
+                  }
+                  setRowData(tmp);
+                  checkIfAllFieldsSelected();
+                }}
+              />
+            );
+            break;
         }
       })}
 

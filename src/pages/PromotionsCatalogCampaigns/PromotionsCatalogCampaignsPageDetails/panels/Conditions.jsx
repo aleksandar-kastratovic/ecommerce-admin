@@ -2,11 +2,25 @@ import React, { useEffect, useState, useRef } from "react";
 
 import useAPI from "../../../../api/api";
 import Group from "./Group/Group";
+import MainGroup from "./Group/MainGroup";
+import ProductGroup from "./Group/ProductGroup"
 import Row from "./Row/Row";
+import ProductRow from "./Row/ProductRow"
 import { v4 } from "uuid";
 import DeleteDialog from "../../../../components/shared/Dialogs/DeleteDialog";
-import group_file from "./Group/group_file.json";
-import row_file from "./Row/row_file.json";
+
+import init_group_file from "./Group/GroupFile/init_group_file.json";
+import product_group_file from "./Group/GroupFile/product_group_file.json";
+import customer_group_file from "./Group/GroupFile/customer_group_file.json";
+import cart_items_group_file from "./Group/GroupFile/cart_items_group_file.json";
+import cart_summary_group_file from "./Group/GroupFile/cart_summary_group_file.json";
+
+import init_row_file from "./Row/RowFile/init_row_file.json";
+import product_row_file from "./Row/RowFile/product_row_file.json";
+import customer_row_file from "./Row/RowFile/customer_row_file.json";
+import cart_items_row_file from "./Row/RowFile/cart_items_row_file.json";
+import cart_summary_row_file from "./Row/RowFile/cart_summary_row_file.json"
+
 import Buttons from "../../../../components/shared/Form/Buttons/Buttons";
 import Button from "../../../../components/shared/Button/Button";
 import { toast } from "react-toastify";
@@ -19,7 +33,7 @@ const Conditions = ({ campaignId }) => {
   const [removeComponentId, setRemoveComponentId] = useState(null);
 
   const api = useAPI();
-  const apiPath = 'admin/campaigns-product-catalog/conditions';
+  const apiPath = 'admin/campaigns/product-catalog/conditions';
 
   // The handleData function uses the API to retrieve data about campaign conditions.
   async function handleData() {
@@ -40,7 +54,7 @@ const Conditions = ({ campaignId }) => {
   const setContentData = (data = []) => {
     // If there is no data, it should take the default value
     if (!data.length) {
-      data = [{ ...cloneDeep(group_file), id: v4() }];
+      data = [{ ...cloneDeep(init_group_file), id: v4() }];
     }
     setData(data);
   };
@@ -63,6 +77,28 @@ const Conditions = ({ campaignId }) => {
               }
 
               switch (t_row?.type_component) {
+                case 'main':
+                  return (
+                    <MainGroup
+                      key={t_row.id}
+                      id={t_row.id}
+                      data={t_row}
+                      rules={rules}
+                      handleAddComponent={handleAddComponent}
+                      handleRemoveComponent={handleRemoveComponent}
+                    />
+                  );
+                case 'product':
+                  return (
+                    <ProductGroup
+                      key={t_row.id}
+                      id={t_row.id}
+                      data={t_row}
+                      rules={rules}
+                      handleAddComponent={handleAddComponent}
+                      handleRemoveComponent={handleRemoveComponent}
+                    />
+                  );
                 case 'default':
                 default:
                   return (
@@ -78,6 +114,16 @@ const Conditions = ({ campaignId }) => {
               }
             } else if (t_row.type === 'row') {
               switch (t_row?.type_component) {
+                case 'product':
+                  return (
+                    <ProductRow
+                      key={t_row.id}
+                      id={t_row.id}
+                      data={t_row}
+                      handleRemoveComponent={handleRemoveComponent}
+                    />
+                  );
+                  break;
                 case 'default':
                 default:
                   return (
@@ -122,8 +168,8 @@ const Conditions = ({ campaignId }) => {
   It takes two parameters: parentId which is the ID of the parent component to which the new component should be added, and componentType which specifies whether the new component should be a group or a row.
   The function calls the addComponent function to modify the data state by adding the new component to the appropriate parent. 
   The modified data state is then passed to the setContentData function to update the component state.*/
-  function handleAddComponent(parentId, componentType) {
-    let temp = addComponent(data, parentId, componentType);
+  function handleAddComponent(parentId, componentType, componentTypeComponent) {
+    let temp = addComponent(data, parentId, componentType, componentTypeComponent);
     setContentData(temp);
   }
 
@@ -156,7 +202,7 @@ const Conditions = ({ campaignId }) => {
   If it does, the function adds a new group or row component to the rules array of the current component, depending on the componentType argument. 
   If the current component has child components, the function is called recursively on the child components. 
   The updated data array is returned.*/
-  const addComponent = (param_data, parentId, componentType) => {
+  const addComponent = (param_data, parentId, componentType, componentTypeComponent) => {
     if (!checkIfAllSelected(param_data[0])) {
       toast.warn('Selektujte sva input polja!');
       return param_data;
@@ -164,12 +210,28 @@ const Conditions = ({ campaignId }) => {
     return param_data.map((t_row) => {
       if (t_row.id === parentId) {
         if (componentType === 'group') {
-
+          let group_file = [];
+          switch (componentTypeComponent) {
+            case "product":
+              group_file = product_group_file;
+              break;
+            default:
+              group_file = init_group_file;
+              break;
+          }
 
           const newRules = [{ ...cloneDeep(group_file), id: v4() }];
           return { ...t_row, rules: [...t_row.rules, ...newRules] };
         } else if (componentType === 'row') {
-
+          let row_file = [];
+          switch (componentTypeComponent) {
+            case "product":
+              row_file = product_row_file;
+              break;
+            default:
+              row_file = init_row_file;
+              break;
+          }
 
           const newRules = [{ ...cloneDeep(row_file), id: v4() }];
           return { ...t_row, rules: [...t_row.rules, ...newRules] };
@@ -177,7 +239,7 @@ const Conditions = ({ campaignId }) => {
       } else if (t_row.rules?.length > 0) {
         return {
           ...t_row,
-          rules: addComponent(t_row.rules, parentId, componentType),
+          rules: addComponent(t_row.rules, parentId, componentType, componentTypeComponent),
         };
       }
 

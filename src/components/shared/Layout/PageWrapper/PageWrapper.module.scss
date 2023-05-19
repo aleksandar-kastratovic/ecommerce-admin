@@ -1,3 +1,7 @@
 .wrapper {
-	padding: 2rem;
+    padding: 2rem;
+}
+
+.wrapper .wrapper {
+    padding: 0;
 }

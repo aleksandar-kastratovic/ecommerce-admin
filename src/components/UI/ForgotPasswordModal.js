@@ -10,6 +10,7 @@ import Input from "./Input";
 import { regax } from "../../helpers/const";
 import Button from "../shared/Button/Button";
 import Modal from "../shared/Modal/Modal";
+import Box from "@mui/material/Box";
 
 const ForgotPasswordModal = ({ openModal, handleClose, forgotPassword }) => {
     let {
@@ -45,11 +46,12 @@ const ForgotPasswordModal = ({ openModal, handleClose, forgotPassword }) => {
             closeModal={handleClose}
             dividers={true}
             content={
-                <Accordion defaultExpanded={true}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        {/* <FontAwesomeIcon icon={faUserTag} /> */}
-                        <PersonIcon />
-                        Podaci o korisniku:
+                <Accordion defaultExpanded={true} sx={{ overflow: "hidden" }}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ backgroundColor: "var(--main-bg-color)" }}>
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <PersonIcon sx={{ fontSize: "1.2rem", marginRight: "0.5rem", color: "#28a86e" }} />
+                            Podaci o korisniku:
+                        </Box>
                     </AccordionSummary>
                     <AccordionDetails>
                         <Input
@@ -60,10 +62,10 @@ const ForgotPasswordModal = ({ openModal, handleClose, forgotPassword }) => {
                             disabled={false}
                             inputType="input"
                             type="text"
-                            class={"form-control input-style form-control-lg " + (emailHasError ? "invalid" : "")}
                             text="Email"
                             text_class="m-0 required"
-                            inputErrorText="je obavezan!"
+                            inputErrorText="Email adresa je obavezna!"
+                            sx={{ width: "100%" }}
                         />
                     </AccordionDetails>
                 </Accordion>
