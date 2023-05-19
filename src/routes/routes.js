@@ -167,7 +167,7 @@ const screens = {
     B2C_CONTACT_FORMS: ["/b2c-contactform", "Kontakt forma", IconList.contactPhone, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],
 
-    PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Kampanje kataloga", IconList.campaign, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
+    PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Proizvodi", IconList.campaign, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
     PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Iznos korpe", IconList.campaign, PROMOTIONS, CartSummary, [[":nid", CartSummaryDetails]]],
     PROMOTIONS_CART_ITEMS_CAMPAIGNS: ["promotions-cart-items-campaigns", "Stavke u korpi", IconList.campaign, PROMOTIONS, PromotionsCartItems, [[":nid", PromotionsCartItemsPageDetails]]],
 
