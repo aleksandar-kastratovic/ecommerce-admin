@@ -48,6 +48,8 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
+  const [deleteModalData, setDeleteModalData] = useState({});
+
   const [openModal, setOpenModal] = useState({ show: false, id: null });
 
   // Default delete URL is the same as the main URL
@@ -59,14 +61,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
   const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false, id: null, mutate: null });
 
   const [selectedRowData, setSelectedRowData] = useState({});
-
-  const handleDeleteConfirm = async () => {
-    api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
-      .then(() => toast.success("Zapis je uspešno obrisan"))
-      .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
-
-    setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
-  };
+  const [selectedActionsButton, setSelectedActionsButton] = useState({});
 
   // Load the data
   const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, openModal.show], () => api.list(apiUrl, { page, search, ...filters }));
@@ -95,39 +90,87 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
     setSearch(value);
   };
 
-  const handleActions = (id, type, rowData, inputOpts = {}) => () => {
+  const handleDeleteModalData = (data) => {
+    setDeleteModalData(data);
+    return data;
+  };
+
+  const handleOnClickActions = (id, type, rowData, inputOpts = {}) => () => {
     setSelectedRowData(rowData);
+    setSelectedActionsButton(inputOpts);
 
-    console.log('handleActions')
-    console.log(rowData)
-
-    switch (type) {
-      case "edit":
-        if (actionNewButton === "modal") {
-          setOpenModal({ show: true, id: id });
-        } else {
+    if (inputOpts?.clickHandler) {
+      switch (inputOpts.clickHandler.type) {
+        case "navigate":
+          let navigate_path = inputOpts.clickHandler.fnc(rowData);
+          navigate(navigate_path);
+          break;
+        case "dialog_delete":
+          let dialog_delete_opt = inputOpts.clickHandler.fnc(rowData, handleDeleteModalData);
+          if (dialog_delete_opt) {
+            setOpenDeleteDialog(dialog_delete_opt);
+          }
+          break;
+        case "modal_form":
+          let modal_form_opt = inputOpts.clickHandler.fnc(rowData);
+          if (modal_form_opt) {
+            setOpenModal(modal_form_opt);
+          }
+          break;
+        default:
+          inputOpts.clickHandler.fnc(rowData);
+          break;
+      }
+    } else {
+      switch (type) {
+        case "edit":
+          if (actionNewButton === "modal") {
+            setOpenModal({ show: true, id: id });
+          } else {
+            navigate(`${pathname}/${id}`);
+          }
+          break;
+        case "preview":
           navigate(`${pathname}/${id}`);
-        }
-        break;
-      case "preview":
-        navigate(`${pathname}/${id}`);
-        break;
-      case "delete":
-        if (deleteNewButton === "modal") {
-          setOpenModal({ show: true, id: id });
-        } else {
-          setOpenDeleteDialog({ show: true, id: id, mutate: null });
-        }
-        break;
-      case "custom":
-        inputOpts?.handler(rowData);
-        break;
-
-      default:
-        break;
+          break;
+        case "delete":
+          if (deleteNewButton === "modal") {
+            setOpenModal({ show: true, id: id });
+          } else {
+            setOpenDeleteDialog({ show: true, id: id, mutate: null });
+          }
+          break;
+      }
     }
-    if (customActions[type] != null) {
-      customActions[type].action(id);
+
+  };
+
+  const handleDeleteConfirm = async () => {
+
+    if (selectedActionsButton?.deleteClickHandler) {
+      switch (selectedActionsButton.deleteClickHandler.type) {
+        case "navigate":
+          let navigate_path = selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
+          navigate(navigate_path);
+          break;
+        case "dialog_delete":
+          let dialog_delete_opt = selectedActionsButton.deleteClickHandler.fnc(selectedRowData, deleteModalData);
+          setOpenDeleteDialog(dialog_delete_opt);
+          break;
+        case "modal_form":
+          let modal_form_opt = selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
+          setOpenModal(modal_form_opt);
+          break;
+        default:
+          selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
+          break;
+      }
+    } else {
+      api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
+        .then(() => toast.success("Zapis je uspešno obrisan"))
+        .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+
+      setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
     }
   };
 
@@ -142,8 +185,6 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
     });
   }
 
-
-
   return (
     <>
       <PageWrapper title={title} actions={actions}>
@@ -152,7 +193,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
         <ListTable
           fields={flatten(fieldsColumns).filter((field) => field.in_main_table)}
           listData={response?.payload}
-          handleActions={handleActions}
+          handleOnClickActions={handleOnClickActions}
           isLoading={isLoading}
           page={page}
           onPageChange={setPage}

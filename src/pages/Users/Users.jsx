@@ -8,7 +8,21 @@ import tblFields from "./tblFields.json";
 const Users = () => {
   const [openDialog, setOpenDialog] = useState({ show: false, userId: null });
 
-  const customActions = { type1: { handler: (rowData) => setOpenDialog({ show: true, userId: rowData.id }), icon: "key" } };
+  const customActions = {
+    key: {
+      type: "custom",
+      display: true,
+      position: 2,
+      clickHandler: {
+        type: '',
+        fnc: (rowData) => {
+          return setOpenDialog({ show: true, userId: rowData.id });
+        },
+      },
+      icon: "key",
+      title: "Promeni lozinku",
+    },
+  };
 
   return (
     <>

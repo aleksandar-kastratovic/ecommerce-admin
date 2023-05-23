@@ -3,12 +3,39 @@ import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 
 const CategoriesGroupsListPage = () => {
-  const navigate = useNavigate();
+
   const { pathname } = useLocation();
+
   const customActions = {
-    type1: { handler: (rowData) => { navigate(`${pathname}/tree/${rowData.id}`) }, icon: "account_tree" },
-    type2: { handler: (rowData) => { navigate(`${pathname}/category/${rowData.id}`) }, icon: "list" }
+    list: {
+      type: "custom",
+      display: true,
+      position: 2,
+      clickHandler: {
+        type: 'navigate',
+        fnc: (rowData) => {
+          return `${pathname}/category/${rowData.id}`;
+        },
+      },
+      icon: "list",
+      // title: "Kategorije",
+    },
+    accountTree: {
+      type: "custom",
+      display: true,
+      position: 3,
+      clickHandler: {
+        type: 'navigate',
+        fnc: (rowData) => {
+          return `${pathname}/tree/${rowData.id}`;
+        },
+      },
+      icon: "account_tree",
+      title: "Kategorije",
+    }
   };
+
+
 
   return (
     <ListPage

@@ -10,8 +10,21 @@ const Products = () => {
   const [openModal, setOpenModal] = useState({ show: false, id: null, name: null });
 
   const customActions = {
-    type1: { handler: (rowData) => { console.log(rowData); setOpenModal({ show: true, id: rowData.id, name: rowData.name }) }, icon: "content_copy", title: "Dupliraj" }
+    contentCopy: {
+      type: "custom",
+      display: true,
+      position: 2,
+      clickHandler: {
+        type: '',
+        fnc: (rowData) => {
+          return setOpenModal({ show: true, id: rowData.id, name: rowData.name });
+        },
+      },
+      icon: "content_copy",
+      title: "Dupliraj"
+    }
   };
+
 
   return (
     <>

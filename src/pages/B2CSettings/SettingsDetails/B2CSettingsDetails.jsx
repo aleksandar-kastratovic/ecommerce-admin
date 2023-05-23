@@ -14,6 +14,7 @@ const B2CSettingsDetails = () => {
 
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     setIsLoading(true);
     api.list(`${apiPath}/${B2CId}`)

@@ -3,8 +3,11 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
+import CircularProgress from "@mui/material/CircularProgress";
 import DialogTitle from "@mui/material/DialogTitle";
 import Icon from "@mui/material/Icon";
+import { useState } from "react";
+
 
 /**
  * Ask for confirmation when deleting a record.
@@ -19,12 +22,31 @@ import Icon from "@mui/material/Icon";
  * @constructor
  */
 const DeleteModal = ({ openDeleteDialog, selectedRowData, title, description, handleConfirm, setOpenDeleteDialog, nameOfButton, deafultDeleteIcon = true, sx = {}, children }) => {
+
+  const childrenData = () => {
+    switch (true) {
+      case children !== undefined:
+        return children(selectedRowData);
+      case openDeleteDialog?.children !== undefined:
+        return openDeleteDialog.children;
+      default:
+        return (
+          <>
+            <span>
+              {description ?? "Da li ste sigurni da želite da obrišete ovaj zapis?"}
+            </span>
+          </>
+        );
+    }
+  };
+
+
   return (
     <Dialog open={openDeleteDialog.show ?? false}>
       <DialogTitle>{title ?? "Brisanje"}</DialogTitle>
 
-      <DialogContent>
-        <DialogContentText>{children ? children(selectedRowData) : (description ?? "Da li ste sigurni da želite da obrišete ovaj zapis?")}</DialogContentText>
+      <DialogContent sx={{ margin: "0 auto" }}>
+        <DialogContentText>{childrenData()}</DialogContentText>
       </DialogContent>
 
       <DialogActions>

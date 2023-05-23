@@ -4,10 +4,23 @@ import columnFields from "./tblFields.json";
 
 const ProductVariantsAttributes = () => {
 
-  const navigate = useNavigate();
   const { pathname } = useLocation();
 
-  const customActions = { type1: { handler: (rowData) => { navigate(`${pathname}/${rowData.id}`) }, icon: "attribution" } };
+  const customActions = {
+    attribution: {
+      type: "custom",
+      display: true,
+      position: 2,
+      clickHandler: {
+        type: 'navigate',
+        fnc: (rowData) => {
+          return `${pathname}/${rowData.id}`;
+        },
+      },
+      icon: "attribution",
+      title: "Dupliraj"
+    }
+  };
 
   return (
     <ListPage
