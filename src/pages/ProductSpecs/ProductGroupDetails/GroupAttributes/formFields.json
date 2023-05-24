@@ -52,26 +52,6 @@
         "name": "Multi select"
       },
       {
-        "id": "date_time",
-        "name": "Date"
-      },
-      {
-        "id": "image_button",
-        "name": "Slika"
-      },
-      {
-        "id": "switch",
-        "name": "Switch"
-      },
-      {
-        "id": "radio",
-        "name": "Radio"
-      },
-      {
-        "id": "checkbox",
-        "name": "Checkbox"
-      },
-      {
         "id": "textarea",
         "name": "Textarea"
       }
@@ -86,7 +66,7 @@
     "editable": true,
     "disabled": false,
     "required": false,
-    "description": "",
+    "description": "Obavezan unos vrednosti prilikom unosa specifikacije.",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "switch"
@@ -99,7 +79,7 @@
     "editable": true,
     "disabled": false,
     "required": false,
-    "description": "",
+    "description": "Ukoliko želite da se vrednost prikazuje krajnjem kupcu u filterima.",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "switch"
@@ -112,7 +92,7 @@
     "editable": true,
     "disabled": false,
     "required": false,
-    "description": "",
+    "description": "Naziv koji se prikazuje krajnjem kupcu u filterima, popunjava se ukoliko treba da bude drugačiji od vrednosti polja naziva.",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"

@@ -34,7 +34,8 @@ const CreateForm = ({
   disabled = false,
   queryString = "",
   optionsIsEmpty = () => { },
-  styleCheckbox
+  styleCheckbox,
+  autoFocus
 }) => {
   // depending on input type in fields you will get a control
   // value is obvious
@@ -69,6 +70,7 @@ const CreateForm = ({
               error={error}
               onChange={onChangeHandler}
               disabled={disabled}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -84,6 +86,7 @@ const CreateForm = ({
               onImageUpload={onImageUpload}
               onImagePreview={onImagePreview}
               disabled={disabled}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -101,14 +104,15 @@ const CreateForm = ({
               onImageUpload={onImageUpload}
               onOpenImageDialog={onOpenImageDialog}
               disabled={disabled}
+              autoFocus={autoFocus}
             />
           );
           break;
         case "checkbox":
-          formItem = <InputCheckbox styleCheckbox={styleCheckbox} name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "checkbox")} disabled={disabled} label={item.field_name} />;
+          formItem = <InputCheckbox styleCheckbox={styleCheckbox} name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "checkbox")} disabled={disabled} label={item.field_name} autoFocus={autoFocus} />;
           break;
         case "radio":
-          formItem = <InputRadio name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "radio")} disabled={disabled} label={item.field_name} />;
+          formItem = <InputRadio name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "radio")} disabled={disabled} label={item.field_name} autoFocus={autoFocus} />;
           break;
         case "switch":
           formItem = (
@@ -120,6 +124,7 @@ const CreateForm = ({
               disabled={disabled}
               error={error}
               description={item.description}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -139,6 +144,7 @@ const CreateForm = ({
               usePropName={item.usePropName}
               queryString={item.queryString ?? queryString}
               optionsIsEmpty={optionsIsEmpty}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -158,6 +164,7 @@ const CreateForm = ({
               usePropName={item.usePropName}
               queryString={queryString}
               optionsIsEmpty={optionsIsEmpty}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -177,6 +184,7 @@ const CreateForm = ({
               usePropName={item.usePropName}
               queryString={queryString}
               optionsIsEmpty={optionsIsEmpty}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -196,6 +204,7 @@ const CreateForm = ({
               usePropName={item.usePropName}
               queryString={queryString}
               optionsIsEmpty={optionsIsEmpty}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -210,6 +219,7 @@ const CreateForm = ({
               error={error}
               onChange={onChangeHandler}
               disabled={disabled}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -224,6 +234,7 @@ const CreateForm = ({
               error={error}
               onChange={onChangeHandler}
               disabled={disabled}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -238,14 +249,15 @@ const CreateForm = ({
               error={error}
               onChange={onChangeHandler}
               disabled={disabled}
+              autoFocus={autoFocus}
             />
           );
           break;
         case "multiple_images": //TODO
-          formItem = <InputMultipleImages list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} />;
+          formItem = <InputMultipleImages list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} autoFocus={autoFocus} />;
           break;
         case "multiple_files": //TODO
-          formItem = <InputMultipleFiles list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} />;
+          formItem = <InputMultipleFiles list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} autoFocus={autoFocus} />;
           break;
         case "file_button":
           formItem = (
@@ -259,6 +271,7 @@ const CreateForm = ({
               onImageUpload={onImageUpload}
               onOpenImageDialog={onOpenImageDialog}
               disabled={disabled}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -273,6 +286,7 @@ const CreateForm = ({
               error={error}
               onChange={onChangeHandler}
               disabled={disabled}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -287,6 +301,7 @@ const CreateForm = ({
               error={error}
               onChange={onChangeHandler}
               disabled={disabled}
+              autoFocus={autoFocus}
             />
           );
           break;
@@ -302,6 +317,7 @@ const CreateForm = ({
               error={error}
               onChange={onChangeHandler}
               disabled={disabled}
+              autoFocus={autoFocus}
             />
           );
           break;

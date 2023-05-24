@@ -31,7 +31,7 @@ import Box from "@mui/material/Box"
  * @constructor
  */
 
-const ModalForm = ({ anchor, selectedRowData, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData, label, customTitle, shortText, cancelButton, withoutSetterFunction = false, styleCheckbox, children }) => {
+const ModalForm = ({ anchor, selectedRowData, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData, label, customTitle, shortText, cancelButton, withoutSetterFunction = false, styleCheckbox, children, queryString = [] }) => {
 
   const { id } = openModal;
   const api = useAPI();
@@ -40,8 +40,21 @@ const ModalForm = ({ anchor, selectedRowData, openModal, setOpenModal, sx, varia
 
   const handleData = async () => {
     setIsLoading(true);
+
+    let queryStringLink = [];
+    if (queryString.length) {
+      queryString.map((item) => {
+        queryStringLink.push(item.field + "=" + item.value);
+      });
+    }
+
+    let url = `${apiPathFormModal}/${id}`;
+    if (queryStringLink) {
+      url += "?" + queryStringLink.join("&");
+    }
+
     await api
-      .get(`${apiPathFormModal}/${id}`)
+      .get(url)
       .then((response) => {
         setData(response?.payload);
         setIsLoading(false);

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -37,9 +37,11 @@ import Button from "../Button/Button";
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren }) => {
+const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
+
+  const showAddButtonRef = useRef(null);
 
   const api = useAPI();
   const navigate = useNavigate();
@@ -82,6 +84,9 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
       toast.warning("Greška");
     }
   }, [isError]);
+
+
+
 
   // Update the search term and reset to the first page
   const handleSearch = (value) => {
@@ -185,6 +190,26 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
     });
   }
 
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const keyCode = event.keyCode;
+      const shiftPress = event.shiftKey ? event.shiftKey : keyCode === 16 ? true : false;
+      const ctrlPress = event.ctrlKey ? event.ctrlKey : keyCode === 17 ? true : false;
+
+      // ctrl + space => open model from right side
+      // 32 => "Space"
+      if (ctrlPress && keyCode === 32) {
+        setOpenModal({ show: true, id: "new" });
+
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
+
   return (
     <>
       <PageWrapper title={title} actions={actions}>
@@ -203,11 +228,11 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
           customActions={customActions}
         />
 
-        {showAddButton && <Button onClick={() => setOpenModal({ show: true, id: "new" })} label={addFieldLabel} icon="add" sx={{ display: "flex", margin: "0 auto", marginTop: "2rem", textTransform: "inherit" }} />}
+        {showAddButton && <Button refForward={showAddButtonRef} onClick={() => setOpenModal({ show: true, id: "new" })} label={addFieldLabel} icon="add" sx={{ display: "flex", margin: "0 auto", marginTop: "2rem", textTransform: "inherit" }} />}
 
       </PageWrapper>
 
-      <ModalForm children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} />
+      <ModalForm children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} />
       <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );
