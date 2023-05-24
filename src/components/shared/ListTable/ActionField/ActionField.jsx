@@ -19,7 +19,7 @@ import Tooltip from '@mui/material/Tooltip';
  * @return {JSX.Element}
  * @constructor
  */
-const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, handleEdit, customActions, rowData }) => {
+const ActionField = ({ fieldType, systemRequired, handleOnClickActions, handlePreview, handleDelete, handleEdit, customActions, rowData }) => {
   /**
    * Parse action into button parameters.
    *
@@ -27,53 +27,52 @@ const ActionField = ({ fieldType, systemRequired, handlePreview, handleDelete, h
    *
    * @return {(string|function)[]|null} Tuple of "icon" and the action for the onClick listener.
    */
-  const actionTitle = {
-    edit: "Izmeni",
-    preview: "Pregledaj",
-    delete: "Obriši",
-  };
-
-  const parseButton = (action) => {
-    const titleTooltip = actionTitle[action];
-    switch (action) {
-      case "edit":
-        return ["edit", handleEdit, titleTooltip];
-
-      case "preview":
-        return ["preview", handlePreview, titleTooltip];
-
-      case "delete":
-        return !systemRequired ? ["delete", handleDelete, titleTooltip] : null;
-
-      default:
-        return null;
-    }
-  };
 
   // Actions are joined with '_', extract them and make sure we can parse then into button parameters
-  const actions = fieldType
-    .split("_")
-    .map((action) => parseButton(action))
-    .filter((action) => action);
+  const actions = (() => {
+    let default_buttons = fieldType.split("_");
+
+    // Prikazuje samo buttons za koje se definise kljuc u JSON u input_type
+    if (default_buttons.length) {
+      if (typeof customActions === "object") {
+        default_buttons.map((display_button) => {
+          Object.keys(customActions).map((key) => {
+            if (display_button == key) {
+              customActions[key].display = true;
+            }
+          });
+        });
+      }
+    }
+
+    // TODO: proveriti da li treba da se prikazuje delete dugme
+    if (typeof customActions === "object") {
+      Object.keys(customActions).map((key) => {
+        if ("delete" == key && systemRequired) {
+          customActions[key].display = false;
+        }
+      });
+    }
+
+    let buttons = Object.keys(customActions)
+      .map((key) => customActions[key])
+      .filter((item) => item.display === true)
+      .sort((a, b) => a.position - b.position);
+
+    return buttons;
+  });
 
   return (
     <div className={scss.wrapper}>
-      {actions.map((button) => (
-        <Tooltip key={button[0]} title={button[2]} placement="top" arrow>
-          <span key={button[0]} className={`${scss.button} ${scss[button[0]]}`} onClick={button[1]}>
-            <Icon className={button[0]}>{button[0]}</Icon>
-          </span>
-        </Tooltip>
-      ))}
-      {Object.entries(customActions).map((item) => (
+      {Object.entries(actions()).map((item) => (
         item[1]?.title ? (
           <Tooltip key={item[0]} title={item[1].title} placement="top" arrow>
-            <span key={item[0]} className={`${scss.icon}`} onClick={() => { item[1].handler(rowData) }}>
+            <span key={item[0]} className={`${scss.icon}`} onClick={handleOnClickActions(rowData.id, item[1].type, rowData, item[1])}>
               <Icon className={item[1].icon}>{item[1].icon} </Icon>
             </span>
           </Tooltip>
         ) : (
-          <span key={item[0]} className={`${scss.icon}`} onClick={() => { item[1].handler(rowData) }}>
+          <span key={item[0]} className={`${scss.icon}`} onClick={handleOnClickActions(rowData.id, item[1].type, rowData, item[1])}>
             <Icon className={item[1].icon}>{item[1].icon} </Icon>
           </span>
         )

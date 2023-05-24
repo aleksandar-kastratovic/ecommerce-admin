@@ -26,7 +26,7 @@
 
 .wrapper {
     margin-top: 2rem;
-    height: calc(100vh - 26.75rem);
+    max-height: calc(100vh - 26.75rem);
 
     table {
         border: 1px solid rgba(224, 224, 224, 1);

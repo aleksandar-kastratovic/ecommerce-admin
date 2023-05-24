@@ -9,7 +9,7 @@ import calc from "./forms/calc.json"
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Conditions from "./panels/Conditions";
 
-const PromotionsCatalogCampaignsPageDetails = () => {
+const PromotionsCartItemsPageDetails = () => {
   const { nid } = useParams();
   const api = useAPI();
   const apiPath = "admin/campaigns/product-catalog/basic-data";
@@ -113,7 +113,7 @@ const PromotionsCatalogCampaignsPageDetails = () => {
     },
   ];
 
-  return <DetailsPage title={data?.id == null ? "Akcija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
+  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
 };
 
-export default PromotionsCatalogCampaignsPageDetails;
+export default PromotionsCartItemsPageDetails;

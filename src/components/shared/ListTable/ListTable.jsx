@@ -9,7 +9,7 @@ import ListTableHead from "./ListTableHead";
 
 import styles from "./ListTable.module.scss";
 
-const ListTable = ({ fields = [], listData = [], isLoading = false, onPageChange, handleActions, previewColumn, showAddButtonTableRow, tooltipAddButtonTableRow, customActions }) => {
+const ListTable = ({ fields = [], listData = [], isLoading = false, onPageChange, handleOnClickActions, previewColumn, showAddButtonTableRow, tooltipAddButtonTableRow, customActions }) => {
   const { items, pagination } = listData;
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
@@ -27,7 +27,7 @@ const ListTable = ({ fields = [], listData = [], isLoading = false, onPageChange
         <Table>
           <ListTableHead fields={fields} order={order} orderBy={orderBy} onRequestSort={handleSort} rowCount={fields.length} />
 
-          <ListTableBody items={items ?? []} fields={fields} isLoading={isLoading} handleActions={handleActions} error={null} previewColumn={previewColumn} showAddButtonTableRow={showAddButtonTableRow} tooltipAddButtonTableRow={tooltipAddButtonTableRow} customActions={customActions} />
+          <ListTableBody items={items ?? []} fields={fields} isLoading={isLoading} handleOnClickActions={handleOnClickActions} error={null} previewColumn={previewColumn} showAddButtonTableRow={showAddButtonTableRow} tooltipAddButtonTableRow={tooltipAddButtonTableRow} customActions={customActions} />
         </Table>
       </TableContainer>
 

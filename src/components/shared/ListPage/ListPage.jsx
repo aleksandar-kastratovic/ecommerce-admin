@@ -37,7 +37,7 @@ import Button from "../Button/Button";
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {} }) => {
+const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
@@ -47,6 +47,8 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
   const [fieldsColumns, setFieldsColumns] = useState(columnFields);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+
+  const [deleteModalData, setDeleteModalData] = useState({});
 
   const [openModal, setOpenModal] = useState({ show: false, id: null });
 
@@ -58,13 +60,8 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
   // Handle delete dialog
   const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false, id: null, mutate: null });
 
-  const handleDeleteConfirm = async () => {
-    api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
-      .then(() => toast.success("Zapis je uspešno obrisan"))
-      .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
-
-    setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
-  };
+  const [selectedRowData, setSelectedRowData] = useState({});
+  const [selectedActionsButton, setSelectedActionsButton] = useState({});
 
   // Load the data
   const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, openModal.show], () => api.list(apiUrl, { page, search, ...filters }));
@@ -93,28 +90,87 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
     setSearch(value);
   };
 
-  const handleActions = (id, type) => () => {
-    switch (type) {
-      case "edit":
-        if (actionNewButton === "modal") {
-          setOpenModal({ show: true, id: id });
-        } else {
+  const handleDeleteModalData = (data) => {
+    setDeleteModalData(data);
+    return data;
+  };
+
+  const handleOnClickActions = (id, type, rowData, inputOpts = {}) => () => {
+    setSelectedRowData(rowData);
+    setSelectedActionsButton(inputOpts);
+
+    if (inputOpts?.clickHandler) {
+      switch (inputOpts.clickHandler.type) {
+        case "navigate":
+          let navigate_path = inputOpts.clickHandler.fnc(rowData);
+          navigate(navigate_path);
+          break;
+        case "dialog_delete":
+          let dialog_delete_opt = inputOpts.clickHandler.fnc(rowData, handleDeleteModalData);
+          if (dialog_delete_opt) {
+            setOpenDeleteDialog(dialog_delete_opt);
+          }
+          break;
+        case "modal_form":
+          let modal_form_opt = inputOpts.clickHandler.fnc(rowData);
+          if (modal_form_opt) {
+            setOpenModal(modal_form_opt);
+          }
+          break;
+        default:
+          inputOpts.clickHandler.fnc(rowData);
+          break;
+      }
+    } else {
+      switch (type) {
+        case "edit":
+          if (actionNewButton === "modal") {
+            setOpenModal({ show: true, id: id });
+          } else {
+            navigate(`${pathname}/${id}`);
+          }
+          break;
+        case "preview":
           navigate(`${pathname}/${id}`);
-        }
-        break;
-      case "preview":
-        navigate(`${pathname}/${id}`);
-        break;
-
-      case "delete":
-        setOpenDeleteDialog({ show: true, id: id, mutate: null });
-        break;
-
-      default:
-        break;
+          break;
+        case "delete":
+          if (deleteNewButton === "modal") {
+            setOpenModal({ show: true, id: id });
+          } else {
+            setOpenDeleteDialog({ show: true, id: id, mutate: null });
+          }
+          break;
+      }
     }
-    if (customActions[type] != null) {
-      customActions[type].action(id);
+
+  };
+
+  const handleDeleteConfirm = async () => {
+
+    if (selectedActionsButton?.deleteClickHandler) {
+      switch (selectedActionsButton.deleteClickHandler.type) {
+        case "navigate":
+          let navigate_path = selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
+          navigate(navigate_path);
+          break;
+        case "dialog_delete":
+          let dialog_delete_opt = selectedActionsButton.deleteClickHandler.fnc(selectedRowData, deleteModalData);
+          setOpenDeleteDialog(dialog_delete_opt);
+          break;
+        case "modal_form":
+          let modal_form_opt = selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
+          setOpenModal(modal_form_opt);
+          break;
+        default:
+          selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
+          break;
+      }
+    } else {
+      api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
+        .then(() => toast.success("Zapis je uspešno obrisan"))
+        .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+
+      setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
     }
   };
 
@@ -129,17 +185,15 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
     });
   }
 
-
-
   return (
     <>
-      <PageWrapper title={title} actions={actions} innerWrapper={false}>
+      <PageWrapper title={title} actions={actions}>
         <ListTableToolbar onColumnsChange={setFieldsColumns} fields={fieldsColumns} filters={filters} onSearch={handleSearch} showDatePicker={showDatePicker} />
 
         <ListTable
           fields={flatten(fieldsColumns).filter((field) => field.in_main_table)}
           listData={response?.payload}
-          handleActions={handleActions}
+          handleOnClickActions={handleOnClickActions}
           isLoading={isLoading}
           page={page}
           onPageChange={setPage}
@@ -153,8 +207,8 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, title, columnFields, showDatePic
 
       </PageWrapper>
 
-      <ModalForm anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} />
-      <DeleteDialog handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
+      <ModalForm children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} />
+      <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );
 };

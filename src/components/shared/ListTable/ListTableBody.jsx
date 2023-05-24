@@ -16,7 +16,7 @@ import { useState } from "react";
  *
  * @param {[][]} items The items to show.
  * @param {[]} fields The definition of fields that are shown as columns.
- * @param {function(id: int, action: string)} handleActions The handler for the row actions.
+ * @param {function(id: int, action: string)} handleOnClickActions The handler for the row actions.
  * @param {boolean} isLoading True if the table is still loading, false otherwise.
  * @param {?string} error An error message to show, or null if there is no error.
  * @param {string default:"id"} error Column value that is sent to preview page
@@ -27,11 +27,13 @@ import { useState } from "react";
  * @return {JSX.Element}
  * @constructor
  */
-const ListTableBody = ({ items, fields, handleActions, isLoading = false, error = null, previewColumn = "id", showAddButtonTableRow = false, tooltipAddButtonTableRow, customActions }) => {
+const ListTableBody = ({ items, fields, handleOnClickActions, isLoading = false, error = null, previewColumn = "id", showAddButtonTableRow = false, tooltipAddButtonTableRow, customActions }) => {
   const [editingCell, setEditingCell] = useState(null); // stanje koje se koristi da se pamti koji je redak i kolona trenutno u procesu uređivanja
   const handleCellDoubleClick = (event, rowId, columnPropName, currentValue) => {
     setEditingCell({ rowId, columnPropName }); // pamti koji se ćelija trenutno uređuje
   };
+
+
   const handleCellBlur = (event, rowId, columnPropName, currentValue) => {
     setEditingCell(null); // resetuje stanje kada korisnik završi sa uređivanjem ćelije
 
@@ -44,9 +46,56 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
       const newData = [...tableData];
       editedCell.value = currentValue;
       setTableData(newData);
-      handleActions(rowId, "edit", { [columnPropName]: currentValue });
+      handleOnClickActions(rowId, "edit", { [columnPropName]: currentValue });
     }
   };
+
+  const actionButtons = () => {
+    let buttons = {};
+
+    buttons.edit = {
+      type: "edit",
+      display: true,
+      icon: "edit",
+      title: "Izmeni",
+      position: 1,
+    };
+
+    buttons.delete = {
+      type: "delete",
+      display: true,
+      icon: "delete",
+      title: "Obriši",
+      position: 1000,
+    };
+
+    buttons.preview = {
+      type: "preview",
+      display: false,
+      icon: "preview",
+      title: "Pregledaj",
+      position: 2,
+    };
+
+    if (typeof customActions === "object") {
+      Object.keys(customActions).map((key) => {
+
+        switch (true) {
+          case key == 'edit':
+          case key == 'delete':
+          case key == 'preview':
+            buttons[key] = Object.assign({}, buttons[key], { ...customActions[key] });
+            break;
+          default:
+            buttons[key] = customActions[key];
+            break;
+        }
+      });
+    }
+
+    return buttons;
+  };
+
   // What to show
   let content;
   switch (true) {
@@ -85,11 +134,9 @@ const ListTableBody = ({ items, fields, handleActions, isLoading = false, error 
               ) : (
                 <ActionField
                   fieldType={column.input_type}
-                  handleEdit={handleActions(row[previewColumn], "edit")}
-                  handlePreview={handleActions(row["id"], "preview")}
-                  handleDelete={handleActions(row["id"], "delete")}
                   systemRequired={row.system_required}
-                  customActions={customActions}
+                  customActions={actionButtons()}
+                  handleOnClickActions={handleOnClickActions}
                   rowData={row}
                 />
               )}

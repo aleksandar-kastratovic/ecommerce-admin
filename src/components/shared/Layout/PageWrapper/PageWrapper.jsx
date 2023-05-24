@@ -6,7 +6,7 @@ import Loading from "../../Loading/Loading";
 import PageTitle from "../PageTitle/PageTitle";
 import scss from "./PageWrapper.module.scss";
 
-const PageWrapper = ({ title, back, children, actions, ready = true, innerWrapper = true }) => {
+const PageWrapper = ({ title, back, children, actions, ready = true }) => {
   let content = children
 
   // Make sure the content is ready to be shown
