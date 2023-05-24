@@ -23,6 +23,9 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
     name: "",
   });
 
+  let propAutoFocus = false;
+  let checkIsFocused = false;
+
   function setInputErrors(name) {
     setInputsError((inputsError) => {
       delete inputsError[name];
@@ -76,8 +79,6 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
     onChange(newData, target.name)
     setInputErrors(target.name);
   };
-
-
 
   const formImageUpload = useCallback(
     (event) => {
@@ -143,7 +144,6 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
     setData(initialData);
   }, [initialData]);
 
-
   const filteredFields = formFields.filter((field) => {
 
     // Default value for display field in form
@@ -172,6 +172,18 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
         {(filteredFields ?? [])
           .filter((field) => field.croonus_use_in_details)
           .map((item, index) => {
+
+            // Priprema vrednosti pre nego sto se prosledi u komponentu
+            let temp_value = Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name];
+
+            // Provera da li input ima vrednost, ukoliko nema prvi input koji nema vrednost se fokusira da bi korisnik mogao da nesmetano unosi podatke
+            if (temp_value === null && !checkIsFocused) {
+              checkIsFocused = true;
+              propAutoFocus = true;
+            } else {
+              propAutoFocus = false;
+            }
+
             return (
               <CreateForm
                 data-test-id="admin-form"
@@ -182,10 +194,11 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
                 item={item}
                 key={index}
                 error={inputsError[item.prop_name] ? inputsError[item.prop_name].content : null}
-                value={Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name]}
+                value={temp_value}
                 queryString={queryString}
                 disabled={item.disabled || (item.prop_name === "slug" && data.system_required === 1)}
                 styleCheckbox={styleCheckbox}
+                autoFocus={propAutoFocus}
               />
             );
           })}

@@ -60,6 +60,12 @@ const GroupValues = ({ groupId }) => {
         key="group-attribute-values"
         apiUrl={`admin/product-item-specifications/group-attribute-values/${groupId}`}
         editUrl={`admin/product-item-specifications/group-attribute-values`}
+        editUrlQueryString={[
+          {
+            field: "id_group",
+            value: groupId
+          }
+        ]}
         title=""
         columnFields={newFields}
         actionNewButton="modal"
