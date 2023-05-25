@@ -284,3 +284,9 @@ pipelines:
           <<: *execute
           name: Winea
           deployment: winea
+
+    prod-aztech:
+      - step:
+          <<: *execute
+          name: Aztech
+          deployment: aztech
