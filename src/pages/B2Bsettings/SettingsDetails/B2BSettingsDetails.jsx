@@ -7,6 +7,7 @@ import IconList from "../../../helpers/icons";
 import B2BSettingsForm from "./panels/B2BSettingsForm";
 
 const B2BSettingsDetails = () => {
+
   const { B2BId } = useParams();
 
   const api = useAPI();
@@ -14,6 +15,7 @@ const B2BSettingsDetails = () => {
 
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
     setIsLoading(true);
     api.list(`${apiPath}/${B2BId}`)
