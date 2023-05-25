@@ -8,6 +8,10 @@ import Loading from "../../../../components/shared/Loading/Loading";
 const B2CSettingsForm = ({ form_slug, module, submodule }) => {
   const api = useAPI();
 
+  console.log("form)slug", form_slug);
+  console.log("module", module);
+  console.log("submodule", submodule);
+
   const [isLoading, setIsLoading] = useState(false);
 
   const [formFields, setFormFields] = useState([]);

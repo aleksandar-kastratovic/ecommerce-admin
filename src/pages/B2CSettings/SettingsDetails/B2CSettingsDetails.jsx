@@ -7,6 +7,7 @@ import IconList from "../../../helpers/icons";
 import B2CSettingsForm from "./panels/B2CSettingsForm";
 
 const B2CSettingsDetails = () => {
+
   const { B2CId } = useParams();
 
   const api = useAPI();
@@ -19,7 +20,7 @@ const B2CSettingsDetails = () => {
     setIsLoading(true);
     api.list(`${apiPath}/${B2CId}`)
       .then((response) => {
-        setData(response);
+        setData(response?.payload);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -28,7 +29,8 @@ const B2CSettingsDetails = () => {
       });
   }, []);
 
-  const fields = (data?.payload?.items ?? []).map((panel) => {
+
+  const fields = (data?.items ?? []).map((panel) => {
     return {
       name: panel?.name,
       icon: IconList.settings,
