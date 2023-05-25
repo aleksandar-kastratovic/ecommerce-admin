@@ -10,8 +10,9 @@ import { flatten } from "lodash";
 import { useQuery } from "react-query";
 import useAPI from "../../../api/api";
 import ModalForm from "../Modal/ModalForm";
-import Button from "../Button/Button";
-// import ModalCheckboxList from "../Modal/ModalCheckboxList";
+import ButtonRef from "../Button/ButtonRef";
+import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
+
 
 /**
  * Show a standardized list.
@@ -196,11 +197,10 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
       const shiftPress = event.shiftKey ? event.shiftKey : keyCode === 16 ? true : false;
       const ctrlPress = event.ctrlKey ? event.ctrlKey : keyCode === 17 ? true : false;
 
-      // ctrl + space => open model from right side
+      // shift + space => open model from right side
       // 32 => "Space"
-      if (ctrlPress && keyCode === 32) {
+      if (showAddButton && shiftPress && keyCode === 32) {
         setOpenModal({ show: true, id: "new" });
-
       }
     };
 
@@ -228,9 +228,14 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
           customActions={customActions}
         />
 
-        {showAddButton && <Button refForward={showAddButtonRef} onClick={() => setOpenModal({ show: true, id: "new" })} label={addFieldLabel} icon="add" sx={{ display: "flex", margin: "0 auto", marginTop: "2rem", textTransform: "inherit" }} />}
+        {showAddButton && (
+          <CustomTooltipRef title="Prečica: SHIFT + SPACE" placement="top" arrow>
+            < ButtonRef ref={showAddButtonRef} onClick={() => setOpenModal({ show: true, id: "new" })} label={addFieldLabel} icon="add" sx={{ display: "flex", margin: "0 auto", marginTop: "2rem", textTransform: "inherit" }} />
+          </CustomTooltipRef>
+        )}
 
-      </PageWrapper>
+
+      </PageWrapper >
 
       <ModalForm children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} />
       <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />

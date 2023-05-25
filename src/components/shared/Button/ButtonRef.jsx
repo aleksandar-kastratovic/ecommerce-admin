@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { Button as MaterialButton } from "@mui/material";
 import scss from "./Button.module.scss";
 import Icon from "@mui/material/Icon";
@@ -16,13 +17,13 @@ import Icon from "@mui/material/Icon";
  * @return {JSX.Element}
  * @constructor
  */
-const Button = ({ icon, label, onClick, type = "button", variant = "outlined", disabled = false, sx = {} }) => {
+const Button = forwardRef(({ icon, label, onClick, type = "button", variant = "outlined", disabled = false, sx = {}, ...props }, ref) => {
   return (
-    <MaterialButton onClick={onClick} variant={variant} className={scss.button} type={type} disabled={disabled} sx={sx}>
+    <MaterialButton ref={ref} onClick={onClick} variant={variant} className={scss.button} type={type} disabled={disabled} sx={sx} {...props}>
       {icon && <Icon className={scss.icon}>{icon}</Icon>}
       {label}
     </MaterialButton>
   );
-};
+});
 
 export default Button;
