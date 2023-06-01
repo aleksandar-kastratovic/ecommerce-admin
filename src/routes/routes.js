@@ -81,10 +81,12 @@ import B2BContactFormDetails from "../pages/B2BContactForm/Details/B2BContactFor
 import B2COrders from "../pages/B2COrders/B2COrders";
 import B2COrdersDetails from "../pages/B2COrders/Details/B2COrdersDetails";
 import B2CContactFormDetails from "../pages/B2CContactForm/B2CContacFormDetails/B2CContactFormDetails";
+import Homepage from "../pages/Homepage/Homepage";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, PROMOTIONS, SETTINGS, TOOLS } = MenuGroup;
 const screens = {
+    HOMEPAGE: ["/homepage", "", "", "", Homepage],
     CATEG: [
         "/product-categories",
         "Kategorije",

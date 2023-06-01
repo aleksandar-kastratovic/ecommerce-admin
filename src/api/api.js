@@ -102,6 +102,15 @@ class ApiService {
     delete(path) {
         return this._execute("DELETE", path);
     }
+
+    /**
+     * Allow to change user data
+     *
+     * @param {array} userData Structure recived from AuthContext.user.
+     */
+    userDataUpdate(userData) {
+        return (this.user = userData);
+    }
 }
 
 /**

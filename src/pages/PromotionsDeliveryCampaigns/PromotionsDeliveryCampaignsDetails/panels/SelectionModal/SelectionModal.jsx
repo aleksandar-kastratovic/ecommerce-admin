@@ -52,21 +52,6 @@ const SelectionModal = ({
   };
 
   return (
-    // <Dialog open={openDialog.show ?? false}>
-    //   <DialogContent>
-    //     {opt && ComponentToRender()}
-    //   </DialogContent>
-
-    //   <DialogActions>
-    //     <Button
-    //       variant="outlined"
-    //       onClick={() => setOpenDialog({ ...openDialog, show: false })}
-    //       data-test-id="btn-cancel"
-    //     >
-    //       Zatvori
-    //     </Button>
-    //   </DialogActions>
-    // </Dialog>
     <ListPageModalWrapper anchor="right" open={openDialog.show ?? false} onClose={() => setOpenDialog({ ...openDialog, show: false })} onCloseButtonClick={() => setOpenDialog({ ...openDialog, show: false })}>
       <Box sx={{ padding: "2rem" }}>
         {opt && ComponentToRender()}

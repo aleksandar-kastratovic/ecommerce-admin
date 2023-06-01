@@ -1,41 +1,44 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
-
 import { ThemeProvider } from "@mui/material";
 import ApplicationRouter from "./routes/ApplicationRouter";
 import AuthContext from "./store/auth-contex";
 import { Flip, toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 import SideNavigation from "./components/SideNavigation";
 import Header from "./components/Header";
-import useHttp from "./hooks/use-http";
 import Loader from "./components/shared/Loading/Loading";
-import { referenceDataService, refreshTokenService, userScreensService } from "./helpers/services";
 import CroonusTheme from "./theme";
+import useAPI from "./api/api";
 
-function App() {
+const App = () => {
+    const api = useAPI();
     const queryClient = new QueryClient();
     const authCtx = useContext(AuthContext);
     let navigate = useNavigate();
-    const { isLoading, sendRequest: referenceDataRequest } = useHttp();
-    const { isLoading2, sendRequest: userScreenRequest } = useHttp();
-
+    const [isLoading, setIsLoading] = useState(false);
     const [sidenav, setSidenav] = useState(true);
     const [activeTheme, setActiveTheme] = useState(localStorage.getItem("theme") === "true" ?? false);
 
     useEffect(() => {
         if (authCtx.isRefreshingToken) {
-            const setUserData = (userData) => {
-                const expirationTime = new Date(new Date().getTime() + +userData.expires_in * 60 * 1000);
-
-                authCtx.login(userData, expirationTime);
-            };
-
             const refreshToken = async () => {
-                const data = await refreshTokenService(referenceDataRequest);
-                setUserData(data);
+                await api
+                    .get(`admin/profile/refresh-token`)
+                    .then((response) => {
+                        const data = response?.payload;
+
+                        if (!data) {
+                            toast.warning("Greška!");
+                        }
+
+                        const expirationTime = new Date(new Date().getTime() + +data.expires_in * 60 * 1000);
+                        authCtx.login(data, expirationTime);
+                    })
+                    .catch((error) => {
+                        console.warn(error);
+                    });
             };
 
             refreshToken();
@@ -49,6 +52,38 @@ function App() {
             navigate(`/`);
         }
     }, [authCtx.isTokenExpired]);
+
+    useEffect(() => {
+        if (authCtx.isLoggedIn) {
+            // Update user data after login
+            api.userDataUpdate(authCtx.user);
+
+            const setUserScreens = (userScreens) => {
+                authCtx.getUserScreens(userScreens);
+            };
+
+            const userScreens = async () => {
+                setIsLoading(true);
+                await api
+                    .get(`admin/profile/user-permissions`)
+                    .then((response) => {
+                        const data = response?.payload;
+
+                        if (!data) {
+                            toast.warning("Greška!");
+                        }
+
+                        setUserScreens(response?.payload);
+                    })
+                    .catch((error) => {
+                        console.warn(error);
+                    });
+                setIsLoading(false);
+            };
+
+            userScreens();
+        }
+    }, [authCtx.isLoggedIn]);
 
     let routerClass;
     if (!authCtx.isLoggedIn) {
@@ -66,32 +101,6 @@ function App() {
         document.body.classList.add("theme-light");
         document.body.classList.remove("theme-dark");
     }
-
-    useEffect(() => {
-        const setReferenceData = (referenceData) => {
-            authCtx.getReferenceData(referenceData);
-        };
-
-        const setUserScreens = (userScreens) => {
-            authCtx.getUserScreens(userScreens);
-        };
-
-        if (authCtx.isLoggedIn) {
-            const referenceData = async () => {
-                const data = await referenceDataService(referenceDataRequest);
-                setReferenceData(data);
-            };
-
-            referenceData();
-
-            const userScreens = async () => {
-                const data = await userScreensService(userScreenRequest);
-                setUserScreens(data);
-            };
-
-            userScreens();
-        }
-    }, [referenceDataRequest, userScreenRequest, authCtx.isLoggedIn]);
 
     return (
         <QueryClientProvider client={queryClient}>
@@ -119,11 +128,11 @@ function App() {
                     {/* Toast */}
                     <ToastContainer position="top-center" theme="colored" transition={Flip} autoClose={800} newestOnTop={false} draggable={false} closeOnClick hideProgressBar pauseOnHover />
 
-                    {(isLoading || isLoading2) && <Loader size={50} />}
+                    {isLoading && <Loader size={50} />}
                 </div>
             </ThemeProvider>
         </QueryClientProvider>
     );
-}
+};
 
 export default App;

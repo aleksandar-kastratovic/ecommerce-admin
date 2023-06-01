@@ -44,6 +44,7 @@ const GroupValues = () => {
   return (
     <>
       <ListPage
+        listPageId="GroupValues"
         key="group-attribute-values"
         apiUrl={`admin/product-items-variants-attributes/group-attribute-values`}
         editUrl={`admin/product-items-variants-attributes/group-attribute-values`}
