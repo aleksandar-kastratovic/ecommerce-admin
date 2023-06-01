@@ -82,11 +82,13 @@ import B2COrders from "../pages/B2COrders/B2COrders";
 import B2COrdersDetails from "../pages/B2COrders/Details/B2COrdersDetails";
 import B2CContactFormDetails from "../pages/B2CContactForm/B2CContacFormDetails/B2CContactFormDetails";
 import Homepage from "../pages/Homepage/Homepage";
+import Error404 from "../pages/Error/Error404";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, PROMOTIONS, SETTINGS, TOOLS } = MenuGroup;
 const screens = {
     HOMEPAGE: ["/homepage", "", "", "", Homepage],
+    ERROR404: ["*", "", "", "", Error404, []],
     CATEG: [
         "/product-categories",
         "Kategorije",
@@ -189,7 +191,7 @@ const screens = {
     B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, TOOLS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
     IMPORT: ["/import", "Uvoz podataka", IconList.upload, TOOLS, ImportSteps],
     B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, TOOLS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
-    ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, TOOLS, AdminForms, [[":FormId", DetailsAdminForm]]],
+    ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, TOOLS, AdminForms, [[":formId", DetailsAdminForm]]],
 };
 
 /**

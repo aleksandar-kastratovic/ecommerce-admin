@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Error404 from "../pages/Error/Error404";
 import LoginPage from "../pages/LoginPage";
 import AuthContext from "../store/auth-contex";
 import { availableScreens } from "./routes";
@@ -17,9 +16,6 @@ const ApplicationRouter = () => {
 
   // Get the default screen for the user
   const defaultPath = availableScreens[authContext.startScreen]?.path ?? "/login";
-
-  console.log('ApplicationRouter defaultPath', defaultPath);
-  console.log('ApplicationRouter authContext', authContext);
 
   // Unauthorized users
   const unauthorizedRoutes = (
@@ -41,7 +37,6 @@ const ApplicationRouter = () => {
   return (
     <Routes>
       {authContext?.isLoggedIn ? authorizedRoutes : unauthorizedRoutes}
-      <Route path="*" element={<Error404 />} />
     </Routes>
   );
 };

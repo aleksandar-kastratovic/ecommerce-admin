@@ -30,7 +30,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
 
     return (
         <nav id="sidebar">
-            <NavLink to="/" className="logo">
+            <NavLink to="/homepage" className="logo">
                 <img
                     className={"img-fluid desktop-logo" + (activeTheme ? " dark-theme-logo" : " light-theme-logo")}
                     src={activeTheme ? sideNavLogoDark : sideNavLogoLight}
