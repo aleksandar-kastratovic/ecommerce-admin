@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import IconList from "../../../helpers/icons";
 import GroupAttributes from "./GroupAttributes/GroupAttributes";
 import GroupValues from "./GroupValues/GroupValues"
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import useAPI from "../../../api/api";
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
 const ProductGroupDetails = () => {
 
@@ -21,6 +22,8 @@ const ProductGroupDetails = () => {
   const [isLoading, setIsLoading] = useState(false);
   const api = useAPI();
   const apiPath = "admin/product-item-specifications/group";
+  const activeTab = getUrlQueryStringParam("tab") ?? 'attributes';
+  const navigate = useNavigate();
 
   const getData = async () => {
     setIsLoading(true);
@@ -42,20 +45,28 @@ const ProductGroupDetails = () => {
 
   const fields = [
     {
+      id: "attributes",
       name: "Atributi",
       icon: IconList.attribution,
       enabled: true,
-      component: <GroupAttributes groupId={data?.id} />,
+      component: <GroupAttributes groupId={groupId} />,
     },
     {
+      id: "attributes_values",
       name: "Vrednosti",
       icon: IconList.list,
-      enabled: data?.id,
-      component: <GroupValues groupId={data?.id} />,
+      enabled: groupId,
+      component: <GroupValues groupId={groupId} />,
     },
   ];
 
-  return <DetailsPage title={data?.id != null && data?.name} fields={fields} ready={!isLoading} />;
+  // Handle after click on tab panel
+  const panelHandleSelect = (field) => {
+    let queryString = setUrlQueryStringParam("tab", field.id);
+    navigate(`/product-specs/groups/${groupId}?${queryString}`, { replace: true });
+  }
+
+  return <DetailsPage title={data?.id != null && data?.name} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default ProductGroupDetails;

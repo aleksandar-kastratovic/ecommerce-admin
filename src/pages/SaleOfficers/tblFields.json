@@ -7,7 +7,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": false,
     "input_type": "input"
@@ -20,7 +20,7 @@
     "editable": true,
     "disabled": false,
     "required": false,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -33,7 +33,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -46,7 +46,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -58,8 +58,8 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": true,
-    "description": "255",
+    "required": false,
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "edit_delete"

@@ -68,7 +68,6 @@ const App = () => {
                     .get(`admin/profile/user-permissions`)
                     .then((response) => {
                         const data = response?.payload;
-
                         if (!data) {
                             toast.warning("Greška!");
                         }

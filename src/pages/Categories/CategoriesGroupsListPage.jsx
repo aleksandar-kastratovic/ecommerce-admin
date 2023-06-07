@@ -18,7 +18,7 @@ const CategoriesGroupsListPage = () => {
         },
       },
       icon: "list",
-      // title: "Kategorije",
+      title: "Lista kategorija",
     },
     accountTree: {
       type: "custom",
@@ -31,7 +31,7 @@ const CategoriesGroupsListPage = () => {
         },
       },
       icon: "account_tree",
-      title: "Kategorije",
+      title: "Drvo kategorija",
     }
   };
 
@@ -40,6 +40,7 @@ const CategoriesGroupsListPage = () => {
   return (
     <ListPage
       apiUrl="admin/category-product/groups"
+      actionNewButton="modal"
       title="Grupe kategorija"
       columnFields={tblFields}
       customActions={customActions}

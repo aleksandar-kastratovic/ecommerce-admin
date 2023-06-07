@@ -6,8 +6,8 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": false,
-    "description": "255",
+    "required": true,
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -19,11 +19,13 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": true,
-    "description": "255",
+    "required": false,
+    "description": "",
     "ui_prop": "xyz",
     "sortable": false,
-    "input_type": "input"
+    "input_type": "input",
+    "in_details_new_display": false,
+    "in_details_edit_display": true
   },
   {
     "field_name": "Država",
@@ -32,11 +34,14 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": false,
-    "description": "255",
+    "required": true,
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "select",
+    "fillFromApi": "admin/category-product/groups/ddl",
+    "usePropName": true,
+    "options": []
   },
   {
     "field_name": "Tip",
@@ -45,11 +50,14 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": false,
-    "description": "255",
+    "required": true,
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "select",
+    "fillFromApi": "admin/category-product/groups/ddl",
+    "usePropName": true,
+    "options": []
   },
   {
     "field_name": "Deo prodavnice",
@@ -58,24 +66,27 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": false,
-    "description": "255",
+    "required": true,
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "select",
+    "fillFromApi": "admin/category-product/groups/ddl",
+    "usePropName": true,
+    "options": []
   },
   {
     "field_name": "Opis",
     "prop_name": "description",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
     "required": false,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "textarea"
   },
   {
     "field_name": "Status",
@@ -84,11 +95,21 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": false,
-    "description": "255",
+    "required": true,
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "select",
+    "options": [
+      {
+        "id": "on",
+        "name": "on"
+      },
+      {
+        "id": "off",
+        "name": "off"
+      }
+    ]
   },
   {
     "field_name": "",
@@ -97,8 +118,8 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": true,
-    "description": "255",
+    "required": false,
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "edit_delete"

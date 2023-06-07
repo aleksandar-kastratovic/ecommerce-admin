@@ -11,6 +11,7 @@ import Icon from "@mui/material/Icon";
  * @param {"button"|"reset"|"submit"} type The HTML button type.
  * @param {"text"|"contained"|"outlined"} variant The variant of the button to use.
  * @param {boolean} disabled If button is disabled
+ * @param sx Button styling
  *
  *
  * @return {JSX.Element}

@@ -8,11 +8,6 @@ import useAPI from "../../../api/api";
 import Form from "../../../components/shared/Form/Form";
 import CreateForm from "../../../components/shared/Form/CreateForm";
 
-import name from "../forms/name.json";
-import positionForm from "../forms/position.json";
-import image from "../forms/image.json";
-import image_description from "../forms/image_description.json";
-import status from "../forms/status.json";
 
 const DetailsBannersB2C = ({ }) => {
   const { B2CId } = useParams();

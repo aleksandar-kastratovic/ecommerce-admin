@@ -58,6 +58,10 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
   };
 
   const formItemChangeHandler = ({ target }, type) => {
+
+    console.log(target);
+
+
     let newData;
     switch (type) {
       case "date":

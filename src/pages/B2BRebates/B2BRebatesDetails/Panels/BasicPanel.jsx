@@ -1,5 +1,5 @@
 import Form from "../../../../components/shared/Form/Form"
-import fields from "../../fields.json"
+import fields from "../../tblFields.json"
 
 /**
  * Form that allows user to edit basic info.
@@ -11,11 +11,11 @@ import fields from "../../fields.json"
  * @constructor
  */
 const BasicPanel = ({ data, updateData }) => (
-    <Form
-        initialData={data}
-        formFields={fields}
-        cancelButton={false}
-        onSubmit={updateData} />
+  <Form
+    initialData={data}
+    formFields={fields}
+    cancelButton={false}
+    onSubmit={updateData} />
 )
 
 export default BasicPanel

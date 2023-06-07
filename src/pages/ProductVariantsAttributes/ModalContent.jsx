@@ -40,8 +40,6 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
     handleData();
   }, []);
 
-  console.log(dialogData)
-
   return (
 
     <>

@@ -1,11 +1,16 @@
 import ListPage from "../../components/shared/ListPage/ListPage"
-import fields from "./fields.json"
+import tblFields from "./tblFields.json"
 
-const B2BRebateTiersListPage = () => (
+const B2BRebateTiersListPage = () => {
+  return (
     <ListPage
-        apiUrl="admin/rebates/tiers"
-        title="Rabatne skale"
-        columnFields={fields} />
-)
+      apiUrl="admin/rebates/tiers"
+      editUrl="admin/rebates/tiers"
+      title="Rabatne skale"
+      columnFields={tblFields}
+      actionNewButton="modal"
+    />
+  );
+}
 
 export default B2BRebateTiersListPage

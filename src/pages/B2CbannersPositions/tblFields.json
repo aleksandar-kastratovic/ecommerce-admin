@@ -7,9 +7,9 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
-    "sortable": false,
+    "sortable": true,
     "input_type": "input"
   },
   {
@@ -20,9 +20,9 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
-    "sortable": false,
+    "sortable": true,
     "input_type": "input"
   },
   {
@@ -32,11 +32,37 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": true,
-    "description": "255",
+    "required": false,
+    "description": "",
     "ui_prop": "xyz",
-    "sortable": false,
-    "input_type": "input"
+    "sortable": true,
+    "input_type": "select",
+    "options": [
+      {
+        "id": "image",
+        "name": "Slika"
+      },
+      {
+        "id": "image_description",
+        "name": "Slika sa opisom"
+      },
+      {
+        "id": "gallery",
+        "name": "Galerija"
+      },
+      {
+        "id": "gallery_description",
+        "name": "Galerija sa opisom"
+      },
+      {
+        "id": "video_upload",
+        "name": "Video upload"
+      },
+      {
+        "id": "video_link",
+        "name": "Video link"
+      }
+    ]
   },
   {
     "field_name": "Širina (px)",
@@ -45,10 +71,10 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": true,
-    "description": "255",
+    "required": false,
+    "description": "",
     "ui_prop": "xyz",
-    "sortable": false,
+    "sortable": true,
     "input_type": "input"
   },
   {
@@ -58,10 +84,10 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": true,
-    "description": "255",
+    "required": false,
+    "description": "",
     "ui_prop": "xyz",
-    "sortable": false,
+    "sortable": true,
     "input_type": "input"
   },
   {
@@ -71,11 +97,21 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": true,
-    "description": "255",
+    "required": false,
+    "description": "",
     "ui_prop": "xyz",
-    "sortable": false,
-    "input_type": "input"
+    "sortable": true,
+    "input_type": "select",
+    "options": [
+      {
+        "id": "on",
+        "name": "On"
+      },
+      {
+        "id": "off",
+        "name": "Off"
+      }
+    ]
   },
   {
     "field_name": "",
@@ -84,8 +120,8 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": true,
-    "description": "255",
+    "required": false,
+    "description": "",
     "ui_prop": "xyz",
     "sortable": false,
     "input_type": "edit_delete"

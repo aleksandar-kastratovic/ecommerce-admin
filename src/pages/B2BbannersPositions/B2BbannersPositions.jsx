@@ -20,6 +20,7 @@ const B2BbannersPositions = () => {
       apiUrl="admin/banners-b2b/positions"
       columnFields={tblFields}
       additionalButtons={buttons}
+      actionNewButton="modal"
     />
   );
 };

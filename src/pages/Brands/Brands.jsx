@@ -6,6 +6,7 @@ const Brands = () => {
   return (
     <ListPage
       apiUrl="admin/brands"
+      actionNewButton="modal"
       title="Brendovi"
       columnFields={tblFields}
     />

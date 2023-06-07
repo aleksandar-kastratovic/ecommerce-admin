@@ -19,7 +19,7 @@ import Tooltip from '@mui/material/Tooltip';
  * @return {JSX.Element}
  * @constructor
  */
-const ActionField = ({ fieldType, systemRequired, handleOnClickActions, handlePreview, handleDelete, handleEdit, customActions, rowData }) => {
+const ActionField = ({ fieldType, systemRequired, handleOnClickActions, customActions, rowData }) => {
   /**
    * Parse action into button parameters.
    *
@@ -32,7 +32,7 @@ const ActionField = ({ fieldType, systemRequired, handleOnClickActions, handlePr
   const actions = (() => {
     let default_buttons = fieldType.split("_");
 
-    // Prikazuje samo buttons za koje se definise kljuc u JSON u input_type
+    //If only shows buttons fot which key is defined in JSON, in input_type
     if (default_buttons.length) {
       if (typeof customActions === "object") {
         default_buttons.map((display_button) => {
@@ -45,7 +45,6 @@ const ActionField = ({ fieldType, systemRequired, handleOnClickActions, handlePr
       }
     }
 
-    // TODO: proveriti da li treba da se prikazuje delete dugme
     if (typeof customActions === "object") {
       Object.keys(customActions).map((key) => {
         if ("delete" == key && systemRequired) {

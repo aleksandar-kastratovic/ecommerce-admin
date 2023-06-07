@@ -8,6 +8,7 @@ import useAPI from "../../../api/api";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import IconList from "../../../helpers/icons";
 import RolesListPanel from "./RolesListPanel";
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
 const RolesDetailsPage = () => {
   const { roleId } = useParams();
@@ -21,6 +22,8 @@ const RolesDetailsPage = () => {
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
+
 
   const handleData = async () => {
     setIsLoading(true);
@@ -60,12 +63,14 @@ const RolesDetailsPage = () => {
 
   const fields = [
     {
-      name: "Osnovne informacije",
+      id: "basic",
+      name: "Osnovno",
       icon: IconList.dataThresholding,
       enabled: true,
       component: <Form formFields={formFields} initialData={data} onSubmit={saveData} />,
     },
     {
+      id: "pages",
       name: "Stranice",
       icon: IconList.screenShare,
       enabled: data?.id,
@@ -73,7 +78,14 @@ const RolesDetailsPage = () => {
     },
   ];
 
-  return <DetailsPage title={data?.id == null ? "Unos nove uloge" : data?.name} fields={fields} ready={!isLoading} />;
+  // Handle after click on tab panel
+  const panelHandleSelect = (field) => {
+    let queryString = setUrlQueryStringParam("tab", field.id);
+    const id = data.id == null ? "new" : data.id;
+    navigate(`/roles/${id}?${queryString}`, { replace: true });
+  }
+
+  return <DetailsPage title={data?.id == null ? "Unos nove uloge" : data?.name} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default RolesDetailsPage;

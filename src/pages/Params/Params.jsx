@@ -1,5 +1,5 @@
 import ListPage from "../../components/shared/ListPage/ListPage";
-import tblFields from "./ParamsListFields.json";
+import tblFields from "./tblFields.json";
 
 const Params = () => {
   return (

@@ -1,4 +1,5 @@
 import deepRenameKeys from "deep-rename-keys";
+import { useLocation, useParams } from "react-router-dom";
 
 export const addTabName = (tabsList, tabData) => {
     let data;
@@ -86,4 +87,35 @@ export const currencyFormat = (num) => {
 export const withPreventDefault = (callback) => (event) => {
     event.preventDefault && event.preventDefault();
     callback(event);
+};
+
+/**
+ * Get param from query string.
+ *
+ * @param {String} queryKey What params looking for.
+ * @param {String} queryString URL query string data.
+ * @returns {?String}
+ */
+export const getUrlQueryStringParam = (queryKey, queryString = null) => {
+    if (!queryString) {
+        queryString = location.search;
+    }
+    return queryString ? new URLSearchParams(queryString).get(queryKey) : null;
+};
+
+/**
+ * Set param from query string by add or update param but keep rest of pramas in query string.
+ *
+ * @param {String} queryKey What params looking for.
+ * @param {String} queryValue What params value.
+ * @param {String} queryString URL query string data.
+ * @returns {?String}
+ */
+export const setUrlQueryStringParam = (queryKey, queryValue, queryString = null) => {
+    if (!queryString) {
+        queryString = location.search;
+    }
+    const params = new URLSearchParams(queryString);
+    params.set(queryKey, queryValue);
+    return params.toString();
 };

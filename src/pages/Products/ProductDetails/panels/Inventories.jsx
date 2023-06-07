@@ -1,59 +1,57 @@
-import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
-import List from "../../../../components/shared/ListAdder/List";
 
 import formFields from "../forms/inventories.json";
+import ListPage from "../../../../components/shared/ListPage/ListPage";
 
 const Inventories = ({ productId }) => {
-    const init = {
-        id: null,
-        id_product: productId,
-        quantity: 0,
-        unit: "kom",
-    };
+  const api = useAPI();
 
-    console.log(productId)
+  const customActions = {
+    delete: {
+      clickHandler: {
+        type: 'dialog_delete',
+        fnc: (rowData) => {
+          return {
+            show: true,
+            id: rowData.id,
+            mutate: null,
+          };
+        },
+      },
+      deleteClickHandler: {
+        type: 'dialog_delete',
+        fnc: (rowData) => {
 
-    const [listData, setListData] = useState([]);
-    const api = useAPI();
-    const apiPath = "admin/product-items/inventories";
+          api.delete(`admin/product-items/inventories/${rowData.id}`)
+            .then(() => toast.success("Zapis je uspešno obrisan"))
+            .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
 
-    const handleList = () => {
-        api.list(`${apiPath}/${productId}`)
-            .then((response) => setListData(response?.payload?.items))
-            .catch((error) => console.warn(error));
-    };
+          return {
+            show: false,
+            id: rowData.id,
+            mutate: 1,
+          };
+        }
+      },
+    },
+  };
 
-    const handleSubmit = (data) => {
-        api.post(apiPath, data)
-            .then((response) => {
-                toast.success("Uspešno");
-                handleList();
-            })
-            .catch((error) => {
-                console.warn(error);
-                toast.warn(error);
-            });
-    };
-
-    const handleDelete = (token, id) => {
-        api.delete(`${apiPath}/${id}`)
-            .then((response) => {
-                toast.success("Uspešno");
-                handleList();
-            })
-            .catch((error) => {
-                console.warn(error);
-                toast.warn(error);
-            });
-    };
-
-    useEffect(() => {
-        handleList();
-    }, []);
-
-    return <List formFields={formFields} init={init} listFields={listData} onSave={handleSubmit} onDelete={handleDelete} />;
+  return (
+    <>
+      <ListPage
+        apiUrl={`admin/product-items/inventories/${productId}`}
+        editUrl={`admin/product-items/inventories`}
+        title=" "
+        columnFields={formFields}
+        initialData={{ id_product: productId }}
+        actionNewButton="modal"
+        addFieldLabel="Dodajte novu cenu"
+        showAddButton={true}
+        customActions={customActions}
+      />
+    </>
+  );
 };
 
 export default Inventories;

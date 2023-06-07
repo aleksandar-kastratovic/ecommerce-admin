@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthContext from "../store/auth-contex";
 import Loader from "./shared/Loading/Loading";
@@ -26,6 +26,12 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
     const open = Boolean(anchorEl);
 
     const authCtx = useContext(AuthContext);
+
+    useEffect(() => {
+        return () => {
+            setIsLoading(false);
+        };
+    }, []);
 
     const logoutHandler = async () => {
         //Uvek mora da izloguje korisnika bez obzira da li je api prosao ili ne
