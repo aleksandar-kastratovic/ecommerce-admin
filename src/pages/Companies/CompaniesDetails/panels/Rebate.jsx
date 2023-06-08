@@ -1,39 +1,22 @@
+
 import { useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
 import Form from "../../../../components/shared/Form/Form";
-import formFields from "../forms/head_office_address.json";
+import formFields from "../forms/rebate.json"
+import { toast } from "react-toastify";
 
-const HeadOffice = ({ companyId }) => {
-
-  const init = {
-    id: null,
-    id_company: companyId,
-    address: null,
-    object_number: null,
-    floor: null,
-    apartment_number: null,
-    id_town: null,
-    town_name: null,
-    zip_code: null,
-    municipality_name: null,
-    id_country: null,
-    country_name: null,
-    note: null,
-  };
-
-  const [data, setData] = useState(init);
+const Rebate = ({ companyId }) => {
   const api = useAPI();
-  const apiPath = "admin/customers-b2b/head-office-address";
+  const [data, setData] = useState({ rebate_tier_id: null });
 
   const handleData = () => {
-    api.get(`${apiPath}/${companyId}`)
+    api.get(`admin/customers-b2b/rebate/${companyId}`)
       .then((response) => setData(response?.payload))
       .catch((error) => console.warn(error));
   };
 
   const saveData = (data) => {
-    api.post(`${apiPath}`, { ...data, id_company: companyId })
+    api.post(`admin/customers-b2b/rebate/${companyId}`, data)
       .then((response) => {
         setData(response?.payload);
         toast.success("Uspešno");
@@ -49,6 +32,6 @@ const HeadOffice = ({ companyId }) => {
   }, []);
 
   return <Form formFields={formFields} initialData={data} onSubmit={saveData} />;
-};
+}
 
-export default HeadOffice;
+export default Rebate;

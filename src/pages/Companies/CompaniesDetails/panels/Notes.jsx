@@ -1,10 +1,9 @@
 import { toast } from "react-toastify";
+import ListPage from "../../../../components/shared/ListPage/ListPage";
+import formFields from "../forms/notes.json";
 import useAPI from "../../../../api/api";
 
-import formFields from "../forms/inventories.json";
-import ListPage from "../../../../components/shared/ListPage/ListPage";
-
-const Inventories = ({ productId }) => {
+const Notes = ({ companyId }) => {
   const api = useAPI();
 
   const customActions = {
@@ -23,7 +22,7 @@ const Inventories = ({ productId }) => {
         type: 'dialog_delete',
         fnc: (rowData) => {
 
-          api.delete(`admin/product-items/inventories/${rowData.id}`)
+          api.delete(`admin/customers-b2b/notes/${rowData.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
             .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
 
@@ -38,20 +37,18 @@ const Inventories = ({ productId }) => {
   };
 
   return (
-    <>
-      <ListPage
-        apiUrl={`admin/product-items/inventories/${productId}`}
-        editUrl={`admin/product-items/inventories`}
-        title=" "
-        columnFields={formFields}
-        initialData={{ id_product: productId }}
-        actionNewButton="modal"
-        addFieldLabel="Dodajte novi lager"
-        showAddButton={true}
-        customActions={customActions}
-      />
-    </>
+    <ListPage
+      apiUrl={`admin/customers-b2b/notes/${companyId}`}
+      editUrl={`admin/customers-b2b/notes`}
+      columnFields={formFields}
+      actionNewButton="modal"
+      addFieldLabel="Dodajte napomenu"
+      showAddButton={true}
+      title=" "
+      initialData={{ id_company: companyId }}
+      customActions={customActions}
+    />
   );
-};
+}
 
-export default Inventories;
+export default Notes;

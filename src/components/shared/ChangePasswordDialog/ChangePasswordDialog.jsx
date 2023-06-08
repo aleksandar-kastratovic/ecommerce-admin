@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "react-toastify";
 
 import useAPI from "../../../api/api";
@@ -10,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 
 
-const ChangePasswordDialog = ({ openDialog, setOpenDialog, apiPath }) => {
+const ChangePasswordDialog = ({ openDialog, setOpenDialog, apiUrl }) => {
 
   const api = useAPI();
 
@@ -28,8 +28,10 @@ const ChangePasswordDialog = ({ openDialog, setOpenDialog, apiPath }) => {
 
   const submitHandler = (data) => {
     if (!(formData.repeat_password !== "" && formData.repeat_password !== formData.password)) {
-      api.post(apiPath, { id: openDialog.userId, ...data })
+
+      api.post(apiUrl, { id: openDialog.userId, ...data })
         .then((response) => {
+
           toast.success("Uspešno!");
           setOpenDialog({ show: false });
         })

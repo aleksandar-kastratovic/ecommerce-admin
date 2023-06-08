@@ -27,7 +27,7 @@ const Users = () => {
   return (
     <>
       <ListPage apiUrl="admin/users" title="Korisnici" columnFields={tblFields} customActions={customActions} actionNewButton="modal" />
-      <ChangePasswordDialog openDialog={openDialog} setOpenDialog={setOpenDialog} apiPath="admin/users/reset-password" />
+      <ChangePasswordDialog openDialog={openDialog} setOpenDialog={setOpenDialog} apiPath="admin/customers-b2b/users/reset-password" />
     </>
   );
 };

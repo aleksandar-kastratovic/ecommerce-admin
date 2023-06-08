@@ -45,7 +45,7 @@
     "usePropName": true
   },
   {
-    "field_name": "s",
+    "field_name": "",
     "prop_name": "action",
     "in_main_table": true,
     "in_details": false,
