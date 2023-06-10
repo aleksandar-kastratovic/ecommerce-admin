@@ -4,7 +4,7 @@ import IconList from "../../../../helpers/icons";
 import PickerMenu from "./PickerMenu";
 import Button from "../../Button/Button";
 
-const ColumnsPicker = ({ tableFields = [], onChange }) => {
+const ColumnsPicker = ({ tableFields = [], onChange, listPageId }) => {
   const [anchor, setAnchor] = useState(null);
 
   /** Pass changed values to parent. **/
@@ -15,7 +15,7 @@ const ColumnsPicker = ({ tableFields = [], onChange }) => {
 
   return (
     <>
-      <PickerMenu anchor={anchor} tableFields={tableFields} handleConfirm={handleConfirm} handleClose={() => setAnchor(null)} />
+      <PickerMenu anchor={anchor} tableFields={tableFields} handleConfirm={handleConfirm} handleClose={() => setAnchor(null)} listPageId={listPageId} />
       <Button icon={IconList.visibility} label="Kolone" onClick={(event) => setAnchor(event.currentTarget)} />
     </>
   );

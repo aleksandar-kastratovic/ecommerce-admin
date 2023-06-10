@@ -7,40 +7,40 @@ import SeoPanel from "./panels/SeoPanel";
 import formFields from "./formField.json";
 import { useQuery } from "react-query";
 import { toast } from "react-toastify";
-import HtmlEditor from "../../../components/shared/HtmlEditor/HtmlEditor";
 
 const StaticPagesDetails = () => {
-    const { spid } = useParams();
-    const api = useAPI();
+  const { spid } = useParams();
+  const api = useAPI();
 
-    const apiPath = "admin/static-pages-b2c/page";
+  const apiPath = "admin/static-pages-b2c/page";
 
-    const { data, isLoading } = useQuery(["staticPage"], () => api.get(`${apiPath}/${spid}`).then((response) => response?.payload));
+  const { data, isLoading } = useQuery(["staticPage"], () => api.get(`${apiPath}/${spid}`).then((response) => response?.payload));
 
-    const submitHandler = (data) => {
-        api.post(apiPath, data)
-            .then((response) => toast.success("Uspešno"))
-            .catch((error) => {
-                console.warn(error);
-                toast.warn("Greška");
-            });
-    };
-    const fields = [
-        {
-            name: "Osnovno",
-            icon: "settings",
-            enabled: true,
-            component: <Form formFields={formFields} initialData={data} onSubmit={submitHandler} />,
-        },
-        {
-            name: "Seo",
-            icon: "settings",
-            enabled: data?.id,
-            component: <SeoPanel apiPath={apiPath} spid={spid} />,
-        },
-    ];
+  const submitHandler = (data) => {
+    api.post(apiPath, data)
+      .then((response) => toast.success("Uspešno"))
+      .catch((error) => {
+        console.warn(error);
+        toast.warn("Greška");
+      });
+  };
 
-    return <DetailsPage title={data?.id == null ? "Unos nove strane" : data?.title} fields={fields} ready={!isLoading} />;
+  const fields = [
+    {
+      name: "Osnovno",
+      icon: "settings",
+      enabled: true,
+      component: <Form formFields={formFields} initialData={data} onSubmit={submitHandler} />,
+    },
+    {
+      name: "Seo",
+      icon: "settings",
+      enabled: data?.id,
+      component: <SeoPanel apiPath={apiPath} spid={spid} />,
+    },
+  ];
+
+  return <DetailsPage title={data?.id == null ? "Unos nove strane" : data?.title} fields={fields} ready={!isLoading} />;
 };
 
 export default StaticPagesDetails;

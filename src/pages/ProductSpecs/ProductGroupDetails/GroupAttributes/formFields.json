@@ -15,7 +15,7 @@
   {
     "field_name": "Kod",
     "prop_name": "slug",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -30,7 +30,7 @@
   {
     "field_name": "Tip vrednosti",
     "prop_name": "field_type",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -61,7 +61,7 @@
   {
     "field_name": "Obavezno polje",
     "prop_name": "required",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -104,21 +104,14 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": false,
+    "required": true,
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "options": [
-      {
-        "id": "on",
-        "name": "On"
-      },
-      {
-        "id": "off",
-        "name": "Off"
-      }
-    ],
-    "input_type": "select"
+    "input_type": "select",
+    "fillFromApi": "admin/product-item-specifications/group-attribute/ddl",
+    "usePropName": true,
+    "options": []
   },
   {
     "field_name": "",

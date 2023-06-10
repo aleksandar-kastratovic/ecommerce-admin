@@ -7,7 +7,7 @@ import List from "../../../components/shared/ListAdder/List";
 
 import ParamsForm from "./ParamsForm/ParamsForm";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
-
+import ListPage from "../../../components/shared/ListPage/ListPage";
 import long_text from "./forms/long_text.json";
 import number from "./forms/number.json";
 import date from "./forms/date.json";
@@ -16,8 +16,14 @@ import image from "./forms/image.json";
 import image_description from "./forms/image_description.json";
 import slug from "./forms/slug.json";
 import status from "./forms/status.json";
+import actions from "./forms/actions.json"
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
-const init = {
+
+
+const ParamsDetails = () => {
+
+  const init = {
     id: null,
     field_type: null,
     field_is_multiple: false,
@@ -38,167 +44,115 @@ const init = {
     active_to: null,
     system_required: null,
     status: "on",
-};
+  };
 
-const listInit = {
-    id: null,
-    id_params: null,
-    slug: null,
-    name: null,
-    int_value: null,
-    text_value: null,
-    datetime_value: null,
-    title: null,
-    subtitle: null,
-    description: null,
-    button: null,
-    target: null,
-    url: null,
-    position: null,
-    image: null,
-    video: null,
-    download: null,
-    status: "on",
-};
+  const { pid } = useParams();
+  const [data, setData] = useState(init);
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
+  const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
-const ParamsDetails = () => {
-    const { pid } = useParams();
-    const [data, setData] = useState(init);
-    const [list, setList] = useState([]);
-    const navigate = useNavigate();
-    const [isLoading, setIsLoading] = useState(false);
+  const apiPath = "admin/params/values";
 
-    const api = useAPI();
+  const api = useAPI();
 
-    const onSubmit = (data) => {
-        let oldId = data.id;
-        api.post(`admin/params/main/`, { ...init, ...data })
-            .then((response) => {
-                toast.success("Uspešno");
-                setData(response?.payload);
+  const onSubmit = (data) => {
+    let oldId = data.id;
+    api.post(`admin/params/main/`, { ...init, ...data })
+      .then((response) => {
+        toast.success("Uspešno");
+        setData(response?.payload);
 
-                if (oldId === null) {
-                    let tId = response?.payload?.id;
-                    navigate(`/params/${tId}`, { replace: true });
-                }
-            })
-            .catch((error) => {
-                toast.warning("Greška");
-                console.warn(error);
-            });
-    };
-
-    const onChange = (data) => {
-        setData(data);
-    };
-
-    const handleGetData = async () => {
-        setIsLoading(true);
-        await api
-            .get(`admin/params/main/${pid}`)
-            .then((response) => {
-                setData(response?.payload);
-            })
-            .catch((error) => {
-                console.warn(error);
-            });
-        setIsLoading(false);
-    };
-
-    const handleGetList = () => {
-        api.list(`admin/params/values/`, { id_param: data.id })
-            .then((response) => {
-                setList(response?.payload?.items);
-            })
-            .catch((error) => {
-                console.warn(error);
-            });
-    };
-
-    const onDelete = (token, id) => {
-        api.delete(`admin/params/values/${id}`)
-            .then((response) => {
-                toast.success("Uspešno");
-                handleGetList();
-            })
-            .catch((error) => {
-                toast.warning("Greška");
-                console.warn(error);
-            });
-    };
-
-    const handleListSubmit = async (listData) => {
-        await api
-            .post("admin/params/values/", { ...listData, id_params: data.id })
-            .then((response) => {
-                handleGetList();
-                toast.success("Uspešno");
-            })
-            .catch((error) => {
-                toast.warning("Greška");
-                console.warn(error);
-            });
-    };
-
-    useEffect(() => {
-        handleGetData();
-    }, []);
-
-    useEffect(() => {
-        if (data.field_is_multiple) {
-            handleGetList();
+        if (oldId === null) {
+          let tId = response?.payload?.id;
+          navigate(`/params/${tId}`, { replace: true });
         }
-    }, [data]);
+      })
+      .catch((error) => {
+        toast.warning("Greška");
+        console.warn(error);
+      });
+  };
 
-    const getParamSubForm = (form) => {
-        if (data.field_is_multiple && form) {
-            return [];
-        }
-        switch (data.field_type) {
-            case "long_text":
-                return long_text;
-            case "number":
-                return number;
-            case "date":
-                return date;
-            case "datetime":
-                return datetime;
-            case "image":
-                return image;
-            case "image_description":
-                return image_description;
-            default:
-                return [];
-        }
-    };
+  const onChange = (data) => {
+    setData(data);
+  };
 
-    const fields = data.field_is_multiple
-        ? [
-              {
-                  name: "Osnovno",
-                  icon: "settings",
-                  enabled: true,
-                  component: <ParamsForm onSubmit={onSubmit} data={data} onChange={onChange} subForm={getParamSubForm(true)} isLoading={isLoading} />,
-              },
-              {
-                  name: "Vrednosti",
-                  icon: "settings",
-                  enabled: data?.id,
-                  component: (
-                      <List formFields={[slug, ...getParamSubForm(false), status]} listFields={list} onSave={handleListSubmit} addFieldLabel={"Dodaj polje"} onDelete={onDelete} init={listInit} />
-                  ),
-              },
-          ]
-        : [
-              {
-                  name: "Osnovno",
-                  icon: "settings",
-                  enabled: true,
-                  component: <ParamsForm onSubmit={onSubmit} data={data} onChange={onChange} subForm={getParamSubForm(true)} isLoading={isLoading} />,
-              },
-          ];
+  const handleGetData = async () => {
+    setIsLoading(true);
+    await api
+      .get(`admin/params/main/${pid}`)
+      .then((response) => {
+        setData(response?.payload);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+    setIsLoading(false);
+  };
 
-    return <DetailsPage title={data?.id == null ? "Unos novog parametra" : data?.name} fields={fields} />;
+  useEffect(() => {
+    handleGetData();
+  }, []);
+
+
+  const getParamSubForm = (form) => {
+    if (data.field_is_multiple && form) {
+      return [];
+    }
+    switch (data.field_type) {
+      case "long_text":
+        return long_text;
+      case "number":
+        return number;
+      case "date":
+        return date;
+      case "datetime":
+        return datetime;
+      case "image":
+        return image;
+      case "image_description":
+        return image_description;
+      default:
+        return [];
+    }
+  };
+
+  const fields = data.field_is_multiple
+    ? [
+      {
+        id: "basic",
+        name: "Osnovno",
+        icon: "settings",
+        enabled: true,
+        component: <ParamsForm onSubmit={onSubmit} data={data} onChange={onChange} subForm={getParamSubForm(true)} isLoading={isLoading} />,
+      },
+      {
+        id: "values",
+        name: "Vrednosti",
+        icon: "settings",
+        enabled: data?.id,
+        component: <ListPage apiUrl={`${apiPath}/${pid}`} editUrl={`${apiPath}`} deleteUrl={`${apiPath}`} columnFields={[slug, ...getParamSubForm(false), status, actions]} addFieldLabel="Dodajte vrednost" title=" " showAddButton={true} actionNewButton="modal" initialData={{ id_params: pid }} />,
+      },
+    ]
+    : [
+      {
+        id: "basic",
+        name: "Osnovno",
+        icon: "settings",
+        enabled: true,
+        component: <ParamsForm onSubmit={onSubmit} data={data} onChange={onChange} subForm={getParamSubForm(true)} isLoading={isLoading} />,
+      },
+    ];
+
+  // Handle after click on tab panel
+  const panelHandleSelect = (field) => {
+    let queryString = setUrlQueryStringParam("tab", field.id);
+    const id = data.id == null ? "new" : data.id;
+    navigate(`/params/${id}?${queryString}`, { replace: true });
+  }
+
+  return <DetailsPage title={data?.id == null ? "Unos novog parametra" : data?.name} fields={fields} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default ParamsDetails;

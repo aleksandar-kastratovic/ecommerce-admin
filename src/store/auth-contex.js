@@ -5,14 +5,13 @@ let refreshTokenTimer;
 
 const AuthContext = React.createContext({
     user: [],
-    referenceData: [],
     userScreens: [],
     isLoggedIn: false,
     isTokenExpired: false,
     isRefreshingToken: false,
+    startScreen: null,
     login: (user) => {},
     logout: () => {},
-    getReferenceData: (referenceData) => {},
     getUserScreens: (userScreens) => {},
     changeTokenExpired: (tokenExpired) => {},
 });
@@ -20,9 +19,7 @@ const AuthContext = React.createContext({
 const calculateRemainingTime = (expirationTime) => {
     const currentTime = new Date().getTime();
     const adjExpirationTime = new Date(expirationTime).getTime();
-
     const remainingDuration = adjExpirationTime - currentTime;
-
     return remainingDuration;
 };
 
@@ -68,9 +65,9 @@ export const AuthContextProvider = (props) => {
     const [refData, setRefData] = useState([]);
     const [userScreensData, setUserScreensData] = useState([]);
     const [refreshingToken, setRefreshingToken] = useState(false);
+    const [startScreenData, setStartScreenData] = useState(null);
 
     const userIsLoggedIn = !!user && !!user.access_token;
-
     const logoutHandler = useCallback(() => {
         setUser(null);
         localStorage.removeItem("user");
@@ -83,11 +80,15 @@ export const AuthContextProvider = (props) => {
         if (refreshTokenTimer) {
             clearTimeout(refreshTokenTimer);
         }
+
+        setStartScreenData(null);
     }, []);
 
     const loginHandler = (user, expirationTime) => {
+        console.log("AuthContextProvider loginHandler", user);
+
         setUser(user);
-        console.log("user", user);
+
         localStorage.setItem("expirationTime", expirationTime);
         localStorage.setItem("user", JSON.stringify(user));
 
@@ -104,6 +105,8 @@ export const AuthContextProvider = (props) => {
             clearTimeout(refreshTokenTimer);
         }
         refreshTokenTimer = setTimeout(refreshToken, remainingTokenTime);
+
+        setStartScreenData(user?.user?.start_screen_code ?? "");
     };
 
     const refreshToken = useCallback(() => {
@@ -144,9 +147,6 @@ export const AuthContextProvider = (props) => {
         }
     }, [userData, logoutHandler, refreshToken]);
 
-    const referenceDataHandler = (referenceData) => {
-        setRefData(referenceData);
-    };
     const userScreensHandler = (userScreens) => {
         setUserScreensData(userScreens);
     };
@@ -159,11 +159,10 @@ export const AuthContextProvider = (props) => {
         isLoggedIn: userIsLoggedIn,
         isTokenExpired: tokenExpired,
         isRefreshingToken: refreshingToken,
-        referenceData: refData,
         userScreens: userScreensData,
+        startScreen: startScreenData,
         login: loginHandler,
         logout: logoutHandler,
-        getReferenceData: referenceDataHandler,
         getUserScreens: userScreensHandler,
         changeTokenExpired: setIsTokenExpiring,
     };

@@ -7,10 +7,10 @@ import Form from "../../../components/shared/Form/Form";
 import IconList from "../../../helpers/icons";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import DetailsSeo from "./DetailsSeo/DetailsSeo";
-import DetailsSpecification from "./DetailsSpecification/DetailsSpecification";
 
 import formFields from "./formFields.json";
 import DetailsDisplayIn from "./DetailsDisplayIn/DetailsDisplayIn";
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
 const CategoriesDetails = () => {
   const { gid, cid } = useParams();
@@ -30,6 +30,7 @@ const CategoriesDetails = () => {
   const api = useAPI();
   const apiPath = "admin/category-product/categories";
   const navigate = useNavigate();
+  const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
   const handleSubmit = (data) => {
     console.log(data)
@@ -69,18 +70,21 @@ const CategoriesDetails = () => {
 
   const fields = [
     {
+      id: "basic",
       name: "Osnovno",
       icon: IconList.category,
       enabled: true,
       component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}&id_category_product=${data?.id}`} />,
     },
     {
+      id: "seo",
       name: "Seo",
       icon: IconList.search,
       enabled: data?.id,
       component: <DetailsSeo cid={data?.id} gid={gid} />,
     },
     {
+      id: "display",
       name: "Prikaz",
       icon: IconList.displaySettings,
       enabled: data?.id,
@@ -96,7 +100,14 @@ const CategoriesDetails = () => {
     }, */
   ];
 
-  return <DetailsPage title={data?.id == null ? "Unos nove kategorije" : data?.name} fields={fields} ready={!isLoading} />;
+  // Handle after click on tab panel
+  const panelHandleSelect = (field) => {
+    let queryString = setUrlQueryStringParam("tab", field.id);
+    const id = data.id == null ? "new" : data.id;
+    navigate(`/product-categories/category/${gid}/${id}?${queryString}`, { replace: true });
+  }
+
+  return <DetailsPage title={data?.id == null ? "Unos nove kategorije" : data?.name} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default CategoriesDetails;

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import useAPI from "../../../../api/api";
 import Form from "../../../../components/shared/Form/Form";
 import Loading from "../../../../components/shared/Loading/Loading";

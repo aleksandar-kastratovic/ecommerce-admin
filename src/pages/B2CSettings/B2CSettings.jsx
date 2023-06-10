@@ -1,6 +1,6 @@
 import { useLocation } from "react-router-dom";
 import ListPage from "../../components/shared/ListPage/ListPage";
-import fields from "./mainListFields.json";
+import fields from "./tblFields.json";
 
 const B2Csettings = () => {
 

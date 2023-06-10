@@ -42,6 +42,32 @@
     "options": []
   },
   {
+    "field_name": "B2B lager",
+    "prop_name": "b2b_store",
+    "in_main_table": false,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "Da li količine definisane u ovom objektu ulaze u računanje lagera na B2B",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "switch"
+  },
+  {
+    "field_name": "B2C lager",
+    "prop_name": "b2c_store",
+    "in_main_table": false,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "Da li količine definisane u ovom objektu ulaze u računanje lagera na B2C",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "switch"
+  },
+  {
     "field_name": "Država",
     "prop_name": "id_country",
     "in_main_table": true,
@@ -68,7 +94,7 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "select",
+    "input_type": "autocomplete",
     "fillFromApi": "admin/stores/ddl",
     "usePropName": true,
     "options": []

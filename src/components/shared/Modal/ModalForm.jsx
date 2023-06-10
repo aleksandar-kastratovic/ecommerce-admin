@@ -19,19 +19,21 @@ import Box from "@mui/material/Box"
  * @param {'permanent'|'persistent'|'temporary'} variant The variant to use.
  * @param {string} apiPathFormModal Api path.
  * @param {FieldSpec[]} formFields
- * @param initialData
- * @param label
- * @param customTitle
- * @param shortText
- * @param cancelButton
- * @param withoutSetterFunction
- * @param styleCheckbox
+ * @param initialData The initialData prop is an object that represents the initial data to populate the form fields in the modal.
+ * @param label 
+ * @param customTitle The customTitle prop is a string that allows you to provide a custom title for the modal form.
+ * @param shortText The shortText prop is a string that represents a short description or additional text to be displayed within the modal form.
+ * @param cancelButton The cancelButton prop is a boolean flag that determines whether to display a cancel button in the modal form.
+ * @param withoutSetterFunction The withoutSetterFunction prop is a boolean flag that determines whether to include the initialData when saving the form data to the API.
+ * @param styleCheckbox The styleCheckbox prop represents additional styling or customization options for checkboxes within the form.
+ * @param children The children prop allows you to include additional content or components inside the ModalForm component.
+ * @param queryString  the queryString prop is an array that represents the query string parameters to be appended to the API request URL when fetching data.
  *
  * @return {JSX.Element}
  * @constructor
  */
 
-const ModalForm = ({ anchor, selectedRowData, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData, label, customTitle, shortText, cancelButton, withoutSetterFunction = false, styleCheckbox, children, queryString = [] }) => {
+const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData, label, customTitle, shortText, cancelButton, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData }) => {
 
   const { id } = openModal;
   const api = useAPI();
@@ -40,7 +42,7 @@ const ModalForm = ({ anchor, selectedRowData, openModal, setOpenModal, sx, varia
 
   const handleData = async () => {
     setIsLoading(true);
-
+    // The queryStringLink array is initialized to store the formatted key-value pairs from the queryString prop.
     let queryStringLink = [];
     if (queryString.length) {
       queryString.map((item) => {
@@ -48,6 +50,8 @@ const ModalForm = ({ anchor, selectedRowData, openModal, setOpenModal, sx, varia
       });
     }
 
+    /* A query string is a part of a URL that contains data in the form of key-value pairs. It is commonly used to send data to the server or retrieve data from the server by appending parameters to the URL. The query string starts with a question mark "?" and consists of one or more key-value pairs separated by ampersands "&".
+   The url variable is constructed by combining the apiPathFormModal, id, and the formatted query string. If there are query string parameters, they are appended to the URL using the "?" separator followed by the formatted key-value pairs joined with ampersands "&". For example, if apiPathFormModal is /api/modal, id is 1, and queryStringLink is [ 'param1=value1', 'param2=value2' ], then the resulting URL will be /api/modal/1?param1=value1&param2=value2.*/
     let url = `${apiPathFormModal}/${id}`;
     if (queryStringLink) {
       url += "?" + queryStringLink.join("&");
@@ -80,7 +84,6 @@ const ModalForm = ({ anchor, selectedRowData, openModal, setOpenModal, sx, varia
           toast.warning("Greška");
           setIsLoading(false);
         });
-
     } else {
       api.post(`${apiPathFormModal}`, { ...data, ...initialData })
         .then((response) => {
@@ -108,7 +111,7 @@ const ModalForm = ({ anchor, selectedRowData, openModal, setOpenModal, sx, varia
         children || (
           <FormWrapper title={customTitle ? customTitle : (data?.id == null ? "Novi unos" : data?.name)}>
             {shortText ? <Typography variant="body2" sx={{ marginBottom: "0.8rem" }}>{shortText}</Typography> : null}
-            <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} />
+            <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} validateData={validateData} />
           </FormWrapper>)
         : <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}><CircularProgress size="2rem" sx={{ marginTop: "50vh" }} /></Box>}
     </ListPageModalWrapper>

@@ -4,7 +4,7 @@ import scss from "./NoteBox.module.scss"
  * Show a semi-important box.
  *
  * @param {string} message Optional message to show in a standardized form.
- * @param {JSX.Element[]}children The children to include in the box.
+ * @param {JSX.Element[]} children The children to include in the box.
  *
  * @return {JSX.Element}
  * @constructor

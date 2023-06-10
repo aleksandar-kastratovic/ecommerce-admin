@@ -47,7 +47,7 @@ const GroupAttributes = () => {
         key="group-attribute"
         apiUrl={`admin/product-items-variants-attributes/group-attribute`}
         editUrl={`admin/product-items-variants-attributes/group-attribute`}
-        title=""
+        title=" "
         columnFields={formFields}
         actionNewButton="modal"
         addFieldLabel="Dodajte novi atribut"

@@ -19,6 +19,7 @@ const B2CbannersPositions = () => {
     <ListPage
       title="Pozicije B2C banera"
       apiUrl="admin/banners-b2c/positions"
+      actionNewButton="modal"
       columnFields={tblFields}
       additionalButtons={buttons}
     />

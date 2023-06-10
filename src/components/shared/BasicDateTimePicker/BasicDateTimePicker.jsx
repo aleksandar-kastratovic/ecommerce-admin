@@ -12,7 +12,7 @@ const BasicDateTimePicker = ({
   label = "",
   error = null,
   name = "",
-  onChangeHandler = () => {},
+  onChangeHandler = () => { },
 }) => {
   const handleChange = (newValue) => {
     const ev = {
@@ -36,7 +36,7 @@ const BasicDateTimePicker = ({
           <TextField
             className={styles.dateTimePickerStyle}
             {...params}
-            // inputProps={{ readOnly: true }}
+          // inputProps={{ readOnly: true }}
           />
         )}
       />

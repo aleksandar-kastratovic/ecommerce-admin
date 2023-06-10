@@ -45,10 +45,11 @@ const GroupAttributes = ({ groupId }) => {
 
     <>
       <ListPage
+        listPageId="GroupAttributes"
         key="group-attribute"
         apiUrl={`admin/product-item-specifications/group-attribute/${groupId}`}
         editUrl={`admin/product-item-specifications/group-attribute`}
-        title=""
+        title=" "
         columnFields={formFields}
         actionNewButton="modal"
         addFieldLabel="Dodajte novi atribut"

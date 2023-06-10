@@ -1,25 +1,39 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 import useAPI from "../../../api/api";
-import { toast } from "react-toastify";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
 import Form from "../Form/Form";
 import styles from "./ChangePassword.module.scss";
 import formFields from "./changePasswordForm.json";
+import ListPageModalWrapper from "../Modal/ListPageModalWrapper";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
-const ChangePasswordDialog = ({ openDialog, setOpenDialog, apiPath }) => {
+
+const ChangePasswordDialog = ({ openDialog, setOpenDialog, apiUrl }) => {
+
   const api = useAPI();
+
+  const init = {
+    password: "",
+    repeat_password: "",
+    sent_mail: 0,
+  };
+
+  const [formData, setFormData] = useState(init);
+
+  const changeHandler = (data) => {
+    setFormData(data);
+  };
 
   const submitHandler = (data) => {
     if (!(formData.repeat_password !== "" && formData.repeat_password !== formData.password)) {
-      api.post(apiPath, { id: openDialog.userId, ...data })
+
+      api.post(apiUrl, { id: openDialog.userId, ...data })
         .then((response) => {
+
           toast.success("Uspešno!");
-          setOpenDialog({ ...openDialog, show: false });
+          setOpenDialog({ show: false });
         })
         .catch((error) => {
           console.warn(error);
@@ -29,37 +43,23 @@ const ChangePasswordDialog = ({ openDialog, setOpenDialog, apiPath }) => {
     }
   };
 
-  const init = {
-    password: "",
-    repeat_password: "",
-    sent_mail: "",
-  };
-  const [formData, setFormData] = useState(init);
-  const changeHandler = (data) => {
-    setFormData(data);
-  };
 
-  useEffect(() => {
-    if (openDialog.userId == null) {
-      setOpenDialog({ ...openDialog, show: false });
-    }
-  }, []);
 
   return (
-    <Dialog open={openDialog.show ?? false}>
-      <DialogTitle>{"Promena lozinke"}</DialogTitle>
-
-      <DialogContent>
-        {formData.repeat_password !== "" && formData.repeat_password !== formData.password && <p className={styles.error}>Lozinke se ne poklapaju</p>}
+    <ListPageModalWrapper anchor="right" open={openDialog.show ?? false} onClose={() => setOpenDialog({ ...openDialog, show: false })} onCloseButtonClick={() => setOpenDialog({ ...openDialog, show: false })} styleBox={{ display: "flex", justifyContent: "center", flexDirection: "column", height: "inherit" }} >
+      <Box sx={{ padding: "2rem" }}>
+        <Typography variant="h6" mb={2}>
+          Promena lozinke
+        </Typography>
+        {formData.repeat_password !== "" && formData.repeat_password !== formData.password && (
+          <Typography variant="body2" className={styles.error}>
+            Lozinke se ne poklapaju
+          </Typography>
+        )}
         <Form formFields={formFields} initialData={formData} onSubmit={submitHandler} onChange={changeHandler} />
-      </DialogContent>
+      </Box>
 
-      <DialogActions>
-        <Button variant="outlined" onClick={() => setOpenDialog({ ...openDialog, show: false })} data-test-id="btn-cancel">
-          Zatvori
-        </Button>
-      </DialogActions>
-    </Dialog>
+    </ListPageModalWrapper>
   );
 };
 

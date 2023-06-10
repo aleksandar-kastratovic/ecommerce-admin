@@ -7,6 +7,7 @@ const SaleOfficers = () => {
       apiUrl="admin/referents-b2b"
       title="Komercijalisti"
       columnFields={tblFields}
+      actionNewButton="modal"
     />
   );
 };

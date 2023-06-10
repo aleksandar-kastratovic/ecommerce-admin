@@ -1,21 +1,26 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import IconList from "../../../helpers/icons";
 import GroupAttributes from "./GroupAttributes/GroupAttributes";
 import GroupValues from "./GroupValues/GroupValues"
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
-import useAPI from "../../../api/api";
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
+
 
 const ProductVariantsAttributeDetails = () => {
 
+  const activeTab = getUrlQueryStringParam("tab") ?? 'attributes';
+  const navigate = useNavigate();
+
   const fields = [
     {
+      id: "attributes",
       name: "Atributi",
       icon: IconList.attribution,
       enabled: true,
       component: <GroupAttributes />,
     },
     {
+      id: "attributes_values",
       name: "Vrednosti",
       icon: IconList.list,
       enabled: true,
@@ -23,7 +28,13 @@ const ProductVariantsAttributeDetails = () => {
     },
   ];
 
-  return <DetailsPage title="Atributi za varijacije" fields={fields} />;
+  // Handle after click on tab panel
+  const panelHandleSelect = (field) => {
+    let queryString = setUrlQueryStringParam("tab", field.id);
+    navigate(`/product-items-variants-attributes/group-attribute?${queryString}`, { replace: true });
+  }
+
+  return <DetailsPage title="Atributi za varijacije" fields={fields} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default ProductVariantsAttributeDetails;

@@ -10,13 +10,14 @@ import Unicon from "./shared/Unicon/Unicon";
 
 const SideNavigation = ({ activeTheme, userName }) => {
     const { userScreens } = useContext(AuthContext);
-
+    const sortedScreens = userScreens?.sort((a, b) => a.order - b.order);
     // Populate the menu
     let menu = [];
-    for (const allowedScreen of userScreens ?? []) {
+    for (const allowedScreen of sortedScreens ?? []) {
         // Check for local screen definition
         const screen = availableScreens[allowedScreen.screen_code];
         if (screen) {
+            screen.name = allowedScreen.screen;
             // Init
             menu[screen.group.order] = menu[screen.group.order] ?? {
                 name: screen.group.name,
@@ -30,7 +31,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
 
     return (
         <nav id="sidebar">
-            <NavLink to="/" className="logo">
+            <NavLink to="/homepage" className="logo">
                 <img
                     className={"img-fluid desktop-logo" + (activeTheme ? " dark-theme-logo" : " light-theme-logo")}
                     src={activeTheme ? sideNavLogoDark : sideNavLogoLight}

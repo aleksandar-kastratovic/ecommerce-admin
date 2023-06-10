@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 
 import ListPage from "../../components/shared/ListPage/ListPage";
-import tblFields from "./mainListFields.json";
+import tblFields from "./tblFields.json";
 
 const B2Cbanners = ({ }) => {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ const B2Cbanners = ({ }) => {
       apiUrl="admin/banners-b2c/main"
       columnFields={tblFields}
       additionalButtons={buttons}
+      actionNewButton="modal"
     />
   );
 };

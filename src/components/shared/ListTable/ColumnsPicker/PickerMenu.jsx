@@ -13,7 +13,7 @@ import { InputCheckbox } from "../../Form/FormInputs/FormInputs";
 import styles from "./ColumnsPicker.module.scss";
 
 
-const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClose }) => {
+const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClose, listPageId }) => {
   // Show errors on the list
   const [errorInput, setErrorInput] = useState(null);
   const errorMessage = "Bar jedna kolona mora ostati vidljiva";
@@ -21,30 +21,26 @@ const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClos
   // With useLocation cheking location of page
   const { pathname } = useLocation();
 
+  let localStorageKey = listPageId ? 'columnPickerState.' + listPageId : 'columnPickerState.' + pathname;
+
   // Check if is localStorage empty
   let visible = createPairs(tableFields, "prop_name", "in_main_table");
-  const isLocalStorage = localStorage.getItem(`columnPickerState${pathname}`);
-  if (!isLocalStorage) {
-    localStorage.setItem(`columnPickerState${pathname}`, JSON.stringify(visible));
+
+  const inLocalStorage = JSON.parse(localStorage.getItem(localStorageKey));
+
+  if (inLocalStorage !== null && Object.keys(inLocalStorage).length > 0) {
+    visible = inLocalStorage;
   } else {
-    visible = JSON.parse(isLocalStorage);
+    localStorage.setItem(localStorageKey, JSON.stringify(visible));
   }
 
   // Not all columns can be hidden
   const [visibleColumns, setVisibleColumns] = useState(visible);
 
   useEffect(() => {
-    const getItemsLocalStorage = JSON.parse(localStorage.getItem(`columnPickerState${pathname}`));
-    setVisibleColumns(getItemsLocalStorage);
-    handleConfirm(tableFields.map((item) => ({ ...item, in_main_table: visibleColumns[item.prop_name] })));
-    setVisibleColumns(visibleColumns);
+    setVisibleColumns(visible);
+    handleConfirm(tableFields.map((item) => ({ ...item, in_main_table: visible[item.prop_name] })));
   }, []);
-
-  useEffect(() => {
-    if (visibleColumns != null) {
-      localStorage.setItem(`columnPickerState${pathname}`, JSON.stringify(visibleColumns));
-    }
-  }, [visibleColumns])
 
   // Handle each time a user click a checkbox
   const handleChange = ({ target }, checked) =>
@@ -70,6 +66,7 @@ const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClos
 
   // Apply the selected columns
   const onConfirm = () => {
+    localStorage.setItem(localStorageKey, JSON.stringify(visibleColumns));
     handleConfirm(tableFields.map((item) => ({ ...item, in_main_table: visibleColumns[item.prop_name] })));
   };
 
@@ -103,7 +100,8 @@ const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClos
               label="Otkaži"
               onClick={() => {
                 handleClose();
-                setVisibleColumns(getItemsLocalStorage);
+                setVisibleColumns(visible);
+                handleConfirm(tableFields.map((item) => ({ ...item, in_main_table: visible[item.prop_name] })));
               }}
             />
           </Buttons>

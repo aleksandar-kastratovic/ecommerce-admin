@@ -659,6 +659,7 @@ li.dropdown-item-custom.open .dropdown-menu {
 
 #sidebar .sidebar-categories p {
     margin-bottom: 0;
+    margin-top: 0;
     font-weight: 600;
     font-size: 14px;
     color: var(--white-side-color);
@@ -706,7 +707,7 @@ li.dropdown-item-custom.open .dropdown-menu {
     overflow-x: hidden;
 }
 .side-open #sidebar .scroll-view {
-    height: calc(100vh - 170px);
+    height: calc(100vh - 250px);
 }
 
 #sidebar .scroll-view .category-item:last-child {

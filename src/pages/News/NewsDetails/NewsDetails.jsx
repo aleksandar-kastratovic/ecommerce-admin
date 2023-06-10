@@ -10,99 +10,113 @@ import Categories from "./panels/Categories";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Seo from "./panels/Seo";
 import TechnicalDoc from "./panels/TechnicalDoc";
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
 const NewsDetails = () => {
-    const { nid } = useParams();
-    console.log(nid);
-    const api = useAPI();
-    const apiPath = "admin/news-b2c/news/basic-data";
-    const navigate = useNavigate();
+  const { nid } = useParams();
+  console.log(nid);
+  const api = useAPI();
+  const apiPath = "admin/news-b2c/news/basic-data";
+  const navigate = useNavigate();
+  const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
-    const init = {
-        id: null,
-        slug: null,
-        name: null,
-        title: null,
-        subtitle: null,
-        short_description: null,
-        description: null,
-        id_news_category: null,
-        thumb_image: null,
-    };
+  const init = {
+    id: null,
+    slug: null,
+    name: null,
+    title: null,
+    subtitle: null,
+    short_description: null,
+    description: null,
+    id_news_category: null,
+    thumb_image: null,
+  };
 
-    const [data, setData] = useState(init);
-    const [isLoading, setIsLoading] = useState(false);
+  const [data, setData] = useState(init);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const handleData = async () => {
-        setIsLoading(true);
-        api.get(`${apiPath}/${nid}`)
-            .then((response) => {
-                setData(response?.payload);
-                console.log(response?.payload);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                console.warn(error);
-                setIsLoading(false);
-            });
-    };
+  const handleData = async () => {
+    setIsLoading(true);
+    api.get(`${apiPath}/${nid}`)
+      .then((response) => {
+        setData(response?.payload);
+        console.log(response?.payload);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.warn(error);
+        setIsLoading(false);
+      });
+  };
 
-    const saveData = async (data) => {
-        let oldId = data.id;
-        api.post(apiPath, { ...data, image: data.thumb_image })
-            .then((response) => {
-                setData(response?.payload);
-                toast.success("Uspešno");
+  const saveData = async (data) => {
+    let oldId = data.id;
+    api.post(apiPath, { ...data, image: data.thumb_image })
+      .then((response) => {
+        setData(response?.payload);
+        toast.success("Uspešno");
 
-                if (oldId === null) {
-                    let tId = response?.payload?.id;
-                    navigate(`/b2c-news/${tId}`, { replace: true });
-                }
-            })
-            .catch((error) => {
-                console.warn(error);
-                toast.warning("Greška");
-            });
-    };
+        if (oldId === null) {
+          let tId = response?.payload?.id;
+          navigate(`/b2c-news/${tId}`, { replace: true });
+        }
+      })
+      .catch((error) => {
+        console.warn(error);
+        toast.warning("Greška");
+      });
+  };
 
-    useEffect(() => {
-        handleData();
-    }, []);
+  useEffect(() => {
+    handleData();
+  }, []);
 
-    const fields = [
-        {
-            name: "Osnovno",
-            icon: IconList.inventory,
-            enabled: true,
-            component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} />,
-        },
-        {
-            name: "Galerija",
-            icon: IconList.browseGallery,
-            enabled: data?.id,
-            component: <Gallery newsId={data?.id} />,
-        },
-        {
-            name: "Kategorije",
-            icon: IconList.category,
-            enabled: data?.id,
-            component: <Categories newsId={data?.id} />,
-        },
-        {
-            name: "Seo",
-            icon: IconList.search,
-            enabled: data?.id,
-            component: <Seo newsId={data?.id} />,
-        },
-        {
-            name: "Dokumentacija",
-            icon: IconList.documentScanner,
-            enabled: data?.id,
-            component: <TechnicalDoc newsId={data?.id} />,
-        },
-    ];
+  const fields = [
+    {
+      id: "basic",
+      name: "Osnovno",
+      icon: IconList.inventory,
+      enabled: true,
+      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} />,
+    },
+    {
+      id: "gallery",
+      name: "Galerija",
+      icon: IconList.browseGallery,
+      enabled: data?.id,
+      component: <Gallery newsId={data?.id} />,
+    },
+    {
+      id: "categories",
+      name: "Kategorije",
+      icon: IconList.category,
+      enabled: data?.id,
+      component: <Categories newsId={data?.id} />,
+    },
+    {
+      id: "seo",
+      name: "Seo",
+      icon: IconList.search,
+      enabled: data?.id,
+      component: <Seo newsId={data?.id} />,
+    },
+    {
+      id: "documentation",
+      name: "Dokumentacija",
+      icon: IconList.documentScanner,
+      enabled: data?.id,
+      component: <TechnicalDoc newsId={data?.id} />,
+    },
+  ];
 
-    return <DetailsPage title={data?.id == null ? "Nova vest" : data?.title} fields={fields} ready={[nid === "new" || data?.id]} />;
+  // Handle after click on tab panel
+  const panelHandleSelect = (field) => {
+    let queryString = setUrlQueryStringParam("tab", field.id);
+    const id = data.id == null ? "new" : data.id;
+    navigate(`/b2c-news/${id}?${queryString}`, { replace: true });
+  }
+
+  return <DetailsPage title={data?.id == null ? "Nova vest" : data?.title} fields={fields} ready={[nid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default NewsDetails;

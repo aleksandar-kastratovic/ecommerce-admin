@@ -38,7 +38,7 @@ import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren }) => {
+const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren, listPageId, validateData }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
@@ -213,7 +213,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
   return (
     <>
       <PageWrapper title={title} actions={actions}>
-        <ListTableToolbar onColumnsChange={setFieldsColumns} fields={fieldsColumns} filters={filters} onSearch={handleSearch} showDatePicker={showDatePicker} />
+        <ListTableToolbar listPageId={listPageId} onColumnsChange={setFieldsColumns} fields={fieldsColumns} filters={filters} onSearch={handleSearch} showDatePicker={showDatePicker} />
 
         <ListTable
           fields={flatten(fieldsColumns).filter((field) => field.in_main_table)}
@@ -237,7 +237,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
 
       </PageWrapper >
 
-      <ModalForm children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} />
+      <ModalForm validateData={validateData} children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} />
       <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );

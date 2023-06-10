@@ -5,17 +5,25 @@ import IconList from "../../helpers/icons";
 import tblFields from "./tblFields.json";
 
 const PricesGroupsListPage = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const additionalButtons = [
-        {
-            label: "Nazad",
-            icon: IconList.arrowBack,
-            action: () => navigate(-1),
-        },
-    ];
+  const additionalButtons = [
+    {
+      label: "Nazad",
+      icon: IconList.arrowBack,
+      action: () => navigate(-1),
+    },
+  ];
 
-    return <ListPage title="Grupe cena" apiUrl="admin/product-items/prices-structure" columnFields={tblFields} additionalButtons={additionalButtons} />;
+  return (
+    <ListPage
+      title="Grupe cena"
+      apiUrl="admin/product-items/prices-structure"
+      columnFields={tblFields}
+      additionalButtons={additionalButtons}
+      actionNewButton="modal"
+    />
+  );
 };
 
 export default PricesGroupsListPage;

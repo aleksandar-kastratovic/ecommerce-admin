@@ -57,7 +57,7 @@ const GroupValues = ({ groupId }) => {
   return (
     <>
       <ListPage
-        key="group-attribute-values"
+        listPageId="GroupValues"
         apiUrl={`admin/product-item-specifications/group-attribute-values/${groupId}`}
         editUrl={`admin/product-item-specifications/group-attribute-values`}
         editUrlQueryString={[
@@ -66,7 +66,7 @@ const GroupValues = ({ groupId }) => {
             value: groupId
           }
         ]}
-        title=""
+        title=" "
         columnFields={newFields}
         actionNewButton="modal"
         addFieldLabel="Dodajte novu vrednost"

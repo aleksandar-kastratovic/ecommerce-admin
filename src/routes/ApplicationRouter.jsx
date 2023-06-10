@@ -1,8 +1,6 @@
 import React, { useContext } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Error404 from "../pages/Error/Error404";
 import LoginPage from "../pages/LoginPage";
-import ResetPasswordPage from "../pages/ResetPasswordPage";
 import AuthContext from "../store/auth-contex";
 import { availableScreens } from "./routes";
 import { makeRoute } from "./utils";
@@ -14,18 +12,15 @@ import { makeRoute } from "./utils";
  * @constructor
  */
 const ApplicationRouter = () => {
-  const authContext: { isLoggedIn: boolean, userScreens: [{ screen_code: string }] } = useContext(AuthContext);
+  const authContext: { isLoggedIn: boolean, userScreens: [{ screen_code: string }], startScreen: null } = useContext(AuthContext);
 
   // Get the default screen for the user
-  const defaultPath = availableScreens[authContext.userScreens?.find((userScreen) => availableScreens[userScreen.screen_code])?.screen_code]?.path ?? "/login";
+  const defaultPath = availableScreens[authContext.startScreen]?.path ?? "/login";
 
   // Unauthorized users
   const unauthorizedRoutes = (
     <>
       <Route path="/login" element={<LoginPage />} />
-      <Route path="/reset-password" element={<ResetPasswordPage />}>
-        <Route path=":token" element={<ResetPasswordPage />} />
-      </Route>
       <Route path="*" element={<Navigate replace to="/login" />} />
     </>
   );
@@ -42,7 +37,6 @@ const ApplicationRouter = () => {
   return (
     <Routes>
       {authContext?.isLoggedIn ? authorizedRoutes : unauthorizedRoutes}
-      <Route path="*" element={<Error404 />} />
     </Routes>
   );
 };

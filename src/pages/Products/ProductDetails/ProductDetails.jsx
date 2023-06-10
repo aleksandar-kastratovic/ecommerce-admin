@@ -20,10 +20,12 @@ import TechnicalDoc from "./panels/TechnicalDoc";
 import Instruction from "./panels/Instruction";
 import Certificate from "./panels/Certificate";
 import DisplayIn from "./panels/DisplayIn";
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
 const ProductDetails = () => {
   const { prodId } = useParams();
   const navigate = useNavigate();
+  const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
   const init = {
     id: null,
@@ -40,6 +42,21 @@ const ProductDetails = () => {
 
   const [data, setData] = useState(init);
   const api = useAPI();
+
+  const updateNewFieldsInDetails = (data, isNew) => {
+    const newFromField = data.find((item) => item.prop_name === "new_from");
+    const newToField = data.find((item) => item.prop_name === "new_to");
+
+    if (isNew) {
+      console.log(isNew)
+      newFromField.in_details = true;
+      newToField.in_details = true;
+    } else {
+      console.log(isNew)
+      newFromField.in_details = false;
+      newToField.in_details = false;
+    }
+  };
 
   const handleSubmit = (data) => {
     let oldId = data.id;
@@ -61,7 +78,10 @@ const ProductDetails = () => {
 
   const handleData = () => {
     api.get(`admin/product-items/basic-data/${prodId}`)
-      .then((response) => setData(response?.payload))
+      .then((response) => {
+        setData(response?.payload)
+        updateNewFieldsInDetails(basic_data, response?.payload?.new);
+      })
       .catch((error) => console.warn(error));
   };
 
@@ -69,86 +89,111 @@ const ProductDetails = () => {
     handleData();
   }, []);
 
+  const validateData = (data, field) => {
+    let ret = data;
+    switch (field) {
+      case "new":
+        updateNewFieldsInDetails(basic_data, ret.new);
+        return ret;
+      default:
+        return ret;
+    }
+  };
+
   const fields = [
     {
+      id: "basic",
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={handleSubmit} />,
+      component: <Form formFields={basic_data} initialData={data} onSubmit={handleSubmit} validateData={validateData} />,
     },
     {
+      id: "description",
       name: "Opis",
       icon: IconList.description,
       enabled: data?.id,
       component: <Description productId={data?.id} />,
     },
     {
+      id: "prices",
       name: "Cene",
       icon: IconList.money,
       enabled: data?.id,
       component: <Prices productId={data?.id} />,
     },
     {
+      id: "lager",
       name: "Lager",
       icon: IconList.inventory2,
       enabled: data?.id,
       component: <Inventories productId={data?.id} />,
     },
     {
+      id: "category",
       name: "Kategorije",
       icon: IconList.category,
       enabled: data?.id,
       component: <Categories productId={data?.id} />,
     },
     {
+      id: "gallery",
       name: "Galerija",
       icon: IconList.browseGallery,
       enabled: data?.id,
       component: <Gallery productId={data?.id} />,
     },
     {
+      id: "declaration",
       name: "Deklaracija",
       icon: IconList.editDocument,
       enabled: data?.id,
       component: <Declaration productId={data?.id} />,
     },
     {
+      id: "seo",
       name: "SEO",
       icon: IconList.search,
       enabled: data?.id,
       component: <Seo productId={data?.id} />,
     },
     {
+      id: "display",
       name: "Prikaz",
       icon: IconList.displaySettings,
       enabled: data?.id,
       component: <DisplayIn productId={data?.id} />,
     },
     {
+      id: "technical_documentation",
       name: "Tehnička dokumentacija",
       icon: IconList.documentScanner,
       enabled: data?.id,
       component: <TechnicalDoc productId={data?.id} />,
     },
     {
+      id: "Certificates",
       name: "Sertifikati",
       icon: IconList.documentScanner,
       enabled: data?.id,
       component: <Certificate productId={data?.id} />,
     },
     {
+      id: "instructions",
       name: "Instrukcije",
       icon: IconList.documentScanner,
       enabled: data?.id,
       component: <Instruction productId={data?.id} />,
     },
     {
+      id: "specifications",
       name: "Specifikacije",
       icon: IconList.checklist,
       enabled: data?.id,
       component: <Specification productId={data?.id} />,
     },
     {
+      id: "variation",
       name: "Varijacije",
       icon: IconList.difference,
       enabled: data?.id,
@@ -156,7 +201,14 @@ const ProductDetails = () => {
     },
   ];
 
-  return <DetailsPage title={data?.id == null ? "Unos novog proizvoda" : data?.name} fields={fields} ready={[prodId === "new" || data?.id]} />;
+  // Handle after click on tab panel
+  const panelHandleSelect = (field) => {
+    let queryString = setUrlQueryStringParam("tab", field.id);
+    const id = data.id == null ? "new" : data.id;
+    navigate(`/products/${id}?${queryString}`, { replace: true });
+  }
+
+  return <DetailsPage title={data?.id == null ? "Unos novog proizvoda" : data?.name} fields={fields} ready={[prodId === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default ProductDetails;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import ListPage from "../../components/shared/ListPage/ListPage";
 
-import tblFields from "./ProductColumnFields.json";
+import tblFields from "./tblFields.json";
 import listCheckbox from "./listCheckbox.json";
 import ModalForm from "../../components/shared/Modal/ModalForm";
 

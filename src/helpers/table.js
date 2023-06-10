@@ -44,6 +44,7 @@ export const columnCell = (value, column) => {
             return moment(value).isValid() ? moment(value).format("DD. MMM yyyy HH:mm A") : "";
 
         case "image":
+        case "image_button":
             return <img src={value} height="70px" alt />;
 
         case "input":

@@ -199,7 +199,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => { }, ac
   }, [imageList]);
 
   return (
-    <Grid container spacing={1} direction="row" sx={{ mt: "2rem", ml: "1rem" }}>
+    <Grid container spacing={1} direction="row" sx={{ mt: "2rem", ml: "1rem", width: "auto" }}>
       <MultipleImages handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} />
 
       <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} handleReorder={handleReorder} />
