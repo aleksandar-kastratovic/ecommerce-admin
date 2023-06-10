@@ -1,24 +1,40 @@
 @import "../../../variables.scss";
 
 .buttonStyle {
-    background-color: $lightGrey  !important;
-    width: 5rem !important;
-    height: 5rem;
+    width: fit-content !important;
+    border-color: #cbd5e1 !important;
+    border-width: thin !important;
 }
 
 .buttonStyle:hover {
-    background-color: $lightGreen  !important;
-    opacity: 0.9, 0.8, 0.7;
+    background-color: rgba(40, 168, 110, 1) !important;
+    h6 {
+        color: #ffffff;
+    }
+    .addAPhotoIcon {
+        color: #ffffff;
+    }
+}
+
+.divider {
+    margin: 1rem 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    &::after,
+    &::before {
+        transform: none !important;
+        border-top: 1px solid #cbd5e1 !important;
+    }
 }
 
 .addAPhotoIcon {
-    font-size: 2rem !important;
+    font-size: 1.9rem !important;
+    color: rgba(0, 0, 0, 0.54);
+    margin-right: 0.5rem;
 }
 
 .formUpload {
-    height: 10rem;
-    width: 15rem;
-    max-width: 100%;
+    width: 100%;
     text-align: center;
     position: relative;
 }

@@ -7,7 +7,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": false,
     "input_type": "input"
@@ -20,7 +20,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -33,7 +33,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -46,7 +46,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -59,7 +59,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -72,7 +72,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -85,7 +85,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -98,7 +98,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -111,7 +111,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -124,7 +124,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -137,7 +137,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -150,7 +150,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -163,7 +163,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -176,7 +176,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -184,12 +184,12 @@
   {
     "field_name": "Valuta",
     "prop_name": "currency",
-    "in_main_table": false,
+    "in_main_table": true,
     "in_details": true,
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -197,12 +197,12 @@
   {
     "field_name": "Opis",
     "prop_name": "description",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -215,7 +215,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -228,7 +228,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -241,7 +241,7 @@
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
@@ -254,7 +254,7 @@
     "editable": true,
     "disabled": false,
     "required": false,
-    "description": "255",
+    "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "preview"

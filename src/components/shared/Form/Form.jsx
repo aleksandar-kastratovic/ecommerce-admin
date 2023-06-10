@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 import Button from "../Button/Button";
 import CreateForm from "./CreateForm";
 import Buttons from "./Buttons/Buttons";
@@ -10,9 +11,11 @@ import ImageDialog from "../Dialogs/ImageDialog";
 import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
 
+
 const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), cancelButton = false, submitButton = true, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox }) => {
   const navigate = useNavigate();
   const [data, setData] = useState(initialData ?? {});
+  const [isLoading, setIsLoading] = useState(false);
   const [inputsError, setInputsError] = useState([]);
   const [openImageDialog, setOpenImageDialog] = useState({
     show: false,
@@ -47,7 +50,18 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
     if (!isEmpty(errors)) {
       console.error("Nisu popunjena sva obavezna polja. ", errors);
     }
-    isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
+
+
+    // TODO treba da prikazuje loader pri slanju podataka, ova postavka nam resava trenutno posao
+    if (isEmpty(errors)) {
+      setIsLoading(true)
+      setTimeout(() => {
+        setIsLoading(false)
+      }, 1000)
+      onSubmit(data)
+    } else {
+      setInputsError(errors)
+    }
 
   };
 
@@ -58,10 +72,6 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
   };
 
   const formItemChangeHandler = ({ target }, type) => {
-
-    console.log(target);
-
-
     let newData;
     switch (type) {
       case "date":
@@ -206,10 +216,13 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
               />
             );
           })}
+
+
         <Buttons>
           {cancelButton && <Button label="Odustani" onClick={onCancel} />}
-          {submitButton && <Button type="submit" label={label ? label : "Sačuvaj"} variant="contained" />}
+          {submitButton && <Button type="submit" label={isLoading ? <CircularProgress size="1.5rem" /> : (label ? label : "Sačuvaj")} variant="contained" disabled={isLoading} />}
         </Buttons>
+
       </Box>
       <ImageDialog
         title="Obrada slike"

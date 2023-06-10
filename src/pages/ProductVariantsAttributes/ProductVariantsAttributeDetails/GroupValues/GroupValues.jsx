@@ -48,7 +48,7 @@ const GroupValues = () => {
         key="group-attribute-values"
         apiUrl={`admin/product-items-variants-attributes/group-attribute-values`}
         editUrl={`admin/product-items-variants-attributes/group-attribute-values`}
-        title=""
+        title=" "
         columnFields={formFields}
         actionNewButton="modal"
         addFieldLabel="Dodajte novu vrednost"

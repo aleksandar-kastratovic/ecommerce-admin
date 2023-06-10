@@ -104,6 +104,19 @@
     ]
   },
   {
+    "field_name": "Tekst",
+    "prop_name": "text",
+    "in_main_table": false,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "textarea"
+  },
+  {
     "field_name": "Tekst na dugmetu",
     "prop_name": "button",
     "in_main_table": false,
@@ -128,16 +141,9 @@
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "select",
-    "options": [
-      {
-        "id": "on",
-        "name": "on"
-      },
-      {
-        "id": "off",
-        "name": "off"
-      }
-    ]
+    "fillFromApi": "admin/banners-b2b/main/ddl",
+    "usePropName": true,
+    "options": []
   },
   {
     "field_name": "",

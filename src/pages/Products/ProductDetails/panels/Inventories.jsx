@@ -3,9 +3,11 @@ import useAPI from "../../../../api/api";
 
 import formFields from "../forms/inventories.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
+import { useNavigate } from "react-router-dom";
 
 const Inventories = ({ productId }) => {
   const api = useAPI();
+  const navigate = useNavigate();
 
   const customActions = {
     delete: {
@@ -37,6 +39,15 @@ const Inventories = ({ productId }) => {
     },
   };
 
+  const additionalButtons = [
+    {
+      label: "Skladišta",
+      action: () => {
+        navigate("/stores");
+      },
+    },
+  ];
+
   return (
     <>
       <ListPage
@@ -49,6 +60,7 @@ const Inventories = ({ productId }) => {
         addFieldLabel="Dodajte novi lager"
         showAddButton={true}
         customActions={customActions}
+        additionalButtons={additionalButtons}
       />
     </>
   );

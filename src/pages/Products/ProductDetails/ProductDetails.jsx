@@ -43,6 +43,21 @@ const ProductDetails = () => {
   const [data, setData] = useState(init);
   const api = useAPI();
 
+  const updateNewFieldsInDetails = (data, isNew) => {
+    const newFromField = data.find((item) => item.prop_name === "new_from");
+    const newToField = data.find((item) => item.prop_name === "new_to");
+
+    if (isNew) {
+      console.log(isNew)
+      newFromField.in_details = true;
+      newToField.in_details = true;
+    } else {
+      console.log(isNew)
+      newFromField.in_details = false;
+      newToField.in_details = false;
+    }
+  };
+
   const handleSubmit = (data) => {
     let oldId = data.id;
     api.post(`admin/product-items/basic-data/`, data)
@@ -63,7 +78,10 @@ const ProductDetails = () => {
 
   const handleData = () => {
     api.get(`admin/product-items/basic-data/${prodId}`)
-      .then((response) => setData(response?.payload))
+      .then((response) => {
+        setData(response?.payload)
+        updateNewFieldsInDetails(basic_data, response?.payload?.new);
+      })
       .catch((error) => console.warn(error));
   };
 
@@ -71,13 +89,24 @@ const ProductDetails = () => {
     handleData();
   }, []);
 
+  const validateData = (data, field) => {
+    let ret = data;
+    switch (field) {
+      case "new":
+        updateNewFieldsInDetails(basic_data, ret.new);
+        return ret;
+      default:
+        return ret;
+    }
+  };
+
   const fields = [
     {
       id: "basic",
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={handleSubmit} />,
+      component: <Form formFields={basic_data} initialData={data} onSubmit={handleSubmit} validateData={validateData} />,
     },
     {
       id: "description",

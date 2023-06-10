@@ -11,7 +11,13 @@ const B2COrders = () => {
   };
 
   return (
-    <ListPage apiUrl="admin/orders-b2c/order" title="Porudžbine" columnFields={tblFields} showNewButton={false} customActions={customActions} />
+    <ListPage
+      apiUrl="admin/orders-b2c/list"
+      title="Porudžbine"
+      columnFields={tblFields}
+      showNewButton={false}
+      customActions={customActions}
+    />
   );
 };
 

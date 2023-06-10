@@ -10,7 +10,7 @@ const B2BOrders = () => {
   };
   return (
     <ListPage
-      apiUrl="admin/orders-b2b/order"
+      apiUrl="admin/orders-b2b/list"
       title="Porudžbine"
       columnFields={tblFields}
       showNewButton={false}

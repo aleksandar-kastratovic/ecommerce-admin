@@ -66,7 +66,7 @@ const GroupValues = ({ groupId }) => {
             value: groupId
           }
         ]}
-        title=""
+        title=" "
         columnFields={newFields}
         actionNewButton="modal"
         addFieldLabel="Dodajte novu vrednost"

@@ -8,6 +8,8 @@ import Icon from "@mui/material/Icon";
 import IconList from "../../../helpers/icons";
 
 import styles from "./MultipleImages.module.scss";
+import { Divider } from "@mui/material";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 
 const MultipleImages = ({ handleMultipleImageUpload = () => { }, handleDrag = () => { }, handleDrop = () => { }, accept = "image/*", dragActive = false, icon = IconList.addAPhoto }) => {
@@ -16,21 +18,22 @@ const MultipleImages = ({ handleMultipleImageUpload = () => { }, handleDrag = ()
       <Box className={styles.formUpload} onDragEnter={handleDrag}>
         <input type="file" className={styles.inputUpload} multiple={true} />
         <label className={!dragActive ? styles.labelUpload : styles.labelUploadActive} htmlFor="input-file-upload">
-          <div>
-            <p>Prevuci ili</p>
+          <Box sx={{ width: "80%", padding: "1.5rem 0" }}>
+            <CloudUploadIcon sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "2rem" }} />
+            <Typography variant="subtitle1" sx={{ fontSize: "0.875rem" }}>
+              Prevuci dokument
+            </Typography>
+            <Divider className={styles.divider}>ili</Divider>
             <Button variant="outlined" component="label" className={styles.buttonStyle}>
               <input hidden accept={accept} multiple type="file" onChange={(e) => handleMultipleImageUpload(e)} />
-              <Box>
-                <Box>
-                  <Typography variant="caption" display="block" gutterBottom />
-                  <Icon className={styles.addAPhotoIcon}>{icon}</Icon>
-                </Box>
-                <Typography variant="caption" display="block" gutterBottom>
-                  klikni
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                <Icon className={styles.addAPhotoIcon}>{icon}</Icon>
+                <Typography variant="subtitle1" sx={{ textTransform: "lowercase", color: "#000", fontSize: "0.875rem" }}>
+                  Odaberi dokument
                 </Typography>
               </Box>
             </Button>
-          </div>
+          </Box>
         </label>
         {dragActive && <div className={styles.dragPseudoElement} onDragEnter={handleDrag} onDragLeave={handleDrag} onDragOver={handleDrag} onDrop={handleDrop} />}
       </Box>

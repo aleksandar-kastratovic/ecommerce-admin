@@ -3,7 +3,6 @@ import B2BRebatesDetails from "../pages/B2BRebates/B2BRebatesDetails/B2BRebatesD
 import B2BRebatesListPage from "../pages/B2BRebates/B2BRebatesListPage";
 import B2BRebateTiersListPage from "../pages/B2BRebateTiers/B2BRebateTiersListPage";
 import Countries from "../pages/Countries/Countries";
-import PricesGroupsDetails from "../pages/PricesGroups/Details/PricesGroupsDetails";
 import PricesGroupsListPage from "../pages/PricesGroups/PricesGroupsListPage";
 import Towns from "../pages/Towns/Towns";
 import Streets from "../pages/Streets/Streets";
@@ -37,7 +36,6 @@ import Newsletter from "../pages/Newsletter/Newsletter";
 import B2CContactForm from "../pages/B2CContactForm/B2CContactForm";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
 import B2Cbanners from "./../pages/B2Cbanners/B2Cbanners";
-import DetailsBannersB2C from "./../pages/B2Cbanners/DetailsBanners/DetailsBannersB2C";
 import B2CSettings from "./../pages/B2CSettings/B2CSettings";
 import ImportSteps from "./../pages/Import/ImportSteps";
 import DetailsParams from "./../pages/Params/DetailsParams/DetailsParams";
@@ -67,6 +65,7 @@ import B2COrdersDetails from "../pages/B2COrders/DetailsOrders/B2COrdersDetails"
 import B2CContactFormDetails from "../pages/B2CContactForm/B2CContacFormDetails/B2CContactFormDetails";
 import Homepage from "../pages/Homepage/Homepage";
 import Error404 from "../pages/Error/Error404";
+import B2BContactFormDetails from "../pages/B2BContactForm/DetailsContactForm/B2BContactFormDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, PROMOTIONS, SETTINGS, TOOLS } = MenuGroup;
@@ -94,7 +93,6 @@ const screens = {
         [
             [":prodId", ProductDetails],
             ["prices-groups", PricesGroupsListPage],
-            ["prices-groups/:priceGroupId", PricesGroupsDetails],
         ],
     ],
     PRODUCT_SPEC: ["/product-specs/groups", "Specifikacija", IconList.inventory, PRODUCT, ProductSpecsGroups, [[":groupId", ProductGroupDetails]]],
@@ -114,19 +112,9 @@ const screens = {
     BANNERS_B2B: ["/b2b-banners", "Baneri", IconList.image, B2B, B2Bbanners, [["positions", B2BbannersPositions]]],
     B2B_SALES_OFFICER: ["/b2b-sales-officers", "Komercijalisti", IconList.manageAccounts, B2B, SaleOfficers],
     B2B_NOTIFICATIONS: ["/b2b-notifications", "Notifikacije", IconList.notifications, B2B, Notifications],
-    B2B_CONTACT_FORMS: ["/b2b-contact", "Kontakt forma", IconList.markunreadMailbox, B2B, B2BContactForm],
+    B2B_CONTACT_FORMS: ["/b2b-contact", "Kontakt forma", IconList.markunreadMailbox, B2B, B2BContactForm, [[":id", B2BContactFormDetails]]],
 
-    BANNERS_B2C: [
-        "/b2c-banners",
-        "Baneri",
-        IconList.image,
-        B2C,
-        B2Cbanners,
-        [
-            [":B2CId", DetailsBannersB2C],
-            ["positions", B2CbannersPositions],
-        ],
-    ],
+    BANNERS_B2C: ["/b2c-banners", "Baneri", IconList.image, B2C, B2Cbanners, [["positions", B2CbannersPositions]]],
     B2C_NEWS: [
         "/b2c-news",
         "Vesti",
@@ -141,7 +129,7 @@ const screens = {
     ],
     B2C_STATIC_PAGES: ["/b2c-staticpages", "Statičke strane", IconList.article, B2C, StaticPages, [[":spid", StaticPagesDetails]]],
     B2C_NEWSLETTER: ["/b2c-newsletter", "Newsletter", IconList.article, B2C, Newsletter, [[":nlid", Newsletter]]],
-    B2C_CONTACT_FORMS: ["/b2c-contactform", "Kontakt forma", IconList.contactPhone, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
+    B2C_CONTACT_FORMS: ["/b2c-contactform", "Kontakt forma", IconList.markunreadMailbox, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],
 
     PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Proizvodi", IconList.campaign, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],

@@ -35,7 +35,7 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": false,
+    "required": true,
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
@@ -136,21 +136,14 @@
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": false,
+    "required": true,
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "select",
-    "options": [
-      {
-        "id": "on",
-        "name": "on"
-      },
-      {
-        "id": "off",
-        "name": "off"
-      }
-    ]
+    "fillFromApi": "admin/banners-b2c/main/ddl",
+    "usePropName": true,
+    "options": []
   },
   {
     "field_name": "",

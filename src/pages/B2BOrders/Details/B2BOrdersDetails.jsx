@@ -19,7 +19,7 @@ const B2BOrdersDetails = () => {
   const navigate = useNavigate();
   const { orderId } = useParams();
   const api = useAPI();
-  const apiPathOrderData = "admin/orders-b2b/order";
+  const apiPathOrderData = "admin/orders-b2b/summary";
   const apiPathBilling = "admin/orders-b2b/billing-address";
   const apiPathShipping = "admin/orders-b2b/shipping-address";
   const apiPathItems = "admin/orders-b2b/items";
