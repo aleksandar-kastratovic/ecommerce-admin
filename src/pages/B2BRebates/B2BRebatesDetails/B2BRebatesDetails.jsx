@@ -8,10 +8,10 @@ import { NEW } from "../../../helpers/const";
 import { updateStateKey } from "../../../helpers/data";
 import IconList from "../../../helpers/icons";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
-import BasicPanel from "./panels/BasicPanel";
-import BrandsPanel from "./panels/BrandsPanel";
-import CategoriesPanel from "./panels/CategoriesPanel";
-import TiersPanel from "./panels/TiersPanel";
+import BasicPanel from "./Panels/BasicPanel";
+import BrandsPanel from "./Panels/BrandsPanel";
+import CategoriesPanel from "./Panels/CategoriesPanel";
+import TiersPanel from "./Panels/TiersPanel";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
 const B2BRebatesDetails = () => {
