@@ -19,7 +19,7 @@ const MultipleImages = ({ handleMultipleImageUpload = () => { }, handleDrag = ()
         <input type="file" className={styles.inputUpload} multiple={true} />
         <label className={!dragActive ? styles.labelUpload : styles.labelUploadActive} htmlFor="input-file-upload">
           <Box sx={{ width: "80%", padding: "1.5rem 0" }}>
-            <CloudUploadIcon sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "2rem" }} />
+            <CloudUploadIcon sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.8rem" }} />
             <Typography variant="subtitle1" sx={{ fontSize: "0.875rem" }}>
               Prevuci dokument
             </Typography>
@@ -29,7 +29,7 @@ const MultipleImages = ({ handleMultipleImageUpload = () => { }, handleDrag = ()
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Icon className={styles.addAPhotoIcon}>{icon}</Icon>
                 <Typography variant="subtitle1" sx={{ textTransform: "lowercase", color: "#000", fontSize: "0.875rem" }}>
-                  Odaberi dokument
+                  <span style={{ textTransform: "capitalize" }}>O</span>daberi dokument
                 </Typography>
               </Box>
             </Button>

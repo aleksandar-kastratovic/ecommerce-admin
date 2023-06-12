@@ -2,7 +2,7 @@
 
 .buttonStyle {
     width: fit-content !important;
-    border-color: #cbd5e1 !important;
+    border-color: #dae1f1 !important;
     border-width: thin !important;
 }
 
@@ -23,12 +23,12 @@
     &::after,
     &::before {
         transform: none !important;
-        border-top: 1px solid #cbd5e1 !important;
+        border-top: 1px solid #dae1f1 !important;
     }
 }
 
 .addAPhotoIcon {
-    font-size: 1.9rem !important;
+    font-size: 1.6rem !important;
     color: rgba(0, 0, 0, 0.54);
     margin-right: 0.5rem;
 }
@@ -60,9 +60,9 @@
     align-items: center;
     justify-content: center;
     border-width: 2px;
-    border-radius: 1rem;
+    border-radius: 0.25rem;
     border-style: dashed;
-    border-color: #cbd5e1;
+    border-color: #dae1f1;
     background-color: #f8fafc;
 }
 

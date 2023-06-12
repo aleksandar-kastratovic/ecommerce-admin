@@ -12,6 +12,8 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { reorder, getItemStyle, getListStyle } from "./util";
 import IconList from "../../../../helpers/icons";
+import Box from "@mui/system/Box";
+import Typography from "@mui/material/Typography";
 
 // https://github.com/atlassian/react-beautiful-dnd
 
@@ -33,7 +35,7 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { 
               {imageList.map((item, index) => (
                 <Draggable key={item.id} draggableId={item.name ?? item.id + "drag"} index={index}>
                   {(provided, snapshot) => (
-                    <div>
+                    <Box sx={{ position: "relative" }}>
                       <ImageListItem
                         key={item.image}
                         ref={provided.innerRef}
@@ -51,15 +53,16 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { 
                             alt={item?.name}
                             loading="lazy"
                             style={{
-                              height: "6rem",
+                              height: "10rem",
+
                             }}
                             onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position)}
                           />
                         ) : (
-                          <div
+                          <Box
                             key={item.src}
                             style={{
-                              height: "6rem",
+                              height: "10rem",
                               background: "white",
                               display: "flex",
                               alignItems: "center",
@@ -68,28 +71,23 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { 
                             onClick={(e) => handleModalOpen(e, item)}
                           >
                             {item.thumb_image ? <img src={item.thumb_image} width="100%" height="100%" /> : <Icon fontSize="large">{IconList.editDocument}</Icon>}
-                          </div>
+                          </Box>
                         )}
-                        <ImageListItemBar
-                          sx={{
-                            background: "linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, " + "rgba(0,0,0,0.3) 70%, rgba(0,0,0,0) 100%)",
-                          }}
-                          // TODO DEMO za prikaz imena slike
-                          // title={item.name}
-                          position="top"
-                          actionPosition="right"
-                          actionIcon={
-                            <IconButton sx={{ color: "white" }} aria-label={`delete ${item.name}`} onClick={(e) => handleDeleteImage(e, item.id, item.new)}>
-                              <DeleteOutlineIcon />
-                            </IconButton>
-                          }
-                        />
                       </ImageListItem>
-                      <Stack spacing={1} sx={{ fontSize: "0.8em", width: "8rem" }}>
-                        <span style={{ lineHeight: "1.4em", maxHeight: "2.8em", wordBreak: "break-all", overflow: "hidden" }}>Name: {item?.name}</span>
-                        <span>Size: {Math.round((item?.size / 1024 / 1024) * 1000) / 1000} MB</span>
+                      <Stack sx={{ background: "rgba(0, 0 , 0,0.5)", borderRadius: "0 0 0.25rem 0.25rem", display: "grid", gridTemplateRows: "auto auto", gridTemplateColumns: "1fr auto", gap: "0.4rem", alignItems: "center", position: "absolute", bottom: 0, width: "100%" }}>
+                        <Typography variant="subtitle2" noWrap style={{ cursor: "pointer", color: "#ffff", fontSize: "0.75rem", gridRow: "1", gridColumn: "1", padding: "0.3rem 0 0 0.3rem" }} onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position)}>
+                          Naziv: {item?.name}
+                        </Typography>
+
+                        <Typography variant="subtitle2" noWrap style={{ cursor: "pointer", color: "#ffff", fontSize: "0.625rem", gridRow: "2", gridColumn: "1 / span 2", padding: "0 0 0.3rem 0.3rem" }} onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position)}>
+                          Veličina: {Math.round((item?.size / 1024 / 1024) * 1000) / 1000} MB
+                        </Typography>
+
+                        <IconButton sx={{ color: "#ffff", gridRow: "1 / span 2", gridColumn: "2" }} aria-label={`delete ${item.name}`} onClick={(e) => handleDeleteImage(e, item.id, item.new)}>
+                          <DeleteOutlineIcon />
+                        </IconButton>
                       </Stack>
-                    </div>
+                    </Box>
                   )}
                 </Draggable>
               ))}
@@ -97,7 +95,7 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { 
             </ImageList>
           )}
         </Droppable>
-      </DragDropContext>
+      </DragDropContext >
     </>
   );
 };
