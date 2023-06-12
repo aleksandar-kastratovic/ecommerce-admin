@@ -5,7 +5,7 @@ import tblFields from "./tblFields.json";
 const StaticPages = () => {
 
   return (
-    <ListPage apiUrl="admin/static-pages-b2c/page" title="Statičke strane" columnFields={tblFields} />
+    <ListPage listPageId="StaticPages" apiUrl="admin/static-pages-b2c/page" title="Statičke strane" columnFields={tblFields} />
   )
 };
 

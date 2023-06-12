@@ -3,7 +3,7 @@ import tblFields from "./tblFields.json";
 
 const Countries = () => {
   return (
-    <ListPage apiUrl="admin/countries" title="Države" columnFields={tblFields} actionNewButton="modal" />
+    <ListPage listPageId="Countries" apiUrl="admin/countries" title="Države" columnFields={tblFields} actionNewButton="modal" />
   );
 };
 

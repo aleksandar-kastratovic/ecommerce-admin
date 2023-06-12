@@ -38,6 +38,7 @@ const Notes = ({ companyId }) => {
 
   return (
     <ListPage
+      listPageId="Notes"
       apiUrl={`admin/customers-b2b/notes/${companyId}`}
       editUrl={`admin/customers-b2b/notes`}
       columnFields={formFields}

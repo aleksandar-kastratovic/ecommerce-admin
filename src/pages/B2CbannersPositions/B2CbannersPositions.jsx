@@ -17,6 +17,7 @@ const B2CbannersPositions = () => {
 
   return (
     <ListPage
+      listPageId="B2CbannersPositions"
       title="Pozicije B2C banera"
       apiUrl="admin/banners-b2c/positions"
       actionNewButton="modal"

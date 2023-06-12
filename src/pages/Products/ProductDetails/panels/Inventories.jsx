@@ -51,6 +51,7 @@ const Inventories = ({ productId }) => {
   return (
     <>
       <ListPage
+        listPageId="Inventories"
         apiUrl={`admin/product-items/inventories/${productId}`}
         editUrl={`admin/product-items/inventories`}
         title=" "

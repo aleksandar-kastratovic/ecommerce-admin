@@ -39,6 +39,7 @@ const CategoriesGroupsListPage = () => {
 
   return (
     <ListPage
+      listPageId="CategoriesGroupsListPage"
       apiUrl="admin/category-product/groups"
       actionNewButton="modal"
       title="Grupe kategorija"

@@ -19,6 +19,7 @@ const B2Csettings = () => {
 
   return (
     < ListPage
+      listPageId="B2Csettings"
       apiUrl="admin/configuration-b2c/main"
       title="B2C podešavanja"
       columnFields={fields}

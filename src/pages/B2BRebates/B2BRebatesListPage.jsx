@@ -4,6 +4,7 @@ import fields from "./tblFields.json"
 const B2BRebatesListPage = () => {
   return (
     <ListPage
+      listPageId="B2BRebatesListPage"
       apiUrl="admin/rebates"
       title="Rabati"
       columnFields={fields}

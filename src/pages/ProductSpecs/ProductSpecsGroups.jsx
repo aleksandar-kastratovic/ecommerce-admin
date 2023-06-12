@@ -59,6 +59,7 @@ const ProductSpecsGroups = () => {
 
   return (
     <ListPage
+      listPageId="ProductSpecsGroups"
       apiUrl="admin/product-item-specifications/group"
       title="Specifikacije"
       columnFields={columnFields}

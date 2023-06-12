@@ -23,4 +23,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# Build files
+/build
+/dist
+/out
+
 .vscode

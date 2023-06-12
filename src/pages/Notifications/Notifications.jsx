@@ -19,6 +19,7 @@ const Notifications = () => {
 
   return (
     <ListPage
+      listPageId="Notifications"
       apiUrl="admin/notifications-b2b"
       editUrl="admin/notifications-b2b"
       title="Notifikacije"

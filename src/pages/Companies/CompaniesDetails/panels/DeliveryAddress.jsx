@@ -59,6 +59,7 @@ const DeliveryAdresss = ({ companyId }) => {
   return (
     <>
       <ListPage
+        listPageId="DeliveryAdresss"
         apiUrl={`admin/customers-b2b/delivery-address/${companyId}`}
         editUrl={`admin/customers-b2b/delivery-address`}
         title=" "
