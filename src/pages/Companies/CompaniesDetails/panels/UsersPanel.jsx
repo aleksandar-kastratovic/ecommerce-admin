@@ -56,7 +56,7 @@ const UsersPanel = ({ companyId }) => {
 
   return (
     <>
-      <ListPage apiUrl={`admin/customers-b2b/users/${companyId}`} editUrl={`admin/customers-b2b/users`} columnFields={formFields} actionNewButton="modal" initialData={{ id_company: companyId }} addFieldLabel="Dodajte korisnika" showAddButton={true} customActions={customActions} />
+      <ListPage listPageId="UsersPanel" apiUrl={`admin/customers-b2b/users/${companyId}`} editUrl={`admin/customers-b2b/users`} columnFields={formFields} actionNewButton="modal" initialData={{ id_company: companyId }} addFieldLabel="Dodajte korisnika" showAddButton={true} customActions={customActions} />
       <ChangePasswordDialog openDialog={openDialog} setOpenDialog={setOpenDialog} apiUrl="admin/customers-b2b/users/reset-password" />
     </>
   );

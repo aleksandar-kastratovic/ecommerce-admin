@@ -74,6 +74,7 @@ const Prices = ({ productId }) => {
   return (
     <>
       <ListPage
+        listPageId="Prices"
         apiUrl={`admin/product-items/prices/${productId}`}
         editUrl={`admin/product-items/prices`}
         title=" "

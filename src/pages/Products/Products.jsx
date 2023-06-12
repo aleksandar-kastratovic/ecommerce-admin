@@ -29,6 +29,7 @@ const Products = () => {
   return (
     <>
       <ListPage
+        listPageId="Products"
         apiUrl="admin/product-items/list"
         deleteUrl="admin/product-items/basic-data"
         title="Proizvodi"

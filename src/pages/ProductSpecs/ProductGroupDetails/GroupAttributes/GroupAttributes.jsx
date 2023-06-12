@@ -45,7 +45,7 @@ const GroupAttributes = ({ groupId }) => {
 
     <>
       <ListPage
-        listPageId="GroupAttributes"
+        listPageId="GroupAttributesProdSpec"
         key="group-attribute"
         apiUrl={`admin/product-item-specifications/group-attribute/${groupId}`}
         editUrl={`admin/product-item-specifications/group-attribute`}

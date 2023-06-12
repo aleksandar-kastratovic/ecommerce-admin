@@ -18,6 +18,7 @@ const B2Bsettings = () => {
 
   return (
     <ListPage
+      listPageId="B2Bsettings"
       apiUrl="admin/configuration-b2b/main"
       title="B2B podešavanja"
       columnFields={fields}

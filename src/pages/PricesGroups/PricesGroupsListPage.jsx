@@ -17,6 +17,7 @@ const PricesGroupsListPage = () => {
 
   return (
     <ListPage
+      listPageId="PricesGroupsListPage"
       title="Grupe cena"
       apiUrl="admin/product-items/prices-structure"
       columnFields={tblFields}

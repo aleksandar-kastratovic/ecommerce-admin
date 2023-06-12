@@ -3,7 +3,7 @@ import tblFields from "./tblFields.json";
 
 const Streets = () => {
   return (
-    <ListPage apiUrl="admin/streets" title="Ulice" columnFields={tblFields} actionNewButton="modal" />
+    <ListPage listPageId="Streets" apiUrl="admin/streets" title="Ulice" columnFields={tblFields} actionNewButton="modal" />
   );
 };
 

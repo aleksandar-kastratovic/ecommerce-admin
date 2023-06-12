@@ -57,7 +57,7 @@ const GroupValues = ({ groupId }) => {
   return (
     <>
       <ListPage
-        listPageId="GroupValues"
+        listPageId="GroupValuesProdSpec"
         apiUrl={`admin/product-item-specifications/group-attribute-values/${groupId}`}
         editUrl={`admin/product-item-specifications/group-attribute-values`}
         editUrlQueryString={[

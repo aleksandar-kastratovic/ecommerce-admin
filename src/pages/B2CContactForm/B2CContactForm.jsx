@@ -9,7 +9,7 @@ const B2CContactForm = () => {
     },
   };
 
-  return <ListPage apiUrl="admin/contact-form-b2c" title="Kontakt forma" columnFields={tblFields} showNewButton={false} customActions={customActions} />;
+  return <ListPage listPageId="B2CContactForm" apiUrl="admin/contact-form-b2c" title="Kontakt forma" columnFields={tblFields} showNewButton={false} customActions={customActions} />;
 };
 
 export default B2CContactForm;

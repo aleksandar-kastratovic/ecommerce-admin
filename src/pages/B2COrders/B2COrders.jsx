@@ -12,6 +12,7 @@ const B2COrders = () => {
 
   return (
     <ListPage
+      listPageId="B2COrders"
       apiUrl="admin/orders-b2c/list"
       title="Porudžbine"
       columnFields={tblFields}

@@ -3,14 +3,14 @@ import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 
 const NewsCategorylist = () => {
-    const navigate = useNavigate();
-    const newsPage = () => {
-        navigate("/b2c-news");
-    };
+  const navigate = useNavigate();
+  const newsPage = () => {
+    navigate("/b2c-news");
+  };
 
-    const newsButtons = [{ id: 1, label: "Vesti", action: newsPage }];
+  const newsButtons = [{ id: 1, label: "Vesti", action: newsPage }];
 
-    return <ListPage apiUrl="admin/news-b2c/category/main" title="Kategorije" columnFields={tblFields} additionalButtons={newsButtons} />;
+  return <ListPage listPageId="NewsCategorylist" apiUrl="admin/news-b2c/category/main" title="Kategorije" columnFields={tblFields} additionalButtons={newsButtons} />;
 };
 
 export default NewsCategorylist;

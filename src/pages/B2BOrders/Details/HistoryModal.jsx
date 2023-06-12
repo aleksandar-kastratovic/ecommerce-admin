@@ -10,7 +10,7 @@ const HistoryModal = ({ openDialog, setOpenDialog, apiPath }) => {
   return (
     <Dialog fullScreen open={openDialog.show ?? false}>
       <DialogContent>
-        <ListPage title="Istorijat promene statusa" apiUrl={apiPath} showNewButton={false} columnFields={tblFields} />
+        <ListPage listPageId="HistoryModal" title="Istorijat promene statusa" apiUrl={apiPath} showNewButton={false} columnFields={tblFields} />
       </DialogContent>
 
       <DialogActions>

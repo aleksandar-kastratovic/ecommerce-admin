@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 
 import Table from "@mui/material/Table";
 import TableContainer from "@mui/material/TableContainer";
@@ -14,22 +14,30 @@ const ListTable = ({ fields = [], listData = [], isLoading = false, onPageChange
   const [order, setOrder] = useState("asc");
   const [orderBy, setOrderBy] = useState("name");
 
+  const tableContainerRef = useRef(null);
+
   const handleSort = (event, property) => {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
   };
 
+  useEffect(() => {
+    if (tableContainerRef.current) {
+      tableContainerRef.current.scrollTop = 0;
+    }
+  }, [pagination]);
+
   // Show the table
   return (
     <>
-      <TableContainer className={styles.wrapper}>
+      <TableContainer ref={tableContainerRef} className={styles.wrapper}>
         <Table>
           <ListTableHead fields={fields} order={order} orderBy={orderBy} onRequestSort={handleSort} rowCount={fields.length} />
 
           <ListTableBody items={items ?? []} fields={fields} isLoading={isLoading} handleOnClickActions={handleOnClickActions} error={null} previewColumn={previewColumn} showAddButtonTableRow={showAddButtonTableRow} tooltipAddButtonTableRow={tooltipAddButtonTableRow} customActions={customActions} />
         </Table>
-      </TableContainer>
+      </TableContainer >
 
       <ListPagination pagination={pagination} onPageChange={onPageChange} />
     </>

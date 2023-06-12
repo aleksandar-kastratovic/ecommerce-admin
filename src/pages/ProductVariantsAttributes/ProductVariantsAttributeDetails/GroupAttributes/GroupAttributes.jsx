@@ -44,7 +44,7 @@ const GroupAttributes = () => {
   return (
     <>
       <ListPage
-        key="group-attribute"
+        listPageId="GroupAttributesProdVarAttr"
         apiUrl={`admin/product-items-variants-attributes/group-attribute`}
         editUrl={`admin/product-items-variants-attributes/group-attribute`}
         title=" "

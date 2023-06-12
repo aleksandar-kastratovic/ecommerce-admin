@@ -16,6 +16,7 @@ const B2Cbanners = ({ }) => {
 
   return (
     <ListPage
+      listPageId="B2Cbanners"
       title={"B2C baneri"}
       apiUrl="admin/banners-b2c/main"
       columnFields={tblFields}
