@@ -107,7 +107,7 @@
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "select",
-    "fillFromApi": "admin/product-items-variants-attributes/group-attribute/ddl",
+    "fillFromApi": "admin/news-b2c/category/basic-data/ddl",
     "usePropName": true,
     "options": []
   }
