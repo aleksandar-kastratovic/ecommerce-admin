@@ -17,10 +17,10 @@ import ProductVariantsAttributes from "../pages/ProductVariantsAttributes/Produc
 import ProductVariantsAttributesDetails from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
 import AdminForms from "./../pages/AdminForms/AdminForms";
 import DetailsAdminForm from "./../pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
-import News from "./../pages/News/News";
-import NewsDetails from "./../pages/News/NewsDetails/NewsDetails";
-import NewsCategoryList from "./../pages/NewsCategoryList/NewsCategoryList";
-import NewsCategoryListDetails from "./../pages/NewsCategoryList/NewsCategoryListDetails/NewsCategoryListDetails";
+import B2CNews from "./../pages/B2CNews/B2CNews";
+import B2CNewsDetails from "../pages/B2CNews/B2CNewsDetails/B2CNewsDetails";
+import B2CNewsCategoryList from "./../pages/B2CNewsCategoryList/B2CNewsCategoryList";
+import B2CNewsCategoryListDetails from "./../pages/B2CNewsCategoryList/B2CNewsCategoryListDetails/B2CNewsCategoryListDetails";
 import B2Bbanners from "./../pages/B2Bbanners/B2Bbanners";
 import StaticPages from "../pages/StaticPages/StaticPages";
 import StaticPagesDetails from "../pages/StaticPages/StaticPagesDetails/StaticPagesDetails";
@@ -120,11 +120,11 @@ const screens = {
         "Vesti",
         IconList.article,
         B2C,
-        News,
+        B2CNews,
         [
-            [":nid", NewsDetails],
-            ["category", NewsCategoryList],
-            ["category/:cid", NewsCategoryListDetails],
+            [":nid", B2CNewsDetails],
+            ["category", B2CNewsCategoryList],
+            ["category/:cid", B2CNewsCategoryListDetails],
         ],
     ],
     B2C_STATIC_PAGES: ["/b2c-staticpages", "Statičke strane", IconList.article, B2C, StaticPages, [[":spid", StaticPagesDetails]]],
