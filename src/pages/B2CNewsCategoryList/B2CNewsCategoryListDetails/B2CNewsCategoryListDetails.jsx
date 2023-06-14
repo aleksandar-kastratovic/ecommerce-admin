@@ -11,7 +11,7 @@ import Seo from "./panels/Seo";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
 
-const NewsCategoryListDetails = () => {
+const B2CNewsCategoryListDetails = () => {
   const { cid } = useParams();
   const api = useAPI();
   const apiPath = "admin/news-b2c/category/basic-data";
@@ -89,4 +89,4 @@ const NewsCategoryListDetails = () => {
   return <DetailsPage title={data?.id == null ? "Unos nove kategorije" : data?.name} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
-export default NewsCategoryListDetails;
+export default B2CNewsCategoryListDetails;

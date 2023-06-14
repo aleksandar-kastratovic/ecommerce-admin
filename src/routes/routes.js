@@ -22,8 +22,8 @@ import B2CNewsDetails from "../pages/B2CNews/B2CNewsDetails/B2CNewsDetails";
 import B2CNewsCategoryList from "./../pages/B2CNewsCategoryList/B2CNewsCategoryList";
 import B2CNewsCategoryListDetails from "./../pages/B2CNewsCategoryList/B2CNewsCategoryListDetails/B2CNewsCategoryListDetails";
 import B2Bbanners from "./../pages/B2Bbanners/B2Bbanners";
-import StaticPages from "../pages/StaticPages/StaticPages";
-import StaticPagesDetails from "../pages/StaticPages/StaticPagesDetails/StaticPagesDetails";
+import B2CStaticPages from "../pages/B2CStaticPages/B2CStaticPages";
+import B2CStaticPagesDetails from "../pages/B2CStaticPages/B2CStaticPagesDetails/B2CStaticPagesDetails";
 import PromotionsCatalogCampaigns from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaigns";
 import PromotionsCatalogCampaignsPageDetails from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaignsPageDetails/PromotionsCatalogCampaignsPageDetails";
 import PromotionsCartSummary from "../pages/PromotionsCartSummary/PromotionsCartSummary";
@@ -127,7 +127,7 @@ const screens = {
             ["category/:cid", B2CNewsCategoryListDetails],
         ],
     ],
-    B2C_STATIC_PAGES: ["/b2c-staticpages", "Statičke strane", IconList.article, B2C, StaticPages, [[":spid", StaticPagesDetails]]],
+    B2C_STATIC_PAGES: ["/b2c-staticpages", "Statičke strane", IconList.article, B2C, B2CStaticPages, [[":spid", B2CStaticPagesDetails]]],
     B2C_NEWSLETTER: ["/b2c-newsletter", "Newsletter", IconList.article, B2C, Newsletter, [[":nlid", Newsletter]]],
     B2C_CONTACT_FORMS: ["/b2c-contactform", "Kontakt forma", IconList.markunreadMailbox, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],

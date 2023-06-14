@@ -12,9 +12,8 @@ import Seo from "./panels/Seo";
 import TechnicalDoc from "./panels/TechnicalDoc";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
-const NewsDetails = () => {
+const B2CNewsDetails = () => {
   const { nid } = useParams();
-  console.log(nid);
   const api = useAPI();
   const apiPath = "admin/news-b2c/news/basic-data";
   const navigate = useNavigate();
@@ -123,4 +122,4 @@ const NewsDetails = () => {
   return <DetailsPage title={data?.id == null ? "Nova vest" : data?.title} fields={fields} ready={[nid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
-export default NewsDetails;
+export default B2CNewsDetails;

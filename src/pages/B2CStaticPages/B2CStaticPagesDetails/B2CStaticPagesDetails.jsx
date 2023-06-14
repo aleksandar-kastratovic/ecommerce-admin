@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import useAPI from "../../../api/api";
 import Form from "../../../components/shared/Form/Form";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
-import SeoPanel from "./panels/SeoPanel";
+// import Seo from "./panels/Seo";
 
 import formFields from "./formField.json";
 import { useQuery } from "react-query";
@@ -36,7 +36,7 @@ const StaticPagesDetails = () => {
       name: "Seo",
       icon: "settings",
       enabled: data?.id,
-      component: <SeoPanel apiPath={apiPath} spid={spid} />,
+      component: <Seo apiPath={apiPath} spid={spid} />,
     },
   ];
 
