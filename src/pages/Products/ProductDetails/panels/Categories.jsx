@@ -5,39 +5,42 @@ import SearchableListForm from "../../../../components/shared/Form/SearchableLis
 import Loading from "../../../../components/shared/Loading/Loading";
 
 const Categories = ({ productId }) => {
-    const [listData, setListData] = useState([]);
+  const [listData, setListData] = useState([]);
+  const [isLoading, setIsLoading] = useState([]);
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
-    const [isLoading, setIsLoading] = useState([]);
+  const api = useAPI();
+  const apiPath = "admin/product-items/categories";
 
-    const api = useAPI();
-    const apiPath = "admin/product-items/categories";
+  const handleList = () => {
+    setIsLoading(true);
+    api.get(`${apiPath}/${productId}`)
+      .then((response) => {
+        setListData(response?.payload);
+        setIsLoading(false);
+      })
+      .catch((error) => console.warn(error));
+  };
 
-    const handleList = () => {
-        setIsLoading(true);
-        api.get(`${apiPath}/${productId}`)
-            .then((response) => {
-                setListData(response?.payload);
-                setIsLoading(false);
-            })
-            .catch((error) => console.warn(error));
-    };
+  const handleSubmit = (data) => {
+    setIsLoadingOnSubmit(true);
+    api.post(apiPath, { id_product: productId, id_categories: data })
+      .then((response) => {
+        toast.success("Uspešno");
+        setIsLoadingOnSubmit(false);
+      })
+      .catch((error) => {
+        console.warn(error);
+        toast.warn("Greška");
+        setIsLoadingOnSubmit(false);
+      });
+  };
 
-    const handleSubmit = (data) => {
-        api.post(apiPath, { id_product: productId, id_categories: data })
-            .then((response) => {
-                toast.success("Uspešno");
-            })
-            .catch((error) => {
-                console.warn(error);
-                toast.warn("Greška");
-            });
-    };
+  useEffect(() => {
+    handleList();
+  }, []);
 
-    useEffect(() => {
-        handleList();
-    }, []);
-
-    return !isLoading ? <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} /> : <Loading />;
+  return !isLoading ? <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} isLoading={isLoadingOnSubmit} /> : <Loading />;
 };
 
 export default Categories;

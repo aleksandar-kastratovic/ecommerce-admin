@@ -26,6 +26,7 @@ const ProductDetails = () => {
   const { prodId } = useParams();
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
   const init = {
     id: null,
@@ -59,20 +60,22 @@ const ProductDetails = () => {
   };
 
   const handleSubmit = (data) => {
+    setIsLoadingOnSubmit(true);
     let oldId = data.id;
     api.post(`admin/product-items/basic-data/`, data)
       .then((response) => {
         toast.success("Uspešno");
         setData(response?.payload);
-
         if (oldId === null) {
           let tId = response?.payload?.id;
           navigate(`/products/${tId}`, { replace: true });
         }
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         console.warn(error);
         toast.warning("Greška");
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -106,7 +109,7 @@ const ProductDetails = () => {
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={handleSubmit} validateData={validateData} />,
+      component: <Form formFields={basic_data} initialData={data} onSubmit={handleSubmit} validateData={validateData} isLoading={isLoadingOnSubmit} />,
     },
     {
       id: "description",

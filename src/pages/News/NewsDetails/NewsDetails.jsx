@@ -34,6 +34,7 @@ const NewsDetails = () => {
 
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
   const handleData = async () => {
     setIsLoading(true);
@@ -50,6 +51,7 @@ const NewsDetails = () => {
   };
 
   const saveData = async (data) => {
+    setIsLoadingOnSubmit(true);
     let oldId = data.id;
     api.post(apiPath, { ...data, image: data.thumb_image })
       .then((response) => {
@@ -60,10 +62,12 @@ const NewsDetails = () => {
           let tId = response?.payload?.id;
           navigate(`/b2c-news/${tId}`, { replace: true });
         }
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         console.warn(error);
         toast.warning("Greška");
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -77,7 +81,7 @@ const NewsDetails = () => {
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} />,
+      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
     },
     {
       id: "gallery",
@@ -85,6 +89,13 @@ const NewsDetails = () => {
       icon: IconList.browseGallery,
       enabled: data?.id,
       component: <Gallery newsId={data?.id} />,
+    },
+    {
+      id: "documentation",
+      name: "Dokumentacija",
+      icon: IconList.documentScanner,
+      enabled: data?.id,
+      component: <TechnicalDoc newsId={data?.id} />,
     },
     {
       id: "categories",
@@ -99,13 +110,6 @@ const NewsDetails = () => {
       icon: IconList.search,
       enabled: data?.id,
       component: <Seo newsId={data?.id} />,
-    },
-    {
-      id: "documentation",
-      name: "Dokumentacija",
-      icon: IconList.documentScanner,
-      enabled: data?.id,
-      component: <TechnicalDoc newsId={data?.id} />,
     },
   ];
 

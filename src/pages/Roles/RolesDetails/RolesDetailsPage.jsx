@@ -21,6 +21,7 @@ const RolesDetailsPage = () => {
   const apiPath = "admin/roles/main";
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
@@ -40,6 +41,7 @@ const RolesDetailsPage = () => {
   };
 
   const saveData = async (data) => {
+    setIsLoadingOnSubmit(true);
     let oldId = data.id;
     api.post(apiPath, data)
       .then((response) => {
@@ -50,10 +52,12 @@ const RolesDetailsPage = () => {
           let tId = response?.payload?.id;
           navigate(`/roles/${tId}`, { replace: true });
         }
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         console.warn(error);
         toast.warning("Greška");
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -67,7 +71,7 @@ const RolesDetailsPage = () => {
       name: "Osnovno",
       icon: IconList.dataThresholding,
       enabled: true,
-      component: <Form formFields={formFields} initialData={data} onSubmit={saveData} />,
+      component: <Form formFields={formFields} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
     },
     {
       id: "pages",

@@ -6,38 +6,42 @@ import Form from "../../../../components/shared/Form/Form";
 import formFields from "./formFields.json";
 
 const DetailsDisplayIn = ({ cid }) => {
-    const init = {
-        display_in_section_recommendation: null,
-    };
-    const [data, setData] = useState(init);
-    const api = useAPI();
-    const apiPath = "admin/category-product/display-in-section";
+  const init = {
+    display_in_section_recommendation: null,
+  };
+  const [data, setData] = useState(init);
+  const api = useAPI();
+  const apiPath = "admin/category-product/display-in-section";
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
-    const handleData = () => {
-        api.get(`${apiPath}/${cid}`)
-            .then((response) => {
-                setData(response?.payload);
-            })
-            .catch((error) => console.warn(error));
-    };
+  const handleData = () => {
+    api.get(`${apiPath}/${cid}`)
+      .then((response) => {
+        setData(response?.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
 
-    const handleSubmit = (data) => {
-        api.post(`${apiPath}`, { ...data, id: cid })
-            .then((response) => {
-                setData(response?.payload);
-                toast.success("Uspešno");
-            })
-            .catch((error) => {
-                toast.warn("Greška");
-                console.warn(error);
-            });
-    };
+  const handleSubmit = (data) => {
+    setIsLoadingOnSubmit(true);
+    api.post(`${apiPath}`, { ...data, id: cid })
+      .then((response) => {
+        setData(response?.payload);
+        toast.success("Uspešno");
+        setIsLoadingOnSubmit(false);
+      })
+      .catch((error) => {
+        toast.warn("Greška");
+        console.warn(error);
+        setIsLoadingOnSubmit(false);
+      });
+  };
 
-    useEffect(() => {
-        handleData();
-    }, []);
+  useEffect(() => {
+    handleData();
+  }, []);
 
-    return <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} />;
+  return <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} isLoading={isLoadingOnSubmit} />;
 };
 
 export default DetailsDisplayIn;

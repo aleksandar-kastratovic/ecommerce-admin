@@ -508,7 +508,7 @@ export const AutocompleteTagsFilled = ({
         multiple
         value={myValue}
         onChange={(event, newInputValue, reason) => {
-          let newIval = newInputValue ? newInputValue : [];
+          let newIval = newInputValue.length ? newInputValue : [];
           setMyValue(newIval);
 
           let for_save = {
@@ -523,6 +523,10 @@ export const AutocompleteTagsFilled = ({
               } else {
                 for_save.new.push(item);
               }
+            });
+          } else {
+            newInputValue.map((item) => {
+              for_save.new.push(item);
             });
           }
           onChange(name, for_save); // Global save data change

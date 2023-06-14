@@ -33,6 +33,7 @@ const PromotionsDeliveryCampaignsDetails = () => {
 
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
   const [formFields, setFormFields] = useState(basic_data);
   let newFields = deepClone(formFields);
@@ -52,6 +53,7 @@ const PromotionsDeliveryCampaignsDetails = () => {
   };
 
   const saveData = async (data) => {
+    setIsLoadingOnSubmit(true);
     let oldId = data.id;
     api.post(apiPath, data)
       .then((response) => {
@@ -62,10 +64,12 @@ const PromotionsDeliveryCampaignsDetails = () => {
           let tId = response?.payload?.id;
           navigate(`/promotions-catalog-campaigns/${tId}`, { replace: true });
         }
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         console.warn(error);
         toast.warning("Greška");
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -80,7 +84,7 @@ const PromotionsDeliveryCampaignsDetails = () => {
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={slugField} initialData={data} onSubmit={saveData} />,
+      component: <Form formFields={slugField} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
     },
     {
       name: "Uslovi",

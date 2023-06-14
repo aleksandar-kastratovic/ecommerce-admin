@@ -22,6 +22,8 @@ const CompaniesDetails = () => {
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+
   const init = {
     id: null,
     id_category_product_groups: 0,
@@ -36,12 +38,14 @@ const CompaniesDetails = () => {
   const api = useAPI();
 
   const handleSubmit = (data) => {
+    setIsLoadingOnSubmit(true);
     let oldId = data.id;
     api.post(`admin/customers-b2b/basic-data/`, data)
+
       .then((response) => {
         setData(response?.payload);
         toast.success("Uspešno");
-
+        setIsLoadingOnSubmit(false);
         if (oldId === null) {
           let tId = response?.payload?.id;
           navigate(`/b2b-companies/${tId}`, { replace: true });
@@ -50,6 +54,7 @@ const CompaniesDetails = () => {
       .catch((error) => {
         console.warn(error);
         toast.warn("Greška");
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -69,7 +74,7 @@ const CompaniesDetails = () => {
       name: "Osnovno",
       icon: IconList.dataThresholding,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={handleSubmit} />,
+      component: <Form formFields={basic_data} initialData={data} onSubmit={handleSubmit} isLoading={isLoadingOnSubmit} />,
     },
     {
       id: "location",

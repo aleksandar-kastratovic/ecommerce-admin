@@ -20,6 +20,7 @@ const DisplayIn = ({ productId }) => {
   const [data, setData] = useState(init);
   const api = useAPI();
   const apiPath = "admin/product-items/display-in-section";
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
   const handleData = () => {
     api.get(`${apiPath}/${productId}`)
@@ -30,14 +31,17 @@ const DisplayIn = ({ productId }) => {
   };
 
   const handleSubmit = (data) => {
+    setIsLoadingOnSubmit(true);
     api.post(`${apiPath}`, data)
       .then((response) => {
         setData(response?.payload);
         toast.success("Uspešno");
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -45,7 +49,7 @@ const DisplayIn = ({ productId }) => {
     handleData();
   }, []);
 
-  return <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} />;
+  return <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} isLoading={isLoadingOnSubmit} />;
 };
 
 export default DisplayIn;

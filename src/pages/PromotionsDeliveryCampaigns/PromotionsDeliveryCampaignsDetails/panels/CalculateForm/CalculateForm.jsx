@@ -23,16 +23,20 @@ const CalculateForm = ({ campaignId }) => {
 
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
   const saveData = async (data) => {
+    setIsLoadingOnSubmit(true);
     api.post(apiPath, data)
       .then((response) => {
         setData(response?.payload);
         toast.success("Uspešno");
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         console.warn(error);
         toast.warning("Greška");
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -101,7 +105,7 @@ const CalculateForm = ({ campaignId }) => {
 
 
 
-  return <Form formFields={formFields} initialData={data} onSubmit={saveData} onChange={chageHandler} />;
+  return <Form formFields={formFields} initialData={data} onSubmit={saveData} onChange={chageHandler} isLoading={isLoadingOnSubmit} />;
 }
 
 export default CalculateForm;

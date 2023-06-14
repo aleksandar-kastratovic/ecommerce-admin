@@ -27,27 +27,29 @@ const CategoriesDetails = () => {
   };
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
   const api = useAPI();
   const apiPath = "admin/category-product/categories";
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
   const handleSubmit = (data) => {
-    console.log(data)
+    setIsLoadingOnSubmit(true);
     let oldId = data.id;
     api.post(apiPath, { ...data, id_category_product_groups: gid })
       .then((response) => {
         setData(response?.payload);
         toast.success("Uspešno");
-
         if (oldId === null) {
           let tId = response?.payload?.id;
           navigate(`/product-categories/category/${gid}/${tId}`, { replace: true });
         }
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         console.warn(error);
         toast.warning("Greška");
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -74,7 +76,7 @@ const CategoriesDetails = () => {
       name: "Osnovno",
       icon: IconList.category,
       enabled: true,
-      component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}&id_category_product=${data?.id}`} />,
+      component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}&id_category_product=${data?.id}`} isLoading={isLoadingOnSubmit} />,
     },
     {
       id: "seo",

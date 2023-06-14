@@ -5,42 +5,45 @@ import SearchableListForm from "../../../components/shared/Form/SearchableListFo
 import Loading from "../../../components/shared/Loading/Loading";
 
 const RolesListPanel = ({ roleId }) => {
-    const [listData, setListData] = useState([]);
+  const [listData, setListData] = useState([]);
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+  const [isLoading, setIsLoading] = useState([]);
 
-    const [isLoading, setIsLoading] = useState([]);
+  const api = useAPI();
+  const apiPath = "admin/roles/screens";
 
-    const api = useAPI();
-    const apiPath = "admin/roles/screens";
+  const handleList = () => {
+    setIsLoading(true);
+    api.get(`${apiPath}/${roleId}`)
+      .then((response) => {
+        setListData(response?.payload);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        console.warn(error);
+        setIsLoading(false);
+      });
+  };
 
-    const handleList = () => {
-        setIsLoading(true);
-        api.get(`${apiPath}/${roleId}`)
-            .then((response) => {
-                setListData(response?.payload);
-                setIsLoading(false);
-            })
-            .catch((error) => {
-                console.warn(error);
-                setIsLoading(false);
-            });
-    };
+  const handleSubmit = (data) => {
+    setIsLoadingOnSubmit(true);
+    api.post(apiPath, { role_id: roleId, screen_ids: data })
+      .then((response) => {
+        toast.success("Uspešno");
+        setIsLoadingOnSubmit(false);
+      })
+      .catch((error) => {
+        console.warn(error);
+        toast.warn("Greška");
+        setIsLoadingOnSubmit(false);
+      });
+  };
 
-    const handleSubmit = (data) => {
-        api.post(apiPath, { role_id: roleId, screen_ids: data })
-            .then((response) => {
-                toast.success("Uspešno");
-            })
-            .catch((error) => {
-                console.warn(error);
-                toast.warn("Greška");
-            });
-    };
+  useEffect(() => {
+    handleList();
+  }, []);
 
-    useEffect(() => {
-        handleList();
-    }, []);
-
-    return !isLoading ? <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} /> : <Loading />;
+  return !isLoading ? <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} isLoading={isLoadingOnSubmit} /> : <Loading />;
 };
 
 export default RolesListPanel;
