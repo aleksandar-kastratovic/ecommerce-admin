@@ -78,7 +78,7 @@
     "input_type": "switch"
   },
   {
-    "field_name": "B2C - Predloženo",
+    "field_name": "B2C - Izdvajamo",
     "prop_name": "display_in_section_recommendation",
     "in_main_table": true,
     "in_details": true,
@@ -104,7 +104,7 @@
     "input_type": "switch"
   },
   {
-    "field_name": "B2B - Predloženo",
+    "field_name": "B2B - Izdvajamo",
     "prop_name": "b2b_display_in_section_recommendation",
     "in_main_table": true,
     "in_details": true,
