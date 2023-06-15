@@ -24,6 +24,8 @@ import B2CNewsCategoryListDetails from "./../pages/B2CNewsCategoryList/B2CNewsCa
 import B2Bbanners from "./../pages/B2Bbanners/B2Bbanners";
 import B2CStaticPages from "../pages/B2CStaticPages/B2CStaticPages";
 import B2CStaticPagesDetails from "../pages/B2CStaticPages/B2CStaticPagesDetails/B2CStaticPagesDetails";
+import B2CCustomers from "../pages/B2CCustomers/B2CCustomers";
+import B2CCustomersDetails from "../pages/B2CCustomers/B2CCustomersDetails/B2CCustomersDetails";
 import PromotionsCatalogCampaigns from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaigns";
 import PromotionsCatalogCampaignsPageDetails from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaignsPageDetails/PromotionsCatalogCampaignsPageDetails";
 import PromotionsCartSummary from "../pages/PromotionsCartSummary/PromotionsCartSummary";
@@ -75,7 +77,7 @@ const screens = {
     CATEG: [
         "/product-categories",
         "Kategorije",
-        IconList.accountTree,
+        IconList.category,
         PRODUCT,
         CategoriesGroupsListPage,
         [
@@ -118,7 +120,7 @@ const screens = {
     B2C_NEWS: [
         "/b2c-news",
         "Vesti",
-        IconList.article,
+        IconList.newspaper,
         B2C,
         B2CNews,
         [
@@ -127,15 +129,16 @@ const screens = {
             ["category/:cid", B2CNewsCategoryListDetails],
         ],
     ],
-    B2C_STATIC_PAGES: ["/b2c-staticpages", "Statičke strane", IconList.article, B2C, B2CStaticPages, [[":spid", B2CStaticPagesDetails]]],
-    B2C_NEWSLETTER: ["/b2c-newsletter", "Newsletter", IconList.article, B2C, Newsletter, [[":nlid", Newsletter]]],
+    B2C_STATIC_PAGES: ["/b2c-staticpages", "Statičke strane", IconList.autoStories, B2C, B2CStaticPages, [[":spid", B2CStaticPagesDetails]]],
+    B2C_CUSTOMERS: ["/b2c-customers", "Kupci", IconList.group, B2C, B2CCustomers, [[":cid", B2CCustomersDetails]]],
+    B2C_NEWSLETTER: ["/b2c-newsletter", "Newsletter", IconList.notificationsActive, B2C, Newsletter, [[":nlid", Newsletter]]],
     B2C_CONTACT_FORMS: ["/b2c-contactform", "Kontakt forma", IconList.markunreadMailbox, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],
 
-    PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Proizvodi", IconList.campaign, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
-    PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Iznos korpe", IconList.campaign, PROMOTIONS, PromotionsCartSummary, [[":nid", PromotionsCartSummaryDetails]]],
-    PROMOTIONS_CART_ITEMS_CAMPAIGNS: ["promotions-cart-items-campaigns", "Stavke u korpi", IconList.campaign, PROMOTIONS, PromotionsCartItems, [[":nid", PromotionsCartItemsPageDetails]]],
-    PROMOTIONS_DELIVERY_CAMPAIGNS: ["promotions-delivery-campaigns", "Dostava", IconList.campaign, PROMOTIONS, PromotionsDeliveryCampaigns, [[":nid", PromotionsDeliveryCampaignsDetails]]],
+    PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Proizvodi", IconList.inventory, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
+    PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Iznos korpe", IconList.requestQuote, PROMOTIONS, PromotionsCartSummary, [[":nid", PromotionsCartSummaryDetails]]],
+    PROMOTIONS_CART_ITEMS_CAMPAIGNS: ["promotions-cart-items-campaigns", "Stavke u korpi", IconList.shoppingBasket, PROMOTIONS, PromotionsCartItems, [[":nid", PromotionsCartItemsPageDetails]]],
+    PROMOTIONS_DELIVERY_CAMPAIGNS: ["promotions-delivery-campaigns", "Dostava", IconList.localShipping, PROMOTIONS, PromotionsDeliveryCampaigns, [[":nid", PromotionsDeliveryCampaignsDetails]]],
 
     ROLES: ["/roles", "Uloge", IconList.reduceCapacity, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
     USERS: ["/users", "Korisnici", IconList.group, SETTINGS, Users],

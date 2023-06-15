@@ -6,12 +6,12 @@ import List from "../../../../components/shared/ListAdder/List";
 import formFields from "../forms/seo.json";
 
 const Seo = ({ pageId }) => {
+
   const init = {
     id: null,
-    id_product: pageId,
-    id_country: null,
-    id_lang: null,
+    id_static_pages: pageId,
     slug: null,
+    id_country: null,
     meta_title: null,
     meta_keywords: null,
     meta_description: null,
@@ -20,7 +20,7 @@ const Seo = ({ pageId }) => {
 
   const [listData, setListData] = useState([]);
   const api = useAPI();
-  const apiPath = "admin/product-items/seo";
+  const apiPath = "admin/static-pages-b2c/seo";
 
   const handleList = () => {
     api.list(`${apiPath}/${pageId}`)
@@ -31,8 +31,8 @@ const Seo = ({ pageId }) => {
   const handleSubmit = (data) => {
     api.post(apiPath, data)
       .then((response) => {
-        toast.success("Uspešno");
         handleList();
+        toast.success("Uspešno");
       })
       .catch((error) => {
         console.warn(error);
@@ -43,8 +43,8 @@ const Seo = ({ pageId }) => {
   const handleDelete = (token, id) => {
     api.delete(`${apiPath}/${id}`)
       .then((response) => {
-        toast.success("Uspešno");
         handleList();
+        toast.success("Uspešno");
       })
       .catch((error) => {
         console.warn(error);

@@ -175,7 +175,7 @@ const ProductDetails = () => {
       component: <TechnicalDoc productId={data?.id} />,
     },
     {
-      id: "Certificates",
+      id: "certificates",
       name: "Sertifikati",
       icon: IconList.documentScanner,
       enabled: data?.id,
