@@ -74,7 +74,7 @@ const CategoriesDetails = () => {
     {
       id: "basic",
       name: "Osnovno",
-      icon: IconList.category,
+      icon: IconList.inventory,
       enabled: true,
       component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}&id_category_product=${data?.id}`} isLoading={isLoadingOnSubmit} />,
     },

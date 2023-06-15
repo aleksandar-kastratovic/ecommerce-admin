@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -7,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import { currencyFormat } from "../../../helpers/functions";
 
 import styles from "./B2BOrdersDetails.module.scss";
+
 
 const OrderItemsTable = ({ items, fields }) => {
   const getField = (type, value) => {
@@ -43,7 +45,9 @@ const OrderItemsTable = ({ items, fields }) => {
               }
               return (
                 <TableCell key={field.prop_name} className={styles.productCell}>
-                  {getField(field.input_type, value)}
+                  <Link to={`/products/${item.item.id_product}`} className={styles.productCellLink}>
+                    {getField(field.input_type, value)}
+                  </Link>
                 </TableCell>
               );
             })}

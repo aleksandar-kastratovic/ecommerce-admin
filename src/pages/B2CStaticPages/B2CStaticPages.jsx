@@ -2,11 +2,11 @@ import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 
 
-const StaticPages = () => {
+const B2CStaticPages = () => {
 
   return (
-    <ListPage listPageId="StaticPages" apiUrl="admin/static-pages-b2c/page" title="Statičke strane" columnFields={tblFields} />
+    <ListPage listPageId="B2CStaticPages" apiUrl="admin/news-b2c/news/list" title="Statičke stranice" columnFields={tblFields} />
   )
 };
 
-export default StaticPages;
+export default B2CStaticPages;
