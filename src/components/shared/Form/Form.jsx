@@ -12,10 +12,9 @@ import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
 
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), cancelButton = false, submitButton = true, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), cancelButton = false, submitButton = true, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading }) => {
   const navigate = useNavigate();
   const [data, setData] = useState(initialData ?? {});
-  const [isLoading, setIsLoading] = useState(false);
   const [inputsError, setInputsError] = useState([]);
   const [openImageDialog, setOpenImageDialog] = useState({
     show: false,
@@ -52,16 +51,17 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
     }
 
 
-    // TODO treba da prikazuje loader pri slanju podataka, ova postavka nam resava trenutno posao
-    if (isEmpty(errors)) {
-      setIsLoading(true)
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 1000)
-      onSubmit(data)
-    } else {
-      setInputsError(errors)
-    }
+    // if (isEmpty(errors)) {
+    //   setIsLoading(true)
+    //   setTimeout(() => {
+    //     setIsLoading(false)
+    //   }, 1000)
+    //   onSubmit(data)
+    // } else {
+    //   setInputsError(errors)
+    // }
+
+    isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
 
   };
 

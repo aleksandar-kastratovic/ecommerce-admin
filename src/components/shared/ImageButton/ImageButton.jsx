@@ -10,17 +10,14 @@ import FormLabel from "@mui/material/FormLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import Input from "@mui/material/Input";
 import CircularProgress from "@mui/material/CircularProgress";
-import Avatar from "@mui/material/Avatar";
-import Chip from "@mui/material/Chip";
-import DriveFolderUploadRoundedIcon from "@mui/icons-material/DriveFolderUploadRounded";
-import ImageOutlinedIcon from "@mui/icons-material/ImageOutlined";
 import Stack from "@mui/material/Stack";
 import Alert from "@mui/material/Alert";
-import { blue } from "@mui/material/colors";
+import Icon from "@mui/material/Icon";
 
 import { getImageRatio } from "../../../helpers/imageSize";
 
 import styles from "./ImageButton.module.scss";
+import IconList from "../../../helpers/icons";
 
 const ImageButton = ({
   name = "",
@@ -33,6 +30,7 @@ const ImageButton = ({
   imgHeight = 600,
   onImageUpload = () => { },
   onOpenImageDialog = () => { },
+  icon = IconList.cloudUpload,
 }) => {
   const [imageDimensions, setImageDimensions] = useState({
     width: imgWidth ?? 0,
@@ -40,13 +38,6 @@ const ImageButton = ({
   });
   const [loadingImage, setLoadingImage] = useState(false);
   const [loaded, setLoaded] = useState(false);
-
-  const buttonSx = {
-    color: "white",
-    ...(value && {
-      bgcolor: blue[100],
-    }),
-  };
 
   useEffect(() => {
     if (loaded) {
@@ -125,7 +116,7 @@ const ImageButton = ({
             }}
           >
             <Grid item margin={0} padding={0} sx={{ padding: 0 }}>
-              <FormControl error={error !== null} fullWidth sx={{ width: "auto" }}>
+              <FormControl error={error !== null} sx={{ width: "100%" }}>
                 <FormLabel required={required}>{label}</FormLabel>
                 <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
                 <Typography variant="caption" display="block" gutterBottom>
@@ -135,19 +126,13 @@ const ImageButton = ({
                 <label htmlFor={label}>
                   <Input multiple name={name} inputProps={{ accept: "image/*" }} id={label} onChange={(e) => onImageUpload(e)} type="file" sx={{ display: "none" }} />
                   <Button variant="contained" component="span" className={styles.buttonStyle}>
-                    <Box className={styles.boxStyle}>
-                      <Typography variant="caption" display="block" gutterBottom />
-                      <ImageOutlinedIcon className={styles.imageOutlinedIcon} />
-                    </Box>
                     <Box className={styles.avatarBoxStyle}>
-                      <Box className={styles.avatarStyle}>
-                        <Avatar sx={buttonSx}>
-                          <DriveFolderUploadRoundedIcon />
-                        </Avatar>
+                      <Box sx={{ display: "flex", alignItems: "center" }}>
+                        <Icon className={styles.avatarStyle}>{icon}</Icon>
                         {loadingImage && <CircularProgress className={styles.loadingImage} size={50} />}
-                      </Box>
-                      <Box sx={{ m: 1, position: "relative" }}>
-                        <Chip label={label} sx={buttonSx} />
+                        <Typography variant="subtitle1" className={styles.label}>
+                          {label}
+                        </Typography>
                       </Box>
                     </Box>
                   </Button>

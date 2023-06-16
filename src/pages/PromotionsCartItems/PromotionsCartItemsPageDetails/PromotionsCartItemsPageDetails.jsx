@@ -4,10 +4,12 @@ import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
 import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
-import basic_data from "./forms/basic_data.json";
-import calc from "./forms/calc.json"
+
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Conditions from "./panels/Conditions";
+import CalculateForm from "./panels/CalculateForm/CalculateForm";
+
+import basic_data from "./forms/basic_data.json";
 
 const PromotionsCartItemsPageDetails = () => {
   const { nid } = useParams();
@@ -35,6 +37,7 @@ const PromotionsCartItemsPageDetails = () => {
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
   const [currency, setCurrency] = useState("");
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
   const handleData = async () => {
     setIsLoading(true);
@@ -50,20 +53,22 @@ const PromotionsCartItemsPageDetails = () => {
   };
 
   const saveData = async (data) => {
+    setIsLoadingOnSubmit(true);
     let oldId = data.id;
     api.post(apiPath, data)
       .then((response) => {
         setData(response?.payload);
         toast.success("Uspešno");
-
         if (oldId === null) {
           let tId = response?.payload?.id;
           navigate(`/promotions-catalog-campaigns/${tId}`, { replace: true });
         }
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         console.warn(error);
         toast.warning("Greška");
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -97,7 +102,7 @@ const PromotionsCartItemsPageDetails = () => {
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} />,
+      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
     },
     {
       name: "Uslovi",
@@ -109,7 +114,7 @@ const PromotionsCartItemsPageDetails = () => {
       name: "Obračun",
       icon: IconList.calculate,
       enabled: true,
-      component: <Form formFields={calc} initialData={data} onSubmit={saveData} validateData={validateData} />,
+      component: <CalculateForm campaignId={data?.id} />,
     },
   ];
 

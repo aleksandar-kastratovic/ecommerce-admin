@@ -17,6 +17,7 @@ const Description = ({ productId }) => {
   const [data, setData] = useState(init);
   const api = useAPI();
   const apiPath = "admin/product-items/description";
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
   const handleData = () => {
     api.get(`${apiPath}/${productId}`)
@@ -30,6 +31,7 @@ const Description = ({ productId }) => {
   };
 
   const handleSubmit = (data) => {
+    setIsLoadingOnSubmit(true);
     let req = {
       ...data,
       stickers: JSON.stringify(data.stickers),
@@ -42,10 +44,12 @@ const Description = ({ productId }) => {
         let res = { ...response?.payload, stickers: stickers };
         setData(res);
         toast.success("Uspešno");
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -53,7 +57,7 @@ const Description = ({ productId }) => {
     handleData();
   }, []);
 
-  return <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} />;
+  return <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} isLoading={isLoadingOnSubmit} />;
 };
 
 export default Description;

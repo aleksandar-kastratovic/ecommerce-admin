@@ -28,7 +28,7 @@ const MultipleImages = ({ handleMultipleImageUpload = () => { }, handleDrag = ()
               <input hidden accept={accept} multiple type="file" onChange={(e) => handleMultipleImageUpload(e)} />
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <Icon className={styles.addAPhotoIcon}>{icon}</Icon>
-                <Typography variant="subtitle1" sx={{ textTransform: "lowercase", color: "#000", fontSize: "0.875rem" }}>
+                <Typography variant="subtitle1" className={styles.label}>
                   <span style={{ textTransform: "capitalize" }}>O</span>daberi dokument
                 </Typography>
               </Box>

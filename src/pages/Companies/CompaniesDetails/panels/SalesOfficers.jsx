@@ -9,8 +9,8 @@ import Loading from "../../../../components/shared/Loading/Loading";
 
 const SalesOfficers = ({ companyId }) => {
   const [listData, setListData] = useState([]);
-
   const [isLoading, setIsLoading] = useState([]);
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
   const navigate = useNavigate();
 
@@ -31,13 +31,16 @@ const SalesOfficers = ({ companyId }) => {
   };
 
   const handleSubmit = (data) => {
+    setIsLoadingOnSubmit(true);
     api.post(apiPath, { id_company: companyId, id_sales_officers: data })
       .then((response) => {
         toast.success("Uspešno");
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         console.warn(error);
         toast.warn("Greška");
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -50,7 +53,7 @@ const SalesOfficers = ({ companyId }) => {
       <Buttons>
         <Button label="Komercijalisti" variant="contained" onClick={() => navigate("/b2b-sales-officers")} />
       </Buttons>
-      <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} />
+      <SearchableListForm available={listData.available} selected={listData.selected} onSubmit={handleSubmit} isLoading={isLoadingOnSubmit} />
     </>
   ) : (
     <Loading />

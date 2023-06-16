@@ -4,17 +4,17 @@ import useAPI from "../../../../api/api";
 import SearchableListForm from "../../../../components/shared/Form/SearchableListForm/SearchableListForm";
 import Loading from "../../../../components/shared/Loading/Loading";
 
-const Categories = ({ productId }) => {
+const Categories = ({ newsId }) => {
   const [listData, setListData] = useState([]);
   const [isLoading, setIsLoading] = useState([]);
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
   const api = useAPI();
-  const apiPath = "admin/product-items/categories";
+  const apiPath = "admin/news-b2c/news/categories";
 
   const handleList = () => {
     setIsLoading(true);
-    api.get(`${apiPath}/${productId}`)
+    api.get(`${apiPath}/${newsId}`)
       .then((response) => {
         setListData(response?.payload);
         setIsLoading(false);
@@ -24,7 +24,7 @@ const Categories = ({ productId }) => {
 
   const handleSubmit = (data) => {
     setIsLoadingOnSubmit(true);
-    api.post(apiPath, { id_product: productId, id_categories: data })
+    api.post(apiPath, { id_news: newsId, id_category_news: data })
       .then((response) => {
         toast.success("Uspešno");
         setIsLoadingOnSubmit(false);

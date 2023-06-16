@@ -7,6 +7,7 @@ import { AuthContextProvider } from "./store/auth-contex";
 const local = "http://192.168.1.174:4400/api/v1/";
 const net = "http://25.19.215.162:4400/api/v1/";
 const staging = "https://api.staging.croonus.com/api/v1/";
+const matija = "http://192.168.1.79:4400/api/v1/";
 
 // Assert sure base URL for the API set
 if (process.env.REACT_APP_URL || local) {

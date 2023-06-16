@@ -27,18 +27,30 @@ const B2BOrdersDetails = () => {
   const { isLoading: isOrderLoading, data: orderData } = useQuery(["data"], () => api.get(`${apiPathOrderData}/${orderId}`).then((response) => response?.payload));
   const { isLoading: isBillingLoading, data: billingData } = useQuery(["billing"], () => api.list(`${apiPathBilling}/${orderId}`).then((response) => response?.payload?.items[0]));
   const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
-  const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
+  const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () =>
+    api.list(`${apiPathItems}/${orderId}`).then((response) =>
+      response?.payload?.items.map((itemName) => {
+
+        if (itemName.item.attributes_text) {
+          itemName.item.name += ` (${itemName.item.attributes_text})`;
+        }
+        return itemName;
+      })
+
+    ));
+
+
 
   return (
     <PageWrapper
-      title={"Porudžbina"}
+      title={`Porudžbina: ${orderData?.slug}`}
       back={() => {
         navigate(-1);
       }}
       ready={!(isOrderLoading || isBillingLoading || isShipingLoading || isItemsLoading)}
     >
       <Box className={styles.orderData}>
-        <OrderSection title="Podaci partnera:" className={styles.orderSection50}>
+        <OrderSection title="Podaci partnera:" >
           <Box className={styles.orderDataSection}>
             <Box className={styles.orderDataDisplay}>
               <p>
@@ -92,7 +104,7 @@ const B2BOrdersDetails = () => {
             </p>
           )}
         </OrderSection>
-        <OrderSection title="Adresa za dostavu:" className={styles.orderSection50}>
+        <OrderSection title="Adresa za dostavu:" >
           <Box className={styles.orderDataSection}>
             <Box className={styles.orderDataDisplay}>
               <p>
@@ -133,16 +145,24 @@ const B2BOrdersDetails = () => {
               {shippingData?.note}
             </p>
           )}
+          {orderData?.note && (
+            <p>
+              <span className={styles.dataLabel}>Dodatna napomena:</span>
+              {orderData?.note}
+            </p>
+          )}
+        </OrderSection>
+        <OrderSection title="Status porudžbine:" >
+          <OrderStatus orderId={orderData?.id} status={orderData?.status} />
         </OrderSection>
       </Box>
-      <OrderSection title="Status porudžbine:" className={styles.orderSection50}>
-        <OrderStatus orderId={orderData?.id} status={orderData?.status} />
-      </OrderSection>
+
       <OrderSection title="Proizvodi u porudžbini:">
         <OrderItemsTable fields={tableFields} items={orderItems} />
       </OrderSection>
       <OrderSection title="Porudžbina:">
         <OrderPrices
+          total_original={orderData?.total_original}
           total_with_out_vat={orderData?.total_with_out_vat}
           total_delivery={orderData?.total_delivery}
           total_discount={orderData?.total_discount}

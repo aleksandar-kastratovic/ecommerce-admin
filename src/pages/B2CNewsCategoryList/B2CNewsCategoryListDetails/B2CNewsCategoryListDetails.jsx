@@ -1,22 +1,20 @@
-import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
-import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
-import basic_data from "./forms/basic_data.json";
-import Gallery from "./panels/Gallery";
-import Categories from "./panels/Categories";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
+import IconList from "../../../helpers/icons";
+
+import formFields from "./formFields.json";
 import Seo from "./panels/Seo";
-import TechnicalDoc from "./panels/TechnicalDoc";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
-const NewsDetails = () => {
-  const { nid } = useParams();
-  console.log(nid);
+
+const B2CNewsCategoryListDetails = () => {
+  const { cid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/news-b2c/news/basic-data";
+  const apiPath = "admin/news-b2c/category/basic-data";
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
@@ -24,12 +22,11 @@ const NewsDetails = () => {
     id: null,
     slug: null,
     name: null,
-    title: null,
-    subtitle: null,
+    image: null,
     short_description: null,
     description: null,
-    id_news_category: null,
-    thumb_image: null,
+    parent_id: null,
+    category_path: null,
   };
 
   const [data, setData] = useState(init);
@@ -37,7 +34,7 @@ const NewsDetails = () => {
 
   const handleData = async () => {
     setIsLoading(true);
-    api.get(`${apiPath}/${nid}`)
+    api.get(`${apiPath}/${cid}`)
       .then((response) => {
         setData(response?.payload);
         console.log(response?.payload);
@@ -50,16 +47,10 @@ const NewsDetails = () => {
   };
 
   const saveData = async (data) => {
-    let oldId = data.id;
-    api.post(apiPath, { ...data, image: data.thumb_image })
+    api.post(apiPath, { ...data, image: data.image })
       .then((response) => {
         setData(response?.payload);
         toast.success("Uspešno");
-
-        if (oldId === null) {
-          let tId = response?.payload?.id;
-          navigate(`/b2c-news/${tId}`, { replace: true });
-        }
       })
       .catch((error) => {
         console.warn(error);
@@ -70,42 +61,20 @@ const NewsDetails = () => {
   useEffect(() => {
     handleData();
   }, []);
-
   const fields = [
     {
       id: "basic",
       name: "Osnovno",
-      icon: IconList.inventory,
-      enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} />,
-    },
-    {
-      id: "gallery",
-      name: "Galerija",
-      icon: IconList.browseGallery,
-      enabled: data?.id,
-      component: <Gallery newsId={data?.id} />,
-    },
-    {
-      id: "categories",
-      name: "Kategorije",
       icon: IconList.category,
-      enabled: data?.id,
-      component: <Categories newsId={data?.id} />,
+      enabled: true,
+      component: <Form formFields={formFields} initialData={data} onSubmit={saveData} />,
     },
     {
       id: "seo",
       name: "Seo",
       icon: IconList.search,
       enabled: data?.id,
-      component: <Seo newsId={data?.id} />,
-    },
-    {
-      id: "documentation",
-      name: "Dokumentacija",
-      icon: IconList.documentScanner,
-      enabled: data?.id,
-      component: <TechnicalDoc newsId={data?.id} />,
+      component: <Seo categoryId={data?.id} />,
     },
   ];
 
@@ -113,10 +82,11 @@ const NewsDetails = () => {
   const panelHandleSelect = (field) => {
     let queryString = setUrlQueryStringParam("tab", field.id);
     const id = data.id == null ? "new" : data.id;
-    navigate(`/b2c-news/${id}?${queryString}`, { replace: true });
+    navigate(`/b2c-news/category/${id}?${queryString}`, { replace: true });
   }
 
-  return <DetailsPage title={data?.id == null ? "Nova vest" : data?.title} fields={fields} ready={[nid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
+
+  return <DetailsPage title={data?.id == null ? "Unos nove kategorije" : data?.name} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
-export default NewsDetails;
+export default B2CNewsCategoryListDetails;

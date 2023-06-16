@@ -1,7 +1,8 @@
 @import "../../../variables.scss";
 
 .orderData {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     width: 100%;
     gap: 2rem;
 }
@@ -64,4 +65,12 @@
 
 .productCell {
     font-weight: bold !important;
+}
+
+.productCellLink {
+    color: inherit;
+    transition: all 0.3s ease-in-out;
+    &:hover {
+        color: #28a86e;
+    }
 }

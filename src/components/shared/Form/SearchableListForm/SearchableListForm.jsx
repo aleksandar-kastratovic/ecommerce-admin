@@ -6,6 +6,7 @@ import useList from "../../../../hooks/useList";
 import { InputCheckbox, InputInput } from "../FormInputs/FormInputs";
 
 import styles from "./SearchableListForm.module.scss";
+import CircularProgress from "@mui/material/CircularProgress";
 
 /**
  * Choose from a list.
@@ -19,7 +20,7 @@ import styles from "./SearchableListForm.module.scss";
  * @return {JSX.Element}
  * @constructor
  */
-const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll = false, toggleShowSelected = true, sx, onChange = () => null, selectOne = false }) => {
+const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll = false, toggleShowSelected = true, sx, onChange = () => null, selectOne = false, isLoading }) => {
   const { list, toggle, has, set, clear } = useList(selected ?? []);
   const [search, setSearch] = useState("");
 
@@ -66,7 +67,7 @@ const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll
 
 
       <Buttons>
-        <Button sx={sx} label="Sačuvaj" variant="contained" onClick={() => onSubmit(list)} />
+        <Button sx={sx} label={isLoading ? <CircularProgress size="1.5rem" /> : "Sačuvaj"} disabled={isLoading} variant="contained" onClick={() => onSubmit(list)} />
       </Buttons>
     </>
   );

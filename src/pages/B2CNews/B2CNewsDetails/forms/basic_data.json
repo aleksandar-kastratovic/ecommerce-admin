@@ -1,20 +1,20 @@
 [
   {
-    "field_name": "B2C - Super akcija",
-    "prop_name": "display_in_section_super_action",
+    "field_name": "Naslov",
+    "prop_name": "title",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": false,
+    "required": true,
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "switch"
+    "input_type": "input"
   },
   {
-    "field_name": "B2C - Top seller",
-    "prop_name": "display_in_section_top_sellers",
+    "field_name": "Slug",
+    "prop_name": "slug",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -23,24 +23,26 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "switch"
+    "input_type": "input",
+    "in_details_new_display": false,
+    "in_details_edit_display": true
   },
   {
-    "field_name": "B2C - Best seller",
-    "prop_name": "display_in_section_best_sell",
+    "field_name": "Thumb slika",
+    "prop_name": "thumb_image",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": false,
+    "required": true,
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "switch"
+    "input_type": "image_button"
   },
   {
-    "field_name": "B2C - Novo pristiglo",
-    "prop_name": "display_in_section_new_arrival",
+    "field_name": "Kratak opis",
+    "prop_name": "short_description",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -49,11 +51,11 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "switch"
+    "input_type": "textarea"
   },
   {
-    "field_name": "B2C - Akcija",
-    "prop_name": "display_in_section_action",
+    "field_name": "Opis",
+    "prop_name": "description",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -62,11 +64,11 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "switch"
+    "input_type": "html_editor"
   },
   {
-    "field_name": "B2C - Rasprodaja",
-    "prop_name": "display_in_section_sale",
+    "field_name": "Tagovi",
+    "prop_name": "tag",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -75,11 +77,14 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "switch"
+    "input_type": "autocomplete_tags_filled",
+    "fillFromApi": "admin/news-b2c/news/basic-data/ddl",
+    "usePropName": true,
+    "options": []
   },
   {
-    "field_name": "B2C - Izdvajamo",
-    "prop_name": "display_in_section_recommendation",
+    "field_name": "Datum objave",
+    "prop_name": "publish_at",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -88,11 +93,11 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "switch"
+    "input_type": "date_time"
   },
   {
-    "field_name": "B2C - Prilagođena pozicija",
-    "prop_name": "display_in_section_position",
+    "field_name": "Autor",
+    "prop_name": "author",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -101,11 +106,11 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "switch"
+    "input_type": "input"
   },
   {
-    "field_name": "B2B - Izdvajamo",
-    "prop_name": "b2b_display_in_section_recommendation",
+    "field_name": "Pozicija",
+    "prop_name": "order",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -114,6 +119,22 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "switch"
+    "input_type": "number"
+  },
+  {
+    "field_name": "Status",
+    "prop_name": "status",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "select",
+    "fillFromApi": "admin/news-b2c/news/basic-data/ddl",
+    "usePropName": true,
+    "options": []
   }
 ]

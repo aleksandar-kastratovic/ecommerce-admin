@@ -28,7 +28,7 @@ const LoginPage = () => {
     const [show, setShow] = useState(false);
 
     const [data, setData] = useState(init);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
     const navigate = useNavigate();
 
     const setLoginData = (userData) => {
@@ -38,7 +38,7 @@ const LoginPage = () => {
     };
 
     const submitHandler = async (data) => {
-        // setIsLoading(true);
+        setIsLoadingOnSubmit(true);
         await api
             .post(apiPath, data)
             .then((response) => {
@@ -47,12 +47,12 @@ const LoginPage = () => {
                     setLoginData(response.payload);
                 }
                 toast.success(`Uspešno`);
-                //setIsLoading(false);
+                setIsLoadingOnSubmit(false);
             })
             .catch((error) => {
                 console.warn(error);
                 toast.warning("Greška");
-                //setIsLoading(false);
+                setIsLoadingOnSubmit(false);
             });
     };
 
@@ -124,7 +124,7 @@ const LoginPage = () => {
                             Molimo prijavite se za pristup administraciji.
                         </Typography>
                         <Box sx={{ maxWidth: "28.125rem" }}>
-                            <Form formFields={fields} initialData={data} onSubmit={submitHandler} />
+                            <Form formFields={fields} initialData={data} onSubmit={submitHandler} isLoading={isLoadingOnSubmit} />
                         </Box>
                     </Box>
                 </Grid>

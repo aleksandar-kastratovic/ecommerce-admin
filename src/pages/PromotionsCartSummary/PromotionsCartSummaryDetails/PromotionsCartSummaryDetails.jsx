@@ -7,9 +7,9 @@ import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Conditions from "./panels/Conditions";
+import CalculateForm from "./panels/CalculateForm/CalculateForm";
 
 import basic_data from "./forms/basic_data.json";
-import calc from "./forms/calc.json"
 
 
 const PromotionsCartSummaryDetails = () => {
@@ -37,6 +37,7 @@ const PromotionsCartSummaryDetails = () => {
 
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
   const handleData = async () => {
     setIsLoading(true);
@@ -52,6 +53,7 @@ const PromotionsCartSummaryDetails = () => {
   };
 
   const saveData = async (data) => {
+    setIsLoadingOnSubmit(true);
     let oldId = data.id;
     api.post(apiPath, data)
       .then((response) => {
@@ -62,10 +64,12 @@ const PromotionsCartSummaryDetails = () => {
           let tId = response?.payload?.id;
           navigate(`/promotions-catalog-campaigns/${tId}`, { replace: true });
         }
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         console.warn(error);
         toast.warning("Greška");
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -92,7 +96,7 @@ const PromotionsCartSummaryDetails = () => {
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} />,
+      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
     },
     {
       name: "Uslovi",
@@ -104,7 +108,7 @@ const PromotionsCartSummaryDetails = () => {
       name: "Obračun",
       icon: IconList.calculate,
       enabled: true,
-      component: <Form formFields={calc} initialData={data} onSubmit={saveData} validateData={validateData} />,
+      component: <CalculateForm campaignId={data?.id} />,
     },
   ];
 

@@ -104,6 +104,32 @@
     ]
   },
   {
+    "field_name": "Naslov",
+    "prop_name": "title",
+    "in_main_table": false,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
+    "field_name": "Podnaslov",
+    "prop_name": "subtitle",
+    "in_main_table": false,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
     "field_name": "Tekst",
     "prop_name": "text",
     "in_main_table": false,

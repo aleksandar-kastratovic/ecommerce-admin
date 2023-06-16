@@ -25,6 +25,7 @@ const HeadOffice = ({ companyId }) => {
   const [data, setData] = useState(init);
   const api = useAPI();
   const apiPath = "admin/customers-b2b/head-office-address";
+  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
   const handleData = () => {
     api.get(`${apiPath}/${companyId}`)
@@ -33,14 +34,17 @@ const HeadOffice = ({ companyId }) => {
   };
 
   const saveData = (data) => {
+    setIsLoadingOnSubmit(true);
     api.post(`${apiPath}`, { ...data, id_company: companyId })
       .then((response) => {
         setData(response?.payload);
         toast.success("Uspešno");
+        setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         console.warn(error);
         toast.warn("Greška");
+        setIsLoadingOnSubmit(false);
       });
   };
 
@@ -48,7 +52,7 @@ const HeadOffice = ({ companyId }) => {
     handleData();
   }, []);
 
-  return <Form formFields={formFields} initialData={data} onSubmit={saveData} />;
+  return <Form formFields={formFields} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />;
 };
 
 export default HeadOffice;
