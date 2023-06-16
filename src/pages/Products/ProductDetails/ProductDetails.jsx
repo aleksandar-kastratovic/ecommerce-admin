@@ -49,7 +49,6 @@ const ProductDetails = () => {
     const newToField = data.find((item) => item.prop_name === "new_to");
 
     if (isNew) {
-      console.log(isNew)
       newFromField.in_details = true;
       newToField.in_details = true;
     } else {
@@ -94,6 +93,7 @@ const ProductDetails = () => {
 
   const validateData = (data, field) => {
     let ret = data;
+    console.log(ret)
     switch (field) {
       case "new":
         updateNewFieldsInDetails(basic_data, ret.new);
