@@ -254,7 +254,17 @@ const CreateForm = ({
           );
           break;
         case "multiple_images": //TODO
-          formItem = <InputMultipleImages list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} autoFocus={autoFocus} />;
+          formItem = (
+            <InputMultipleImages
+              list={Array.isArray(value) ? value : []}
+              name={item.prop_name}
+              uploadHandler={item?.uploadHandler}
+              deleteHandler={item?.deleteHandler}
+              handleReorder={item?.handleReorder}
+              onChangeHandler={onChangeHandler}
+              autoFocus={autoFocus}
+            />
+          );
           break;
         case "multiple_files": //TODO
           formItem = <InputMultipleFiles list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} autoFocus={autoFocus} />;

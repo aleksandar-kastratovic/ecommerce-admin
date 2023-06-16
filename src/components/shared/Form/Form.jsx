@@ -50,17 +50,6 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
       console.error("Nisu popunjena sva obavezna polja. ", errors);
     }
 
-
-    // if (isEmpty(errors)) {
-    //   setIsLoading(true)
-    //   setTimeout(() => {
-    //     setIsLoading(false)
-    //   }, 1000)
-    //   onSubmit(data)
-    // } else {
-    //   setInputsError(errors)
-    // }
-
     isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
 
   };
