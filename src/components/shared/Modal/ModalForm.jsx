@@ -8,6 +8,8 @@ import ListPageModalWrapper from "./ListPageModalWrapper";
 import Typography from '@mui/material/Typography';
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box"
+import Button from "../Button/Button";
+import { initial } from "lodash";
 
 /**
  * Modal.
@@ -33,13 +35,12 @@ import Box from "@mui/material/Box"
  * @constructor
  */
 
-const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData, label, customTitle, shortText, cancelButton, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData }) => {
+const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, typePage = '', modalObject = null, customTitleDataNameForEdit = "Izmena" }) => {
 
   const { id } = openModal;
   const api = useAPI();
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-
   const handleData = async () => {
     setIsLoading(true);
     // The queryStringLink array is initialized to store the formatted key-value pairs from the queryString prop.
@@ -56,11 +57,14 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
     if (queryStringLink) {
       url += "?" + queryStringLink.join("&");
     }
-
     await api
       .get(url)
       .then((response) => {
-        setData(response?.payload);
+        let modifiedData = response?.payload;
+        if (typePage === 'stranice') {
+          modifiedData = prepareInitialData(modifiedData);
+        }
+        setData(modifiedData);
         setIsLoading(false);
       })
       .catch((error) => {
@@ -85,7 +89,11 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
           setIsLoading(false);
         });
     } else {
-      api.post(`${apiPathFormModal}`, { ...data, ...initialData })
+      let objectForServer = { ...data, ...initialData };
+      if (modalObject) {
+        objectForServer.id = modalObject?.id
+      }
+      api.post(`${apiPathFormModal}`, objectForServer)
         .then((response) => {
           toast.success(`Uspešno`);
           setOpenModal({ ...openModal, show: false });
@@ -99,6 +107,17 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
     }
   };
 
+  /** function for clearing state after clear button press */
+  const onClearDataPress = () => {
+    setData({
+      ...data,
+      first_name: '',
+      last_name: '',
+      phone: '',
+      email: ''
+    });
+  }
+
   useEffect(() => {
     if (openModal.show) {
       handleData();
@@ -109,9 +128,10 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
     <ListPageModalWrapper anchor={anchor} open={openModal.show ?? false} onClose={() => setOpenModal({ ...openModal, show: false })} sx={sx} variant={variant} onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}>
       {!isLoading ?
         children || (
-          <FormWrapper title={customTitle ? customTitle : (data?.id == null ? "Novi unos" : data?.name)}>
+          <FormWrapper title={customTitle ? customTitle : (data?.id === null ? "Novi unos" : (data?.name ?? customTitleDataNameForEdit))}>
             {shortText ? <Typography variant="body2" sx={{ marginBottom: "0.8rem" }}>{shortText}</Typography> : null}
-            <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} validateData={validateData} />
+            {clearButton && <Button label="Resetujte vrednosti" onClick={() => { onClearDataPress() }} variant="contained" />}
+            <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} submitButton={submitButton} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} validateData={validateData} />
           </FormWrapper>)
         : <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}><CircularProgress size="2rem" sx={{ marginTop: "50vh" }} /></Box>}
     </ListPageModalWrapper>

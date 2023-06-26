@@ -35,8 +35,8 @@ export const columnProps = (column: FieldSpec, header: boolean = false) => {
     };
 };
 
-export const columnCell = (value, column) => {
-    switch (column) {
+export const columnCell = (value, column, rowType) => {
+    switch (rowType !== undefined ? rowType : column) {
         case "boolean":
             return value ? <Unicon icon={IconList.check} /> : <Unicon icon={IconList.close} />;
 
@@ -45,8 +45,17 @@ export const columnCell = (value, column) => {
 
         case "image":
         case "image_button":
-            return <img src={value} height="70px" alt />;
+            return <img src={value} height="50px" alt={true} />;
 
+        case "multiple_images":
+            if (column === "input") {
+                const arrParsed = JSON.parse(value);
+                return arrParsed.map((item) => {
+                    return <img src={item.file} height="50px" style={{ marginRight: "2px" }} />;
+                });
+            } else {
+                return value;
+            }
         case "input":
         default:
             return value;

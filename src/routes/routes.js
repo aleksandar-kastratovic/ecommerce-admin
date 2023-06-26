@@ -24,6 +24,8 @@ import B2CNewsCategoryListDetails from "./../pages/B2CNewsCategoryList/B2CNewsCa
 import B2Bbanners from "./../pages/B2Bbanners/B2Bbanners";
 import B2CStaticPages from "../pages/B2CStaticPages/B2CStaticPages";
 import B2CStaticPagesDetails from "../pages/B2CStaticPages/B2CStaticPagesDetails/B2CStaticPagesDetails";
+import B2CLandingPages from "../pages/B2CLandingPages/B2CLandingPages";
+import B2CLandingPagesDetails from "../pages/B2CLandingPages/B2CLandingPagesDetails/B2CLandingPagesDetails";
 import B2CCustomers from "../pages/B2CCustomers/B2CCustomers";
 import B2CCustomersDetails from "../pages/B2CCustomers/B2CCustomersDetails/B2CCustomersDetails";
 import PromotionsCatalogCampaigns from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaigns";
@@ -64,6 +66,8 @@ import B2CSettingsDetails from "../pages/B2CSettings/SettingsDetails/B2CSettings
 import B2BContactForm from "../pages/B2BContactForm/B2BContactForm";
 import B2COrders from "../pages/B2COrders/B2COrders";
 import B2COrdersDetails from "../pages/B2COrders/DetailsOrders/B2COrdersDetails";
+// import Scripts from "../pages/Scripts/Scripts";
+// import ScriptsDetails from "../pages/Scripts/ScriptsDetails/ScriptsDetails";
 import B2CContactFormDetails from "../pages/B2CContactForm/B2CContacFormDetails/B2CContactFormDetails";
 import Homepage from "../pages/Homepage/Homepage";
 import Error404 from "../pages/Error/Error404";
@@ -130,6 +134,7 @@ const screens = {
         ],
     ],
     B2C_STATIC_PAGES: ["/b2c-staticpages", "Statičke strane", IconList.autoStories, B2C, B2CStaticPages, [[":spid", B2CStaticPagesDetails]]],
+    B2C_LANDING_PAGES: ["/b2c-landingpages", "Promo strane", IconList.autoStories, B2C, B2CLandingPages, [[":lid", B2CLandingPagesDetails]]],
     B2C_CUSTOMERS: ["/b2c-customers", "Kupci", IconList.group, B2C, B2CCustomers, [[":cid", B2CCustomersDetails]]],
     B2C_NEWSLETTER: ["/b2c-newsletter", "Newsletter", IconList.notificationsActive, B2C, Newsletter, [[":nlid", Newsletter]]],
     B2C_CONTACT_FORMS: ["/b2c-contactform", "Kontakt forma", IconList.markunreadMailbox, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
@@ -153,6 +158,7 @@ const screens = {
     B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, TOOLS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
     IMPORT: ["/import", "Uvoz podataka", IconList.upload, TOOLS, ImportSteps],
     B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, TOOLS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
+    // SCRIPTS: ["/scripts", "Skripte", IconList.description, TOOLS, Scripts, [[":sId", ScriptsDetails]]],
     ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, TOOLS, AdminForms, [[":formId", DetailsAdminForm]]],
 };
 

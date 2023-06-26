@@ -1,51 +1,77 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
-import Form from "../../../../components/shared/Form/Form";
 
 import formFields from "../forms/delivery.json";
+import ListPage from "../../../../components/shared/ListPage/ListPage";
 
-const Delivery = ({ customerId }) => {
-  const init = {
-    id_company: customerId,
-    saldo: null,
-    debt_in_currency: null,
-    debt_out_currency: null,
-    credit_limit: null,
-    debt_days: null,
-  };
-  const [data, setData] = useState(init);
+const Payments = ({ data, customerId }) => {
+
+  const [dataPayments, setDataPayments] = useState(data);
+
   const api = useAPI();
 
-  const apiPath = "admin/customers-b2b/analytics-data";
-  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+  const customActions = {
+    // edit: {
+    //   clickHandler: {
+    //     type: 'modal_form',
+    //     fnc: (rowData) => {
+    //       api.get(`admin/customers-b2c/billing-address/${customerId}/${rowData.id}`)
+    //         .then((response) => console.log(response))
+    //         .catch((error) => console.log(error));
+    //       return {
+    //         show: true,
+    //         id: rowData.id
+    //       };
+    //     },
+    //   },
+    // },
+    delete: {
+      clickHandler: {
+        type: 'dialog_delete',
+        fnc: (rowData) => {
+          return {
+            show: true,
+            id: rowData.id,
+            mutate: null,
+          };
+        },
+      },
+      deleteClickHandler: {
+        type: 'dialog_delete',
+        fnc: (rowData) => {
 
-  const handleData = () => {
-    api.get(`${apiPath}/${customerId}`)
-      .then((response) => setData(response?.payload))
-      .catch((error) => console.warn(error));
+          api.delete(`admin/customers-b2c/shipping-address/${rowData.id}`)
+            .then(() => toast.success("Zapis je uspešno obrisan"))
+            .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+
+          return {
+            show: false,
+            id: rowData.id,
+            mutate: 1,
+          };
+        }
+      },
+    },
   };
 
-  const saveData = (data) => {
-    setIsLoadingOnSubmit(true);
-    api.post(`${apiPath}`, { ...data, id_company: customerId })
-      .then((response) => {
-        setData(response?.payload);
-        toast.success("Uspešno");
-        setIsLoadingOnSubmit(false);
-      })
-      .catch((error) => {
-        console.warn(error);
-        toast.warn("Greška");
-        setIsLoadingOnSubmit(false);
-      });
-  };
 
-  useEffect(() => {
-    handleData();
-  }, []);
-
-  return <Form formFields={formFields} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />;
+  return (
+    <>
+      <ListPage
+        listPageId="B2CDelivery"
+        apiUrl={`admin/customers-b2c/shipping-address/${customerId}`}
+        editUrl={`admin/customers-b2c/shipping-address`}
+        title=" "
+        columnFields={formFields}
+        actionNewButton="modal"
+        addFieldLabel="Dodajte novu vrednost"
+        showAddButton={true}
+        initialData={{ id_customer: customerId }}
+        customActions={customActions}
+      />
+    </>
+  );
 };
 
-export default Delivery;
+export default Payments;

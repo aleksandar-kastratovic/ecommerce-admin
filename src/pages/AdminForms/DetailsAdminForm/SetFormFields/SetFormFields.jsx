@@ -24,6 +24,8 @@ const SetFormFields = ({ formFields = [], formId }) => {
     description: "",
     ui_prop: "",
     option_prop: "",
+    fillFromApi: "",
+    usePropName: false,
     order: 0,
   };
   const [fields, setFields] = useState(formFields);

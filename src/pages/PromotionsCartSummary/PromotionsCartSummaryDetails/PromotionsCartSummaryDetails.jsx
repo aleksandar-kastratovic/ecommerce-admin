@@ -107,7 +107,7 @@ const PromotionsCartSummaryDetails = () => {
     {
       name: "Obračun",
       icon: IconList.calculate,
-      enabled: true,
+      enabled: data?.id,
       component: <CalculateForm campaignId={data?.id} />,
     },
   ];
