@@ -9,6 +9,7 @@ const Payments = ({ data, customerId }) => {
 
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
   const [type, setType] = useState('');
+  const [dataPayments, setDataPayments] = useState(null)
 
   const api = useAPI();
 
@@ -19,6 +20,7 @@ const Payments = ({ data, customerId }) => {
         fnc: (rowData) => {
           api.get(`admin/customers-b2c/billing-address/${customerId}/${rowData.id}`)
             .then((response) => {
+              setDataPayments(response?.payload);
               setType(response?.payload?.customer_type);
             })
             .catch((error) => console.log(error));
@@ -54,14 +56,13 @@ const Payments = ({ data, customerId }) => {
             mutate: 1,
           };
         }
+
       },
     },
   };
 
   const filterFormFields = (data, type) => {
-
     let arr = data.map((field) => {
-      console.log(field)
       if (type === 'company') {
         if (field.prop_name === "pib" || field.prop_name === "maticni_broj" || field.prop_name === "company_name") {
           return {
@@ -98,12 +99,53 @@ const Payments = ({ data, customerId }) => {
     setFormFieldsTemp([...arr]);
   };
 
+  const fetchPlacesFormFields = async (formFields, id_country) => {
+    let index = formFields.findIndex((it) => { return it.prop_name === 'id_town' });
+
+    const townObject = formFields[index];
+    let path = `${townObject.fillFromApi}?id_country=${id_country}`;
+    if (townObject?.usePropName) {
+      path = `${townObject.fillFromApi}/${townObject.prop_name}?id_country=${id_country}`;
+    }
+    await api
+      .get(path)
+      .then((response) => {
+        let res = response?.payload;
+        let arr = formFields.map((item, i) => {
+          if (item.prop_name === 'id_town') {
+            if (res.length > 0) {
+              return {
+                ...item,
+                queryString: `id_country=${id_country}`,
+                in_details: true
+              }
+            } else {
+              return {
+                ...item,
+                in_details: false
+              }
+            }
+          } else {
+            return {
+              ...item
+            }
+          }
+        });
+        setFormFieldsTemp([...arr]);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
 
   const validateData = (data, field) => {
     let ret = data;
     switch (field) {
       case "customer_type":
         filterFormFields(formFields, ret.customer_type);
+        return ret;
+      case 'id_country':
+        fetchPlacesFormFields(formFields, data?.id_country);
         return ret;
       default:
         return ret;
@@ -118,6 +160,13 @@ const Payments = ({ data, customerId }) => {
     }
   }, [type]);
 
+  useEffect(() => {
+    if (dataPayments?.id_country) {
+      fetchPlacesFormFields(formFields, dataPayments?.id_country);
+    }
+  }, [dataPayments])
+
+
   return (
     <>
       <ListPage
@@ -131,9 +180,10 @@ const Payments = ({ data, customerId }) => {
         showAddButton={true}
         initialData={{ id_customer: customerId }}
         customActions={customActions}
-        typePage='placanja'
         onNewButtonPress={() => { setType('') }}
         clearButton={type === '' ? true : false}
+        selectableCountryTown={true}
+        useColumnFields={true}
       />
     </>
   );

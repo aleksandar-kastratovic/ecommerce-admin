@@ -199,6 +199,7 @@
     "input_type": "autocomplete",
     "options": [],
     "fillFromApi": "admin/customers-b2c/billing-address/ddl",
+    "queryString": "",
     "usePropName": true,
     "company_display": true,
     "personal_display": true

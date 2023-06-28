@@ -210,7 +210,6 @@ const Content = ({ pageId }) => {
         columnFields={formFieldsTemp}
         actionNewButton="modal"
         customActions={customActions}
-        typePage='stranice'
         onNewButtonPress={() => {
           setHideSubmitModalBUtton(false);
           updateNewFieldsInDetails(formFields, '', false, null);
@@ -220,6 +219,9 @@ const Content = ({ pageId }) => {
         withoutSetterFunction
         submitButtonForm={hideSubmitModalButton}
         modalObject={modalObject}
+        useColumnFields={true}
+        useModalGalleryInjection={true}
+
       />
     </>
   );

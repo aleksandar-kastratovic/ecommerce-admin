@@ -369,7 +369,7 @@ export const AutocompleteInput = ({
     return () => {
       isMounted = false;
     };
-  }, [fillFromApi]);
+  }, [fillFromApi, queryString]);
 
   useEffect(() => {
     if (opt?.length === 0) {

@@ -27,7 +27,6 @@ const B2CCustomersDetails = () => {
     setIsLoading(true);
     api.get(`${apiPath}/${cid}`)
       .then((response) => {
-        console.log("response", response)
         setData(response?.payload);
         setIsLoading(false);
       })
@@ -64,6 +63,7 @@ const B2CCustomersDetails = () => {
   useEffect(() => {
     handleData();
   }, []);
+
 
   const fields = [
     {

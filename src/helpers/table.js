@@ -45,14 +45,22 @@ export const columnCell = (value, column, rowType) => {
 
         case "image":
         case "image_button":
-            return <img src={value} height="50px" alt={true} />;
+            return (
+                <div style={{ height: "30px" }}>
+                    <img src={value} height="30px" alt="Slika" />
+                </div>
+            );
 
         case "multiple_images":
             if (column === "input") {
                 const arrParsed = JSON.parse(value);
-                return arrParsed.map((item) => {
-                    return <img src={item.file} height="50px" style={{ marginRight: "2px" }} />;
-                });
+                return (
+                    <div style={{ height: "30px", display: "flex" }}>
+                        {arrParsed.map((item) => {
+                            return <img key={item.id} src={item.file} style={{ marginRight: "0.3rem", height: "100%" }} alt="Slika" />;
+                        })}
+                    </div>
+                );
             } else {
                 return value;
             }

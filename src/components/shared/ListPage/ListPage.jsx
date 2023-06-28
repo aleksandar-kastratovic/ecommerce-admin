@@ -38,7 +38,7 @@ import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren, listPageId, validateData, typePage = '', onNewButtonPress = () => { }, prepareInitialData, withoutSetterFunction, submitButtonForm, clearButton, customTitleModalForm, modalObject, customTitleDataNameForEditModal }) => {
+const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren, listPageId, validateData, onNewButtonPress = () => { }, prepareInitialData, withoutSetterFunction, submitButtonForm, clearButton, customTitleModalForm, modalObject, customTitleDataNameForEditModal, selectableCountryTown, useColumnFields = false, useModalGalleryInjection = false }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
@@ -243,7 +243,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
 
       </PageWrapper >
 
-      <ModalForm validateData={validateData} children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={typePage === 'stranice' || typePage === 'placanja' ? flatten(columnFields).filter((field) => field.in_details) : flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} prepareInitialData={prepareInitialData} withoutSetterFunction={withoutSetterFunction} typePage={typePage} submitButton={submitButtonForm} clearButton={clearButton} customTitle={customTitleModalForm} modalObject={modalObject} customTitleDataNameForEdit={customTitleDataNameForEditModal} />
+      <ModalForm validateData={validateData} children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={useColumnFields ? flatten(columnFields).filter((field) => field.in_details) : flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} prepareInitialData={prepareInitialData} withoutSetterFunction={withoutSetterFunction} submitButton={submitButtonForm} clearButton={clearButton} customTitle={customTitleModalForm} modalObject={modalObject} customTitleDataNameForEdit={customTitleDataNameForEditModal} selectableCountryTown={selectableCountryTown} useModalGalleryInjection={useModalGalleryInjection} />
       <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );

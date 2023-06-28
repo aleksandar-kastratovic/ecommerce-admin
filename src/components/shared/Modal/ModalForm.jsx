@@ -35,7 +35,7 @@ import { initial } from "lodash";
  * @constructor
  */
 
-const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, typePage = '', modalObject = null, customTitleDataNameForEdit = "Izmena" }) => {
+const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, modalObject = null, customTitleDataNameForEdit = "Izmena", selectableCountryTown = false, useModalGalleryInjection = false }) => {
 
   const { id } = openModal;
   const api = useAPI();
@@ -61,7 +61,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
       .get(url)
       .then((response) => {
         let modifiedData = response?.payload;
-        if (typePage === 'stranice') {
+        if (useModalGalleryInjection) {
           modifiedData = prepareInitialData(modifiedData);
         }
         setData(modifiedData);
@@ -72,10 +72,15 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
         setIsLoading(false);
       });
   };
-
   const saveData = async (data) => {
     setIsLoading(true);
     if (!withoutSetterFunction) {
+      if (selectableCountryTown) {
+        let index = formFields.findIndex(it => it.prop_name === "id_town");
+        if (index === -1) {
+          data = { ...data, id_town: null, town_name: null, zip_code: null, municipality_name: null };
+        }
+      }
       api.post(`${apiPathFormModal}`, { ...data, ...initialData })
         .then((response) => {
           setData(response?.payload);

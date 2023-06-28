@@ -96,6 +96,7 @@
     "sortable": true,
     "input_type": "autocomplete",
     "fillFromApi": "admin/stores/ddl",
+    "queryString": "",
     "usePropName": true,
     "options": []
   },

@@ -162,7 +162,7 @@ const CreateForm = ({
               description={item.description}
               fillFromApi={item.fillFromApi}
               usePropName={item.usePropName}
-              queryString={queryString}
+              queryString={item?.queryString ?? queryString}
               optionsIsEmpty={optionsIsEmpty}
               autoFocus={autoFocus}
             />
