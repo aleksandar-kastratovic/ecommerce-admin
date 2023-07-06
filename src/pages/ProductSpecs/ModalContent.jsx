@@ -29,7 +29,6 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
       api.get(apiPath)
         .then((response) => {
           setDialogData(response?.payload);
-
           setIsLoading(false);
         })
         .catch((error) => {
@@ -39,8 +38,6 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
     };
     handleData();
   }, []);
-
-  console.log(dialogData)
 
   return (
 

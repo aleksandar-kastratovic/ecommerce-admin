@@ -11,7 +11,7 @@ import Gallery from "./panels/Gallery";
 import Seo from "./panels/Seo";
 
 import basic_data from "./forms/basic_data.json";
-import Articles from "./panels/Articles";
+import Articles from "./panels/Articles/Articles";
 import Thumbs from "./panels/Thumbs";
 
 const B2CLandingPagesDetails = () => {

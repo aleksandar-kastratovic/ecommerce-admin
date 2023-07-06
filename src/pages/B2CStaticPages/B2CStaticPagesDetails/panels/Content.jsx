@@ -12,6 +12,7 @@ const Content = ({ pageId }) => {
   const [selectedRow, setSelectedRow] = useState({});
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
   const [hideSubmitModalButton, setHideSubmitModalBUtton] = useState(true);
+  const [modalFormTitle, setModalFormTitle] = useState(null);
 
   const [modalObject, setModalObject] = useState(null);
 
@@ -26,6 +27,8 @@ const Content = ({ pageId }) => {
           updateNewFieldsInDetails(formFieldsTemp, rowData?.input_type, true, null);
           setSelectedRow(rowData);
           setModalObject(null);
+          setModalFormTitle(null);
+
           return {
             show: true,
             id: rowData.id
@@ -166,15 +169,17 @@ const Content = ({ pageId }) => {
         }
 
         if (!edit && item.prop_name === 'order') {
-          item.disabled = true;
+          item.in_details = false;
+        } else {
+          item.in_details = true;
         }
-
 
       }
     });
     setFormFieldsTemp([...fields]);
   };
   const saveData = (data) => {
+    setModalFormTitle("Izmeni");
     api.post(`${apiPathContent}/${pageId}`, { ...data, id_static_pages: pageId })
       .then((response) => {
         toast.success(`Uspešno`);
@@ -214,6 +219,7 @@ const Content = ({ pageId }) => {
           setHideSubmitModalBUtton(false);
           updateNewFieldsInDetails(formFields, '', false, null);
           setModalObject(null);
+          setModalFormTitle(null);
         }}
         prepareInitialData={prepareInitialData}
         withoutSetterFunction
@@ -221,7 +227,7 @@ const Content = ({ pageId }) => {
         modalObject={modalObject}
         useColumnFields={true}
         useModalGalleryInjection={true}
-
+        customTitleModalForm={modalFormTitle}
       />
     </>
   );

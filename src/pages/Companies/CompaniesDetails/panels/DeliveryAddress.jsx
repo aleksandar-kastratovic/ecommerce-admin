@@ -68,7 +68,6 @@ const DeliveryAdresss = ({ companyId, data }) => {
       .get(path)
       .then((response) => {
         let res = response?.payload;
-        console.log("Res of id_country:", res);
         let arr = formFields.map((item, i) => {
           if (item.prop_name === 'id_town') {
             if (res.length > 0) {
@@ -84,6 +83,19 @@ const DeliveryAdresss = ({ companyId, data }) => {
               }
             }
           } else {
+            if (item.prop_name === 'town_name') {
+              if (res.length > 0) {
+                return {
+                  ...item,
+                  in_details: false
+                }
+              } else {
+                return {
+                  ...item,
+                  in_details: true
+                }
+              }
+            }
             return {
               ...item
             }

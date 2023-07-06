@@ -45,7 +45,7 @@
     "field_name": "Mesto",
     "prop_name": "id_town",
     "in_main_table": false,
-    "in_details": true,
+    "in_details": false,
     "editable": true,
     "disabled": false,
     "required": true,

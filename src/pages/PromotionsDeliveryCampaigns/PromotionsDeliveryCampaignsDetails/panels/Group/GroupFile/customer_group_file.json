@@ -1,6 +1,6 @@
 {
   "type": "group",
-  "type_component": "customer_group",
+  "type_component": "customer",
   "fields": [
     {
       "field": "entity_group",

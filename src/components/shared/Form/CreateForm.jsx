@@ -256,6 +256,7 @@ const CreateForm = ({
         case "multiple_images": //TODO
           formItem = (
             <InputMultipleImages
+              label={item.field_name}
               list={Array.isArray(value) ? value : []}
               name={item.prop_name}
               uploadHandler={item?.uploadHandler}

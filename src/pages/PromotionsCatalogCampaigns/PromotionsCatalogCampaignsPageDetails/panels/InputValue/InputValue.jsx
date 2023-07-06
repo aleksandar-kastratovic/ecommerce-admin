@@ -50,6 +50,8 @@ const InputValue = ({
         });
     };
 
+    console.log(opt)
+
     if (fillFromApi) {
       fillDdl();
     }
@@ -101,8 +103,9 @@ const InputValue = ({
           <InputInput
             value={
               Array.isArray(selectedValues)
-                ? selectedValues.map((item) => item.name)
+                ? selectedValues.map((item) => item.name).join(', ')
                 : selectedValues ?? ""
+
             }
             onChange={() => { }}
             disabled={true}

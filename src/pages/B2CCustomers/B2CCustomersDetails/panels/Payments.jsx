@@ -9,7 +9,8 @@ const Payments = ({ data, customerId }) => {
 
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
   const [type, setType] = useState('');
-  const [dataPayments, setDataPayments] = useState(null)
+  const [dataPayments, setDataPayments] = useState(null);
+  const [hasPlaces, setHasPlaces] = useState(false);
 
   const api = useAPI();
 
@@ -70,29 +71,70 @@ const Payments = ({ data, customerId }) => {
             required: true
           };
         }
+        if (field.prop_name !== 'id_town') {
+          if (field.company_display === true) {
+            if (field.prop_name === 'town_name') {
+              if (hasPlaces) {
+                return {
+                  ...field,
+                  in_details: false
+                };
+              } else {
+                return {
+                  ...field,
+                  in_details: true
+                };
+              }
+            }
+            return {
+              ...field,
+              in_details: true
+            };
+          } else {
+            return {
+              ...field,
+              in_details: false
+            };
+          }
 
-        if (field.company_display === true) {
-          return {
-            ...field,
-            in_details: true
-          };
         } else {
-          return {
-            ...field,
-            in_details: false
-          };
+          if (hasPlaces) {
+            return {
+              ...field,
+              in_details: true
+            }
+          } else {
+            return {
+              ...field,
+              in_details: false
+            }
+          }
         }
       } else {
-        if (field.personal_display === true) {
-          return {
-            ...field,
-            in_details: true
-          };
+        if (field.prop_name !== 'id_town') {
+          if (field.personal_display === true) {
+            return {
+              ...field,
+              in_details: true
+            };
+          } else {
+            return {
+              ...field,
+              in_details: false
+            };
+          }
         } else {
-          return {
-            ...field,
-            in_details: false
-          };
+          if (hasPlaces) {
+            return {
+              ...field,
+              in_details: true
+            }
+          } else {
+            return {
+              ...field,
+              in_details: false
+            }
+          }
         }
       }
     });
@@ -111,6 +153,11 @@ const Payments = ({ data, customerId }) => {
       .get(path)
       .then((response) => {
         let res = response?.payload;
+        if (res.length > 0) {
+          setHasPlaces(true);
+        } else {
+          setHasPlaces(false);
+        }
         let arr = formFields.map((item, i) => {
           if (item.prop_name === 'id_town') {
             if (res.length > 0) {
@@ -126,6 +173,19 @@ const Payments = ({ data, customerId }) => {
               }
             }
           } else {
+            if (item.prop_name === 'town_name') {
+              if (res.length > 0) {
+                return {
+                  ...item,
+                  in_details: false
+                }
+              } else {
+                return {
+                  ...item,
+                  in_details: true
+                }
+              }
+            }
             return {
               ...item
             }
@@ -164,7 +224,7 @@ const Payments = ({ data, customerId }) => {
     if (dataPayments?.id_country) {
       fetchPlacesFormFields(formFields, dataPayments?.id_country);
     }
-  }, [dataPayments])
+  }, [dataPayments]);
 
 
   return (

@@ -122,7 +122,6 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
               onClick={() => {
                 handleAddComponent(id, "group", button.id);
                 setShowModal(false);
-
               }}
               sx={{ width: "20rem", marginBottom: "1rem", padding: "0.5rem 0 0.5rem 0" }}
             />

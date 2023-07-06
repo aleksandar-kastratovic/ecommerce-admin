@@ -20,7 +20,6 @@ const Stores = () => {
       .get(path)
       .then((response) => {
         let res = response?.payload;
-        console.log(res)
         let arr = formFields.map((item, i) => {
           if (item.prop_name === 'id_town') {
             if (res.length > 0) {
@@ -36,6 +35,19 @@ const Stores = () => {
               }
             }
           } else {
+            if (item.prop_name === 'town_name') {
+              if (res.length > 0) {
+                return {
+                  ...item,
+                  in_details: false
+                }
+              } else {
+                return {
+                  ...item,
+                  in_details: true
+                }
+              }
+            }
             return {
               ...item
             }
@@ -67,6 +79,8 @@ const Stores = () => {
       title="Skladišta"
       columnFields={formFieldsTemp}
       actionNewButton="modal"
+      useColumnFields={true}
+      selectableCountryTown={true}
     />
   );
 };

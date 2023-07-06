@@ -12,20 +12,6 @@ const Payments = ({ data, customerId }) => {
   const api = useAPI();
 
   const customActions = {
-    // edit: {
-    //   clickHandler: {
-    //     type: 'modal_form',
-    //     fnc: (rowData) => {
-    //       api.get(`admin/customers-b2c/billing-address/${customerId}/${rowData.id}`)
-    //         .then((response) => console.log(response))
-    //         .catch((error) => console.log(error));
-    //       return {
-    //         show: true,
-    //         id: rowData.id
-    //       };
-    //     },
-    //   },
-    // },
     delete: {
       clickHandler: {
         type: 'dialog_delete',

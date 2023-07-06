@@ -41,7 +41,9 @@ import B2CContactForm from "../pages/B2CContactForm/B2CContactForm";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
 import B2Cbanners from "./../pages/B2Cbanners/B2Cbanners";
 import B2CSettings from "./../pages/B2CSettings/B2CSettings";
-import ImportSteps from "./../pages/Import/ImportSteps";
+// import ImportSteps from "../pages/Importt/ImportSteps";
+import Import from "../pages/Import/Import";
+import ImportDetails from "../pages/Import/ImportDetails/ImportDetails";
 import DetailsParams from "./../pages/Params/DetailsParams/DetailsParams";
 import Params from "./../pages/Params/Params";
 import Products from "./../pages/Products/Products";
@@ -66,12 +68,14 @@ import B2CSettingsDetails from "../pages/B2CSettings/SettingsDetails/B2CSettings
 import B2BContactForm from "../pages/B2BContactForm/B2BContactForm";
 import B2COrders from "../pages/B2COrders/B2COrders";
 import B2COrdersDetails from "../pages/B2COrders/DetailsOrders/B2COrdersDetails";
-// import Scripts from "../pages/Scripts/Scripts";
-// import ScriptsDetails from "../pages/Scripts/ScriptsDetails/ScriptsDetails";
+import B2CEmployees from "../pages/B2CEmployees/B2CEmployees";
+import Scripts from "../pages/Scripts/Scripts";
 import B2CContactFormDetails from "../pages/B2CContactForm/B2CContacFormDetails/B2CContactFormDetails";
 import Homepage from "../pages/Homepage/Homepage";
 import Error404 from "../pages/Error/Error404";
 import B2BContactFormDetails from "../pages/B2BContactForm/DetailsContactForm/B2BContactFormDetails";
+import B2CWorkingUnit from "../pages/B2CWorkingUnit/B2CWorkingUnit";
+import B2CCareer from "../pages/B2CCareer/B2CCareer";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, PROMOTIONS, SETTINGS, TOOLS } = MenuGroup;
@@ -139,6 +143,9 @@ const screens = {
     B2C_NEWSLETTER: ["/b2c-newsletter", "Newsletter", IconList.notificationsActive, B2C, Newsletter, [[":nlid", Newsletter]]],
     B2C_CONTACT_FORMS: ["/b2c-contactform", "Kontakt forma", IconList.markunreadMailbox, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],
+    B2C_EMPLOYEES: ["/b2c-employees", "Zaposleni", IconList.badge, B2C, B2CEmployees],
+    B2C_WORKING_UNITS: ["/b2c-working-unit", "Radne jedinice", IconList.engineering, B2C, B2CWorkingUnit],
+    B2C_CAREER: ["/b2c-career", "Karijera", IconList.notes, B2C, B2CCareer],
 
     PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Proizvodi", IconList.inventory, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
     PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Iznos korpe", IconList.requestQuote, PROMOTIONS, PromotionsCartSummary, [[":nid", PromotionsCartSummaryDetails]]],
@@ -156,9 +163,9 @@ const screens = {
     STORES: ["/stores", "Skladišta", IconList.store, SETTINGS, Stores],
     MANUFACTURERS: ["/manufacturers", "Proizvođači", IconList.factory, SETTINGS, Manufacturers],
     B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, TOOLS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
-    IMPORT: ["/import", "Uvoz podataka", IconList.upload, TOOLS, ImportSteps],
+    IMPORT: ["/import", "Uvoz podataka", IconList.upload, TOOLS, Import, [[":upId", ImportDetails]]],
     B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, TOOLS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
-    // SCRIPTS: ["/scripts", "Skripte", IconList.description, TOOLS, Scripts, [[":sId", ScriptsDetails]]],
+    ADMIN_SCRIPTS: ["/scripts", "Skripte", IconList.description, TOOLS, Scripts],
     ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, TOOLS, AdminForms, [[":formId", DetailsAdminForm]]],
 };
 

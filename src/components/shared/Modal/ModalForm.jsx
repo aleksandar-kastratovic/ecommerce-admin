@@ -35,7 +35,7 @@ import { initial } from "lodash";
  * @constructor
  */
 
-const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, modalObject = null, customTitleDataNameForEdit = "Izmena", selectableCountryTown = false, useModalGalleryInjection = false }) => {
+const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, modalObject = null, customTitleDataNameForEdit = "Izmeni", selectableCountryTown = false, useModalGalleryInjection = false }) => {
 
   const { id } = openModal;
   const api = useAPI();
@@ -78,7 +78,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
       if (selectableCountryTown) {
         let index = formFields.findIndex(it => it.prop_name === "id_town");
         if (index === -1) {
-          data = { ...data, id_town: null, town_name: null, zip_code: null, municipality_name: null };
+          data = { ...data, id_town: null, zip_code: null, municipality_name: null };
         }
       }
       api.post(`${apiPathFormModal}`, { ...data, ...initialData })

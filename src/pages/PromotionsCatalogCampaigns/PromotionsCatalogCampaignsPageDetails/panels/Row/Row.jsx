@@ -39,6 +39,7 @@ const Row = ({ data, id, handleRemoveComponent }) => {
   return (
     <div className={scss.rowHolder}>
       {(rowData?.fields ?? []).map((item, index) => {
+        console.log("row", item)
         if (
           index > 0 &&
           (rowData?.fields[index - 1]?.selected?.id == null ||
