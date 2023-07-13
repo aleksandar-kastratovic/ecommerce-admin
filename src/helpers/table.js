@@ -1,6 +1,7 @@
 import Unicon from "../components/shared/Unicon/Unicon";
 import IconList from "./icons";
 import moment from "moment";
+import Icon from "@mui/material/Icon";
 
 /** @return {int|string|null} The widht for the column. */
 export const columnWidth = (column: FieldSpec) => {
@@ -46,8 +47,8 @@ export const columnCell = (value, column, rowType) => {
         case "image":
         case "image_button":
             return (
-                <div style={{ height: "30px" }}>
-                    <img src={value} height="30px" alt="Slika" />
+                <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
+                    {value ? <img src={value} height="30px" alt="Slika" /> : <Icon sx={{ color: "#b3b3b3" }}>no_photography</Icon>}
                 </div>
             );
 
@@ -55,10 +56,14 @@ export const columnCell = (value, column, rowType) => {
             if (column === "input") {
                 const arrParsed = JSON.parse(value);
                 return (
-                    <div style={{ height: "30px", display: "flex" }}>
-                        {arrParsed.map((item) => {
-                            return <img key={item.id} src={item.file} style={{ marginRight: "0.3rem", height: "100%" }} alt="Slika" />;
-                        })}
+                    <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
+                        {arrParsed.length > 0 ? (
+                            arrParsed.map((item) => {
+                                return <img key={item.id} src={item.file} style={{ marginRight: "0.3rem", height: "100%" }} alt="Slika" />;
+                            })
+                        ) : (
+                            <Icon sx={{ color: "#b3b3b3" }}>no_photography</Icon>
+                        )}
                     </div>
                 );
             } else {

@@ -1,7 +1,7 @@
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 
-const Import = () => {
+const Export = () => {
 
   const customActions = {
     delete: {
@@ -30,13 +30,13 @@ const Import = () => {
 
   return (
     <ListPage
-      listPageId="Import"
+      listPageId="Export"
       apiUrl="admin/import/list"
-      title="Uvoz podataka iz fajla"
+      title="Izvoz podataka iz fajla"
       columnFields={tblFields}
       customActions={customActions}
     />
   )
 };
 
-export default Import;
+export default Export;

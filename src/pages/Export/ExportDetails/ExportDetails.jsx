@@ -7,11 +7,12 @@ import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
-import Connection from "./panels/Connection";
-
+import Columns from "./panels/Columns";
+import Content from "./panels/Content";
 import basic_data from "./forms/basic_data.json";
 
-const ImportDetails = () => {
+
+const ExportDetails = () => {
 
   const { upId } = useParams();
   const api = useAPI();
@@ -98,11 +99,18 @@ const ImportDetails = () => {
       component: <Form formFields={isBasicData} initialData={data} onSubmit={submitHandler} isLoading={isLoadingOnSubmit} onFilePicked={setFile} selectedFile={file} />,
     },
     {
-      id: "connection",
-      name: "Povezivanje",
-      icon: IconList.settingsEthernet,
+      id: "columns",
+      name: "Kolone",
+      icon: IconList.viewColumn,
       enabled: data?.id,
-      component: <Connection file={file} id={data?.id} />,
+      component: <Columns file={file} id={data?.id} />,
+    },
+    {
+      id: "content",
+      name: "Sadržaji",
+      icon: IconList.contentPasteSearch,
+      enabled: data?.id,
+      component: <Content file={file} id={data?.id} />,
     },
   ];
 
@@ -118,4 +126,4 @@ const ImportDetails = () => {
   return <DetailsPage title={data?.id == null ? "Unos nove stranice" : file?.name} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
-export default ImportDetails;
+export default ExportDetails;

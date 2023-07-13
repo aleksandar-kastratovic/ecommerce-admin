@@ -12,7 +12,7 @@ import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
 
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), cancelButton = false, submitButton = true, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), cancelButton = false, submitButton = true, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked, selectedFile }) => {
   const navigate = useNavigate();
   const [data, setData] = useState(initialData ?? {});
   const [inputsError, setInputsError] = useState([]);
@@ -202,6 +202,15 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
                 disabled={item.disabled || (item.prop_name === "slug" && data.system_required === 1)}
                 styleCheckbox={styleCheckbox}
                 autoFocus={propAutoFocus}
+                onFilePicked={(fileObject) => {
+                  //passing object to upper level
+                  onFilePicked(fileObject);
+                  //deleting import error object:
+                  setInputErrors("import");
+                  //setting data to be defiend in value: 
+                  setData({ ...data, import: fileObject.name });
+                }}
+                selectedFile={selectedFile}
               />
             );
           })}

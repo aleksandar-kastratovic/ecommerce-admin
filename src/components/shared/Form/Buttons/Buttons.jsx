@@ -9,8 +9,9 @@ import scss from "./Buttons.module.scss"
  * @return {JSX.Element}
  * @constructor
  */
-const Buttons = ({ children }) => (
-  <Box className={scss.wrapper}>
+const Buttons = ({ children, styleWrapperButtons }) => (
+
+  <Box className={scss.wrapper} sx={styleWrapperButtons}>
     {children}
   </Box>
 )

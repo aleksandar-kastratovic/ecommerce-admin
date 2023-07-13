@@ -41,9 +41,9 @@ import B2CContactForm from "../pages/B2CContactForm/B2CContactForm";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
 import B2Cbanners from "./../pages/B2Cbanners/B2Cbanners";
 import B2CSettings from "./../pages/B2CSettings/B2CSettings";
-// import ImportSteps from "../pages/Importt/ImportSteps";
 import Import from "../pages/Import/Import";
 import ImportDetails from "../pages/Import/ImportDetails/ImportDetails";
+// import Import from "../pages/Importt/ImportSteps";
 import DetailsParams from "./../pages/Params/DetailsParams/DetailsParams";
 import Params from "./../pages/Params/Params";
 import Products from "./../pages/Products/Products";
@@ -76,6 +76,8 @@ import Error404 from "../pages/Error/Error404";
 import B2BContactFormDetails from "../pages/B2BContactForm/DetailsContactForm/B2BContactFormDetails";
 import B2CWorkingUnit from "../pages/B2CWorkingUnit/B2CWorkingUnit";
 import B2CCareer from "../pages/B2CCareer/B2CCareer";
+import Export from "../pages/Export/Export";
+import ExportDetails from "../pages/Export/ExportDetails/ExportDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, PROMOTIONS, SETTINGS, TOOLS } = MenuGroup;
@@ -164,6 +166,8 @@ const screens = {
     MANUFACTURERS: ["/manufacturers", "Proizvođači", IconList.factory, SETTINGS, Manufacturers],
     B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, TOOLS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
     IMPORT: ["/import", "Uvoz podataka", IconList.upload, TOOLS, Import, [[":upId", ImportDetails]]],
+    // IMPORT: ["/import", "Uvoz podataka", IconList.upload, TOOLS, Import],
+    EXPORT: ["/export", "Izvoz podataka", IconList.upload, TOOLS, Export, [[":exId", ExportDetails]]],
     B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, TOOLS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
     ADMIN_SCRIPTS: ["/scripts", "Skripte", IconList.description, TOOLS, Scripts],
     ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, TOOLS, AdminForms, [[":formId", DetailsAdminForm]]],

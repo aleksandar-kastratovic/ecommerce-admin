@@ -131,7 +131,6 @@ const Scripts = () => {
                       fontSize: "1.2rem"
                     }
                   }}
-                  className={style.chip}
                 />
               </Box>
             ) : (

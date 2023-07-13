@@ -1,19 +1,21 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
 import useAPI from "../../api/api";
-import Typography from '@mui/material/Typography';
-import CircularProgress from "@mui/material/CircularProgress";
 import { InputCheckbox } from "../../components/shared/Form/FormInputs/FormInputs";
 import Buttons from "../../components/shared/Form/Buttons/Buttons";
 import Button from "../../components/shared/Button/Button";
-import { toast } from "react-toastify";
-import { Box } from "@mui/material";
+
+import Typography from '@mui/material/Typography';
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+
 
 const ModalContent = ({ data, rowData, labelModalContent }) => {
 
   const [dataModalContent, setDataModalContent] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isChecked, setIsChecked] = useState([]);
-  // const localStorageRef = useRef(null);
 
   const api = useAPI();
   const apiPathSave = `admin/scripts/execute`;
@@ -53,34 +55,6 @@ const ModalContent = ({ data, rowData, labelModalContent }) => {
   useEffect(() => {
     setDataModalContent(data);
   }, [data]);
-
-  // This function will read the value from local storage.
-  // const loadFromLocalStorage = () => {
-  //   const storedValue = localStorage.getItem("isChecked");
-  //   if (storedValue) {
-  //     setIsChecked(JSON.parse(storedValue));
-  //   }
-  // };
-
-  // // This function will store the value in local storage.
-  // const saveToLocalStorage = (value) => {
-  //   localStorage.setItem("isChecked", JSON.stringify(value));
-  // };
-
-  // // Reading the value from local storage during the initial rendering of the component.
-  // useEffect(() => {
-  //   loadFromLocalStorage();
-  // }, []);
-
-  // // Saving the value in local storage every time isChecked changes.
-  // useEffect(() => {
-  //   saveToLocalStorage(isChecked);
-  // }, [isChecked]);
-
-  // // Saving references for updating isChecked in local storage.
-  // useEffect(() => {
-  //   localStorageRef.current = isChecked;
-  // }, [isChecked]);
 
   return (
     <Box sx={{ padding: "2rem" }}>

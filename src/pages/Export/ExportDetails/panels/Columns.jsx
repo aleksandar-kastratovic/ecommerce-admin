@@ -19,7 +19,7 @@ import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-const Connection = ({ id, file }) => {
+const Columns = ({ id, file }) => {
 
   const api = useAPI();
   const getImport = "admin/import/connect";
@@ -150,4 +150,4 @@ const Connection = ({ id, file }) => {
   );
 }
 
-export default Connection;
+export default Columns;
