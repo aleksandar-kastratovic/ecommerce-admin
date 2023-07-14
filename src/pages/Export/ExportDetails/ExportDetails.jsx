@@ -14,7 +14,7 @@ import basic_data from "./forms/basic_data.json";
 
 const ExportDetails = () => {
 
-  const { upId } = useParams();
+  const { exId } = useParams();
   const api = useAPI();
   const apiPath = "admin/import/basic-data";
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
@@ -39,7 +39,7 @@ const ExportDetails = () => {
 
   const handleData = async () => {
     setIsLoading(true);
-    api.get(`${apiPath}/${upId}`)
+    api.get(`${apiPath}/${exId}`)
       .then((response) => {
         setData(response?.payload);
         setFile({ name: response?.payload?.filename })
@@ -103,7 +103,7 @@ const ExportDetails = () => {
       name: "Kolone",
       icon: IconList.viewColumn,
       enabled: data?.id,
-      component: <Columns file={file} id={data?.id} />,
+      component: <Columns file={file} data={data} />,
     },
     {
       id: "content",
@@ -117,11 +117,8 @@ const ExportDetails = () => {
   const panelHandleSelect = (field) => {
     let queryString = setUrlQueryStringParam("tab", field.id);
     const id = data.id == null ? "new" : data.id;
-    navigate(`/import/${id}?${queryString}`, { replace: true });
+    navigate(`/export/${id}?${queryString}`, { replace: true });
   }
-
-  console.log(file)
-
 
   return <DetailsPage title={data?.id == null ? "Unos nove stranice" : file?.name} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };

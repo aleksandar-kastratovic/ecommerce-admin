@@ -18,8 +18,11 @@ import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
 import FormControlLabel from '@mui/material/FormControlLabel';
+import LoadingTableRows from '../../../../components/shared/Loading/LoadingTableRows';
 
 const Connection = ({ id, file }) => {
+
+  console.log("id", id)
 
   const api = useAPI();
   const getImport = "admin/import/connect";
@@ -69,9 +72,6 @@ const Connection = ({ id, file }) => {
     }
   }, [id]);
 
-  // useEffect(() => {
-  //   console.log(dataImport?.preview);
-  // }, [dataImport]);
 
   return (
     <>
@@ -95,7 +95,7 @@ const Connection = ({ id, file }) => {
                 {/* The list of options to choose from */}
                 < TableCell className="no-padding" >
                   <FormControl fullWidth size="small" style={{ padding: "5px 1em 5px 5px" }}>
-                    <Select name={dataImport.columns[index]} value={mapping[dataImport.columns[index]] ?? ""} onChange={updateMapping} label=" ">
+                    <Select name={dataImport.columns[index]} value={mapping[dataImport.columns[index]] ?? ""} onChange={updateMapping} disabled label=" ">
                       <MenuItem value="">-</MenuItem>
                       {dataImport.targets.map(key =>
                         <MenuItem key={key.code} value={key.code}>{key.name}</MenuItem>
@@ -113,7 +113,7 @@ const Connection = ({ id, file }) => {
           })}
 
           {/*  Shown while loading */}
-          {/* {!response && <LoadingTableRows columns="4" />} */}
+          {/* {setIsLoading && <LoadingTableRows columns="4" />} */}
         </TableBody >
 
       </Table >
