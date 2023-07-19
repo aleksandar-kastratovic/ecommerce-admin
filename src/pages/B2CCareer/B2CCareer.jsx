@@ -17,7 +17,7 @@ const B2CCareer = () => {
         type: 'modal_form',
         fnc: (rowData) => {
           console.log("rowData", rowData)
-          api.get(`admin/b2c-career/${rowData.id}`)
+          api.get(`admin/career-b2c/${rowData.id}`)
             .then((response) => {
               setDataCareer(response?.payload);
             })
@@ -105,9 +105,9 @@ const B2CCareer = () => {
   return (
     <ListPage
       listPageId="B2CCareer"
-      apiUrl="admin/b2c-career/list"
-      editUrl="admin/b2c-career"
-      deleteUrl="admin/b2c-career"
+      apiUrl="admin/career-b2c/list"
+      editUrl="admin/career-b2c/basic-data"
+      deleteUrl="admin/career-b2c/list"
       validateData={validateData}
       customActions={customActions}
       title="Karijera"

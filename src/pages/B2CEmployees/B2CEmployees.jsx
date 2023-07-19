@@ -26,7 +26,7 @@ const B2CEmployees = () => {
         type: 'dialog_delete',
         fnc: (rowData) => {
 
-          api.delete(`admin/b2c-employees/${rowData.id}`)
+          api.delete(`admin/employees-b2c/list/${rowData.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
             .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
 
@@ -53,8 +53,8 @@ const B2CEmployees = () => {
   return (
     <ListPage
       listPageId="B2CEmployees"
-      apiUrl="admin/b2c-employees/list"
-      editUrl="admin/b2c-employees"
+      apiUrl="admin/employees-b2c/list"
+      editUrl="admin/employees-b2c/basic-data"
       title="Zaposleni"
       actionNewButton="modal"
       columnFields={tblFields}

@@ -20,7 +20,7 @@ const B2CWorkingUnit = () => {
             id: rowData.id,
             mutate: null,
             children: (
-              <ModalContent apiPath={`admin/b2c-employees/working-unit/message/${rowData.id}`} rowData={rowData} handleDeleteModalData={handleDeleteModalData} />
+              <ModalContent apiPath={`admin/working-units-b2c/list/message/${rowData.id}`} rowData={rowData} handleDeleteModalData={handleDeleteModalData} />
             )
           };
         },
@@ -28,7 +28,7 @@ const B2CWorkingUnit = () => {
       deleteClickHandler: {
         type: 'dialog_delete',
         fnc: (rowData, deleteModalData) => {
-          api.delete(`admin/b2c-employees/working-unit/confirm/${rowData.id}`)
+          api.delete(`admin/working-units-b2c/list/confirm/${rowData.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
             .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
 
@@ -55,8 +55,8 @@ const B2CWorkingUnit = () => {
   return (
     <ListPage
       listPageId="B2CWorkingUnit"
-      apiUrl="admin/b2c-employees/working-unit/list"
-      editUrl="admin/b2c-employees/working-unit"
+      apiUrl="admin/working-units-b2c/list"
+      editUrl="admin/working-units-b2c/basic-data"
       title="Radne jedinice"
       actionNewButton="modal"
       columnFields={tblFields}
