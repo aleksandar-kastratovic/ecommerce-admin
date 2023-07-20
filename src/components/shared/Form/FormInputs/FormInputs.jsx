@@ -42,9 +42,9 @@ import { toast } from "react-toastify";
  * @return {JSX.Element}
  */
 
-export const InputWrapper = ({ children = null, label, required, disabled, margin = "dense", error = null, fullWidth = true }) => {
+export const InputWrapper = ({ children = null, label, required, disabled, margin = "dense", error = null, fullWidth = true, styleFormControl }) => {
   return (
-    <FormControl fullWidth={fullWidth} margin={margin} error={error !== null}>
+    <FormControl fullWidth={fullWidth} margin={margin} error={error !== null} sx={styleFormControl}>
       <FormLabel required={required} disabled={disabled}>
         {label}
       </FormLabel>
@@ -248,6 +248,8 @@ export const InputSelect = ({
   optionsIsEmpty = () => { },
   className,
   onDataReceived = () => null,
+  styleFormControl,
+  // defaultOption
 }) => {
   const api = useAPI();
   const [opt, setOpt] = useState(options);
@@ -287,9 +289,11 @@ export const InputSelect = ({
     }
   }, [opt]);
 
-
+  useEffect(() => {
+    setOpt(options);
+  }, [options]);
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleFormControl}>
       <Select
         className={className}
         name={name}
@@ -303,8 +307,8 @@ export const InputSelect = ({
 
       >
         {(opt ?? []).map((item) => (
-          <MenuItem key={item.id} value={item.id} selected={item.id === value} disabled={item?.disabled ?? false} props={item.props} valuename={item.name}>
-            {item.name}
+          <MenuItem key={item.id} value={item?.id} selected={item.id === value} disabled={item?.disabled ?? false} props={item.props} valuename={item?.name}>
+            {item?.name}
           </MenuItem>
         ))}
       </Select>
@@ -631,6 +635,12 @@ export const InputMultiSelect = ({
     }
   }, [opt]);
 
+  useEffect(() => {
+    if (options) {
+      setOpt(options);
+    }
+  }, [options]);
+
   return (
     <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
       <Select
@@ -656,7 +666,7 @@ export const InputMultiSelect = ({
         {(opt ?? []).map((item) => (
           <MenuItem key={item.id} value={item.id} selected={item.id === value} disabled={item?.disabled ?? false}>
             <ListItemIcon>
-              <Checkbox checked={value.indexOf(item.id) > -1} />
+              <Checkbox checked={value?.indexOf(item.id) > -1} />
             </ListItemIcon>
 
             {item.name}
