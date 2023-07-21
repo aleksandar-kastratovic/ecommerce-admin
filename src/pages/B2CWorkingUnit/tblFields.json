@@ -70,6 +70,19 @@
     "input_type": "input"
   },
   {
+    "field_name": "Pozicija",
+    "prop_name": "order",
+    "in_main_table": false,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "number"
+  },
+  {
     "field_name": "",
     "prop_name": "action",
     "in_main_table": true,
