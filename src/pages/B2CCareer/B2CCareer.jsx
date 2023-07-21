@@ -16,8 +16,7 @@ const B2CCareer = () => {
       clickHandler: {
         type: 'modal_form',
         fnc: (rowData) => {
-          console.log("rowData", rowData)
-          api.get(`admin/career-b2c/${rowData.id}`)
+          api.get(`admin/career-b2c/basic-data/${rowData.id}`)
             .then((response) => {
               setDataCareer(response?.payload);
             })
@@ -33,7 +32,6 @@ const B2CCareer = () => {
 
 
   const fetchPlacesFormFields = async (formFields, id_country) => {
-    console.log("fetchPlacesFormFields", formFields)
     let index = formFields.findIndex((it) => { return it.prop_name === 'id_town' });
     const townObject = formFields[index];
     let path = `${townObject.fillFromApi}?id_country=${id_country}`;
@@ -44,7 +42,6 @@ const B2CCareer = () => {
       .get(path)
       .then((response) => {
         let res = response?.payload;
-        console.log("res", res)
         let arr = formFields.map((item, i) => {
           if (item.prop_name === 'id_town') {
             if (res.length > 0) {
@@ -78,6 +75,7 @@ const B2CCareer = () => {
             }
           }
         });
+        console.log("arr", arr)
         setFormFieldsTemp([...arr]);
       })
       .catch((error) => {
@@ -96,11 +94,16 @@ const B2CCareer = () => {
     }
   };
 
+
+
+
   useEffect(() => {
     if (dataCareer?.id_country) {
       fetchPlacesFormFields(formFields, dataCareer?.id_country);
     }
   }, [dataCareer])
+
+
 
   return (
     <ListPage
@@ -115,6 +118,7 @@ const B2CCareer = () => {
       actionNewButton="modal"
       selectableCountryTown={true}
       useColumnFields={true}
+      onNewButtonPress={() => { setFormFieldsTemp(formFields); }}
     />
   );
 };
