@@ -74,7 +74,6 @@ const HeadOffice = ({ companyId }) => {
       .get(path)
       .then((response) => {
         let res = response?.payload;
-        console.log(res)
         let arr = formFields.map((item, i) => {
           if (item.prop_name === 'id_town') {
             if (res.length > 0) {
@@ -93,6 +92,19 @@ const HeadOffice = ({ companyId }) => {
             }
           } else {
             if (item.prop_name === 'town_name') {
+              if (res.length > 0) {
+                return {
+                  ...item,
+                  in_details: false
+                }
+              } else {
+                return {
+                  ...item,
+                  in_details: true
+                }
+              }
+            }
+            if (item.prop_name === 'zip_code') {
               if (res.length > 0) {
                 return {
                   ...item,
