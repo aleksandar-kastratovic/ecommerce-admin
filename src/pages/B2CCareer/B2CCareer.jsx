@@ -94,8 +94,26 @@ const B2CCareer = () => {
     }
   };
 
+  const savePrapareDataHandler = (options) => {
+    options.formFields.map((item, i) => {
+      if (item.prop_name === 'id_town' && item.in_details === true) {
+        options.connectedData.town_name = null;
 
+        // Set null if no selected town
+        if (options.connectedData.id_town === "") {
+          options.connectedData.id_town = null;
+        }
+      }
+      if (item.prop_name === 'town_name' && item.in_details === true) {
+        options.connectedData.id_town = null;
+      }
+    });
 
+    return {
+      'setData': true,
+      'data': options.connectedData,
+    };
+  };
 
   useEffect(() => {
     if (dataCareer?.id_country) {
@@ -113,6 +131,7 @@ const B2CCareer = () => {
       deleteUrl="admin/career-b2c/list"
       validateData={validateData}
       customActions={customActions}
+      savePrapareDataHandler={savePrapareDataHandler}
       title="Karijera"
       columnFields={formFieldsTemp}
       actionNewButton="modal"

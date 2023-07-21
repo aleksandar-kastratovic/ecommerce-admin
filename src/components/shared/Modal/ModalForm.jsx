@@ -35,7 +35,7 @@ import { initial } from "lodash";
  * @constructor
  */
 
-const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, modalObject = null, customTitleDataNameForEdit = "Izmeni", selectableCountryTown = false, useModalGalleryInjection = false }) => {
+const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = null, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, modalObject = null, customTitleDataNameForEdit = "Izmeni", selectableCountryTown = false, useModalGalleryInjection = false }) => {
 
   const { id } = openModal;
   const api = useAPI();
@@ -73,15 +73,27 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
       });
   };
   const saveData = async (data) => {
+    console.log("dataaa modal form", data)
     setIsLoading(true);
-    if (!withoutSetterFunction) {
-      if (selectableCountryTown) {
-        let index = formFields.findIndex(it => it.prop_name === "id_town");
-        if (index === -1) {
-          data = { ...data, id_town: null, zip_code: null, municipality_name: null };
-        }
+
+    let sendData = { ...data, ...initialData };
+
+    if (typeof savePrapareDataHandler === 'function') {
+      let saveOptions = {
+        'data': data,
+        'initialData': initialData,
+        'connectedData': sendData,
+        'formFields': formFields
+      };
+      let savePrapareData = savePrapareDataHandler(saveOptions);
+
+      if (savePrapareData.setData == true) {
+        setData(savePrapareData.data);
       }
-      api.post(`${apiPathFormModal}`, { ...data, ...initialData })
+    }
+
+    if (!withoutSetterFunction) {
+      api.post(`${apiPathFormModal}`, sendData)
         .then((response) => {
           setData(response?.payload);
           toast.success(`Uspešno`);
@@ -94,7 +106,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, sx, variant, apiPathFormMo
           setIsLoading(false);
         });
     } else {
-      let objectForServer = { ...data, ...initialData };
+      let objectForServer = sendData;
       if (modalObject) {
         objectForServer.id = modalObject?.id
       }
