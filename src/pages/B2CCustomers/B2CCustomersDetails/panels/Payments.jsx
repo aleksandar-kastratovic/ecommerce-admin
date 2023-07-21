@@ -244,6 +244,7 @@ const Payments = ({ data, customerId }) => {
         clearButton={type === '' ? true : false}
         selectableCountryTown={true}
         useColumnFields={true}
+        onModalInitDataChange={(data, type) => { }}
       />
     </>
   );

@@ -21,7 +21,6 @@ const ImportDetails = () => {
 
   const [isBasicData, setBasicData] = useState(basic_data);
 
-
   const init = {
     id: null,
     import_type: false,

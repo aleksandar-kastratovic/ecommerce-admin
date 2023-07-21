@@ -60,12 +60,12 @@ const Columns = ({ data, file }) => {
 
   return (
     <>
-      {/* <InputCheckbox onChange={handleCheckboxChange} key="{item.name}" name="{item.slug}" label="{item.name}" styleCheckbox={{ padding: "0 0.563rem 0 0.563rem" }} value="ruza" /> */}
-      {Array.isArray(dataModalContent) &&
+      {/* <InputCheckbox onChange={handleCheckboxChange} key="{item.name}" name="{item.slug}" label="{item.name}" styleCheckbox={{ padding: "0 0.563rem 0 0.563rem" }} value="ruza"/> */}
+      {/* {Array.isArray(dataModalContent) &&
         dataModalContent.map((item) => {
           const isCheckedItem = isChecked.includes(item.filename);
           return (<InputCheckbox onChange={handleCheckboxChange} key={item.filename} name={item.slug} label={item.filename} styleCheckbox={{ padding: "0 0.563rem 0 0.563rem" }} value={isCheckedItem} />);
-        })}
+        })} */}
     </>
   );
 }

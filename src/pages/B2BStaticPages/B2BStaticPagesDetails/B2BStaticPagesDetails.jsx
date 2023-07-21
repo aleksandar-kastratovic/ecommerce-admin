@@ -1,24 +1,24 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
 import useAPI from "../../../api/api";
+import { toast } from "react-toastify";
+
 import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
-
-import Payments from "./panels/Payments";
-import Payments2 from "./panels/Payments2";
-import Delivery from "./panels/Delivery";
+import Seo from "./panels/Seo";
+import Content from "./panels/Content";
 
 import basic_data from "./forms/basic_data.json";
 
-const B2CCustomersDetails = () => {
-  const { cid } = useParams();
+const B2BStaticPagesDetails = () => {
+
+  const { spid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/customers-b2c/profile";
-  const navigate = useNavigate();
+  const apiPath = "admin/static-pages-b2c/basic-data";
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
+  const navigate = useNavigate();
 
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -26,7 +26,7 @@ const B2CCustomersDetails = () => {
 
   const handleData = async () => {
     setIsLoading(true);
-    api.get(`${apiPath}/${cid}`)
+    api.get(`${apiPath}/${spid}`)
       .then((response) => {
         setData(response?.payload);
         setIsLoading(false);
@@ -37,26 +37,23 @@ const B2CCustomersDetails = () => {
       });
   };
 
-
-
-  const saveData = async (data) => {
+  const submitHandler = (data) => {
     setIsLoadingOnSubmit(true);
     let oldId = data.id;
-    api.post(apiPath, { ...data, id_customer: data.id })
+    api.post(apiPath, data)
       .then((response) => {
         setData(response?.payload);
-        toast.success("Uspešno");
-
         if (oldId === null) {
           let tId = response?.payload?.id;
-
-          navigate(`/b2c-customers/${tId}`, { replace: true });
+          navigate(`/b2b-staticpages/${tId}`, { replace: true });
         }
+        toast.success("Uspešno");
+
         setIsLoadingOnSubmit(false);
       })
       .catch((error) => {
         console.warn(error);
-        toast.warning("Greška");
+        toast.warn("Greška");
         setIsLoadingOnSubmit(false);
       });
   };
@@ -65,39 +62,37 @@ const B2CCustomersDetails = () => {
     handleData();
   }, []);
 
-
   const fields = [
     {
       id: "basic",
-      name: "Profil",
+      name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
+      component: <Form formFields={basic_data} initialData={data} onSubmit={submitHandler} isLoading={isLoadingOnSubmit} />,
     },
     {
-      id: "payments",
-      name: "Plaćanja",
-      icon: IconList.payments,
+      id: "content",
+      name: "Sadržaj",
+      icon: IconList.list,
       enabled: data?.id,
-      component: <Payments customerId={data?.id} data={data} />,
+      component: <Content pageId={data?.id} />,
     },
     {
-      id: "delivery",
-      name: "Dostava",
-      icon: IconList.localShipping,
+      id: "ceo",
+      name: "SEO",
+      icon: IconList.search,
       enabled: data?.id,
-      component: <Delivery customerId={data?.id} />,
+      component: <Seo pageId={data?.id} />,
     },
   ];
 
-  // Handle after click on tab panel
   const panelHandleSelect = (field) => {
     let queryString = setUrlQueryStringParam("tab", field.id);
     const id = data.id == null ? "new" : data.id;
-    navigate(`/b2c-customers/${id}?${queryString}`, { replace: true });
+    navigate(`/b2b-staticpages/${id}?${queryString}`, { replace: true });
   }
 
-  return <DetailsPage title={data?.id == null ? "Unos novog kupca" : data?.first_name + " " + data?.last_name} fields={fields} ready={[cid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
+  return <DetailsPage title={data?.id == null ? "Unos nove stranice" : data?.name} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
-export default B2CCustomersDetails;
+export default B2BStaticPagesDetails;

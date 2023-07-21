@@ -8,25 +8,20 @@ import Table from "../../../../components/shared/Table/Table";
 
 import Check from "@mui/icons-material/Check";
 import CircularProgress from '@mui/material/CircularProgress';
-import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import FormControlLabel from '@mui/material/FormControlLabel';
-import LoadingTableRows from '../../../../components/shared/Loading/LoadingTableRows';
+import { InputSelect } from '../../../../components/shared/Form/FormInputs/FormInputs';
+import { map } from 'lodash';
 
 const Connection = ({ id, file }) => {
-
-  console.log("id", id)
-
   const api = useAPI();
   const getImport = "admin/import/connect";
-  const postImportExecute = "admin/products/import/execute";
+  const postImportExecute = "admin/import/execute";
 
   const [dataImport, setDataImport] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,16 +29,37 @@ const Connection = ({ id, file }) => {
   const [offset, setOffset] = useState(1);
   const [insert, setInsert] = useState(false);
 
+  const [selectedTargets, setSelectedTargets] = useState([]);
+
+  const [selectedConnection, setSelectedConnection] = useState(null);
+  const [selectedImportSystem, setSelectedImportSystem] = useState(null);
+
   // The selected mapping by the user
   const [mapping, setMapping] = useState({})
-  const updateMapping = event => setMapping({ ...mapping, [event.target.name]: event.target.value })
+  const updateMapping = (event, row) => {
+    setMapping({ ...mapping, [event.target.name]: event.target.value })
+    let obj = {
+      [event.target.value]: row[0]
+    };
+
+    // let index = selectedTargets.findIndex((item) => item[event.target.value] === obj[event.target.value]);
+
+    selectedTargets.map((item, i) => {
+      console.log("Whole item:", item);
+      console.log("Key:", event.target.value);
+      console.log("Item::::", item[event.target.value]);
+    })
+
+    // console.log("Index:", index);
+
+    setSelectedTargets([...selectedTargets, obj]);
+  }
 
   const handleData = async () => {
     setIsLoading(true);
     api.put(`${getImport}/${id}`)
       .then((response) => {
         setDataImport(response?.payload);
-        console.log(dataImport)
         setIsLoading(false);
       })
       .catch((error) => {
@@ -72,7 +88,6 @@ const Connection = ({ id, file }) => {
     }
   }, [id]);
 
-
   return (
     <>
       <Table>
@@ -87,27 +102,27 @@ const Connection = ({ id, file }) => {
 
         <TableBody>
           {dataImport && dataImport.preview && rotateMatrix(dataImport.preview).map((row, index) => {
-            console.log(index)
             return (
 
               < TableRow key={index} >
 
                 {/* The list of options to choose from */}
-                < TableCell className="no-padding" >
+                <TableCell className="no-padding" >
                   <FormControl fullWidth size="small" style={{ padding: "5px 1em 5px 5px" }}>
-                    <Select name={dataImport.columns[index]} value={mapping[dataImport.columns[index]] ?? ""} onChange={updateMapping} disabled label=" ">
-                      <MenuItem value="">-</MenuItem>
+                    <Select name={dataImport.skip_columns[index]} value={mapping[dataImport.skip_columns[index]] ?? ""} onChange={(event => updateMapping(event, row))} label=" ">
                       {dataImport.targets.map(key =>
-                        <MenuItem key={key.code} value={key.code}>{key.name}</MenuItem>
+                        <MenuItem key={key.id} value={key.id}>{key.name}</MenuItem>
                       )}
                     </Select>
                   </FormControl>
                 </TableCell>
 
                 {/* The extracted values, limited to 4 */}
-                {row.slice(0, 3).map((cell, index) => (
-                  <TableCell key={index}>{cell}</TableCell>
-                ))}
+                {
+                  row.slice(0, 3).map((cell, index) => (
+                    <TableCell key={index}>{cell}</TableCell>
+                  ))
+                }
               </TableRow>
             );
           })}
@@ -120,32 +135,13 @@ const Connection = ({ id, file }) => {
       {file && (
         <Buttons styleWrapperButtons={{ alignItems: "end" }}>
           {/* Skip starting rows */}
-          <FormControl sx={{ marginRight: "2rem", width: "15%" }} >
-            <FormLabel>Preskoči redova</FormLabel>
-            <Select
-              value={offset}
-              onChange={event => setOffset(event.target.value)}
-              sx={{
-                "& .MuiSelect-select": {
-                  padding: "0.469rem 0.875rem"
-                }
-              }}
-            >
-              <MenuItem value={0}>0</MenuItem>
-              <MenuItem value={1}>1</MenuItem>
-              <MenuItem value={2}>2</MenuItem>
-              <MenuItem value={3}>3</MenuItem>
-            </Select>
-          </FormControl>
+          <InputSelect onChange={(res) => { const { target } = res; setSelectedConnection(target.value) }} value={selectedConnection} label="Preskoči redova" options={dataImport?.skip_columns} styleFormControl={{ width: "25%", marginBottom: "0" }} />
+          {/* <InputSelect onChange={(res) => { const { target } = res; setSelectedImportSystem(target.value) }} value={selectedImportSystem} label="Import sistema" options={dataImport?.import_system} styleFormControl={{ width: "25%", marginRight: "auto", marginBottom: "0" }} /> */}
 
-          <FormControlLabel
-            control={<Checkbox checked={insert} onChange={event => setInsert(event.target.checked)} />} label="Kreiraj nove proizvode" sx={{ "& .MuiCheckbox-root": { padding: "0", paddingRight: "0.3rem" }, marginRight: "auto", "& .MuiFormControlLabel-label": { color: "rgba(0, 0, 0, 0.6)" } }}
-          />
-
-          {/* <Button icon={<Check />} label={isLoadingOnSubmit ? <CircularProgress size="1.5rem" /> : "Uvezi dokument"} onClick={() => submitHandler({ offset: offset })} variant="contained" /> */}
           <Button icon={<Check />} label={isLoading ? <CircularProgress size="1.5rem" /> : "Potvrdi uvoz"} onClick={submitHandler} variant="contained" />
         </Buttons>
-      )}
+      )
+      }
     </>
   );
 }

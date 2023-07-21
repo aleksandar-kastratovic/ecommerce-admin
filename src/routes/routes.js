@@ -43,7 +43,6 @@ import B2Cbanners from "./../pages/B2Cbanners/B2Cbanners";
 import B2CSettings from "./../pages/B2CSettings/B2CSettings";
 import Import from "../pages/Import/Import";
 import ImportDetails from "../pages/Import/ImportDetails/ImportDetails";
-// import Import from "../pages/Importt/ImportSteps";
 import DetailsParams from "./../pages/Params/DetailsParams/DetailsParams";
 import Params from "./../pages/Params/Params";
 import Products from "./../pages/Products/Products";
@@ -78,6 +77,10 @@ import B2CWorkingUnit from "../pages/B2CWorkingUnit/B2CWorkingUnit";
 import B2CCareer from "../pages/B2CCareer/B2CCareer";
 import Export from "../pages/Export/Export";
 import ExportDetails from "../pages/Export/ExportDetails/ExportDetails";
+import B2BStaticPages from "../pages/B2BStaticPages/B2BStaticPages";
+import B2BStaticPagesDetails from "../pages/B2BStaticPages/B2BStaticPagesDetails/B2BStaticPagesDetails";
+import B2BLandingPages from "../pages/B2BLandingPages/B2BLandingPages";
+import B2BLandingPagesDetails from "../pages/B2BLandingPages/B2BLandingPagesDetails/B2BLandingPagesDetails";
 
 /** The list of available screens. */
 const { PRODUCT, B2B, B2C, PROMOTIONS, SETTINGS, TOOLS } = MenuGroup;
@@ -125,6 +128,8 @@ const screens = {
     B2B_SALES_OFFICER: ["/b2b-sales-officers", "Komercijalisti", IconList.manageAccounts, B2B, SaleOfficers],
     B2B_NOTIFICATIONS: ["/b2b-notifications", "Notifikacije", IconList.notifications, B2B, Notifications],
     B2B_CONTACT_FORMS: ["/b2b-contact", "Kontakt forma", IconList.markunreadMailbox, B2B, B2BContactForm, [[":id", B2BContactFormDetails]]],
+    B2B_STATIC_PAGES: ["/b2b-staticpages", "Statičke strane", IconList.autoStories, B2B, B2BStaticPages, [[":spid", B2BStaticPagesDetails]]],
+    B2B_LANDING_PAGES: ["/b2b-landingpages", "Promo strane", IconList.autoStories, B2B, B2BLandingPages, [[":lid", B2BLandingPagesDetails]]],
 
     BANNERS_B2C: ["/b2c-banners", "Baneri", IconList.image, B2C, B2Cbanners, [["positions", B2CbannersPositions]]],
     B2C_NEWS: [
@@ -166,7 +171,6 @@ const screens = {
     MANUFACTURERS: ["/manufacturers", "Proizvođači", IconList.factory, SETTINGS, Manufacturers],
     B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, TOOLS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
     IMPORT: ["/import", "Uvoz podataka", IconList.upload, TOOLS, Import, [[":upId", ImportDetails]]],
-    // IMPORT: ["/import", "Uvoz podataka", IconList.upload, TOOLS, Import],
     EXPORT: ["/export", "Izvoz podataka", IconList.upload, TOOLS, Export, [[":exId", ExportDetails]]],
     B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, TOOLS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
     ADMIN_SCRIPTS: ["/scripts", "Skripte", IconList.description, TOOLS, Scripts],
