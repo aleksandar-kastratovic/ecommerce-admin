@@ -7,8 +7,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 
 const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
 
-  console.log(apiPath)
-
   const api = useAPI();
 
   const [dialogData, setDialogData] = useState({})

@@ -26,6 +26,21 @@
     "input_type": "input"
   },
   {
+    "field_name": "Kod",
+    "prop_name": "slug",
+    "in_main_table": false,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "input",
+    "in_details_new_display": false,
+    "in_details_edit_display": true
+  },
+  {
     "field_name": "Radna jedinica",
     "prop_name": "parent_id",
     "in_main_table": false,
