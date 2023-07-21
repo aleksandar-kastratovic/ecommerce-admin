@@ -59,6 +59,7 @@ const DeliveryAdresss = ({ companyId, data }) => {
 
   const fetchPlacesFormFields = async (formFields, id_country) => {
     let index = formFields.findIndex((it) => { return it.prop_name === 'id_town' });
+
     const townObject = formFields[index];
     let path = `${townObject.fillFromApi}?id_country=${id_country}`;
     if (townObject?.usePropName) {
@@ -84,6 +85,19 @@ const DeliveryAdresss = ({ companyId, data }) => {
             }
           } else {
             if (item.prop_name === 'town_name') {
+              if (res.length > 0) {
+                return {
+                  ...item,
+                  in_details: false
+                }
+              } else {
+                return {
+                  ...item,
+                  in_details: true
+                }
+              }
+            }
+            if (item.prop_name === 'zip_code') {
               if (res.length > 0) {
                 return {
                   ...item,
@@ -142,6 +156,7 @@ const DeliveryAdresss = ({ companyId, data }) => {
         customActions={customActions}
         useColumnFields={true}
         selectableCountryTown={true}
+
       />
     </>
   );
