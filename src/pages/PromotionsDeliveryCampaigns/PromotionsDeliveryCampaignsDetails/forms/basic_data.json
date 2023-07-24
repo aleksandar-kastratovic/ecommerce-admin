@@ -12,7 +12,7 @@
     "sortable": true,
     "input_type": "select",
     "options": [],
-    "fillFromApi": "admin/campaigns/product-catalog/basic-data/ddl",
+    "": "admin/campaigns/product-catalog/basic-data/ddl",
     "usePropName": true
   },
   {
@@ -152,7 +152,7 @@
     "sortable": true,
     "input_type": "select",
     "options": [],
-    "fillFromApi": "admin/campaigns/product-catalog/basic-data/ddl",
+    "": "admin/campaigns/product-catalog/basic-data/ddl",
     "usePropName": true
   }
 ]

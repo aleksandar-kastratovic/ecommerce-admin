@@ -88,7 +88,7 @@ const CompaniesDetails = () => {
       name: "Adresa dostave",
       icon: IconList.locationCity,
       enabled: data?.id,
-      component: <DeliveryAddress companyId={comId} />,
+      component: <DeliveryAddress companyId={comId} data={data} />,
     },
     {
       id: "contact",

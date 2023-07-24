@@ -14,7 +14,7 @@
   },
   {
     "field_name": "Kod",
-    "prop_name": "slug",
+    "prop_name": "",
     "in_main_table": false,
     "in_details": true,
     "editable": true,

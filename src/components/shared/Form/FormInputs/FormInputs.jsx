@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
@@ -13,7 +13,8 @@ import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Chip from "@mui/material/Chip";
-
+import Input from '@mui/material/Input';
+import Box from "@mui/material/Box";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -21,6 +22,12 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import useAPI from "../../../../api/api";
 import HtmlEditor from "../../HtmlEditor/HtmlEditor";
+import NoteBox from "../../NoteBox/NoteBox";
+import useFileInput from "../../../../hooks/useFileInput";
+import ButtonBase from "@mui/material/ButtonBase";
+import { blobToData } from "../../../../helpers/data";
+import { InputAdornment } from "@mui/material";
+import { toast } from "react-toastify";
 
 /**
  * Wrapper for the input element
@@ -35,9 +42,9 @@ import HtmlEditor from "../../HtmlEditor/HtmlEditor";
  * @return {JSX.Element}
  */
 
-export const InputWrapper = ({ children = null, label, required, disabled, margin = "dense", error = null, fullWidth = true }) => {
+export const InputWrapper = ({ children = null, label, required, disabled, margin = "dense", error = null, fullWidth = true, styleFormControl }) => {
   return (
-    <FormControl fullWidth={fullWidth} margin={margin} error={error !== null}>
+    <FormControl fullWidth={fullWidth} margin={margin} error={error !== null} sx={styleFormControl}>
       <FormLabel required={required} disabled={disabled}>
         {label}
       </FormLabel>
@@ -241,6 +248,8 @@ export const InputSelect = ({
   optionsIsEmpty = () => { },
   className,
   onDataReceived = () => null,
+  styleFormControl,
+  // defaultOption
 }) => {
   const api = useAPI();
   const [opt, setOpt] = useState(options);
@@ -280,9 +289,11 @@ export const InputSelect = ({
     }
   }, [opt]);
 
-
+  useEffect(() => {
+    setOpt(options);
+  }, [options]);
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleFormControl}>
       <Select
         className={className}
         name={name}
@@ -296,8 +307,8 @@ export const InputSelect = ({
 
       >
         {(opt ?? []).map((item) => (
-          <MenuItem key={item.id} value={item.id} selected={item.id === value} disabled={item?.disabled ?? false} props={item.props} valuename={item.name}>
-            {item.name}
+          <MenuItem key={item.id} value={item?.id} selected={item.id === value} disabled={item?.disabled ?? false} props={item.props} valuename={item?.name}>
+            {item?.name}
           </MenuItem>
         ))}
       </Select>
@@ -369,7 +380,7 @@ export const AutocompleteInput = ({
     return () => {
       isMounted = false;
     };
-  }, [fillFromApi]);
+  }, [fillFromApi, queryString]);
 
   useEffect(() => {
     if (opt?.length === 0) {
@@ -624,6 +635,12 @@ export const InputMultiSelect = ({
     }
   }, [opt]);
 
+  useEffect(() => {
+    if (options) {
+      setOpt(options);
+    }
+  }, [options]);
+
   return (
     <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
       <Select
@@ -649,7 +666,7 @@ export const InputMultiSelect = ({
         {(opt ?? []).map((item) => (
           <MenuItem key={item.id} value={item.id} selected={item.id === value} disabled={item?.disabled ?? false}>
             <ListItemIcon>
-              <Checkbox checked={value.indexOf(item.id) > -1} />
+              <Checkbox checked={value?.indexOf(item.id) > -1} />
             </ListItemIcon>
 
             {item.name}
@@ -829,3 +846,60 @@ export const InputHtml = ({ label, required, disabled, name, value, error = null
     </InputWrapper>
   );
 };
+
+export const ImportPicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile }) => {
+  const ref = useRef();
+  const [attachment, setAttachment] = useState(null);
+
+  const handleChange = (event) => {
+    const files = Array.from(event.target.files);
+    const [file] = files;
+
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (fileExtension !== 'csv' && fileExtension !== 'xml' && fileExtension !== 'json') {
+      toast.error('Pogrešan tip fajla.');
+      return;
+    }
+
+    blobToData(file).then((result) => {
+      let obj = {
+        base_64: result,
+        name: file?.name
+      }
+      onFilePicked(obj);
+    });
+    setAttachment(file);
+  };
+
+  return (
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+      <ButtonBase
+        component="label"
+        sx={{
+          height: "55px",
+          border: "1px solid",
+          borderColor: error ? "#d32f2f" : "rgba(0, 0, 0, 0.23)",
+          borderRadius: "0.25rem",
+          justifyContent: "start",
+          paddingLeft: "0.875rem",
+        }}
+      >
+        {selectedFile ? (
+          <span style={{ fontSize: "1rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Izabrani fajl: {selectedFile.name}</span>
+        ) : (
+          <span style={{ fontSize: "1rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Kliknite ovde kako biste odabrali fajl za import.</span>
+        )}
+        <Input
+          type="file"
+          onChange={handleChange}
+          inputRef={ref}
+          disabled={disabled}
+          sx={{ display: "none" }}
+          error={error !== null}
+        />
+      </ButtonBase>
+      <FormHelperText>{error ? error : description}</FormHelperText>
+    </InputWrapper>
+  )
+}

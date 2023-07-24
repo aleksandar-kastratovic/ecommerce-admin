@@ -3,9 +3,11 @@ import React, { useEffect, useState, useRef } from "react";
 import useAPI from "../../../../api/api";
 import Group from "./Group/Group";
 import MainGroup from "./Group/MainGroup";
-import ProductGroup from "./Group/ProductGroup"
+import ProductGroup from "./Group/ProductGroup";
+import CustomerGroup from "./Group/CustomerGroup"
 import Row from "./Row/Row";
 import ProductRow from "./Row/ProductRow"
+import CustomerRow from "./Row/CustomerRow"
 import { v4 } from "uuid";
 import DeleteDialog from "../../../../components/shared/Dialogs/DeleteDialog";
 
@@ -69,6 +71,7 @@ const Conditions = ({ campaignId }) => {
     return (
       <>
         {param_data.map((t_row) => {
+          console.log("t_row", t_row)
           if (t_row?.type) {
             if (t_row.type === 'group') {
               let rules = [];
@@ -99,6 +102,17 @@ const Conditions = ({ campaignId }) => {
                       handleRemoveComponent={handleRemoveComponent}
                     />
                   );
+                case 'customer':
+                  return (
+                    <CustomerGroup
+                      key={t_row.id}
+                      id={t_row.id}
+                      data={t_row}
+                      rules={rules}
+                      handleAddComponent={handleAddComponent}
+                      handleRemoveComponent={handleRemoveComponent}
+                    />
+                  );
                 case 'default':
                 default:
                   return (
@@ -117,6 +131,16 @@ const Conditions = ({ campaignId }) => {
                 case 'product':
                   return (
                     <ProductRow
+                      key={t_row.id}
+                      id={t_row.id}
+                      data={t_row}
+                      handleRemoveComponent={handleRemoveComponent}
+                    />
+                  );
+                  break;
+                case 'customer':
+                  return (
+                    <CustomerRow
                       key={t_row.id}
                       id={t_row.id}
                       data={t_row}
@@ -208,12 +232,16 @@ const Conditions = ({ campaignId }) => {
       return param_data;
     }
     return param_data.map((t_row) => {
+      console.log("t_row", t_row)
       if (t_row.id === parentId) {
         if (componentType === 'group') {
           let group_file = [];
           switch (componentTypeComponent) {
             case "product":
               group_file = product_group_file;
+              break;
+            case "customer":
+              group_file = customer_group_file;
               break;
             default:
               group_file = init_group_file;
@@ -227,6 +255,9 @@ const Conditions = ({ campaignId }) => {
           switch (componentTypeComponent) {
             case "product":
               row_file = product_row_file;
+              break;
+            case "customer":
+              row_file = customer_row_file;
               break;
             default:
               row_file = init_row_file;

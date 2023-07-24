@@ -129,7 +129,7 @@ const ListTableBody = ({ items, fields, handleOnClickActions, isLoading = false,
                 //   <input type={column.input_type} defaultValue={row[column.prop_name]} />
                 // ) : (
                 // inače, prikazuje se samo trenutna vrednost ćelije
-                columnCell(row[column.prop_name], column.input_type)
+                columnCell(row[column.prop_name], column.input_type, row.input_type)
 
               ) : (
                 <ActionField

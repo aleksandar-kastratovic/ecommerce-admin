@@ -42,20 +42,25 @@ const ProductDetails = () => {
   };
 
   const [data, setData] = useState(init);
+  const [basicDataTemp, setBasicDataTemp] = useState(basic_data);
   const api = useAPI();
 
   const updateNewFieldsInDetails = (data, isNew) => {
-    const newFromField = data.find((item) => item.prop_name === "new_from");
-    const newToField = data.find((item) => item.prop_name === "new_to");
+    // const newFromField = data.find((item) => item.prop_name === "new_from");
+    // const newToField = data.find((item) => item.prop_name === "new_to");
 
-    if (isNew) {
-      newFromField.in_details = true;
-      newToField.in_details = true;
-    } else {
-      console.log(isNew)
-      newFromField.in_details = false;
-      newToField.in_details = false;
-    }
+    data.map((item, i) => {
+      if (isNew) {
+        if (item.prop_name === 'new_from' || item.prop_name === 'new_to') {
+          item.in_details = true;
+        }
+      } else {
+        if (item.prop_name === 'new_from' || item.prop_name === 'new_to') {
+          item.in_details = false;
+        }
+      }
+    })
+    setBasicDataTemp([...data]);
   };
 
   const handleSubmit = (data) => {
@@ -109,7 +114,7 @@ const ProductDetails = () => {
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={handleSubmit} validateData={validateData} isLoading={isLoadingOnSubmit} />,
+      component: <Form formFields={basicDataTemp} initialData={data} onSubmit={handleSubmit} validateData={validateData} isLoading={isLoadingOnSubmit} />,
     },
     {
       id: "description",

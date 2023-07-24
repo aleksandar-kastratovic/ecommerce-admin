@@ -8,6 +8,7 @@ import DetailsPage from "../../../components/shared/ListPage/DetailsPage/Details
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
 import Payments from "./panels/Payments";
+import Payments2 from "./panels/Payments2";
 import Delivery from "./panels/Delivery";
 
 import basic_data from "./forms/basic_data.json";
@@ -36,6 +37,8 @@ const B2CCustomersDetails = () => {
       });
   };
 
+
+
   const saveData = async (data) => {
     setIsLoadingOnSubmit(true);
     let oldId = data.id;
@@ -46,6 +49,7 @@ const B2CCustomersDetails = () => {
 
         if (oldId === null) {
           let tId = response?.payload?.id;
+
           navigate(`/b2c-customers/${tId}`, { replace: true });
         }
         setIsLoadingOnSubmit(false);
@@ -61,10 +65,11 @@ const B2CCustomersDetails = () => {
     handleData();
   }, []);
 
+
   const fields = [
     {
       id: "basic",
-      name: "Osnovno",
+      name: "Profil",
       icon: IconList.inventory,
       enabled: true,
       component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
@@ -74,7 +79,7 @@ const B2CCustomersDetails = () => {
       name: "Plaćanja",
       icon: IconList.payments,
       enabled: data?.id,
-      component: <Payments customerId={data?.id} />,
+      component: <Payments customerId={data?.id} data={data} />,
     },
     {
       id: "delivery",

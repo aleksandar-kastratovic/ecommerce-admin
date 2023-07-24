@@ -1,16 +1,18 @@
 [
   {
-    "field_name": "Kompanija",
-    "prop_name": "company_name",
+    "field_name": "Naziv",
+    "prop_name": "name",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
     "disabled": false,
     "required": true,
-    "description": "",
+    "description": "Naziv koji se prikazuje prilikom odabira podataka za dostavu.",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "input",
+    "company_display": true,
+    "personal_display": true
   },
   {
     "field_name": "Ime",
@@ -65,9 +67,37 @@
     "input_type": "input"
   },
   {
+    "field_name": "Kompanija",
+    "prop_name": "company_name",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
+    "field_name": "Država",
+    "prop_name": "country_name",
+    "in_main_table": true,
+    "in_details": false,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "input",
+    "company_display": false,
+    "personal_display": false
+  },
+  {
     "field_name": "Država",
     "prop_name": "id_country",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -77,36 +107,7 @@
     "sortable": true,
     "input_type": "select",
     "options": [],
-    "fillFromApi": "admin/customers-b2b/delivery-address/ddl",
-    "usePropName": true
-  },
-  {
-    "field_name": "Država",
-    "prop_name": "country_name",
-    "in_main_table": true,
-    "in_details": false,
-    "editable": true,
-    "disabled": false,
-    "required": true,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "input"
-  },
-  {
-    "field_name": "Mesto",
-    "prop_name": "id_town",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": true,
-    "description": "",
-    "ui_prop": "xyz",
-    "sortable": true,
-    "input_type": "autocomplete",
-    "options": [],
-    "fillFromApi": "admin/customers-b2b/delivery-address/ddl",
+    "fillFromApi": "admin/customers-b2c/shipping-address/ddl",
     "usePropName": true
   },
   {
@@ -116,16 +117,34 @@
     "in_details": false,
     "editable": true,
     "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "input",
+    "company_display": false,
+    "personal_display": false
+  },
+  {
+    "field_name": "Mesto",
+    "prop_name": "id_town",
+    "in_main_table": false,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
     "required": true,
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "autocomplete",
+    "options": [],
+    "fillFromApi": "admin/customers-b2c/shipping-address/ddl",
+    "usePropName": true
   },
   {
     "field_name": "Ulica",
     "prop_name": "address",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -138,7 +157,7 @@
   {
     "field_name": "Broj",
     "prop_name": "object_number",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -151,7 +170,7 @@
   {
     "field_name": "Sprat",
     "prop_name": "floor",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -164,7 +183,7 @@
   {
     "field_name": "Stan",
     "prop_name": "apartment_number",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -177,7 +196,7 @@
   {
     "field_name": "Napomena",
     "prop_name": "note",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -199,8 +218,21 @@
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "select",
-    "fillFromApi": "admin/customers-b2c/profile/ddl",
+    "fillFromApi": "admin/customers-b2c/shipping-address/ddl",
     "usePropName": true,
     "options": []
+  },
+  {
+    "field_name": "",
+    "prop_name": "action",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "edit_delete"
   }
 ]

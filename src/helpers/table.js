@@ -1,6 +1,7 @@
 import Unicon from "../components/shared/Unicon/Unicon";
 import IconList from "./icons";
 import moment from "moment";
+import Icon from "@mui/material/Icon";
 
 /** @return {int|string|null} The widht for the column. */
 export const columnWidth = (column: FieldSpec) => {
@@ -35,8 +36,8 @@ export const columnProps = (column: FieldSpec, header: boolean = false) => {
     };
 };
 
-export const columnCell = (value, column) => {
-    switch (column) {
+export const columnCell = (value, column, rowType) => {
+    switch (rowType !== undefined ? rowType : column) {
         case "boolean":
             return value ? <Unicon icon={IconList.check} /> : <Unicon icon={IconList.close} />;
 
@@ -45,8 +46,29 @@ export const columnCell = (value, column) => {
 
         case "image":
         case "image_button":
-            return <img src={value} height="70px" alt />;
+            return (
+                <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
+                    {value ? <img src={value} height="30px" alt="Slika" /> : <Icon sx={{ color: "#b3b3b3" }}>no_photography</Icon>}
+                </div>
+            );
 
+        case "multiple_images":
+            if (column === "input") {
+                const arrParsed = JSON.parse(value);
+                return (
+                    <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
+                        {arrParsed.length > 0 ? (
+                            arrParsed.map((item) => {
+                                return <img key={item.id} src={item.file} style={{ marginRight: "0.3rem", height: "100%" }} alt="Slika" />;
+                            })
+                        ) : (
+                            <Icon sx={{ color: "#b3b3b3" }}>no_photography</Icon>
+                        )}
+                    </div>
+                );
+            } else {
+                return value;
+            }
         case "input":
         default:
             return value;

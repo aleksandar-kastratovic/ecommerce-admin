@@ -13,7 +13,7 @@ const ListPageModalWrapper = ({ children, anchor, open, sx, variant, onClose, on
       <IconButton sx={{ display: "flex", alignItems: "flex-start", width: "fit-content", position: "fixed", right: "calc(50rem + 2rem)", top: "1rem", color: "var(--bg-color)" }} onClick={onCloseButtonClick}>
         <Icon>close</Icon>
       </IconButton>
-      <Box width="50rem" sx={styleBox}>
+      <Box width="50rem" height="100%" sx={styleBox}>
         {children}
       </Box>
     </Drawer>

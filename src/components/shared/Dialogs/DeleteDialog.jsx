@@ -24,7 +24,7 @@ import Icon from "@mui/material/Icon";
  * @return {JSX.Element}
  * @constructor
  */
-const DeleteModal = ({ openDeleteDialog, selectedRowData, title, description, handleConfirm, setOpenDeleteDialog, nameOfButton, deafultDeleteIcon = true, sx = {}, children }) => {
+const DeleteModal = ({ openDeleteDialog, selectedRowData, title, description, handleConfirm, setOpenDeleteDialog, nameOfButton, deafultDeleteIcon = true, sx = {}, children, nameOfButtonCancel }) => {
 
   // The childrenData function checks if the children prop is defined. If it is, it assumes that the parent component has passed a function as the children prop and calls that function with the selectedRowData as an argument. This allows the parent component to render custom content or components inside the DialogContentText component.
   const childrenData = () => {
@@ -57,7 +57,7 @@ const DeleteModal = ({ openDeleteDialog, selectedRowData, title, description, ha
 
       <DialogActions>
         <Button variant="outlined" onClick={() => setOpenDeleteDialog({ ...openDeleteDialog, show: false })} data-test-id="btn-cancel">
-          odustani
+          {nameOfButtonCancel ?? "odustani"}
         </Button>
         <Button variant="contained" color="error" startIcon={deafultDeleteIcon ? <Icon>delete</Icon> : null} onClick={handleConfirm} data-test-id="btn-confirm" sx={sx}>
           {nameOfButton ?? "obriši"}

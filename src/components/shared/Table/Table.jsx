@@ -10,8 +10,8 @@ import scss from "./Table.module.scss";
  * @return {JSX.Element}
  * @constructor
  */
-const Table = ({ children }) => (
-  <TableContainer component={Paper} className={scss.table}>
+const Table = ({ children, styleTable }) => (
+  <TableContainer component={Paper} className={scss.table} sx={styleTable}>
     <MaterialTable>{children}</MaterialTable>
   </TableContainer>
 )

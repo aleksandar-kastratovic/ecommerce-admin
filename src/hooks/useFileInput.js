@@ -1,5 +1,5 @@
-import { useLayoutEffect, useRef } from "react"
-import { blobToData } from "../helpers/data"
+import { useLayoutEffect, useRef } from "react";
+import { blobToData } from "../helpers/data";
 
 /**
  * Capture a new file added to a new file input.
@@ -13,21 +13,21 @@ import { blobToData } from "../helpers/data"
  * @param {function(name: string, base64: string)} handler The handler that will capture the filename and the base64 encoded data.
  */
 const useFileInput = (handler: function) => {
+    // Create the reference to the file input and add listeners
+    const inputElementRef = useRef();
+    useLayoutEffect(() => inputElementRef.current?.addEventListener("change", (event) => handleFiles(event.target.files)), []);
 
-  // Create the reference to the file input and add listeners
-  const inputElementRef = useRef()
-  useLayoutEffect(() => inputElementRef.current?.addEventListener("change", event => handleFiles(event.target.files)), [])
+    // Handle changes for each file
+    const handleFiles = (files) => {
+        if (files.length > 0) {
+            const file = { ...files[0] };
+            console.log("Files 0:", files[0]);
+            blobToData(files[0]).then((result) => handler(file.name, result));
+            inputElementRef.current.value = null;
+        }
+    };
 
-  // Handle changes for each file
-  const handleFiles = (files) => {
-    if (files.length > 0) {
-      const file = { ...files[0] }
-      blobToData(files[0]).then(result => handler(file.name, result))
-      inputElementRef.current.value = null
-    }
-  }
+    return inputElementRef;
+};
 
-  return inputElementRef
-}
-
-export default useFileInput
+export default useFileInput;

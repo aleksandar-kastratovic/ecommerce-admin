@@ -17,6 +17,7 @@ import {
   InputText,
   AutocompleteInput,
   AutocompleteTagsFilled,
+  ImportPicker,
 } from "./FormInputs/FormInputs";
 import FileButton from "../FileButton/FileButton";
 import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
@@ -35,7 +36,9 @@ const CreateForm = ({
   queryString = "",
   optionsIsEmpty = () => { },
   styleCheckbox,
-  autoFocus
+  autoFocus,
+  onFilePicked,
+  selectedFile
 }) => {
   // depending on input type in fields you will get a control
   // value is obvious
@@ -162,7 +165,7 @@ const CreateForm = ({
               description={item.description}
               fillFromApi={item.fillFromApi}
               usePropName={item.usePropName}
-              queryString={queryString}
+              queryString={item?.queryString ?? queryString}
               optionsIsEmpty={optionsIsEmpty}
               autoFocus={autoFocus}
             />
@@ -256,6 +259,7 @@ const CreateForm = ({
         case "multiple_images": //TODO
           formItem = (
             <InputMultipleImages
+              label={item.field_name}
               list={Array.isArray(value) ? value : []}
               name={item.prop_name}
               uploadHandler={item?.uploadHandler}
@@ -330,6 +334,21 @@ const CreateForm = ({
               autoFocus={autoFocus}
             />
           );
+          break;
+        case "import_picker":
+          formItem = (
+            <ImportPicker
+              label={item.field_name}
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
+              error={error}
+              disabled={disabled}
+              importPickerMessage={item.picker_message ? item.picker_message : "Kliknite ovde kako biste odabrali fajl za import."}
+              onFilePicked={onFilePicked}
+              value={value}
+              description={item.description}
+              selectedFile={selectedFile}
+            />
+          )
           break;
         default:
           formItem = null;
