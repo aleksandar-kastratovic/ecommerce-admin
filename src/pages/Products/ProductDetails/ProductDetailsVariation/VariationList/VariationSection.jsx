@@ -116,7 +116,7 @@ const VariationSection = ({
     <Box>
       <Box className={styles.variationSectionTitle} onClick={() => setOpen(!open)}>
         {title}
-        {open ? <Icon>expand_less</Icon> : <Icon>expand_more</Icon>}
+        {open ? <Icon sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.3rem" }}>expand_less</Icon> : <Icon sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.3rem" }}>expand_more</Icon>}
       </Box>
       {open && <Box className={styles.variationSectionBody}>{getDisplayed()}</Box>}
     </Box>

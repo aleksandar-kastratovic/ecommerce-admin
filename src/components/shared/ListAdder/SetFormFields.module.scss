@@ -1,15 +1,19 @@
 @import "../../../variables.scss";
 
 .formFieldHeader {
-  width: 100%;
-  display: flex;
-  padding: 10px;
-  border: 2px solid $lightGrey;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 2px;
+    // width: 100%;
+    cursor: pointer;
+    display: flex;
+    padding: 0.95rem;
+    border: 1px solid rgba(0, 0, 0, 0.23);
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    border-radius: 0.25rem;
 }
 
-.iconDelete:hover {
-  color: $red;
+.lessMoreContent {
+    width: 100%;
+    display: flex;
+    align-items: center;
 }

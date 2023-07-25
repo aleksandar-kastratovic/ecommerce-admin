@@ -77,7 +77,7 @@ const ProductVariation = ({ title = "", productParentId, productId, status }) =>
 
   const setStatus = (status) => {
     api.post(`admin/product-items/variants/main/change-status/${productParentId}/${productId}`, { status })
-      .then((response) => console.log(response))
+      .then((response) => console.log("status response", response))
       .catch((error) => console.warn(error));
   };
 
@@ -103,7 +103,7 @@ const ProductVariation = ({ title = "", productParentId, productId, status }) =>
             setStatus(target.checked);
           }}
         />
-        {open ? <Icon>expand_less</Icon> : <Icon>expand_more</Icon>}
+        {open ? <Icon sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.3rem" }}>expand_less</Icon> : <Icon sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.3rem" }}>expand_more</Icon>}
       </Box>
       {open && (
         <Box className={styles.productVariationBody}>

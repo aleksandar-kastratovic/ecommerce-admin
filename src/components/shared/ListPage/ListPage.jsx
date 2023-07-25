@@ -38,7 +38,7 @@ import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren, listPageId, validateData, onNewButtonPress = () => { }, prepareInitialData, withoutSetterFunction, submitButtonForm, clearButton, customTitleModalForm, modalObject, customTitleDataNameForEditModal, selectableCountryTown, useColumnFields = false, useModalGalleryInjection = false, savePrapareDataHandler = null }) => {
+const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren, listPageId, validateData, onNewButtonPress = () => { }, prepareInitialData, withoutSetterFunction, submitButtonForm, clearButton, customTitleModalForm, modalObject, customTitleDataNameForEditModal, selectableCountryTown, useColumnFields = false, useModalGalleryInjection = false, savePrapareDataHandler = null, onModalCancel = () => { } }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
@@ -236,14 +236,14 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
 
         {showAddButton && (
           <CustomTooltipRef title="Prečica: SHIFT + SPACE" placement="top" arrow>
-            < ButtonRef ref={showAddButtonRef} onClick={() => setOpenModal({ show: true, id: "new" })} label={addFieldLabel} icon="add" sx={{ display: "flex", margin: "0 auto", marginTop: "2rem", textTransform: "inherit" }} />
+            < ButtonRef ref={showAddButtonRef} onClick={() => { onNewButtonPress(); setOpenModal({ show: true, id: "new" }) }} label={addFieldLabel} icon="add" sx={{ display: "flex", margin: "0 auto", marginTop: "2rem", textTransform: "inherit" }} />
           </CustomTooltipRef>
         )}
 
 
       </PageWrapper >
 
-      <ModalForm validateData={validateData} children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={setOpenModal} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={useColumnFields ? flatten(columnFields).filter((field) => field.in_details) : flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} prepareInitialData={prepareInitialData} withoutSetterFunction={withoutSetterFunction} submitButton={submitButtonForm} clearButton={clearButton} customTitle={customTitleModalForm} modalObject={modalObject} customTitleDataNameForEdit={customTitleDataNameForEditModal} selectableCountryTown={selectableCountryTown} useModalGalleryInjection={useModalGalleryInjection} savePrapareDataHandler={savePrapareDataHandler} />
+      <ModalForm validateData={validateData} children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={(modalObj) => { onModalCancel(); setOpenModal(modalObj) }} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={useColumnFields ? flatten(columnFields).filter((field) => field.in_details) : flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} prepareInitialData={prepareInitialData} withoutSetterFunction={withoutSetterFunction} submitButton={submitButtonForm} clearButton={clearButton} customTitle={customTitleModalForm} modalObject={modalObject} customTitleDataNameForEdit={customTitleDataNameForEditModal} selectableCountryTown={selectableCountryTown} useModalGalleryInjection={useModalGalleryInjection} savePrapareDataHandler={savePrapareDataHandler} />
       <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );

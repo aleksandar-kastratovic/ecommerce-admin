@@ -69,6 +69,7 @@ const DeliveryAdresss = ({ companyId, data }) => {
       .get(path)
       .then((response) => {
         let res = response?.payload;
+        console.log(res, "res")
         let arr = formFields.map((item, i) => {
           if (item.prop_name === 'id_town') {
             if (res.length > 0) {
@@ -122,6 +123,30 @@ const DeliveryAdresss = ({ companyId, data }) => {
       });
   }
 
+  const savePrapareDataHandler = (options) => {
+
+    options?.formFields?.map((item, i) => {
+      if (item.prop_name === 'id_town' && item.in_details === true) {
+        options.connectedData.town_name = null;
+
+        // Set null if no selected town
+        if (options.connectedData.id_town === "") {
+          options.connectedData.id_town = null;
+        }
+      }
+      if (item.prop_name === 'town_name' && item.in_details === true) {
+        options.connectedData.id_town = null;
+      }
+    });
+
+    console.log("options", options)
+
+    return {
+      'setData': true,
+      'data': options.connectedData,
+    };
+  };
+
   const validateData = (data, field) => {
     let ret = data;
     switch (field) {
@@ -147,6 +172,7 @@ const DeliveryAdresss = ({ companyId, data }) => {
         listPageId="DeliveryAdresss"
         apiUrl={`admin/customers-b2b/delivery-address/${companyId}`}
         editUrl={`admin/customers-b2b/delivery-address`}
+        savePrapareDataHandler={savePrapareDataHandler}
         title=" "
         columnFields={formFieldsTemp}
         actionNewButton="modal"
@@ -156,7 +182,7 @@ const DeliveryAdresss = ({ companyId, data }) => {
         customActions={customActions}
         useColumnFields={true}
         selectableCountryTown={true}
-
+        onNewButtonPress={() => setFormFieldsTemp(formFields)}
       />
     </>
   );
