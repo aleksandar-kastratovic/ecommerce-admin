@@ -111,7 +111,7 @@ const ImportDetails = () => {
     navigate(`/import/${id}?${queryString}`, { replace: true });
   }
 
-  console.log(file)
+
 
 
   return <DetailsPage title={data?.id == null ? "Unos nove stranice" : file?.name} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;

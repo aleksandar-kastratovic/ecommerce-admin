@@ -24,7 +24,7 @@ import Icon from "@mui/material/Icon";
  * @return {JSX.Element}
  * @constructor
  */
-const DeleteModal = ({ openDeleteDialog, selectedRowData, title, description, handleConfirm, setOpenDeleteDialog, nameOfButton, deafultDeleteIcon = true, sx = {}, children, nameOfButtonCancel }) => {
+const DeleteModal = ({ openDeleteDialog, selectedRowData, title, description, handleConfirm, setOpenDeleteDialog, nameOfButton, deafultDeleteIcon = true, sx = {}, children, nameOfButtonCancel, disabledButton }) => {
 
   // The childrenData function checks if the children prop is defined. If it is, it assumes that the parent component has passed a function as the children prop and calls that function with the selectedRowData as an argument. This allows the parent component to render custom content or components inside the DialogContentText component.
   const childrenData = () => {
@@ -48,7 +48,7 @@ const DeleteModal = ({ openDeleteDialog, selectedRowData, title, description, ha
 
 
   return (
-    <Dialog open={openDeleteDialog.show ?? false}>
+    <Dialog open={openDeleteDialog.show ?? false} sx={{ "& .MuiDialog-paper": { maxWidth: "900px" } }}>
       <DialogTitle>{title ?? "Brisanje"}</DialogTitle>
 
       <DialogContent sx={{ margin: "0 auto" }}>
@@ -59,11 +59,11 @@ const DeleteModal = ({ openDeleteDialog, selectedRowData, title, description, ha
         <Button variant="outlined" onClick={() => setOpenDeleteDialog({ ...openDeleteDialog, show: false })} data-test-id="btn-cancel">
           {nameOfButtonCancel ?? "odustani"}
         </Button>
-        <Button variant="contained" color="error" startIcon={deafultDeleteIcon ? <Icon>delete</Icon> : null} onClick={handleConfirm} data-test-id="btn-confirm" sx={sx}>
+        <Button variant="contained" color="error" startIcon={deafultDeleteIcon ? <Icon>delete</Icon> : null} onClick={handleConfirm} data-test-id="btn-confirm" sx={sx} disabled={disabledButton}>
           {nameOfButton ?? "obriši"}
         </Button>
       </DialogActions>
-    </Dialog>
+    </Dialog >
   );
 };
 
