@@ -8,7 +8,6 @@ import DetailsPage from "../../../components/shared/ListPage/DetailsPage/Details
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
 import Payments from "./panels/Payments";
-import Payments2 from "./panels/Payments2";
 import Delivery from "./panels/Delivery";
 
 import basic_data from "./forms/basic_data.json";

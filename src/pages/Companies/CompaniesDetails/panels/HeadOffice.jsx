@@ -37,7 +37,7 @@ const HeadOffice = ({ companyId }) => {
     setIsLoadingOnSubmit(true);
     let index = formFieldsTemp.findIndex(it => it.prop_name === "id_town");
     if (!formFieldsTemp[index].in_details) {
-      data = { ...data, id_town: null, zip_code: null, municipality_name: null };
+      data = { ...data, id_town: null, municipality_name: null };
     }
     api.post(`${apiPath}`, { ...data, id_company: companyId })
       .then((response) => {
@@ -108,12 +108,14 @@ const HeadOffice = ({ companyId }) => {
               if (res.length > 0) {
                 return {
                   ...item,
-                  in_details: false
+                  in_details: false,
+                  required: false
                 }
               } else {
                 return {
                   ...item,
-                  in_details: true
+                  in_details: true,
+                  required: true
                 }
               }
             }

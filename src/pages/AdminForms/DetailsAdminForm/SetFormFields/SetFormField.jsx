@@ -2,8 +2,7 @@ import { useContext, useState } from "react";
 
 import Delete from "@mui/icons-material/Delete";
 import Box from "@mui/system/Box";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import Icon from "@mui/material/Icon";
 import Button from "@mui/material/Button";
 
 import CreateForm from "../../../../components/shared/Form/CreateForm";
@@ -83,12 +82,13 @@ const SetFormField = ({ data, index, onDelete }) => {
     <div>
       <div className={styles.formFieldHeader}>
         <div
+          className={styles.lessMoreContent}
           onClick={() => {
             setIsOpen(!isOpen);
           }}
         >
           {fieldData.field_name}
-          {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          {isOpen ? <Icon sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.3rem" }}>expand_less</Icon> : <Icon sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.3rem" }}>expand_more</Icon>}
         </div>
         <Delete className={styles.iconDelete} onClick={onClickDelete} />
       </div>

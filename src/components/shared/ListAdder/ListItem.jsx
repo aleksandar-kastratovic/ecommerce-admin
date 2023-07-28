@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 
-import Delete from "@mui/icons-material/Delete";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import DeleteDialog from "../Dialogs/DeleteDialog";
 import Form from "../Form/Form";
 import Button from "../Button/Button";
+import IconButton from "@mui/material/IconButton";
 
 import styles from "./SetFormFields.module.scss";
+import Icon from "@mui/material/Icon";
+import { Box } from "@mui/material";
 
 const ListItem = ({ data, index, onDelete = () => { }, saveData = () => { }, formFields, actions = {}, onChange = () => null, validateData }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -105,14 +105,25 @@ const ListItem = ({ data, index, onDelete = () => { }, saveData = () => { }, for
     <div>
       <div className={styles.formFieldHeader}>
         <div
+          className={styles.lessMoreContent}
           onClick={() => {
             setIsOpen(!isOpen);
           }}
         >
           {fieldData.field_display_title ?? fieldData.name ?? fieldData.field_name ?? fieldData.title ?? fieldData.slug ?? fieldData.id ?? "Novo"}
-          {isOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+          {isOpen ? <Icon sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.3rem" }}>expand_less</Icon> : <Icon sx={{ color: "rgba(0, 0, 0, 0.54)", fontSize: "1.3rem" }}>expand_more</Icon>}
         </div>
-        {!fieldData.system_required && <Delete className={styles.iconDelete} onClick={onClickDelete} />}
+        {!fieldData.system_required &&
+          <IconButton
+            sx={{
+              padding: "0",
+              "&:hover": {
+                backgroundColor: "none",
+              }
+            }}
+            onClick={onClickDelete}>
+            <Icon>delete</Icon>
+          </IconButton>}
       </div>
       {isOpen && (
         <>

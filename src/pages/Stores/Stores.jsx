@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useAPI from "../../api/api";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import formFields from "./tblFields.json";
@@ -7,6 +7,26 @@ const Stores = () => {
 
   const api = useAPI();
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
+  const [stores, setStores] = useState(null);
+
+  const customActions = {
+    edit: {
+      clickHandler: {
+        type: 'modal_form',
+        fnc: (rowData) => {
+          api.get(`admin/stores/${rowData.id}`)
+            .then((response) => {
+              setStores(response?.payload);
+            })
+            .catch((error) => console.log(error));
+          return {
+            show: true,
+            id: rowData.id
+          };
+        },
+      },
+    },
+  }
 
   const fetchPlacesFormFields = async (formFields, id_country) => {
     let index = formFields.findIndex((it) => { return it.prop_name === 'id_town' });
@@ -48,6 +68,19 @@ const Stores = () => {
                 }
               }
             }
+            if (item.prop_name === 'zip_code') {
+              if (res.length > 0) {
+                return {
+                  ...item,
+                  in_details: false
+                }
+              } else {
+                return {
+                  ...item,
+                  in_details: true
+                }
+              }
+            }
             return {
               ...item
             }
@@ -71,6 +104,36 @@ const Stores = () => {
     }
   };
 
+  const savePrapareDataHandler = (options) => {
+
+    options?.formFields?.map((item, i) => {
+      if (item.prop_name === 'id_town' && item.in_details === true) {
+        options.connectedData.town_name = null;
+
+        // Set null if no selected town
+        if (options.connectedData.id_town === "") {
+          options.connectedData.id_town = null;
+        }
+      }
+      if (item.prop_name === 'town_name' && item.in_details === true) {
+        options.connectedData.id_town = null;
+      }
+    });
+
+    console.log("options", options)
+
+    return {
+      'setData': true,
+      'data': options.connectedData,
+    };
+  };
+
+  useEffect(() => {
+    if (stores?.id_country) {
+      fetchPlacesFormFields(formFields, stores?.id_country);
+    }
+  }, [])
+
   return (
     <ListPage
       validateData={validateData}
@@ -81,6 +144,9 @@ const Stores = () => {
       actionNewButton="modal"
       useColumnFields={true}
       selectableCountryTown={true}
+      savePrapareDataHandler={savePrapareDataHandler}
+      onNewButtonPress={() => setFormFieldsTemp(formFields)}
+      customActions={customActions}
     />
   );
 };

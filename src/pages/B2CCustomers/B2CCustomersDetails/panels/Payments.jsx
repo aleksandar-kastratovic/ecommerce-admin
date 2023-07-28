@@ -9,8 +9,8 @@ const Payments = ({ data, customerId }) => {
 
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
   const [type, setType] = useState('');
-  const [dataPayments, setDataPayments] = useState(null);
-  const [hasPlaces, setHasPlaces] = useState(false);
+  const [idCountrySelected, setIdCountrySelected] = useState(null);
+  const [showResetButton, setShowResetButton] = useState(false);
 
   const api = useAPI();
 
@@ -19,12 +19,9 @@ const Payments = ({ data, customerId }) => {
       clickHandler: {
         type: 'modal_form',
         fnc: (rowData) => {
-          api.get(`admin/customers-b2c/billing-address/${customerId}/${rowData.id}`)
-            .then((response) => {
-              setDataPayments(response?.payload);
-              setType(response?.payload?.customer_type);
-            })
-            .catch((error) => console.log(error));
+          setShowResetButton(false);
+          setIdCountrySelected(rowData?.id_country);
+          fetchPlacesAndFilterFileds(rowData);
           return {
             show: true,
             id: rowData.id
@@ -46,11 +43,9 @@ const Payments = ({ data, customerId }) => {
       deleteClickHandler: {
         type: 'dialog_delete',
         fnc: (rowData) => {
-
           api.delete(`admin/customers-b2c/billing-address/${rowData.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
             .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
-
           return {
             show: false,
             id: rowData.id,
@@ -62,170 +57,168 @@ const Payments = ({ data, customerId }) => {
     },
   };
 
-  const filterFormFields = (data, type) => {
-    let arr = data.map((field) => {
-      if (type === 'company') {
-        if (field.prop_name === "pib" || field.prop_name === "maticni_broj" || field.prop_name === "company_name") {
-          return {
-            ...field,
-            required: true
-          };
-        }
-        if (field.prop_name !== 'id_town') {
-          if (field.company_display === true) {
-            if (field.prop_name === 'town_name') {
-              if (hasPlaces) {
-                return {
-                  ...field,
-                  in_details: false
-                };
-              } else {
-                return {
-                  ...field,
-                  in_details: true
-                };
-              }
-            }
-            return {
-              ...field,
-              in_details: true
-            };
-          } else {
-            return {
-              ...field,
-              in_details: false
-            };
-          }
-
-        } else {
-          if (hasPlaces) {
-            return {
-              ...field,
-              in_details: true
-            }
-          } else {
-            return {
-              ...field,
-              in_details: false
-            }
-          }
-        }
-      } else {
-        if (field.prop_name !== 'id_town') {
-          if (field.personal_display === true) {
-            return {
-              ...field,
-              in_details: true
-            };
-          } else {
-            return {
-              ...field,
-              in_details: false
-            };
-          }
-        } else {
-          if (hasPlaces) {
-            return {
-              ...field,
-              in_details: true
-            }
-          } else {
-            return {
-              ...field,
-              in_details: false
-            }
-          }
-        }
-      }
-    });
-    setFormFieldsTemp([...arr]);
-  };
-
-  const fetchPlacesFormFields = async (formFields, id_country) => {
-    let index = formFields.findIndex((it) => { return it.prop_name === 'id_town' });
-
-    const townObject = formFields[index];
-    let path = `${townObject.fillFromApi}?id_country=${id_country}`;
-    if (townObject?.usePropName) {
-      path = `${townObject.fillFromApi}/${townObject.prop_name}?id_country=${id_country}`;
-    }
-    await api
-      .get(path)
-      .then((response) => {
-        let res = response?.payload;
-        if (res.length > 0) {
-          setHasPlaces(true);
-        } else {
-          setHasPlaces(false);
-        }
-        let arr = formFields.map((item, i) => {
-          if (item.prop_name === 'id_town') {
-            if (res.length > 0) {
-              return {
-                ...item,
-                queryString: `id_country=${id_country}`,
-                in_details: true
-              }
-            } else {
-              return {
-                ...item,
-                in_details: false
-              }
-            }
-          } else {
-            if (item.prop_name === 'town_name') {
-              if (res.length > 0) {
-                return {
-                  ...item,
-                  in_details: false
-                }
-              } else {
-                return {
-                  ...item,
-                  in_details: true
-                }
-              }
-            }
-            return {
-              ...item
-            }
-          }
-        });
-        setFormFieldsTemp([...arr]);
-      })
-      .catch((error) => {
-        console.warn(error);
-      });
-  }
-
   const validateData = (data, field) => {
     let ret = data;
     switch (field) {
       case "customer_type":
-        filterFormFields(formFields, ret.customer_type);
+        let tempData = { id_country: idCountrySelected };
+        if (tempData?.id_country) {
+          fetchPlacesAndFilterFileds(tempData);
+        } else {
+          setType(data?.customer_type);
+        }
         return ret;
       case 'id_country':
-        fetchPlacesFormFields(formFields, data?.id_country);
+        setIdCountrySelected(data?.id_country);
+        fetchPlacesAndFilterFileds(data);
         return ret;
       default:
         return ret;
     }
   };
 
+  const fetchPlacesAndFilterFileds = (data) => {
+    let index = formFields.findIndex((it) => { return it.prop_name === 'id_town' });
+    let townObject = formFields[index];
+    let path = `${townObject?.fillFromApi}/${townObject?.prop_name}?id_country=${data?.id_country}`;
+    api.get(path)
+      .then((response) => {
+        const placeArr = response?.payload;
+        filterFormFieldsInitialy(type, placeArr, true);
+      })
+      .catch((error) => console.log(error));
+  }
+
+  const filterFormFieldsInitialy = (type, townArr, countryChange) => {
+    let hasTowns = townArr?.length > 0;
+    let arr = formFieldsTemp?.map((formItem, i) => {
+      const { company_display, personal_display, prop_name } = formItem;
+      if (type === 'company') {
+        if (company_display) {
+          if (countryChange) {
+            if (prop_name === 'id_town') {
+              if (hasTowns) {
+                return {
+                  ...formItem,
+                  in_details: true
+                }
+              } else {
+                return {
+                  ...formItem,
+                  in_details: false
+                }
+              }
+            }
+            if (prop_name === 'town_name' || prop_name === 'zip_code') {
+              if (hasTowns) {
+                return {
+                  ...formItem,
+                  in_details: false
+                }
+              } else {
+                return {
+                  ...formItem,
+                  in_details: true
+                }
+              }
+            }
+          }
+          if (prop_name === 'id_town' || prop_name === 'town_name' || prop_name === 'zip_code') {
+            return {
+              ...formItem,
+              in_details: false
+            }
+          }
+          return {
+            ...formItem,
+            in_details: true
+          }
+        } else {
+          return {
+            ...formItem,
+            in_details: false
+          }
+        }
+      } else {
+        if (personal_display) {
+          if (countryChange) {
+            if (prop_name === 'id_town') {
+              if (hasTowns) {
+                return {
+                  ...formItem,
+                  in_details: true
+                }
+              } else {
+                return {
+                  ...formItem,
+                  in_details: false
+                }
+              }
+            }
+            if (prop_name === 'town_name' || prop_name === 'zip_code') {
+              if (hasTowns) {
+                return {
+                  ...formItem,
+                  in_details: false
+                }
+              } else {
+                return {
+                  ...formItem,
+                  in_details: true
+                }
+              }
+            }
+          }
+          if (prop_name === 'id_town' || prop_name === 'town_name' || prop_name === 'zip_code') {
+            return {
+              ...formItem,
+              in_details: false
+            }
+          }
+          return {
+            ...formItem,
+            in_details: true
+          }
+        } else {
+          return {
+            ...formItem,
+            in_details: false
+          }
+        }
+      }
+    });
+    setFormFieldsTemp([...arr]);
+  }
+
+
+  const savePrapareDataHandler = (options) => {
+    options.formFields.map((item, i) => {
+      if (item.prop_name === 'id_town' && item.in_details === true) {
+        options.connectedData.town_name = null;
+
+        // Set null if no selected town
+        if (options.connectedData.id_town === "") {
+          options.connectedData.id_town = null;
+        }
+      }
+      if (item.prop_name === 'town_name' && item.in_details === true) {
+        options.connectedData.id_town = null;
+      }
+    });
+
+    return {
+      'setData': true,
+      'data': options.connectedData,
+    };
+  };
+
   useEffect(() => {
-    if (type !== '') {
-      filterFormFields(formFields, type);
-    } else {
-      filterFormFields(formFields, data?.customer_type);
-    }
+    setType(data?.customer_type);
+  }, [data]);
+
+  useEffect(() => {
+    filterFormFieldsInitialy(type, [], false);
   }, [type]);
-
-  useEffect(() => {
-    if (dataPayments?.id_country) {
-      fetchPlacesFormFields(formFields, dataPayments?.id_country);
-    }
-  }, [dataPayments]);
-
 
   return (
     <>
@@ -240,11 +233,19 @@ const Payments = ({ data, customerId }) => {
         showAddButton={true}
         initialData={{ id_customer: customerId }}
         customActions={customActions}
-        onNewButtonPress={() => { setType('') }}
-        clearButton={type === '' ? true : false}
+        onNewButtonPress={() => {
+          setType(data?.customer_type);
+          setShowResetButton(true);
+        }}
+        clearButton={showResetButton}
         selectableCountryTown={true}
         useColumnFields={true}
-        onModalInitDataChange={(data, type) => { }}
+        onModalInitDataChange={(data, type) => { console.log("Aaa") }}
+        onModalCancel={() => {
+          setIdCountrySelected(null);
+          filterFormFieldsInitialy(type, [], false);
+        }}
+        savePrapareDataHandler={savePrapareDataHandler}
       />
     </>
   );

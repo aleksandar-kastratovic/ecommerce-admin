@@ -73,7 +73,6 @@ const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = n
       });
   };
   const saveData = async (data) => {
-    console.log("dataaa modal form", data)
     setIsLoading(true);
 
     let sendData = { ...data, ...initialData };
@@ -142,7 +141,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = n
   }, [openModal.show]);
 
   return (
-    <ListPageModalWrapper anchor={anchor} open={openModal.show ?? false} onClose={() => setOpenModal({ ...openModal, show: false })} sx={sx} variant={variant} onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}>
+    <ListPageModalWrapper anchor={anchor} open={openModal.show ?? false} onClose={() => { setOpenModal({ ...openModal, show: false }) }} sx={sx} variant={variant} onCloseButtonClick={() => { setOpenModal({ ...openModal, show: false }) }}>
       {!isLoading ?
         children || (
           <FormWrapper title={customTitle ? customTitle : (data?.id === null ? "Novi unos" : (data?.name ?? customTitleDataNameForEdit))}>

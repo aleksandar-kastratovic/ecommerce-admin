@@ -45,6 +45,7 @@ const Scripts = () => {
         type: 'modal_form',
         fnc: (rowData) => {
           setActivePage('info');
+          setRowData(rowData);
           api.get(`admin/scripts/execute/${rowData.id}`)
             .then((response) => {
               const status = response?.payload?.status;
@@ -106,6 +107,7 @@ const Scripts = () => {
       display: false,
     }
   };
+
   return (
     <>
       <ListPage
@@ -119,7 +121,7 @@ const Scripts = () => {
             {activePage === 'info' ? (
               <Box sx={{ height: "100%", display: "flex" }}>
                 <Chip
-                  label={data?.status}
+                  label={rowData?.status}
                   icon={<Icon>{data?.icon}</Icon>}
                   color={data?.chipColor}
                   sx={{

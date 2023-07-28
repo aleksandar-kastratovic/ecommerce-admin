@@ -10,7 +10,11 @@ import Buttons from "../../../../components/shared/Form/Buttons/Buttons";
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 import Icon from "@mui/material/Icon";
+import Typography from "@mui/material/Typography";
 import DeleteModal from "../../../../components/shared/Dialogs/DeleteDialog";
+import ProductVariation from "./VariationList/ProductVariation";
+import { Link } from "react-router-dom";
+
 
 
 const ProductDetailsVariation = ({ parentId }) => {
@@ -19,15 +23,19 @@ const ProductDetailsVariation = ({ parentId }) => {
   const [variationAttributes, setVariationAttributes] = useState([]); // svi sa disabled false
   const [variantsAttributesData, setVariantsAttributesData] = useState([]); // modifikovan niz za prikaz
 
+  const [listVariants, setListVariants] = useState([]);
+
   const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false });
   const [loading, setLoading] = useState(false);
 
   const [itemToBeDeleted, setItemToBeDeleted] = useState(null);
 
   const api = useAPI();
+
   const getVariants = () => {
     api.get(`admin/product-items/variants/main/product-attributes/${parentId}`)
       .then((response) => {
+        console.log("get varinats", response?.payload)
         let variants = response?.payload;
 
         let arrData = [];
@@ -78,6 +86,17 @@ const ProductDetailsVariation = ({ parentId }) => {
           variationAttributesTemp.push({ ...attr, disabled: false });
         });
         setVariationAttributes(variationAttributesTemp);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  };
+
+  const getListVariants = () => {
+    api.get(`admin/product-items/variants/main/product/${parentId}`)
+      .then((response) => {
+        console.log("get list varinats", response);
+        setListVariants(response?.payload);
       })
       .catch((error) => {
         console.warn(error);
@@ -225,6 +244,7 @@ const ProductDetailsVariation = ({ parentId }) => {
         .then((response) => {
           setLoading(false);
           toast.success(`Uspešno`);
+          getListVariants();
         })
         .catch((error) => {
           setLoading(false);
@@ -266,49 +286,92 @@ const ProductDetailsVariation = ({ parentId }) => {
 
   useEffect(() => {
     getVariants();
+    getListVariants();
   }, []);
 
+  console.log("variantsData", variationAttributes);
 
   return (
-    <Box>
-      {
-        variantsData?.map((item, i) => {
-          const { selectedAttr, values, isVisible, checkedValues, isValid } = item;
-          if (isVisible) {
-            let isErrorExists = isValid != undefined && isValid === false ? true : false;
-            return (
-              <Box key={i.toString()} sx={{ display: "flex", alignItems: "center" }}>
-                <InputSelect error={isErrorExists ? 'Izaberite vrednosti' : null} value={selectedAttr?.id} label="Atribut" options={variantsAttributesData} onChange={(res) => { onChnageHandler(res, i); }} styleFormControl={{ marginRight: "1rem", width: "20%" }} />
-                <InputMultiSelect error={isErrorExists ? 'Izaberite vrednosti' : null} value={checkedValues} label="Vrednost" options={values} onChange={(res) => { onChangeSelectionMultiple(res, i) }} />
-                <IconButton
-                  sx={{ marginTop: "1.2rem" }}
-                  onClick={() => {
-                    setItemToBeDeleted(item);
-                    setOpenDeleteDialog({ show: true });
-                  }}>
-                  <Icon>delete</Icon>
-                </IconButton>
-              </Box>
-            )
-          }
-        })
-      }
+    <>
+      <Box>
+        <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
+          Atributi i njihove vrednosti
+        </Typography>
+        {variantsData?.length === 0 ? (
+          <Typography sx={{ marginTop: "1rem" }}>Nema dostupnih atributa i vrednosti za varijacije. Vrednosti možete uneti u sekciji <Link to="/product-items-variants-attributes/group-attribute" style={{ color: "#28a86e", textDecoration: "underline" }}>Atributi za varijacije.</Link> </Typography>
 
-      <Buttons>
-        <Button onClick={onButtonClick} icon="add" label="Dodaj" sx={{ marginRight: "auto" }} />
-        <Button onClick={() => { onSaveClick(null, false) }} label={loading ? <CircularProgress size={"1.5rem"} /> : "Sačuvaj"} disabled={loading} />
-      </Buttons>
+        ) : (
+          <>
+            {variantsData?.map((item, i) => {
+              const { selectedAttr, values, isVisible, checkedValues, isValid } = item;
+              if (isVisible) {
+                let isErrorExists = isValid != undefined && isValid === false ? true : false;
+                return (
+                  <Box key={i.toString()} sx={{ display: "flex", alignItems: "center" }}>
+                    <InputSelect
+                      error={isErrorExists ? 'Izaberite vrednosti' : null}
+                      value={selectedAttr?.id}
+                      label="Atribut"
+                      options={variantsAttributesData}
+                      onChange={(res) => { onChnageHandler(res, i); }}
+                      styleFormControl={{ marginRight: "1rem", width: "20%", "& label": { fontSize: "0.875rem" } }}
+                    />
+                    <InputMultiSelect
+                      error={isErrorExists ? 'Izaberite vrednosti' : null}
+                      value={checkedValues}
+                      label="Vrednosti"
+                      options={values}
+                      onChange={(res) => { onChangeSelectionMultiple(res, i) }}
+                      styleMultiSelect={{ "& label": { fontSize: "0.875rem" } }}
+                    />
+                    <IconButton
+                      sx={{ marginTop: "1.2rem" }}
+                      onClick={() => {
+                        setItemToBeDeleted(item);
+                        setOpenDeleteDialog({ show: true });
+                      }}
+                    >
+                      <Icon>delete</Icon>
+                    </IconButton>
+                  </Box>
+                );
+              }
+            })}
 
-      <DeleteModal
-        description="Da li ste sigurni da želite da obrišete ovu varijaciju?"
-        title=""
-        openDeleteDialog={openDeleteDialog}
-        setOpenDeleteDialog={setOpenDeleteDialog}
-        nameOfButton="Obriši"
-        deafultDeleteIcon={false}
-        handleConfirm={() => { handleDeleteModalAction(itemToBeDeleted) }}
-      />
-    </Box>
+            <Buttons>
+              <Button onClick={onButtonClick} icon="add" label="Dodaj" sx={{ marginRight: "auto" }} />
+              <Button onClick={() => { onSaveClick(null, false) }} label={loading ? <CircularProgress size={"1.5rem"} /> : "Sačuvaj"} disabled={loading} variant="contained" />
+            </Buttons>
+          </>
+
+        )}
+
+        <DeleteModal
+          description="Da li ste sigurni da želite da obrišete ovu varijaciju?"
+          title=""
+          openDeleteDialog={openDeleteDialog}
+          setOpenDeleteDialog={setOpenDeleteDialog}
+          nameOfButton="Obriši"
+          deafultDeleteIcon={false}
+          handleConfirm={() => { handleDeleteModalAction(itemToBeDeleted) }}
+        />
+      </Box >
+
+      <Box>
+        <Typography variant="subtitle1" sx={{ fontWeight: "bold", margin: "1rem 0" }}>
+          Lista varijanti
+        </Typography>
+        {listVariants.length > 0 ? (
+          listVariants.map((variant) => {
+            console.log(listVariants, "variantsAttr")
+            return <ProductVariation title={variant.attributes_text} key={variant.id} productParentId={parentId} productId={variant.id} status={variant.status === "on"} />;
+          })
+        ) : (
+          <p>Trenutno ne postoje varijante za prikaz.</p>
+        )}
+      </Box>
+    </>
+
   );
 };
 

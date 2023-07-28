@@ -39,6 +39,7 @@ const CompaniesDetails = () => {
 
   const handleSubmit = (data) => {
     setIsLoadingOnSubmit(true);
+
     let oldId = data.id;
     api.post(`admin/customers-b2b/basic-data/`, data)
 

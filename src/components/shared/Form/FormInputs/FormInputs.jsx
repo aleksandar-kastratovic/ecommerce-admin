@@ -290,8 +290,9 @@ export const InputSelect = ({
   }, [opt]);
 
   useEffect(() => {
-    setOpt(options);
-  }, [options]);
+    setOpt(opt?.length > 0 ? opt : options);
+  }, [options, opt]);
+
   return (
     <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleFormControl}>
       <Select
@@ -599,6 +600,7 @@ export const InputMultiSelect = ({
   options,
   queryString = "",
   optionsIsEmpty = () => { },
+  styleMultiSelect
 }) => {
   const api = useAPI();
   const [opt, setOpt] = useState(options);
@@ -642,7 +644,7 @@ export const InputMultiSelect = ({
   }, [options]);
 
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleMultiSelect}>
       <Select
         name={name}
         value={(opt ?? []).length === 0 ? "" : value}
