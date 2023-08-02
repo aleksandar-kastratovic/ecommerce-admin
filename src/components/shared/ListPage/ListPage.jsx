@@ -6,12 +6,13 @@ import ListTable from "../ListTable/ListTable";
 import ListTableToolbar from "../ListTable/ListTableToolbar";
 import DeleteDialog from "../Dialogs/DeleteDialog";
 import PageWrapper from "../Layout/PageWrapper/PageWrapper";
-import { flatten } from "lodash";
+import { flatten, initial } from "lodash";
 import { useQuery } from "react-query";
 import useAPI from "../../../api/api";
 import ModalForm from "../Modal/ModalForm";
 import ButtonRef from "../Button/ButtonRef";
 import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
+import { ElectricScooter } from "@mui/icons-material";
 
 
 /**
@@ -38,7 +39,7 @@ import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren, listPageId, validateData, onNewButtonPress = () => { }, prepareInitialData, withoutSetterFunction, submitButtonForm, clearButton, customTitleModalForm, modalObject, customTitleDataNameForEditModal, selectableCountryTown, useColumnFields = false, useModalGalleryInjection = false, savePrapareDataHandler = null, onModalCancel = () => { } }) => {
+const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren, listPageId, validateData, onNewButtonPress = () => { }, prepareInitialData, withoutSetterFunction, submitButtonForm, clearButton, closeButtonModalForm, customTitleModalForm, modalObject, customTitleDataNameForEditModal, selectableCountryTown, useColumnFields = false, useModalGalleryInjection = false, savePrapareDataHandler = null, onModalCancel = () => { }, onClickFieldBehavior, customFields = null }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
@@ -216,6 +217,24 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
     };
   }, []);
 
+  /** 
+   * form fileds for modal
+   * returns array of fields (in_details)
+   * based on data from ListPage!
+   */
+  const getFormFieldsForModal = () => {
+    if (customFields) {
+      return customFields.filter((field) => field.in_details);
+    } else {
+      if (useColumnFields) {
+        return flatten(columnFields).filter((field) => field.in_details);
+      } else {
+        return flatten(fieldsColumns).filter((field) => field.in_details);
+      }
+    }
+  }
+
+  console.log("INitial data list page:", initialData);
   return (
     <>
       <PageWrapper title={title} actions={actions}>
@@ -232,6 +251,20 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
           showAddButtonTableRow={showAddButtonTableRow}
           tooltipAddButtonTableRow={tooltipAddButtonTableRow}
           customActions={customActions}
+          onClickFieldBehavior={(event, fieldBhavior, column, row) => {
+            if (fieldBhavior?.action === "open_modal") {
+              const { prop_name } = column;
+              let key = prop_name + "_options";
+              let obj = row[key];
+              const { id, urls } = obj;
+              setOpenModal({ show: true, id: id ? id : "new", modalUrl: urls });
+              let galleryData = { urls, row }
+              onClickFieldBehavior(event, fieldBhavior, column, row, galleryData);
+
+            } else {
+              onClickFieldBehavior(event, fieldBhavior, column, row, null);
+            }
+          }}
         />
 
         {showAddButton && (
@@ -243,7 +276,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
 
       </PageWrapper >
 
-      <ModalForm validateData={validateData} children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={(modalObj) => { onModalCancel(); setOpenModal(modalObj) }} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={useColumnFields ? flatten(columnFields).filter((field) => field.in_details) : flatten(fieldsColumns).filter((field) => field.in_details)} initialData={initialData} sx={{ padding: "2rem" }} prepareInitialData={prepareInitialData} withoutSetterFunction={withoutSetterFunction} submitButton={submitButtonForm} clearButton={clearButton} customTitle={customTitleModalForm} modalObject={modalObject} customTitleDataNameForEdit={customTitleDataNameForEditModal} selectableCountryTown={selectableCountryTown} useModalGalleryInjection={useModalGalleryInjection} savePrapareDataHandler={savePrapareDataHandler} />
+      <ModalForm validateData={validateData} children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={(modalObj) => { onModalCancel(); setOpenModal(modalObj) }} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={getFormFieldsForModal()} initialData={initialData} sx={{ padding: "2rem" }} prepareInitialData={prepareInitialData} withoutSetterFunction={withoutSetterFunction} submitButton={submitButtonForm} clearButton={clearButton} closeButtonModalForm={closeButtonModalForm} customTitle={customTitleModalForm} modalObject={modalObject} customTitleDataNameForEdit={customTitleDataNameForEditModal} selectableCountryTown={selectableCountryTown} useModalGalleryInjection={useModalGalleryInjection} savePrapareDataHandler={savePrapareDataHandler} />
       <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );

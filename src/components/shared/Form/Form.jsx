@@ -12,7 +12,7 @@ import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
 
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), cancelButton = false, submitButton = true, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked, selectedFile }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), onCloseModalButton = () => { }, cancelButton = false, submitButton = true, closeButton = false, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked, selectedFile }) => {
   const navigate = useNavigate();
   const [data, setData] = useState(initialData ?? {});
   const [inputsError, setInputsError] = useState([]);
@@ -219,6 +219,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
         <Buttons>
           {cancelButton && <Button label="Odustani" onClick={onCancel} />}
           {submitButton && <Button type="submit" label={isLoading ? <CircularProgress size="1.5rem" /> : (label ? label : "Sačuvaj")} variant="contained" disabled={isLoading} />}
+          {closeButton && <Button label={(label ? label : "Sačuvaj")} variant="contained" onClick={onCloseModalButton} />}
         </Buttons>
 
       </Box>

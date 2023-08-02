@@ -69,6 +69,23 @@ export const columnCell = (value, column, rowType) => {
             } else {
                 return value;
             }
+        case "gallery":
+            // varijacije tabela
+            if (column === "gallery") {
+                return (
+                    <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
+                        {value.length > 0 ? (
+                            value.map((item) => {
+                                return <img key={item.id} src={item.file} style={{ marginRight: "0.3rem", height: "100%" }} alt="Slika" />;
+                            })
+                        ) : (
+                            <Icon sx={{ color: "#b3b3b3" }}>no_photography</Icon>
+                        )}
+                    </div>
+                );
+            } else {
+                return value;
+            }
         case "input":
         default:
             return value;
