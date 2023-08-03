@@ -35,9 +35,9 @@ import { initial } from "lodash";
  * @constructor
  */
 
-const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = null, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, modalObject = null, customTitleDataNameForEdit = "Izmeni", selectableCountryTown = false, useModalGalleryInjection = false }) => {
+const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = null, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, closeButtonModalForm, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, modalObject = null, customTitleDataNameForEdit = "Izmeni", selectableCountryTown = false, useModalGalleryInjection = false, onCloseModalButton }) => {
 
-  const { id } = openModal;
+  const { id, modalUrl = null } = openModal;
   const api = useAPI();
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +58,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = n
       url += "?" + queryStringLink.join("&");
     }
     await api
-      .get(url)
+      .get(modalUrl !== null ? modalUrl["data"]?.url : url)
       .then((response) => {
         let modifiedData = response?.payload;
         if (useModalGalleryInjection) {
@@ -92,7 +92,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = n
     }
 
     if (!withoutSetterFunction) {
-      api.post(`${apiPathFormModal}`, sendData)
+      api.post(`${modalUrl !== null ? modalUrl['save']?.url : apiPathFormModal}`, sendData)
         .then((response) => {
           setData(response?.payload);
           toast.success(`Uspešno`);
@@ -109,7 +109,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = n
       if (modalObject) {
         objectForServer.id = modalObject?.id
       }
-      api.post(`${apiPathFormModal}`, objectForServer)
+      api.post(`${modalUrl !== null ? modalUrl['save']?.url : apiPathFormModal}`, objectForServer)
         .then((response) => {
           toast.success(`Uspešno`);
           setOpenModal({ ...openModal, show: false });
@@ -147,7 +147,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = n
           <FormWrapper title={customTitle ? customTitle : (data?.id === null ? "Novi unos" : (data?.name ?? customTitleDataNameForEdit))}>
             {shortText ? <Typography variant="body2" sx={{ marginBottom: "0.8rem" }}>{shortText}</Typography> : null}
             {clearButton && <Button label="Resetujte vrednosti" onClick={() => { onClearDataPress() }} variant="contained" />}
-            <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} submitButton={submitButton} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} validateData={validateData} />
+            <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} submitButton={submitButton} closeButton={closeButtonModalForm} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} validateData={validateData} onCloseModalButton={() => { setOpenModal({ show: false }) }} />
           </FormWrapper>)
         : <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}><CircularProgress size="2rem" sx={{ marginTop: "50vh" }} /></Box>}
     </ListPageModalWrapper>

@@ -256,7 +256,7 @@ const CreateForm = ({
             />
           );
           break;
-        case "multiple_images": //TODO
+        case "multiple_images":
           formItem = (
             <InputMultipleImages
               label={item.field_name}

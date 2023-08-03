@@ -27,28 +27,10 @@ import { useState } from "react";
  * @return {JSX.Element}
  * @constructor
  */
-const ListTableBody = ({ items, fields, handleOnClickActions, isLoading = false, error = null, previewColumn = "id", showAddButtonTableRow = false, tooltipAddButtonTableRow, customActions }) => {
-  const [editingCell, setEditingCell] = useState(null); // stanje koje se koristi da se pamti koji je redak i kolona trenutno u procesu uređivanja
-  const handleCellDoubleClick = (event, rowId, columnPropName, currentValue) => {
-    setEditingCell({ rowId, columnPropName }); // pamti koji se ćelija trenutno uređuje
-  };
+const ListTableBody = ({ items, fields, handleOnClickActions, isLoading = false, error = null, previewColumn = "id", showAddButtonTableRow = false, tooltipAddButtonTableRow, customActions, onClickFieldBehavior }) => {
 
+  const [clickTimeout, setClickTimeout] = useState(null);
 
-  const handleCellBlur = (event, rowId, columnPropName, currentValue) => {
-    setEditingCell(null); // resetuje stanje kada korisnik završi sa uređivanjem ćelije
-
-    // Pronađi ćeliju u state-u
-    const editedRow = tableData.find((data) => data.id === rowId);
-    const editedCell = editedRow[columnPropName];
-
-    // Ako se vrednost ćelije promenila, sačuvaj promene na backendu
-    if (currentValue !== editedCell.value) {
-      const newData = [...tableData];
-      editedCell.value = currentValue;
-      setTableData(newData);
-      handleOnClickActions(rowId, "edit", { [columnPropName]: currentValue });
-    }
-  };
 
   const actionButtons = () => {
     let buttons = {};
@@ -119,17 +101,33 @@ const ListTableBody = ({ items, fields, handleOnClickActions, isLoading = false,
             <TableCell
               key={`${row.id}-${column.prop_name}`}
               {...columnProps(column)}
-              onDoubleClick={(event) => handleCellDoubleClick(event, row.id, column.prop_name, row[column.prop_name])}
-
+              onClick={(event) => {
+                if (!column.field_behavior) return;
+                const { onDoubleClick, onClick } = column.field_behavior;
+                if (clickTimeout !== null) {
+                  clearTimeout(clickTimeout);
+                  setClickTimeout(null);
+                  onClickFieldBehavior(event, onDoubleClick, column, row)
+                } else {
+                  setClickTimeout(setTimeout(() => {
+                    setClickTimeout(null);
+                    onClickFieldBehavior(event, onClick, column, row)
+                  }, 500));
+                }
+              }}
+              sx={column.field_behavior ? { cursor: "pointer" } : {}}
             >
               {column.prop_name !== "action" ? (
-                // columnCell(row[column.prop_name], column.input_type)
-                // editingCell?.rowId === row.id && editingCell?.columnPropName === column.prop_name ? (
-                //   // ako je ćelija u procesu uređivanja, prikazuje se input polje sa trenutnom vrednošću
-                //   <input type={column.input_type} defaultValue={row[column.prop_name]} />
-                // ) : (
-                // inače, prikazuje se samo trenutna vrednost ćelije
-                columnCell(row[column.prop_name], column.input_type, row.input_type)
+                column.field_behavior ? (
+                  <span style={{ display: "flex", alignItems: "center" }}>
+                    {columnCell(row[column.prop_name], column.input_type, column.input_type)}
+                    <IconButton>
+                      <Icon sx={{ fontSize: "1.1rem", opacity: "0.3" }}>edit</Icon>
+                    </IconButton>
+                  </span>
+                ) : (
+                  columnCell(row[column.prop_name], column.input_type, row.input_type)
+                )
 
               ) : (
                 <ActionField

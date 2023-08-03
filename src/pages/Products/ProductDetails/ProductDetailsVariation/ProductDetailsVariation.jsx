@@ -13,29 +13,36 @@ import Icon from "@mui/material/Icon";
 import Typography from "@mui/material/Typography";
 import DeleteModal from "../../../../components/shared/Dialogs/DeleteDialog";
 import ProductVariation from "./VariationList/ProductVariation";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import ListPage from "../../../../components/shared/ListPage/ListPage";
+import tblFields from "../forms/tblFields.json";
+import { get, set } from "lodash";
 
 
 
 const ProductDetailsVariation = ({ parentId }) => {
+
   const [variants, setVariants] = useState([]);
   const [variantsData, setVariantsData] = useState([]);
   const [variationAttributes, setVariationAttributes] = useState([]); // svi sa disabled false
   const [variantsAttributesData, setVariantsAttributesData] = useState([]); // modifikovan niz za prikaz
 
-  const [listVariants, setListVariants] = useState([]);
+  // const [listVariants, setListVariants] = useState([]);
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false });
   const [loading, setLoading] = useState(false);
 
   const [itemToBeDeleted, setItemToBeDeleted] = useState(null);
 
+  const [tableLoading, setTableLoading] = useState(false);
+
+  const [formFields, setFormFields] = useState([]);
+
   const api = useAPI();
 
   const getVariants = () => {
     api.get(`admin/product-items/variants/main/product-attributes/${parentId}`)
       .then((response) => {
-        console.log("get varinats", response?.payload)
         let variants = response?.payload;
 
         let arrData = [];
@@ -91,15 +98,14 @@ const ProductDetailsVariation = ({ parentId }) => {
         console.warn(error);
       });
   };
-
   const getListVariants = () => {
-    api.get(`admin/product-items/variants/main/product/${parentId}`)
+    api.list(`admin/product-items/variants/list/${parentId}`)
       .then((response) => {
-        console.log("get list varinats", response);
-        setListVariants(response?.payload);
+        setTableLoading(false);
       })
       .catch((error) => {
-        console.warn(error);
+        console.warn("Aloo:", error);
+        setTableLoading(false);
       });
   };
 
@@ -244,6 +250,7 @@ const ProductDetailsVariation = ({ parentId }) => {
         .then((response) => {
           setLoading(false);
           toast.success(`Uspešno`);
+          setTableLoading(true);
           getListVariants();
         })
         .catch((error) => {
@@ -283,13 +290,21 @@ const ProductDetailsVariation = ({ parentId }) => {
       onSaveClick(arr, true);
     }
   }
+  const getFormFields = () => {
+    api.get(`admin/product-items/variants/list/table-structure`)
+      .then((response) => {
+        setFormFields(response?.payload);
+        setTableLoading(false);
+      })
+      .catch((error) => { console.warn(error); setTableLoading(false); });
+  }
 
   useEffect(() => {
     getVariants();
-    getListVariants();
+    setTableLoading(true);
+    getFormFields();
   }, []);
 
-  console.log("variantsData", variationAttributes);
 
   return (
     <>
@@ -361,14 +376,7 @@ const ProductDetailsVariation = ({ parentId }) => {
         <Typography variant="subtitle1" sx={{ fontWeight: "bold", margin: "1rem 0" }}>
           Lista varijanti
         </Typography>
-        {listVariants.length > 0 ? (
-          listVariants.map((variant) => {
-            console.log(listVariants, "variantsAttr")
-            return <ProductVariation title={variant.attributes_text} key={variant.id} productParentId={parentId} productId={variant.id} status={variant.status === "on"} />;
-          })
-        ) : (
-          <p>Trenutno ne postoje varijante za prikaz.</p>
-        )}
+        {tableLoading ? <CircularProgress size={"1.5rem"} /> : <ProductVariation parentId={parentId} tblFields={formFields} />}
       </Box>
     </>
 
