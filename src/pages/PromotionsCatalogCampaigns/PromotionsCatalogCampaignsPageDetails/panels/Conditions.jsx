@@ -14,14 +14,10 @@ import DeleteDialog from "../../../../components/shared/Dialogs/DeleteDialog";
 import init_group_file from "./Group/GroupFile/init_group_file.json";
 import product_group_file from "./Group/GroupFile/product_group_file.json";
 import customer_group_file from "./Group/GroupFile/customer_group_file.json";
-import cart_items_group_file from "./Group/GroupFile/cart_items_group_file.json";
-import cart_summary_group_file from "./Group/GroupFile/cart_summary_group_file.json";
 
 import init_row_file from "./Row/RowFile/init_row_file.json";
 import product_row_file from "./Row/RowFile/product_row_file.json";
 import customer_row_file from "./Row/RowFile/customer_row_file.json";
-import cart_items_row_file from "./Row/RowFile/cart_items_row_file.json";
-import cart_summary_row_file from "./Row/RowFile/cart_summary_row_file.json"
 
 import Buttons from "../../../../components/shared/Form/Buttons/Buttons";
 import Button from "../../../../components/shared/Button/Button";
@@ -29,6 +25,7 @@ import { toast } from "react-toastify";
 import { cloneDeep } from "lodash";
 
 const Conditions = ({ campaignId }) => {
+
   const elementRef = useRef('');
   const [data, setData] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false });
@@ -71,7 +68,6 @@ const Conditions = ({ campaignId }) => {
     return (
       <>
         {param_data.map((t_row) => {
-          console.log("t_row", t_row)
           if (t_row?.type) {
             if (t_row.type === 'group') {
               let rules = [];
@@ -135,6 +131,7 @@ const Conditions = ({ campaignId }) => {
                       id={t_row.id}
                       data={t_row}
                       handleRemoveComponent={handleRemoveComponent}
+                      campaignId={campaignId}
                     />
                   );
                   break;
@@ -145,6 +142,7 @@ const Conditions = ({ campaignId }) => {
                       id={t_row.id}
                       data={t_row}
                       handleRemoveComponent={handleRemoveComponent}
+                      campaignId={campaignId}
                     />
                   );
                   break;
@@ -156,6 +154,7 @@ const Conditions = ({ campaignId }) => {
                       id={t_row.id}
                       data={t_row}
                       handleRemoveComponent={handleRemoveComponent}
+                      campaignId={campaignId}
                     />
                   );
               }
@@ -232,7 +231,6 @@ const Conditions = ({ campaignId }) => {
       return param_data;
     }
     return param_data.map((t_row) => {
-      console.log("t_row", t_row)
       if (t_row.id === parentId) {
         if (componentType === 'group') {
           let group_file = [];

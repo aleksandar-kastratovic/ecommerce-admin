@@ -22,7 +22,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   const [fieldValue, setFieldValue] = useState(null);
 
   const api = useAPI();
-  const apiPath = "admin/landing-pages-b2c/conditions";
+  const apiPath = "admin/landing-pages-b2b/conditions";
 
   useEffect(() => {
     setFieldCondition(getValueField("condition"));

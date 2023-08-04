@@ -34,7 +34,7 @@ const CampaignTable = ({
   };
 
   const changeSortHandler = (data) => {
-    setOptions({ ...options, sort: data.map(item => { return { name: item.name, type: item.sort } }) })
+    setOptions({ ...options, sort: data.map(item => { return { field: item.field, direction: item.sort } }) })
   }
 
   const onChangeHandler = (value) => {

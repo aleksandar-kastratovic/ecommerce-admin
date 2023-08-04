@@ -12,7 +12,7 @@
     "sortable": true,
     "input_type": "select",
     "options": [],
-    "fillFromApi": "admin/landing-pages-b2c/seo/ddl",
+    "fillFromApi": "admin/landing-pages-b2b/seo/ddl",
     "usePropName": true
   },
   {
@@ -28,7 +28,7 @@
     "sortable": true,
     "input_type": "select",
     "options": [],
-    "fillFromApi": "admin/landing-pages-b2c/seo/ddl",
+    "fillFromApi": "admin/landing-pages-b2b/seo/ddl",
     "usePropName": true
   },
   {

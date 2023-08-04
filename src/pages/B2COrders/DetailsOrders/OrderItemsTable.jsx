@@ -35,6 +35,7 @@ const OrderItemsTable = ({ items, fields }) => {
         {items.map((item) => (
           <TableRow key={item.item.id}>
             {fields.map((field) => {
+              console.log(field, "field")
               let value = null;
               if (item.item != null && item.item.hasOwnProperty(field.prop_name)) {
                 value = item.item[field.prop_name];
@@ -46,6 +47,7 @@ const OrderItemsTable = ({ items, fields }) => {
               return (
                 <TableCell key={field.prop_name} className={styles.productCell}>
                   <Link to={`/products/${item.item.id_product}`} className={styles.productCellLink}>
+                    {field.prop_name === "total_discount_amount" ? "-" : null}
                     {getField(field.input_type, value)}
                   </Link>
                 </TableCell>
@@ -54,7 +56,7 @@ const OrderItemsTable = ({ items, fields }) => {
           </TableRow>
         ))}
       </TableBody>
-    </Table>
+    </Table >
   );
 };
 

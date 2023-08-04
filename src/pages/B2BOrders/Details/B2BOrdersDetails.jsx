@@ -39,7 +39,7 @@ const B2BOrdersDetails = () => {
 
     ));
 
-
+  console.log("orderData", orderData)
 
   return (
     <PageWrapper
@@ -127,15 +127,19 @@ const B2BOrdersDetails = () => {
             <Box className={styles.orderDataDisplay}>
               <p>
                 <span className={styles.dataLabel}>Način plaćanja:</span>
-                {orderData?.payment_method}
+                {orderData?.payment_method_name}
               </p>
               <p>
                 <span className={styles.dataLabel}> Način dostave:</span>
-                {orderData?.delivery_method}
+                {orderData?.delivery_method_name}
               </p>
               <p>
                 <span className={styles.dataLabel}>Poručilac:</span>
                 {orderData?.ship_to_name}
+              </p>
+              <p>
+                <span className={styles.dataLabel}>Datum porudžbine:</span>
+                {orderData?.created_at}
               </p>
             </Box>
           </Box>
@@ -164,7 +168,7 @@ const B2BOrdersDetails = () => {
         <OrderPrices
           total_original={orderData?.total_original}
           total_with_out_vat={orderData?.total_with_out_vat}
-          total_delivery={orderData?.total_delivery}
+          total_delivery_amount={orderData?.total_delivery_amount}
           total_discount={orderData?.total_discount}
           total_promo_code={orderData?.total_promo_code}
           total_rabat_1={orderData?.total_rabat_1}

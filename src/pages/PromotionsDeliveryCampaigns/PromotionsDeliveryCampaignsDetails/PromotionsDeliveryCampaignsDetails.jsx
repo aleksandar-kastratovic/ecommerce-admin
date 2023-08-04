@@ -9,12 +9,14 @@ import DetailsPage from "../../../components/shared/ListPage/DetailsPage/Details
 import Conditions from "./panels/Conditions";
 import CalculateForm from "./panels/CalculateForm/CalculateForm";
 import { deepClone } from "@mui/x-data-grid/utils/utils";
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
 const PromotionsDeliveryCampaignsDetails = () => {
   const { nid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/campaigns/product-catalog/basic-data";
+  const apiPath = "admin/campaigns/cart-delivery/basic-data";
   const navigate = useNavigate();
+  const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
   const init = {
     id: null,
@@ -37,7 +39,14 @@ const PromotionsDeliveryCampaignsDetails = () => {
 
   const [formFields, setFormFields] = useState(basic_data);
   let newFields = deepClone(formFields);
-  let slugField = newFields.filter((field) => !(field.prop_name === "slug" && nid === "new"));
+  let slugField = newFields.map((field) => {
+    if (field.prop_name === "system" && nid !== "new") {
+      return { ...field, disabled: true };
+    } else {
+      return field;
+    }
+  }).filter((field) => !(field.prop_name === "slug" && nid === "new"));
+
 
   const handleData = async () => {
     setIsLoading(true);
@@ -62,7 +71,7 @@ const PromotionsDeliveryCampaignsDetails = () => {
 
         if (oldId === null) {
           let tId = response?.payload?.id;
-          navigate(`/promotions-catalog-campaigns/${tId}`, { replace: true });
+          navigate(`/promotions-delivery-campaigns/${tId}`, { replace: true });
         }
         setIsLoadingOnSubmit(false);
       })
@@ -81,18 +90,21 @@ const PromotionsDeliveryCampaignsDetails = () => {
 
   const fields = [
     {
+      id: "basic",
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
       component: <Form formFields={slugField} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
     },
     {
+      id: "conditions",
       name: "Uslovi",
       icon: IconList.settings,
       enabled: data?.id,
       component: <Conditions campaignId={data?.id} />,
     },
     {
+      id: "calculate",
       name: "Obračun",
       icon: IconList.calculate,
       enabled: data?.id,
@@ -100,7 +112,14 @@ const PromotionsDeliveryCampaignsDetails = () => {
     },
   ];
 
-  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
+  // Handle after click on tab panel
+  const panelHandleSelect = (field) => {
+    let queryString = setUrlQueryStringParam("tab", field.id);
+    const id = data.id == null ? "new" : data.id;
+    navigate(`/promotions-delivery-campaigns/${id}?${queryString}`, { replace: true });
+  }
+
+  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default PromotionsDeliveryCampaignsDetails;

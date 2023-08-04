@@ -35,7 +35,7 @@ const Articles = ({ pageId }) => {
   const [removeComponentId, setRemoveComponentId] = useState(null);
 
   const api = useAPI();
-  const apiPath = 'admin/landing-pages-b2c/conditions';
+  const apiPath = 'admin/landing-pages-b2b/conditions';
 
   // The handleData function uses the API to retrieve data about campaign conditions.
   async function handleData() {

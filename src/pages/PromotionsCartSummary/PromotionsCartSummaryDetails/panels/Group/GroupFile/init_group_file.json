@@ -1,6 +1,6 @@
 {
   "type": "group",
-  "type_component": "cart_items",
+  "type_component": "main",
   "fields": [
     {
       "field": "entity_group",

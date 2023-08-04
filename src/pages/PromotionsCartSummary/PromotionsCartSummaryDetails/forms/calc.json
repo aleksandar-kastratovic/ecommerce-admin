@@ -12,7 +12,7 @@
     "sortable": true,
     "input_type": "select",
     "options": [],
-    "fillFromApi": "admin/campaigns/product-catalog/calculations/ddl",
+    "fillFromApi": "admin/campaigns/cart-summary/calculations/ddl",
     "usePropName": true
   },
   {
@@ -41,7 +41,7 @@
     "sortable": true,
     "input_type": "select",
     "options": [],
-    "fillFromApi": "admin/campaigns/product-catalog/calculations/ddl",
+    "fillFromApi": "admin/campaigns/cart-summary/calculations/ddl",
     "usePropName": true
   }
 ]

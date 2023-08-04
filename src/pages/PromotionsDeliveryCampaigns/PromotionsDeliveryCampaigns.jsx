@@ -1,8 +1,9 @@
 import ListPage from "../../components/shared/ListPage/ListPage";
-import tblFields from "./tblFields.json";
+import tblFields from "./PromotionsDeliveryCampaignsDetails/forms/basic_data.json";
 
 const PromotionsDeliveryCampaigns = () => {
-  return <ListPage listPageId="PromotionsDeliveryCampaigns" apiUrl="admin/campaigns/product-catalog/list" deleteUrl="admin/campaigns/product-catalog/basic-data" title="Promocije za dostavu" columnFields={tblFields} showNewButton={true} />;
+
+  return <ListPage listPageId="PromotionsDeliveryCampaigns" apiUrl="admin/campaigns/cart-delivery/list" deleteUrl="admin/campaigns/cart-delivery/list" title="Promocije za dostavu" columnFields={tblFields} showNewButton={true} />;
 };
 
 export default PromotionsDeliveryCampaigns;

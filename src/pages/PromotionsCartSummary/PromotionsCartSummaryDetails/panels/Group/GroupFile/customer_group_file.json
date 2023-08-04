@@ -1,12 +1,12 @@
 {
   "type": "group",
-  "type_component": "cart_items",
+  "type_component": "customer",
   "fields": [
     {
       "field": "entity_group",
       "selected": {
-        "id": null,
-        "name": null
+        "id": "customer",
+        "name": "customer"
       }
     },
     {

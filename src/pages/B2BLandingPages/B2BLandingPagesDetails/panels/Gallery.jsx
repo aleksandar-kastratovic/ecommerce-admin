@@ -7,7 +7,7 @@ const Gallery = ({ pageId }) => {
 
   const [data, setData] = useState([]);
   const api = useAPI();
-  const apiPath = "admin/landing-pages-b2c/gallery";
+  const apiPath = "admin/landing-pages-b2b/gallery";
 
   const handleData = () => {
     api.list(`${apiPath}/${pageId}`)

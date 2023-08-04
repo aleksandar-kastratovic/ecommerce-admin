@@ -32,8 +32,8 @@ import PromotionsCatalogCampaigns from "../pages/PromotionsCatalogCampaigns/Prom
 import PromotionsCatalogCampaignsPageDetails from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaignsPageDetails/PromotionsCatalogCampaignsPageDetails";
 import PromotionsCartSummary from "../pages/PromotionsCartSummary/PromotionsCartSummary";
 import PromotionsCartSummaryDetails from "../pages/PromotionsCartSummary/PromotionsCartSummaryDetails/PromotionsCartSummaryDetails";
-import PromotionsCartItems from "../pages/PromotionsCartItems/PromotionsCartItems";
-import PromotionsCartItemsPageDetails from "../pages/PromotionsCartItems/PromotionsCartItemsPageDetails/PromotionsCartItemsPageDetails";
+// import PromotionsCartItems from "../pages/PromotionsCartItems/PromotionsCartItems";
+// import PromotionsCartItemsPageDetails from "../pages/PromotionsCartItems/PromotionsCartItemsPageDetails/PromotionsCartItemsPageDetails";
 import PromotionsDeliveryCampaigns from "../pages/PromotionsDeliveryCampaigns/PromotionsDeliveryCampaigns";
 import PromotionsDeliveryCampaignsDetails from "../pages/PromotionsDeliveryCampaigns/PromotionsDeliveryCampaignsDetails/PromotionsDeliveryCampaignsDetails";
 import Newsletter from "../pages/Newsletter/Newsletter";
@@ -156,7 +156,7 @@ const screens = {
 
     PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Proizvodi", IconList.inventory, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
     PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Iznos korpe", IconList.requestQuote, PROMOTIONS, PromotionsCartSummary, [[":nid", PromotionsCartSummaryDetails]]],
-    PROMOTIONS_CART_ITEMS_CAMPAIGNS: ["promotions-cart-items-campaigns", "Stavke u korpi", IconList.shoppingBasket, PROMOTIONS, PromotionsCartItems, [[":nid", PromotionsCartItemsPageDetails]]],
+    // PROMOTIONS_CART_ITEMS_CAMPAIGNS: ["promotions-cart-items-campaigns", "Stavke u korpi", IconList.shoppingBasket, PROMOTIONS, PromotionsCartItems, [[":nid", PromotionsCartItemsPageDetails]]],
     PROMOTIONS_DELIVERY_CAMPAIGNS: ["promotions-delivery-campaigns", "Dostava", IconList.localShipping, PROMOTIONS, PromotionsDeliveryCampaigns, [[":nid", PromotionsDeliveryCampaignsDetails]]],
 
     ROLES: ["/roles", "Uloge", IconList.reduceCapacity, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],

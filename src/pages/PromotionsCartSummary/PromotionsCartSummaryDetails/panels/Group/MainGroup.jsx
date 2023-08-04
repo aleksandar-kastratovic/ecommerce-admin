@@ -7,10 +7,13 @@ import Tooltip from "@mui/material/Tooltip";
 
 import Button from "../../../../../components/shared/Button/Button";
 import Buttons from "../../../../../components/shared/Form/Buttons/Buttons";
+import buttons from "./buttons.json"
 import { InputSelect } from "../../../../../components/shared/Form/FormInputs/FormInputs";
 import useAPI from "../../../../../api/api";
 
 import scss from "./Group.module.scss";
+import ListPageModalWrapper from "../../../../../components/shared/Modal/ListPageModalWrapper";
+import { Typography } from "@mui/material";
 
 
 const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) => {
@@ -21,8 +24,10 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
 
   const [fieldValue, setFieldValue] = useState(null);
 
+  const [showModal, setShowModal] = useState(false);
+
   const api = useAPI();
-  const apiPath = "admin/campaigns/product-catalog/conditions";
+  const apiPath = "admin/campaigns/cart-summary/conditions";
 
   useEffect(() => {
     setFieldCondition(getValueField("condition"));
@@ -91,27 +96,43 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
       <div className={`${scss.buttonHolder}`}>
         <Buttons>
           <Button
-            label="Novi uslov"
-            icon={<Icon>difference</Icon>}
-            sx={{ width: "100%" }}
-            disabled={!isLastSelected}
-            onClick={() => {
-              handleAddComponent(id, "row", "product");
-            }}
-          />
-        </Buttons>
-        <Buttons>
-          <Button
             label="Dodajte grupu"
             icon={<Icon>difference</Icon>}
             sx={{ width: "100%" }}
             onClick={() => {
-              handleAddComponent(id, "group", "product");
+              if (buttons.length > 1) {
+                setShowModal(true);
+              } else {
+                handleAddComponent(id, "group", buttons[0].id);
+              }
             }}
           />
         </Buttons>
       </div>
-    </div>
+
+      <ListPageModalWrapper anchor="right" open={showModal} onClose={() => setShowModal(false)} onCloseButtonClick={() => setShowModal(false)} styleBox={{ display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", height: "inherit" }}>
+        <Typography variant="h5" sx={{ margin: "1.5rem 0 0 0" }}>
+          Izaberite grupu za uslove
+        </Typography>
+        <Box sx={{ display: "flex", flexDirection: "column", margin: "auto" }}>
+          {buttons.map((button) => (
+            <Button
+              key={button.id}
+              label={button.name}
+              onClick={() => {
+                handleAddComponent(id, "group", button.id);
+                setShowModal(false);
+
+              }}
+              sx={{ width: "20rem", marginBottom: "1rem", padding: "0.5rem 0 0.5rem 0" }}
+            />
+          ))}
+        </Box>
+
+      </ListPageModalWrapper >
+    </div >
+
+
   );
 };
 

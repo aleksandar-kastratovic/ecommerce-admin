@@ -27,7 +27,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   const [showModal, setShowModal] = useState(false);
 
   const api = useAPI();
-  const apiPath = "admin/campaigns/product-catalog/conditions";
+  const apiPath = "admin/campaigns/cart-delivery/conditions";
 
   useEffect(() => {
     setFieldCondition(getValueField("condition"));
