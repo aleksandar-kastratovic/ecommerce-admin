@@ -1,12 +1,12 @@
 {
   "type": "group",
-  "type_component": "product",
+  "type_component": "cart_summary",
   "fields": [
     {
       "field": "entity_group",
       "selected": {
-        "id": "product",
-        "name": "product"
+        "id": "cart_summary",
+        "name": "cart_summary"
       }
     },
     {

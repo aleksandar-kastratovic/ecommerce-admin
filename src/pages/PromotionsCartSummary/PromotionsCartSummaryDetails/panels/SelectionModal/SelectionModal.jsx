@@ -4,6 +4,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import CampaignList from "../CampaignList/CampaignList";
 import CampaignTable from "../CampaignTable/CampaignTable";
+import ListPageModalWrapper from "../../../../../components/shared/Modal/ListPageModalWrapper";
+import { Box } from "@mui/material";
 
 const SelectionModal = ({
   openDialog,
@@ -50,21 +52,11 @@ const SelectionModal = ({
   };
 
   return (
-    <Dialog open={openDialog.show ?? false}>
-      <DialogContent>
+    <ListPageModalWrapper anchor="right" open={openDialog.show ?? false} onClose={() => setOpenDialog({ ...openDialog, show: false })} onCloseButtonClick={() => setOpenDialog({ ...openDialog, show: false })}>
+      <Box sx={{ padding: "2rem" }}>
         {opt && ComponentToRender()}
-      </DialogContent>
-
-      <DialogActions>
-        <Button
-          variant="outlined"
-          onClick={() => setOpenDialog({ ...openDialog, show: false })}
-          data-test-id="btn-cancel"
-        >
-          Zatvori
-        </Button>
-      </DialogActions>
-    </Dialog>
+      </Box>
+    </ListPageModalWrapper>
   );
 };
 

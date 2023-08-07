@@ -10,6 +10,7 @@ import InputValue from "../InputValue/InputValue";
 import scss from "./Row.module.scss";
 
 const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
+
   const apiPath = 'admin/campaigns/cart-delivery/conditions';
 
   const [rowData, setRowData] = useState(data);
@@ -33,6 +34,16 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
 
     if (allSelected) {
       setOpenDialog({ show: true });
+    }
+  };
+
+  const onDataReceived = (options, currentIndex) => {
+    if (options?.length === 2) {
+      setRowData((prevRowData) => {
+        const newData = { ...prevRowData };
+        newData.fields[currentIndex].selected = options[1];
+        return newData;
+      });
     }
   };
 
@@ -90,6 +101,7 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
                 usePropName={true}
                 queryString={queryString}
                 value={item?.selected?.id ?? 0}
+                onDataReceived={(options) => onDataReceived(options, index)}
                 onChange={({ target }, { props }) => {
                   if (item.field === 'condition' && props.props != null) {
                     setValueOptions(props.props);

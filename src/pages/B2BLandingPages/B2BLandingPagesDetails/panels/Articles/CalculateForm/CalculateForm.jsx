@@ -11,7 +11,7 @@ const CalculateForm = ({ campaignId }) => {
 
   const { nid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/landing-pages-b2c/calculations";
+  const apiPath = "admin/landing-pages-b2b/calculations";
   const [formFields, setFormFields] = useState(calc);
 
   const init = {

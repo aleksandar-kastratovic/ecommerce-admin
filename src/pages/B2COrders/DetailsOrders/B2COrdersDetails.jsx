@@ -28,9 +28,10 @@ const B2COrdersDetails = () => {
   const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
   const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
 
+  console.log(orderItems)
   return (
     <PageWrapper
-      title={"Porudžbina"}
+      title={`Porudžbina: ${orderData?.slug}`}
       back={() => {
         navigate(-1);
       }}
@@ -114,15 +115,19 @@ const B2COrdersDetails = () => {
             <Box className={styles.orderDataDisplay}>
               <p>
                 <span className={styles.dataLabel}>Način plaćanja:</span>
-                {orderData?.payment_method}
+                {orderData?.payment_method_name}
               </p>
               <p>
                 <span className={styles.dataLabel}> Način dostave:</span>
-                {orderData?.delivery_method}
+                {orderData?.delivery_method_name}
               </p>
               <p>
                 <span className={styles.dataLabel}>Poručilac:</span>
                 {orderData?.ship_to_name}
+              </p>
+              <p>
+                <span className={styles.dataLabel}>Datum porudžbine:</span>
+                {orderData?.created_at}
               </p>
             </Box>
           </Box>
@@ -143,13 +148,16 @@ const B2COrdersDetails = () => {
       <OrderSection title="Porudžbina:">
         <OrderPrices
           total_with_out_vat={orderData?.total_with_out_vat}
-          total_delivery={orderData?.total_delivery}
+          total_delivery_amount={orderData?.total_delivery_amount}
           total_discount={orderData?.total_discount}
           total_promo_code={orderData?.total_promo_code}
           total_vat={orderData?.total_vat}
           total_with_vat={orderData?.total_with_vat}
           total={orderData?.total}
           currency={orderData?.currency}
+          total_items_discount_amount={orderData?.total_items_discount_amount}
+          total_cart_discount_amount={orderData?.total_cart_discount_amount}
+          total_promo_code_amount={orderData?.total_promo_code_amount}
         />
       </OrderSection>
     </PageWrapper>

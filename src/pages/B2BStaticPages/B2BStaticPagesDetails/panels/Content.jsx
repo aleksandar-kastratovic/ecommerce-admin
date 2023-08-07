@@ -6,8 +6,8 @@ import { toast } from 'react-toastify';
 
 const Content = ({ pageId }) => {
   const api = useAPI();
-  const apiPathGallery = "admin/static-pages-b2c/gallery";
-  const apiPathContent = "admin/static-pages-b2c/content";
+  const apiPathGallery = "admin/static-pages-b2b/gallery";
+  const apiPathContent = "admin/static-pages-b2b/content";
 
   const [selectedRow, setSelectedRow] = useState({});
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
@@ -51,7 +51,7 @@ const Content = ({ pageId }) => {
         type: 'dialog_delete',
         fnc: (rowData) => {
 
-          api.delete(`admin/static-pages-b2c/content/${rowData.id}`)
+          api.delete(`admin/static-pages-b2b/content/${rowData.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
             .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
 
@@ -208,8 +208,8 @@ const Content = ({ pageId }) => {
       <ListPage
         validateData={validateData}
         listPageId="B2CContent"
-        apiUrl={`admin/static-pages-b2c/content/${pageId}`}
-        editUrl={`admin/static-pages-b2c/content/${pageId}`}
+        apiUrl={`admin/static-pages-b2b/content/${pageId}`}
+        editUrl={`admin/static-pages-b2b/content/${pageId}`}
         initialData={{ id_static_pages: pageId }}
         title=" "
         columnFields={formFieldsTemp}

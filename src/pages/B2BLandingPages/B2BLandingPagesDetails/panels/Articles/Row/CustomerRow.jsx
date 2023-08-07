@@ -11,7 +11,7 @@ import scss from "./Row.module.scss";
 
 const Row = ({ data, id, handleRemoveComponent }) => {
 
-  const apiPath = 'admin/landing-pages-b2c/conditions';
+  const apiPath = 'admin/landing-pages-b2b/conditions';
 
   const [rowData, setRowData] = useState(data);
   const [openDialog, setOpenDialog] = useState({ show: false });
@@ -50,7 +50,6 @@ const Row = ({ data, id, handleRemoveComponent }) => {
   return (
     <div className={scss.rowHolder}>
       {(rowData?.fields ?? []).map((item, index) => {
-        console.log("item product", item)
         if (
           index > 0 &&
           (rowData?.fields[index - 1]?.selected?.id == null ||

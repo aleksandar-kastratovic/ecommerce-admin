@@ -36,6 +36,8 @@ const Connection = ({ id, file }) => {
     show: false,
   });
 
+  const [skipRows, setSkipRows] = useState(0);
+
   const [selectedConnection, setSelectedConnection] = useState(null);
 
   // The selected mapping by the user
@@ -76,7 +78,7 @@ const Connection = ({ id, file }) => {
     const dataForServer = {
       targets: arrTargetsModified,
       id_admin_import_set: id,
-      skip_rows: 0
+      skip_rows: skipRows
     }
 
     setModalContent(dataForServer);
@@ -180,7 +182,7 @@ const Connection = ({ id, file }) => {
       {file && (
         <Buttons styleWrapperButtons={{ alignItems: "end" }}>
           {/* Skip starting rows */}
-          <InputSelect onChange={(res) => { const { target } = res; setSelectedConnection(target.value) }} value={selectedConnection ?? ""} label="Preskoči redova" options={dataImport?.skip_rows} styleFormControl={{ width: "25%", marginBottom: "0", marginRight: "auto" }} />
+          <InputSelect onChange={(res) => { const { target } = res; setSkipRows(target.value); setSelectedConnection(target.value) }} value={selectedConnection ?? ""} label="Preskoči redova" options={dataImport?.skip_rows} styleFormControl={{ width: "25%", marginBottom: "0", marginRight: "auto" }} />
           {/* <InputSelect onChange={(res) => { const { target } = res; setSelectedImportSystem(target.value) }} value={selectedImportSystem} label="Import sistema" options={dataImport?.import_system} styleFormControl={{ width: "25%", marginRight: "auto", marginBottom: "0" }} /> */}
 
           <Button icon={<Check />} label={isLoading ? <CircularProgress size="1.5rem" /> : "Potvrdi uvoz"} onClick={submitTemp} variant="contained" />

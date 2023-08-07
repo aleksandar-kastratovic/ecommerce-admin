@@ -11,7 +11,7 @@ const CalculateForm = ({ campaignId }) => {
 
   const { nid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/campaigns/product-catalog/calculations";
+  const apiPath = "admin/campaigns/cart-summary/calculations";
   const [formFields, setFormFields] = useState(calc);
 
   const init = {
@@ -41,33 +41,43 @@ const CalculateForm = ({ campaignId }) => {
   };
 
   const chageHandler = (data, fieldName) => {
+    api.get(`admin/campaigns/cart-summary/calculations/ddl/currency?discount_type=${data.discount_type}`)
+      .then((response) => {
 
-    if (fieldName != "discount_type") {
-      return;
-    }
+        if (fieldName != "discount_type") {
+          return;
+        }
 
-    let discountTypeValue = data.discount_type;
-    if (discountTypeValue == undefined) {
-      console.warn("Vrednost data.discount nije pronadjena!");
-      return;
-    }
+        let discountTypeValue = data.discount_type;
+        if (discountTypeValue == undefined) {
+          console.warn("Vrednost data.discount nije pronadjena!");
+          return;
+        }
 
-    let newFields = deepClone(formFields);
+        let newFields = deepClone(formFields);
 
-    let currencyField = newFields.find((item) => item.prop_name === "currency")
-    if (currencyField == undefined) {
-      console.warn("Polje currency nije pronadjeno!");
-      return;
-    }
+        let currencyField = newFields.find((item) => item.prop_name === "currency")
+        if (currencyField == undefined) {
+          console.warn("Polje currency nije pronadjeno!");
+          return;
+        }
 
-    const queryString = `discount_type=${discountTypeValue}`;
+        const queryString = `discount_type=${discountTypeValue}`;
 
-    currencyField.queryString = queryString
+        currencyField.queryString = queryString
 
-    let newData = { ...data };
-    newData.currency = "0";
-    setData(newData);
-    setFormFields(newFields);
+        let newData = { ...data };
+        newData.currency = "0";
+        if (response.payload.length === 2) {
+          newData.currency = response.payload[1].id;
+        }
+        setData(newData);
+        setFormFields(newFields);
+
+      })
+      .catch((error) => {
+        console.log(error);
+      })
   }
 
   useEffect(() => {

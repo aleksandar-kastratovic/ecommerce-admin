@@ -1,8 +1,15 @@
 {
   "id": null,
   "type": "row",
-  "type_component": "cart_summary",
+  "type_component": "main",
   "fields": [
+    {
+      "field": "entity_group",
+      "selected": {
+        "id": null,
+        "name": null
+      }
+    },
     {
       "field": "entity",
       "selected": {

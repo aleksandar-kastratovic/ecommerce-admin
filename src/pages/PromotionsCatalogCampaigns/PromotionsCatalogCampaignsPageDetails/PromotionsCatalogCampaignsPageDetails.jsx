@@ -11,12 +11,15 @@ import CalculateForm from "./panels/CalculateForm/CalculateForm";
 
 import basic_data from "./forms/basic_data.json";
 import { deepClone } from "@mui/x-data-grid/utils/utils";
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
+
 
 const PromotionsCatalogCampaignsPageDetails = () => {
   const { nid } = useParams();
   const api = useAPI();
   const apiPath = "admin/campaigns/product-catalog/basic-data";
   const navigate = useNavigate();
+  const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
   const init = {
     id: null,
@@ -39,7 +42,13 @@ const PromotionsCatalogCampaignsPageDetails = () => {
 
   const [formFields, setFormFields] = useState(basic_data);
   let newFields = deepClone(formFields);
-  let slugField = newFields.filter((field) => !(field.prop_name === "slug" && nid === "new"));
+  let slugField = newFields.map((field) => {
+    if (field.prop_name === "system" && nid !== "new") {
+      return { ...field, disabled: true };
+    } else {
+      return field;
+    }
+  }).filter((field) => !(field.prop_name === "slug" && nid === "new"));
 
   const handleData = async () => {
     setIsLoading(true);
@@ -81,20 +90,25 @@ const PromotionsCatalogCampaignsPageDetails = () => {
 
 
 
+
+
   const fields = [
     {
+      id: "basic",
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
       component: <Form formFields={slugField} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
     },
     {
+      id: "conditions",
       name: "Uslovi",
       icon: IconList.settings,
       enabled: data?.id,
       component: <Conditions campaignId={data?.id} />,
     },
     {
+      id: "calculate",
       name: "Obračun",
       icon: IconList.calculate,
       enabled: data?.id,
@@ -102,7 +116,14 @@ const PromotionsCatalogCampaignsPageDetails = () => {
     },
   ];
 
-  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
+  // Handle after click on tab panel
+  const panelHandleSelect = (field) => {
+    let queryString = setUrlQueryStringParam("tab", field.id);
+    const id = data.id == null ? "new" : data.id;
+    navigate(`/promotions-catalog-campaigns/${id}?${queryString}`, { replace: true });
+  }
+
+  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default PromotionsCatalogCampaignsPageDetails;

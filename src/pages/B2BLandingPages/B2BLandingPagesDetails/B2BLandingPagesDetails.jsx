@@ -17,7 +17,7 @@ import Thumbs from "./panels/Thumbs";
 const B2BLandingPagesDetails = () => {
   const { lid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/landing-pages-b2c/basic-data";
+  const apiPath = "admin/landing-pages-b2b/basic-data";
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 

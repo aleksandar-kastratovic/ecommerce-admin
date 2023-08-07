@@ -96,7 +96,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
             sx={{ width: "100%" }}
             disabled={!isLastSelected}
             onClick={() => {
-              handleAddComponent(id, "row");
+              handleAddComponent(id, "row", "customer");
             }}
           />
         </Buttons>
@@ -106,7 +106,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
             icon={<Icon>difference</Icon>}
             sx={{ width: "100%" }}
             onClick={() => {
-              handleAddComponent(id, "group");
+              handleAddComponent(id, "group", "customer");
             }}
           />
         </Buttons>

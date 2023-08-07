@@ -9,7 +9,7 @@ import InputValue from "../InputValue/InputValue";
 
 import scss from "./Row.module.scss";
 
-const Row = ({ data, id, handleRemoveComponent }) => {
+const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
   const apiPath = 'admin/campaigns/product-catalog/conditions';
 
   const [rowData, setRowData] = useState(data);
@@ -39,7 +39,6 @@ const Row = ({ data, id, handleRemoveComponent }) => {
   return (
     <div className={scss.rowHolder}>
       {(rowData?.fields ?? []).map((item, index) => {
-        console.log("row", item)
         if (
           index > 0 &&
           (rowData?.fields[index - 1]?.selected?.id == null ||
@@ -48,15 +47,11 @@ const Row = ({ data, id, handleRemoveComponent }) => {
           return null;
         }
 
-        let queryString = '';
+        let queryString = 'id_campaign=' + campaignId;
         for (let i = 0; i < rowData.fields.length; i++) {
           const selectedId = rowData.fields[i]?.selected?.id;
 
-          if (i === 0) {
-            queryString += `${rowData.fields[i].field}=${selectedId ?? ''}`;
-          } else {
-            queryString += `&${rowData.fields[i].field}=${selectedId ?? ''}`;
-          }
+          queryString += `&${rowData.fields[i].field}=${selectedId ?? ''}`;
         }
 
         switch (item.field) {

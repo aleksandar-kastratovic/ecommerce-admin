@@ -14,10 +14,6 @@ import Typography from "@mui/material/Typography";
 import DeleteModal from "../../../../components/shared/Dialogs/DeleteDialog";
 import ProductVariation from "./VariationList/ProductVariation";
 import { Link, useParams } from "react-router-dom";
-import ListPage from "../../../../components/shared/ListPage/ListPage";
-import tblFields from "../forms/tblFields.json";
-import { get, set } from "lodash";
-
 
 
 const ProductDetailsVariation = ({ parentId }) => {
@@ -372,8 +368,8 @@ const ProductDetailsVariation = ({ parentId }) => {
         />
       </Box >
 
-      <Box>
-        <Typography variant="subtitle1" sx={{ fontWeight: "bold", margin: "1rem 0" }}>
+      <Box sx={{ marginTop: "2rem" }}>
+        <Typography variant="subtitle1" sx={{ fontWeight: "bold", margin: "1rem 0" }} position={"absolute"}>
           Lista varijanti
         </Typography>
         {tableLoading ? <CircularProgress size={"1.5rem"} /> : <ProductVariation parentId={parentId} tblFields={formFields} />}

@@ -234,7 +234,6 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
     }
   }
 
-  console.log("INitial data list page:", initialData);
   return (
     <>
       <PageWrapper title={title} actions={actions}>

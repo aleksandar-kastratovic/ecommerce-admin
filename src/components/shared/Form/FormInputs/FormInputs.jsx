@@ -293,6 +293,7 @@ export const InputSelect = ({
     setOpt(opt?.length > 0 ? opt : options);
   }, [options, opt]);
 
+
   return (
     <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleFormControl}>
       <Select

@@ -3,7 +3,7 @@ import { currencyFormat } from "../../../helpers/functions";
 
 import styles from "./B2BOrdersDetails.module.scss";
 
-const OrderPrices = ({ total_original, total_with_out_vat, total_delivery, total_discount, total_promo_code, total_rabat_1, total_rabat_2, total_vat, total_with_vat, total, currency }) => {
+const OrderPrices = ({ total_original, total_with_out_vat, total_delivery_amount, total_discount, total_promo_code, total_rabat_1, total_rabat_2, total_vat, total_with_vat, total, currency }) => {
   currency = currency == null ? "" : currency;
   return (
     <Box>
@@ -20,10 +20,10 @@ const OrderPrices = ({ total_original, total_with_out_vat, total_delivery, total
         <span>Iznos rabat:</span>
         <span className={styles.priceValue}>{`${currencyFormat(total_rabat_2)} ${currency}`}</span>
       </Box> */}
-      <Box className={styles.priceRow}>
+      {/* <Box className={styles.priceRow}>
         <span>Popust:</span>
         <span className={styles.priceValue}>{`${currencyFormat(total_discount)} ${currency}`}</span>
-      </Box>
+      </Box> */}
       {/* <Box className={styles.priceRow}>
         <span>Promo kod:</span>
         <span className={styles.priceValue}>{`${currencyFormat(total_promo_code)} ${currency}`}</span>
@@ -38,7 +38,7 @@ const OrderPrices = ({ total_original, total_with_out_vat, total_delivery, total
       </Box>
       <Box className={styles.priceRow}>
         <span>Iznos dostave:</span>
-        <span className={styles.priceValue}>{`${currencyFormat(total_delivery)} ${currency}`}</span>
+        <span className={styles.priceValue}>{`${currencyFormat(total_delivery_amount)} ${currency}`}</span>
       </Box>
       <hr />
       <Box className={`${styles.totalPriceRow} ${styles.priceRow}`}>

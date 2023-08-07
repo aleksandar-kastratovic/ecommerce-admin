@@ -26,6 +26,7 @@ const ProductVariation = ({ parentId, tblFields }) => {
     switch (type) {
       case 'click':
         const { show_fields } = fieldBhavior;
+        console.log(show_fields, "showFields")
         switch (show_fields) {
           case 'seo_field':
             setFields(seo);

@@ -24,7 +24,7 @@ const Thumbs = ({ pageId }) => {
         type: 'dialog_delete',
         fnc: (rowData) => {
 
-          api.delete(`admin/landing-pages-b2c/thumb/${rowData.id}`)
+          api.delete(`admin/landing-pages-b2b/thumb/${rowData.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
             .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
 
@@ -42,8 +42,8 @@ const Thumbs = ({ pageId }) => {
     <>
       <ListPage
         listPageId="B2CLandingPageThumbs"
-        apiUrl={`admin/landing-pages-b2c/thumb/${pageId}`}
-        editUrl={`admin/landing-pages-b2c/thumb`}
+        apiUrl={`admin/landing-pages-b2b/thumb/${pageId}`}
+        editUrl={`admin/landing-pages-b2b/thumb`}
         title=" "
         columnFields={formFields}
         actionNewButton="modal"

@@ -1,29 +1,27 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-
 import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
 import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
+import basic_data from "./forms/basic_data.json";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Conditions from "./panels/Conditions";
 import CalculateForm from "./panels/CalculateForm/CalculateForm";
-
-import basic_data from "./forms/basic_data.json";
-
+import { deepClone } from "@mui/x-data-grid/utils/utils";
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
 const PromotionsCartSummaryDetails = () => {
   const { nid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/campaigns/product-catalog/basic-data";
+  const apiPath = "admin/campaigns/cart-summary/basic-data";
   const navigate = useNavigate();
+  const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
   const init = {
     id: null,
+    calculation_type: null,
     description: null,
-    discount_type: null,
-    discount_value: null,
-    currency: null,
     slug: null,
     name: null,
     description: null,
@@ -38,6 +36,16 @@ const PromotionsCartSummaryDetails = () => {
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+
+  const [formFields, setFormFields] = useState(basic_data);
+  let newFields = deepClone(formFields);
+  let slugField = newFields.map((field) => {
+    if (field.prop_name === "system" && nid !== "new") {
+      return { ...field, disabled: true };
+    } else {
+      return field;
+    }
+  }).filter((field) => !(field.prop_name === "slug" && nid === "new"));
 
   const handleData = async () => {
     setIsLoading(true);
@@ -62,7 +70,7 @@ const PromotionsCartSummaryDetails = () => {
 
         if (oldId === null) {
           let tId = response?.payload?.id;
-          navigate(`/promotions-catalog-campaigns/${tId}`, { replace: true });
+          navigate(`/promotions-cart-summary-campaigns/${tId}`, { replace: true });
         }
         setIsLoadingOnSubmit(false);
       })
@@ -73,38 +81,29 @@ const PromotionsCartSummaryDetails = () => {
       });
   };
 
-  const validateData = (data, field) => {
-    let ret = data;
-    console.log("data", data);
-    console.log("field", field);
-    switch (field) {
-      case "discount_type":
-        ret.currency = "ruzaaa";
-        return ret;
-        console.log("aaaaaaaaaaaaaaaaaa");
-      default:
-        return ret;
-    }
-  };
-
   useEffect(() => {
     handleData();
   }, []);
 
+
+
   const fields = [
     {
+      id: "basic",
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
+      component: <Form formFields={slugField} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
     },
     {
+      id: "conditions",
       name: "Uslovi",
       icon: IconList.settings,
       enabled: data?.id,
       component: <Conditions campaignId={data?.id} />,
     },
     {
+      id: "calculate",
       name: "Obračun",
       icon: IconList.calculate,
       enabled: data?.id,
@@ -112,7 +111,14 @@ const PromotionsCartSummaryDetails = () => {
     },
   ];
 
-  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} />;
+  // Handle after click on tab panel
+  const panelHandleSelect = (field) => {
+    let queryString = setUrlQueryStringParam("tab", field.id);
+    const id = data.id == null ? "new" : data.id;
+    navigate(`/promotions-cart-summary-campaigns/${id}?${queryString}`, { replace: true });
+  }
+
+  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[nid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default PromotionsCartSummaryDetails;

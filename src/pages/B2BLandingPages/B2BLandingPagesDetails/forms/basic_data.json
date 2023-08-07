@@ -65,7 +65,7 @@
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "select",
-    "fillFromApi": "admin/landing-pages-b2c/basic-data/ddl",
+    "fillFromApi": "admin/landing-pages-b2b/basic-data/ddl",
     "usePropName": true,
     "options": []
   }
