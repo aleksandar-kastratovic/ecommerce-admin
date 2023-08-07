@@ -16,7 +16,7 @@ const B2BStaticPagesDetails = () => {
 
   const { spid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/static-pages-b2c/basic-data";
+  const apiPath = "admin/static-pages-b2b/basic-data";
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
   const navigate = useNavigate();
 

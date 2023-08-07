@@ -20,7 +20,7 @@ const Seo = ({ pageId }) => {
 
   const [listData, setListData] = useState([]);
   const api = useAPI();
-  const apiPath = "admin/static-pages-b2c/seo";
+  const apiPath = "admin/static-pages-b2b/seo";
 
   const handleList = () => {
     api.list(`${apiPath}/${pageId}`)
