@@ -82,7 +82,7 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
           default:
             return (
               <InputSelect
-                className={scss.inputSelect}
+                className={`${scss.inputSelect}`}
                 key={item.field + queryString}
                 required={false}
                 name={item.field}
