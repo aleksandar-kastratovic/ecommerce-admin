@@ -17,7 +17,12 @@
 }
 
 .deleteButton {
-    color: $black;
+    color: #b3b3b3;
+    cursor: pointer;
+    transition: color 0.2s ease-in;
+    &:hover {
+        color: #28a86e !important;
+    }
 }
 
 .deleteButton:hover {

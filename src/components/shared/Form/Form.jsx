@@ -14,6 +14,7 @@ import { isEmpty } from "lodash";
 
 const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), onCloseModalButton = () => { }, cancelButton = false, submitButton = true, closeButton = false, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked, selectedFile }) => {
   const navigate = useNavigate();
+
   const [data, setData] = useState(initialData ?? {});
   const [inputsError, setInputsError] = useState([]);
   const [openImageDialog, setOpenImageDialog] = useState({
@@ -175,6 +176,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
         {(filteredFields ?? [])
           .filter((field) => field.croonus_use_in_details)
           .map((item, index) => {
+            console.log("Item before create:", item);
 
             // Priprema vrednosti pre nego sto se prosledi u komponentu
             let temp_value = Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name];

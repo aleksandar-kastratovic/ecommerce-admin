@@ -286,6 +286,7 @@ const ProductDetailsVariation = ({ parentId }) => {
       onSaveClick(arr, true);
     }
   }
+
   const getFormFields = () => {
     api.get(`admin/product-items/variants/list/table-structure`)
       .then((response) => {

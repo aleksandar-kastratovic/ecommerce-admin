@@ -614,6 +614,7 @@ export const InputMultiSelect = ({
         .then((response) => {
           if (isMounted) {
             setOpt(response?.payload);
+            console.log("Multiple select payload:", response?.payload);
           }
         })
         .catch((error) => {
@@ -639,10 +640,12 @@ export const InputMultiSelect = ({
   }, [opt]);
 
   useEffect(() => {
-    if (options) {
+    if (options && options?.length > 0) {
       setOpt(options);
+    } else {
+      setOpt(opt);
     }
-  }, [options]);
+  }, [options, opt]);
 
   return (
     <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleMultiSelect}>

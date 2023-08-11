@@ -12,19 +12,16 @@ import IconList from "../../../../../helpers/icons";
 import useAPI from "../../../../../api/api";
 
 import styles from "./SetFormFields.module.scss";
+import Typography from "@mui/material/Typography";
+import Tooltip from "@mui/material/Tooltip";
 
-const ListItem = ({ index, onDelete = () => { }, title = "", selectedSet = undefined, productId, apiPath, listHandler }) => {
+const ListItem = ({ index, onDelete = () => { }, title = "", selectedSet = undefined, productId, apiPath, set, group, onChange }) => {
   const [loaded, setLoaded] = useState(false);
-  const [open, setOpen] = useState(false);
+  // const [open, setOpen] = useState(false);
 
   //delected set
   const [selected, setSetlected] = useState(selectedSet);
 
-  //set groups
-  const [groups, setGroups] = useState([]);
-  const [set, setSet] = useState({});
-
-  const [ddlDisabled, setDdlDisabled] = useState(false);
   const [showEmptyMessage, setShowEmptyMessage] = useState(false);
   const navigate = useNavigate();
 
@@ -53,94 +50,41 @@ const ListItem = ({ index, onDelete = () => { }, title = "", selectedSet = undef
     setOpenDeleteDialog({ show: false, id: null });
   };
 
-  const groupsChangeHandler = async () => {
-    api.get(`${apiPath}/set-groups/${selected}`)
-      .then((response) => {
-        setSet(response?.payload?.set);
-        setGroups(response?.payload?.groups);
-      })
-      .catch((error) => console.warn(error));
-  };
-
-  useEffect(() => {
-    if (loaded && selected) {
-      groupsChangeHandler();
-    }
-  }, [selected, loaded]);
-
   useEffect(() => {
     setLoaded(true);
   }, []);
 
-  const changeHandler = (data) => {
-    const isEmpty = Object.values(data).every((x) => x === null || x === "");
-    setDdlDisabled(!isEmpty);
-  };
-
-  let setSelect = {
-    ...chooseSetForm,
-    fillFromApi: `${chooseSetForm.fillFromApi}/${productId}`,
-  };
+  const changeHandler = (data, attributes, attributeValues) => {
+    onChange(data, attributes, attributeValues);
+  }
 
   return (
-    <div>
-      <div className={styles.formFieldHeader}>
-        <div className={styles.formFieldTitle}>
-          <div onClick={() => setOpen(!open)}>
+    <>
+      <Box>
+        <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
             {title}
-            <Icon>{open ? IconList.expandLess : IconList.expandMore}</Icon>
-          </div>
-
-          <Icon onClick={onClickDelete} className={styles.deleteButton}>
-            {IconList.delete}
-          </Icon>
-        </div>
-        {open && (
-          <Box component="form" autoComplete="off" className={styles.setField}>
-            {selectedSet === undefined && (
-              <CreateForm
-                data-test-id="form"
-                onChangeHandler={formItemChangeHandler}
-                item={setSelect}
-                key={index}
-                value={selected}
-                disabled={ddlDisabled}
-                optionsIsEmpty={(isEmpty) => {
-                  setShowEmptyMessage(isEmpty);
-                }}
-              />
-            )}
-            {showEmptyMessage && (
-              <p>
-                Nema setova za prikaz. <a href="/product-specs/new">Kreiraj novi set</a>
-              </p>
-            )}
-          </Box>
-        )}
-      </div>
-
-      {open && (
-        <>
-          {groups.map((group) => {
-            return (
-              <div className={styles.section} key={group.id}>
-                <GroupField
-                  name={group.name}
-                  groupId={group.id}
-                  slug={group.slug}
-                  setId={set.id}
-                  slugSet={set.slug}
-                  nameSet={set.name}
-                  productId={productId}
-                  onChange={changeHandler}
-                  apiPath={apiPath}
-                  listHandler={listHandler}
-                />
-              </div>
-            );
-          })}
-        </>
-      )}
+          </Typography>
+          <Tooltip title={'Obrišite specifikaciju'} placement="top" arrow>
+            <Icon onClick={onClickDelete} className={styles.deleteButton}>
+              {IconList.delete}
+            </Icon>
+          </Tooltip>
+        </Box>
+      </Box>
+      <Box sx={{ margin: "0 0 2rem 2rem" }} key={group.id}>
+        <GroupField
+          name={group.name}
+          groupId={group.id}
+          slug={group.slug}
+          setId={set?.id}
+          slugSet={set?.slug}
+          nameSet={set?.name}
+          productId={productId}
+          onChange={changeHandler}
+          apiPath={apiPath}
+        />
+      </Box>
       <DeleteDialog
         title="Brisanje"
         description="Da li ste sigurni da želite da obrišete?"
@@ -149,7 +93,7 @@ const ListItem = ({ index, onDelete = () => { }, title = "", selectedSet = undef
         handleConfirm={deleteHandler}
         handleCancel={handleCancel}
       />
-    </div>
+    </>
   );
 };
 

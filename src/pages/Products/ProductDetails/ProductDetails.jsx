@@ -98,7 +98,6 @@ const ProductDetails = () => {
 
   const validateData = (data, field) => {
     let ret = data;
-    console.log(ret)
     switch (field) {
       case "new":
         updateNewFieldsInDetails(basic_data, ret.new);
@@ -198,7 +197,7 @@ const ProductDetails = () => {
       name: "Specifikacije",
       icon: IconList.checklist,
       enabled: data?.id,
-      component: <Specification productId={data?.id} />,
+      component: <Specification productId={data?.id} data={data} />,
     },
     {
       id: "variation",
