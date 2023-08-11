@@ -39,8 +39,10 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
   const onDataReceived = (options, currentIndex) => {
     if (options?.length === 2) {
       setRowData((prevRowData) => {
+        let hideElement = true;
         const newData = { ...prevRowData };
         newData.fields[currentIndex].selected = options[1];
+        newData.fields[currentIndex].hideElement = hideElement;
         return newData;
       });
     }
@@ -63,6 +65,8 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
 
           queryString += `&${rowData.fields[i].field}=${selectedId ?? ''}`;
         }
+
+
 
         switch (item.field) {
           case "entity_group":
@@ -92,7 +96,10 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
           default:
             return (
               <InputSelect
-                className={scss.inputSelect}
+                styleFormControl={{
+                  display: item?.hideElement && 'none',
+                }}
+                className={`${scss.inputSelect}`}
                 key={item.field + queryString}
                 required={false}
                 name={item.field}

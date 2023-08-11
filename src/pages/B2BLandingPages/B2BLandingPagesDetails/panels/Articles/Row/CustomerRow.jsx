@@ -40,8 +40,10 @@ const Row = ({ data, id, handleRemoveComponent }) => {
   const onDataReceived = (options, currentIndex) => {
     if (options?.length === 2) {
       setRowData((prevRowData) => {
+        let hideElement = true;
         const newData = { ...prevRowData };
         newData.fields[currentIndex].selected = options[1];
+        newData.fields[currentIndex].hideElement = hideElement;
         return newData;
       });
     }
@@ -97,6 +99,9 @@ const Row = ({ data, id, handleRemoveComponent }) => {
           default:
             return (
               <InputSelect
+                styleFormControl={{
+                  display: item?.hideElement && 'none',
+                }}
                 className={scss.inputSelect}
                 key={item.field + queryString}
                 required={false}

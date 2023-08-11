@@ -75,8 +75,8 @@ import Error404 from "../pages/Error/Error404";
 import B2BContactFormDetails from "../pages/B2BContactForm/DetailsContactForm/B2BContactFormDetails";
 import B2CWorkingUnit from "../pages/B2CWorkingUnit/B2CWorkingUnit";
 import B2CCareer from "../pages/B2CCareer/B2CCareer";
-import Export from "../pages/Export/Export";
-import ExportDetails from "../pages/Export/ExportDetails/ExportDetails";
+// import Export from "../pages/Export/Export";
+// import ExportDetails from "../pages/Export/ExportDetails/ExportDetails";
 import B2BStaticPages from "../pages/B2BStaticPages/B2BStaticPages";
 import B2BStaticPagesDetails from "../pages/B2BStaticPages/B2BStaticPagesDetails/B2BStaticPagesDetails";
 import B2BLandingPages from "../pages/B2BLandingPages/B2BLandingPages";
@@ -171,7 +171,7 @@ const screens = {
     MANUFACTURERS: ["/manufacturers", "Proizvođači", IconList.factory, SETTINGS, Manufacturers],
     B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, TOOLS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
     IMPORT: ["/import", "Uvoz podataka", IconList.upload, TOOLS, Import, [[":upId", ImportDetails]]],
-    EXPORT: ["/export", "Izvoz podataka", IconList.upload, TOOLS, Export, [[":exId", ExportDetails]]],
+    // EXPORT: ["/export", "Izvoz podataka", IconList.upload, TOOLS, Export, [[":exId", ExportDetails]]],
     B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, TOOLS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
     ADMIN_SCRIPTS: ["/scripts", "Skripte", IconList.description, TOOLS, Scripts],
     ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, TOOLS, AdminForms, [[":formId", DetailsAdminForm]]],

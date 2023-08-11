@@ -11,7 +11,7 @@ const Prices = ({ productId }) => {
 
   const additionalButtons = [
     {
-      label: "Grupe cena",
+      label: "Cenovnik",
       action: () => {
         navigate("/products/prices-groups");
       },
