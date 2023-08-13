@@ -2,6 +2,7 @@ import Unicon from "../components/shared/Unicon/Unicon";
 import IconList from "./icons";
 import moment from "moment";
 import Icon from "@mui/material/Icon";
+import { Padding } from "@mui/icons-material";
 
 /** @return {int|string|null} The widht for the column. */
 export const columnWidth = (column: FieldSpec) => {
@@ -88,6 +89,12 @@ export const columnCell = (value, column, rowType) => {
             }
         case "input":
         default:
-            return value;
+            if (value === "Vidljiv") {
+                return <span style={{ backgroundColor: "#28a86e36", padding: "0.1rem 0.3rem", borderRadius: "0.2rem" }}>{value}</span>;
+            } else if (value === "Nevidljiv") {
+                return <span style={{ backgroundColor: "#ff000024", padding: "0.1rem 0.3rem", borderRadius: "0.2rem" }}>{value}</span>;
+            } else {
+                return value;
+            }
     }
 };
