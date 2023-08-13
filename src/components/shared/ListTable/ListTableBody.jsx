@@ -95,52 +95,58 @@ const ListTableBody = ({ items, fields, handleOnClickActions, isLoading = false,
 
     default:
       content = (items ?? []).map((row) => (
-        <TableRow hover key={row.id} >
-          {/* TODO typeannotation sluzi samo u typescript, da li je ovde podrebna anotacija i cemu sluzi? */}
-          {fields.map((column) => (
-            <TableCell
-              key={`${row.id}-${column.prop_name}`}
-              {...columnProps(column)}
-              onClick={(event) => {
-                if (!column.field_behavior) return;
-                const { onDoubleClick, onClick } = column.field_behavior;
-                if (clickTimeout !== null) {
-                  clearTimeout(clickTimeout);
-                  setClickTimeout(null);
-                  onClickFieldBehavior(event, onDoubleClick, column, row)
-                } else {
-                  setClickTimeout(setTimeout(() => {
-                    setClickTimeout(null);
-                    onClickFieldBehavior(event, onClick, column, row)
-                  }, 500));
-                }
-              }}
-              sx={column.field_behavior ? { cursor: "pointer" } : {}}
-            >
-              {column.prop_name !== "action" ? (
-                column.field_behavior ? (
-                  <span style={{ display: "flex", alignItems: "center" }}>
-                    {columnCell(row[column.prop_name], column.input_type, column.input_type)}
-                    <IconButton>
-                      <Icon sx={{ fontSize: "1.1rem", opacity: "0.3" }}>edit</Icon>
-                    </IconButton>
-                  </span>
-                ) : (
-                  columnCell(row[column.prop_name], column.input_type, row.input_type)
-                )
+        <TableRow
+          hover
+          key={row.id}
 
-              ) : (
-                <ActionField
-                  fieldType={column.input_type}
-                  systemRequired={row.system_required}
-                  customActions={actionButtons()}
-                  handleOnClickActions={handleOnClickActions}
-                  rowData={row}
-                />
-              )}
-            </TableCell>
-          ))}
-        </TableRow>
+        >
+          {/* TODO typeannotation sluzi samo u typescript, da li je ovde podrebna anotacija i cemu sluzi? */}
+          {
+            fields.map((column) => (
+              <TableCell
+                key={`${row.id}-${column.prop_name}`}
+                {...columnProps(column)}
+                onClick={(event) => {
+                  if (!column.field_behavior) return;
+                  const { onDoubleClick, onClick } = column.field_behavior;
+                  if (clickTimeout !== null) {
+                    clearTimeout(clickTimeout);
+                    setClickTimeout(null);
+                    onClickFieldBehavior(event, onDoubleClick, column, row)
+                  } else {
+                    setClickTimeout(setTimeout(() => {
+                      setClickTimeout(null);
+                      onClickFieldBehavior(event, onClick, column, row)
+                    }, 500));
+                  }
+                }}
+                sx={column.field_behavior ? { cursor: "pointer" } : {}}
+              >
+                {column.prop_name !== "action" ? (
+                  column.field_behavior ? (
+                    <span style={{ display: "flex", alignItems: "center" }}>
+                      {columnCell(row[column.prop_name], column.input_type, column.input_type)}
+                      <IconButton>
+                        <Icon sx={{ fontSize: "1.1rem", opacity: "0.3" }}>edit</Icon>
+                      </IconButton>
+                    </span>
+                  ) : (
+                    columnCell(row[column.prop_name], column.input_type, row.input_type)
+                  )
+
+                ) : (
+                  <ActionField
+                    fieldType={column.input_type}
+                    systemRequired={row.system_required}
+                    customActions={actionButtons()}
+                    handleOnClickActions={handleOnClickActions}
+                    rowData={row}
+                  />
+                )}
+              </TableCell>
+            ))
+          }
+        </ TableRow>
       ));
 
       if (showAddButtonTableRow) {
