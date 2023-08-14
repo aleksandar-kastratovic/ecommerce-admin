@@ -14,7 +14,6 @@ import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Chip from "@mui/material/Chip";
 import Input from '@mui/material/Input';
-import Box from "@mui/material/Box";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -22,11 +21,8 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import useAPI from "../../../../api/api";
 import HtmlEditor from "../../HtmlEditor/HtmlEditor";
-import NoteBox from "../../NoteBox/NoteBox";
-import useFileInput from "../../../../hooks/useFileInput";
 import ButtonBase from "@mui/material/ButtonBase";
 import { blobToData } from "../../../../helpers/data";
-import { InputAdornment } from "@mui/material";
 import { toast } from "react-toastify";
 
 /**
@@ -90,6 +86,7 @@ export const InputInput = ({ label, required, disabled, name, value, autoFocus, 
         sx={{
           "& legend": { display: "none" },
           "& fieldset": { top: 0 },
+          ".MuiInputBase-input": { padding: "0.7rem", fontSize: "0.875rem" }
         }}
       />
     </InputWrapper>
@@ -129,6 +126,7 @@ export const InputNumber = ({ label, required, disabled, error = null, name, val
         sx={{
           "& legend": { display: "none" },
           "& fieldset": { top: 0 },
+          ".MuiInputBase-input": { padding: "0.8rem", fontSize: "0.875rem" }
         }}
         onWheel={(e) => e.target.blur()}
       />
@@ -152,10 +150,10 @@ export const InputNumber = ({ label, required, disabled, error = null, name, val
  * @return {JSX.Element}
  */
 
-export const InputCheckbox = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, labelStyle, styleCheckbox }) => {
+export const InputCheckbox = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, labelStyle, styleCheckbox, styleCheckBoxWrapp }) => {
   return (
-    <InputWrapper required={required} disabled={disabled} margin={margin} error={error}>
-      <FormControlLabel control={<Checkbox name={name} checked={value} onChange={onChange} disabled={disabled} sx={styleCheckbox} />} label={label} sx={labelStyle} />
+    <InputWrapper required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleCheckBoxWrapp}>
+      <FormControlLabel control={<Checkbox name={name} checked={value} onChange={onChange} disabled={disabled} sx={styleCheckbox} />} label={label} sx={{ ".MuiTypography-root": { fontSize: "14px" }, ...labelStyle }} />
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>
   );
@@ -180,7 +178,7 @@ export const InputCheckbox = ({ label, required, disabled, name, value, error = 
 export const InputRadio = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description }) => {
   return (
     <InputWrapper required={required} disabled={disabled} margin={margin} error={error}>
-      <FormControlLabel control={<Radio name={name} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
+      <FormControlLabel sx={{ ".MuiTypography-root": { fontSize: "0.875rem" } }} control={<Radio name={name} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>
   );
@@ -205,7 +203,7 @@ export const InputRadio = ({ label, required, disabled, name, value, error = nul
 export const InputSwitch = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, fullWidth = true }) => {
   return (
     <InputWrapper required={required} disabled={disabled} margin={margin} error={error} fullWidth={fullWidth}>
-      <FormControlLabel control={<Switch name={name} value={value} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
+      <FormControlLabel sx={{ ".MuiTypography-root": { fontSize: "0.875rem" } }} control={<Switch name={name} value={value} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>
   );
@@ -305,11 +303,13 @@ export const InputSelect = ({
         sx={{
           "& legend": { display: "none" },
           "& fieldset": { top: 0 },
+          "& .MuiSelect-select": { padding: "0.7rem", fontSize: "0.875rem" },
         }}
+
 
       >
         {(opt ?? []).map((item) => (
-          <MenuItem key={item.id} value={item?.id} selected={item.id === value} disabled={item?.disabled ?? false} props={item.props} valuename={item?.name}>
+          <MenuItem sx={{ fontSize: "0.875rem" }} key={item.id} value={item?.id} selected={item.id === value} disabled={item?.disabled ?? false} props={item.props} valuename={item?.name}>
             {item?.name}
           </MenuItem>
         ))}
@@ -419,6 +419,7 @@ export const AutocompleteInput = ({
         sx={{
           "& legend": { display: "none" },
           "& fieldset": { top: 0 },
+          ".MuiInputBase-root": { padding: "0.23rem !important" }
         }}
         renderInput={(params) => <TextField {...params} />}
       />
@@ -548,6 +549,7 @@ export const AutocompleteTagsFilled = ({
         sx={{
           "& legend": { display: "none" },
           "& fieldset": { top: 0 },
+          "& .MuiInputBase-input": { fontSize: "0.875rem" },
         }}
         freeSolo
         renderTags={(value, getTagProps) =>
@@ -667,10 +669,11 @@ export const InputMultiSelect = ({
         sx={{
           "& legend": { display: "none" },
           "& fieldset": { top: 0 },
+          "& .MuiSelect-select": { padding: "0.7rem", fontSize: "0.875rem" }
         }}
       >
         {(opt ?? []).map((item) => (
-          <MenuItem key={item.id} value={item.id} selected={item.id === value} disabled={item?.disabled ?? false}>
+          <MenuItem sx={{ fontSize: "0.875rem" }} key={item.id} value={item.id} selected={item.id === value} disabled={item?.disabled ?? false}>
             <ListItemIcon>
               <Checkbox checked={value?.indexOf(item.id) > -1} />
             </ListItemIcon>
@@ -717,6 +720,8 @@ export const InputText = ({ label, required, disabled, error = null, name, value
         sx={{
           "& legend": { display: "none" },
           "& fieldset": { top: 0 },
+          ".MuiInputBase-root": { padding: "0.7rem" },
+          ".MuiInputBase-input": { fontSize: "0.875rem" }
         }}
       />
     </InputWrapper>
@@ -765,6 +770,7 @@ export const InputDateTime = ({ label, required, disabled, error = null, name, v
               sx={{
                 "& legend": { display: "none" },
                 "& fieldset": { top: 0 },
+                ".MuiInputBase-input": { fontSize: "0.875rem", padding: "0.7rem" }
               }}
             />
           )}
@@ -817,6 +823,7 @@ export const InputDate = ({ label, required, disabled, error = null, name, value
               sx={{
                 "& legend": { display: "none" },
                 "& fieldset": { top: 0 },
+                ".MuiInputBase-input": { fontSize: "0.875rem", padding: "0.7rem" }
               }}
             />
           )}

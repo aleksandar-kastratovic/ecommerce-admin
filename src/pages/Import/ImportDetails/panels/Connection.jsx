@@ -20,7 +20,7 @@ import Dialog from '../../../../components/shared/Dialogs/DeleteDialog';
 import Done from '@mui/icons-material/Done';
 import Close from '@mui/icons-material/Close';
 import style from './Connection.module.scss';
-import { TableContainer, Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
 const Connection = ({ id, file }) => {
   const api = useAPI();
@@ -36,7 +36,9 @@ const Connection = ({ id, file }) => {
     show: false,
   });
 
+
   const [skipRows, setSkipRows] = useState(0);
+  const [showSelected, setShowSelected] = useState(false);
 
   const [selectedConnection, setSelectedConnection] = useState(null);
 
@@ -78,14 +80,13 @@ const Connection = ({ id, file }) => {
     const dataForServer = {
       targets: arrTargetsModified,
       id_admin_import_set: id,
-      skip_rows: skipRows
+      skip_rows: skipRows,
+      save_template: showSelected
     }
 
     setModalContent(dataForServer);
     setOpenDialog({ show: true });
   }
-
-
 
   const updateMappingCheckBox = (index) => {
     setMappingCheckBox({ ...mappingCheckBox, [index]: !mappingCheckBox[index] });
@@ -149,10 +150,19 @@ const Connection = ({ id, file }) => {
                 {/* The list of options to choose from */}
                 <TableCell className="no-padding" >
                   <FormControl fullWidth size="small" style={{ padding: "5px 1em 5px 5px" }}>
-                    <Select value={mapping[index] ?? ""} onChange={(event => updateMapping(event, index, dataImport?.targets))} label=" ">
-                      <MenuItem value="">-</MenuItem>
+                    <Select
+                      value={mapping[index] ?? ""}
+                      onChange={(event => updateMapping(event, index, dataImport?.targets))}
+                      label=" "
+                      sx={{
+                        ".MuiSelect-select": { padding: "0.7rem", fontSize: "0.875rem" },
+                        "& legend": { display: "none" },
+                        "& fieldset": { top: 0 },
+                      }}
+                    >
+                      <MenuItem sx={{ fontSize: "0.875rem" }} value="">-</MenuItem>
                       {dataImport.targets.map(key =>
-                        <MenuItem key={key.id} value={key.id}>{key.name}</MenuItem>
+                        <MenuItem sx={{ fontSize: "0.875rem" }} key={key.id} value={key.id}>{key.name}</MenuItem>
                       )}
                     </Select>
                   </FormControl>
@@ -182,9 +192,9 @@ const Connection = ({ id, file }) => {
       {file && (
         <Buttons styleWrapperButtons={{ alignItems: "end" }}>
           {/* Skip starting rows */}
-          <InputSelect onChange={(res) => { const { target } = res; setSkipRows(target.value); setSelectedConnection(target.value) }} value={selectedConnection ?? ""} label="Preskoči redova" options={dataImport?.skip_rows} styleFormControl={{ width: "25%", marginBottom: "0", marginRight: "auto" }} />
+          <InputSelect onChange={(res) => { const { target } = res; setSkipRows(target.value); setSelectedConnection(target.value) }} value={selectedConnection ?? ""} label="Preskoči redova" options={dataImport?.skip_rows} styleFormControl={{ width: "25%", marginBottom: "0", marginRight: "1rem !important", ".MuiFormLabel-root": { fontSize: "0.875rem" } }} />
           {/* <InputSelect onChange={(res) => { const { target } = res; setSelectedImportSystem(target.value) }} value={selectedImportSystem} label="Import sistema" options={dataImport?.import_system} styleFormControl={{ width: "25%", marginRight: "auto", marginBottom: "0" }} /> */}
-
+          <InputCheckbox label="Sačuvaj kao template" value={showSelected} onChange={({ target }) => { setShowSelected(target.checked) }} labelStyle={{ color: "#00000099" }} styleCheckBoxWrapp={{ width: "auto", marginRight: "auto", visibility: "hidden" }} />
           <Button icon={<Check />} label={isLoading ? <CircularProgress size="1.5rem" /> : "Potvrdi uvoz"} onClick={submitTemp} variant="contained" />
         </Buttons>
       )

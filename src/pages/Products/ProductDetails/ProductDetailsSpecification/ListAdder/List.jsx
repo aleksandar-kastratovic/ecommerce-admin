@@ -10,7 +10,8 @@ import Box from "@mui/material/Box";
 import SearchableListForm from "../../../../../components/shared/Form/SearchableListForm/SearchableListForm";
 import Buttons from "../../../../../components/shared/Form/Buttons/Buttons";
 import DeleteModal from "../../../../../components/shared/Dialogs/DeleteDialog";
-import { Typography } from "@mui/material";
+import Typography from "@mui/material/Typography";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const List = ({ productId, apiPath }) => {
   const [fields, setFields] = useState([]);
@@ -20,6 +21,7 @@ const List = ({ productId, apiPath }) => {
   const [newDisabled, setNewDisabled] = useState(false);
   const [openModalUncheckedSet, setOpenModalUncheckedSet] = useState({ show: false });
   const [stateRemove, setStateRemove] = useState([]);
+  const [showProgress, setShowProgress] = useState(false);
 
 
   const api = useAPI();
@@ -84,7 +86,6 @@ const List = ({ productId, apiPath }) => {
   }, [])
 
   const handleSubmit = (data) => {
-    // setSelectedModalId(data);
     saveGroups(data);
     setOpenModal({ show: false, id: null })
   }
@@ -116,7 +117,13 @@ const List = ({ productId, apiPath }) => {
 
   }
 
-  console.log(fields)
+  const handleSubmitProgress = () => {
+    setShowProgress(true);
+    setTimeout(() => {
+      setShowProgress(false);
+    }, 1000)
+  }
+
   return (
     <div className={styles.list}>
       <Button label={"Odaberi specifikaciju"} variant={"contained"} onClick={() => { setOpenModal({ show: true, id: productId }) }} sx={{ marginBottom: "2rem" }} />
@@ -147,7 +154,7 @@ const List = ({ productId, apiPath }) => {
 
       {fields.length !== 0 &&
         <Buttons>
-          <Button label={"Sačuvaj"} variant={"contained"} />
+          <Button label={showProgress ? <CircularProgress size={24} /> : "Sačuvaj"} variant={"contained"} onClick={() => handleSubmitProgress()} disabled={showProgress ? true : false} />
         </Buttons>
       }
 
