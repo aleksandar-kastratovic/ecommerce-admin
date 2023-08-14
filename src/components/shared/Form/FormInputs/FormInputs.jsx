@@ -150,9 +150,9 @@ export const InputNumber = ({ label, required, disabled, error = null, name, val
  * @return {JSX.Element}
  */
 
-export const InputCheckbox = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, labelStyle, styleCheckbox }) => {
+export const InputCheckbox = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, labelStyle, styleCheckbox, styleCheckBoxWrapp }) => {
   return (
-    <InputWrapper required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleCheckBoxWrapp}>
       <FormControlLabel control={<Checkbox name={name} checked={value} onChange={onChange} disabled={disabled} sx={styleCheckbox} />} label={label} sx={{ ".MuiTypography-root": { fontSize: "14px" }, ...labelStyle }} />
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>
@@ -304,7 +304,6 @@ export const InputSelect = ({
           "& legend": { display: "none" },
           "& fieldset": { top: 0 },
           "& .MuiSelect-select": { padding: "0.7rem", fontSize: "0.875rem" },
-
         }}
 
 
