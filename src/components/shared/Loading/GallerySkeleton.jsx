@@ -1,5 +1,5 @@
-import React from "react";
-import { Grid, Skeleton } from "@mui/material";
+import Skeleton from "@mui/material/Skeleton";
+import Grid from "@mui/material/Grid";
 
 const GallerySkeleton = () => {
   return (
@@ -20,7 +20,7 @@ const GallerySkeleton = () => {
             <Grid item xs={6} sm={3} key={item}>
               <Skeleton
                 variant="rectangular"
-                height={160}
+                height={170}
                 sx={{ borderRadius: "4px" }}
               />
             </Grid>

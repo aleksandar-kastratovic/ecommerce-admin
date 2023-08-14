@@ -176,7 +176,6 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
         {(filteredFields ?? [])
           .filter((field) => field.croonus_use_in_details)
           .map((item, index) => {
-            console.log("Item before create:", item);
 
             // Priprema vrednosti pre nego sto se prosledi u komponentu
             let temp_value = Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name];

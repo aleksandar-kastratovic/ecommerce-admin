@@ -48,8 +48,8 @@ export const columnCell = (value, column, rowType) => {
         case "image":
         case "image_button":
             return (
-                <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
-                    {value ? <img src={value} height="30px" alt="Slika" /> : <Icon sx={{ color: "#b3b3b3" }}>no_photography</Icon>}
+                <div style={{ height: "30px", width: "30px", display: "flex", alignItems: "center" }}>
+                    {value ? <img src={value} style={{ objectFit: "cover", height: "30px", width: "100%" }} alt="Slika" /> : <Icon sx={{ color: "#b3b3b3" }}>no_photography</Icon>}
                 </div>
             );
 
@@ -57,10 +57,15 @@ export const columnCell = (value, column, rowType) => {
             if (column === "input") {
                 const arrParsed = JSON.parse(value);
                 return (
-                    <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
+                    <div style={{ height: "30px", width: "30px", display: "flex", alignItems: "center" }}>
                         {arrParsed.length > 0 ? (
                             arrParsed.map((item) => {
-                                return <img key={item.id} src={item.file} style={{ marginRight: "0.3rem", height: "100%" }} alt="Slika" />;
+                                // return <img key={item.id} src={item.file} style={{ marginRight: "0.3rem", height: "100%", width: "100%", objectFit: "cover" }} alt="Slika" />;
+                                return (
+                                    <div key={item.id} style={{ height: "100%", width: "30px", display: "flex", alignItems: "center", marginRight: "0.3rem" }}>
+                                        <img src={item.file} style={{ height: "100%", width: "100%", objectFit: "cover" }} alt="Slika" />;
+                                    </div>
+                                );
                             })
                         ) : (
                             <Icon sx={{ color: "#b3b3b3" }}>no_photography</Icon>
@@ -77,7 +82,12 @@ export const columnCell = (value, column, rowType) => {
                     <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
                         {value.length > 0 ? (
                             value.map((item) => {
-                                return <img key={item.id} src={item.file} style={{ marginRight: "0.3rem", height: "100%" }} alt="Slika" />;
+                                // return <img key={item.id} src={item.file} style={{ marginRight: "0.3rem", height: "100%" }} alt="Slika" />;
+                                return (
+                                    <div key={item.id} style={{ height: "100%", width: "30px", marginRight: "0.3rem" }}>
+                                        <img src={item.file} style={{ height: "100%", width: "100%", objectFit: "cover" }} alt="Slika" />
+                                    </div>
+                                );
                             })
                         ) : (
                             <Icon sx={{ color: "#b3b3b3" }}>no_photography</Icon>
@@ -89,10 +99,12 @@ export const columnCell = (value, column, rowType) => {
             }
         case "input":
         default:
-            if (value === "Vidljiv") {
+            if (value === "Vidljiv" || value === "on" || value === "Objavljen" || value === "Aktivno") {
                 return <span style={{ backgroundColor: "#28a86e36", padding: "0.1rem 0.3rem", borderRadius: "0.2rem" }}>{value}</span>;
-            } else if (value === "Nevidljiv") {
+            } else if (value === "Nevidljiv" || value === "off" || value === "Blokiran" || value === "Neaktivno") {
                 return <span style={{ backgroundColor: "#ff000024", padding: "0.1rem 0.3rem", borderRadius: "0.2rem" }}>{value}</span>;
+            } else if (value === "Arhiviran" || value === "U izradi") {
+                return <span style={{ backgroundColor: "#329beb36", padding: "0.1rem 0.3rem", borderRadius: "0.2rem" }}>{value}</span>;
             } else {
                 return value;
             }
