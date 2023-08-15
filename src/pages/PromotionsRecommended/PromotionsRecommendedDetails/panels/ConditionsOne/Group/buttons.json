@@ -1,10 +1,10 @@
 [
   {
-    "id": "customer",
-    "name": "Kupac"
+    "id": "product",
+    "name": "Proizvod"
   },
   {
-    "id": "cart_delivery",
-    "name": "Iznos korpe"
+    "id": "customer",
+    "name": "Kupac"
   }
 ]

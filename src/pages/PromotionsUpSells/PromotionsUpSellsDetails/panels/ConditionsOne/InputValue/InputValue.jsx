@@ -8,6 +8,7 @@ import scss from "./InputValue.module.scss";
 import { InputInput, InputNumber } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
 import Loading from "../../../../../../components/shared/Loading/Loading";
 import SelectionModal from "../../../../../PromotionsCatalogCampaigns/PromotionsCatalogCampaignsPageDetails/panels/SelectionModal/SelectionModal";
+import useAPI from "../../../../../../api/api";
 
 const InputValue = ({
   fillFromApi,

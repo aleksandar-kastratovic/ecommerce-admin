@@ -165,8 +165,8 @@ const screens = {
     // PROMOTIONS_CART_ITEMS_CAMPAIGNS: ["promotions-cart-items-campaigns", "Stavke u korpi", IconList.shoppingBasket, PROMOTIONS, PromotionsCartItems, [[":nid", PromotionsCartItemsPageDetails]]],
     PROMOTIONS_DELIVERY_CAMPAIGNS: ["promotions-delivery-campaigns", "Dostava", IconList.localShipping, PROMOTIONS, PromotionsDeliveryCampaigns, [[":nid", PromotionsDeliveryCampaignsDetails]]],
     PROMOTIONS_RECOMMENDED: ["promotions-recommended", "Preporučeni proizvodi", IconList.thumbUp, PROMOTIONS, PromotionsRecommended, [[":rid", PromotionsRecommendedDetails]]],
-    PROMOTIONS_CROSS_SELLS: ["promotions-cross-sells", "Kros-sel proizvodi", IconList.thumbUp, PROMOTIONS, PromotionsCrossSells, [[":csid", PromotionsCrossSellsDetails]]],
-    PROMOTIONS_UPSELLS: ["promotions-up-sells", "Up-sel proizvodi", IconList.thumbUp, PROMOTIONS, PromotionsUpSells, [[":usid", PromotionsUpSellsDetails]]],
+    PROMOTIONS_CROSS_SELLS: ["promotions-cross-sells", "Kros-sel proizvodi", IconList.closeFullscreen, PROMOTIONS, PromotionsCrossSells, [[":csid", PromotionsCrossSellsDetails]]],
+    PROMOTIONS_UPSELLS: ["promotions-up-sells", "Up-sel proizvodi", IconList.swapHoriz, PROMOTIONS, PromotionsUpSells, [[":usid", PromotionsUpSellsDetails]]],
 
     ROLES: ["/roles", "Uloge", IconList.reduceCapacity, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
     USERS: ["/users", "Korisnici", IconList.group, SETTINGS, Users],

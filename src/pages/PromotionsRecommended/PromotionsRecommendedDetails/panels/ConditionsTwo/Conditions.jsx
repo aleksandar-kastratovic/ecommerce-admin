@@ -4,21 +4,21 @@ import useAPI from "../../../../../api/api";
 import Group from "./Group/Group";
 import MainGroup from "./Group/MainGroup";
 import CustomerGroup from "./Group/CustomerGroup";
-import CartDeliveryGroup from "./Group/CartDeliveryGroup";
+import ProductGroup from "./Group/ProductGroup";
 
 import Row from "./Row/Row";
 import CustomerRow from "./Row/CustomerRow";
-import CartDeliveryRow from "./Row/CartDeliveryRow";
+import ProductRow from "./Row/ProductRow";
 import { v4 } from "uuid";
 import DeleteDialog from "../../../../../components/shared/Dialogs/DeleteDialog";
 
 import init_group_file from "./Group/GroupFile/init_group_file.json";
 import customer_group_file from "./Group/GroupFile/customer_group_file.json";
-import cart_delivery_group_file from "./Group/GroupFile/cart_delivery_group_file.json";
+import product_group_file from "./Group/GroupFile/product_group_file.json";
 
 import init_row_file from "./Row/RowFile/init_row_file.json";
 import customer_row_file from "./Row/RowFile/customer_row_file.json";
-import cart_delivery_row_file from "./Row/RowFile/cart_delivery_row_file.json";
+import product_row_file from "./Row/RowFile/product_row_file.json";
 
 import Buttons from "../../../../../components/shared/Form/Buttons/Buttons";
 import Button from "../../../../../components/shared/Button/Button";
@@ -26,13 +26,14 @@ import { toast } from "react-toastify";
 import { cloneDeep } from "lodash";
 
 const Conditions = ({ campaignId }) => {
+
   const elementRef = useRef('');
   const [data, setData] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false });
   const [removeComponentId, setRemoveComponentId] = useState(null);
 
   const api = useAPI();
-  const apiPath = 'admin/campaigns/cart-delivery/conditions';
+  const apiPath = 'admin/campaigns/product-catalog/conditions';
 
   // The handleData function uses the API to retrieve data about campaign conditions.
   async function handleData() {
@@ -87,9 +88,9 @@ const Conditions = ({ campaignId }) => {
                       handleRemoveComponent={handleRemoveComponent}
                     />
                   );
-                case 'customer':
+                case 'product':
                   return (
-                    <CustomerGroup
+                    <ProductGroup
                       key={t_row.id}
                       id={t_row.id}
                       data={t_row}
@@ -98,9 +99,9 @@ const Conditions = ({ campaignId }) => {
                       handleRemoveComponent={handleRemoveComponent}
                     />
                   );
-                case 'cart_delivery':
+                case 'customer':
                   return (
-                    <CartDeliveryGroup
+                    <CustomerGroup
                       key={t_row.id}
                       id={t_row.id}
                       data={t_row}
@@ -124,9 +125,9 @@ const Conditions = ({ campaignId }) => {
               }
             } else if (t_row.type === 'row') {
               switch (t_row?.type_component) {
-                case 'customer':
+                case 'product':
                   return (
-                    <CustomerRow
+                    <ProductRow
                       key={t_row.id}
                       id={t_row.id}
                       data={t_row}
@@ -135,9 +136,9 @@ const Conditions = ({ campaignId }) => {
                     />
                   );
                   break;
-                case 'cart_delivery':
+                case 'customer':
                   return (
-                    <CartDeliveryRow
+                    <CustomerRow
                       key={t_row.id}
                       id={t_row.id}
                       data={t_row}
@@ -231,16 +232,15 @@ const Conditions = ({ campaignId }) => {
       return param_data;
     }
     return param_data.map((t_row) => {
-
       if (t_row.id === parentId) {
         if (componentType === 'group') {
           let group_file = [];
           switch (componentTypeComponent) {
+            case "product":
+              group_file = product_group_file;
+              break;
             case "customer":
               group_file = customer_group_file;
-              break;
-            case "cart_delivery":
-              group_file = cart_delivery_group_file;
               break;
             default:
               group_file = init_group_file;
@@ -252,11 +252,11 @@ const Conditions = ({ campaignId }) => {
         } else if (componentType === 'row') {
           let row_file = [];
           switch (componentTypeComponent) {
+            case "product":
+              row_file = product_row_file;
+              break;
             case "customer":
               row_file = customer_row_file;
-              break;
-            case "cart_delivery":
-              row_file = cart_delivery_row_file;
               break;
             default:
               row_file = init_row_file;
@@ -272,7 +272,7 @@ const Conditions = ({ campaignId }) => {
           rules: addComponent(t_row.rules, parentId, componentType, componentTypeComponent),
         };
       }
-      console.log("t row", t_row);
+
       return t_row;
     });
   };

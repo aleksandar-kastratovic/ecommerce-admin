@@ -1,13 +1,13 @@
 {
   "id": null,
   "type": "row",
-  "type_component": "cart_delivery",
+  "type_component": "product",
   "fields": [
     {
       "field": "entity_group",
       "selected": {
-        "id": "cart_delivery",
-        "name": "cart_delivery"
+        "id": "product",
+        "name": "product"
       }
     },
     {

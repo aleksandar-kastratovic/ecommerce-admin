@@ -6,9 +6,10 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
 import scss from "./Group.module.scss";
-import Buttons from "../../../../../../components/shared/Form/Buttons/Buttons";
-import Button from "../../../../../../components/shared/Button/Button";
 import useAPI from "../../../../../../api/api";
+import { InputSelect } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
+import Button from "../../../../../../components/shared/Button/Button";
+import Buttons from "../../../../../../components/shared/Form/Buttons/Buttons";
 
 const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) => {
 
@@ -19,7 +20,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   const [fieldValue, setFieldValue] = useState(null);
 
   const api = useAPI();
-  const apiPath = "admin/campaigns/cart-delivery/conditions";
+  const apiPath = "admin/campaigns/product-catalog/conditions";
 
   useEffect(() => {
     setFieldCondition(getValueField("condition"));
@@ -93,7 +94,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
             sx={{ width: "100%" }}
             disabled={!isLastSelected}
             onClick={() => {
-              handleAddComponent(id, "row", "cart_delivery");
+              handleAddComponent(id, "row", "product");
             }}
           />
         </Buttons>
@@ -103,7 +104,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
             icon={<Icon>difference</Icon>}
             sx={{ width: "100%" }}
             onClick={() => {
-              handleAddComponent(id, "group", "cart_delivery");
+              handleAddComponent(id, "group", "product");
             }}
           />
         </Buttons>

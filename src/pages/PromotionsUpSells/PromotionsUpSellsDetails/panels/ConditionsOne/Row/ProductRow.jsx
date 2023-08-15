@@ -4,15 +4,13 @@ import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
-import { InputSelect } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
-import InputValue from "../InputValue/InputValue";
-
 import scss from "./Row.module.scss";
+import InputValue from "../InputValue/InputValue";
+import { InputSelect } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
 
 const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
 
-  const apiPath = 'admin/campaigns/cart-delivery/conditions';
-
+  const apiPath = 'admin/campaigns/product-catalog/conditions';
   const [rowData, setRowData] = useState(data);
   const [openDialog, setOpenDialog] = useState({ show: false });
   const [valueOptions, setValueOptions] = useState(rowData.fields.find((item) => item.field === "condition")?.selected?.props ?? {
@@ -67,6 +65,8 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
           queryString += `&${rowData.fields[i].field}=${selectedId ?? ''}`;
         }
 
+
+
         switch (item.field) {
           case "entity_group":
             return null;
@@ -98,7 +98,7 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
                 styleFormControl={{
                   display: item?.hideElement && 'none',
                 }}
-                className={scss.inputSelect}
+                className={`${scss.inputSelect}`}
                 key={item.field + queryString}
                 required={false}
                 name={item.field}
