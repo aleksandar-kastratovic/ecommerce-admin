@@ -36,6 +36,12 @@ import PromotionsCartSummaryDetails from "../pages/PromotionsCartSummary/Promoti
 // import PromotionsCartItemsPageDetails from "../pages/PromotionsCartItems/PromotionsCartItemsPageDetails/PromotionsCartItemsPageDetails";
 import PromotionsDeliveryCampaigns from "../pages/PromotionsDeliveryCampaigns/PromotionsDeliveryCampaigns";
 import PromotionsDeliveryCampaignsDetails from "../pages/PromotionsDeliveryCampaigns/PromotionsDeliveryCampaignsDetails/PromotionsDeliveryCampaignsDetails";
+import PromotionsRecommended from "../pages/PromotionsRecommended/PromotionsRecommended";
+import PromotionsRecommendedDetails from "../pages/PromotionsRecommended/PromotionsRecommendedDetails/PromotionsRecommendedDetails";
+import PromotionsCrossSells from "../pages/PromotionsCrossSells/PromotionsCrossSells";
+import PromotionsCrossSellsDetails from "../pages/PromotionsCrossSells/PromotionsCrossSellsDetails/PromotionsCrossSellsDetails";
+import PromotionsUpSells from "../pages/PromotionsUpSells/PromotionsUpSells";
+import PromotionsUpSellsDetails from "../pages/PromotionsUpSells/PromotionsUpSellsDetails/PromotionsUpSellsDetails";
 import Newsletter from "../pages/Newsletter/Newsletter";
 import B2CContactForm from "../pages/B2CContactForm/B2CContactForm";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
@@ -158,6 +164,9 @@ const screens = {
     PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Iznos korpe", IconList.requestQuote, PROMOTIONS, PromotionsCartSummary, [[":nid", PromotionsCartSummaryDetails]]],
     // PROMOTIONS_CART_ITEMS_CAMPAIGNS: ["promotions-cart-items-campaigns", "Stavke u korpi", IconList.shoppingBasket, PROMOTIONS, PromotionsCartItems, [[":nid", PromotionsCartItemsPageDetails]]],
     PROMOTIONS_DELIVERY_CAMPAIGNS: ["promotions-delivery-campaigns", "Dostava", IconList.localShipping, PROMOTIONS, PromotionsDeliveryCampaigns, [[":nid", PromotionsDeliveryCampaignsDetails]]],
+    PROMOTIONS_RECOMMENDED: ["promotions-recommended", "Preporučeni proizvodi", IconList.thumbUp, PROMOTIONS, PromotionsRecommended, [[":rid", PromotionsRecommendedDetails]]],
+    PROMOTIONS_CROSS_SELLS: ["promotions-cross-sells", "Kros-sel proizvodi", IconList.thumbUp, PROMOTIONS, PromotionsCrossSells, [[":csid", PromotionsCrossSellsDetails]]],
+    PROMOTIONS_UPSELLS: ["promotions-up-sells", "Up-sel proizvodi", IconList.thumbUp, PROMOTIONS, PromotionsUpSells, [[":usid", PromotionsUpSellsDetails]]],
 
     ROLES: ["/roles", "Uloge", IconList.reduceCapacity, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
     USERS: ["/users", "Korisnici", IconList.group, SETTINGS, Users],
