@@ -899,9 +899,9 @@ export const ImportPicker = ({ label, required, disabled, margin, error = null, 
         }}
       >
         {selectedFile ? (
-          <span style={{ fontSize: "1rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Izabrani fajl: {selectedFile.name}</span>
+          <span style={{ fontSize: "0.875rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Izabrani fajl: {selectedFile.name}</span>
         ) : (
-          <span style={{ fontSize: "1rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Kliknite ovde kako biste odabrali fajl za import.</span>
+          <span style={{ fontSize: "0.875rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Kliknite ovde kako biste odabrali fajl za import.</span>
         )}
         <Input
           type="file"

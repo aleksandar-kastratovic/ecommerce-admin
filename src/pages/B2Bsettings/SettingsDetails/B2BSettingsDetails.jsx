@@ -44,9 +44,7 @@ const B2BSettingsDetails = () => {
     };
   });
 
-  console.log("fffff", fields[0]?.submodule)
-
-  const activeTab = getUrlQueryStringParam("tab") ?? fields[0]?.submodule;
+  const activeTab = getUrlQueryStringParam("tab") ?? 2;
 
   // Handle after click on tab panel
   const panelHandleSelect = (field) => {

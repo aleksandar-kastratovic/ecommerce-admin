@@ -11,12 +11,15 @@ const Gallery = ({ productId }) => {
   const [loading, setLoading] = useState(false);
 
   const handleData = () => {
+    setLoading(true);
     api.list(`${apiPath}/${productId}`)
       .then((response) => {
         setData(response?.payload?.items);
+        setLoading(false);
       })
       .catch((error) => {
         console.warn(error);
+        setLoading(false);
       });
   };
 
@@ -78,6 +81,7 @@ const Gallery = ({ productId }) => {
   useEffect(() => {
     handleData();
   }, []);
+
   return (
     <>
       {loading ? (

@@ -76,5 +76,14 @@
 }
 
 .labelUploadActive {
-    background-color: #ffffff;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-width: 2px;
+    border-radius: 0.25rem;
+    border-style: dashed;
+    border-color: #28a86e;
+    transition: all 0.2s ease-in-out;
+    background-color: #f8fafc;
 }
