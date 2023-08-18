@@ -47,9 +47,9 @@ const App = () => {
 
     useEffect(() => {
         if (authCtx.isTokenExpired) {
-            toast.warning("Istekao Vam je token!");
+            // toast.warning("Istekao Vam je token!");
             authCtx.changeTokenExpired(false);
-            navigate(`/`);
+            // navigate(`/`);
         }
     }, [authCtx.isTokenExpired]);
 
@@ -68,6 +68,7 @@ const App = () => {
                     .get(`admin/profile/user-permissions`)
                     .then((response) => {
                         const data = response?.payload;
+                        console.log("user-permission", data);
                         if (!data) {
                             toast.warning("Greška!");
                         }

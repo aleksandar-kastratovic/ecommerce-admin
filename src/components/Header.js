@@ -5,16 +5,17 @@ import Loader from "./shared/Loading/Loading";
 
 import DehazeIcon from "@mui/icons-material/Dehaze";
 
-import Switch from "@mui/material/Switch";
+// import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 
 import { styled } from "@mui/system";
 import useAPI from "../api/api";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { toast } from "react-toastify";
 
 const Header = ({ openSidenav, changeTheme, activeTheme }) => {
     const api = useAPI();
@@ -23,6 +24,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+
     const open = Boolean(anchorEl);
 
     const authCtx = useContext(AuthContext);
@@ -33,7 +35,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
         };
     }, []);
 
-    const logoutHandler = async () => {
+    const logoutHandler = async (e) => {
         //Uvek mora da izloguje korisnika bez obzira da li je api prosao ili ne
         authCtx.logout();
 
@@ -41,6 +43,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
         await api
             .post(apiPath)
             .then((response) => {
+                toast.success("Uspešno ste se odjavili!");
                 navigate(`/`);
                 setIsLoading(false);
             })
@@ -64,17 +67,19 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
         boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
     });
 
-    const StyledToggleButton = styled(Switch)({
-        "& .MuiSwitch-thumb": {
-            boxShadow: "0px 0px 10px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,2,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
-        },
-        ".MuiSwitch-switchBase.Mui-checked": {
-            color: "var(--main-color)",
-            "&:hover": {
-                backgroundColor: "rgba(255, 255, 255, 0.1)",
-            },
-        },
-    });
+    // const StyledToggleButton = styled(Switch)({
+    //     "& .MuiSwitch-thumb": {
+    //         boxShadow: "0px 0px 10px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,2,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)",
+    //     },
+    //     ".MuiSwitch-switchBase.Mui-checked": {
+    //         color: "var(--main-color)",
+    //         "&:hover": {
+    //             backgroundColor: "rgba(255, 255, 255, 0.1)",
+    //         },
+    //     },
+    // });
+
+    console.log(authCtx.user);
 
     return (
         <>
@@ -87,9 +92,9 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
                     </Grid>
 
                     <Grid container alignItems="center" width="auto">
-                        <Grid item>
+                        {/* <Grid item>
                             <StyledToggleButton checked={activeTheme} onClick={changeTheme} name="themeSwitcher" inputProps={{ "aria-label": "toggle theme" }} />
-                        </Grid>
+                        </Grid> */}
 
                         <Grid item>
                             <IconButton
@@ -151,7 +156,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
                                         },
                                     }}
                                 >
-                                    Logout
+                                    Odjavite se
                                 </MenuItem>
                             </Menu>
                         </Grid>

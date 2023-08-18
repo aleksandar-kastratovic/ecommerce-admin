@@ -15,8 +15,8 @@ import ProductGroupDetails from "../pages/ProductSpecs/ProductGroupDetails/Produ
 import ProductSpecsGroups from "../pages/ProductSpecs/ProductSpecsGroups";
 import ProductVariantsAttributes from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
 import ProductVariantsAttributesDetails from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
-import AdminForms from "./../pages/AdminForms/AdminForms";
-import DetailsAdminForm from "./../pages/AdminForms/DetailsAdminForm/DetailsAdminForm";
+import AdminForm from "../pages/AdminForm/AdminForm";
+import AdminFormDetails from "../pages/AdminForm/AdminFormDetails/AdminFormDetails";
 import B2CNews from "./../pages/B2CNews/B2CNews";
 import B2CNewsDetails from "../pages/B2CNews/B2CNewsDetails/B2CNewsDetails";
 import B2CNewsCategoryList from "./../pages/B2CNewsCategoryList/B2CNewsCategoryList";
@@ -114,18 +114,14 @@ const screens = {
         [
             [":prodId", ProductDetails],
             ["prices-groups", PricesGroupsListPage],
+            ["product-items-variants-attributes/group-attribute", ProductVariantsAttributesDetails],
         ],
     ],
     PRODUCT_SPEC: ["/product-specs/groups", "Specifikacija", IconList.inventory, PRODUCT, ProductSpecsGroups, [[":groupId", ProductGroupDetails]]],
 
-    VARIANTS_ATTRIBUTES: [
-        "/product-items-variants-attributes/group-attribute",
-        "Atributi za varijacije",
-        IconList.addToQueue,
-        PRODUCT,
-        ProductVariantsAttributes,
-        [[":groupId", ProductVariantsAttributesDetails]],
-    ],
+    IMPORT: ["/import", "Uvoz podataka", IconList.upload, PRODUCT, Import, [[":upId", ImportDetails]]],
+    // EXPORT: ["/export", "Izvoz podataka", IconList.upload, PRODUCT, Export, [[":exId", ExportDetails]]],
+
     B2B_ORDERS: ["/b2b-orders", "Porudžbine", IconList.fileOpen, B2B, B2BOrders, [[":orderId", B2BOrdersDetails]]],
     COMPN: ["/b2b-companies", "Kompanije", IconList.locationCity, B2B, Companies, [[":comId", CompaniesDetails]]],
     REBATE_TIERS: ["/b2b-rebate-tiers", "Rabatne skale", IconList.barChart, B2B, B2BRebateTiersListPage],
@@ -178,12 +174,10 @@ const screens = {
     BRANDS: ["/brands", "Brendovi", IconList.copyright, SETTINGS, Brands],
     STORES: ["/stores", "Skladišta", IconList.store, SETTINGS, Stores],
     MANUFACTURERS: ["/manufacturers", "Proizvođači", IconList.factory, SETTINGS, Manufacturers],
-    B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, TOOLS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
-    IMPORT: ["/import", "Uvoz podataka", IconList.upload, TOOLS, Import, [[":upId", ImportDetails]]],
-    // EXPORT: ["/export", "Izvoz podataka", IconList.upload, TOOLS, Export, [[":exId", ExportDetails]]],
-    B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, TOOLS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
-    ADMIN_SCRIPTS: ["/scripts", "Skripte", IconList.description, TOOLS, Scripts],
-    ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, TOOLS, AdminForms, [[":formId", DetailsAdminForm]]],
+    B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, SETTINGS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
+    B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, SETTINGS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
+    ADMIN_SCRIPTS: ["/scripts", "Skripte", IconList.description, SETTINGS, Scripts],
+    ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, SETTINGS, AdminForm, [[":formId", AdminFormDetails]]],
 };
 
 /**

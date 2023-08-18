@@ -3,12 +3,12 @@ import { Route } from "react-router-dom";
 
 /** The menu MenuGroups to show menu items in. */
 export const MenuGroup = {
-  PRODUCT: { order: 0, name: "Katalog" },
-  B2B: { order: 1, name: "B2B" },
-  B2C: { order: 2, name: "B2C" },
-  PROMOTIONS: { order: 3, name: "Promocije" },
-  SETTINGS: { order: 4, name: "Podešavanja" },
-  TOOLS: { order: 5, name: "Alati" },
+    PRODUCT: { order: 0, name: "Katalog" },
+    B2B: { order: 1, name: "B2B" },
+    B2C: { order: 2, name: "B2C" },
+    PROMOTIONS: { order: 3, name: "Promocije" },
+    SETTINGS: { order: 4, name: "Kompanija" },
+    TOOLS: { order: 5, name: "Alati" },
 };
 
 /**
@@ -20,26 +20,24 @@ export const MenuGroup = {
  * @return {AvailableScreen}
  */
 export const makeScreen = (screen, parentPath) => {
+    // Quick screen without name
+    if (screen.length === 2) {
+        screen = [screen[0], null, null, null, screen[1], []];
+    }
 
-  // Quick screen without name
-  if (screen.length === 2) {
-    screen = [screen[0], null, null, null, screen[1], []];
-  }
+    // Append the parent path
+    if (parentPath) {
+        screen[0] = `${parentPath}/${screen[0]}`;
+    }
 
-  // Append the parent path
-  if (parentPath) {
-    screen[0] = `${parentPath}/${screen[0]}`;
-  }
-
-  return {
-    path: screen[0],
-    name: screen[1],
-    icon: screen[2],
-    group: screen[3],
-    component: screen[4],
-    children:
-      (screen[5] ?? [])?.map((child) => makeScreen(child, screen[0])) ?? [],
-  };
+    return {
+        path: screen[0],
+        name: screen[1],
+        icon: screen[2],
+        group: screen[3],
+        component: screen[4],
+        children: (screen[5] ?? [])?.map((child) => makeScreen(child, screen[0])) ?? [],
+    };
 };
 
 /**
@@ -49,12 +47,9 @@ export const makeScreen = (screen, parentPath) => {
  * @return {Route}
  */
 export const makeRoute = (screen) =>
-  screen?.component ? (
-    <Fragment key={screen.path}>
-      {screen.children?.map(makeRoute)}
-      <Route
-        path={screen.path}
-        element={React.createElement(screen.component)}
-      />
-    </Fragment>
-  ) : null;
+    screen?.component ? (
+        <Fragment key={screen.path}>
+            {screen.children?.map(makeRoute)}
+            <Route path={screen.path} element={React.createElement(screen.component)} />
+        </Fragment>
+    ) : null;

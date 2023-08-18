@@ -42,7 +42,6 @@ const LoginPage = () => {
         await api
             .post(apiPath, data)
             .then((response) => {
-                console.log(response);
                 if (response?.payload?.user?.id) {
                     setLoginData(response.payload);
                 }

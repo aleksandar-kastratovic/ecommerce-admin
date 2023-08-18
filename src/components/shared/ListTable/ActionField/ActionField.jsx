@@ -63,7 +63,8 @@ const ActionField = ({ fieldType, systemRequired, handleOnClickActions, customAc
 
   return (
     <div className={scss.wrapper}>
-      {Object.entries(actions()).map((item) => (
+      {Object.entries(actions()).map((item) =>
+      (
         item[1]?.title ? (
           <Tooltip key={item[0]} title={item[1].title} placement="top" arrow>
             <span key={item[0]} className={`${scss.icon}`} onClick={handleOnClickActions(rowData.id, item[1].type, rowData, item[1])}>

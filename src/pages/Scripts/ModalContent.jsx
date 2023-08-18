@@ -23,7 +23,7 @@ const ModalContent = ({ data, rowData, labelModalContent }) => {
   const handleSubmit = () => {
     setIsLoading(true);
 
-    api.post(`${apiPathSave}`, { id_admin_scripts: rowData.id, log_proccess: true, admin_executable_command_slugs: isChecked })
+    api.post(`${apiPathSave}`, { id_admin_scripts: rowData.id, log_process: true, admin_scripts_command_slugs: isChecked })
       .then((response) => {
         toast.success(`Uspešno`);
         setIsLoading(false);
