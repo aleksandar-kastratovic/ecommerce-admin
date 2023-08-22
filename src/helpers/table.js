@@ -2,7 +2,6 @@ import Unicon from "../components/shared/Unicon/Unicon";
 import IconList from "./icons";
 import moment from "moment";
 import Icon from "@mui/material/Icon";
-import { Padding } from "@mui/icons-material";
 
 /** @return {int|string|null} The widht for the column. */
 export const columnWidth = (column: FieldSpec) => {
@@ -106,7 +105,21 @@ export const columnCell = (value, column, rowType) => {
             } else if (value === "Paket spreman za slanje") {
                 return <span style={{ backgroundColor: "#feff7f6b", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#a0a13291", fontWeight: "500" }}>{value}</span>;
             } else {
-                return value;
+                return (
+                    <span
+                        style={{
+                            overflow: "hidden",
+                            lineHeight: "initial",
+                            textOverflow: "ellipsis",
+                            display: "-webkit-box",
+                            WebkitLineClamp: "3",
+                            lineClamp: 3,
+                            WebkitBoxOrient: "vertical",
+                        }}
+                    >
+                        {value}
+                    </span>
+                );
             }
     }
 };

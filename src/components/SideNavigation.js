@@ -15,7 +15,7 @@ const SideNavigation = ({ activeTheme, userName }) => {
     const authCtx = useContext(AuthContext);
     const sortedScreens = userScreens?.sort((a, b) => a.order - b.order);
     const initialOpenGroups = {
-        Katalog: true,
+        Prodaja: true,
     };
     const [openGroups, setOpenGroups] = useState(initialOpenGroups);
     // Populate the menu

@@ -13,7 +13,7 @@ import Manufacturers from "../pages/Manufacturers/Manufacturers";
 import ProductDetails from "../pages/Products/ProductDetails/ProductDetails";
 import ProductGroupDetails from "../pages/ProductSpecs/ProductGroupDetails/ProductGroupDetails";
 import ProductSpecsGroups from "../pages/ProductSpecs/ProductSpecsGroups";
-import ProductVariantsAttributes from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
+// import ProductVariantsAttributes from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
 import ProductVariantsAttributesDetails from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
 import AdminForm from "../pages/AdminForm/AdminForm";
 import AdminFormDetails from "../pages/AdminForm/AdminFormDetails/AdminFormDetails";
@@ -28,20 +28,7 @@ import B2CLandingPages from "../pages/B2CLandingPages/B2CLandingPages";
 import B2CLandingPagesDetails from "../pages/B2CLandingPages/B2CLandingPagesDetails/B2CLandingPagesDetails";
 import B2CCustomers from "../pages/B2CCustomers/B2CCustomers";
 import B2CCustomersDetails from "../pages/B2CCustomers/B2CCustomersDetails/B2CCustomersDetails";
-import PromotionsCatalogCampaigns from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaigns";
-import PromotionsCatalogCampaignsPageDetails from "../pages/PromotionsCatalogCampaigns/PromotionsCatalogCampaignsPageDetails/PromotionsCatalogCampaignsPageDetails";
-import PromotionsCartSummary from "../pages/PromotionsCartSummary/PromotionsCartSummary";
-import PromotionsCartSummaryDetails from "../pages/PromotionsCartSummary/PromotionsCartSummaryDetails/PromotionsCartSummaryDetails";
-// import PromotionsCartItems from "../pages/PromotionsCartItems/PromotionsCartItems";
-// import PromotionsCartItemsPageDetails from "../pages/PromotionsCartItems/PromotionsCartItemsPageDetails/PromotionsCartItemsPageDetails";
-import PromotionsDeliveryCampaigns from "../pages/PromotionsDeliveryCampaigns/PromotionsDeliveryCampaigns";
-import PromotionsDeliveryCampaignsDetails from "../pages/PromotionsDeliveryCampaigns/PromotionsDeliveryCampaignsDetails/PromotionsDeliveryCampaignsDetails";
-import PromotionsRecommended from "../pages/PromotionsRecommended/PromotionsRecommended";
-import PromotionsRecommendedDetails from "../pages/PromotionsRecommended/PromotionsRecommendedDetails/PromotionsRecommendedDetails";
-import PromotionsCrossSells from "../pages/PromotionsCrossSells/PromotionsCrossSells";
-import PromotionsCrossSellsDetails from "../pages/PromotionsCrossSells/PromotionsCrossSellsDetails/PromotionsCrossSellsDetails";
-import PromotionsUpSells from "../pages/PromotionsUpSells/PromotionsUpSells";
-import PromotionsUpSellsDetails from "../pages/PromotionsUpSells/PromotionsUpSellsDetails/PromotionsUpSellsDetails";
+import Promotions from "../pages/Promotions/Promotions";
 import Newsletter from "../pages/Newsletter/Newsletter";
 import B2CContactForm from "../pages/B2CContactForm/B2CContactForm";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
@@ -87,12 +74,35 @@ import B2BStaticPages from "../pages/B2BStaticPages/B2BStaticPages";
 import B2BStaticPagesDetails from "../pages/B2BStaticPages/B2BStaticPagesDetails/B2BStaticPagesDetails";
 import B2BLandingPages from "../pages/B2BLandingPages/B2BLandingPages";
 import B2BLandingPagesDetails from "../pages/B2BLandingPages/B2BLandingPagesDetails/B2BLandingPagesDetails";
+import PromotionsCatalogCampaignsPageDetails from "../pages/Promotions/PromotionsCatalogCampaigns/PromotionsCatalogCampaignsPageDetails/PromotionsCatalogCampaignsPageDetails";
+import PromotionsCartSummaryDetails from "../pages/Promotions/PromotionsCartSummary/PromotionsCartSummaryDetails/PromotionsCartSummaryDetails";
+import PromotionsDeliveryCampaignsDetails from "../pages/Promotions/PromotionsDeliveryCampaigns/PromotionsDeliveryCampaignsDetails/PromotionsDeliveryCampaignsDetails";
 
 /** The list of available screens. */
-const { PRODUCT, B2B, B2C, PROMOTIONS, SETTINGS, TOOLS } = MenuGroup;
+const { PRODUCT, SALE, B2B, B2C, COMPANY_SETTINGS, SETTINGS } = MenuGroup;
 const screens = {
     HOMEPAGE: ["/homepage", "", "", "", Homepage],
     ERROR404: ["*", "", "", "", Error404, []],
+
+    B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, SALE, B2COrders, [[":orderId", B2COrdersDetails]]],
+    B2B_ORDERS: ["/b2b-orders", "Porudžbine", IconList.fileOpen, SALE, B2BOrders, [[":orderId", B2BOrdersDetails]]],
+    BANNERS_B2C: ["/b2c-banners", "Baneri", IconList.image, SALE, B2Cbanners, [["positions", B2CbannersPositions]]],
+    BANNERS_B2B: ["/b2b-banners", "Baneri", IconList.image, SALE, B2Bbanners, [["positions", B2BbannersPositions]]],
+    B2C_LANDING_PAGES: ["/b2c-landingpages", "Promo strane", IconList.autoStories, SALE, B2CLandingPages, [[":lid", B2CLandingPagesDetails]]],
+    B2B_LANDING_PAGES: ["/b2b-landingpages", "Promo strane", IconList.autoStories, SALE, B2BLandingPages, [[":lid", B2BLandingPagesDetails]]],
+    PROMOTIONS: ["/promotions", "Promocije", IconList.celebration, SALE, Promotions, [["promotions-catalog-campaigns/:nid", PromotionsCatalogCampaignsPageDetails]]],
+    PROMOTIONS: [
+        "/promotions",
+        "Promocije",
+        IconList.celebration,
+        SALE,
+        Promotions,
+        [
+            ["promotions-catalog-campaigns/:nid", PromotionsCatalogCampaignsPageDetails],
+            ["promotions-cart-summary-campaigns/:nid", PromotionsCartSummaryDetails],
+            ["promotions-delivery-campaigns/:nid", PromotionsDeliveryCampaignsDetails],
+        ],
+    ],
     CATEG: [
         "/product-categories",
         "Kategorije",
@@ -118,22 +128,17 @@ const screens = {
         ],
     ],
     PRODUCT_SPEC: ["/product-specs/groups", "Specifikacija", IconList.inventory, PRODUCT, ProductSpecsGroups, [[":groupId", ProductGroupDetails]]],
-
     IMPORT: ["/import", "Uvoz podataka", IconList.upload, PRODUCT, Import, [[":upId", ImportDetails]]],
     // EXPORT: ["/export", "Izvoz podataka", IconList.upload, PRODUCT, Export, [[":exId", ExportDetails]]],
 
-    B2B_ORDERS: ["/b2b-orders", "Porudžbine", IconList.fileOpen, B2B, B2BOrders, [[":orderId", B2BOrdersDetails]]],
     COMPN: ["/b2b-companies", "Kompanije", IconList.locationCity, B2B, Companies, [[":comId", CompaniesDetails]]],
     REBATE_TIERS: ["/b2b-rebate-tiers", "Rabatne skale", IconList.barChart, B2B, B2BRebateTiersListPage],
     REBATES: ["/b2b-rebates", "Rabati", IconList.percent, B2B, B2BRebatesListPage, [[":rebateId", B2BRebatesDetails]]],
-    BANNERS_B2B: ["/b2b-banners", "Baneri", IconList.image, B2B, B2Bbanners, [["positions", B2BbannersPositions]]],
     B2B_SALES_OFFICER: ["/b2b-sales-officers", "Komercijalisti", IconList.manageAccounts, B2B, SaleOfficers],
     B2B_NOTIFICATIONS: ["/b2b-notifications", "Notifikacije", IconList.notifications, B2B, Notifications],
     B2B_CONTACT_FORMS: ["/b2b-contact", "Kontakt forma", IconList.markunreadMailbox, B2B, B2BContactForm, [[":id", B2BContactFormDetails]]],
     B2B_STATIC_PAGES: ["/b2b-staticpages", "Statičke strane", IconList.autoStories, B2B, B2BStaticPages, [[":spid", B2BStaticPagesDetails]]],
-    B2B_LANDING_PAGES: ["/b2b-landingpages", "Promo strane", IconList.autoStories, B2B, B2BLandingPages, [[":lid", B2BLandingPagesDetails]]],
 
-    BANNERS_B2C: ["/b2c-banners", "Baneri", IconList.image, B2C, B2Cbanners, [["positions", B2CbannersPositions]]],
     B2C_NEWS: [
         "/b2c-news",
         "Vesti",
@@ -147,37 +152,29 @@ const screens = {
         ],
     ],
     B2C_STATIC_PAGES: ["/b2c-staticpages", "Statičke strane", IconList.autoStories, B2C, B2CStaticPages, [[":spid", B2CStaticPagesDetails]]],
-    B2C_LANDING_PAGES: ["/b2c-landingpages", "Promo strane", IconList.autoStories, B2C, B2CLandingPages, [[":lid", B2CLandingPagesDetails]]],
     B2C_CUSTOMERS: ["/b2c-customers", "Kupci", IconList.group, B2C, B2CCustomers, [[":cid", B2CCustomersDetails]]],
     B2C_NEWSLETTER: ["/b2c-newsletter", "Newsletter", IconList.notificationsActive, B2C, Newsletter, [[":nlid", Newsletter]]],
     B2C_CONTACT_FORMS: ["/b2c-contactform", "Kontakt forma", IconList.markunreadMailbox, B2C, B2CContactForm, [[":id", B2CContactFormDetails]]],
-    B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, B2C, B2COrders, [[":orderId", B2COrdersDetails]]],
     B2C_EMPLOYEES: ["/b2c-employees", "Zaposleni", IconList.badge, B2C, B2CEmployees],
     B2C_WORKING_UNITS: ["/b2c-working-unit", "Radne jedinice", IconList.engineering, B2C, B2CWorkingUnit],
     B2C_CAREER: ["/b2c-career", "Karijera", IconList.notes, B2C, B2CCareer],
 
-    PROMOTIONS_CATALOG_CAMPAIGNS: ["promotions-catalog-campaigns", "Proizvodi", IconList.inventory, PROMOTIONS, PromotionsCatalogCampaigns, [[":nid", PromotionsCatalogCampaignsPageDetails]]],
-    PROMOTIONS_CART_SUMMARY_CAMPAIGNS: ["promotions-cart-summary-campaigns", "Iznos korpe", IconList.requestQuote, PROMOTIONS, PromotionsCartSummary, [[":nid", PromotionsCartSummaryDetails]]],
-    // PROMOTIONS_CART_ITEMS_CAMPAIGNS: ["promotions-cart-items-campaigns", "Stavke u korpi", IconList.shoppingBasket, PROMOTIONS, PromotionsCartItems, [[":nid", PromotionsCartItemsPageDetails]]],
-    PROMOTIONS_DELIVERY_CAMPAIGNS: ["promotions-delivery-campaigns", "Dostava", IconList.localShipping, PROMOTIONS, PromotionsDeliveryCampaigns, [[":nid", PromotionsDeliveryCampaignsDetails]]],
-    PROMOTIONS_RECOMMENDED: ["promotions-recommended", "Preporučeni proizvodi", IconList.thumbUp, PROMOTIONS, PromotionsRecommended, [[":rid", PromotionsRecommendedDetails]]],
-    PROMOTIONS_CROSS_SELLS: ["promotions-cross-sells", "Kros-sel proizvodi", IconList.closeFullscreen, PROMOTIONS, PromotionsCrossSells, [[":csid", PromotionsCrossSellsDetails]]],
-    PROMOTIONS_UPSELLS: ["promotions-up-sells", "Up-sel proizvodi", IconList.swapHoriz, PROMOTIONS, PromotionsUpSells, [[":usid", PromotionsUpSellsDetails]]],
+    ROLES: ["/roles", "Uloge", IconList.reduceCapacity, COMPANY_SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
+    USERS: ["/users", "Korisnici", IconList.group, COMPANY_SETTINGS, Users],
 
-    ROLES: ["/roles", "Uloge", IconList.reduceCapacity, SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
-    USERS: ["/users", "Korisnici", IconList.group, SETTINGS, Users],
-    PARAMS: ["/params", "Parametri", IconList.settings, SETTINGS, Params, [[":pid", DetailsParams]]],
-    COUNTRIES: ["/countries", "Države", IconList.flag, SETTINGS, Countries],
-    MUNICIPALITIES: ["/municipalities", "Opštine", IconList.locationCity, SETTINGS, Municipalities],
-    TOWNS: ["/towns", "Mesta", IconList.apartment, SETTINGS, Towns],
-    STREETS: ["/streets", "Ulice", IconList.addRoad, SETTINGS, Streets],
-    BRANDS: ["/brands", "Brendovi", IconList.copyright, SETTINGS, Brands],
-    STORES: ["/stores", "Skladišta", IconList.store, SETTINGS, Stores],
-    MANUFACTURERS: ["/manufacturers", "Proizvođači", IconList.factory, SETTINGS, Manufacturers],
+    COUNTRIES: ["/countries", "Države", IconList.flag, COMPANY_SETTINGS, Countries],
+    MUNICIPALITIES: ["/municipalities", "Opštine", IconList.locationCity, COMPANY_SETTINGS, Municipalities],
+    TOWNS: ["/towns", "Mesta", IconList.apartment, COMPANY_SETTINGS, Towns],
+    STREETS: ["/streets", "Ulice", IconList.addRoad, COMPANY_SETTINGS, Streets],
+    BRANDS: ["/brands", "Brendovi", IconList.copyright, COMPANY_SETTINGS, Brands],
+    STORES: ["/stores", "Skladišta", IconList.store, COMPANY_SETTINGS, Stores],
+    MANUFACTURERS: ["/manufacturers", "Proizvođači", IconList.factory, COMPANY_SETTINGS, Manufacturers],
+
     B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, SETTINGS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
     B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, SETTINGS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
     ADMIN_SCRIPTS: ["/scripts", "Skripte", IconList.description, SETTINGS, Scripts],
     ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, SETTINGS, AdminForm, [[":formId", AdminFormDetails]]],
+    PARAMS: ["/params", "Parametri", IconList.settings, SETTINGS, Params, [[":pid", DetailsParams]]],
 };
 
 /**

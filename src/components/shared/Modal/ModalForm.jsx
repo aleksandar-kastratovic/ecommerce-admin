@@ -35,7 +35,7 @@ import { initial } from "lodash";
  * @constructor
  */
 
-const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = null, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, closeButtonModalForm, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, modalObject = null, customTitleDataNameForEdit = "Izmeni", selectableCountryTown = false, useModalGalleryInjection = false, onCloseModalButton }) => {
+const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = null, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, closeButtonModalForm, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, modalObject = null, customTitleDataNameForEdit = "Izmeni", selectableCountryTown = false, useModalGalleryInjection = false, onCloseModalButton, allowedFileTypes, onFilePicked, selectedFile }) => {
 
   const { id, modalUrl = null } = openModal;
   const api = useAPI();
@@ -147,7 +147,7 @@ const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = n
           <FormWrapper title={customTitle ? customTitle : (data?.id === null ? "Novi unos" : (data?.name ?? customTitleDataNameForEdit))}>
             {shortText ? <Typography variant="body2" sx={{ marginBottom: "0.8rem" }}>{shortText}</Typography> : null}
             {clearButton && <Button label="Resetujte vrednosti" onClick={() => { onClearDataPress() }} variant="contained" />}
-            <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} submitButton={submitButton} closeButton={closeButtonModalForm} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} validateData={validateData} onCloseModalButton={() => { setOpenModal({ show: false }) }} />
+            <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} submitButton={submitButton} closeButton={closeButtonModalForm} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} validateData={validateData} onCloseModalButton={() => { setOpenModal({ show: false }) }} allowedFileTypes={allowedFileTypes} onFilePicked={onFilePicked} selectedFile={selectedFile} />
           </FormWrapper>)
         : <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}><CircularProgress size="2rem" sx={{ marginTop: "50vh" }} /></Box>}
     </ListPageModalWrapper>

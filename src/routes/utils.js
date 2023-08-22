@@ -3,12 +3,12 @@ import { Route } from "react-router-dom";
 
 /** The menu MenuGroups to show menu items in. */
 export const MenuGroup = {
-    PRODUCT: { order: 0, name: "Katalog" },
-    B2B: { order: 1, name: "B2B" },
-    B2C: { order: 2, name: "B2C" },
-    PROMOTIONS: { order: 3, name: "Promocije" },
-    SETTINGS: { order: 4, name: "Kompanija" },
-    TOOLS: { order: 5, name: "Alati" },
+    SALE: { order: 0, name: "Prodaja" },
+    PRODUCT: { order: 1, name: "Katalog" },
+    B2B: { order: 2, name: "B2B" },
+    B2C: { order: 3, name: "B2C" },
+    COMPANY_SETTINGS: { order: 4, name: "Kompanija" },
+    SETTINGS: { order: 5, name: "Podešavanja" },
 };
 
 /**
