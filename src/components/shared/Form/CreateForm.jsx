@@ -38,7 +38,8 @@ const CreateForm = ({
   styleCheckbox,
   autoFocus,
   onFilePicked,
-  selectedFile
+  selectedFile,
+  allowedFileTypes
 }) => {
   // depending on input type in fields you will get a control
   // value is obvious
@@ -347,6 +348,7 @@ const CreateForm = ({
               value={value}
               description={item.description}
               selectedFile={selectedFile}
+              allowedFileTypes={allowedFileTypes}
             />
           )
           break;
