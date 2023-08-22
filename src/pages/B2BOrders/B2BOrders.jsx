@@ -12,7 +12,7 @@ const B2BOrders = () => {
     <ListPage
       listPageId="B2BOrders"
       apiUrl="admin/orders-b2b/list"
-      title="Porudžbine"
+      title="Narudžbenice"
       columnFields={tblFields}
       showNewButton={false}
       customActions={customActions}

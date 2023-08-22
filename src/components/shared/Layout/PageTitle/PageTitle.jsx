@@ -20,14 +20,32 @@ const PageTitle = ({ title, back, actions = [] }) => {
 
       {/* Buttons */}
       <Box className={scss.buttons}>
-        {actions.map((button, index) => (
-          <Button
-            key={index}
-            icon={button.icon}
-            label={button.label}
-            onClick={button.action}
-            variant={button.variant} />
-        ))}
+        {actions.map((button, index) => {
+          console.log(button)
+          return (
+            <Button
+              key={index}
+              icon={button.icon}
+              label={button.label}
+              onClick={button.action}
+              variant={button.variant}
+              sx={{
+                ...(button.label !== "Novi unos" && {
+                  backgroundColor: "#17a2b9",
+                  borderColor: "#17a2b9",
+                  color: "#fff",
+                  "&:hover": {
+                    backgroundColor: "#17a2b9de",
+                    borderColor: "#17a2b9de",
+                  },
+                }),
+              }}
+            />
+          )
+        }
+
+
+        )}
 
         {/* Optional back button */}
         {back && <Button icon={"arrow_back"} label="Nazad" onClick={back} />}

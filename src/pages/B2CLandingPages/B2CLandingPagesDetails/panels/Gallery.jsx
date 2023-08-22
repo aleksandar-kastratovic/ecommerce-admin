@@ -2,20 +2,31 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
 import InputMultipleImages from "../../../../components/shared/InputMultipleImages/InputMultipleImages";
+import { set } from "lodash";
+import GallerySkeleton from "../../../../components/shared/Loading/GallerySkeleton";
 
 const Gallery = ({ pageId }) => {
 
   const [data, setData] = useState([]);
   const api = useAPI();
   const apiPath = "admin/landing-pages-b2c/gallery";
+  const [loading, setLoading] = useState(false);
 
   const handleData = () => {
+    setLoading(true);
     api.list(`${apiPath}/${pageId}`)
-      .then((response) => setData(response?.payload?.items))
-      .catch((error) => console.warn(error));
+      .then((response) => {
+        setData(response?.payload?.items);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.warn(error)
+        setLoading(false);
+      });
   };
 
   const handleSubmit = (data) => {
+    setLoading(true);
     let req = {
       // id: data.id,
       id_landing_page: pageId,
@@ -31,33 +42,41 @@ const Gallery = ({ pageId }) => {
       .then((response) => {
         toast.success("Uspešno");
         handleData();
+        setLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
+        setLoading(false);
       });
   };
 
   const handleDelete = (id) => {
+    setLoading(true);
     api.delete(`${apiPath}/${id}`)
       .then((response) => {
         toast.success("Uspešno");
         handleData();
+        setLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
+        setLoading(false);
       });
   };
 
   const handleReorder = (id, destination) => {
+    setLoading(true);
     api.put(`${apiPath}/order`, { id: id, order: destination })
       .then((response) => {
         toast.success("Uspešno");
+        setLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
+        setLoading(false);
       });
   };
 
@@ -75,7 +94,11 @@ const Gallery = ({ pageId }) => {
     handleData();
   }, []);
 
-  return <InputMultipleImages list={list} name="Galerija" onChangeHandler={() => { }} uploadHandler={handleSubmit} deleteHandler={handleDelete} handleReorder={handleReorder} />;
+  return (
+    <>
+      {loading ? <GallerySkeleton /> : <InputMultipleImages list={list} name="Galerija" onChangeHandler={() => { }} uploadHandler={handleSubmit} deleteHandler={handleDelete} handleReorder={handleReorder} />}
+    </>
+  )
 };
 
 export default Gallery;

@@ -195,7 +195,7 @@ export const InputMultipleFiles = ({
   }, [imageList]);
 
   return (
-    <Grid container spacing={1} direction="row" sx={{ mt: "2rem", ml: "1rem" }}>
+    <Grid container spacing={1} direction="row" sx={{ width: "auto", margin: "2rem 0 0 0" }}>
       <MultipleImages handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} icon={IconList.uploadFile} />
 
       <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} handleReorder={handleReorder} />

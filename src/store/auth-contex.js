@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from "react";
+import { toast } from "react-toastify";
 
 let logoutTimer;
 let refreshTokenTimer;
@@ -20,6 +21,7 @@ const calculateRemainingTime = (expirationTime) => {
     const currentTime = new Date().getTime();
     const adjExpirationTime = new Date(expirationTime).getTime();
     const remainingDuration = adjExpirationTime - currentTime;
+    // const remainingDuration = 10000;
     return remainingDuration;
 };
 
@@ -68,11 +70,13 @@ export const AuthContextProvider = (props) => {
     const [startScreenData, setStartScreenData] = useState(null);
 
     const userIsLoggedIn = !!user && !!user.access_token;
+
     const logoutHandler = useCallback(() => {
         setUser(null);
         localStorage.removeItem("user");
         localStorage.removeItem("expirationTime");
         localStorage.removeItem("lastHttp");
+        localStorage.removeItem("openGroups");
 
         if (logoutTimer) {
             clearTimeout(logoutTimer);
@@ -85,8 +89,6 @@ export const AuthContextProvider = (props) => {
     }, []);
 
     const loginHandler = (user, expirationTime) => {
-        console.log("AuthContextProvider loginHandler", user);
-
         setUser(user);
 
         localStorage.setItem("expirationTime", expirationTime);

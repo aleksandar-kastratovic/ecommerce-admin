@@ -13,7 +13,7 @@ import Icon from "@mui/material/Icon";
 import Typography from "@mui/material/Typography";
 import DeleteModal from "../../../../components/shared/Dialogs/DeleteDialog";
 import ProductVariation from "./VariationList/ProductVariation";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 
 const ProductDetailsVariation = ({ parentId }) => {
@@ -35,6 +35,15 @@ const ProductDetailsVariation = ({ parentId }) => {
   const [formFields, setFormFields] = useState([]);
 
   const api = useAPI();
+
+  const additionalButtons = [
+    {
+      label: "Dodavanje atributa",
+      action: () => {
+        navigate("/products/prices-groups");
+      },
+    },
+  ];
 
   const getVariants = () => {
     api.get(`admin/product-items/variants/main/product-attributes/${parentId}`)
@@ -306,12 +315,14 @@ const ProductDetailsVariation = ({ parentId }) => {
   return (
     <>
       <Box>
+        <Buttons>
+          <Button icon={"add"} label="Dodavanje atributa" href={"product-items-variants-attributes/group-attribute"} sx={{ backgroundColor: "#17a2b9", borderColor: "#17a2b9", color: "#ffff", "&:hover": { backgroundColor: "#17a2b9de", borderColor: "#17a2b9de" } }} />
+        </Buttons>
         <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
           Atributi i njihove vrednosti
         </Typography>
         {variantsData?.length === 0 ? (
           <Typography sx={{ marginTop: "1rem" }}>Nema dostupnih atributa i vrednosti za varijacije. Vrednosti možete uneti u sekciji <Link to="/product-items-variants-attributes/group-attribute" style={{ color: "#28a86e", textDecoration: "underline" }}>Atributi za varijacije.</Link> </Typography>
-
         ) : (
           <>
             {variantsData?.map((item, i) => {

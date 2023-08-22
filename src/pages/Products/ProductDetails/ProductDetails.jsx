@@ -19,6 +19,7 @@ import Gallery from "./panels/Gallery";
 import TechnicalDoc from "./panels/TechnicalDoc";
 import Instruction from "./panels/Instruction";
 import Certificate from "./panels/Certificate";
+// import Document from "./panels/Document";
 import DisplayIn from "./panels/DisplayIn";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
@@ -185,6 +186,13 @@ const ProductDetails = () => {
       enabled: data?.id,
       component: <Certificate productId={data?.id} />,
     },
+    // {
+    //   id: "dokument",
+    //   name: "Dokumenta",
+    //   icon: IconList.documentScanner,
+    //   enabled: data?.id,
+    //   component: <Document productId={data?.id} />,
+    // },
     {
       id: "instructions",
       name: "Instrukcije",
@@ -192,6 +200,7 @@ const ProductDetails = () => {
       enabled: data?.id,
       component: <Instruction productId={data?.id} />,
     },
+
     {
       id: "specifications",
       name: "Specifikacije",

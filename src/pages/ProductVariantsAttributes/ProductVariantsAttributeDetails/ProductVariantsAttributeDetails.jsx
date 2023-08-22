@@ -31,7 +31,7 @@ const ProductVariantsAttributeDetails = () => {
   // Handle after click on tab panel
   const panelHandleSelect = (field) => {
     let queryString = setUrlQueryStringParam("tab", field.id);
-    navigate(`/product-items-variants-attributes/group-attribute?${queryString}`, { replace: true });
+    navigate(`?${queryString}`, { replace: true });
   }
 
   return <DetailsPage title="Atributi za varijacije" fields={fields} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;

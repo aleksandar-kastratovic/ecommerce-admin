@@ -15,6 +15,7 @@ const Content = ({ pageId }) => {
   const [modalFormTitle, setModalFormTitle] = useState(null);
 
   const [modalObject, setModalObject] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const formFieldsOne = formFields;
 
@@ -81,6 +82,7 @@ const Content = ({ pageId }) => {
   }
 
   const handleSubmitWrapper = (pageId, selectedRow) => {
+    setLoading(true);
     const handleSubmit = (data) => {
       let req = {
         id: data.new ? null : data.id,
@@ -96,34 +98,42 @@ const Content = ({ pageId }) => {
       api.post(`${apiPathGallery}`, req)
         .then((response) => {
           toast.success("Uspešno");
+          setLoading(false);
         })
         .catch((error) => {
           toast.warn("Greška");
           console.warn(error);
+          setLoading(false);
         });
     };
     return handleSubmit;
   }
 
   const handleDelete = (id) => {
+    setLoading(true);
     api.delete(`${apiPathGallery}/${id}`)
       .then((response) => {
         toast.success("Uspešno");
+        setLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
+        setLoading(false);
       });
   };
 
   const handleReorder = (id, destination) => {
+    setLoading(true);
     api.put(`${apiPathGallery}/order`, { id: id, order: destination })
       .then((response) => {
         toast.success("Uspešno");
+        setLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
+        setLoading(false);
       });
   };
 

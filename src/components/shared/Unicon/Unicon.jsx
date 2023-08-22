@@ -11,8 +11,8 @@ import Icon from "@mui/material/Icon";
  * @return {JSX.Element}
  * @constructor
  */
-const Unicon = ({ icon }) => (
-  typeof icon !== "object" && <Icon>{icon}</Icon>
+const Unicon = ({ icon, styleIcon }) => (
+  typeof icon !== "object" && <Icon sx={styleIcon}>{icon}</Icon>
 )
 
 export default Unicon

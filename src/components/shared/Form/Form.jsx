@@ -12,7 +12,7 @@ import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
 
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), onCloseModalButton = () => { }, cancelButton = false, submitButton = true, closeButton = false, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked, selectedFile }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), onCloseModalButton = () => { }, cancelButton = false, submitButton = true, closeButton = false, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked, selectedFile, allowedFileTypes }) => {
   const navigate = useNavigate();
 
   const [data, setData] = useState(initialData ?? {});
@@ -212,6 +212,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
                   setData({ ...data, import: fileObject.name });
                 }}
                 selectedFile={selectedFile}
+                allowedFileTypes={allowedFileTypes}
               />
             );
           })}

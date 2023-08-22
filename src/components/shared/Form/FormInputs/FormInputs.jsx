@@ -860,9 +860,10 @@ export const InputHtml = ({ label, required, disabled, name, value, error = null
   );
 };
 
-export const ImportPicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile }) => {
+export const ImportPicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile, allowedFileTypes = ['csv', 'xml', 'json', 'jpg'] }) => {
   const ref = useRef();
   const [attachment, setAttachment] = useState(null);
+  const isFileTypeAllowed = (fileExtension) => allowedFileTypes.includes(fileExtension);
 
   const handleChange = (event) => {
     const files = Array.from(event.target.files);
@@ -870,10 +871,15 @@ export const ImportPicker = ({ label, required, disabled, margin, error = null, 
 
     const fileExtension = file.name.split('.').pop().toLowerCase();
 
-    if (fileExtension !== 'csv' && fileExtension !== 'xml' && fileExtension !== 'json') {
+    if (!isFileTypeAllowed(fileExtension)) {
       toast.error('Pogrešan tip fajla.');
       return;
     }
+
+    // if (fileExtension !== 'csv' && fileExtension !== 'xml' && fileExtension !== 'json') {
+    //   toast.error('Pogrešan tip fajla.');
+    //   return;
+    // }
 
     blobToData(file).then((result) => {
       let obj = {
@@ -890,7 +896,7 @@ export const ImportPicker = ({ label, required, disabled, margin, error = null, 
       <ButtonBase
         component="label"
         sx={{
-          height: "55px",
+          height: "2.844rem",
           border: "1px solid",
           borderColor: error ? "#d32f2f" : "rgba(0, 0, 0, 0.23)",
           borderRadius: "0.25rem",

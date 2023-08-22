@@ -32,7 +32,7 @@ const ListTableBody = ({ items, fields, handleOnClickActions, isLoading = false,
 
   const [clickTimeout, setClickTimeout] = useState(null);
 
-
+  console.log("fields", fields)
   const actionButtons = () => {
     let buttons = {};
 
@@ -121,7 +121,7 @@ const ListTableBody = ({ items, fields, handleOnClickActions, isLoading = false,
                     }, 500));
                   }
                 }}
-                sx={column.field_behavior ? { cursor: "pointer" } : {}}
+                sx={{ cursor: column.field_behavior && "pointer", fontSize: "0.813rem" }}
               >
                 {column.prop_name !== "action" ? (
                   column.field_behavior ? (
@@ -147,7 +147,7 @@ const ListTableBody = ({ items, fields, handleOnClickActions, isLoading = false,
               </TableCell>
             ))
           }
-        </ TableRow>
+        </ TableRow >
       ));
 
       if (showAddButtonTableRow) {
