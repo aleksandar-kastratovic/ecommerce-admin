@@ -65,7 +65,7 @@ const List = ({ productId, apiPath }) => {
   };
 
   const deleteHandler = async (productId, setId, groupId) => {
-    api.delete(`${apiPath}/${productId}/${setId}/${groupId}`)
+    api.delete(`${apiPath}/group/${productId}/${setId}/${groupId}`)
       .then((response) => {
         toast.success("Uspešno");
         setListHandler(selectedModalId);
@@ -111,6 +111,9 @@ const List = ({ productId, apiPath }) => {
           name_attribute_value: attribute.field_type === "select" ? attribute_value.name : data[attribute.slug],
         };
         await api.post(`${apiPath}`, req);
+        getList();
+      } else {
+        await api.delete(`${apiPath}/attribute/${productId}/${set?.id}/${group?.id}/${attribute.id}`);
         getList();
       }
     }
@@ -158,7 +161,7 @@ const List = ({ productId, apiPath }) => {
 
       {fields.length !== 0 &&
         <Buttons>
-          <Button label={showProgress ? <CircularProgress size={24} /> : "Sačuvaj"} variant={"contained"} onClick={() => handleSubmitProgress()} disabled={showProgress ? true : false} />
+          <Button label={showProgress ? <CircularProgress size={24} /> : "Sačuvaj"} variant={"contained"} onClick={() => { handleSubmitProgress(); toast.success("Uspešno") }} disabled={showProgress ? true : false} />
         </Buttons>
       }
 
