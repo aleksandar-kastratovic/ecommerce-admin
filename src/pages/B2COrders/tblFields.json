@@ -41,7 +41,7 @@
   {
     "field_name": "Naplatiti na ime",
     "prop_name": "bill_to_name",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -67,7 +67,7 @@
   {
     "field_name": "Dostava",
     "prop_name": "delivery_method_name",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -184,7 +184,7 @@
   {
     "field_name": "Valuta",
     "prop_name": "currency",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
@@ -221,9 +221,9 @@
     "input_type": "input"
   },
   {
-    "field_name": "Knjigovodstveni broj",
+    "field_name": "Knjigovodstvo",
     "prop_name": "bookkeeping_number",
-    "in_main_table": true,
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,

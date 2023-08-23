@@ -126,7 +126,11 @@ const List = ({ productId, apiPath }) => {
 
   return (
     <div className={styles.list}>
-      <Button label={"Odaberi specifikaciju"} variant={"contained"} onClick={() => { setOpenModal({ show: true, id: productId }) }} sx={{ marginBottom: "2rem" }} />
+      <Buttons styleWrapperButtons={{ marginBottom: "2rem" }}>
+        <Button label={"Odaberi specifikaciju"} vaiant={"contained"} onClick={() => { setOpenModal({ show: true, id: productId }) }} sx={{ marginRight: "auto", backgroundColor: "#28a86e", color: "#ffff", "&:hover": { backgroundColor: "#1c754d", borderColor: "#1c754d" } }} />
+        <Button icon={"add"} label="Dodavanje specifikacije" href={"product-specs/groups"} sx={{ backgroundColor: "#17a2b9", borderColor: "#17a2b9", color: "#ffff", "&:hover": { backgroundColor: "#17a2b9de", borderColor: "#17a2b9de" } }} />
+      </Buttons>
+
       {fields.length === 0 ? (
         <Typography variant="subtitle1">
           Trenutno nema odabranih specifikacija.

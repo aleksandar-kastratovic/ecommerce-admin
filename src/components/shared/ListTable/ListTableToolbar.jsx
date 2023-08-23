@@ -17,7 +17,6 @@ const ListTableToolbar = ({ fields = [], filterFields, showDatePicker, onColumns
   return (
     <div className="list-page-toolbar">
       <Box className={styles.toolbarButtons}>
-
         {/* Search by term */}
         <DebouncedInput
           autoFocus

@@ -9,6 +9,7 @@ import Unicon from "./shared/Unicon/Unicon";
 import ChevronRight from "@mui/icons-material/ChevronRight";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import Badge from "@mui/material/Badge";
+import Typography from "@mui/material/Typography";
 
 const SideNavigation = ({ activeTheme, userName }) => {
     const { userScreens, logout } = useContext(AuthContext);
@@ -68,8 +69,12 @@ const SideNavigation = ({ activeTheme, userName }) => {
                 <img className={"img-fluid mobile-logo" + (activeTheme ? " dark-theme-icon" : " light-theme-icon")} src={sideNavIcon} alt={sideNavIcon} />
             </NavLink>
             <div className="sidebar-welcome">
-                <h5>Dobrodošli</h5>
-                <p>{userName}</p>
+                <Typography variant="subtitle1" sx={{ margin: "1rem 0 0", fontSize: "0.875rem" }}>
+                    Dobrodošli
+                </Typography>
+                <Typography variant="subtitle1" sx={{ fontWeight: "500" }}>
+                    {userName}
+                </Typography>
             </div>
             <ul className="list-unstyled components mb-5 scroll-view">
                 {menu.map((menuGroup) => (
@@ -98,9 +103,10 @@ const SideNavigation = ({ activeTheme, userName }) => {
                         {openGroups[menuGroup.name] && (
                             <>
                                 {menuGroup.items.map((item, index) => {
+                                    console.log(item);
                                     return (
                                         <li key={item.path}>
-                                            {item?.name === "Narudžbenice" && item?.group?.name === "B2C" ? (
+                                            {item?.path === "/b2b-orders" || item?.path === "/b2c-orders" ? (
                                                 <Badge
                                                     badgeContent={0}
                                                     showZero
