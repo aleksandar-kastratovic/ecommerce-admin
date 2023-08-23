@@ -63,7 +63,7 @@ const ProductGroupDetails = () => {
   // Handle after click on tab panel
   const panelHandleSelect = (field) => {
     let queryString = setUrlQueryStringParam("tab", field.id);
-    navigate(`/product-specs/groups/${groupId}?${queryString}`, { replace: true });
+    navigate(`/products/product-specs/groups/${groupId}?${queryString}`, { replace: true });
   }
 
   return <DetailsPage title={data?.id != null && data?.name} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;

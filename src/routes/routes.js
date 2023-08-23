@@ -125,9 +125,11 @@ const screens = {
             [":prodId", ProductDetails],
             ["prices-groups", PricesGroupsListPage],
             ["product-items-variants-attributes/group-attribute", ProductVariantsAttributesDetails],
+            ["product-specs/groups", ProductSpecsGroups],
+            ["product-specs/groups/:groupId", ProductGroupDetails],
         ],
     ],
-    PRODUCT_SPEC: ["/product-specs/groups", "Specifikacija", IconList.inventory, PRODUCT, ProductSpecsGroups, [[":groupId", ProductGroupDetails]]],
+    //PRODUCT_SPEC: ["/product-specs/groups", "Specifikacija", IconList.inventory, PRODUCT, ProductSpecsGroups, [[":groupId", ProductGroupDetails]]],
     IMPORT: ["/import", "Uvoz podataka", IconList.upload, PRODUCT, Import, [[":upId", ImportDetails]]],
     // EXPORT: ["/export", "Izvoz podataka", IconList.upload, PRODUCT, Export, [[":exId", ExportDetails]]],
 

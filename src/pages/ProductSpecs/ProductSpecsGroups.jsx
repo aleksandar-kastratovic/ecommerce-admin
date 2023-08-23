@@ -1,15 +1,17 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import columnFields from "./tblFields.json";
 import useAPI from "../../api/api";
 import ModalContent from "./ModalContent";
+import IconList from "../../helpers/icons";
 
 
 const ProductSpecsGroups = () => {
 
   const api = useAPI();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const customActions = {
     delete: {
@@ -57,6 +59,14 @@ const ProductSpecsGroups = () => {
     }
   };
 
+  const additionalButtons = [
+    {
+      label: "Nazad",
+      icon: IconList.arrowBack,
+      action: () => navigate(-1),
+    },
+  ];
+
   return (
     <ListPage
       listPageId="ProductSpecsGroups"
@@ -66,6 +76,7 @@ const ProductSpecsGroups = () => {
       showNewButton={true}
       actionNewButton="modal"
       customActions={customActions}
+      additionalButtons={additionalButtons}
     />
   );
 };

@@ -12,11 +12,9 @@ const Homepage = () => {
   return (
     <Paper elevation={0} sx={{ display: "flex", alignItems: "center", justifyContent: "center", flexDirection: "column", padding: "2rem" }}>
 
-      <Typography variant="h6" sx={{ marginBottom: "1rem" }}>
-        Poštovani, {authCtx.user?.user?.first_name + " " + authCtx.user?.user?.last_name}, dobrodošli u administrativni panel
+      <Typography variant="h6">
+        {authCtx.user?.user?.first_name + " " + authCtx.user?.user?.last_name}, dobrodošli na Croonus CMS.
       </Typography>
-
-      <img src={logo} alt="Logo" width="210px" />
     </Paper>
   )
 }

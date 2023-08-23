@@ -65,7 +65,7 @@ const List = ({ productId, apiPath }) => {
   };
 
   const deleteHandler = async (productId, setId, groupId) => {
-    api.delete(`${apiPath}/${productId}/${setId}/${groupId}`)
+    api.delete(`${apiPath}/group/${productId}/${setId}/${groupId}`)
       .then((response) => {
         toast.success("Uspešno");
         setListHandler(selectedModalId);
@@ -112,6 +112,9 @@ const List = ({ productId, apiPath }) => {
         };
         await api.post(`${apiPath}`, req);
         getList();
+      } else {
+        await api.delete(`${apiPath}/attribute/${productId}/${set?.id}/${group?.id}/${attribute.id}`);
+        getList();
       }
     }
 
@@ -126,7 +129,11 @@ const List = ({ productId, apiPath }) => {
 
   return (
     <div className={styles.list}>
-      <Button label={"Odaberi specifikaciju"} variant={"contained"} onClick={() => { setOpenModal({ show: true, id: productId }) }} sx={{ marginBottom: "2rem" }} />
+      <Buttons styleWrapperButtons={{ marginBottom: "2rem" }}>
+        <Button label={"Odaberi specifikaciju"} vaiant={"contained"} onClick={() => { setOpenModal({ show: true, id: productId }) }} sx={{ marginRight: "auto", backgroundColor: "#28a86e", color: "#ffff", "&:hover": { backgroundColor: "#1c754d", borderColor: "#1c754d" } }} />
+        <Button icon={"add"} label="Dodavanje specifikacije" href={"product-specs/groups"} sx={{ backgroundColor: "#17a2b9", borderColor: "#17a2b9", color: "#ffff", "&:hover": { backgroundColor: "#17a2b9de", borderColor: "#17a2b9de" } }} />
+      </Buttons>
+
       {fields.length === 0 ? (
         <Typography variant="subtitle1">
           Trenutno nema odabranih specifikacija.
@@ -154,7 +161,7 @@ const List = ({ productId, apiPath }) => {
 
       {fields.length !== 0 &&
         <Buttons>
-          <Button label={showProgress ? <CircularProgress size={24} /> : "Sačuvaj"} variant={"contained"} onClick={() => handleSubmitProgress()} disabled={showProgress ? true : false} />
+          <Button label={showProgress ? <CircularProgress size={24} /> : "Sačuvaj"} variant={"contained"} onClick={() => { handleSubmitProgress(); toast.success("Uspešno") }} disabled={showProgress ? true : false} />
         </Buttons>
       }
 

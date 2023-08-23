@@ -74,8 +74,9 @@ const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClos
   const isColumnToggleable = (column: FieldSpec): boolean => column.field_name !== "";
 
   return (
+
     <Menu id="column-picker-menu" anchorEl={anchor} open={anchor !== null} onClose={handleClose}>
-      <Box className={styles.formStyle}>
+      <Box className={styles.formStyle} sx={{ flexDirection: "column" }}>
         <FormControl className={styles.formControl} component="fieldset" variant="standard">
           {tableFields.filter(isColumnToggleable).map((item) => (
             <InputCheckbox
@@ -87,12 +88,17 @@ const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClos
               onChange={handleChange}
               labelStyle={{
                 '& .MuiFormControlLabel-label': {
-                  fontSize: '0.875rem',
+                  fontSize: '0.813rem',
                 },
+                '& .MuiButtonBase-root': {
+                  padding: '0.3rem',
+                },
+              }}
+              styleCheckBoxWrapp={{
+                margin: 0
               }}
             />
           ))}
-
           <Buttons>
             <Button variant="contained" label="Odaberi" onClick={onConfirm} />
             <Button
@@ -107,7 +113,9 @@ const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClos
           </Buttons>
         </FormControl>
       </Box>
+
     </Menu>
+
   );
 };
 

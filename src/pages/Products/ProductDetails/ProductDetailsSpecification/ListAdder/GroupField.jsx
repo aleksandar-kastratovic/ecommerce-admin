@@ -22,45 +22,11 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
 
   const api = useAPI();
 
-
-
-  // const onSubmit = async (data) => {
-  //   try {
-  //     for (const attribute of attributes) {
-  //       if (data[attribute.slug]) {
-  //         let attribute_value = (attributeValues[attribute.id] ?? []).filter((item) => item.id === data[attribute.slug])[0];
-  //         let req = {
-  //           id: data.id[attribute.slug] ?? null,
-  //           id_product: productId,
-  //           id_set: setId,
-  //           slug_set: slugSet,
-  //           set_name: nameSet,
-  //           id_group: groupId,
-  //           slug_group: slug,
-  //           group_name: name,
-  //           id_attribute: attribute.id,
-  //           slug_attribute: attribute.slug,
-  //           name_attribute: attribute.name,
-  //           id_attribute_value: attribute.field_type === "select" ? data[attribute.slug] : null,
-  //           slug_attribute_value: attribute.field_type === "select" ? attribute_value.slug : null,
-  //           name_attribute_value: attribute.field_type === "select" ? attribute_value.name : data[attribute.slug],
-  //         };
-  //         await api.post(`${apiPath}`, req);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     toast.warn("Greška");
-  //     console.warn(error);
-  //   } finally {
-  //     toast.success("Uspešno");
-  //     listHandler();
-  //   }
-  // };
-
   const groupFiledsHandler = async () => {
     api.get(`${apiPath}/group-attributes/${groupId}`)
       .then((response) => {
         setAttributes(response?.payload)
+
       })
       .catch((error) => console.warn(error));
   };
@@ -107,6 +73,7 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
     if (item.field_type === "multi_select" || item.field_type === "select") {
       api.get(`${apiPath}/attribute-values/${item.id}`)
         .then((response) => {
+
           setAttributeValues((attributeValues) => {
             attributeValues[item.id] = response?.payload;
             return attributeValues;
@@ -144,10 +111,9 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
   };
 
   return (
-
-    < Box >
+    <Box>
       <Form formFields={formFields} initialData={data} onChange={changeHandler} submitButton={false} />
-    </Box >
+    </Box>
   );
 };
 
