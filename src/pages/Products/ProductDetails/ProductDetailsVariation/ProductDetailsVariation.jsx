@@ -268,7 +268,7 @@ const ProductDetailsVariation = ({ parentId }) => {
   const handleDeleteModalAction = (item) => {
     if (item) {
       let arr = [...variantsData];
-      let index = arr.findIndex((it) => it.selectedAttr.id === item.selectedAttr.id);
+      let index = arr.findIndex((it) => it?.selectedAttr?.id === item?.selectedAttr?.id);
       let obj = arr[index];
       const { selectedAttr } = obj;
 
