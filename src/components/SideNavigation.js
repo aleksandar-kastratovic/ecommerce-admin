@@ -10,7 +10,8 @@ import ChevronRight from "@mui/icons-material/ChevronRight";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import Badge from "@mui/material/Badge";
 import Typography from "@mui/material/Typography";
-
+import useAPI from "../api/api";
+import { useQuery } from "react-query";
 const SideNavigation = ({ activeTheme, userName }) => {
     const { userScreens, logout } = useContext(AuthContext);
     const authCtx = useContext(AuthContext);
@@ -19,6 +20,8 @@ const SideNavigation = ({ activeTheme, userName }) => {
         Prodaja: true,
     };
     const [openGroups, setOpenGroups] = useState(initialOpenGroups);
+    const api = useAPI();
+
     // Populate the menu
     let menu = [];
     for (const allowedScreen of sortedScreens ?? []) {
@@ -43,6 +46,28 @@ const SideNavigation = ({ activeTheme, userName }) => {
             [groupName]: !prevOpenGroups[groupName],
         }));
     };
+
+    const { data: badgeNumberB2c } = useQuery(
+        "badgeNumberB2c",
+        async () => {
+            const response = await api.get(`admin/orders-b2c/list/badge-count`);
+            return response?.payload;
+        },
+        {
+            refetchInterval: 5000,
+        }
+    );
+
+    const { data: badgeNumberB2b } = useQuery(
+        "badgeNumberB2b",
+        async () => {
+            const response = await api.get(`admin/orders-b2b/list/badge-count`);
+            return response?.payload;
+        },
+        {
+            refetchInterval: 5000,
+        }
+    );
 
     useEffect(() => {
         const storedOpenGroups = JSON.parse(localStorage.getItem("openGroups")) || {};
@@ -103,12 +128,14 @@ const SideNavigation = ({ activeTheme, userName }) => {
                         {openGroups[menuGroup.name] && (
                             <>
                                 {menuGroup.items.map((item, index) => {
-                                    console.log(item);
-                                    return (
-                                        <li key={item.path}>
-                                            {item?.path === "/b2b-orders" || item?.path === "/b2c-orders" ? (
+                                    let renderedLink;
+
+                                    switch (item?.path) {
+                                        case "/b2c-orders":
+                                            const badgeB2c = badgeNumberB2c || [];
+                                            renderedLink = (
                                                 <Badge
-                                                    badgeContent={0}
+                                                    badgeContent={badgeB2c.find((item) => item.status === "new")?.count || 0}
                                                     showZero
                                                     sx={{
                                                         ".MuiBadge-badge": { backgroundColor: "#d32f2f", fontSize: "0.625rem", top: "50%", transform: "translateY(-50%)", right: "1rem" },
@@ -120,22 +147,39 @@ const SideNavigation = ({ activeTheme, userName }) => {
                                                         {item?.name}
                                                     </NavLink>
                                                 </Badge>
-                                            ) : (
+                                            );
+                                            break;
+
+                                        case "/b2b-orders":
+                                            const badgeB2b = badgeNumberB2b || [];
+                                            renderedLink = (
+                                                <Badge
+                                                    badgeContent={badgeB2b.find((item) => item.status === "new")?.count || 0}
+                                                    showZero
+                                                    sx={{
+                                                        ".MuiBadge-badge": { backgroundColor: "#d32f2f", fontSize: "0.625rem", top: "50%", transform: "translateY(-50%)", right: "1rem" },
+                                                        width: "100%",
+                                                    }}
+                                                >
+                                                    <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")} style={{ width: "100%" }}>
+                                                        <Unicon icon={item?.icon} />
+                                                        {item?.name}
+                                                    </NavLink>
+                                                </Badge>
+                                            );
+                                            break;
+
+                                        default:
+                                            renderedLink = (
                                                 <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")}>
                                                     <Unicon icon={item.icon} />
                                                     {item.name}
                                                 </NavLink>
-                                            )}
-                                            {/* {
-                                                <Badge badgeContent={1} color="secondary">
-                                                    <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")}>
-                                                        <Unicon icon={item.icon} />
-                                                        {item.name}
-                                                    </NavLink>
-                                                </Badge>
-                                            } */}
-                                        </li>
-                                    );
+                                            );
+                                            break;
+                                    }
+
+                                    return <li key={item.path}>{renderedLink}</li>;
                                 })}
                             </>
                         )}
