@@ -7,10 +7,10 @@ import Tooltip from "@mui/material/Tooltip";
 
 import scss from "./Row.module.scss";
 import InputValue from "../InputValue/InputValue";
-import { InputSelect } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
+import { InputSelect } from "../../../../../../../components/shared/Form/FormInputs/FormInputs";
 
-const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
-  const apiPath = 'admin/campaigns/cart-delivery/conditions';
+const Row = ({ data, id, handleRemoveComponent, idSellStrategy }) => {
+  const apiPath = 'admin/sell-strategies/cross-sell/conditions-apply';
 
   const [rowData, setRowData] = useState(data);
   const [openDialog, setOpenDialog] = useState({ show: false });
@@ -36,6 +36,18 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
     }
   };
 
+  const onDataReceived = (options, currentIndex) => {
+    if (options?.length === 2) {
+      setRowData((prevRowData) => {
+        let hideElement = true;
+        const newData = { ...prevRowData };
+        newData.fields[currentIndex].selected = options[1];
+        newData.fields[currentIndex].hideElement = hideElement;
+        return newData;
+      });
+    }
+  };
+
   return (
     <div className={scss.rowHolder}>
       {(rowData?.fields ?? []).map((item, index) => {
@@ -47,7 +59,7 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
           return null;
         }
 
-        let queryString = 'id_campaign=' + campaignId;
+        let queryString = 'id_sell_strategy=' + idSellStrategy;
         for (let i = 0; i < rowData.fields.length; i++) {
           const selectedId = rowData.fields[i]?.selected?.id;
 
@@ -82,6 +94,9 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
           default:
             return (
               <InputSelect
+                styleFormControl={{
+                  display: item?.hideElement && 'none',
+                }}
                 className={scss.inputSelect}
                 key={item.field + queryString}
                 required={false}
@@ -90,6 +105,7 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
                 usePropName={true}
                 queryString={queryString}
                 value={item?.selected?.id ?? 0}
+                onDataReceived={(options) => onDataReceived(options, index)}
                 onChange={({ target }, { props }) => {
                   if (item.field === 'condition' && props.props != null) {
                     setValueOptions(props.props);

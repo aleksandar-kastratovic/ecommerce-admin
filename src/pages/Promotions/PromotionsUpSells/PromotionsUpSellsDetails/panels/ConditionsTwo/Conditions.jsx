@@ -1,31 +1,21 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import useAPI from "../../../../../api/api";
+import useAPI from "../../../../../../api/api";
 import Group from "./Group/Group";
-import MainGroup from "./Group/MainGroup";
-import CustomerGroup from "./Group/CustomerGroup";
-import ProductGroup from "./Group/ProductGroup";
-
 import Row from "./Row/Row";
-import CustomerRow from "./Row/CustomerRow";
-import ProductRow from "./Row/ProductRow";
 import { v4 } from "uuid";
-import DeleteDialog from "../../../../../components/shared/Dialogs/DeleteDialog";
+import DeleteDialog from "../../../../../../components/shared/Dialogs/DeleteDialog";
 
 import init_group_file from "./Group/GroupFile/init_group_file.json";
-import customer_group_file from "./Group/GroupFile/customer_group_file.json";
-import product_group_file from "./Group/GroupFile/product_group_file.json";
 
 import init_row_file from "./Row/RowFile/init_row_file.json";
-import customer_row_file from "./Row/RowFile/customer_row_file.json";
-import product_row_file from "./Row/RowFile/product_row_file.json";
 
-import Buttons from "../../../../../components/shared/Form/Buttons/Buttons";
-import Button from "../../../../../components/shared/Button/Button";
+import Buttons from "../../../../../../components/shared/Form/Buttons/Buttons";
+import Button from "../../../../../../components/shared/Button/Button";
 import { toast } from "react-toastify";
 import { cloneDeep } from "lodash";
 
-const Conditions = ({ campaignId }) => {
+const Conditions = ({ idSellStrategy }) => {
 
   const elementRef = useRef('');
   const [data, setData] = useState([]);
@@ -33,12 +23,12 @@ const Conditions = ({ campaignId }) => {
   const [removeComponentId, setRemoveComponentId] = useState(null);
 
   const api = useAPI();
-  const apiPath = 'admin/campaigns/product-catalog/conditions';
+  const apiPath = 'admin/sell-strategies/up-sell/conditions-display';
 
   // The handleData function uses the API to retrieve data about campaign conditions.
   async function handleData() {
     await api
-      .get(`${apiPath}/${campaignId}`)
+      .get(`${apiPath}/${idSellStrategy}`)
       .then((response) => {
         setContentData(response?.payload);
       })
@@ -77,40 +67,7 @@ const Conditions = ({ campaignId }) => {
               }
 
               switch (t_row?.type_component) {
-                case 'main':
-                  return (
-                    <MainGroup
-                      key={t_row.id}
-                      id={t_row.id}
-                      data={t_row}
-                      rules={rules}
-                      handleAddComponent={handleAddComponent}
-                      handleRemoveComponent={handleRemoveComponent}
-                    />
-                  );
                 case 'product':
-                  return (
-                    <ProductGroup
-                      key={t_row.id}
-                      id={t_row.id}
-                      data={t_row}
-                      rules={rules}
-                      handleAddComponent={handleAddComponent}
-                      handleRemoveComponent={handleRemoveComponent}
-                    />
-                  );
-                case 'customer':
-                  return (
-                    <CustomerGroup
-                      key={t_row.id}
-                      id={t_row.id}
-                      data={t_row}
-                      rules={rules}
-                      handleAddComponent={handleAddComponent}
-                      handleRemoveComponent={handleRemoveComponent}
-                    />
-                  );
-                case 'default':
                 default:
                   return (
                     <Group
@@ -126,28 +83,6 @@ const Conditions = ({ campaignId }) => {
             } else if (t_row.type === 'row') {
               switch (t_row?.type_component) {
                 case 'product':
-                  return (
-                    <ProductRow
-                      key={t_row.id}
-                      id={t_row.id}
-                      data={t_row}
-                      handleRemoveComponent={handleRemoveComponent}
-                      campaignId={campaignId}
-                    />
-                  );
-                  break;
-                case 'customer':
-                  return (
-                    <CustomerRow
-                      key={t_row.id}
-                      id={t_row.id}
-                      data={t_row}
-                      handleRemoveComponent={handleRemoveComponent}
-                      campaignId={campaignId}
-                    />
-                  );
-                  break;
-                case 'default':
                 default:
                   return (
                     <Row
@@ -155,7 +90,7 @@ const Conditions = ({ campaignId }) => {
                       id={t_row.id}
                       data={t_row}
                       handleRemoveComponent={handleRemoveComponent}
-                      campaignId={campaignId}
+                      idSellStrategy={idSellStrategy}
                     />
                   );
               }
@@ -178,7 +113,7 @@ const Conditions = ({ campaignId }) => {
       return;
     }
     api
-      .post(apiPath, { id_campaign: campaignId, conditions: { ...data } })
+      .post(apiPath, { id_sell_strategy: idSellStrategy, conditions: { ...data } })
       .then((response) => {
         toast.success('Uspešno!');
       })
@@ -236,12 +171,6 @@ const Conditions = ({ campaignId }) => {
         if (componentType === 'group') {
           let group_file = [];
           switch (componentTypeComponent) {
-            case "product":
-              group_file = product_group_file;
-              break;
-            case "customer":
-              group_file = customer_group_file;
-              break;
             default:
               group_file = init_group_file;
               break;
@@ -252,12 +181,6 @@ const Conditions = ({ campaignId }) => {
         } else if (componentType === 'row') {
           let row_file = [];
           switch (componentTypeComponent) {
-            case "product":
-              row_file = product_row_file;
-              break;
-            case "customer":
-              row_file = customer_row_file;
-              break;
             default:
               row_file = init_row_file;
               break;

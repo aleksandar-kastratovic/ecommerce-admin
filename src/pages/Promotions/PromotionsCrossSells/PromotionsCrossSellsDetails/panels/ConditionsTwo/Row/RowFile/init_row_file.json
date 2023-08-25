@@ -1,13 +1,13 @@
 {
   "id": null,
   "type": "row",
-  "type_component": "main",
+  "type_component": "product",
   "fields": [
     {
       "field": "entity_group",
       "selected": {
-        "id": null,
-        "name": null
+        "id": "product",
+        "name": "product"
       }
     },
     {

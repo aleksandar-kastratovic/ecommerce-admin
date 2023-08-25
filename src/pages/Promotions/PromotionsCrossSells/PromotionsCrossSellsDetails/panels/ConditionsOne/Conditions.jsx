@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 
-import useAPI from "../../../../../api/api";
+import useAPI from "../../../../../../api/api";
 import Group from "./Group/Group";
 import MainGroup from "./Group/MainGroup";
 import CustomerGroup from "./Group/CustomerGroup";
@@ -10,7 +10,7 @@ import Row from "./Row/Row";
 import CustomerRow from "./Row/CustomerRow";
 import ProductRow from "./Row/ProductRow";
 import { v4 } from "uuid";
-import DeleteDialog from "../../../../../components/shared/Dialogs/DeleteDialog";
+import DeleteDialog from "../../../../../../components/shared/Dialogs/DeleteDialog";
 
 import init_group_file from "./Group/GroupFile/init_group_file.json";
 import customer_group_file from "./Group/GroupFile/customer_group_file.json";
@@ -20,12 +20,12 @@ import init_row_file from "./Row/RowFile/init_row_file.json";
 import customer_row_file from "./Row/RowFile/customer_row_file.json";
 import product_row_file from "./Row/RowFile/product_row_file.json";
 
-import Buttons from "../../../../../components/shared/Form/Buttons/Buttons";
-import Button from "../../../../../components/shared/Button/Button";
+import Buttons from "../../../../../../components/shared/Form/Buttons/Buttons";
+import Button from "../../../../../../components/shared/Button/Button";
 import { toast } from "react-toastify";
 import { cloneDeep } from "lodash";
 
-const Conditions = ({ campaignId }) => {
+const Conditions = ({ idSellStrategy }) => {
 
   const elementRef = useRef('');
   const [data, setData] = useState([]);
@@ -33,12 +33,12 @@ const Conditions = ({ campaignId }) => {
   const [removeComponentId, setRemoveComponentId] = useState(null);
 
   const api = useAPI();
-  const apiPath = 'admin/campaigns/product-catalog/conditions';
+  const apiPath = 'admin/sell-strategies/cross-sell/conditions-apply';
 
   // The handleData function uses the API to retrieve data about campaign conditions.
   async function handleData() {
     await api
-      .get(`${apiPath}/${campaignId}`)
+      .get(`${apiPath}/${idSellStrategy}`)
       .then((response) => {
         setContentData(response?.payload);
       })
@@ -132,7 +132,7 @@ const Conditions = ({ campaignId }) => {
                       id={t_row.id}
                       data={t_row}
                       handleRemoveComponent={handleRemoveComponent}
-                      campaignId={campaignId}
+                      idSellStrategy={idSellStrategy}
                     />
                   );
                   break;
@@ -143,7 +143,7 @@ const Conditions = ({ campaignId }) => {
                       id={t_row.id}
                       data={t_row}
                       handleRemoveComponent={handleRemoveComponent}
-                      campaignId={campaignId}
+                      idSellStrategy={idSellStrategy}
                     />
                   );
                   break;
@@ -155,7 +155,7 @@ const Conditions = ({ campaignId }) => {
                       id={t_row.id}
                       data={t_row}
                       handleRemoveComponent={handleRemoveComponent}
-                      campaignId={campaignId}
+                      idSellStrategy={idSellStrategy}
                     />
                   );
               }
@@ -178,7 +178,7 @@ const Conditions = ({ campaignId }) => {
       return;
     }
     api
-      .post(apiPath, { id_campaign: campaignId, conditions: { ...data } })
+      .post(apiPath, { id_sell_strategy: idSellStrategy, conditions: { ...data } })
       .then((response) => {
         toast.success('Uspešno!');
       })

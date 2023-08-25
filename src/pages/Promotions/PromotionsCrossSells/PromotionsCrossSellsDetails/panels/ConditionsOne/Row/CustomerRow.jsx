@@ -6,11 +6,11 @@ import Tooltip from "@mui/material/Tooltip";
 
 import scss from "./Row.module.scss";
 import InputValue from "../InputValue/InputValue";
-import { InputSelect } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
+import { InputSelect } from "../../../../../../../components/shared/Form/FormInputs/FormInputs";
 
-const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
+const Row = ({ data, id, handleRemoveComponent, idSellStrategy }) => {
 
-  const apiPath = 'admin/campaigns/cart-delivery/conditions';
+  const apiPath = 'admin/sell-strategies/cross-sell/conditions-apply';
 
   const [rowData, setRowData] = useState(data);
   const [openDialog, setOpenDialog] = useState({ show: false });
@@ -59,7 +59,7 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
           return null;
         }
 
-        let queryString = 'id_campaign=' + campaignId;
+        let queryString = 'id_sell_strategy=' + idSellStrategy;
         for (let i = 0; i < rowData.fields.length; i++) {
           const selectedId = rowData.fields[i]?.selected?.id;
 
@@ -73,6 +73,7 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
           case "value":
             return (
               <InputValue
+
                 key={item.field + queryString}
                 selectedValues={item.selected}
                 setOpenDialog={setOpenDialog}
