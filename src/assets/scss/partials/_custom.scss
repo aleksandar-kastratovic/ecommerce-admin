@@ -832,7 +832,7 @@ li.dropdown-item-custom.open .dropdown-menu {
         min-width: 80px;
         max-width: 80px;
         text-align: center;
-        margin-left: -80px !important;
+        // margin-left: -80px !important;
     }
     #sidebar .active {
         margin-left: 0 !important;
@@ -2185,4 +2185,23 @@ div.rowContents {
 }
 .orders-item-holder .buyers {
     padding: 1rem;
+}
+
+@media (max-width: 900px) {
+    #sidebar {
+        left: auto;
+        min-width: 0;
+        max-width: 0;
+    }
+    .router-container.side-open {
+        padding-left: 0;
+        width: auto;
+    }
+    .router-container {
+        padding-left: 0;
+        width: 100%;
+    }
+    #sidebar .logo img {
+        display: none;
+    }
 }

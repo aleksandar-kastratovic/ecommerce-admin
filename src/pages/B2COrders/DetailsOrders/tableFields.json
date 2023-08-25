@@ -1,5 +1,18 @@
 [
   {
+    "field_name": "Slika:",
+    "prop_name": "image",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": true,
+    "description": "",
+    "ui_prop": "",
+    "sortable": false,
+    "input_type": "image"
+  },
+  {
     "field_name": "Proizvod:",
     "prop_name": "name",
     "in_main_table": true,
@@ -39,47 +52,8 @@
     "input_type": "input"
   },
   {
-    "field_name": "J.C. bez PDV:",
-    "prop_name": "price_with_out_vat",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": true,
-    "description": "",
-    "ui_prop": "",
-    "sortable": false,
-    "input_type": "currency"
-  },
-  {
-    "field_name": "PDV (%):",
-    "prop_name": "price_vat_procent",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": true,
-    "description": "",
-    "ui_prop": "",
-    "sortable": false,
-    "input_type": "currency"
-  },
-  {
-    "field_name": "Iznos PDV:",
-    "prop_name": "total_vat",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": true,
-    "description": "",
-    "ui_prop": "",
-    "sortable": false,
-    "input_type": "currency"
-  },
-  {
-    "field_name": "Ukupno sa PDV:",
-    "prop_name": "total_with_vat",
+    "field_name": "Cena artikla:",
+    "prop_name": "price_with_vat",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -92,7 +66,7 @@
   },
   {
     "field_name": "Popust:",
-    "prop_name": "total_discount_amount",
+    "prop_name": "price_discount_amount",
     "in_main_table": true,
     "in_details": true,
     "editable": true,

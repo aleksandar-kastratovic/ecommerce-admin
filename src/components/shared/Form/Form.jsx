@@ -12,7 +12,7 @@ import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
 
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), onCloseModalButton = () => { }, cancelButton = false, submitButton = true, closeButton = false, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked, selectedFile, allowedFileTypes }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), onCloseModalButton = () => { }, cancelButton = false, submitButton = true, closeButton = false, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked, selectedFile, allowedFileTypes, styleButtonSubmit, styleWrapperButtons }) => {
   const navigate = useNavigate();
 
   const [data, setData] = useState(initialData ?? {});
@@ -35,7 +35,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
       return inputsError;
     });
   }
-
+  console.log("inputsError", inputsError)
   const submitHandler = (event) => {
     event.preventDefault && event.preventDefault();
 
@@ -81,6 +81,8 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
     newData = validateData(newData, target.name);
     setData(newData);
     onChange(newData, target.name)
+    console.log(target.name, "TARGET NAME:")
+    console.log("New data", newData);
     setInputErrors(target.name);
   };
 
@@ -208,6 +210,8 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
                   onFilePicked(fileObject);
                   //deleting import error object:
                   setInputErrors("import");
+                  console.log("Fileee:::");
+                  setInputErrors("file");
                   //setting data to be defiend in value: 
                   setData({ ...data, import: fileObject.name });
                 }}
@@ -218,9 +222,9 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
           })}
 
 
-        <Buttons>
+        <Buttons styleWrapperButtons={styleWrapperButtons}>
           {cancelButton && <Button label="Odustani" onClick={onCancel} />}
-          {submitButton && <Button type="submit" label={isLoading ? <CircularProgress size="1.5rem" /> : (label ? label : "Sačuvaj")} variant="contained" disabled={isLoading} />}
+          {submitButton && <Button type="submit" label={isLoading ? <CircularProgress size="1.5rem" /> : (label ? label : "Sačuvaj")} variant="contained" disabled={isLoading} sx={styleButtonSubmit} />}
           {closeButton && <Button label={(label ? label : "Sačuvaj")} variant="contained" onClick={onCloseModalButton} />}
         </Buttons>
 

@@ -16,6 +16,7 @@ import useAPI from "../api/api";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { toast } from "react-toastify";
+import sideNavIcon from "../assets/images/croonus-sidebar-icon.svg";
 
 const Header = ({ openSidenav, changeTheme, activeTheme }) => {
     const api = useAPI();
@@ -79,88 +80,117 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
     //     },
     // });
 
-    console.log(authCtx.user);
-
     return (
         <>
             <StyledNav>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item xs={1} sx={{ pr: 1 }}>
-                        <IconButton onClick={openSidenav}>
-                            <DehazeIcon sx={{ color: "var(--third-color)" }} />
-                        </IconButton>
-                    </Grid>
+                <Grid container alignItems="center" sx={{ flexWrap: "nowrap" }}>
+                    <Box
+                        sx={{
+                            "@media (min-width: 900px)": {
+                                display: "none",
+                            },
+                        }}
+                    >
+                        <img src={sideNavIcon} alt="Croonus" width={60} />
+                    </Box>
 
-                    <Grid container alignItems="center" width="auto">
-                        {/* <Grid item>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "space-between",
+                            width: "inherit",
+                            "@media (max-width: 899px)": {
+                                justifyContent: "flex-end",
+                            },
+                        }}
+                    >
+                        <Grid
+                            item
+                            xs={1}
+                            sx={{
+                                pr: 1,
+                                "@media (max-width: 900px)": {
+                                    order: 1,
+                                },
+                            }}
+                        >
+                            <IconButton onClick={openSidenav}>
+                                <DehazeIcon sx={{ color: "var(--third-color)" }} />
+                            </IconButton>
+                        </Grid>
+
+                        <Grid container alignItems="center" width="auto">
+                            {/* <Grid item>
                             <StyledToggleButton checked={activeTheme} onClick={changeTheme} name="themeSwitcher" inputProps={{ "aria-label": "toggle theme" }} />
                         </Grid> */}
 
-                        <Grid item>
-                            <IconButton
-                                onClick={handleClick}
-                                size="small"
-                                sx={{
-                                    ml: 2,
-                                    background: "var(--sidebar-bg-color)",
-                                    color: "var(--main-bg-color)",
-                                    padding: "0.8rem",
-                                    "&:hover": {
-                                        backgroundColor: "var(--sidebar-bg-color)",
-                                    },
-                                }}
-                                aria-controls={open ? "account-menu" : undefined}
-                                aria-haspopup="true"
-                                aria-expanded={open ? "true" : undefined}
-                            >
-                                {authCtx.user?.user?.first_name?.charAt(0) + authCtx.user?.user?.last_name?.charAt(0)}
-                            </IconButton>
-                            <Menu
-                                anchorEl={anchorEl}
-                                id="account-menu"
-                                open={open}
-                                onClose={handleClose}
-                                onClick={handleClose}
-                                PaperProps={{
-                                    elevation: 0,
-                                    sx: {
-                                        overflow: "visible",
-                                        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                                        mt: 1.5,
-                                        right: "3rem",
-                                        left: "auto !important",
-                                        top: "3.5rem !important",
-                                        "&:before": {
-                                            content: '""',
-                                            display: "block",
-                                            position: "absolute",
-                                            top: 0,
-                                            right: 14,
-                                            width: 10,
-                                            height: 10,
-                                            bgcolor: "background.paper",
-                                            transform: "translateY(-50%) rotate(45deg)",
-                                            zIndex: 0,
-                                        },
-                                    },
-                                }}
-                            >
-                                <MenuItem
-                                    onClick={(e) => {
-                                        logoutHandler(e);
-                                    }}
+                            <Grid item>
+                                <IconButton
+                                    onClick={handleClick}
+                                    size="small"
                                     sx={{
+                                        ml: 2,
+                                        background: "var(--sidebar-bg-color)",
+                                        color: "var(--main-bg-color)",
+                                        padding: "0.8rem",
                                         "&:hover": {
-                                            backgroundColor: "inherit",
-                                            color: "inherit",
+                                            backgroundColor: "var(--sidebar-bg-color)",
+                                        },
+                                    }}
+                                    aria-controls={open ? "account-menu" : undefined}
+                                    aria-haspopup="true"
+                                    aria-expanded={open ? "true" : undefined}
+                                >
+                                    {authCtx.user?.user?.first_name?.charAt(0) + authCtx.user?.user?.last_name?.charAt(0)}
+                                </IconButton>
+                                <Menu
+                                    anchorEl={anchorEl}
+                                    id="account-menu"
+                                    open={open}
+                                    onClose={handleClose}
+                                    onClick={handleClose}
+                                    PaperProps={{
+                                        elevation: 0,
+                                        sx: {
+                                            overflow: "visible",
+                                            filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                                            mt: 1.5,
+                                            right: "3rem",
+                                            left: "auto !important",
+                                            top: "3.5rem !important",
+                                            "&:before": {
+                                                content: '""',
+                                                display: "block",
+                                                position: "absolute",
+                                                top: 0,
+                                                right: 14,
+                                                width: 10,
+                                                height: 10,
+                                                bgcolor: "background.paper",
+                                                transform: "translateY(-50%) rotate(45deg)",
+                                                zIndex: 0,
+                                            },
                                         },
                                     }}
                                 >
-                                    Odjavite se
-                                </MenuItem>
-                            </Menu>
+                                    <MenuItem
+                                        onClick={(e) => {
+                                            logoutHandler(e);
+                                        }}
+                                        sx={{
+                                            "&:hover": {
+                                                backgroundColor: "inherit",
+                                                color: "inherit",
+                                            },
+                                        }}
+                                    >
+                                        Odjavite se
+                                    </MenuItem>
+                                </Menu>
+                            </Grid>
                         </Grid>
-                    </Grid>
+                    </Box>
                 </Grid>
             </StyledNav>
             {isLoading && <Loader size={50} />}

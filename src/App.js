@@ -108,7 +108,11 @@ const App = () => {
                 <div className={routerClass}>
                     {authCtx.isLoggedIn && (
                         <>
-                            <SideNavigation activeTheme={activeTheme} userName={(authCtx.user.user.first_name ?? "") + " " + (authCtx.user.user.last_name ?? "")} />
+                            <SideNavigation
+                                openSidenav={() => setSidenav(!sidenav)}
+                                activeTheme={activeTheme}
+                                userName={(authCtx.user.user.first_name ?? "") + " " + (authCtx.user.user.last_name ?? "")}
+                            />
                             <Header
                                 openSidenav={() => setSidenav(!sidenav)}
                                 activeTheme={activeTheme}

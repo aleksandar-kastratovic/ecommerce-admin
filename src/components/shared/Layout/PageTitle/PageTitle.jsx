@@ -29,17 +29,17 @@ const PageTitle = ({ title, back, actions = [] }) => {
               label={button.label}
               onClick={button.action}
               variant={button.variant}
-              sx={{
-                ...(button.label !== "Novi unos" && {
-                  backgroundColor: "#17a2b9",
-                  borderColor: "#17a2b9",
-                  color: "#fff",
-                  "&:hover": {
-                    backgroundColor: "#17a2b9de",
-                    borderColor: "#17a2b9de",
-                  },
-                }),
-              }}
+            // sx={{
+            //   ...(button.label !== "Novi unos" && {
+            //     backgroundColor: "#17a2b9",
+            //     borderColor: "#17a2b9",
+            //     color: "#fff",
+            //     "&:hover": {
+            //       backgroundColor: "#17a2b9de",
+            //       borderColor: "#17a2b9de",
+            //     },
+            //   }),
+            // }}
             />
           )
         }
@@ -48,7 +48,17 @@ const PageTitle = ({ title, back, actions = [] }) => {
         )}
 
         {/* Optional back button */}
-        {back && <Button icon={"arrow_back"} label="Nazad" onClick={back} />}
+        {back &&
+          <Button
+            icon={"arrow_back"}
+            label="Nazad"
+            onClick={back}
+          // sx={{
+          //   "@media (max-width: 900px)": {
+          //     display: "none",
+          //   },
+          // }}
+          />}
       </Box>
 
       {/* The title */}

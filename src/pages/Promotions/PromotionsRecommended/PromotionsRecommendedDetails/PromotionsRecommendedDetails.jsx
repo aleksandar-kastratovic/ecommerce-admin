@@ -1,20 +1,20 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../api/api";
-import IconList from "../../../helpers/icons";
-import Form from "../../../components/shared/Form/Form";
+import useAPI from "../../../../api/api";
+import IconList from "../../../../helpers/icons";
+import Form from "../../../../components/shared/Form/Form";
 import basic_data from "./forms/basic_data.json";
-import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
+import DetailsPage from "../../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import { deepClone } from "@mui/x-data-grid/utils/utils";
 import ConditionsOne from "./panels/ConditionsOne/Conditions";
 import ConditionsTwo from "./panels/ConditionsTwo/Conditions";
-import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../../helpers/functions";
 
 const PromotionsRecommendedDetails = () => {
   const { rid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/campaigns/cart-delivery/basic-data";
+  const apiPath = "admin/sell-strategies/recommended/basic-data";
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
@@ -71,7 +71,7 @@ const PromotionsRecommendedDetails = () => {
 
         if (oldId === null) {
           let tId = response?.payload?.id;
-          navigate(`/promotions-recommended/${tId}`, { replace: true });
+          navigate(`/promotions/promotions-recommended/${tId}`, { replace: true });
         }
         setIsLoadingOnSubmit(false);
       })
@@ -96,17 +96,17 @@ const PromotionsRecommendedDetails = () => {
     },
     {
       id: "conditionsOne",
-      name: "Uslovi - 1",
+      name: "Primeni na proizvode",
       icon: IconList.settings,
       enabled: data?.id,
-      component: <ConditionsOne campaignId={data?.id} />,
+      component: <ConditionsOne idSellStrategy={data?.id} />,
     },
     {
       id: "conditionsTwo",
-      name: "Uslovi - 2",
+      name: "Prikaži proizvode",
       icon: IconList.settings,
       enabled: data?.id,
-      component: <ConditionsTwo campaignId={data?.id} />,
+      component: <ConditionsTwo idSellStrategy={data?.id} />,
     },
   ];
 
@@ -114,7 +114,7 @@ const PromotionsRecommendedDetails = () => {
   const panelHandleSelect = (field) => {
     let queryString = setUrlQueryStringParam("tab", field.id);
     const id = data.id == null ? "new" : data.id;
-    navigate(`/promotions-recommended/${id}?${queryString}`, { replace: true });
+    navigate(`/promotions/promotions-recommended/${id}?${queryString}`, { replace: true });
   }
 
   return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[rid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;

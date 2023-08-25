@@ -39,7 +39,7 @@ const CreateForm = ({
   autoFocus,
   onFilePicked,
   selectedFile,
-  allowedFileTypes
+  allowedFileTypes,
 }) => {
   // depending on input type in fields you will get a control
   // value is obvious
@@ -75,6 +75,7 @@ const CreateForm = ({
               onChange={onChangeHandler}
               disabled={disabled}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;
@@ -333,6 +334,7 @@ const CreateForm = ({
               onChange={onChangeHandler}
               disabled={disabled}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;

@@ -89,6 +89,9 @@ const LoginPage = () => {
                         justifyContent: "center",
                         alignItems: "center",
                         backgroundColor: "var(--login-img-background)",
+                        "@media (max-width: 1200px)": {
+                            display: "none",
+                        },
                     }}
                 >
                     <img src={singinBackground} alt={singinBackground} style={{ maxHeight: "100%", width: "100%" }} />
@@ -101,29 +104,77 @@ const LoginPage = () => {
                     sx={{
                         display: "flex",
                         flexDirection: "column",
-                        alignItems: { xs: "center", md: "start" },
+                        alignItems: { xs: "center" },
                         justifyContent: "center",
-                        padding: { xs: "2rem", md: "0 3rem", lg: "0 5rem" },
+                        padding: { xs: "1.5rem", md: "0 3rem", lg: "0 5rem" },
+                        "@media (max-width: 1200px)": {},
                     }}
                 >
-                    <Box sx={{ display: "flex", flexDirection: "column", mb: 2 }}>
-                        <img src={logo} alt={logo} width="90%" />
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            mb: 2,
+                            "@media (max-width: 1200px)": {
+                                alignItems: "center",
+                            },
+                        }}
+                    >
+                        <img src={logo} alt={logo} width="68%" />
                         <Typography
                             variant="h5"
                             sx={{
                                 fontWeight: "600",
                                 paddingTop: "3rem",
                                 fontSize: "1.6875rem",
+                                "@media (max-width: 1200px)": {
+                                    fontSize: "1rem",
+                                    textAlign: "center",
+                                    paddingTop: "1.5rem",
+                                },
                             }}
                         >
                             Dobrodošli na Croonus CMS.
                         </Typography>
 
-                        <Typography variant="body1" sx={{ mt: 1, mb: 3 }}>
-                            Molimo prijavite se za pristup administraciji.
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                mt: 1,
+                                mb: 3,
+                                "@media (max-width: 1200px)": {
+                                    fontSize: "0.8rem",
+                                    textAlign: "center",
+                                    marginTop: "0",
+                                    marginBottom: "0.5rem",
+                                },
+                            }}
+                        >
+                            Molimo unesite Vaše pristupne podatke za pristup administraciji.
                         </Typography>
                         <Box sx={{ maxWidth: "28.125rem" }}>
-                            <Form formFields={fields} initialData={data} onSubmit={submitHandler} isLoading={isLoadingOnSubmit} />
+                            <Form
+                                formFields={fields}
+                                initialData={data}
+                                onSubmit={submitHandler}
+                                isLoading={isLoadingOnSubmit}
+                                label={"Prijavite se"}
+                                styleButtonSubmit={{
+                                    fontWeight: "400",
+                                    marginTop: "0.5rem",
+                                    minWidth: "15rem !important",
+                                    boxShadow: "none",
+                                    "&:hover": { boxShadow: "none" },
+                                    "@media (max-width: 1200px)": {
+                                        minWidth: "12rem !important",
+                                    },
+                                }}
+                                styleWrapperButtons={{
+                                    "@media (max-width: 1200px)": {
+                                        justifyContent: "center",
+                                    },
+                                }}
+                            />
                         </Box>
                     </Box>
                 </Grid>

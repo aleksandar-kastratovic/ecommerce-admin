@@ -6,10 +6,10 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
 import scss from "./Group.module.scss";
-import useAPI from "../../../../../../api/api";
-import { InputSelect } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
-import Button from "../../../../../../components/shared/Button/Button";
-import Buttons from "../../../../../../components/shared/Form/Buttons/Buttons";
+import useAPI from "../../../../../../../api/api";
+import { InputSelect } from "../../../../../../../components/shared/Form/FormInputs/FormInputs";
+import Button from "../../../../../../../components/shared/Button/Button";
+import Buttons from "../../../../../../../components/shared/Form/Buttons/Buttons";
 
 
 const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) => {
@@ -21,7 +21,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   const [fieldValue, setFieldValue] = useState(null);
 
   const api = useAPI();
-  const apiPath = "admin/campaigns/cart-delivery/conditions";
+  const apiPath = "admin/sell-strategies/recommended/conditions-apply";
 
   useEffect(() => {
     setFieldCondition(getValueField("condition"));

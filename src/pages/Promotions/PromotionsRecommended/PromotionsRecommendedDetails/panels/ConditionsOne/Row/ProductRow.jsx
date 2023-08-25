@@ -6,11 +6,11 @@ import Tooltip from "@mui/material/Tooltip";
 
 import scss from "./Row.module.scss";
 import InputValue from "../InputValue/InputValue";
-import { InputSelect } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
+import { InputSelect } from "../../../../../../../components/shared/Form/FormInputs/FormInputs";
 
-const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
+const Row = ({ data, id, handleRemoveComponent, idSellStrategy }) => {
 
-  const apiPath = 'admin/campaigns/product-catalog/conditions';
+  const apiPath = 'admin/sell-strategies/recommended/conditions-apply';
   const [rowData, setRowData] = useState(data);
   const [openDialog, setOpenDialog] = useState({ show: false });
   const [valueOptions, setValueOptions] = useState(rowData.fields.find((item) => item.field === "condition")?.selected?.props ?? {
@@ -58,7 +58,7 @@ const Row = ({ data, id, handleRemoveComponent, campaignId }) => {
           return null;
         }
 
-        let queryString = 'id_campaign=' + campaignId;
+        let queryString = 'id_sell_strategy=' + idSellStrategy;
         for (let i = 0; i < rowData.fields.length; i++) {
           const selectedId = rowData.fields[i]?.selected?.id;
 
