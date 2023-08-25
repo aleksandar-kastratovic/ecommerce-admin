@@ -12,7 +12,7 @@
     "sortable": true,
     "input_type": "select",
     "options": [],
-    "fillFromApi": "admin/campaigns/product-catalog/basic-data/ddl",
+    "fillFromApi": "admin/sell-strategies/recommended/basic-data/ddl",
     "usePropName": true
   },
   {
@@ -93,7 +93,7 @@
     "sortable": true,
     "input_type": "select",
     "options": [],
-    "fillFromApi": "admin/campaigns/product-catalog/basic-data/ddl",
+    "fillFromApi": "admin/sell-strategies/recommended/basic-data/ddl",
     "usePropName": true
   },
   {
@@ -109,7 +109,7 @@
     "sortable": true,
     "input_type": "select",
     "options": [],
-    "fillFromApi": "admin/campaigns/product-catalog/basic-data/ddl",
+    "fillFromApi": "admin/sell-strategies/recommended/basic-data/ddl",
     "usePropName": true
   },
   {

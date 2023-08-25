@@ -12,7 +12,11 @@ import Badge from "@mui/material/Badge";
 import Typography from "@mui/material/Typography";
 import useAPI from "../api/api";
 import { useQuery } from "react-query";
-const SideNavigation = ({ activeTheme, userName }) => {
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@emotion/react";
+import { is } from "date-fns/locale";
+
+const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
     const { userScreens, logout } = useContext(AuthContext);
     const authCtx = useContext(AuthContext);
     const sortedScreens = userScreens?.sort((a, b) => a.order - b.order);
@@ -22,6 +26,8 @@ const SideNavigation = ({ activeTheme, userName }) => {
     const [openGroups, setOpenGroups] = useState(initialOpenGroups);
     const api = useAPI();
 
+    const theme = useTheme();
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
     // Populate the menu
     let menu = [];
     for (const allowedScreen of sortedScreens ?? []) {
@@ -102,89 +108,103 @@ const SideNavigation = ({ activeTheme, userName }) => {
                 </Typography>
             </div>
             <ul className="list-unstyled components mb-5 scroll-view">
-                {menu.map((menuGroup) => (
-                    <Fragment key={menuGroup.name}>
-                        <li className="sidebar-categories">
-                            <p
-                                className={`group-toggle-button`}
-                                onClick={() => toggleGroup(menuGroup.name)}
-                                style={{
-                                    cursor: "pointer",
-                                    display: "flex",
-                                    alignItems: "center",
-                                    justifyContent: "space-between",
-                                    transition: "height 0.3s ease",
-                                    overflow: "hidden",
-                                    whiteSpace: "nowrap",
-                                    height: openGroups[menuGroup.name] ? "2rem" : "1.5rem",
-                                }}
-                            >
-                                {menuGroup.name}
+                {menu.map((menuGroup) => {
+                    if (isSmallScreen && menuGroup.name !== "Prodaja") {
+                        return null;
+                    }
+                    return (
+                        <Fragment key={menuGroup.name}>
+                            <li className="sidebar-categories">
+                                <p
+                                    className={`group-toggle-button`}
+                                    onClick={() => toggleGroup(menuGroup.name)}
+                                    style={{
+                                        cursor: "pointer",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "space-between",
+                                        transition: "height 0.3s ease",
+                                        overflow: "hidden",
+                                        whiteSpace: "nowrap",
+                                        height: openGroups[menuGroup.name] ? "2rem" : "1.5rem",
+                                    }}
+                                >
+                                    {menuGroup.name}
 
-                                {openGroups[menuGroup.name] ? <ExpandMore sx={{ fontSize: "1rem" }} /> : <ChevronRight sx={{ fontSize: "1rem" }} />}
-                            </p>
-                        </li>
+                                    {openGroups[menuGroup.name] ? <ExpandMore sx={{ fontSize: "1rem" }} /> : <ChevronRight sx={{ fontSize: "1rem" }} />}
+                                </p>
+                            </li>
 
-                        {openGroups[menuGroup.name] && (
-                            <>
-                                {menuGroup.items.map((item, index) => {
-                                    let renderedLink;
+                            {openGroups[menuGroup.name] && (
+                                <>
+                                    {menuGroup.items.map((item, index) => {
+                                        let renderedLink;
+                                        if ((isSmallScreen && item.path === "/b2c-orders") || !isSmallScreen) {
+                                            switch (item?.path) {
+                                                case "/b2c-orders":
+                                                    const badgeB2c = badgeNumberB2c || [];
+                                                    renderedLink = (
+                                                        <Badge
+                                                            badgeContent={badgeB2c.find((item) => item.status === "new")?.count || 0}
+                                                            showZero
+                                                            sx={{
+                                                                ".MuiBadge-badge": { backgroundColor: "#d32f2f", fontSize: "0.625rem", top: "50%", transform: "translateY(-50%)", right: "1rem" },
+                                                                width: "100%",
+                                                            }}
+                                                        >
+                                                            {isSmallScreen ? (
+                                                                <NavLink onClick={openSidenav} to={item.path} className={(navData) => (navData.isActive ? "active" : "")} style={{ width: "100%" }}>
+                                                                    <Unicon icon={item?.icon} />
+                                                                    {item?.name}
+                                                                </NavLink>
+                                                            ) : (
+                                                                <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")} style={{ width: "100%" }}>
+                                                                    <Unicon icon={item?.icon} />
+                                                                    {item?.name}
+                                                                </NavLink>
+                                                            )}
+                                                        </Badge>
+                                                    );
+                                                    break;
 
-                                    switch (item?.path) {
-                                        case "/b2c-orders":
-                                            const badgeB2c = badgeNumberB2c || [];
-                                            renderedLink = (
-                                                <Badge
-                                                    badgeContent={badgeB2c.find((item) => item.status === "new")?.count || 0}
-                                                    showZero
-                                                    sx={{
-                                                        ".MuiBadge-badge": { backgroundColor: "#d32f2f", fontSize: "0.625rem", top: "50%", transform: "translateY(-50%)", right: "1rem" },
-                                                        width: "100%",
-                                                    }}
-                                                >
-                                                    <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")} style={{ width: "100%" }}>
-                                                        <Unicon icon={item?.icon} />
-                                                        {item?.name}
-                                                    </NavLink>
-                                                </Badge>
-                                            );
-                                            break;
+                                                case "/b2b-orders":
+                                                    const badgeB2b = badgeNumberB2b || [];
+                                                    renderedLink = (
+                                                        <Badge
+                                                            badgeContent={badgeB2b.find((item) => item.status === "new")?.count || 0}
+                                                            showZero
+                                                            sx={{
+                                                                ".MuiBadge-badge": { backgroundColor: "#d32f2f", fontSize: "0.625rem", top: "50%", transform: "translateY(-50%)", right: "1rem" },
+                                                                width: "100%",
+                                                            }}
+                                                        >
+                                                            <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")} style={{ width: "100%" }}>
+                                                                <Unicon icon={item?.icon} />
+                                                                {item?.name}
+                                                            </NavLink>
+                                                        </Badge>
+                                                    );
+                                                    break;
 
-                                        case "/b2b-orders":
-                                            const badgeB2b = badgeNumberB2b || [];
-                                            renderedLink = (
-                                                <Badge
-                                                    badgeContent={badgeB2b.find((item) => item.status === "new")?.count || 0}
-                                                    showZero
-                                                    sx={{
-                                                        ".MuiBadge-badge": { backgroundColor: "#d32f2f", fontSize: "0.625rem", top: "50%", transform: "translateY(-50%)", right: "1rem" },
-                                                        width: "100%",
-                                                    }}
-                                                >
-                                                    <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")} style={{ width: "100%" }}>
-                                                        <Unicon icon={item?.icon} />
-                                                        {item?.name}
-                                                    </NavLink>
-                                                </Badge>
-                                            );
-                                            break;
+                                                default:
+                                                    renderedLink = (
+                                                        <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")}>
+                                                            <Unicon icon={item.icon} />
+                                                            {item.name}
+                                                        </NavLink>
+                                                    );
+                                                    break;
+                                            }
 
-                                        default:
-                                            renderedLink = (
-                                                <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")}>
-                                                    <Unicon icon={item.icon} />
-                                                    {item.name}
-                                                </NavLink>
-                                            );
-                                            break;
-                                    }
-
-                                    return <li key={item.path}>{renderedLink}</li>;
-                                })}
-                            </>
-                        )}
-                    </Fragment>
-                ))}
+                                            return <li key={item.path}>{renderedLink}</li>;
+                                        }
+                                        return null;
+                                    })}
+                                </>
+                            )}
+                        </Fragment>
+                    );
+                })}
             </ul>
         </nav>
     );

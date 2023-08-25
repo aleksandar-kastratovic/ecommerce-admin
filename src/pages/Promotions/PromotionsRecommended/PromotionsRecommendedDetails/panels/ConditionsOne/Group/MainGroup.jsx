@@ -8,11 +8,11 @@ import Tooltip from "@mui/material/Tooltip";
 import buttons from "./buttons.json"
 import scss from "./Group.module.scss";
 import Typography from "@mui/material/Typography";
-import { InputSelect } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
-import Buttons from "../../../../../../components/shared/Form/Buttons/Buttons";
-import Button from "../../../../../../components/shared/Button/Button";
-import ListPageModalWrapper from "../../../../../../components/shared/Modal/ListPageModalWrapper";
-import useAPI from "../../../../../../api/api";
+import { InputSelect } from "../../../../../../../components/shared/Form/FormInputs/FormInputs";
+import Buttons from "../../../../../../../components/shared/Form/Buttons/Buttons";
+import Button from "../../../../../../../components/shared/Button/Button";
+import ListPageModalWrapper from "../../../../../../../components/shared/Modal/ListPageModalWrapper";
+import useAPI from "../../../../../../../api/api";
 
 
 const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) => {
@@ -26,7 +26,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   const [showModal, setShowModal] = useState(false);
 
   const api = useAPI();
-  const apiPath = "admin/campaigns/cart-delivery/conditions";
+  const apiPath = "admin/sell-strategies/recommended/conditions-apply";
 
   useEffect(() => {
     setFieldCondition(getValueField("condition"));

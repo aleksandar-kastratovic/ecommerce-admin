@@ -15,7 +15,6 @@ const Promotions = () => {
   const activeTab = getUrlQueryStringParam("tab") ?? 'products';
   const navigate = useNavigate();
 
-
   const fields = [
     {
       id: "products",
@@ -41,14 +40,14 @@ const Promotions = () => {
       component: <PromotionsDeliveryCampaigns />,
       title: "Promocije za dostavu"
     },
-    // {
-    //   id: "reccomended",
-    //   name: "Preporučeni",
-    //   icon: IconList.list,
-    //   enabled: true,
-    //   component: <PromotionsRecommended />,
-    //   title: "Preporučeni proizvodi"
-    // },
+    {
+      id: "reccomended",
+      name: "Preporučeni",
+      icon: IconList.list,
+      enabled: true,
+      component: <PromotionsRecommended />,
+      title: "Preporučeni proizvodi"
+    },
     // {
     //   id: "up_sells",
     //   name: "Up-sells",
@@ -75,12 +74,6 @@ const Promotions = () => {
     navigate(`?${queryString}`, { replace: true });
     setPageTitle(`${field.title}`);
   }
-
-  // useEffect(() => {
-  //   setPageTitle(`${pageTitle}`);
-  // }, [])
-
-
 
   return <DetailsPage title={pageTitle} fields={fields} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };

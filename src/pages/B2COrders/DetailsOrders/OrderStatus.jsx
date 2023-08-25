@@ -66,9 +66,10 @@ const OrderStatus = ({ orderId, status }) => {
         onChange={({ target }) => {
           setData({ ...data, [target.name]: target.value });
         }}
-        fillFromApi={`${apiPath}/ddl`}
-        usePropName={true}
+        fillFromApi={`${apiPath}/ddl/status`}
+        usePropName={false}
         options={[]}
+        styleFormControl={{ ".MuiFormLabel-root": { fontSize: "0.875rem" }, "&.MuiFormControl-root": { marginTop: "0" } }}
       />
       {sendMail === "1" && data.status !== oldStatus && (
         <>
@@ -97,8 +98,22 @@ const OrderStatus = ({ orderId, status }) => {
         </>
       )}
       <Buttons>
-        <Button label="Istorija" onClick={() => setOpenDialog({ show: true })} />
-        <Button label="Sačuvaj" variant="contained" onClick={formSubmitHandler} disabled={data.status === oldStatus} />
+        <Button
+          label="Istorija"
+          onClick={() => setOpenDialog({ show: true })}
+          sx={{
+            "@media (max-width: 500px)": {
+              minWidth: "fit-content !important",
+              padding: "0.2rem 0.5rem !important",
+            },
+          }}
+        />
+        <Button label="Sačuvaj" variant="contained" onClick={formSubmitHandler} disabled={data.status === oldStatus} sx={{
+          "@media (max-width: 500px)": {
+            minWidth: "fit-content !important",
+            padding: "0.2rem 0.5rem !important",
+          },
+        }} />
       </Buttons>
       <HistoryModal openDialog={openDialog} setOpenDialog={setOpenDialog} apiPath={`${apiPath}/${orderId}`} />
     </Box>

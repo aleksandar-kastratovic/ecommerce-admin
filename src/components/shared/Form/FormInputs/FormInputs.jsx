@@ -69,9 +69,15 @@ export const InputWrapper = ({ children = null, label, required, disabled, margi
  * @return {JSX.Element}
  */
 
-export const InputInput = ({ label, required, disabled, name, value, autoFocus, type = "text", error = null, margin = "dense", onChange = () => null, description, placeholder, readOnly }) => {
+export const InputInput = ({ label, required, disabled, name, value, autoFocus, type = "text", error = null, margin = "dense", onChange = () => null, description, placeholder, readOnly, uiProp }) => {
+  const existingStyles = {
+    "& legend": { display: "none" },
+    "& fieldset": { top: 0 },
+    ".MuiInputBase-root": { overflow: "hidden" },
+    ".MuiInputBase-input": { padding: "0.7rem", fontSize: "0.875rem" },
+  };
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={uiProp?.wrapper_props?.custom_sx}>
       <TextField
         type={type}
         name={name}
@@ -84,9 +90,8 @@ export const InputInput = ({ label, required, disabled, name, value, autoFocus, 
         helperText={error ? error : description}
         error={error !== null}
         sx={{
-          "& legend": { display: "none" },
-          "& fieldset": { top: 0 },
-          ".MuiInputBase-input": { padding: "0.7rem", fontSize: "0.875rem" }
+          ...existingStyles,
+          ...uiProp?.component_props?.custom_sx
         }}
       />
     </InputWrapper>
@@ -860,7 +865,7 @@ export const InputHtml = ({ label, required, disabled, name, value, error = null
   );
 };
 
-export const ImportPicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile, allowedFileTypes = ['csv', 'xml', 'json', 'jpg'] }) => {
+export const ImportPicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile, allowedFileTypes = ['csv', 'xml', 'json'] }) => {
   const ref = useRef();
   const [attachment, setAttachment] = useState(null);
   const isFileTypeAllowed = (fileExtension) => allowedFileTypes.includes(fileExtension);
@@ -907,7 +912,7 @@ export const ImportPicker = ({ label, required, disabled, margin, error = null, 
         {selectedFile ? (
           <span style={{ fontSize: "0.875rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Izabrani fajl: {selectedFile.name}</span>
         ) : (
-          <span style={{ fontSize: "0.875rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Kliknite ovde kako biste odabrali fajl za import.</span>
+          <span style={{ fontSize: "0.875rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Kliknite ovde kako biste odabrali fajl.</span>
         )}
         <Input
           type="file"

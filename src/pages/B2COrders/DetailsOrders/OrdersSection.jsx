@@ -2,11 +2,11 @@ import Box from "@mui/material/Box";
 
 import styles from "./B2COrdersDetails.module.scss";
 
-const OrderSection = ({ title, children, className }) => {
+const OrderSection = ({ title, children, className, styleBodyProductOrders, styleWrapperOfOrderSection }) => {
   return (
-    <Box className={`${className} ${styles.orderSection}`}>
+    <Box className={`${className} ${styles.orderSection}`} sx={styleWrapperOfOrderSection}>
       <Box className={styles.orderSectionTitle}>{title}</Box>
-      <Box className={styles.orderSectionBody}>{children}</Box>
+      <Box className={styles.orderSectionBody} sx={styleBodyProductOrders}>{children}</Box>
     </Box>
   );
 };

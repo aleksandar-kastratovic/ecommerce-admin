@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import { currencyFormat } from "../../../helpers/functions";
+import Divider from '@mui/material/Divider';
 
 import styles from "./B2COrdersDetails.module.scss";
 
@@ -10,35 +11,32 @@ const OrderPrices = ({ total_with_out_vat, total_delivery_amount, total_discount
   const totalDiscount = Number(total_items_discount_amount) + Number(total_cart_discount_amount);
 
   return (
-    <Box>
-      <hr />
+    <Box sx={{ background: "#ecf0fa", padding: "1rem 0.5rem", borderRadius: "0.25rem", marginTop: "1rem" }}>
+      {/* <hr /> */}
       <Box className={styles.priceRow}>
-        <span>Ukupna osnovica za PDV:</span>
+        <span>Ukupno bez PDV:</span>
         <span className={styles.priceValue}>{`${currencyFormat(total_with_out_vat)} ${currency}`}</span>
       </Box>
       <Box className={styles.priceRow}>
-        <span>Ukupan PDV:</span>
+        <span>PDV:</span>
         <span className={styles.priceValue}>{`${currencyFormat(total_vat)} ${currency}`}</span>
       </Box>
-      <Box className={styles.priceRow}>
-        <span>Ukupan iznos:</span>
-        <span className={styles.priceValue}>{`${currencyFormat(total_with_vat)} ${currency}`}</span>
-      </Box>
+      <Divider sx={{ margin: "1rem 0", borderColor: "#ffff" }} />
       <Box className={styles.priceRow}>
         <span>Popust:</span>
-        <span className={styles.priceValue}>{`-${currencyFormat(totalDiscount)} ${currency}`}</span>
+        <span className={styles.priceValue}>{`${currencyFormat(totalDiscount)} ${currency}`}</span>
       </Box>
       <Box className={styles.priceRow}>
         <span>Promo kod:</span>
         <span className={styles.priceValue}>{`-${currencyFormat(total_promo_code_amount)} ${currency}`}</span>
       </Box>
       <Box className={styles.priceRow}>
-        <span>Iznos dostave:</span>
+        <span>Dostava:</span>
         <span className={styles.priceValue}>{`${currencyFormat(total_delivery_amount)} ${currency}`}</span>
       </Box>
-      <hr />
-      <Box className={`${styles.totalPriceRow} ${styles.priceRow}`}>
-        <span>Ukupno za uplatu:</span>
+      <Divider sx={{ margin: "1rem 0", borderColor: "#ffff" }} />
+      <Box className={`${styles.totalPriceRow} ${styles.priceRow}`} sx={{ color: "#28a86e !important" }}>
+        <span style={{ fontWeight: "600" }}>UKUPNO:</span>
         <span className={styles.priceValue}>{`${currencyFormat(total)} ${currency}`}</span>
       </Box>
     </Box>

@@ -59,3 +59,11 @@
     background-color: $lightGrey !important;
     color: $black !important;
 }
+
+// RESPONSIVE
+
+@media only screen and (max-width: 900px) {
+    .wrapper {
+        max-height: none;
+    }
+}

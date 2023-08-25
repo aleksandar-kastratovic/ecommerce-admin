@@ -7,7 +7,7 @@
 }
 
 .orderSectionTitle {
-    font-weight: 400;
+    font-weight: 500;
     padding: 0.5rem;
     font-size: 17px;
     background-color: $lightGrey;
@@ -15,7 +15,7 @@
 }
 
 .orderSectionBody {
-    padding: 1rem;
+    padding: 0.8rem 0.5rem;
 }
 
 .orderSection {
@@ -44,6 +44,7 @@
     display: flex;
     justify-content: space-between;
     color: $middleGrey;
+    font-size: 0.875rem;
 }
 
 .totalPriceRow {
@@ -53,16 +54,16 @@
 }
 
 .priceValue {
-    font-weight: bold;
+    font-weight: 600;
 }
 
 .dataLabel {
-    font-weight: bold;
+    font-weight: 600;
     margin-right: 10px;
 }
 
 .productCell {
-    font-weight: bold !important;
+    font-weight: 600 !important;
 }
 
 .productCellLink {
@@ -70,5 +71,20 @@
     transition: all 0.3s ease-in-out;
     &:hover {
         color: #28a86e;
+    }
+}
+
+// RESPONSIVE
+
+@media (max-width: 1536px) {
+    .orderSection50 {
+        width: 100%;
+    }
+}
+
+@media (max-width: 1024px) {
+    .orderDataSection {
+        flex-direction: column;
+        gap: 1rem;
     }
 }

@@ -28,138 +28,88 @@ const B2COrdersDetails = () => {
   const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
   const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
 
-  console.log(orderItems)
   return (
     <PageWrapper
-      title={`Porudžbina: ${orderData?.slug}`}
+      title={`Narudžbenica: ${orderData?.slug}`}
       back={() => {
         navigate(-1);
       }}
       ready={!(isOrderLoading || isBillingLoading || isShipingLoading || isItemsLoading)}
     >
-      <Box className={styles.orderData}>
-        <OrderSection title="Podaci partnera:" className={styles.orderSection50}>
+      <Box
+        className={styles.orderData}
+        sx={{
+          marginBottom: "1rem", "@media (max-width: 1536px)": { flexDirection: "column", },
+        }}
+      >
+        <OrderSection title="Podaci kupca:" className={styles.orderSection50}>
           <Box className={styles.orderDataSection}>
             <Box className={styles.orderDataDisplay}>
-              <p>
-                <span className={styles.dataLabel}>Kompanija:</span>
-                {billingData?.company_name}
+              <p style={{ fontSize: "0.875rem" }}>
+                <span className={styles.dataLabel}>Kupac:</span>
+                {orderData?.ship_to_name ? orderData?.ship_to_name : "/"}
               </p>
-              <p>
-                <span className={styles.dataLabel}>Matični broj:</span>
-                {billingData?.maticni_broj}
-              </p>
-              <p>
-                <span className={styles.dataLabel}>PIB:</span>
-                {billingData?.pib}
-              </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Adresa:</span>
-                {addressTemplate(billingData?.address, billingData?.object_number, billingData?.floor, billingData?.apartment_number)}
+                {addressTemplate(billingData?.address, billingData?.object_number, billingData?.floor, billingData?.apartment_number, billingData?.zip_code, billingData?.town_name, billingData?.country_name)}
               </p>
-              <p>
-                <span className={styles.dataLabel}>Grad:</span>
-                {billingData?.town_display_name ?? billingData?.town_name}
-              </p>
-            </Box>
-            <Box className={styles.orderDataDisplay}>
-              <p>
-                <span className={styles.dataLabel}>Poštanski broj:</span>
-                {billingData?.zip_code}
-              </p>
-              <p>
-                <span className={styles.dataLabel}>Država:</span>
-                {billingData?.country_name}
-              </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Telefon:</span>
-                {billingData?.phone}
+                {billingData?.phone ? billingData?.phone : "/"}
               </p>
-              <p>
-                <span className={styles.dataLabel}>Mobilni telefon:</span>
-                {billingData?.phone}
+              <p style={{ fontSize: "0.875rem" }}>
+                <span className={styles.dataLabel}>Email:</span>
+                {billingData?.email ? billingData?.email : "/"}
               </p>
-              <p>
-                <span className={styles.dataLabel}>E-mail:</span>
-                {billingData?.email}
+            </Box>
+            <Box className={styles.orderDataDisplay}>
+              <p style={{ fontSize: "0.875rem" }}>
+                <span className={styles.dataLabel}>Plaćanje:</span>
+                <span style={{ fontWeight: "600", color: "#28a86e" }}>{orderData?.payment_method_name ? orderData?.payment_method_name : "/"}</span>
+              </p>
+              <p style={{ fontSize: "0.875rem" }}>
+                <span className={styles.dataLabel}>Dostava:</span>
+                {orderData?.delivery_method_name ? orderData?.delivery_method_name : "/"}
+              </p>
+              <p style={{ fontSize: "0.875rem" }}>
+                <span className={styles.dataLabel}>Vreme kupovine:</span>
+                {orderData?.created_at ? orderData?.created_at : "/"}
+              </p>
+              <p style={{ fontSize: "0.875rem" }}>
+                <span className={styles.dataLabel}>Napomena:</span>
+                {shippingData?.note ? shippingData?.note : "/"}
               </p>
             </Box>
           </Box>
-          {billingData?.note && (
-            <p>
-              <span className={styles.dataLabel}>Napomena:</span>
-              {billingData?.note}
-            </p>
-          )}
         </OrderSection>
-        <OrderSection title="Adresa za dostavu:" className={styles.orderSection50}>
-          <Box className={styles.orderDataSection}>
-            <Box className={styles.orderDataDisplay}>
-              <p>
-                <span className={styles.dataLabel}>Adresa:</span>
-                {addressTemplate(shippingData?.address, shippingData?.object_number, shippingData?.floor, shippingData?.apartment_number)}
-              </p>
-              <p>
-                <span className={styles.dataLabel}>Grad:</span>
-                {shippingData?.town_display_name ?? shippingData?.town_name}
-              </p>
-              <p>
-                <span className={styles.dataLabel}>Poštanski broj:</span>
-                {shippingData?.zip_code}
-              </p>
-              <p>
-                <span className={styles.dataLabel}>Država:</span>
-                {shippingData?.country_name}
-              </p>
-            </Box>
-            <Box className={styles.orderDataDisplay}>
-              <p>
-                <span className={styles.dataLabel}>Način plaćanja:</span>
-                {orderData?.payment_method_name}
-              </p>
-              <p>
-                <span className={styles.dataLabel}> Način dostave:</span>
-                {orderData?.delivery_method_name}
-              </p>
-              <p>
-                <span className={styles.dataLabel}>Poručilac:</span>
-                {orderData?.ship_to_name}
-              </p>
-              <p>
-                <span className={styles.dataLabel}>Datum porudžbine:</span>
-                {orderData?.created_at}
-              </p>
-            </Box>
-          </Box>
-          {shippingData?.note && (
-            <p>
-              <span className={styles.dataLabel}>Napomena:</span>
-              {shippingData?.note}
-            </p>
-          )}
+        <OrderSection title="Status narudžbenice:" className={styles.orderSection50}>
+          <OrderStatus orderId={orderData?.id} status={orderData?.status} />
         </OrderSection>
       </Box>
-      <OrderSection title="Status porudžbine:" className={styles.orderSection50}>
-        <OrderStatus orderId={orderData?.id} status={orderData?.status} />
-      </OrderSection>
-      <OrderSection title="Proizvodi u porudžbini:">
-        <OrderItemsTable fields={tableFields} items={orderItems} />
-      </OrderSection>
-      <OrderSection title="Porudžbina:">
-        <OrderPrices
-          total_with_out_vat={orderData?.total_with_out_vat}
-          total_delivery_amount={orderData?.total_delivery_amount}
-          total_discount={orderData?.total_discount}
-          total_promo_code={orderData?.total_promo_code}
-          total_vat={orderData?.total_vat}
-          total_with_vat={orderData?.total_with_vat}
-          total={orderData?.total}
-          currency={orderData?.currency}
-          total_items_discount_amount={orderData?.total_items_discount_amount}
-          total_cart_discount_amount={orderData?.total_cart_discount_amount}
-          total_promo_code_amount={orderData?.total_promo_code_amount}
-        />
-      </OrderSection>
+
+      <Box
+        sx={{ display: "grid", gridTemplateColumns: "78% auto", gap: "2rem", "@media (max-width: 1536px)": { gridTemplateColumns: "1fr" }, }}
+      >
+        <OrderSection title="Proizvodi u narudžbenici:" styleBodyProductOrders={{ paddingTop: "0.5rem", overflowX: "auto" }} styleWrapperOfOrderSection={{ maxWidth: "100%", overflowX: "hidden" }} >
+          <OrderItemsTable fields={tableFields} items={orderItems} />
+        </OrderSection>
+        <OrderSection title="Ukupno za naplatu:" styleBodyProductOrders={{ padding: "0" }}>
+          <OrderPrices
+            total_with_out_vat={orderData?.total_with_out_vat}
+            total_delivery_amount={orderData?.total_delivery_amount}
+            total_discount={orderData?.total_discount}
+            total_promo_code={orderData?.total_promo_code}
+            total_vat={orderData?.total_vat}
+            total_with_vat={orderData?.total_with_vat}
+            total={orderData?.total}
+            currency={orderData?.currency}
+            total_items_discount_amount={orderData?.total_items_discount_amount}
+            total_cart_discount_amount={orderData?.total_cart_discount_amount}
+            total_promo_code_amount={orderData?.total_promo_code_amount}
+          />
+        </OrderSection>
+      </Box>
+
     </PageWrapper>
   );
 };
