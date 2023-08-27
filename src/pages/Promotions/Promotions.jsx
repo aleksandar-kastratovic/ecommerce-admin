@@ -48,22 +48,22 @@ const Promotions = () => {
       component: <PromotionsRecommended />,
       title: "Preporučeni proizvodi"
     },
-    // {
-    //   id: "up_sells",
-    //   name: "Up-sells",
-    //   icon: IconList.attribution,
-    //   enabled: true,
-    //   component: <PromotionsUpSells />,
-    //   title: "Up-sells proizvodi"
-    // },
-    // {
-    //   id: "cross_sells",
-    //   name: "Cross-sells",
-    //   icon: IconList.list,
-    //   enabled: true,
-    //   component: <PromotionsCrossSells />,
-    //   title: "Cross-sells proizvodi"
-    // },
+    {
+      id: "up_sells",
+      name: "Up-sells",
+      icon: IconList.attribution,
+      enabled: true,
+      component: <PromotionsUpSells />,
+      title: "Up-sells proizvodi"
+    },
+    {
+      id: "cross_sells",
+      name: "Cross-sells",
+      icon: IconList.list,
+      enabled: true,
+      component: <PromotionsCrossSells />,
+      title: "Cross-sells proizvodi"
+    },
   ];
 
   const [pageTitle, setPageTitle] = useState(`${fields.find(field => field.id === activeTab)?.name}`);

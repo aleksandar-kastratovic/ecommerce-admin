@@ -94,6 +94,9 @@ const Row = ({ data, id, handleRemoveComponent, idSellStrategy }) => {
           default:
             return (
               <InputSelect
+                styleFormControl={{
+                  display: item?.hideElement && 'none',
+                }}
                 className={scss.inputSelect}
                 key={item.field + queryString}
                 required={false}

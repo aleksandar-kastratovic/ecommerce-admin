@@ -5,10 +5,10 @@ import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
-import Button from "../../../../../../components/shared/Button/Button";
-import Buttons from "../../../../../../components/shared/Form/Buttons/Buttons";
-import { InputSelect } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
-import useAPI from "../../../../../../api/api";
+import Button from "../../../../../../../components/shared/Button/Button";
+import Buttons from "../../../../../../../components/shared/Form/Buttons/Buttons";
+import { InputSelect } from "../../../../../../../components/shared/Form/FormInputs/FormInputs";
+import useAPI from "../../../../../../../api/api";
 
 import scss from "./Group.module.scss";
 
@@ -22,7 +22,7 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
   const [fieldValue, setFieldValue] = useState(null);
 
   const api = useAPI();
-  const apiPath = "admin/campaigns/product-catalog/conditions";
+  const apiPath = "admin/sell-strategies/cross-sell/conditions-apply";
 
   useEffect(() => {
     setFieldCondition(getValueField("condition"));

@@ -1,20 +1,20 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../api/api";
-import IconList from "../../../helpers/icons";
-import Form from "../../../components/shared/Form/Form";
+import useAPI from "../../../../api/api";
+import IconList from "../../../../helpers/icons";
+import Form from "../../../../components/shared/Form/Form";
 import basic_data from "./forms/basic_data.json";
-import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
+import DetailsPage from "../../../../components/shared/ListPage/DetailsPage/DetailsPage";
+import { deepClone } from "@mui/x-data-grid/utils/utils";
 import ConditionsOne from "./panels/ConditionsOne/Conditions";
 import ConditionsTwo from "./panels/ConditionsTwo/Conditions";
-import { deepClone } from "@mui/x-data-grid/utils/utils";
-import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
+import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../../helpers/functions";
 
 const PromotionsCrossSellsDetails = () => {
-  const { csid } = useParams();
+  const { rid } = useParams();
   const api = useAPI();
-  const apiPath = "admin/campaigns/cart-delivery/basic-data";
+  const apiPath = "admin/sell-strategies/cross-sell/basic-data";
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
@@ -40,17 +40,17 @@ const PromotionsCrossSellsDetails = () => {
   const [formFields, setFormFields] = useState(basic_data);
   let newFields = deepClone(formFields);
   let slugField = newFields.map((field) => {
-    if (field.prop_name === "system" && csid !== "new") {
+    if (field.prop_name === "system" && rid !== "new") {
       return { ...field, disabled: true };
     } else {
       return field;
     }
-  }).filter((field) => !(field.prop_name === "slug" && csid === "new"));
+  }).filter((field) => !(field.prop_name === "slug" && rid === "new"));
 
 
   const handleData = async () => {
     setIsLoading(true);
-    api.get(`${apiPath}/${csid}`)
+    api.get(`${apiPath}/${rid}`)
       .then((response) => {
         setData(response?.payload);
         setIsLoading(false);
@@ -71,7 +71,7 @@ const PromotionsCrossSellsDetails = () => {
 
         if (oldId === null) {
           let tId = response?.payload?.id;
-          navigate(`/promotions-cross-sells/${tId}`, { replace: true });
+          navigate(`/promotions/promotions-cross-sells/${tId}`, { replace: true });
         }
         setIsLoadingOnSubmit(false);
       })
@@ -86,8 +86,6 @@ const PromotionsCrossSellsDetails = () => {
     handleData();
   }, []);
 
-
-
   const fields = [
     {
       id: "basic",
@@ -98,17 +96,17 @@ const PromotionsCrossSellsDetails = () => {
     },
     {
       id: "conditionsOne",
-      name: "Uslovi - 1",
+      name: "Primeni na proizvode",
       icon: IconList.settings,
       enabled: data?.id,
-      component: <ConditionsOne campaignId={data?.id} />,
+      component: <ConditionsOne idSellStrategy={data?.id} />,
     },
     {
       id: "conditionsTwo",
-      name: "Uslovi - 2",
+      name: "Prikaži proizvode",
       icon: IconList.settings,
       enabled: data?.id,
-      component: <ConditionsTwo campaignId={data?.id} />,
+      component: <ConditionsTwo idSellStrategy={data?.id} />,
     },
   ];
 
@@ -116,10 +114,10 @@ const PromotionsCrossSellsDetails = () => {
   const panelHandleSelect = (field) => {
     let queryString = setUrlQueryStringParam("tab", field.id);
     const id = data.id == null ? "new" : data.id;
-    navigate(`/promotions-cross-sells/${id}?${queryString}`, { replace: true });
+    navigate(`/promotions/promotions-cross-sells/${id}?${queryString}`, { replace: true });
   }
 
-  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[csid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
+  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[rid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default PromotionsCrossSellsDetails;

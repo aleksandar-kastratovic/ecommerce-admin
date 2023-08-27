@@ -78,6 +78,9 @@ import PromotionsCatalogCampaignsPageDetails from "../pages/Promotions/Promotion
 import PromotionsCartSummaryDetails from "../pages/Promotions/PromotionsCartSummary/PromotionsCartSummaryDetails/PromotionsCartSummaryDetails";
 import PromotionsDeliveryCampaignsDetails from "../pages/Promotions/PromotionsDeliveryCampaigns/PromotionsDeliveryCampaignsDetails/PromotionsDeliveryCampaignsDetails";
 import PromotionsRecommendedDetails from "../pages/Promotions/PromotionsRecommended/PromotionsRecommendedDetails/PromotionsRecommendedDetails";
+import PromotionsCrossSellsDetails from "../pages/Promotions/PromotionsCrossSells/PromotionsCrossSellsDetails/PromotionsCrossSellsDetails";
+import PromotionsUpSellsDetails from "../pages/Promotions/PromotionsUpSells/PromotionsUpSellsDetails/PromotionsUpSellsDetails";
+
 /** The list of available screens. */
 const { PRODUCT, SALE, B2B, B2C, COMPANY_SETTINGS, SETTINGS } = MenuGroup;
 const screens = {
@@ -102,6 +105,8 @@ const screens = {
             ["promotions-cart-summary-campaigns/:nid", PromotionsCartSummaryDetails],
             ["promotions-delivery-campaigns/:nid", PromotionsDeliveryCampaignsDetails],
             ["promotions-recommended/:rid", PromotionsRecommendedDetails],
+            ["promotions-cross-sells/:rid", PromotionsCrossSellsDetails],
+            ["promotions-up-sells/:rid", PromotionsUpSellsDetails],
         ],
     ],
     CATEG: [
