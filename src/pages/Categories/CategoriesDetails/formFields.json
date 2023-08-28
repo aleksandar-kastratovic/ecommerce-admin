@@ -80,7 +80,7 @@
     "description": "",
     "ui_prop": "settings",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "textarea"
   },
   {
     "field_name": "Opis",
@@ -93,7 +93,7 @@
     "description": "",
     "ui_prop": "settings",
     "sortable": true,
-    "input_type": "textarea"
+    "input_type": "html_editor"
   },
   {
     "field_name": "Status",

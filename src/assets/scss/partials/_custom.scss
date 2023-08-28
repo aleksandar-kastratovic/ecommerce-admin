@@ -116,21 +116,46 @@ form label {
 /*---------------------- SORTABLE TREE START -----------------*/
 .rst__rowWrapper {
     .rst__row {
-        height: 3rem;
+        height: 2.5rem;
         .rst__rowContents {
             justify-content: flex-start;
             min-width: 60%;
+            box-shadow: none;
+            border-radius: 0 0.25rem 0.25rem 0;
             .rst__rowToolbar,
             .rst__toolbarButton {
                 width: 100%;
             }
         }
+        .rst__moveHandle {
+            box-shadow: none;
+            width: 2.5rem;
+            border-color: #c7c7c7;
+            border-radius: 0.25rem 0 0 0.25rem;
+        }
     }
+}
+
+.rst__expandButton,
+.rst__collapseButton {
+    box-shadow: 0 0 0 1px #bbb;
+}
+
+.rst__lineHalfHorizontalRight::before,
+.rst__lineHalfHorizontalRight::after,
+.rst__lineFullVertical::after,
+.rst__lineChildren::after {
+    background-color: #bbb;
+}
+
+.rst__collapseButton:focus,
+.rst__expandButton:focus {
+    box-shadow: 0 0 0 1px #28a86e, 0 0 1px 3px #82c2a5;
 }
 
 .rst__node,
 .rst__nodeContent {
-    min-width: 60%;
+    min-width: 30%;
 }
 
 .rst__rowSearchMatch {
