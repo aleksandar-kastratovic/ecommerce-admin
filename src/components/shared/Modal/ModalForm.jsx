@@ -140,6 +140,8 @@ const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = n
     }
   }, [openModal.show]);
 
+
+
   return (
     <ListPageModalWrapper anchor={anchor} open={openModal.show ?? false} onClose={() => { setOpenModal({ ...openModal, show: false }) }} sx={sx} variant={variant} onCloseButtonClick={() => { setOpenModal({ ...openModal, show: false }) }}>
       {!isLoading ?
