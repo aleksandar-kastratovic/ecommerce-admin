@@ -36,6 +36,12 @@ export const columnProps = (column: FieldSpec, header: boolean = false) => {
     };
 };
 
+const htmlToPlainText = (html) => {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+    return doc.body.textContent || "";
+};
+
 export const columnCell = (value, column, rowType) => {
     switch (rowType !== undefined ? rowType : column) {
         case "boolean":
@@ -107,21 +113,40 @@ export const columnCell = (value, column, rowType) => {
             } else if (value === "Porudžbina je dostavljena") {
                 return <span style={{ backgroundColor: "#8d28a836", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#8d28a8", fontWeight: "500" }}>{value}</span>;
             } else {
-                return (
-                    <span
-                        style={{
-                            overflow: "hidden",
-                            lineHeight: "initial",
-                            textOverflow: "ellipsis",
-                            display: "-webkit-box",
-                            WebkitLineClamp: "3",
-                            lineClamp: 3,
-                            WebkitBoxOrient: "vertical",
-                        }}
-                    >
-                        {value}
-                    </span>
-                );
+                if (value && /<\/?[a-z][\s\S]*>/i.test(value)) {
+                    const plainText = htmlToPlainText(value);
+                    return (
+                        <span
+                            style={{
+                                overflow: "hidden",
+                                lineHeight: "initial",
+                                textOverflow: "ellipsis",
+                                display: "-webkit-box",
+                                WebkitLineClamp: "3",
+                                lineClamp: 3,
+                                WebkitBoxOrient: "vertical",
+                            }}
+                        >
+                            {plainText}
+                        </span>
+                    );
+                } else {
+                    return (
+                        <span
+                            style={{
+                                overflow: "hidden",
+                                lineHeight: "initial",
+                                textOverflow: "ellipsis",
+                                display: "-webkit-box",
+                                WebkitLineClamp: "3",
+                                lineClamp: 3,
+                                WebkitBoxOrient: "vertical",
+                            }}
+                        >
+                            {value}
+                        </span>
+                    );
+                }
             }
     }
 };

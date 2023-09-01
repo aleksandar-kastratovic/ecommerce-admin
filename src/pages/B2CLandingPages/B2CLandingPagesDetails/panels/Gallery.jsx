@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
 import InputMultipleImages from "../../../../components/shared/InputMultipleImages/InputMultipleImages";
-import { set } from "lodash";
 import GallerySkeleton from "../../../../components/shared/Loading/GallerySkeleton";
 
 const Gallery = ({ pageId }) => {
