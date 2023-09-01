@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAPI from "../../../../api/api";
@@ -9,6 +10,8 @@ const Prices = ({ productId }) => {
   const navigate = useNavigate();
   const api = useAPI();
 
+  const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
+
   const additionalButtons = [
     {
       label: "Cenovnik",
@@ -17,6 +20,33 @@ const Prices = ({ productId }) => {
       },
     },
   ];
+
+
+  const filterFields = (fields, system) => {
+    let arr = formFields;
+
+    if (system === 'b2b') {
+      arr = fields?.map((item, i) => {
+        const { prop_name } = item;
+        if (prop_name === 'name') {
+          return {
+            ...item,
+            in_details: false
+          }
+        }
+        if (prop_name === 'exclude_from_rebates') {
+          return {
+            ...item,
+            in_details: true
+          }
+        }
+        return {
+          ...item
+        }
+      });
+    }
+    setFormFieldsTemp([...arr]);
+  }
 
   const validateData = (data, field) => {
     let ret = data;
@@ -35,13 +65,39 @@ const Prices = ({ productId }) => {
         ret.price_with_out_vat = Math.round((ret.price_with_vat / (ret.price_vat_procent / 100 + 1)) * 100) / 100;
         ret.price_single_with_out_vat = Math.round((ret.price_with_out_vat / ret.price_quantity) * 100) / 100;
         return ret;
+      case "id_price_structure":
+        let index = formFieldsTemp.findIndex((it) => { return it.prop_name === 'id_price_structure' });
+        let systemObject = formFieldsTemp[index];
+        let path = `${systemObject?.fillFromApi}/${systemObject?.prop_name}?id_price_structure=${ret?.id_price_structure}`;
+        api.get(path)
+          .then((response) => {
+            const systemArr = response?.payload;
+            const selectedSystemItem = systemArr.find((systemItem) => systemItem.id === ret.id_price_structure);
+            if (selectedSystemItem) {
+              filterFields(formFields, selectedSystemItem.system);
+            }
+
+          })
+          .catch((error) => console.log(error));
+        return ret;
       default:
         return ret;
     }
   };
 
-
   const customActions = {
+    edit: {
+      clickHandler: {
+        type: 'modal_form',
+        fnc: (rowData) => {
+          filterFields(formFields, rowData?.system);
+          return {
+            show: true,
+            id: rowData.id
+          };
+        },
+      },
+    },
     delete: {
       clickHandler: {
         type: 'dialog_delete',
@@ -74,18 +130,20 @@ const Prices = ({ productId }) => {
   return (
     <>
       <ListPage
+        validateData={validateData}
         listPageId="Prices"
         apiUrl={`admin/product-items/prices/${productId}`}
         editUrl={`admin/product-items/prices`}
         title=" "
-        columnFields={formFields}
+        columnFields={formFieldsTemp}
         actionNewButton="modal"
         initialData={{ id_product: productId }}
         addFieldLabel="Dodajte novu cenu"
         showAddButton={true}
         additionalButtons={additionalButtons}
         customActions={customActions}
-        validateData={validateData}
+        useColumnFields={true}
+
       />
     </>
   );

@@ -32,7 +32,6 @@ const ListTableBody = ({ items, fields, handleOnClickActions, isLoading = false,
 
   const [clickTimeout, setClickTimeout] = useState(null);
 
-  console.log("fields", fields)
   const actionButtons = () => {
     let buttons = {};
 

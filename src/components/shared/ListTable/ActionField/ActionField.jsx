@@ -65,7 +65,6 @@ const ActionField = ({ fieldType, systemRequired, handleOnClickActions, customAc
     <div className={scss.wrapper}>
       <div className={scss.wrapper}>
         {Object.entries(actions()).map((item) => {
-          console.log("Item:", item);
 
           return (
             item[1]?.title ? (

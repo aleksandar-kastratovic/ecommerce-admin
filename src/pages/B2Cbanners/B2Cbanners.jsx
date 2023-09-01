@@ -25,7 +25,6 @@ const B2Cbanners = ({ }) => {
       clickHandler: {
         type: 'modal_form',
         fnc: (rowData) => {
-          console.log(rowData, "rowData")
           setIdPosition(rowData?.id_position);
           // filterFields(formFieldsTemp, rowData?.type);
           getForm();
@@ -42,7 +41,6 @@ const B2Cbanners = ({ }) => {
     let arr = [];
 
     if (type === "gallery") {
-      console.log("Upao! - gallery");
       arr = fields?.map((item, i) => {
         const { prop_name } = item;
         if (prop_name === 'position_name' || prop_name === 'title' || prop_name === 'subtitle' || prop_name === 'text') {
@@ -56,7 +54,6 @@ const B2Cbanners = ({ }) => {
         }
       });
     } else if (type === "image") {
-      console.log("Upao! - image");
       arr = fields?.map((item, i) => {
         const { prop_name } = item;
         if (prop_name === 'position_name' || prop_name === 'title' || prop_name === 'subtitle' || prop_name === 'text') {
@@ -80,8 +77,6 @@ const B2Cbanners = ({ }) => {
 
   const validateData = (data, field) => {
     let ret = data;
-    console.log("data b2c baner::::", ret)
-    console.log("field b2c baner::::", field)
     switch (field) {
       case "id_position":
         let index = formFieldsTemp.findIndex((it) => { return it.prop_name === 'id_position' });
@@ -113,8 +108,6 @@ const B2Cbanners = ({ }) => {
         res = response?.payload;
         if (res) {
           let dimensions = { width: res.width, height: res.height };
-          console.log("DImenzije", dimensions);
-          console.log("Tip galerija:", res?.type);
           let arr = [];
           switch (res.type) {
             case "image":

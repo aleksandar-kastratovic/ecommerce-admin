@@ -13,7 +13,8 @@
     "input_type": "select",
     "options": [],
     "fillFromApi": "admin/product-items/prices/ddl",
-    "usePropName": true
+    "usePropName": true,
+    "b2b_system": false
   },
   {
     "field_name": "Grupa cene",
@@ -26,7 +27,8 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "input"
+    "input_type": "input",
+    "b2b_system": false
   },
   {
     "field_name": "Jedinična cena bez PDV-a",
@@ -39,7 +41,8 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "number"
+    "input_type": "number",
+    "b2b_system": false
   },
   {
     "field_name": "Jedinična cena sa PDV-om",
@@ -52,7 +55,8 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "number"
+    "input_type": "number",
+    "b2b_system": false
   },
   {
     "field_name": "Procenat PDV-a",
@@ -67,7 +71,8 @@
     "sortable": true,
     "input_type": "select",
     "fillFromApi": "admin/product-items/prices/ddl",
-    "usePropName": true
+    "usePropName": true,
+    "b2b_system": false
   },
   {
     "field_name": "Količina",
@@ -80,7 +85,8 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "number"
+    "input_type": "number",
+    "b2b_system": false
   },
   {
     "field_name": "Jedinica",
@@ -96,7 +102,8 @@
     "input_type": "select",
     "options": [],
     "fillFromApi": "admin/product-items/prices/ddl",
-    "usePropName": true
+    "usePropName": true,
+    "b2b_system": false
   },
   {
     "field_name": "Cena bez PDV-a",
@@ -109,7 +116,8 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "number"
+    "input_type": "number",
+    "b2b_system": false
   },
   {
     "field_name": "Cena sa PDV-om",
@@ -122,7 +130,8 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "number"
+    "input_type": "number",
+    "b2b_system": false
   },
   {
     "field_name": "Izuzmi iz promocija",
@@ -135,7 +144,8 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "boolean"
+    "input_type": "boolean",
+    "b2b_system": false
   },
   {
     "field_name": "Izuzmi iz rabata",
@@ -148,7 +158,8 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "boolean"
+    "input_type": "boolean",
+    "b2b_system": false
   },
   {
     "field_name": "Izuzmi iz promocija",
@@ -161,20 +172,22 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "switch"
+    "input_type": "switch",
+    "b2b_system": false
   },
   {
     "field_name": "Izuzmi iz rabata",
     "prop_name": "exclude_from_rebates",
     "in_main_table": false,
-    "in_details": true,
+    "in_details": false,
     "editable": true,
     "disabled": false,
     "required": false,
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "switch"
+    "input_type": "switch",
+    "b2b_system": true
   },
   {
     "field_name": "",
