@@ -23,7 +23,6 @@ const B2CCustomers = () => {
     },
   };
 
-
   return (
     <>
       <ListPage listPageId="B2CCustomers" apiUrl="admin/customers-b2c/list" title="Kupci" columnFields={tblFields} customActions={customActions} />

@@ -24,6 +24,11 @@ import "react-sortable-tree/style.css";
 
 import scss from "./TreeView.module.scss";
 import { handleExpandedElements } from "./helper";
+import Box from "@mui/material/Box";
+import Buttons from "../Form/Buttons/Buttons";
+import TextField from "@mui/material/TextField";
+import InputAdornment from "@mui/material/InputAdornment";
+import SearchIcon from '@mui/icons-material/Search';
 
 const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, additionalButtons = [], showNewButton = false, filters = {} }) => {
   const { user } = useContext(AuthContext);
@@ -349,36 +354,43 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
       <PageWrapper back={true} title={title} actions={actions}>
         {!isLoadingTreeList ? (
           <>
-            <div className={scss.buttonsDownUp}>
-              <span className={scss.button}>
-                <Button icon={"keyboard_double_arrow_down"} label="Proširi sve" onClick={expandAll} sx={{ mr: "1rem" }} />
-              </span>
-
-              <span className={scss.button}>
-                <Button icon={"keyboard_double_arrow_up"} label="Skupi sve" onClick={collapseAll} sx={{ mr: "1rem" }} />
-              </span>
-
-              <input
-                className={scss.searchCategory}
-                placeholder="Pretraga po ključnoj reči"
-                type="search"
-                value={searchString}
+            <Box className={scss.buttonsDownUp}>
+              <TextField
+                size="small"
+                variant="outlined"
                 onChange={(event) => {
                   setSearchString(event.target.value);
                 }}
+                value={searchString}
+                sx={{ marginRight: "1rem", ".MuiInputBase-input": { fontSize: "0.875rem" }, "&.MuiTextField-root": { width: "50%" } }}
+                placeholder="Pretraga po ključnoj reči"
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon sx={{ color: "#b3b3b3" }} />
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </div>
-            <TextBoxSingle
-              name="parent"
-              label="Dodaj novog roditelja"
-              value={addParent.name}
-              onSaveClick={saveParent}
-              onCancelClick={cancelParent}
-              onChange={handleParent}
-              saveIcon="check_circle"
-              cancelIcon="cancel"
-              width="30%"
-            />
+
+              <TextBoxSingle
+                name="parent"
+                label="Dodaj novog roditelja"
+                value={addParent.name}
+                onSaveClick={saveParent}
+                onCancelClick={cancelParent}
+                onChange={handleParent}
+                saveIcon="check_circle"
+                cancelIcon="cancel"
+              />
+
+              <Buttons>
+                <Button icon={"keyboard_double_arrow_down"} label="Proširi sve" onClick={expandAll} sx={{ mr: "1rem", "&.MuiButtonBase-root": { fontWeight: "normal" }, ".MuiIcon-root": { fontSize: "1.2rem" } }} variant="contained" />
+                <Button icon={"keyboard_double_arrow_up"} label="Skupi sve" onClick={collapseAll} sx={{ "&.MuiButtonBase-root": { fontWeight: "normal" }, ".MuiIcon-root": { fontSize: "1.2rem" } }} variant="contained" />
+              </Buttons>
+
+            </Box>
+
             <SortableTree
               className={scss.sortableTree}
               searchMethod={customSearchMethod}
@@ -396,7 +408,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
               generateNodeProps={({ node, path }) => ({
                 buttons: [
                   <div className={scss.wrappEditDeleteAdd}>
-                    <div className={scss.name}>{node.name}</div>
+                    <div className={scss.name} style={{ fontSize: "0.875rem", color: "rgba(0, 0, 0, 0.6)" }}>{node.name}</div>
 
                     <span className={scss.button} onClick={() => handleEdit(node.id)}>
                       <Icon className={scss.button}>edit</Icon>
@@ -414,6 +426,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                         saveIcon="check_circle"
                         cancelIcon="cancel"
                         width="auto"
+                        styleFormControl={{ position: "absolute", right: "-65%", fontSize: "0.875rem", top: "0" }}
                       />
                     ) : (
                       <span className={scss.button} onClick={() => handleOpenTextBox(node.id)}>

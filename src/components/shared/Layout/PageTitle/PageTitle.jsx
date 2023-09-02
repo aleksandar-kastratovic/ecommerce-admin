@@ -21,7 +21,6 @@ const PageTitle = ({ title, back, actions = [] }) => {
       {/* Buttons */}
       <Box className={scss.buttons}>
         {actions.map((button, index) => {
-          console.log(button)
           return (
             <Button
               key={index}

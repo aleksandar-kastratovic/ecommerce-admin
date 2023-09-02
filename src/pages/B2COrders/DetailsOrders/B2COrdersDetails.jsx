@@ -47,7 +47,7 @@ const B2COrdersDetails = () => {
             <Box className={styles.orderDataDisplay}>
               <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Kupac:</span>
-                {orderData?.ship_to_name ? orderData?.ship_to_name : "/"}
+                {orderData?.bill_to_name ? orderData?.bill_to_name : "/"}
               </p>
               <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Adresa:</span>
@@ -77,7 +77,7 @@ const B2COrdersDetails = () => {
               </p>
               <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Napomena:</span>
-                {shippingData?.note ? shippingData?.note : "/"}
+                {billingData?.note ? billingData?.note : "/"}
               </p>
             </Box>
           </Box>

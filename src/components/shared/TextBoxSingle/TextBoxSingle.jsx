@@ -18,9 +18,11 @@ const TextBoxSingle = ({
   placeholder = "",
   size = "small",
   fontWeight = "normal",
+  fontSize = "0.875rem",
   error = "",
   saveIcon = "check_circle",
   cancelIcon = "cancel",
+  styleFormControl,
   onChange = () => { },
   onSaveClick = () => { },
   onCancelClick = () => { },
@@ -31,12 +33,14 @@ const TextBoxSingle = ({
       sx={{
         width: width,
         margin: margin,
+        ...styleFormControl
       }}
     >
       <FormLabel
         required={required}
         sx={{
           fontWeight: fontWeight,
+          fontSize: fontSize,
         }}
       >
         {label}
@@ -52,8 +56,10 @@ const TextBoxSingle = ({
           sx={{
             "& legend": { display: "none" },
             "& fieldset": { top: 0 },
+            ".MuiInputBase-input": { fontSize: "0.875rem" },
           }}
           helperText={error?.content ? error.content : description}
+
         />
         <IconButton onClick={onSaveClick} aria-label="plus" style={{ color: "#28a86e", padding: "4px" }}>
           {/* <AddCircleOutlineIcon fontSize="inherit" /> */}

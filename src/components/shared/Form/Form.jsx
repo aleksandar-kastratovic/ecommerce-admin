@@ -35,7 +35,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
       return inputsError;
     });
   }
-  console.log("inputsError", inputsError)
+
   const submitHandler = (event) => {
     event.preventDefault && event.preventDefault();
 
@@ -81,8 +81,6 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
     newData = validateData(newData, target.name);
     setData(newData);
     onChange(newData, target.name)
-    console.log(target.name, "TARGET NAME:")
-    console.log("New data", newData);
     setInputErrors(target.name);
   };
 
