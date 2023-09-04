@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
@@ -865,10 +865,10 @@ export const InputHtml = ({ label, required, disabled, name, value, error = null
   );
 };
 
-export const ImportPicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile, allowedFileTypes = ['csv', 'xml', 'json'] }) => {
+export const ImportPicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile }) => {
   const ref = useRef();
   const [attachment, setAttachment] = useState(null);
-  const isFileTypeAllowed = (fileExtension) => allowedFileTypes.includes(fileExtension);
+  // const isFileTypeAllowed = (fileExtension) => allowedFileTypes.includes(fileExtension);
 
   const handleChange = (event) => {
     const files = Array.from(event.target.files);
@@ -876,15 +876,73 @@ export const ImportPicker = ({ label, required, disabled, margin, error = null, 
 
     const fileExtension = file.name.split('.').pop().toLowerCase();
 
-    if (!isFileTypeAllowed(fileExtension)) {
+    // if (!isFileTypeAllowed(fileExtension)) {
+    //   toast.error('Pogrešan tip fajla.');
+    //   return;
+    // }
+
+    if (fileExtension !== 'csv' && fileExtension !== 'xml' && fileExtension !== 'json') {
       toast.error('Pogrešan tip fajla.');
       return;
     }
 
-    // if (fileExtension !== 'csv' && fileExtension !== 'xml' && fileExtension !== 'json') {
-    //   toast.error('Pogrešan tip fajla.');
-    //   return;
-    // }
+    blobToData(file).then((result) => {
+      let obj = {
+        base_64: result,
+        name: file?.name
+      }
+      onFilePicked(obj);
+    });
+    setAttachment(file);
+  };
+
+  return (
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+      <ButtonBase
+        component="label"
+        sx={{
+          height: "2.844rem",
+          border: "1px solid",
+          borderColor: error ? "#d32f2f" : "rgba(0, 0, 0, 0.23)",
+          borderRadius: "0.25rem",
+          justifyContent: "start",
+          paddingLeft: "0.875rem",
+        }}
+      >
+        {selectedFile ? (
+          <span style={{ fontSize: "0.875rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Izabrani fajl: {selectedFile.name}</span>
+        ) : (
+          <span style={{ fontSize: "0.875rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Kliknite ovde kako biste odabrali fajl za import.</span>
+        )}
+        <Input
+          type="file"
+          onChange={handleChange}
+          inputRef={ref}
+          disabled={disabled}
+          sx={{ display: "none" }}
+          error={error !== null}
+        />
+      </ButtonBase>
+      <FormHelperText>{error ? error : description}</FormHelperText>
+    </InputWrapper>
+  )
+}
+
+
+export const FilePicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile }) => {
+  const ref = useRef();
+  const [attachment, setAttachment] = useState(null);
+
+  const handleChange = (event) => {
+    const files = Array.from(event.target.files);
+    const [file] = files;
+
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+
+    if (fileExtension !== 'txt' && fileExtension !== 'pdf' && fileExtension !== 'png' && fileExtension !== 'jpg' && fileExtension !== 'jpeg') {
+      toast.error('Pogrešan tip fajla.');
+      return;
+    }
 
     blobToData(file).then((result) => {
       let obj = {

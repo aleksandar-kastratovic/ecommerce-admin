@@ -16,10 +16,7 @@ import basic_data from "./forms/basic_data.json";
 import Inventories from "./panels/Inventories";
 import Categories from "./panels/Categories";
 import Gallery from "./panels/Gallery";
-import TechnicalDoc from "./panels/TechnicalDoc";
-import Instruction from "./panels/Instruction";
-import Certificate from "./panels/Certificate";
-// import Document from "./panels/Document";
+import Document from "./panels/Document";
 import DisplayIn from "./panels/DisplayIn";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 
@@ -47,8 +44,6 @@ const ProductDetails = () => {
   const api = useAPI();
 
   const updateNewFieldsInDetails = (data, isNew) => {
-    // const newFromField = data.find((item) => item.prop_name === "new_from");
-    // const newToField = data.find((item) => item.prop_name === "new_to");
 
     data.map((item, i) => {
       if (isNew) {
@@ -173,34 +168,12 @@ const ProductDetails = () => {
       component: <DisplayIn productId={data?.id} />,
     },
     {
-      id: "technical_documentation",
-      name: "Tehnička dokumentacija",
+      id: "document",
+      name: "Dokumenta",
       icon: IconList.documentScanner,
       enabled: data?.id,
-      component: <TechnicalDoc productId={data?.id} />,
+      component: <Document productId={data?.id} />,
     },
-    {
-      id: "certificates",
-      name: "Sertifikati",
-      icon: IconList.documentScanner,
-      enabled: data?.id,
-      component: <Certificate productId={data?.id} />,
-    },
-    // {
-    //   id: "dokument",
-    //   name: "Dokumenta",
-    //   icon: IconList.documentScanner,
-    //   enabled: data?.id,
-    //   component: <Document productId={data?.id} />,
-    // },
-    {
-      id: "instructions",
-      name: "Instrukcije",
-      icon: IconList.documentScanner,
-      enabled: data?.id,
-      component: <Instruction productId={data?.id} />,
-    },
-
     {
       id: "specifications",
       name: "Specifikacije",

@@ -18,6 +18,7 @@ import {
   AutocompleteInput,
   AutocompleteTagsFilled,
   ImportPicker,
+  FilePicker
 } from "./FormInputs/FormInputs";
 import FileButton from "../FileButton/FileButton";
 import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
@@ -39,7 +40,7 @@ const CreateForm = ({
   autoFocus,
   onFilePicked,
   selectedFile,
-  allowedFileTypes,
+  // allowedFileTypes,
 }) => {
   // depending on input type in fields you will get a control
   // value is obvious
@@ -350,7 +351,22 @@ const CreateForm = ({
               value={value}
               description={item.description}
               selectedFile={selectedFile}
-              allowedFileTypes={allowedFileTypes}
+            // allowedFileTypes={allowedFileTypes}
+            />
+          )
+          break;
+        case "file_picker":
+          formItem = (
+            <FilePicker
+              label={item.field_name}
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
+              error={error}
+              disabled={disabled}
+              importPickerMessage={item.picker_message ? item.picker_message : "Kliknite ovde kako biste odabrali fajl za import."}
+              onFilePicked={onFilePicked}
+              value={value}
+              description={item.description}
+              selectedFile={selectedFile}
             />
           )
           break;
