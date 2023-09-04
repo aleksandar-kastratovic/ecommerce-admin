@@ -45,7 +45,7 @@ const B2Bbanners = ({ }) => {
     if (type === "gallery") {
       arr = fields?.map((item, i) => {
         const { prop_name } = item;
-        if (prop_name === 'title' || prop_name === 'subtitle' || prop_name === 'text') {
+        if (prop_name === 'position_name' || prop_name === 'title' || prop_name === 'subtitle' || prop_name === 'text') {
           return {
             ...item,
             in_details: false
@@ -58,7 +58,7 @@ const B2Bbanners = ({ }) => {
     } else if (type === "image") {
       arr = fields?.map((item, i) => {
         const { prop_name } = item;
-        if (prop_name === 'title' || prop_name === 'subtitle' || prop_name === 'text') {
+        if (prop_name === 'position_name' || prop_name === 'title' || prop_name === 'subtitle' || prop_name === 'text') {
           return {
             ...item,
             in_details: false
