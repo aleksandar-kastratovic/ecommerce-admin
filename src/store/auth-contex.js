@@ -1,8 +1,12 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { toast } from "react-toastify";
+import DeleteModal from "../components/shared/Dialogs/DeleteDialog";
+import { set } from "lodash";
+import useAPI from "../api/api";
 
 let logoutTimer;
 let refreshTokenTimer;
+let showModalTimer;
 
 const AuthContext = React.createContext({
     user: [],
@@ -16,7 +20,6 @@ const AuthContext = React.createContext({
     getUserScreens: (userScreens) => {},
     changeTokenExpired: (tokenExpired) => {},
 });
-
 const calculateRemainingTime = (expirationTime) => {
     const currentTime = new Date().getTime();
     const adjExpirationTime = new Date(expirationTime).getTime();
@@ -49,6 +52,8 @@ const retrieveStoredUser = () => {
 export const AuthContextProvider = (props) => {
     let userData = retrieveStoredUser();
     const [tokenExpired, setTokenExpired] = useState(false);
+    const [showTokenExpiryModal, setShowTokenExpiryModal] = useState(false);
+    const api = useAPI();
 
     if (userData.duration <= 10000 && userData.user) {
         localStorage.removeItem("user");
@@ -64,7 +69,6 @@ export const AuthContextProvider = (props) => {
     }
 
     const [user, setUser] = useState(initialUser);
-    const [refData, setRefData] = useState([]);
     const [userScreensData, setUserScreensData] = useState([]);
     const [refreshingToken, setRefreshingToken] = useState(false);
     const [startScreenData, setStartScreenData] = useState(null);
@@ -90,12 +94,11 @@ export const AuthContextProvider = (props) => {
 
     const loginHandler = (user, expirationTime) => {
         setUser(user);
-
+        setRefreshingToken(false);
         localStorage.setItem("expirationTime", expirationTime);
         localStorage.setItem("user", JSON.stringify(user));
 
         const remainingTime = calculateRemainingTime(expirationTime);
-
         if (logoutTimer) {
             clearTimeout(logoutTimer);
         }
@@ -133,7 +136,7 @@ export const AuthContextProvider = (props) => {
     }, []);
 
     useEffect(() => {
-        if (userData) {
+        if (userData?.user) {
             if (logoutTimer) {
                 clearTimeout(logoutTimer);
             }
@@ -146,6 +149,15 @@ export const AuthContextProvider = (props) => {
                 clearTimeout(refreshTokenTimer);
             }
             refreshTokenTimer = setTimeout(refreshToken, remainingTokenTime);
+            let modalShowTime = remainingTokenTime - 300000;
+
+            showModalTimer = setTimeout(() => {
+                setShowTokenExpiryModal(true);
+            }, 5000);
+
+            return () => {
+                clearTimeout(showModalTimer);
+            };
         }
     }, [userData, logoutHandler, refreshToken]);
 
@@ -169,7 +181,32 @@ export const AuthContextProvider = (props) => {
         changeTokenExpired: setIsTokenExpiring,
     };
 
-    return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>;
+    return (
+        <>
+            <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>
+
+            <DeleteModal
+                title="Obaveštenje"
+                openDeleteDialog={{ show: false }}
+                // openDeleteDialog={{ show: false }}
+                nameOfButtonCancel="Nastavi"
+                nameOfButton="Odjavite se"
+                deafultDeleteIcon={false}
+                description={`Vaš token ističe za 5 minuta.`}
+                handleConfirm={() => {
+                    logoutHandler();
+                    setShowTokenExpiryModal(false);
+                }}
+                styleButtonCancel={{ color: "#28a86e", borderColor: "rgba(40, 168, 110, 0.5)", "&:hover": { backgroundColor: "rgba(40, 168, 110, 0.04)", borderColor: "#28a86e" } }}
+                //sx={{ backgroundColor: "#28a86e", "&:hover": { backgroundColor: "rgb(28, 117, 77)" } }}
+                handleCancel={() => {
+                    setShowTokenExpiryModal(false);
+                    setRefreshingToken(true);
+                }}
+                handleCancelToken={true}
+            />
+        </>
+    );
 };
 
 export default AuthContext;

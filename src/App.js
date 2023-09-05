@@ -33,17 +33,18 @@ const App = () => {
                             toast.warning("Greška!");
                         }
 
-                        const expirationTime = new Date(new Date().getTime() + +data.expires_in * 60 * 1000);
+                        const expirationTime = new Date(new Date().getTime() + +data.expires_in * 1000);
                         authCtx.login(data, expirationTime);
                     })
                     .catch((error) => {
                         console.warn(error);
+                        console.log(error?.response);
                     });
             };
 
             refreshToken();
         }
-    }, [authCtx.isRefreshingToken]);
+    }, [authCtx?.isRefreshingToken]);
 
     useEffect(() => {
         if (authCtx.isTokenExpired) {
@@ -68,7 +69,6 @@ const App = () => {
                     .get(`admin/profile/user-permissions`)
                     .then((response) => {
                         const data = response?.payload;
-                        console.log("user-permission", data);
                         if (!data) {
                             toast.warning("Greška!");
                         }

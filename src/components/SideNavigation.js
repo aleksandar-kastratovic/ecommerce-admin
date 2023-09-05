@@ -77,7 +77,6 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
 
     useEffect(() => {
         const storedOpenGroups = JSON.parse(localStorage.getItem("openGroups")) || {};
-        console.log(openGroups);
         if (Object.keys(storedOpenGroups).length === 0) {
             setOpenGroups(initialOpenGroups);
         } else {

@@ -13,6 +13,7 @@ const Document = ({ productId }) => {
 
   const customActions = {
     delete: {
+
       clickHandler: {
         type: 'dialog_delete',
         fnc: (rowData) => {
