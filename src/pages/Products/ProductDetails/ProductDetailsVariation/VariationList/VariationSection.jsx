@@ -1,14 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import Icon from "@mui/material/Icon";
 import Box from "@mui/system/Box";
 
-import useAPI from "../../../../../api/api";
 import Form from "../../../../../components/shared/Form/Form";
 import List from "../../../../../components/shared/ListAdder/List";
 import { toast } from "react-toastify";
 
 import styles from "./VariationList.module.scss";
+import AuthContext from "../../../../../store/auth-contex";
 
 const VariationSection = ({
   title = "",
@@ -24,9 +24,12 @@ const VariationSection = ({
   validateData = (data) => data,
   children,
 }) => {
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const [open, setOpen] = useState(false);
   const [data, setData] = useState([]);
-  const api = useAPI();
+
 
   const listData = () => {
     api.list(listUrl)

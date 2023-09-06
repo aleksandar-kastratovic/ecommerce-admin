@@ -1,7 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import useAPI from "../../../api/api";
 import Form from "../../../components/shared/Form/Form";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import IconList from "../../../helpers/icons";
@@ -9,11 +8,12 @@ import IconList from "../../../helpers/icons";
 import formFields from "./formFields.json";
 import Seo from "./panels/Seo";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
-
+import AuthContext from "../../../store/auth-contex";
 
 const B2CNewsCategoryListDetails = () => {
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const { cid } = useParams();
-  const api = useAPI();
   const apiPath = "admin/news-b2c/category/basic-data";
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';

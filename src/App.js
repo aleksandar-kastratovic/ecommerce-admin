@@ -14,6 +14,7 @@ import useAPI from "./api/api";
 
 const App = () => {
     const api = useAPI();
+
     const queryClient = new QueryClient();
     const authCtx = useContext(AuthContext);
     let navigate = useNavigate();
@@ -22,29 +23,34 @@ const App = () => {
     const [activeTheme, setActiveTheme] = useState(localStorage.getItem("theme") === "true" ?? false);
 
     useEffect(() => {
+        //seting global api:
+        authCtx?.setGlobalApiFile(api);
         if (authCtx.isRefreshingToken) {
             const refreshToken = async () => {
-                await api
-                    .get(`admin/profile/refresh-token`)
-                    .then((response) => {
-                        const data = response?.payload;
+                if (authCtx?.api?.get) {
+                    await authCtx?.api
+                        .get(`admin/profile/refresh-token`)
+                        .then((response) => {
+                            const data = response?.payload;
 
-                        if (!data) {
-                            toast.warning("Greška!");
-                        }
+                            if (!data) {
+                                toast.warning("Greška!");
+                            }
 
-                        const expirationTime = new Date(new Date().getTime() + +data.expires_in * 1000);
-                        authCtx.login(data, expirationTime);
-                    })
-                    .catch((error) => {
-                        console.warn(error);
-                        console.log(error?.response);
-                    });
+                            const expirationTime = new Date(new Date().getTime() + +data.expires_in * 1000);
+                            authCtx.login(data, expirationTime);
+                            authCtx?.api?.userDataUpdate(data);
+                        })
+                        .catch((error) => {
+                            console.warn(error);
+                            console.log(error?.response);
+                        });
+                }
             };
 
             refreshToken();
         }
-    }, [authCtx?.isRefreshingToken]);
+    }, [authCtx?.isRefreshingToken, authCtx?.api]);
 
     useEffect(() => {
         if (authCtx.isTokenExpired) {
@@ -64,26 +70,28 @@ const App = () => {
             };
 
             const userScreens = async () => {
-                setIsLoading(true);
-                await api
-                    .get(`admin/profile/user-permissions`)
-                    .then((response) => {
-                        const data = response?.payload;
-                        if (!data) {
-                            toast.warning("Greška!");
-                        }
+                if (authCtx?.api?.get) {
+                    setIsLoading(true);
+                    await authCtx?.api
+                        .get(`admin/profile/user-permissions`)
+                        .then((response) => {
+                            const data = response?.payload;
+                            if (!data) {
+                                toast.warning("Greška!");
+                            }
 
-                        setUserScreens(response?.payload);
-                    })
-                    .catch((error) => {
-                        console.warn(error);
-                    });
-                setIsLoading(false);
+                            setUserScreens(response?.payload);
+                        })
+                        .catch((error) => {
+                            console.warn(error);
+                        });
+                    setIsLoading(false);
+                }
             };
 
             userScreens();
         }
-    }, [authCtx.isLoggedIn]);
+    }, [authCtx.isLoggedIn, authCtx?.api]);
 
     let routerClass;
     if (!authCtx.isLoggedIn) {

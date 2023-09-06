@@ -1,9 +1,7 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import useAPI from "../../../api/api";
-import List from "../../../components/shared/ListAdder/List";
 
 import ParamsForm from "./ParamsForm/ParamsForm";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
@@ -18,6 +16,7 @@ import slug from "./forms/slug.json";
 import status from "./forms/status.json";
 import actions from "./forms/actions.json"
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
+import AuthContext from "../../../store/auth-contex";
 
 
 
@@ -46,6 +45,9 @@ const ParamsDetails = () => {
     status: "on",
   };
 
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const { pid } = useParams();
   const [data, setData] = useState(init);
   const navigate = useNavigate();
@@ -53,8 +55,6 @@ const ParamsDetails = () => {
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
   const apiPath = "admin/params/values";
-
-  const api = useAPI();
 
   const onSubmit = (data) => {
     let oldId = data.id;

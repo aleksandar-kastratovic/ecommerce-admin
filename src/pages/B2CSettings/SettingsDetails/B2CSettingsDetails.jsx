@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import useAPI from "../../../api/api";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import IconList from "../../../helpers/icons";
 import B2CSettingsForm from "./panels/B2CSettingsForm";
+import AuthContext from "../../../store/auth-contex";
 
 const B2CSettingsDetails = () => {
 
   const { B2CId } = useParams();
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPath = "admin/configuration-b2c/main";
 
   const [data, setData] = useState([]);

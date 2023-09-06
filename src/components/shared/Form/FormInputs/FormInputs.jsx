@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 
 import Checkbox from "@mui/material/Checkbox";
 import FormControl from "@mui/material/FormControl";
@@ -19,11 +19,11 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
-import useAPI from "../../../../api/api";
 import HtmlEditor from "../../HtmlEditor/HtmlEditor";
 import ButtonBase from "@mui/material/ButtonBase";
 import { blobToData } from "../../../../helpers/data";
 import { toast } from "react-toastify";
+import AuthContext from "../../../../store/auth-contex";
 
 /**
  * Wrapper for the input element
@@ -254,7 +254,8 @@ export const InputSelect = ({
   styleFormControl,
   // defaultOption
 }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [opt, setOpt] = useState(options);
 
   useEffect(() => {
@@ -360,7 +361,8 @@ export const AutocompleteInput = ({
   queryString = "",
   optionsIsEmpty = () => { }
 }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [opt, setOpt] = useState(options);
   const [myValue, setMyValue] = useState(null);
 
@@ -470,7 +472,8 @@ export const AutocompleteTagsFilled = ({
   queryString = "",
   optionsIsEmpty = () => { }
 }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [opt, setOpt] = useState(options);
   const [myValue, setMyValue] = useState([]);
 
@@ -610,7 +613,8 @@ export const InputMultiSelect = ({
   optionsIsEmpty = () => { },
   styleMultiSelect
 }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [opt, setOpt] = useState(options);
   useEffect(() => {
     let isMounted = true;

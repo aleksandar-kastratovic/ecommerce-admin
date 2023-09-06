@@ -1,12 +1,13 @@
 
-import { useEffect, useState } from "react";
-import useAPI from "../../../../api/api";
+import { useContext, useEffect, useState } from "react";
 import Form from "../../../../components/shared/Form/Form";
 import formFields from "../forms/rebate.json"
 import { toast } from "react-toastify";
+import AuthContext from "../../../../store/auth-contex";
 
 const Rebate = ({ companyId }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [data, setData] = useState({ rebate_tier_id: null });
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import Form from "../../../../components/shared/Form/Form";
 import formFields from "../forms/analitics.json";
+import AuthContext from "../../../../store/auth-contex";
 
 const AnalitycsData = ({ companyId }) => {
   const init = {
@@ -13,8 +13,10 @@ const AnalitycsData = ({ companyId }) => {
     credit_limit: null,
     debt_days: null,
   };
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const [data, setData] = useState(init);
-  const api = useAPI();
 
   const apiPath = "admin/customers-b2b/analytics-data";
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);

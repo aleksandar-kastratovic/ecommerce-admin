@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import Form from "../Form/Form";
-import useAPI from "../../../api/api";
 import { toast } from "react-toastify";
 import FormWrapper from "../Layout/FormWrapper/FormWrapper";
 import ListPageModalWrapper from "./ListPageModalWrapper";
@@ -9,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box"
 import Button from "../Button/Button";
-import { initial } from "lodash";
+import AuthContext from "../../../store/auth-contex";
 
 /**
  * Modal.
@@ -38,7 +37,8 @@ import { initial } from "lodash";
 const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = null, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, closeButtonModalForm, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, modalObject = null, customTitleDataNameForEdit = "Izmeni", selectableCountryTown = false, useModalGalleryInjection = false, onCloseModalButton, allowedFileTypes, onFilePicked, selectedFile }) => {
 
   const { id, modalUrl = null } = openModal;
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const handleData = async () => {

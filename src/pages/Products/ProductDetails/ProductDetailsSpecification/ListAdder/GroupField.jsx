@@ -1,12 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Box from "@mui/system/Box";
 
-import useAPI from "../../../../../api/api";
 import Form from "../../../../../components/shared/Form/Form";
-import { toast } from "react-toastify";
-import LoadingForm from "../../../../../components/shared/Loading/LoadingForm";
-import { InputSelect } from "../../../../../components/shared/Form/FormInputs/FormInputs";
+import AuthContext from "../../../../../store/auth-contex";
 
 
 const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, onChange = () => { }, productId, apiPath }) => {
@@ -20,7 +17,8 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
 
   const [data, setData] = useState({});
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const groupFiledsHandler = async () => {
     api.get(`${apiPath}/group-attributes/${groupId}`)

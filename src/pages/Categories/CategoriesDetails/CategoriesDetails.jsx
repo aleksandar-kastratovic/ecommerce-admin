@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import useAPI from "../../../api/api";
 import Form from "../../../components/shared/Form/Form";
 import IconList from "../../../helpers/icons";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
@@ -11,6 +10,7 @@ import DetailsSeo from "./DetailsSeo/DetailsSeo";
 import formFields from "./formFields.json";
 import DetailsDisplayIn from "./DetailsDisplayIn/DetailsDisplayIn";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
+import AuthContext from "../../../store/auth-contex";
 
 const CategoriesDetails = () => {
   const { gid, cid } = useParams();
@@ -28,7 +28,8 @@ const CategoriesDetails = () => {
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPath = "admin/category-product/categories";
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';

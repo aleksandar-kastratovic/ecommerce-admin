@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 
-import useAPI from "../../../../../api/api";
 import Group from "./Group/Group";
 import MainGroup from "./Group/MainGroup";
 import ProductGroup from "./Group/ProductGroup";
@@ -14,19 +13,16 @@ import DeleteDialog from "../../../../../components/shared/Dialogs/DeleteDialog"
 import init_group_file from "./Group/GroupFile/init_group_file.json";
 import product_group_file from "./Group/GroupFile/product_group_file.json";
 import customer_group_file from "./Group/GroupFile/customer_group_file.json";
-import cart_items_group_file from "./Group/GroupFile/cart_items_group_file.json";
-import cart_summary_group_file from "./Group/GroupFile/cart_summary_group_file.json";
 
 import init_row_file from "./Row/RowFile/init_row_file.json";
 import product_row_file from "./Row/RowFile/product_row_file.json";
 import customer_row_file from "./Row/RowFile/customer_row_file.json";
-import cart_items_row_file from "./Row/RowFile/cart_items_row_file.json";
-import cart_summary_row_file from "./Row/RowFile/cart_summary_row_file.json"
 
 import Buttons from "../../../../../components/shared/Form/Buttons/Buttons";
 import Button from "../../../../../components/shared/Button/Button";
 import { toast } from "react-toastify";
 import { cloneDeep } from "lodash";
+import AuthContext from "../../../../../store/auth-contex";
 
 const Articles = ({ pageId }) => {
   const elementRef = useRef('');
@@ -34,7 +30,8 @@ const Articles = ({ pageId }) => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false });
   const [removeComponentId, setRemoveComponentId] = useState(null);
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPath = 'admin/landing-pages-b2c/conditions';
 
   // The handleData function uses the API to retrieve data about campaign conditions.

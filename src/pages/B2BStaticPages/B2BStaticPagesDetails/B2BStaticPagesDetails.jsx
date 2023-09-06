@@ -1,7 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import useAPI from "../../../api/api";
-import { toast } from "react-toastify";
+import { useContext, useEffect, useState } from "react";
 
 import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
@@ -11,11 +9,13 @@ import Seo from "./panels/Seo";
 import Content from "./panels/Content";
 
 import basic_data from "./forms/basic_data.json";
+import AuthContext from "../../../store/auth-contex";
 
 const B2BStaticPagesDetails = () => {
 
   const { spid } = useParams();
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPath = "admin/static-pages-b2b/basic-data";
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
   const navigate = useNavigate();

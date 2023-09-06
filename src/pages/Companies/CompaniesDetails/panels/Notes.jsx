@@ -1,10 +1,12 @@
 import { toast } from "react-toastify";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
 import formFields from "../forms/notes.json";
-import useAPI from "../../../../api/api";
+import { useContext } from "react";
+import AuthContext from "../../../../store/auth-contex";
 
 const Notes = ({ companyId }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const customActions = {
     delete: {

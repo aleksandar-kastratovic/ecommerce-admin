@@ -11,15 +11,12 @@ import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 
 import { styled } from "@mui/system";
-import useAPI from "../api/api";
-// import { toast } from "react-toastify";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { toast } from "react-toastify";
 import sideNavIcon from "../assets/images/croonus-sidebar-icon.svg";
 
 const Header = ({ openSidenav, changeTheme, activeTheme }) => {
-    const api = useAPI();
     const apiPath = "admin/profile/logout";
     const navigate = useNavigate();
 
@@ -29,7 +26,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
     const open = Boolean(anchorEl);
 
     const authCtx = useContext(AuthContext);
-
+    const { api } = authCtx;
     useEffect(() => {
         return () => {
             setIsLoading(false);
@@ -46,6 +43,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
             .then((response) => {
                 toast.success("Uspešno ste se odjavili!");
                 navigate(`/`);
+                api?.userDataUpdate(null);
                 setIsLoading(false);
             })
             .catch((error) => {

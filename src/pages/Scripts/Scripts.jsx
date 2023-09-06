@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ListPage from "../../components/shared/ListPage/ListPage";
 
 import tblFields from "./tblFields.json";
 import ModalContent from "./ModalContent";
-import useAPI from "../../api/api";
 import Chip from "@mui/material/Chip";
 import Icon from "@mui/material/Icon";
 import Box from "@mui/material/Box";
+import AuthContext from "../../store/auth-contex";
 
 const Scripts = () => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const [data, setData] = useState(null);
   const [rowData, setRowData] = useState(null);
   const [activePage, setActivePage] = useState(null);

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import useAPI from '../../../../api/api';
+import React, { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Buttons from '../../../../components/shared/Form/Buttons/Buttons';
 import Button from '../../../../components/shared/Button/Button';
@@ -21,9 +20,11 @@ import Done from '@mui/icons-material/Done';
 import Close from '@mui/icons-material/Close';
 import style from './Connection.module.scss';
 import Typography from '@mui/material/Typography';
+import AuthContext from '../../../../store/auth-contex';
 
 const Connection = ({ id, file }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const getImport = "admin/import/connect";
   const postImportExecute = "admin/import/mapping";
 

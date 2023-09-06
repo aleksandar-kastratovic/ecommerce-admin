@@ -2,14 +2,17 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import columnFields from "./tblFields.json";
-import useAPI from "../../api/api";
 import ModalContent from "./ModalContent";
 import IconList from "../../helpers/icons";
+import AuthContext from "../../store/auth-contex";
+import { useContext } from "react";
 
 
 const ProductSpecsGroups = () => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const { pathname } = useLocation();
   const navigate = useNavigate();
 

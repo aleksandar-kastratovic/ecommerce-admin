@@ -4,7 +4,6 @@ import { useQuery } from "react-query";
 import Box from "@mui/material/Box";
 
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
-import useAPI from "../../../api/api";
 import addressTemplate from "../../../helpers/addressTemplate";
 import OrderSection from "./OrdersSection";
 import OrderPrices from "./OrderPrices";
@@ -14,11 +13,14 @@ import OrderStatus from "./OrderStatus";
 import tableFields from "./tableFields.json";
 
 import styles from "./B2BOrdersDetails.module.scss";
+import { useContext } from "react";
+import AuthContext from "../../../store/auth-contex";
 
 const B2BOrdersDetails = () => {
   const navigate = useNavigate();
   const { orderId } = useParams();
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPathOrderData = "admin/orders-b2b/summary";
   const apiPathBilling = "admin/orders-b2b/billing-address";
   const apiPathShipping = "admin/orders-b2b/shipping-address";

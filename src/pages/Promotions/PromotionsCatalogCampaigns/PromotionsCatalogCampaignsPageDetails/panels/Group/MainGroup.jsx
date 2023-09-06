@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import Box from "@mui/material/Box";
 import Icon from "@mui/material/Icon";
@@ -9,14 +9,16 @@ import Button from "../../../../../../components/shared/Button/Button";
 import Buttons from "../../../../../../components/shared/Form/Buttons/Buttons";
 import buttons from "./buttons.json"
 import { InputSelect } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
-import useAPI from "../../../../../../api/api";
 
 import scss from "./Group.module.scss";
 import ListPageModalWrapper from "../../../../../../components/shared/Modal/ListPageModalWrapper";
 import { Typography } from "@mui/material";
-
+import AuthContext from "../../../../../../store/auth-contex";
 
 const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) => {
+
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const [dataGroup, setDataGroup] = useState({ ...data, id });
 
@@ -26,7 +28,6 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
 
   const [showModal, setShowModal] = useState(false);
 
-  const api = useAPI();
   const apiPath = "admin/campaigns/product-catalog/conditions";
 
   useEffect(() => {

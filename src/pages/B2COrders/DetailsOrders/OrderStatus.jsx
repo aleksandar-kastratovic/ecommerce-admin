@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import Box from "@mui/material/Box";
 
 import { toast } from "react-toastify";
-import useAPI from "../../../api/api";
 import Button from "../../../components/shared/Button/Button";
 import Buttons from "../../../components/shared/Form/Buttons/Buttons";
 import { InputCheckbox, InputHtml, InputSelect } from "../../../components/shared/Form/FormInputs/FormInputs";
 import HistoryModal from "./HistoryModal";
+import AuthContext from "../../../store/auth-contex";
 
 const OrderStatus = ({ orderId, status }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPath = "admin/orders-b2c/status";
 
   const init = { id_order: orderId, status, send_mail: null, mail_to_customer: null, mail_to_admin: null, subject: null, content: null };

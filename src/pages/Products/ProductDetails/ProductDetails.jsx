@@ -1,9 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Specification from "./ProductDetailsSpecification/Specification";
 import ProductDetailsVariation from "./ProductDetailsVariation/ProductDetailsVariation";
-import useAPI from "../../../api/api";
 import IconList from "../../../helpers/icons";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Form from "../../../components/shared/Form/Form";
@@ -19,6 +18,7 @@ import Gallery from "./panels/Gallery";
 import Document from "./panels/Document";
 import DisplayIn from "./panels/DisplayIn";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
+import AuthContext from "../../../store/auth-contex";
 
 const ProductDetails = () => {
   const { prodId } = useParams();
@@ -38,10 +38,10 @@ const ProductDetails = () => {
     new_to: null,
     status: "on",
   };
-
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [data, setData] = useState(init);
   const [basicDataTemp, setBasicDataTemp] = useState(basic_data);
-  const api = useAPI();
 
   const updateNewFieldsInDetails = (data, isNew) => {
 

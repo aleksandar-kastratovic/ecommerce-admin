@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
 import { InputInput, InputNumber } from "../../../../../../components/shared/Form/FormInputs/FormInputs";
-import useAPI from "../../../../../../api/api";
 import SelectionModal from "../SelectionModal/SelectionModal";
 import Loading from "../../../../../../components/shared/Loading/Loading";
 
 import scss from "./InputValue.module.scss";
+import AuthContext from "../../../../../../store/auth-contex";
 
 const InputValue = ({
   fillFromApi,
@@ -23,7 +23,8 @@ const InputValue = ({
   inputType,
   onChange
 }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [opt, setOpt] = useState([]);
   const [options, setOptions] = useState({});
   const [isLoading, setIsLoading] = useState(false);

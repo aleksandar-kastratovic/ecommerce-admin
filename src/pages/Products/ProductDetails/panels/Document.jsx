@@ -1,14 +1,15 @@
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import formFields from "../forms/document.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
+import AuthContext from "../../../../store/auth-contex";
 
 
 const Document = ({ productId }) => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [file, setFile] = useState(null);
 
   const customActions = {

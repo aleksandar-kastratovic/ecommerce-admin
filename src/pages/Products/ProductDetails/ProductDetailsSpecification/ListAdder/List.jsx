@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ListItem from "./ListItem";
 
 import styles from "./List.module.scss";
-import useAPI from "../../../../../api/api";
 import Button from "../../../../../components/shared/Button/Button";
 import { toast } from "react-toastify";
 import ModalForm from "../../../../../components/shared/Modal/ModalForm";
@@ -12,6 +11,7 @@ import Buttons from "../../../../../components/shared/Form/Buttons/Buttons";
 import DeleteModal from "../../../../../components/shared/Dialogs/DeleteDialog";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
+import AuthContext from "../../../../../store/auth-contex";
 
 const List = ({ productId, apiPath }) => {
   const [fields, setFields] = useState([]);
@@ -24,7 +24,8 @@ const List = ({ productId, apiPath }) => {
   const [showProgress, setShowProgress] = useState(false);
 
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const getList = () => {
     api.get(`${apiPath}/groups/${productId}`)

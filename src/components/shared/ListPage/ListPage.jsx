@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -8,10 +8,10 @@ import DeleteDialog from "../Dialogs/DeleteDialog";
 import PageWrapper from "../Layout/PageWrapper/PageWrapper";
 import { flatten } from "lodash";
 import { useQuery } from "react-query";
-import useAPI from "../../../api/api";
 import ModalForm from "../Modal/ModalForm";
 import ButtonRef from "../Button/ButtonRef";
 import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
+import AuthContext from "../../../store/auth-contex";
 
 
 /**
@@ -44,7 +44,8 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
 
   const showAddButtonRef = useRef(null);
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [fieldsColumns, setFieldsColumns] = useState(columnFields);

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -20,13 +20,14 @@ import CheckIcon from "@mui/icons-material/Check";
 
 import styles from "./FileDialog.module.scss";
 import Form from "../../Form/Form";
-import useAPI from "../../../../api/api";
+import AuthContext from "../../../../store/auth-contex";
 
 const FileDialog = ({ openFullPageDialog, title = "", onImageUpload = () => { }, handleCloseImageDialog = () => { }, handleDeleteImage = () => { }, saveHandler = () => { }, formFields, getPath }) => {
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [loadingImage, setLoadingImage] = useState(false);
   const [data, setData] = useState({});
   const [formData, setFormData] = useState({});
-  const api = useAPI();
 
   const handleImageUpload = (e) => {
     setLoadingImage(true);

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import useAPI from '../../../../api/api';
+import React, { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Buttons from '../../../../components/shared/Form/Buttons/Buttons';
 import Button from '../../../../components/shared/Button/Button';
@@ -8,20 +7,16 @@ import Table from "../../../../components/shared/Table/Table";
 
 import Check from "@mui/icons-material/Check";
 import CircularProgress from '@mui/material/CircularProgress';
-import Checkbox from "@mui/material/Checkbox";
-import FormControl from "@mui/material/FormControl";
-import FormLabel from "@mui/material/FormLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import TableCell from "@mui/material/TableCell";
-import FormControlLabel from '@mui/material/FormControlLabel';
+import AuthContext from '../../../../store/auth-contex';
 
 const Content = ({ id, file }) => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const getImport = "admin/import/connect";
   const postImportExecute = "admin/products/import/execute";
 

@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { toast } from "react-toastify";
 import DeleteModal from "../components/shared/Dialogs/DeleteDialog";
-import { set } from "lodash";
-import useAPI from "../api/api";
+import { set, update } from "lodash";
+import { useNavigate } from "react-router-dom";
 
 let logoutTimer;
 let refreshTokenTimer;
@@ -15,11 +15,14 @@ const AuthContext = React.createContext({
     isTokenExpired: false,
     isRefreshingToken: false,
     startScreen: null,
+    api: {},
     login: (user) => {},
     logout: () => {},
     getUserScreens: (userScreens) => {},
     changeTokenExpired: (tokenExpired) => {},
+    setGlobalApiFile: (apiConfig) => {},
 });
+
 const calculateRemainingTime = (expirationTime) => {
     const currentTime = new Date().getTime();
     const adjExpirationTime = new Date(expirationTime).getTime();
@@ -51,9 +54,9 @@ const retrieveStoredUser = () => {
 
 export const AuthContextProvider = (props) => {
     let userData = retrieveStoredUser();
+
     const [tokenExpired, setTokenExpired] = useState(false);
     const [showTokenExpiryModal, setShowTokenExpiryModal] = useState(false);
-    const api = useAPI();
 
     if (userData.duration <= 10000 && userData.user) {
         localStorage.removeItem("user");
@@ -72,6 +75,7 @@ export const AuthContextProvider = (props) => {
     const [userScreensData, setUserScreensData] = useState([]);
     const [refreshingToken, setRefreshingToken] = useState(false);
     const [startScreenData, setStartScreenData] = useState(null);
+    const [globalApi, setApi] = useState({});
 
     const userIsLoggedIn = !!user && !!user.access_token;
 
@@ -153,7 +157,7 @@ export const AuthContextProvider = (props) => {
 
             showModalTimer = setTimeout(() => {
                 setShowTokenExpiryModal(true);
-            }, 5000);
+            }, modalShowTime);
 
             return () => {
                 clearTimeout(showModalTimer);
@@ -168,6 +172,10 @@ export const AuthContextProvider = (props) => {
         setTokenExpired(tokenExpired);
     };
 
+    const setGlobalApiFile = (apiConfig) => {
+        setApi(apiConfig);
+    };
+
     const contextValue = {
         user: user,
         isLoggedIn: userIsLoggedIn,
@@ -179,6 +187,8 @@ export const AuthContextProvider = (props) => {
         logout: logoutHandler,
         getUserScreens: userScreensHandler,
         changeTokenExpired: setIsTokenExpiring,
+        api: globalApi,
+        setGlobalApiFile: setGlobalApiFile,
     };
 
     return (
@@ -187,15 +197,25 @@ export const AuthContextProvider = (props) => {
 
             <DeleteModal
                 title="Obaveštenje"
-                openDeleteDialog={{ show: false }}
+                openDeleteDialog={{ show: showTokenExpiryModal }}
                 // openDeleteDialog={{ show: false }}
                 nameOfButtonCancel="Nastavi"
                 nameOfButton="Odjavite se"
                 deafultDeleteIcon={false}
                 description={`Vaš token ističe za 5 minuta.`}
-                handleConfirm={() => {
-                    logoutHandler();
+                handleConfirm={async () => {
                     setShowTokenExpiryModal(false);
+                    await contextValue?.api
+                        .post("admin/profile/logout")
+                        .then((response) => {
+                            toast.success("Uspešno ste se odjavili!");
+                            // navigate(`/`);
+                            logoutHandler();
+                            contextValue?.api?.userDataUpdate(null);
+                        })
+                        .catch((error) => {
+                            console.warn(error);
+                        });
                 }}
                 styleButtonCancel={{ color: "#28a86e", borderColor: "rgba(40, 168, 110, 0.5)", "&:hover": { backgroundColor: "rgba(40, 168, 110, 0.04)", borderColor: "#28a86e" } }}
                 //sx={{ backgroundColor: "#28a86e", "&:hover": { backgroundColor: "rgb(28, 117, 77)" } }}

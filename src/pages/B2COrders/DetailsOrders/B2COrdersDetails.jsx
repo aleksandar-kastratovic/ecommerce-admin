@@ -6,7 +6,6 @@ import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
 
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
-import useAPI from "../../../api/api";
 import addressTemplate from "../../../helpers/addressTemplate";
 import OrderSection from "./OrdersSection";
 import OrderPrices from "./OrderPrices";
@@ -15,12 +14,15 @@ import OrderItemsTable from "./OrderItemsTable";
 import OrderStatus from "./OrderStatus";
 
 import styles from "./B2COrdersDetails.module.scss";
+import { useContext } from "react";
+import AuthContext from "../../../store/auth-contex";
 
 
 const B2COrdersDetails = () => {
   const navigate = useNavigate();
   const { orderId } = useParams();
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPathOrderData = "admin/orders-b2c/summary";
   const apiPathBilling = "admin/orders-b2c/billing-address";
   const apiPathShipping = "admin/orders-b2c/shipping-address";
@@ -31,7 +33,7 @@ const B2COrdersDetails = () => {
   const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
   const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
 
-  console.log(orderData, "orderData")
+
   return (
     <PageWrapper
       title={`Narudžbenica: ${orderData?.slug}`}

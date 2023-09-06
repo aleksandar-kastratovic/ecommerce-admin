@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import InputMultipleImages from "../../../../components/shared/InputMultipleImages/InputMultipleImages";
 import GallerySkeleton from "../../../../components/shared/Loading/GallerySkeleton";
+import AuthContext from "../../../../store/auth-contex";
 
 const Gallery = ({ productId }) => {
+
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [data, setData] = useState([]);
-  const api = useAPI();
   const apiPath = "admin/product-items/gallery";
   const [loading, setLoading] = useState(false);
 

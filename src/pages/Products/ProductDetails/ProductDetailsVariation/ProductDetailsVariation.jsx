@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import Box from "@mui/material/Box";
 
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import { InputMultiSelect, InputSelect } from "../../../../components/shared/Form/FormInputs/FormInputs";
 import Button from "../../../../components/shared/Button/Button";
 import Buttons from "../../../../components/shared/Form/Buttons/Buttons";
@@ -14,6 +13,7 @@ import Typography from "@mui/material/Typography";
 import DeleteModal from "../../../../components/shared/Dialogs/DeleteDialog";
 import ProductVariation from "./VariationList/ProductVariation";
 import { Link } from "react-router-dom";
+import AuthContext from "../../../../store/auth-contex";
 
 
 const ProductDetailsVariation = ({ parentId }) => {
@@ -34,7 +34,8 @@ const ProductDetailsVariation = ({ parentId }) => {
 
   const [formFields, setFormFields] = useState([]);
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const additionalButtons = [
     {

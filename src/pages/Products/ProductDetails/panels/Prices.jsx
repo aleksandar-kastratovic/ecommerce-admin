@@ -1,14 +1,15 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import formFields from "../forms/prices.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
+import AuthContext from "../../../../store/auth-contex";
 
 const Prices = ({ productId }) => {
 
   const navigate = useNavigate();
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
 

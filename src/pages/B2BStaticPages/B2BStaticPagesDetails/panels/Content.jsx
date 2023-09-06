@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import ListPage from '../../../../components/shared/ListPage/ListPage';
-import useAPI from '../../../../api/api';
 import formFields from '../forms/content.json';
 import { toast } from 'react-toastify';
+import AuthContext from '../../../../store/auth-contex';
 
 const Content = ({ pageId }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPathGallery = "admin/static-pages-b2b/gallery";
   const apiPathContent = "admin/static-pages-b2b/content";
 

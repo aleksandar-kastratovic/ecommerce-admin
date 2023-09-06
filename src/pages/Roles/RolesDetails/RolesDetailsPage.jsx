@@ -1,18 +1,19 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import formFields from "./formField.json";
 import { toast } from "react-toastify";
 import Form from "../../../components/shared/Form/Form";
-import useAPI from "../../../api/api";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import IconList from "../../../helpers/icons";
 import RolesListPanel from "./RolesListPanel";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
+import AuthContext from "../../../store/auth-contex";
 
 const RolesDetailsPage = () => {
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const { roleId } = useParams();
-  const api = useAPI();
   const init = {
     id: null,
     screen: null,

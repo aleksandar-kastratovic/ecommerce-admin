@@ -1,23 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Box from "@mui/system/Box";
 import Icon from "@mui/material/Icon";
 
-import CreateForm from "../../../../../components/shared/Form/CreateForm";
 import DeleteDialog from "../../../../../components/shared/Dialogs/DeleteDialog";
 import GroupField from "./GroupField";
-import chooseSetForm from "../chooseSetForm.json";
-import IconList from "../../../../../helpers/icons";
-import useAPI from "../../../../../api/api";
+import IconList from "../../../../../helpers/icons";;
 
 import styles from "./SetFormFields.module.scss";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
+import AuthContext from "../../../../../store/auth-contex";
 
 const ListItem = ({ index, onDelete = () => { }, title = "", selectedSet = undefined, productId, apiPath, set, group, onChange }) => {
   const [loaded, setLoaded] = useState(false);
-  // const [open, setOpen] = useState(false);
 
   //delected set
   const [selected, setSetlected] = useState(selectedSet);
@@ -25,7 +22,8 @@ const ListItem = ({ index, onDelete = () => { }, title = "", selectedSet = undef
   const [showEmptyMessage, setShowEmptyMessage] = useState(false);
   const navigate = useNavigate();
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     show: false,

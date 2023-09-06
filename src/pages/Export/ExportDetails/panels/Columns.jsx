@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import useAPI from '../../../../api/api';
-import { toast } from 'react-toastify';
-import { InputCheckbox } from '../../../../components/shared/Form/FormInputs/FormInputs';
+import React, { useContext, useEffect, useState } from 'react';
+import AuthContext from '../../../../store/auth-contex';
 
 const Columns = ({ data, file }) => {
-
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPathExport = "admin/import/connect";
 
   const [dataModalContent, setDataModalContent] = useState([]);

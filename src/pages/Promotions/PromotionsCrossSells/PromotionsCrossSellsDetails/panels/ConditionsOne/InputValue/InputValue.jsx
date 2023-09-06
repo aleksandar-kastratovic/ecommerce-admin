@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
@@ -8,7 +8,8 @@ import scss from "./InputValue.module.scss";
 import { InputInput, InputNumber } from "../../../../../../../components/shared/Form/FormInputs/FormInputs";
 import Loading from "../../../../../../../components/shared/Loading/Loading";
 import SelectionModal from "../../../../../PromotionsCatalogCampaigns/PromotionsCatalogCampaignsPageDetails/panels/SelectionModal/SelectionModal";
-import useAPI from "../../../../../../../api/api";
+import AuthContext from "../../../../../../../store/auth-contex";
+
 
 const InputValue = ({
   fillFromApi,
@@ -22,7 +23,9 @@ const InputValue = ({
   inputType,
   onChange
 }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const [opt, setOpt] = useState([]);
   const [options, setOptions] = useState({});
   const [isLoading, setIsLoading] = useState(false);

@@ -1,17 +1,19 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 
-import useAPI from "../../../api/api";
 import Form from "../../../components/shared/Form/Form";
 import FormWrapper from "../../../components/shared/Layout/FormWrapper/FormWrapper";
 import formFields from "./formFields.json";
+import { useContext } from "react";
+import AuthContext from "../../../store/auth-contex";
 
 const B2BContactFormDetails = () => {
   const { id } = useParams();
 
   const navigate = useNavigate();
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPath = "admin/contact-form-b2b";
 
   const { data, isLoading } = useQuery(["ContactForm.details"], () => api.get(`${apiPath}/${id}`).then((response) => response?.payload));

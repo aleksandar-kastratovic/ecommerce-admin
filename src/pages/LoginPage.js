@@ -10,12 +10,10 @@ import { regax } from "../helpers/const";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-import useAPI from "../api/api";
 import Form from "../components/shared/Form/Form";
 import fields from "../pages/loginFields.json";
 
 const LoginPage = () => {
-    const api = useAPI();
     const apiPath = "admin/sign-in/login";
 
     const init = {
@@ -24,6 +22,7 @@ const LoginPage = () => {
     };
 
     const authCtx = useContext(AuthContext);
+    const { api } = authCtx;
     const regex = regax;
     const [show, setShow] = useState(false);
 

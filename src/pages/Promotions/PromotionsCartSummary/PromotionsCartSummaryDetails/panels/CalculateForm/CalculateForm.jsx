@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import calc from "../../forms/calc.json"
 import Form from "../../../../../../components/shared/Form/Form";
 import { deepClone } from "@mui/x-data-grid/utils/utils";
-import useAPI from "../../../../../../api/api";
 import { toast } from "react-toastify";
-
+import AuthContext from "../../../../../../store/auth-contex";
 
 const CalculateForm = ({ campaignId }) => {
 
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const { nid } = useParams();
-  const api = useAPI();
   const apiPath = "admin/campaigns/cart-summary/calculations";
   const [formFields, setFormFields] = useState(calc);
 

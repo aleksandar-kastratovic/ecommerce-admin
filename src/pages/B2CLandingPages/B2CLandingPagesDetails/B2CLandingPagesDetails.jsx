@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../api/api";
 import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
@@ -13,10 +12,12 @@ import Seo from "./panels/Seo";
 import basic_data from "./forms/basic_data.json";
 import Articles from "./panels/Articles/Articles";
 import Thumbs from "./panels/Thumbs";
+import AuthContext from "../../../store/auth-contex";
 
 const B2CLandingPagesDetails = () => {
   const { lid } = useParams();
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPath = "admin/landing-pages-b2c/basic-data";
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';

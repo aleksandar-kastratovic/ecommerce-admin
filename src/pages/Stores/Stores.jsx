@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
-import useAPI from "../../api/api";
+import { useContext, useEffect, useState } from "react";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import formFields from "./tblFields.json";
+import AuthContext from "../../store/auth-contex";
 
 const Stores = () => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
   const [stores, setStores] = useState(null);
 
