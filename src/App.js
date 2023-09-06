@@ -11,6 +11,7 @@ import Header from "./components/Header";
 import Loader from "./components/shared/Loading/Loading";
 import CroonusTheme from "./theme";
 import useAPI from "./api/api";
+import DeleteModal from "./components/shared/Dialogs/DeleteDialog";
 
 const App = () => {
     const api = useAPI();
@@ -142,6 +143,34 @@ const App = () => {
 
                     {isLoading && <Loader size={50} />}
                 </div>
+                <DeleteModal
+                    title="Obaveštenje"
+                    openDeleteDialog={{ show: authCtx.modal }}
+                    nameOfButtonCancel="Nastavi"
+                    nameOfButton="Odjavite se"
+                    deafultDeleteIcon={false}
+                    description={`Vaša sesija ističe za 5 minuta. Da li želite da nastavite rad?`}
+                    handleConfirm={async () => {
+                        authCtx.setShowModal(false);
+                        await authCtx?.api
+                            .post("admin/profile/logout")
+                            .then((response) => {
+                                toast.success("Uspešno ste se odjavili!");
+                                navigate(`/`);
+                                authCtx.logout();
+                                authCtx?.api?.userDataUpdate(null);
+                            })
+                            .catch((error) => {
+                                console.warn(error);
+                            });
+                    }}
+                    styleButtonCancel={{ color: "#28a86e", borderColor: "rgba(40, 168, 110, 0.5)", "&:hover": { backgroundColor: "rgba(40, 168, 110, 0.04)", borderColor: "#28a86e" } }}
+                    handleCancel={() => {
+                        authCtx.setShowModal(false);
+                        authCtx?.setIsRefreshingToken(true);
+                    }}
+                    handleCancelToken={true}
+                />
             </ThemeProvider>
         </QueryClientProvider>
     );

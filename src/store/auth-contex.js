@@ -1,8 +1,4 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { toast } from "react-toastify";
-import DeleteModal from "../components/shared/Dialogs/DeleteDialog";
-import { set, update } from "lodash";
-import { useNavigate } from "react-router-dom";
 
 let logoutTimer;
 let refreshTokenTimer;
@@ -21,6 +17,7 @@ const AuthContext = React.createContext({
     getUserScreens: (userScreens) => {},
     changeTokenExpired: (tokenExpired) => {},
     setGlobalApiFile: (apiConfig) => {},
+    setIsRefreshingToken: (value) => {},
 });
 
 const calculateRemainingTime = (expirationTime) => {
@@ -176,11 +173,20 @@ export const AuthContextProvider = (props) => {
         setApi(apiConfig);
     };
 
+    const setIsRefreshingToken = (value) => {
+        setRefreshingToken(value);
+    };
+
+    const setShowModal = (value) => {
+        setShowTokenExpiryModal(value);
+    };
+
     const contextValue = {
         user: user,
         isLoggedIn: userIsLoggedIn,
         isTokenExpired: tokenExpired,
         isRefreshingToken: refreshingToken,
+        setIsRefreshingToken: setIsRefreshingToken,
         userScreens: userScreensData,
         startScreen: startScreenData,
         login: loginHandler,
@@ -189,42 +195,13 @@ export const AuthContextProvider = (props) => {
         changeTokenExpired: setIsTokenExpiring,
         api: globalApi,
         setGlobalApiFile: setGlobalApiFile,
+        modal: showTokenExpiryModal,
+        setShowModal: setShowModal,
     };
 
     return (
         <>
             <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>
-
-            <DeleteModal
-                title="Obaveštenje"
-                openDeleteDialog={{ show: showTokenExpiryModal }}
-                // openDeleteDialog={{ show: false }}
-                nameOfButtonCancel="Nastavi"
-                nameOfButton="Odjavite se"
-                deafultDeleteIcon={false}
-                description={`Vaš token ističe za 5 minuta.`}
-                handleConfirm={async () => {
-                    setShowTokenExpiryModal(false);
-                    await contextValue?.api
-                        .post("admin/profile/logout")
-                        .then((response) => {
-                            toast.success("Uspešno ste se odjavili!");
-                            // navigate(`/`);
-                            logoutHandler();
-                            contextValue?.api?.userDataUpdate(null);
-                        })
-                        .catch((error) => {
-                            console.warn(error);
-                        });
-                }}
-                styleButtonCancel={{ color: "#28a86e", borderColor: "rgba(40, 168, 110, 0.5)", "&:hover": { backgroundColor: "rgba(40, 168, 110, 0.04)", borderColor: "#28a86e" } }}
-                //sx={{ backgroundColor: "#28a86e", "&:hover": { backgroundColor: "rgb(28, 117, 77)" } }}
-                handleCancel={() => {
-                    setShowTokenExpiryModal(false);
-                    setRefreshingToken(true);
-                }}
-                handleCancelToken={true}
-            />
         </>
     );
 };
