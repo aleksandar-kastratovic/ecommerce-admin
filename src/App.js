@@ -91,6 +91,10 @@ const App = () => {
             };
 
             userScreens();
+        } else {
+            if (authCtx.modal) {
+                authCtx.setShowModal(false);
+            }
         }
     }, [authCtx.isLoggedIn, authCtx?.api]);
 
