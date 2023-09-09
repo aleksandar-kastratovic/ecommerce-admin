@@ -1,13 +1,14 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import formFields from "../forms/delivery_address.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
+import AuthContext from "../../../../store/auth-contex";
 
 
 const DeliveryAdresss = ({ companyId, data }) => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
 
   const [dataDeliveryAdress, setDataDeliveryAdress] = useState(null);

@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import Form from "../../../../components/shared/Form/Form";
 
 import formFields from "../forms/declaration.json";
+import AuthContext from "../../../../store/auth-contex";
 
 const Declaration = ({ productId }) => {
   const init = {
@@ -16,8 +16,10 @@ const Declaration = ({ productId }) => {
     declaration_importer_name: null,
     declaration_importer_id: null,
   };
+
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [data, setData] = useState(init);
-  const api = useAPI();
   const apiPath = "admin/product-items/declaration";
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 

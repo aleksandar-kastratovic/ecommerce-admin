@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import IconList from "../../../../helpers/icons";
 import Form from "../../../../components/shared/Form/Form";
 import basic_data from "./forms/basic_data.json";
@@ -10,10 +9,13 @@ import Conditions from "./panels/Conditions";
 import CalculateForm from "./panels/CalculateForm/CalculateForm";
 import { deepClone } from "@mui/x-data-grid/utils/utils";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../../helpers/functions";
+import AuthContext from "../../../../store/auth-contex";
 
 const PromotionsDeliveryCampaignsDetails = () => {
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const { nid } = useParams();
-  const api = useAPI();
   const apiPath = "admin/campaigns/cart-delivery/basic-data";
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';

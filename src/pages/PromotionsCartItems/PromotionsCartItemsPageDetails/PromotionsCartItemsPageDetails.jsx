@@ -1,7 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../api/api";
 import IconList from "../../../helpers/icons";
 import Form from "../../../components/shared/Form/Form";
 
@@ -10,13 +9,14 @@ import Conditions from "./panels/Conditions";
 import CalculateForm from "./panels/CalculateForm/CalculateForm";
 
 import basic_data from "./forms/basic_data.json";
+import AuthContext from "../../../store/auth-contex";
 
 const PromotionsCartItemsPageDetails = () => {
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const { nid } = useParams();
-  const api = useAPI();
   const apiPath = "admin/campaigns/product-catalog/basic-data";
   const navigate = useNavigate();
-
 
   const init = {
     id: null,

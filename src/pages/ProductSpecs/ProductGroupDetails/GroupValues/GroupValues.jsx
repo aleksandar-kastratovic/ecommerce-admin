@@ -1,13 +1,15 @@
 import formFields from "./formFields.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
 import { deepClone } from "@mui/x-data-grid/utils/utils";
-import useAPI from "../../../../api/api";
 import { toast } from "react-toastify";
 import ModalContent from "../../ModalContent";
+import { useContext } from "react";
+import AuthContext from "../../../../store/auth-contex";
 
 const GroupValues = ({ groupId }) => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   let newFields = deepClone(formFields);
 

@@ -1,9 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import Specification from "./ProductDetailsSpecification/Specification";
 import ProductDetailsVariation from "./ProductDetailsVariation/ProductDetailsVariation";
-import useAPI from "../../../api/api";
 import IconList from "../../../helpers/icons";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Form from "../../../components/shared/Form/Form";
@@ -16,12 +15,10 @@ import basic_data from "./forms/basic_data.json";
 import Inventories from "./panels/Inventories";
 import Categories from "./panels/Categories";
 import Gallery from "./panels/Gallery";
-import TechnicalDoc from "./panels/TechnicalDoc";
-import Instruction from "./panels/Instruction";
-import Certificate from "./panels/Certificate";
-// import Document from "./panels/Document";
+import Document from "./panels/Document";
 import DisplayIn from "./panels/DisplayIn";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
+import AuthContext from "../../../store/auth-contex";
 
 const ProductDetails = () => {
   const { prodId } = useParams();
@@ -41,14 +38,12 @@ const ProductDetails = () => {
     new_to: null,
     status: "on",
   };
-
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [data, setData] = useState(init);
   const [basicDataTemp, setBasicDataTemp] = useState(basic_data);
-  const api = useAPI();
 
   const updateNewFieldsInDetails = (data, isNew) => {
-    // const newFromField = data.find((item) => item.prop_name === "new_from");
-    // const newToField = data.find((item) => item.prop_name === "new_to");
 
     data.map((item, i) => {
       if (isNew) {
@@ -173,34 +168,12 @@ const ProductDetails = () => {
       component: <DisplayIn productId={data?.id} />,
     },
     {
-      id: "technical_documentation",
-      name: "Tehnička dokumentacija",
+      id: "document",
+      name: "Dokumenta",
       icon: IconList.documentScanner,
       enabled: data?.id,
-      component: <TechnicalDoc productId={data?.id} />,
+      component: <Document productId={data?.id} />,
     },
-    {
-      id: "certificates",
-      name: "Sertifikati",
-      icon: IconList.documentScanner,
-      enabled: data?.id,
-      component: <Certificate productId={data?.id} />,
-    },
-    // {
-    //   id: "dokument",
-    //   name: "Dokumenta",
-    //   icon: IconList.documentScanner,
-    //   enabled: data?.id,
-    //   component: <Document productId={data?.id} />,
-    // },
-    {
-      id: "instructions",
-      name: "Instrukcije",
-      icon: IconList.documentScanner,
-      enabled: data?.id,
-      component: <Instruction productId={data?.id} />,
-    },
-
     {
       id: "specifications",
       name: "Specifikacije",

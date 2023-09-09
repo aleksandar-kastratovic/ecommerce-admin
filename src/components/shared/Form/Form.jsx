@@ -12,7 +12,7 @@ import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
 
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), onCloseModalButton = () => { }, cancelButton = false, submitButton = true, closeButton = false, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked, selectedFile, allowedFileTypes, styleButtonSubmit, styleWrapperButtons }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), onCloseModalButton = () => { }, cancelButton = false, submitButton = true, closeButton = false, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked, selectedFile, styleButtonSubmit, styleWrapperButtons }) => {
   const navigate = useNavigate();
 
   const [data, setData] = useState(initialData ?? {});
@@ -35,6 +35,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
       return inputsError;
     });
   }
+
 
   const submitHandler = (event) => {
     event.preventDefault && event.preventDefault();
@@ -208,13 +209,12 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
                   onFilePicked(fileObject);
                   //deleting import error object:
                   setInputErrors("import");
-                  console.log("Fileee:::");
+                  //deleting file error object:
                   setInputErrors("file");
                   //setting data to be defiend in value: 
-                  setData({ ...data, import: fileObject.name });
+                  setData({ ...data, import: fileObject.name, file: fileObject.name });
                 }}
                 selectedFile={selectedFile}
-                allowedFileTypes={allowedFileTypes}
               />
             );
           })}

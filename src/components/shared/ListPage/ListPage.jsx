@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -8,10 +8,10 @@ import DeleteDialog from "../Dialogs/DeleteDialog";
 import PageWrapper from "../Layout/PageWrapper/PageWrapper";
 import { flatten } from "lodash";
 import { useQuery } from "react-query";
-import useAPI from "../../../api/api";
 import ModalForm from "../Modal/ModalForm";
 import ButtonRef from "../Button/ButtonRef";
 import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
+import AuthContext from "../../../store/auth-contex";
 
 
 /**
@@ -38,13 +38,14 @@ import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren, listPageId, validateData, onNewButtonPress = () => { }, prepareInitialData, withoutSetterFunction, submitButtonForm, clearButton, closeButtonModalForm, customTitleModalForm, modalObject, customTitleDataNameForEditModal, selectableCountryTown, useColumnFields = false, useModalGalleryInjection = false, savePrapareDataHandler = null, onModalCancel = () => { }, onClickFieldBehavior, customFields = null, customNewButtonPath, allowedFileTypes, onFilePicked, selectedFile }) => {
+const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren, listPageId, validateData, onNewButtonPress = () => { }, prepareInitialData, withoutSetterFunction, submitButtonForm, clearButton, closeButtonModalForm, customTitleModalForm, modalObject, customTitleDataNameForEditModal, selectableCountryTown, useColumnFields = false, useModalGalleryInjection = false, savePrapareDataHandler = null, onModalCancel = () => { }, onClickFieldBehavior, customFields = null, customNewButtonPath, onFilePicked, selectedFile }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
   const showAddButtonRef = useRef(null);
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [fieldsColumns, setFieldsColumns] = useState(columnFields);
@@ -276,7 +277,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
 
       </PageWrapper >
 
-      <ModalForm validateData={validateData} children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={(modalObj) => { onModalCancel(); setOpenModal(modalObj) }} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={getFormFieldsForModal()} initialData={initialData} sx={{ padding: "2rem" }} prepareInitialData={prepareInitialData} withoutSetterFunction={withoutSetterFunction} submitButton={submitButtonForm} clearButton={clearButton} closeButtonModalForm={closeButtonModalForm} customTitle={customTitleModalForm} modalObject={modalObject} customTitleDataNameForEdit={customTitleDataNameForEditModal} selectableCountryTown={selectableCountryTown} useModalGalleryInjection={useModalGalleryInjection} savePrapareDataHandler={savePrapareDataHandler} allowedFileTypes={allowedFileTypes} onFilePicked={onFilePicked} selectedFile={selectedFile} />
+      <ModalForm validateData={validateData} children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={(modalObj) => { onModalCancel(); setOpenModal(modalObj) }} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={getFormFieldsForModal()} initialData={initialData} sx={{ padding: "2rem" }} prepareInitialData={prepareInitialData} withoutSetterFunction={withoutSetterFunction} submitButton={submitButtonForm} clearButton={clearButton} closeButtonModalForm={closeButtonModalForm} customTitle={customTitleModalForm} modalObject={modalObject} customTitleDataNameForEdit={customTitleDataNameForEditModal} selectableCountryTown={selectableCountryTown} useModalGalleryInjection={useModalGalleryInjection} savePrapareDataHandler={savePrapareDataHandler} onFilePicked={onFilePicked} selectedFile={selectedFile} />
       <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );

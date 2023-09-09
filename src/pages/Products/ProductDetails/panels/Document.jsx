@@ -1,18 +1,20 @@
 
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import formFields from "../forms/document.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
+import AuthContext from "../../../../store/auth-contex";
 
 
 const Document = ({ productId }) => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [file, setFile] = useState(null);
 
   const customActions = {
     delete: {
+
       clickHandler: {
         type: 'dialog_delete',
         fnc: (rowData) => {
@@ -43,9 +45,13 @@ const Document = ({ productId }) => {
       clickHandler: {
         type: 'modal_form',
         fnc: (rowData) => {
+
           api.get(`admin/product-items/documents/basic-data/${rowData.id}`)
             .then((response) => {
-              console.log("reeeeeee", response)
+              setFile({
+                name: response?.payload?.file_filename,
+                base_64: response?.payload?.file_base64
+              })
             })
             .catch((error) => console.log(error));
           return {
@@ -66,13 +72,13 @@ const Document = ({ productId }) => {
         title=" "
         columnFields={formFields}
         actionNewButton="modal"
-        initialData={{ id_product: productId }}
+        initialData={{ id_product: productId, file_base64: file?.base_64 }}
         addFieldLabel="Dodajte novi dokument"
         showAddButton={true}
         customActions={customActions}
-        allowedFileTypes={["jpg"]}
         onFilePicked={setFile}
         selectedFile={file}
+        onNewButtonPress={() => { setFile(null) }}
       />
     </>
   );

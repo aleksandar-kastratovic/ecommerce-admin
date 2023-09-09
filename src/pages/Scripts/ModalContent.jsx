@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
-import useAPI from "../../api/api";
 import { InputCheckbox } from "../../components/shared/Form/FormInputs/FormInputs";
 import Buttons from "../../components/shared/Form/Buttons/Buttons";
 import Button from "../../components/shared/Button/Button";
@@ -9,15 +8,18 @@ import Button from "../../components/shared/Button/Button";
 import Typography from '@mui/material/Typography';
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
+import AuthContext from "../../store/auth-contex";
 
 
 const ModalContent = ({ data, rowData, labelModalContent }) => {
+
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const [dataModalContent, setDataModalContent] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isChecked, setIsChecked] = useState([]);
 
-  const api = useAPI();
   const apiPathSave = `admin/scripts/execute`;
 
   const handleSubmit = () => {

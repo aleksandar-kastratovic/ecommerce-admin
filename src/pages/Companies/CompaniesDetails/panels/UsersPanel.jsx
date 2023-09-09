@@ -1,12 +1,13 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import ChangePasswordDialog from "../../../../components/shared/ChangePasswordDialog/ChangePasswordDialog";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
 import formFields from "../forms/users.json";
-import useAPI from "../../../../api/api";
 import { toast } from "react-toastify";
+import AuthContext from "../../../../store/auth-contex";
 
 const UsersPanel = ({ companyId }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [openDialog, setOpenDialog] = useState({ show: false, userId: null });
 
   const customActions = {

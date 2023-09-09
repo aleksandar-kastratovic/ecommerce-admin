@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import Box from "@mui/material/Box";
 import Icon from "@mui/material/Icon";
@@ -12,10 +12,13 @@ import { InputSelect } from "../../../../../../../components/shared/Form/FormInp
 import Buttons from "../../../../../../../components/shared/Form/Buttons/Buttons";
 import Button from "../../../../../../../components/shared/Button/Button";
 import ListPageModalWrapper from "../../../../../../../components/shared/Modal/ListPageModalWrapper";
-import useAPI from "../../../../../../../api/api";
+import AuthContext from "../../../../../../../store/auth-contex";
 
 
 const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) => {
+
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const [dataGroup, setDataGroup] = useState({ ...data, id });
 
@@ -25,7 +28,6 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
 
   const [showModal, setShowModal] = useState(false);
 
-  const api = useAPI();
   const apiPath = "admin/sell-strategies/up-sell/conditions-apply";
 
   useEffect(() => {

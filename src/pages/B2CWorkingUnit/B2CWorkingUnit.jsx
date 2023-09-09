@@ -1,13 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
-import useAPI from "../../api/api";
 import { toast } from "react-toastify";
 import ModalContent from "./ModalContent";
+import { useContext } from "react";
+import AuthContext from "../../store/auth-contex";
 
 const B2CWorkingUnit = () => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const navigate = useNavigate();
 
   const customActions = {

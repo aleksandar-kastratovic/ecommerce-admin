@@ -33,7 +33,6 @@ const OrderItemsTable = ({ items, fields }) => {
       <TableHead>
         <TableRow>
           {fields.map((field, index) => {
-            console.log(index)
             return (
               <TableCell key={field.prop_name} sx={{ padding: index === 0 ? "0.3rem 0.8rem 0.3rem 0" : "0.3rem 0.8rem" }}>{field.field_name}</TableCell>
             )
@@ -46,7 +45,6 @@ const OrderItemsTable = ({ items, fields }) => {
           return (
             <TableRow key={item.item.id}>
               {fields.map((field, index) => {
-                console.log(field, "field")
                 let value = null;
                 if (item.item != null && item.item.hasOwnProperty(field.prop_name)) {
                   value = item.item[field.prop_name];

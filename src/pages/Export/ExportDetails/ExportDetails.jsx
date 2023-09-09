@@ -1,6 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import useAPI from "../../../api/api";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
 import IconList from "../../../helpers/icons";
@@ -10,12 +9,14 @@ import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers
 import Columns from "./panels/Columns";
 import Content from "./panels/Content";
 import basic_data from "./forms/basic_data.json";
+import AuthContext from "../../../store/auth-contex";
 
 
 const ExportDetails = () => {
 
   const { exId } = useParams();
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPath = "admin/import/basic-data";
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
   const navigate = useNavigate();

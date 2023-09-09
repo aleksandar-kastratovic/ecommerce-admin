@@ -1,12 +1,14 @@
 import formFields from "./formFields.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
-import useAPI from "../../../../api/api";
 import ModalContent from "../../ModalContent";
 import { toast } from "react-toastify";
+import { useContext } from "react";
+import AuthContext from "../../../../store/auth-contex";
 
 const GroupAttributes = () => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const customActions = {
     delete: {

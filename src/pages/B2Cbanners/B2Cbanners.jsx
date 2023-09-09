@@ -1,13 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
-import useAPI from "../../api/api";
+import AuthContext from "../../store/auth-contex";
 
 const B2Cbanners = ({ }) => {
   const navigate = useNavigate();
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [formFieldsTemp, setFormFieldsTemp] = useState(tblFields);
   const [idPosition, setIdPosition] = useState(null);
 

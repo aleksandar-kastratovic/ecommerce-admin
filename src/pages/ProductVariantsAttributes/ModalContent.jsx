@@ -1,15 +1,15 @@
-import { useEffect, useRef, useState } from "react";
-import useAPI from "../../api/api";
+import { useContext, useEffect, useRef, useState } from "react";
 import Typography from '@mui/material/Typography';
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import CircularProgress from "@mui/material/CircularProgress";
+import AuthContext from "../../store/auth-contex";
 
 const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const productAttributes = useRef();
-  // const
 
   const [dialogData, setDialogData] = useState({})
   const [isLoading, setIsLoading] = useState(false);

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import Form from "../../../../components/shared/Form/Form";
 import formFields from "../forms/head_office_address.json";
+import AuthContext from "../../../../store/auth-contex";
 
 const HeadOffice = ({ companyId }) => {
 
@@ -21,9 +21,9 @@ const HeadOffice = ({ companyId }) => {
     country_name: null,
     note: null,
   };
-
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const [data, setData] = useState(init);
-  const api = useAPI();
   const apiPath = "admin/customers-b2b/head-office-address";
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);

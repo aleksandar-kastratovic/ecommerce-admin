@@ -1,16 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Box from "@mui/material/Box"
 import Typography from '@mui/material/Typography';
 import { InputSelect } from "../../../../../components/shared/Form/FormInputs/FormInputs";
 import Button from "../../../../../components/shared/Button/Button";
 import Buttons from "../../../../../components/shared/Form/Buttons/Buttons";
-import useAPI from "../../../../../api/api";
+import AuthContext from "../../../../../store/auth-contex";
 
 
 const ListItem = ({ productId, apiPath }) => {
 
   const [fields, setFields] = useState([]);
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const setListHandler = async () => {
     api.get(`${apiPath}/product/sets/${productId}`)

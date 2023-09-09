@@ -1,15 +1,16 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import SearchableListForm from "../../../../components/shared/Form/SearchableListForm/SearchableListForm";
 import Loading from "../../../../components/shared/Loading/Loading";
+import AuthContext from "../../../../store/auth-contex";
 
 const Categories = ({ newsId }) => {
   const [listData, setListData] = useState([]);
   const [isLoading, setIsLoading] = useState([]);
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPath = "admin/news-b2c/news/categories";
 
   const handleList = () => {

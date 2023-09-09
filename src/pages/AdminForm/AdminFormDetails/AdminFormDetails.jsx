@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import IconList from "../../../helpers/icons";
-// import GroupAttributes from "./GroupAttributes/GroupAttributes";
-// import GroupValues from "./GroupValues/GroupValues"
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
-import useAPI from "../../../api/api";
 import Form from "../../../components/shared/Form/Form";
 import basic_data from "../tblFields.json";
 import InputFields from "./panels/InputFields";
+import AuthContext from "../../../store/auth-contex";
 
 const AdminFormDetails = () => {
 
@@ -22,10 +20,12 @@ const AdminFormDetails = () => {
     order: 0,
   };
 
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const { formId } = useParams();
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
-  const api = useAPI();
   const apiPath = "admin/forms";
 
   const getData = async () => {

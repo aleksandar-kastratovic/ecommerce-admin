@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import IconList from "../../../helpers/icons";
 import GroupAttributes from "./GroupAttributes/GroupAttributes";
 import GroupValues from "./GroupValues/GroupValues"
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
-import useAPI from "../../../api/api";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
+import AuthContext from "../../../store/auth-contex";
 
 const ProductGroupDetails = () => {
 
@@ -17,10 +17,12 @@ const ProductGroupDetails = () => {
     status: "on",
   };
 
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const { groupId } = useParams();
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
-  const api = useAPI();
   const apiPath = "admin/product-item-specifications/group";
   const activeTab = getUrlQueryStringParam("tab") ?? 'attributes';
   const navigate = useNavigate();

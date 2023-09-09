@@ -11,9 +11,11 @@ import Header from "./components/Header";
 import Loader from "./components/shared/Loading/Loading";
 import CroonusTheme from "./theme";
 import useAPI from "./api/api";
+import DeleteModal from "./components/shared/Dialogs/DeleteDialog";
 
 const App = () => {
     const api = useAPI();
+
     const queryClient = new QueryClient();
     const authCtx = useContext(AuthContext);
     let navigate = useNavigate();
@@ -22,28 +24,34 @@ const App = () => {
     const [activeTheme, setActiveTheme] = useState(localStorage.getItem("theme") === "true" ?? false);
 
     useEffect(() => {
+        //seting global api:
+        authCtx?.setGlobalApiFile(api);
         if (authCtx.isRefreshingToken) {
             const refreshToken = async () => {
-                await api
-                    .get(`admin/profile/refresh-token`)
-                    .then((response) => {
-                        const data = response?.payload;
+                if (authCtx?.api?.get) {
+                    await authCtx?.api
+                        .get(`admin/profile/refresh-token`)
+                        .then((response) => {
+                            const data = response?.payload;
 
-                        if (!data) {
-                            toast.warning("Greška!");
-                        }
+                            if (!data) {
+                                toast.warning("Greška!");
+                            }
 
-                        const expirationTime = new Date(new Date().getTime() + +data.expires_in * 60 * 1000);
-                        authCtx.login(data, expirationTime);
-                    })
-                    .catch((error) => {
-                        console.warn(error);
-                    });
+                            const expirationTime = new Date(new Date().getTime() + +data.expires_in * 1000);
+                            authCtx.login(data, expirationTime);
+                            authCtx?.api?.userDataUpdate(data);
+                        })
+                        .catch((error) => {
+                            console.warn(error);
+                            console.log(error?.response);
+                        });
+                }
             };
 
             refreshToken();
         }
-    }, [authCtx.isRefreshingToken]);
+    }, [authCtx?.isRefreshingToken, authCtx?.api]);
 
     useEffect(() => {
         if (authCtx.isTokenExpired) {
@@ -63,27 +71,32 @@ const App = () => {
             };
 
             const userScreens = async () => {
-                setIsLoading(true);
-                await api
-                    .get(`admin/profile/user-permissions`)
-                    .then((response) => {
-                        const data = response?.payload;
-                        console.log("user-permission", data);
-                        if (!data) {
-                            toast.warning("Greška!");
-                        }
+                if (authCtx?.api?.get) {
+                    setIsLoading(true);
+                    await authCtx?.api
+                        .get(`admin/profile/user-permissions`)
+                        .then((response) => {
+                            const data = response?.payload;
+                            if (!data) {
+                                toast.warning("Greška!");
+                            }
 
-                        setUserScreens(response?.payload);
-                    })
-                    .catch((error) => {
-                        console.warn(error);
-                    });
-                setIsLoading(false);
+                            setUserScreens(response?.payload);
+                        })
+                        .catch((error) => {
+                            console.warn(error);
+                        });
+                    setIsLoading(false);
+                }
             };
 
             userScreens();
+        } else {
+            if (authCtx.modal) {
+                authCtx.setShowModal(false);
+            }
         }
-    }, [authCtx.isLoggedIn]);
+    }, [authCtx.isLoggedIn, authCtx?.api]);
 
     let routerClass;
     if (!authCtx.isLoggedIn) {
@@ -134,6 +147,34 @@ const App = () => {
 
                     {isLoading && <Loader size={50} />}
                 </div>
+                <DeleteModal
+                    title="Obaveštenje"
+                    openDeleteDialog={{ show: authCtx.modal }}
+                    nameOfButtonCancel="Nastavi"
+                    nameOfButton="Odjavite se"
+                    deafultDeleteIcon={false}
+                    description={`Vaša sesija ističe za 5 minuta. Da li želite da nastavite rad?`}
+                    handleConfirm={async () => {
+                        authCtx.setShowModal(false);
+                        await authCtx?.api
+                            .post("admin/profile/logout")
+                            .then((response) => {
+                                toast.success("Uspešno ste se odjavili!");
+                                navigate(`/`);
+                                authCtx.logout();
+                                authCtx?.api?.userDataUpdate(null);
+                            })
+                            .catch((error) => {
+                                console.warn(error);
+                            });
+                    }}
+                    styleButtonCancel={{ color: "#28a86e", borderColor: "rgba(40, 168, 110, 0.5)", "&:hover": { backgroundColor: "rgba(40, 168, 110, 0.04)", borderColor: "#28a86e" } }}
+                    handleCancel={() => {
+                        authCtx.setShowModal(false);
+                        authCtx?.setIsRefreshingToken(true);
+                    }}
+                    handleCancelToken={true}
+                />
             </ThemeProvider>
         </QueryClientProvider>
     );

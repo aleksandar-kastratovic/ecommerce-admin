@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
-import useAPI from "../../api/api";
+import AuthContext from "../../store/auth-contex";
 
 
 const B2Bbanners = ({ }) => {
   const navigate = useNavigate();
   const [formFieldsTemp, setFormFieldsTemp] = useState(tblFields);
   const [idPosition, setIdPosition] = useState(null);
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const buttons = [
     {
@@ -45,7 +46,7 @@ const B2Bbanners = ({ }) => {
     if (type === "gallery") {
       arr = fields?.map((item, i) => {
         const { prop_name } = item;
-        if (prop_name === 'title' || prop_name === 'subtitle' || prop_name === 'text') {
+        if (prop_name === 'position_name' || prop_name === 'title' || prop_name === 'subtitle' || prop_name === 'text') {
           return {
             ...item,
             in_details: false
@@ -58,7 +59,7 @@ const B2Bbanners = ({ }) => {
     } else if (type === "image") {
       arr = fields?.map((item, i) => {
         const { prop_name } = item;
-        if (prop_name === 'title' || prop_name === 'subtitle' || prop_name === 'text') {
+        if (prop_name === 'position_name' || prop_name === 'title' || prop_name === 'subtitle' || prop_name === 'text') {
           return {
             ...item,
             in_details: false

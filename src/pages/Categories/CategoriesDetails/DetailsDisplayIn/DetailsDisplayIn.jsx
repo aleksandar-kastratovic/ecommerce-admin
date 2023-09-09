@@ -1,16 +1,17 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import Form from "../../../../components/shared/Form/Form";
 
 import formFields from "./formFields.json";
+import AuthContext from "../../../../store/auth-contex";
 
 const DetailsDisplayIn = ({ cid }) => {
   const init = {
     display_in_section_recommendation: null,
   };
   const [data, setData] = useState(init);
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPath = "admin/category-product/display-in-section";
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 

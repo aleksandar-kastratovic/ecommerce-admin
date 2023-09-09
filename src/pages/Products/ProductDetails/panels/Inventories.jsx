@@ -1,12 +1,16 @@
+import { useContext } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 
 import formFields from "../forms/inventories.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
 import { useNavigate } from "react-router-dom";
+import AuthContext from "../../../../store/auth-contex";
+
 
 const Inventories = ({ productId }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const navigate = useNavigate();
 
   const customActions = {

@@ -1,8 +1,7 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import useAPI from "../../../api/api";
 import NoteBox from "../../../components/shared/NoteBox/NoteBox";
 import { NEW } from "../../../helpers/const";
 import { updateStateKey } from "../../../helpers/data";
@@ -13,9 +12,11 @@ import BrandsPanel from "./Panels/BrandsPanel";
 import CategoriesPanel from "./Panels/CategoriesPanel";
 import TiersPanel from "./Panels/TiersPanel";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
+import AuthContext from "../../../store/auth-contex";
 
 const B2BRebatesDetails = () => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const params = useParams();
   const [error, setError] = useState(null);
   const [data, setData] = useState({

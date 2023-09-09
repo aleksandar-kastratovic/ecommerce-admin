@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../api/api";
 import SearchableListForm from "../../../components/shared/Form/SearchableListForm/SearchableListForm";
 import Loading from "../../../components/shared/Loading/Loading";
+import AuthContext from "../../../store/auth-contex";
 
 const RolesListPanel = ({ roleId }) => {
+
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const [listData, setListData] = useState([]);
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
   const [isLoading, setIsLoading] = useState([]);
 
-  const api = useAPI();
   const apiPath = "admin/roles/screens";
 
   const handleList = () => {

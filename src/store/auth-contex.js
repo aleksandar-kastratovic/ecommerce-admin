@@ -1,8 +1,8 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { toast } from "react-toastify";
 
 let logoutTimer;
 let refreshTokenTimer;
+let showModalTimer;
 
 const AuthContext = React.createContext({
     user: [],
@@ -11,10 +11,13 @@ const AuthContext = React.createContext({
     isTokenExpired: false,
     isRefreshingToken: false,
     startScreen: null,
+    api: {},
     login: (user) => {},
     logout: () => {},
     getUserScreens: (userScreens) => {},
     changeTokenExpired: (tokenExpired) => {},
+    setGlobalApiFile: (apiConfig) => {},
+    setIsRefreshingToken: (value) => {},
 });
 
 const calculateRemainingTime = (expirationTime) => {
@@ -48,7 +51,9 @@ const retrieveStoredUser = () => {
 
 export const AuthContextProvider = (props) => {
     let userData = retrieveStoredUser();
+
     const [tokenExpired, setTokenExpired] = useState(false);
+    const [showTokenExpiryModal, setShowTokenExpiryModal] = useState(false);
 
     if (userData.duration <= 10000 && userData.user) {
         localStorage.removeItem("user");
@@ -64,10 +69,10 @@ export const AuthContextProvider = (props) => {
     }
 
     const [user, setUser] = useState(initialUser);
-    const [refData, setRefData] = useState([]);
     const [userScreensData, setUserScreensData] = useState([]);
     const [refreshingToken, setRefreshingToken] = useState(false);
     const [startScreenData, setStartScreenData] = useState(null);
+    const [globalApi, setApi] = useState({});
 
     const userIsLoggedIn = !!user && !!user.access_token;
 
@@ -90,12 +95,11 @@ export const AuthContextProvider = (props) => {
 
     const loginHandler = (user, expirationTime) => {
         setUser(user);
-
+        setRefreshingToken(false);
         localStorage.setItem("expirationTime", expirationTime);
         localStorage.setItem("user", JSON.stringify(user));
 
         const remainingTime = calculateRemainingTime(expirationTime);
-
         if (logoutTimer) {
             clearTimeout(logoutTimer);
         }
@@ -133,7 +137,7 @@ export const AuthContextProvider = (props) => {
     }, []);
 
     useEffect(() => {
-        if (userData) {
+        if (userData?.user) {
             if (logoutTimer) {
                 clearTimeout(logoutTimer);
             }
@@ -146,6 +150,15 @@ export const AuthContextProvider = (props) => {
                 clearTimeout(refreshTokenTimer);
             }
             refreshTokenTimer = setTimeout(refreshToken, remainingTokenTime);
+            let modalShowTime = remainingTokenTime - 300000;
+
+            showModalTimer = setTimeout(() => {
+                setShowTokenExpiryModal(true);
+            }, modalShowTime);
+
+            return () => {
+                clearTimeout(showModalTimer);
+            };
         }
     }, [userData, logoutHandler, refreshToken]);
 
@@ -156,20 +169,41 @@ export const AuthContextProvider = (props) => {
         setTokenExpired(tokenExpired);
     };
 
+    const setGlobalApiFile = (apiConfig) => {
+        setApi(apiConfig);
+    };
+
+    const setIsRefreshingToken = (value) => {
+        setRefreshingToken(value);
+    };
+
+    const setShowModal = (value) => {
+        setShowTokenExpiryModal(value);
+    };
+
     const contextValue = {
         user: user,
         isLoggedIn: userIsLoggedIn,
         isTokenExpired: tokenExpired,
         isRefreshingToken: refreshingToken,
+        setIsRefreshingToken: setIsRefreshingToken,
         userScreens: userScreensData,
         startScreen: startScreenData,
         login: loginHandler,
         logout: logoutHandler,
         getUserScreens: userScreensHandler,
         changeTokenExpired: setIsTokenExpiring,
+        api: globalApi,
+        setGlobalApiFile: setGlobalApiFile,
+        modal: showTokenExpiryModal,
+        setShowModal: setShowModal,
     };
 
-    return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>;
+    return (
+        <>
+            <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>
+        </>
+    );
 };
 
 export default AuthContext;

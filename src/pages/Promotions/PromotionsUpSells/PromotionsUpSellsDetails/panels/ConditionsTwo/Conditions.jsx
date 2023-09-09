@@ -1,6 +1,5 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 
-import useAPI from "../../../../../../api/api";
 import Group from "./Group/Group";
 import Row from "./Row/Row";
 import { v4 } from "uuid";
@@ -14,15 +13,18 @@ import Buttons from "../../../../../../components/shared/Form/Buttons/Buttons";
 import Button from "../../../../../../components/shared/Button/Button";
 import { toast } from "react-toastify";
 import { cloneDeep } from "lodash";
+import AuthContext from "../../../../../../store/auth-contex";
 
 const Conditions = ({ idSellStrategy }) => {
+
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const elementRef = useRef('');
   const [data, setData] = useState([]);
   const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false });
   const [removeComponentId, setRemoveComponentId] = useState(null);
 
-  const api = useAPI();
   const apiPath = 'admin/sell-strategies/up-sell/conditions-display';
 
   // The handleData function uses the API to retrieve data about campaign conditions.

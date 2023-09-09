@@ -1,7 +1,6 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import useAPI from "../../../api/api";
 import DetailsPage from "../../../components/shared/ListPage/DetailsPage/DetailsPage";
 import Form from "../../../components/shared/Form/Form";
 import { toast } from "react-toastify";
@@ -16,8 +15,12 @@ import UsersPanel from "./panels/UsersPanel";
 import DeliveryAddress from "./panels/DeliveryAddress";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 import Rebate from "./panels/Rebate";
+import AuthContext from "../../../store/auth-contex";
 
 const CompaniesDetails = () => {
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const { comId } = useParams();
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
@@ -35,7 +38,6 @@ const CompaniesDetails = () => {
   };
 
   const [data, setData] = useState(init);
-  const api = useAPI();
 
   const handleSubmit = (data) => {
     setIsLoadingOnSubmit(true);

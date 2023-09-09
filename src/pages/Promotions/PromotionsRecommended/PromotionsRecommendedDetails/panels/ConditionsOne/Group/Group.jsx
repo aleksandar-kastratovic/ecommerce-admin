@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 
 import Box from "@mui/material/Box";
 import Icon from "@mui/material/Icon";
@@ -6,13 +6,16 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 
 import scss from "./Group.module.scss";
-import useAPI from "../../../../../../../api/api";
 import { InputSelect } from "../../../../../../../components/shared/Form/FormInputs/FormInputs";
 import Button from "../../../../../../../components/shared/Button/Button";
 import Buttons from "../../../../../../../components/shared/Form/Buttons/Buttons";
+import AuthContext from "../../../../../../../store/auth-contex";
 
 
 const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) => {
+
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const [dataGroup, setDataGroup] = useState({ ...data, id });
 
@@ -20,7 +23,6 @@ const Group = ({ id, data, rules, handleAddComponent, handleRemoveComponent }) =
 
   const [fieldValue, setFieldValue] = useState(null);
 
-  const api = useAPI();
   const apiPath = "admin/sell-strategies/recommended/conditions-apply";
 
   useEffect(() => {

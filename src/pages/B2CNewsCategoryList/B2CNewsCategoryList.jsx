@@ -3,7 +3,8 @@ import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 import ModalContent from "./ModalContent";
 import { toast } from "react-toastify";
-import useAPI from "../../api/api";
+import { useContext } from "react";
+import AuthContext from "../../store/auth-contex";
 
 const B2CNewsCategorylist = () => {
   const navigate = useNavigate();
@@ -11,7 +12,8 @@ const B2CNewsCategorylist = () => {
     navigate("/b2c-news");
   };
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const newsButtons = [{ id: 1, label: "Vesti", action: newsPage }];
 

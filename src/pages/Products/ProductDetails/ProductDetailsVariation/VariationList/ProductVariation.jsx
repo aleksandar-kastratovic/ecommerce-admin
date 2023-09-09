@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import prices from "../../forms_variation/prices.json";
 import seo from "../../forms_variation/seo.json";
@@ -7,12 +7,13 @@ import lagerData from "../../forms_variation/inventories.json";
 import basicData from "../../forms_variation/product_variant_basic.json";
 
 import ListPage from "../../../../../components/shared/ListPage/ListPage";
-import useAPI from "../../../../../api/api";
 import { toast } from "react-toastify";
+import AuthContext from "../../../../../store/auth-contex";
 
 const ProductVariation = ({ parentId, tblFields }) => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const [fields, setFields] = useState(null);
   const [selectedColumn, setSelectedColumn] = useState(null);

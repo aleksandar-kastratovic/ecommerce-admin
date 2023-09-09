@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 
 import formFields from "../forms/payments.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
+import AuthContext from "../../../../store/auth-contex";
 
 const Payments = ({ data, customerId }) => {
 
@@ -12,7 +12,8 @@ const Payments = ({ data, customerId }) => {
   const [idCountrySelected, setIdCountrySelected] = useState(null);
   const [showResetButton, setShowResetButton] = useState(false);
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const customActions = {
     edit: {

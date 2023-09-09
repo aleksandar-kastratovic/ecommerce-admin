@@ -1,12 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ListPage from "../../components/shared/ListPage/ListPage";
 
 import formFields from "./tblFields.json";
-import useAPI from "../../api/api";
+import AuthContext from "../../store/auth-contex";
 
 const B2CCareer = () => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
   const [dataCareer, setDataCareer] = useState(null);

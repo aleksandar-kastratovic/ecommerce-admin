@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
-import useAPI from "../../../../api/api";
+import { useContext, useEffect, useState } from "react";
 import Form from "../../../../components/shared/Form/Form";
 import Loading from "../../../../components/shared/Loading/Loading";
 import { toast } from "react-toastify";
+import AuthContext from "../../../../store/auth-contex";
 
 const B2CSettingsForm = ({ form_slug, config_module_id, module, submodule }) => {
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const [isLoading, setIsLoading] = useState(false);
 

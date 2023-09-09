@@ -1,6 +1,6 @@
 [
   {
-    "field_name": "Grupa cene",
+    "field_name": "Cenovnik",
     "prop_name": "id_price_structure",
     "in_main_table": false,
     "in_details": true,
@@ -17,7 +17,7 @@
     "b2b_system": false
   },
   {
-    "field_name": "Grupa cene",
+    "field_name": "Cenovnik",
     "prop_name": "name",
     "in_main_table": true,
     "in_details": false,

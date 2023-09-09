@@ -1,14 +1,42 @@
+import { useEffect, useState } from "react";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 
 const B2COrders = () => {
+
+  const useWindowWide = (size) => {
+    const [width, setWidth] = useState(0);
+
+    useEffect(() => {
+      const handleResize = () => {
+        setWidth(window.innerWidth);
+      }
+
+      window.addEventListener("resize", handleResize);
+
+      handleResize();
+
+      return () => {
+        window.removeEventListener("resize", handleResize);
+      };
+    }, [setWidth]);
+
+    return width > size;
+  };
+
+  const wide = useWindowWide(768);
 
   const customActions = {
     edit: {
       type: "custom",
       display: false,
     },
+    delete: {
+      display: wide,
+    }
   };
+
+
 
   return (
     <ListPage

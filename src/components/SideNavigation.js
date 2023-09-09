@@ -10,11 +10,9 @@ import ChevronRight from "@mui/icons-material/ChevronRight";
 import ExpandMore from "@mui/icons-material/ExpandMore";
 import Badge from "@mui/material/Badge";
 import Typography from "@mui/material/Typography";
-import useAPI from "../api/api";
 import { useQuery } from "react-query";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@emotion/react";
-import { is } from "date-fns/locale";
 
 const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
     const { userScreens, logout } = useContext(AuthContext);
@@ -24,7 +22,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         Prodaja: true,
     };
     const [openGroups, setOpenGroups] = useState(initialOpenGroups);
-    const api = useAPI();
+    const { api } = authCtx;
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
@@ -56,8 +54,10 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
     const { data: badgeNumberB2c } = useQuery(
         "badgeNumberB2c",
         async () => {
-            const response = await api.get(`admin/orders-b2c/list/badge-count`);
-            return response?.payload;
+            if (api?.user) {
+                const response = await api?.get(`admin/orders-b2c/list/badge-count`);
+                return response?.payload;
+            }
         },
         {
             refetchInterval: 5000,
@@ -67,8 +67,10 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
     const { data: badgeNumberB2b } = useQuery(
         "badgeNumberB2b",
         async () => {
-            const response = await api.get(`admin/orders-b2b/list/badge-count`);
-            return response?.payload;
+            if (api?.user) {
+                const response = await api?.get(`admin/orders-b2b/list/badge-count`);
+                return response?.payload;
+            }
         },
         {
             refetchInterval: 5000,
@@ -77,7 +79,6 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
 
     useEffect(() => {
         const storedOpenGroups = JSON.parse(localStorage.getItem("openGroups")) || {};
-        console.log(openGroups);
         if (Object.keys(storedOpenGroups).length === 0) {
             setOpenGroups(initialOpenGroups);
         } else {

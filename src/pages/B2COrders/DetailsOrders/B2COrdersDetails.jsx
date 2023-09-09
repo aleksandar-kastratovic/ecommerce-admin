@@ -2,9 +2,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 
 import Box from "@mui/material/Box";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
 
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
-import useAPI from "../../../api/api";
 import addressTemplate from "../../../helpers/addressTemplate";
 import OrderSection from "./OrdersSection";
 import OrderPrices from "./OrderPrices";
@@ -13,11 +14,15 @@ import OrderItemsTable from "./OrderItemsTable";
 import OrderStatus from "./OrderStatus";
 
 import styles from "./B2COrdersDetails.module.scss";
+import { useContext } from "react";
+import AuthContext from "../../../store/auth-contex";
+
 
 const B2COrdersDetails = () => {
   const navigate = useNavigate();
   const { orderId } = useParams();
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPathOrderData = "admin/orders-b2c/summary";
   const apiPathBilling = "admin/orders-b2c/billing-address";
   const apiPathShipping = "admin/orders-b2c/shipping-address";
@@ -27,6 +32,7 @@ const B2COrdersDetails = () => {
   const { isLoading: isBillingLoading, data: billingData } = useQuery(["billing"], () => api.list(`${apiPathBilling}/${orderId}`).then((response) => response?.payload?.items[0]));
   const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
   const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
+
 
   return (
     <PageWrapper
@@ -63,9 +69,37 @@ const B2COrdersDetails = () => {
               </p>
             </Box>
             <Box className={styles.orderDataDisplay}>
+
               <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Plaćanje:</span>
-                <span style={{ fontWeight: "600", color: "#28a86e" }}>{orderData?.payment_method_name ? orderData?.payment_method_name : "/"}</span>
+                <Tooltip
+                  placement='top'
+                  arrow={true}
+                  title={
+                    <Box>
+                      <Typography>Banka: {orderData?.payment_method_status?.bank_name}</Typography>
+                      <Typography>Autorizacioni kod: {orderData?.payment_method_status?.auth_code}</Typography>
+                      <Typography>Status transakcije: {orderData?.payment_method_status?.payment_status}</Typography>
+                      <Typography>Kod statusa transakcije: {orderData?.payment_method_status?.transaction_status_code}</Typography>
+                      <Typography>Datum transakcije: {orderData?.payment_method_status?.transaction_date}</Typography>
+                      <Typography>Statusni kod 3D transakcije: {orderData?.payment_method_status?.status_code_3D_transaction}</Typography>
+                    </Box>
+                  } >
+                  <span style={{
+                    cursor: "pointer",
+                    fontWeight: "600",
+                    color: orderData?.payment_method && orderData?.payment_method.startsWith("credit_card_") ?
+                      (
+                        orderData?.payment_method_status.status_info === "danger" ? "#d32f2f" :
+                          orderData?.payment_method_status.status_info === "success" ? "#28a86e" :
+                            orderData?.payment_method_status.status_info === "warning" ? "#FFCC00" :
+                              "black" // Default color
+                      )
+                      : "black" // Default color if payment_method doesn't start with "credit_card_"
+                  }}>
+                    {orderData?.payment_method_name ? orderData?.payment_method_name : "/"}
+                  </span>
+                </Tooltip>
               </p>
               <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Dostava:</span>
@@ -85,7 +119,7 @@ const B2COrdersDetails = () => {
         <OrderSection title="Status narudžbenice:" className={styles.orderSection50}>
           <OrderStatus orderId={orderData?.id} status={orderData?.status} />
         </OrderSection>
-      </Box>
+      </Box >
 
       <Box
         sx={{ display: "grid", gridTemplateColumns: "78% auto", gap: "2rem", "@media (max-width: 1536px)": { gridTemplateColumns: "1fr" }, }}
@@ -110,7 +144,7 @@ const B2COrdersDetails = () => {
         </OrderSection>
       </Box>
 
-    </PageWrapper>
+    </PageWrapper >
   );
 };
 

@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import List from "../../../../components/shared/ListAdder/List";
 
 import formFields from "../forms/seo.json";
+import AuthContext from "../../../../store/auth-contex";
 
 const Seo = ({ pageId }) => {
 
@@ -19,7 +19,8 @@ const Seo = ({ pageId }) => {
   };
 
   const [listData, setListData] = useState([]);
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const apiPath = "admin/static-pages-b2c/seo";
 
   const handleList = () => {

@@ -1,18 +1,19 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { toast } from "react-toastify";
 
-import useAPI from "../../../api/api";
 import Form from "../Form/Form";
 import styles from "./ChangePassword.module.scss";
 import formFields from "./changePasswordForm.json";
 import ListPageModalWrapper from "../Modal/ListPageModalWrapper";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
+import AuthContext from "../../../store/auth-contex";
 
 
 const ChangePasswordDialog = ({ openDialog, setOpenDialog, apiUrl }) => {
 
-  const api = useAPI();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const init = {
     password: "",

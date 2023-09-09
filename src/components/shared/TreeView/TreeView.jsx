@@ -12,7 +12,6 @@ import Icon from "@mui/material/Icon";
 import Skeleton from "@mui/material/Skeleton";
 import Stack from "@mui/material/Stack";
 
-import useAPI from "../../../api/api";
 import { deleteByPath, getByPathAndParams, postPutByPathAndData } from "../../../api/services";
 import useFetching from "../../../hooks/fetching";
 import AuthContext from "../../../store/auth-contex";
@@ -31,9 +30,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from '@mui/icons-material/Search';
 
 const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, additionalButtons = [], showNewButton = false, filters = {} }) => {
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
   const { user } = useContext(AuthContext);
   const [treeData, setTreeData] = useState([]);
-  const api = useAPI();
   const navigate = useNavigate();
   const { gid } = useParams();
 

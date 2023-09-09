@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import useAPI from "../../../../api/api";
 import Form from "../../../../components/shared/Form/Form";
 
 import formFields from "../forms/display_in.json";
+import AuthContext from "../../../../store/auth-contex";
 
 const DisplayIn = ({ productId }) => {
   const init = {
@@ -17,8 +17,10 @@ const DisplayIn = ({ productId }) => {
     display_in_section_position: null,
     b2b_display_in_section_recommendation: null,
   };
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const [data, setData] = useState(init);
-  const api = useAPI();
   const apiPath = "admin/product-items/display-in-section";
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
