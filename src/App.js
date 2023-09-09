@@ -150,11 +150,16 @@ const App = () => {
                 <DeleteModal
                     title="Obaveštenje"
                     openDeleteDialog={{ show: authCtx.modal }}
-                    nameOfButtonCancel="Nastavi"
-                    nameOfButton="Odjavite se"
+                    nameOfButtonCancel="Odjavite se"
+                    nameOfButton="Nastavite rad"
                     deafultDeleteIcon={false}
                     description={`Vaša sesija ističe za 5 minuta. Da li želite da nastavite rad?`}
-                    handleConfirm={async () => {
+                    handleConfirm={() => {
+                        authCtx.setShowModal(false);
+                        authCtx?.setIsRefreshingToken(true);
+                    }}
+                    sx={{ backgroundColor: "#28a86e", "&:hover": { backgroundColor: "rgb(28, 117, 77)" } }}
+                    handleCancel={async () => {
                         authCtx.setShowModal(false);
                         await authCtx?.api
                             .post("admin/profile/logout")
@@ -167,11 +172,6 @@ const App = () => {
                             .catch((error) => {
                                 console.warn(error);
                             });
-                    }}
-                    styleButtonCancel={{ color: "#28a86e", borderColor: "rgba(40, 168, 110, 0.5)", "&:hover": { backgroundColor: "rgba(40, 168, 110, 0.04)", borderColor: "#28a86e" } }}
-                    handleCancel={() => {
-                        authCtx.setShowModal(false);
-                        authCtx?.setIsRefreshingToken(true);
                     }}
                     handleCancelToken={true}
                 />
