@@ -290,3 +290,9 @@ pipelines:
           <<: *execute
           name: Aztech
           deployment: aztech
+
+    prod-agscustom:
+      - step:
+          <<: *execute
+          name: AGSCustom
+          deployment: agscustom
