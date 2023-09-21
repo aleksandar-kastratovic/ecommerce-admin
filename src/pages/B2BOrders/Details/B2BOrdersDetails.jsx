@@ -83,30 +83,30 @@ const B2BOrdersDetails = () => {
               </p>
             </Box>
             <Box className={styles.orderDataDisplay}>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Poštanski broj:</span>
                 {billingData?.zip_code}
               </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Država:</span>
                 {billingData?.country_name}
               </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Telefon:</span>
                 {billingData?.phone}
               </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Mobilni telefon:</span>
                 {billingData?.phone}
               </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>E-mail:</span>
                 {billingData?.email}
               </p>
             </Box>
           </Box>
           {billingData?.note && (
-            <p>
+            <p style={{ fontSize: "0.875rem" }}>
               <span className={styles.dataLabel}>Napomena:</span>
               {billingData?.note}
             </p>
@@ -115,37 +115,37 @@ const B2BOrdersDetails = () => {
         <OrderSection title="Adresa za dostavu:" className={styles.orderSection50}>
           <Box className={styles.orderDataSection}>
             <Box className={styles.orderDataDisplay}>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Adresa:</span>
                 {addressTemplate(shippingData?.address, shippingData?.object_number, shippingData?.floor, shippingData?.apartment_number)}
               </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Grad:</span>
                 {shippingData?.town_display_name ?? shippingData?.town_name}
               </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Poštanski broj:</span>
                 {shippingData?.zip_code}
               </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Država:</span>
                 {shippingData?.country_name}
               </p>
             </Box>
             <Box className={styles.orderDataDisplay}>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Način plaćanja:</span>
                 {orderData?.payment_method_name}
               </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}> Način dostave:</span>
                 {orderData?.delivery_method_name}
               </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Poručilac:</span>
                 {orderData?.ship_to_name}
               </p>
-              <p>
+              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Datum porudžbine:</span>
                 {orderData?.created_at}
               </p>
