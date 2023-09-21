@@ -41,7 +41,6 @@ const OrderItemsTable = ({ items, fields }) => {
       </TableHead>
       <TableBody>
         {items.map((item) => {
-
           return (
             <TableRow key={item.item.id}>
               {fields.map((field, index) => {

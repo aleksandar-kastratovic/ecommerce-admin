@@ -323,7 +323,7 @@ const ProductDetailsVariation = ({ parentId }) => {
           Atributi i njihove vrednosti
         </Typography>
         {variantsData?.length === 0 ? (
-          <Typography sx={{ marginTop: "1rem" }}>Nema dostupnih atributa i vrednosti za varijacije. Vrednosti možete uneti u sekciji <Link to="/product-items-variants-attributes/group-attribute" style={{ color: "#28a86e", textDecoration: "underline" }}>Atributi za varijacije.</Link> </Typography>
+          <Typography sx={{ marginTop: "1rem" }}>Nema dostupnih atributa i vrednosti za varijacije. Vrednosti možete uneti u sekciji <Link to="/products/product-items-variants-attributes/group-attribute" style={{ color: "#28a86e", textDecoration: "underline" }}>Atributi za varijacije.</Link> </Typography>
         ) : (
           <>
             {variantsData?.map((item, i) => {
