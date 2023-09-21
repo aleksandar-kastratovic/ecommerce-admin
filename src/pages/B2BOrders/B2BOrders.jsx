@@ -7,7 +7,12 @@ const B2BOrders = () => {
       type: "custom",
       display: false,
     },
+    delete: {
+      type: "delete",
+      display: false,
+    },
   };
+
   return (
     <ListPage
       listPageId="B2BOrders"

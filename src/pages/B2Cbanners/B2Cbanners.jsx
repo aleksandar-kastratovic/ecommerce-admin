@@ -27,7 +27,7 @@ const B2Cbanners = ({ }) => {
         type: 'modal_form',
         fnc: (rowData) => {
           setIdPosition(rowData?.id_position);
-          // filterFields(formFieldsTemp, rowData?.type);
+          filterFields(formFieldsTemp, rowData?.position_type);
           getForm();
           return {
             show: true,
@@ -40,7 +40,6 @@ const B2Cbanners = ({ }) => {
 
   const filterFields = (fields, type) => {
     let arr = [];
-
     if (type === "gallery") {
       arr = fields?.map((item, i) => {
         const { prop_name } = item;
@@ -51,7 +50,8 @@ const B2Cbanners = ({ }) => {
           }
         }
         return {
-          ...item
+          ...item,
+          in_details: true
         }
       });
     } else if (type === "image") {
@@ -64,7 +64,22 @@ const B2Cbanners = ({ }) => {
           }
         }
         return {
-          ...item
+          ...item,
+          in_details: true
+        }
+      });
+    } else if (type === "image_description") {
+      arr = fields?.map((item, i) => {
+        const { prop_name } = item;
+        if (prop_name === 'position_name') {
+          return {
+            ...item,
+            in_details: false
+          }
+        }
+        return {
+          ...item,
+          in_details: true
         }
       });
     }

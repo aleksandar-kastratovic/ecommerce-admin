@@ -14,7 +14,7 @@
   },
   {
     "field_name": "Kod",
-    "prop_name": "",
+    "prop_name": "slug",
     "in_main_table": false,
     "in_details": true,
     "editable": true,
@@ -52,6 +52,19 @@
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
+  },
+  {
+    "field_name": "Pozicija",
+    "prop_name": "order",
+    "in_main_table": false,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "number"
   },
   {
     "field_name": "Status",

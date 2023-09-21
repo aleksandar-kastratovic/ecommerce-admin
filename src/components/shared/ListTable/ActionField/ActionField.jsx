@@ -74,7 +74,7 @@ const ActionField = ({ fieldType, systemRequired, handleOnClickActions, customAc
                 </span>
               </Tooltip>
             ) : (
-              <span key={item[0]} className={`${scss.icon}`} onClick={handleOnClickActions(rowData.id, item[1].type, rowData, item[1])}>
+              <span key={item[0]} className={`${scss.icon} `} onClick={handleOnClickActions(rowData.id, item[1].type, rowData, item[1])}>
                 <Icon className={item[1].icon} >{item[1].icon} </Icon>
               </span>
             )

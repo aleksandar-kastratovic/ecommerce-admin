@@ -28,8 +28,9 @@ const B2Bbanners = ({ }) => {
       clickHandler: {
         type: 'modal_form',
         fnc: (rowData) => {
+          console.log("Row data::", rowData)
           setIdPosition(rowData?.id_position);
-          // filterFields(formFieldsTemp, rowData?.type);
+          filterFields(formFieldsTemp, rowData?.position_type);
           getForm();
           return {
             show: true,
@@ -53,7 +54,8 @@ const B2Bbanners = ({ }) => {
           }
         }
         return {
-          ...item
+          ...item,
+          in_details: true
         }
       });
     } else if (type === "image") {
@@ -66,7 +68,22 @@ const B2Bbanners = ({ }) => {
           }
         }
         return {
-          ...item
+          ...item,
+          in_details: true
+        }
+      });
+    } else if (type === "image_description") {
+      arr = fields?.map((item, i) => {
+        const { prop_name } = item;
+        if (prop_name === 'position_name') {
+          return {
+            ...item,
+            in_details: false
+          }
+        }
+        return {
+          ...item,
+          in_details: true
         }
       });
     }
@@ -76,6 +93,7 @@ const B2Bbanners = ({ }) => {
 
     setFormFieldsTemp([...arr]);
   };
+
 
 
   const validateData = (data, field) => {
@@ -89,6 +107,7 @@ const B2Bbanners = ({ }) => {
           .then((response) => {
             const idPositionArr = response?.payload;
             const selectedIdPositionItem = idPositionArr.find((systemItem) => systemItem.id === ret.id_position);
+            console.log("selectedIdPositionItem", selectedIdPositionItem)
             if (selectedIdPositionItem) {
               filterFields(formFieldsTemp, selectedIdPositionItem.type);
               setIdPosition(ret?.id_position);
@@ -174,7 +193,6 @@ const B2Bbanners = ({ }) => {
       getForm();
     }
   }, [idPosition]);
-
 
   return (
     <ListPage
