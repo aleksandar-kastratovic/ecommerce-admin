@@ -1,5 +1,5 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
 import ListTable from "../ListTable/ListTable";
@@ -12,7 +12,7 @@ import ModalForm from "../Modal/ModalForm";
 import ButtonRef from "../Button/ButtonRef";
 import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
 import AuthContext from "../../../store/auth-contex";
-
+import { queryKeys } from "../../../helpers/const";
 
 /**
  * Show a standardized list.
@@ -47,15 +47,19 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
   const navigate = useNavigate();
-  const { pathname } = useLocation();
-  const [fieldsColumns, setFieldsColumns] = useState(columnFields);
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
 
+  const location = useLocation();
+  const { pathname, search: locationSearch } = location;
+  const queryParams = new URLSearchParams(locationSearch);
+  const currPage = queryParams.get(queryKeys.page);
+  const currSearch = queryParams.get(queryKeys.search);
+  const [fieldsColumns, setFieldsColumns] = useState(columnFields);
+  const [search, setSearch] = useState(currSearch ? currSearch : "");
+  // const [page, setPage] = useState(1);
+  const [page, setPage] = useState(currPage ? currPage : 1);
   const [deleteModalData, setDeleteModalData] = useState({});
 
   const [openModal, setOpenModal] = useState({ show: false, id: null });
-
   // Default delete URL is the same as the main URL
   deleteUrl = deleteUrl ?? apiUrl;
 
@@ -74,6 +78,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
   if (response?.payload && modifyItems) {
     response.payload.items = modifyItems(response.payload.items);
   }
+
 
   useEffect(() => {
     if (openDeleteDialog.mutate === 1) {
@@ -95,7 +100,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
     setPage(1);
     setSearch(value);
   };
-
+  console.log(page)
   const handleDeleteModalData = (data) => {
     setDeleteModalData(data);
     return data;
@@ -224,6 +229,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
    * returns array of fields (in_details)
    * based on data from ListPage!
    */
+
   const getFormFieldsForModal = () => {
     if (customFields) {
       return customFields.filter((field) => field.in_details);
@@ -236,18 +242,56 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
     }
   }
 
+  const replaceQuery = useCallback(
+    (newQuery) => {
+      // Create a new instance of URLSearchParams using the current location's search parameters.
+      if (!newQuery[queryKeys.search]) {
+        if (queryParams.has(queryKeys.search)) {
+          queryParams.delete(queryKeys.search);
+        }
+      }
+      // Loop through the keys in the newQuery object.
+      for (const key in newQuery) {
+        // For each key in newQuery, set the corresponding value in URLSearchParams.
+        queryParams.set(key, newQuery[key]);
+      }
+      // Combine the updated query parameters into a string and navigate to the updated URL.
+      navigate(`${pathname}?${queryParams.toString()}`);
+    },
+    [navigate, pathname, locationSearch]
+  );
+
+
+  const onPageChange = (num) => {
+    const newQuery = { [queryKeys.page]: num };
+    replaceQuery(newQuery);
+    setPage(num);
+  };
+
+
+  useEffect(() => {
+    let newQuery = {};
+
+    if (search !== "") {
+      newQuery = { [queryKeys.page]: page, [queryKeys.search]: search };
+    } else {
+      newQuery = { [queryKeys.page]: page };
+    }
+    replaceQuery(newQuery);
+
+  }, [search, page]);
+
   return (
     <>
       <PageWrapper title={title} actions={actions}>
-        <ListTableToolbar listPageId={listPageId} onColumnsChange={setFieldsColumns} fields={fieldsColumns} filters={filters} onSearch={handleSearch} showDatePicker={showDatePicker} />
-
+        <ListTableToolbar searchValue={search} listPageId={listPageId} onColumnsChange={setFieldsColumns} fields={fieldsColumns} filters={filters} onSearch={handleSearch} showDatePicker={showDatePicker} />
         <ListTable
           fields={flatten(fieldsColumns).filter((field) => field.in_main_table)}
           listData={response?.payload}
           handleOnClickActions={handleOnClickActions}
           isLoading={isLoading}
           page={page}
-          onPageChange={setPage}
+          onPageChange={onPageChange}
           previewColumn={previewColumn}
           showAddButtonTableRow={showAddButtonTableRow}
           tooltipAddButtonTableRow={tooltipAddButtonTableRow}

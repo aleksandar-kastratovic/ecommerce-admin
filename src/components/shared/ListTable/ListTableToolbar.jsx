@@ -11,7 +11,7 @@ import FilterForm from "./FilterForm/FilterForm";
 
 import styles from "./ListTableToolbar.module.scss";
 
-const ListTableToolbar = ({ fields = [], filterFields, showDatePicker, onColumnsChange, onSearch, listPageId }) => {
+const ListTableToolbar = ({ fields = [], filterFields, showDatePicker, onColumnsChange, onSearch, listPageId, searchValue }) => {
   const [filterOpen, setFilterOpen] = useState(false)
 
   return (
@@ -22,7 +22,9 @@ const ListTableToolbar = ({ fields = [], filterFields, showDatePicker, onColumns
           autoFocus
           placeholder="Pretraga po ključnoj reči"
           ui_prop="search"
-          onChange={onSearch} />
+          onChange={onSearch}
+          value={searchValue}
+        />
 
         {/* Search by date range */}
         {showDatePicker && (
