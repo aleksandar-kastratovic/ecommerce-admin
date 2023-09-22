@@ -1,5 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
+import { useContext, useState } from "react";
 
 import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
@@ -12,10 +13,14 @@ import OrderPrices from "./OrderPrices";
 import tableFields from "./tableFields.json";
 import OrderItemsTable from "./OrderItemsTable";
 import OrderStatus from "./OrderStatus";
+import { InputInput } from "../../../components/shared/Form/FormInputs/FormInputs"
 
 import styles from "./B2COrdersDetails.module.scss";
-import { useContext } from "react";
 import AuthContext from "../../../store/auth-contex";
+import Button from "../../../components/shared/Button/Button";
+import DeleteDialog from "../../../components/shared/Dialogs/DeleteDialog";
+import { toast } from "react-toastify";
+import Buttons from "../../../components/shared/Form/Buttons/Buttons";
 
 
 const B2COrdersDetails = () => {
@@ -23,6 +28,11 @@ const B2COrdersDetails = () => {
   const { orderId } = useParams();
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
+  const [showDialog, setShowDialog] = useState(false);
+
+  const [search, setSearch] = useState('');
+  const [displayedText, setDisplayedText] = useState([]);
+
   const apiPathOrderData = "admin/orders-b2c/summary";
   const apiPathBilling = "admin/orders-b2c/billing-address";
   const apiPathShipping = "admin/orders-b2c/shipping-address";
@@ -33,6 +43,25 @@ const B2COrdersDetails = () => {
   const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
   const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
 
+  const handleSubmit = () => {
+    if (search.trim() !== '') {
+      setDisplayedText(prevDisplayedText => [...prevDisplayedText, search]);
+      setSearch('');
+    }
+    // setIsLoading(true);
+
+    // api.post(`${apiPathSave}`, {})
+    //   .then((response) => {
+    //     toast.success(`Uspešno`);
+    //     setIsLoading(false);
+    //     setIsChecked(isChecked);
+    //   })
+    //   .catch((error) => {
+    //     console.warn(error);
+    //     toast.warning("Greška");
+    //     setIsLoading(false);
+    //   });
+  };
 
   return (
     <PageWrapper
@@ -42,6 +71,7 @@ const B2COrdersDetails = () => {
       }}
       ready={!(isOrderLoading || isBillingLoading || isShipingLoading || isItemsLoading)}
     >
+
       <Box
         className={styles.orderData}
         sx={{
@@ -119,6 +149,17 @@ const B2COrdersDetails = () => {
         <OrderSection title="Status narudžbenice:" className={styles.orderSection50}>
           <OrderStatus orderId={orderData?.id} status={orderData?.status} />
         </OrderSection>
+        {/* <OrderSection title="Napomena:" className={styles.orderSection50}>
+          <Box sx={{ height: "50px", overflowX: "auto", borderRadius: "0.4rem", border: "1px solid red" }}>
+            {displayedText.map((text, index) => (
+              <div key={index}>{text}</div>
+            ))}
+          </Box>
+          <Box sx={{ display: "flex" }}>
+            <InputInput value={search} onChange={(event) => setSearch(event.target.value)} />
+            <Button onClick={handleSubmit} type="submit" label={"Sačuvaj"} variant="contained" disabled={isItemsLoading} sx={{ marginLeft: "0.5rem" }} />
+          </Box>
+        </OrderSection>  */}
       </Box >
 
       <Box
@@ -141,8 +182,36 @@ const B2COrdersDetails = () => {
             total_cart_discount_amount={orderData?.total_cart_discount_amount}
             total_promo_code_amount={orderData?.total_promo_code_amount}
           />
+          <Tooltip title="Izbrišite narudžbenicu" arrow placement="top">
+            <Box sx={{ width: "fit-content", marginLeft: "auto" }}>
+              <Button
+                onClick={() => {
+                  setShowDialog(true);
+                }}
+                icon={"delete"}
+                sx={{ border: "none", color: "var(--light-silver)", marginBottom: "0.5rem", marginLeft: "auto", paddingRight: "inherit", display: "flex", minWidth: "auto !important", "&:hover": { border: "none", backgroundColor: "transparent" } }}
+              />
+            </Box>
+          </Tooltip>
+
+
         </OrderSection>
       </Box>
+
+      <DeleteDialog
+        openDeleteDialog={{ show: showDialog }}
+        setOpenDeleteDialog={() => setShowDialog(false)}
+        handleConfirm={() => {
+          api.delete(`admin/orders-b2c/list/${orderId}`)
+            .then((response) => {
+              navigate(-1);
+              toast.success("Uspešno!");
+            })
+            .catch((error) => { console.log(error); toast.warning("Greška!"); });
+          setShowDialog(false);
+        }}
+
+      />
 
     </PageWrapper >
   );

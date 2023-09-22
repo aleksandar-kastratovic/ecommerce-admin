@@ -60,7 +60,6 @@ const DeleteModal = ({ openDeleteDialog, selectedRowData, title, description, ha
           {nameOfButtonCancel ?? "odustani"}
         </Button>
 
-
         <Button variant="contained" color="error" startIcon={deafultDeleteIcon ? <Icon>delete</Icon> : null} onClick={handleConfirm} data-test-id="btn-confirm" sx={sx} disabled={disabledButton}>
           {nameOfButton ?? "obriši"}
         </Button>
