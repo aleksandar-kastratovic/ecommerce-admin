@@ -296,3 +296,9 @@ pipelines:
           <<: *execute
           name: AGSCustom
           deployment: agscustom
+
+    prod-fashiondemo:
+      - step:
+          <<: *execute
+          name: FashionDemo
+          deployment: fashiondemo
