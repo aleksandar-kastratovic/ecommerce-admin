@@ -101,6 +101,9 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
                             "@media (max-width: 899px)": {
                                 justifyContent: "flex-end",
                             },
+                            "@media print": {
+                                display: "none",
+                            },
                         }}
                     >
                         <Grid

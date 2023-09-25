@@ -2,7 +2,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { useContext, useState } from "react";
 
-import Box from "@mui/material/Box";
 import { toast } from "react-toastify";
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
 import addressTemplate from "../../../helpers/addressTemplate";
@@ -18,6 +17,8 @@ import styles from "./B2BOrdersDetails.module.scss";
 import Button from "../../../components/shared/Button/Button";
 import DeleteDialog from "../../../components/shared/Dialogs/DeleteDialog";
 import Tooltip from "@mui/material/Tooltip";
+import PrintIcon from '@mui/icons-material/Print';
+import Box from "@mui/material/Box";
 
 const B2BOrdersDetails = () => {
   const navigate = useNavigate();
@@ -45,6 +46,10 @@ const B2BOrdersDetails = () => {
 
     ));
 
+  const handlePrint = () => {
+    window.print();
+  };
+
   return (
     <PageWrapper
       title={`Porudžbina: ${orderData?.slug}`}
@@ -53,11 +58,17 @@ const B2BOrdersDetails = () => {
       }}
       ready={!(isOrderLoading || isBillingLoading || isShipingLoading || isItemsLoading)}
     >
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", marginBottom: "1rem" }} className={styles.orderDupPrt}>
+        <Tooltip arrow={true} title="Štampaj" placement="top">
+          <PrintIcon onClick={() => handlePrint()} sx={{ cursor: "pointer", fontSize: "2rem", color: "#17a2b9" }} />
+        </Tooltip>
+      </Box>
       <Box
         className={styles.orderData}
         sx={{
           marginBottom: "1rem", "@media (max-width: 1536px)": { flexDirection: "column", },
         }}>
+
         <OrderSection title="Podaci partnera:" className={styles.orderSection50}>
           <Box className={styles.orderDataSection}>
             <Box className={styles.orderDataDisplay}>
@@ -164,7 +175,15 @@ const B2BOrdersDetails = () => {
             </p>
           )}
         </OrderSection>
-        <OrderSection title="Status porudžbine:" className={styles.orderSection50}>
+        <OrderSection
+          title="Status porudžbine:"
+          className={styles.orderSection50}
+          styleWrapperOfOrderSection={{
+            "@media print": {
+              display: "none",
+            },
+          }}
+        >
           <OrderStatus orderId={orderData?.id} status={orderData?.status} />
         </OrderSection>
       </Box>
@@ -189,7 +208,13 @@ const B2BOrdersDetails = () => {
             currency={orderData?.currency}
           />
           <Tooltip title="Izbrišite narudžbenicu" arrow placement="top">
-            <Box sx={{ width: "fit-content", marginLeft: "auto" }}>
+            <Box sx={{
+              width: "fit-content",
+              marginLeft: "auto",
+              "@media print": {
+                display: "none",
+              },
+            }}>
               <Button
                 onClick={() => {
                   setShowDialog(true);
@@ -199,7 +224,6 @@ const B2BOrdersDetails = () => {
               />
             </Box>
           </Tooltip>
-
         </OrderSection>
       </Box>
 
@@ -216,7 +240,7 @@ const B2BOrdersDetails = () => {
           setShowDialog(false);
         }}
       />
-    </PageWrapper>
+    </PageWrapper >
   );
 };
 

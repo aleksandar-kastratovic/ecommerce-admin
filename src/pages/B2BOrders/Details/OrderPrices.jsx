@@ -8,7 +8,15 @@ const OrderPrices = ({ total_original, total_with_out_vat, total_delivery_amount
   currency = currency == null ? "" : currency;
   // const totalDiscount = Number(total_items_discount_amount) + Number(total_cart_discount_amount);
   return (
-    <Box sx={{ background: "#ecf0fa", padding: "1rem 0.5rem", borderRadius: "0.25rem", marginTop: "1rem" }}>
+    <Box sx={{
+      background: "#ecf0fa",
+      padding: "1rem 0.5rem",
+      borderRadius: "0.25rem",
+      marginTop: "1rem",
+      "@media print": {
+        marginTop: "0",
+      },
+    }}>
 
       <Box className={styles.priceRow}>
         <span>Ukupan iznos:</span>

@@ -34,7 +34,7 @@ const OrderItemsTable = ({ items, fields }) => {
         <TableRow>
           {fields.map((field, index) => {
             return (
-              <TableCell key={field.prop_name} sx={{ padding: index === 0 ? "0.3rem 0.8rem 0.3rem 0" : "0.3rem 0.8rem" }}>{field.field_name}</TableCell>
+              <TableCell key={field.prop_name} sx={{ padding: index === 0 ? "0.3rem 0.8rem 0.3rem 0" : "0.3rem 0.8rem", display: field.prop_name === "price_discount_amount" && "none !important" }}>{field.field_name}</TableCell>
             )
           })}
         </TableRow>
@@ -63,6 +63,9 @@ const OrderItemsTable = ({ items, fields }) => {
                     className={styles.productCell}
                     sx={{
                       padding: index === 0 ? "0.8rem 0.8rem 0.8rem 0" : "0.8rem",
+                      "@media print": {
+                        display: field.prop_name === "price_discount_amount" && "none !important",
+                      },
                     }}
                     width={field.prop_name === "name" || field.prop_name === "sku" ? specificFieldWidth : `${totalWidthWithoutSpecificFields}%`}
                   >

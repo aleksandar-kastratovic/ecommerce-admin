@@ -2230,3 +2230,12 @@ div.rowContents {
         display: none;
     }
 }
+
+@media print {
+    .main-wrapper {
+        padding: 0;
+    }
+    .side-open #sidebar {
+        display: none;
+    }
+}

@@ -11,7 +11,17 @@ const OrderPrices = ({ total_with_out_vat, total_delivery_amount, total_discount
   const totalDiscount = Number(total_items_discount_amount) + Number(total_cart_discount_amount);
 
   return (
-    <Box sx={{ background: "#ecf0fa", padding: "1rem 0.5rem", borderRadius: "0.25rem", marginTop: "1rem" }}>
+    <Box
+      sx={{
+        background: "#ecf0fa",
+        padding: "1rem 0.5rem",
+        borderRadius: "0.25rem",
+        marginTop: "1rem",
+        "@media print": {
+          marginTop: "0",
+        },
+      }}
+    >
       {/* <hr /> */}
       <Box className={styles.priceRow}>
         <span>Ukupno bez PDV:</span>

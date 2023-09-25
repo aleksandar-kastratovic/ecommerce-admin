@@ -5,6 +5,7 @@ import { useContext, useState } from "react";
 import Box from "@mui/material/Box";
 import Tooltip from "@mui/material/Tooltip";
 import Typography from "@mui/material/Typography";
+import PrintIcon from '@mui/icons-material/Print';
 
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
 import addressTemplate from "../../../helpers/addressTemplate";
@@ -13,14 +14,12 @@ import OrderPrices from "./OrderPrices";
 import tableFields from "./tableFields.json";
 import OrderItemsTable from "./OrderItemsTable";
 import OrderStatus from "./OrderStatus";
-import { InputInput } from "../../../components/shared/Form/FormInputs/FormInputs"
 
 import styles from "./B2COrdersDetails.module.scss";
 import AuthContext from "../../../store/auth-contex";
 import Button from "../../../components/shared/Button/Button";
 import DeleteDialog from "../../../components/shared/Dialogs/DeleteDialog";
 import { toast } from "react-toastify";
-import Buttons from "../../../components/shared/Form/Buttons/Buttons";
 
 
 const B2COrdersDetails = () => {
@@ -43,24 +42,8 @@ const B2COrdersDetails = () => {
   const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
   const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
 
-  const handleSubmit = () => {
-    if (search.trim() !== '') {
-      setDisplayedText(prevDisplayedText => [...prevDisplayedText, search]);
-      setSearch('');
-    }
-    // setIsLoading(true);
-
-    // api.post(`${apiPathSave}`, {})
-    //   .then((response) => {
-    //     toast.success(`Uspešno`);
-    //     setIsLoading(false);
-    //     setIsChecked(isChecked);
-    //   })
-    //   .catch((error) => {
-    //     console.warn(error);
-    //     toast.warning("Greška");
-    //     setIsLoading(false);
-    //   });
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
@@ -71,7 +54,11 @@ const B2COrdersDetails = () => {
       }}
       ready={!(isOrderLoading || isBillingLoading || isShipingLoading || isItemsLoading)}
     >
-
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end", marginBottom: "1rem" }} className={styles.orderDupPrt}>
+        <Tooltip arrow={true} title="Štampaj" placement="top">
+          <PrintIcon onClick={() => handlePrint()} sx={{ cursor: "pointer", fontSize: "2rem", color: "#17a2b9" }} />
+        </Tooltip>
+      </Box>
       <Box
         className={styles.orderData}
         sx={{
@@ -146,7 +133,14 @@ const B2COrdersDetails = () => {
             </Box>
           </Box>
         </OrderSection>
-        <OrderSection title="Status narudžbenice:" className={styles.orderSection50}>
+        <OrderSection
+          title="Status narudžbenice:"
+          className={styles.orderSection50}
+          styleWrapperOfOrderSection={{
+            "@media print": {
+              display: "none",
+            },
+          }}>
           <OrderStatus orderId={orderData?.id} status={orderData?.status} />
         </OrderSection>
         {/* <OrderSection title="Napomena:" className={styles.orderSection50}>
@@ -183,7 +177,13 @@ const B2COrdersDetails = () => {
             total_promo_code_amount={orderData?.total_promo_code_amount}
           />
           <Tooltip title="Izbrišite narudžbenicu" arrow placement="top">
-            <Box sx={{ width: "fit-content", marginLeft: "auto" }}>
+            <Box sx={{
+              width: "fit-content",
+              marginLeft: "auto",
+              "@media print": {
+                display: "none",
+              },
+            }}>
               <Button
                 onClick={() => {
                   setShowDialog(true);

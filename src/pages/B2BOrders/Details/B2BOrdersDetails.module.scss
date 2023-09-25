@@ -97,3 +97,21 @@
         gap: 1rem;
     }
 }
+
+@media print {
+    .print {
+        display: flex !important;
+    }
+    .orderDupPrt {
+        display: none !important;
+    }
+    .orderDataSection {
+        gap: 0 !important;
+    }
+    .orderData {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .orderDataDisplay {
+        width: 100% !important;
+    }
+}
