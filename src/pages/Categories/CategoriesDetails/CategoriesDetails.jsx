@@ -84,7 +84,7 @@ const CategoriesDetails = () => {
       name: "Seo",
       icon: IconList.search,
       enabled: data?.id,
-      component: <DetailsSeo cid={data?.id} gid={gid} />,
+      component: <DetailsSeo gid={gid} />,
     },
     {
       id: "display",
