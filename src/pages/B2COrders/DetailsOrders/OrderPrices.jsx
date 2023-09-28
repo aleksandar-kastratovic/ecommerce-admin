@@ -31,7 +31,7 @@ const OrderPrices = ({ total_with_out_vat, total_delivery_amount, total_discount
         <span>PDV:</span>
         <span className={styles.priceValue}>{`${currencyFormat(total_vat)} ${currency}`}</span>
       </Box>
-      <Divider sx={{ margin: "1rem 0", borderColor: "#ffff" }} />
+      <Divider sx={{ margin: "1rem 0", borderColor: "#ffff", "@media print": { borderColor: "rgba(224, 224, 224, 1)" } }} />
       <Box className={styles.priceRow}>
         <span>Popust:</span>
         <span className={styles.priceValue}>{`${currencyFormat(totalDiscount)} ${currency}`}</span>
@@ -44,7 +44,7 @@ const OrderPrices = ({ total_with_out_vat, total_delivery_amount, total_discount
         <span>Dostava:</span>
         <span className={styles.priceValue}>{`${currencyFormat(total_delivery_amount)} ${currency}`}</span>
       </Box>
-      <Divider sx={{ margin: "1rem 0", borderColor: "#ffff" }} />
+      <Divider sx={{ margin: "1rem 0", borderColor: "#ffff", "@media print": { borderColor: "rgba(224, 224, 224, 1)" } }} />
       <Box className={`${styles.totalPriceRow} ${styles.priceRow}`} sx={{ color: "#28a86e !important" }}>
         <span style={{ fontWeight: "600" }}>UKUPNO:</span>
         <span className={styles.priceValue}>{`${currencyFormat(total)} ${currency}`}</span>

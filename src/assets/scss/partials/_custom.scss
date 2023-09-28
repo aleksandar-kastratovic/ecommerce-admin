@@ -2211,6 +2211,9 @@ div.rowContents {
 .orders-item-holder .buyers {
     padding: 1rem;
 }
+.mediaPrintLogo {
+    display: none !important;
+}
 
 @media (max-width: 900px) {
     #sidebar {
@@ -2237,5 +2240,11 @@ div.rowContents {
     }
     .side-open #sidebar {
         display: none;
+    }
+    .sideNavIcon {
+        display: none !important;
+    }
+    .mediaPrintLogo {
+        display: block !important;
     }
 }

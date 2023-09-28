@@ -37,7 +37,7 @@ const ListTable = ({ fields = [], listData = [], isLoading = false, onPageChange
 
           <ListTableBody items={items ?? []} fields={fields} isLoading={isLoading} handleOnClickActions={handleOnClickActions} error={null} previewColumn={previewColumn} showAddButtonTableRow={showAddButtonTableRow} tooltipAddButtonTableRow={tooltipAddButtonTableRow} customActions={customActions} onClickFieldBehavior={onClickFieldBehavior} />
         </Table>
-      </TableContainer >
+      </TableContainer>
 
       <ListPagination pagination={pagination} onPageChange={onPageChange} />
     </>

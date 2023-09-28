@@ -74,6 +74,23 @@
     }
 }
 
+.chatBox {
+    display: flex;
+    margin-bottom: 1.5rem;
+    padding: 0.5rem;
+    background-color: #ecf0fa5c;
+    word-break: break-word;
+    border-radius: 0.25rem;
+    flex-direction: column;
+    min-height: auto;
+    font-size: 0.875rem;
+    margin-left: 0.5rem;
+}
+
+.createdAt {
+    font-size: 0.55rem;
+}
+
 // RESPONSIVE
 
 @media (max-width: 1536px) {
@@ -100,9 +117,17 @@
         display: none !important;
     }
     .orderDataSection {
-        gap: 0 !important;
+        gap: 1rem !important;
     }
     .orderDataDisplay {
         width: 100% !important;
+        p {
+            font-size: 1rem !important;
+        }
+    }
+    .productCell,
+    .priceRow,
+    .tableHeadCell {
+        font-size: 1rem !important;
     }
 }
