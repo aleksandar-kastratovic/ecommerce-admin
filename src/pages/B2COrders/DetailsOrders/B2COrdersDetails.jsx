@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import { useContext, useRef, useState } from "react";
 
 import Box from "@mui/material/Box";
@@ -21,7 +21,6 @@ import Button from "../../../components/shared/Button/Button";
 import DeleteDialog from "../../../components/shared/Dialogs/DeleteDialog";
 import { toast } from "react-toastify";
 import { InputInput } from "../../../components/shared/Form/FormInputs/FormInputs";
-import { Avatar } from "@mui/material";
 import BillMediaPrint from "./BillMediaPrint/BillMediaPrint";
 
 
@@ -29,7 +28,6 @@ const B2COrdersDetails = () => {
   const navigate = useNavigate();
   const { orderId } = useParams();
   const authCtx = useContext(AuthContext);
-  const queryClient = useQueryClient();
   const { api } = authCtx;
   const [showDialog, setShowDialog] = useState(false);
   const [search, setSearch] = useState('');

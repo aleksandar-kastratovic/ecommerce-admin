@@ -11,7 +11,8 @@ const BillMediaPrint = ({ orderData, billingData }) => {
           display: "flex",
           gap: "1rem",
         },
-      }}>
+      }}
+    >
       <Box className={styles.orderDataDisplay}>
         <p>
           <span className={styles.dataLabel}>Kupac:</span>

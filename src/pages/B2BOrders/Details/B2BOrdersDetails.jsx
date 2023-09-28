@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
-import { useContext, useState } from "react";
+import { useContext, useRef, useState } from "react";
 
 import { toast } from "react-toastify";
 import PageWrapper from "../../../components/shared/Layout/PageWrapper/PageWrapper";
@@ -19,6 +19,7 @@ import DeleteDialog from "../../../components/shared/Dialogs/DeleteDialog";
 import Tooltip from "@mui/material/Tooltip";
 import PrintIcon from '@mui/icons-material/Print';
 import Box from "@mui/material/Box";
+import { InputInput } from "../../../components/shared/Form/FormInputs/FormInputs";
 
 const B2BOrdersDetails = () => {
   const navigate = useNavigate();
@@ -26,14 +27,19 @@ const B2BOrdersDetails = () => {
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
   const [showDialog, setShowDialog] = useState(false);
+  const [search, setSearch] = useState('');
+  const notesBoxRef = useRef(null);
+
   const apiPathOrderData = "admin/orders-b2b/summary";
   const apiPathBilling = "admin/orders-b2b/billing-address";
   const apiPathShipping = "admin/orders-b2b/shipping-address";
   const apiPathItems = "admin/orders-b2b/items";
+  const apiPathNotes = "admin/orders-b2b/notes";
 
   const { isLoading: isOrderLoading, data: orderData } = useQuery(["data"], () => api.get(`${apiPathOrderData}/${orderId}`).then((response) => response?.payload));
   const { isLoading: isBillingLoading, data: billingData } = useQuery(["billing"], () => api.list(`${apiPathBilling}/${orderId}`).then((response) => response?.payload?.items[0]));
   const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
+  const { isLoading: isNotesLoading, data: orderNotes, refetch } = useQuery(["notes"], () => api.list(`${apiPathNotes}/${orderId}`).then((response) => response?.payload?.items));
   const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () =>
     api.list(`${apiPathItems}/${orderId}`).then((response) =>
       response?.payload?.items.map((itemName) => {
@@ -49,6 +55,29 @@ const B2BOrdersDetails = () => {
   const handlePrint = () => {
     window.print();
   };
+
+  const scrollToBottom = () => {
+    if (notesBoxRef.current) {
+      notesBoxRef.current.scrollTop = notesBoxRef.current.scrollHeight;
+    }
+  };
+
+  const submitHandlerNotes = (event) => {
+    event.preventDefault();
+    if (search.trim() !== '') {
+      api.post(`admin/orders-b2b/notes`, { id: null, id_order: Number(orderId), description: search })
+        .then((response) => {
+          console.log(response, "response")
+          setSearch('');
+          refetch();
+          toast.success("Uspešno ste dodali napomenu!");
+          scrollToBottom();
+        })
+        .catch((error) => { console.log(error); toast.warning("Greška!"); });
+    } else {
+      toast.warning("Unesite tekst napomene.");
+    }
+  }
 
   return (
     <PageWrapper
@@ -163,13 +192,13 @@ const B2BOrdersDetails = () => {
             </Box>
           </Box>
           {shippingData?.note && (
-            <p>
+            <p style={{ fontSize: "0.875rem" }}>
               <span className={styles.dataLabel}>Napomena:</span>
               {shippingData?.note}
             </p>
           )}
           {orderData?.note && (
-            <p>
+            <p style={{ fontSize: "0.875rem" }}>
               <span className={styles.dataLabel}>Dodatna napomena:</span>
               {orderData?.note}
             </p>
@@ -186,6 +215,47 @@ const B2BOrdersDetails = () => {
         >
           <OrderStatus orderId={orderData?.id} status={orderData?.status} />
         </OrderSection>
+        <OrderSection
+          title="Interna napomena:"
+          className={styles.orderSection50}
+          styleWrapperOfOrderSection={{
+            "@media print": {
+              display: "none",
+            },
+          }}>
+          {/* start notes */}
+          <Box
+            component="form"
+            autoComplete="off"
+            onSubmit={submitHandlerNotes}
+          >
+            <Box
+              ref={notesBoxRef}
+              sx={{ height: "10rem", overflowX: "auto", borderRadius: "0.25rem", border: "1px solid red", borderColor: "rgba(0, 0, 0, 0.23)" }}
+            >
+              {orderNotes && orderNotes.map((text, index) => (
+                <Box key={index} sx={{ width: "75%" }}>
+                  <Box sx={{ margin: "0.2rem 0", display: "flex", flexDirection: "column", alignItems: "end" }}>
+                    <span className={styles.createdAt}>{text.first_name + " " + text.last_name} / {text.created_at}</span>
+                  </Box>
+                  <Box className={styles.chatBox}>
+                    {text.description}
+                  </Box>
+                </Box>
+              ))}
+            </Box>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <InputInput value={search} onChange={(event) => setSearch(event.target.value)} />
+              <Button
+                type="submit"
+                label={"Sačuvaj"}
+                variant="contained"
+                disabled={isItemsLoading}
+                sx={{ marginLeft: "0.5rem", padding: "0.55rem", marginTop: "0.2rem" }}
+              />
+            </Box>
+          </Box>
+        </OrderSection>
       </Box>
       <Box
         sx={{ display: "grid", gridTemplateColumns: "78% auto", gap: "2rem", "@media (max-width: 1536px)": { gridTemplateColumns: "1fr" }, }}
@@ -193,7 +263,15 @@ const B2BOrdersDetails = () => {
         <OrderSection title="Proizvodi u porudžbini:" styleBodyProductOrders={{ paddingTop: "0.5rem", overflowX: "auto" }} styleWrapperOfOrderSection={{ maxWidth: "100%", overflowX: "hidden" }}>
           <OrderItemsTable fields={tableFields} items={orderItems} />
         </OrderSection>
-        <OrderSection title="Porudžbina:" styleBodyProductOrders={{ padding: "0" }}>
+        <OrderSection
+          title="Porudžbina:"
+          styleBodyProductOrders={{ padding: "0" }}
+          styleWrapperOfOrderSection={{
+            "@media print": {
+              width: "40%",
+              marginLeft: "auto",
+            },
+          }}>
           <OrderPrices
             total_original={orderData?.total_original}
             total_with_out_vat={orderData?.total_with_out_vat}
