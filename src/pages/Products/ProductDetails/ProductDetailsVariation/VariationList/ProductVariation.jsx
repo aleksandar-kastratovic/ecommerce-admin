@@ -39,7 +39,20 @@ const ProductVariation = ({ parentId, tblFields }) => {
             setFields(lagerData);
             break;
           case 'price_field':
-            setFields(prices);
+            let arr = prices;
+            if (column.prop_name === "price_1") {
+              let index = arr.findIndex((item) => item.prop_name === "exclude_from_rebates");
+              let indexOne = arr.findIndex((item) => item.prop_name === "exclude_from_discount");
+              arr[index] = { ...arr[index], in_details: false };
+              arr[indexOne] = { ...arr[indexOne], in_details: true };
+
+            } else if (column.prop_name === "price_2") {
+              let index = arr.findIndex((item) => item.prop_name === "exclude_from_rebates");
+              let indexOne = arr.findIndex((item) => item.prop_name === "exclude_from_discount");
+              arr[index] = { ...arr[index], in_details: true };
+              arr[indexOne] = { ...arr[indexOne], in_details: true };
+            }
+            setFields([...arr]);
             break;
           case 'gallery_field':
             // setFields(gallery);
@@ -120,6 +133,7 @@ const ProductVariation = ({ parentId, tblFields }) => {
         console.warn(error);
       });
   };
+
   useEffect(() => {
     if (selectedColumn) {
       const { galleryData, column } = selectedColumn;
