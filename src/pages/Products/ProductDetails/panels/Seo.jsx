@@ -11,7 +11,6 @@ const Seo = ({ productId }) => {
         apiUrl={`admin/product-items/seo/${productId}`}
         editUrl={`admin/product-items/seo`}
         deleteUrl={`admin/product-items/seo`}
-        delete
         title=" "
         columnFields={formFields}
         actionNewButton="modal"

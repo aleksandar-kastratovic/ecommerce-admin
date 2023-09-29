@@ -15,6 +15,7 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { toast } from "react-toastify";
 import sideNavIcon from "../assets/images/croonus-sidebar-icon.svg";
+import logoMediaPrint from "../assets/images/croonus-sidebar-logo-dark.svg";
 
 const Header = ({ openSidenav, changeTheme, activeTheme }) => {
     const apiPath = "admin/profile/logout";
@@ -64,6 +65,9 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
         backgroundColor: "var(--bg-color)",
         padding: "0.938rem 2rem",
         boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
+        "@media print": {
+            padding: "0 1rem !important",
+        },
     });
 
     // const StyledToggleButton = styled(Switch)({
@@ -89,7 +93,8 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
                             },
                         }}
                     >
-                        <img src={sideNavIcon} alt="Croonus" width={60} />
+                        <img src={sideNavIcon} alt="Croonus" width={60} className="sideNavIcon" />
+                        <img src={logoMediaPrint} alt="Croonus" width={300} className="mediaPrintLogo" />
                     </Box>
 
                     <Box
@@ -100,6 +105,9 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
                             width: "inherit",
                             "@media (max-width: 899px)": {
                                 justifyContent: "flex-end",
+                            },
+                            "@media print": {
+                                display: "none",
                             },
                         }}
                     >
@@ -120,8 +128,8 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
 
                         <Grid container alignItems="center" width="auto">
                             {/* <Grid item>
-                            <StyledToggleButton checked={activeTheme} onClick={changeTheme} name="themeSwitcher" inputProps={{ "aria-label": "toggle theme" }} />
-                        </Grid> */}
+                                <StyledToggleButton checked={activeTheme} onClick={changeTheme} name="themeSwitcher" inputProps={{ "aria-label": "toggle theme" }} />
+                            </Grid> */}
 
                             <Grid item>
                                 <IconButton

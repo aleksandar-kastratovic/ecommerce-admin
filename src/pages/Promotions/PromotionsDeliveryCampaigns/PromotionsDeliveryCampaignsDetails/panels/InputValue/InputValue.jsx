@@ -90,13 +90,21 @@ const InputValue = ({
     };
   }, [options]);
 
+  const handleInputChange = (event) => {
+    let newValue = event.target.value;
+
+    newValue = newValue < 0 ? 0 : newValue;
+
+    onChange(newValue);
+  };
+
 
   const InputComponent = () => {
     switch (inputType) {
       case 'text':
         return <InputInput autoFocus={true} value={selectedValues ?? ""} onChange={(e) => onChange(e.target.value)} />;
       case 'number':
-        return <InputNumber autoFocus={true} value={selectedValues ?? ""} onChange={(e) => onChange(e.target.value)} />;
+        return <InputNumber autoFocus={true} value={selectedValues ?? ""} onChange={handleInputChange} />;
       default:
         return (
           <InputInput

@@ -102,16 +102,28 @@ export const columnCell = (value, column, rowType) => {
             }
         case "input":
         default:
-            if (value === "Vidljiv" || value === "on" || value === "Objavljen" || value === "Aktivno" || value === "Novo" || value === "Kompletirano") {
+            if (value === "Vidljiv" || value === "on" || value === "Objavljen" || value === "Aktivno") {
                 return <span style={{ backgroundColor: "#28a86e36", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#28a86e", fontWeight: "500" }}>{value}</span>;
-            } else if (value === "Nevidljiv" || value === "off" || value === "Blokiran" || value === "Neaktivno" || value === "Otkazano") {
+            } else if (value === "Nevidljiv" || value === "off" || value === "Blokiran" || value === "Neaktivno") {
                 return <span style={{ backgroundColor: "#ff000024", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#d32f2f", fontWeight: "500" }}>{value}</span>;
-            } else if (value === "Arhiviran" || value === "U izradi" || value === "Potvrđeno") {
-                return <span style={{ backgroundColor: "#17a2b93d", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#17a2b9", fontWeight: "500" }}>{value}</span>;
+            } else if (value === "Kompletirano") {
+                return <span style={{ backgroundColor: "#28a86e", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
+            } else if (value === "Otkazano") {
+                return <span style={{ backgroundColor: "#d32f2f", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
+            } else if (value === "Arhiviran") {
+                return <span style={{ backgroundColor: "#e1e1e3", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#696969", fontWeight: "500" }}>{value}</span>;
+            } else if (value === "Potvrđeno") {
+                return <span style={{ backgroundColor: "#7cd992", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
+            } else if (value === "U izradi") {
+                return <span style={{ backgroundColor: "#5bc0de", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
+            } else if (value === "Novo") {
+                return <span style={{ backgroundColor: "#0275d8", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
+            } else if (value === "Paket je preuzet") {
+                return <span style={{ backgroundColor: "#f0b24f", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
             } else if (value === "Paket spreman za slanje") {
-                return <span style={{ backgroundColor: "#feff7f6b", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#a0a13291", fontWeight: "500" }}>{value}</span>;
+                return <span style={{ backgroundColor: "#aea7ff", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
             } else if (value === "Porudžbina je dostavljena") {
-                return <span style={{ backgroundColor: "#8d28a836", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#8d28a8", fontWeight: "500" }}>{value}</span>;
+                return <span style={{ backgroundColor: "#681cff", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
             } else {
                 if (value && /<\/?[a-z][\s\S]*>/i.test(value)) {
                     const plainText = htmlToPlainText(value);

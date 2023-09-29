@@ -34,7 +34,15 @@ const OrderItemsTable = ({ items, fields }) => {
         <TableRow>
           {fields.map((field, index) => {
             return (
-              <TableCell key={field.prop_name} sx={{ padding: index === 0 ? "0.3rem 0.8rem 0.3rem 0" : "0.3rem 0.8rem" }}>{field.field_name}</TableCell>
+              <TableCell
+                className={styles.tableHeadCell}
+                key={field.prop_name}
+                sx={{
+                  padding: index === 0 ? "0.3rem 0.8rem 0.3rem 0" : "0.3rem 0.8rem",
+                }}
+              >
+                {field.field_name}
+              </TableCell>
             )
           })}
         </TableRow>

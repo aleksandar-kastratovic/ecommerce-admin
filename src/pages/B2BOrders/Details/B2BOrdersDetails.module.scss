@@ -77,6 +77,23 @@
     }
 }
 
+.chatBox {
+    display: flex;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    background-color: #ecf0fa5c;
+    word-break: break-word;
+    border-radius: 0.25rem;
+    flex-direction: column;
+    min-height: auto;
+    font-size: 0.875rem;
+    margin-left: 0.5rem;
+}
+
+.createdAt {
+    font-size: 0.55rem;
+}
+
 // RESPONSIVE
 
 @media (max-width: 1536px) {
@@ -95,5 +112,34 @@
     .orderDataSection {
         flex-direction: column;
         gap: 1rem;
+    }
+    .orderDupPrt {
+        display: none !important;
+    }
+}
+
+@media print {
+    .print {
+        display: flex !important;
+    }
+    .orderDupPrt {
+        display: none !important;
+    }
+    .orderDataSection {
+        gap: 1rem !important;
+    }
+    .orderData {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+    .orderDataDisplay {
+        width: 100% !important;
+        p {
+            font-size: 1rem !important;
+        }
+    }
+    .productCell,
+    .priceRow,
+    .tableHeadCell {
+        font-size: 1rem !important;
     }
 }

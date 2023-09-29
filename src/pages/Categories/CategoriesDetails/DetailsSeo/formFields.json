@@ -1,27 +1,43 @@
 [
   {
-    "field_name": "Kod",
-    "prop_name": "slug",
-    "in_main_table": true,
+    "field_name": "Država",
+    "prop_name": "id_country",
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
     "required": true,
     "description": "",
-    "ui_prop": "settings",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "select",
+    "options": [],
+    "fillFromApi": "admin/category-product/seo/ddl",
+    "usePropName": true
+  },
+  {
+    "field_name": "Država",
+    "prop_name": "country_name",
+    "in_main_table": true,
+    "in_details": false,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
   },
   {
-    "field_name": "Država",
-    "prop_name": "id_country",
-    "in_main_table": true,
+    "field_name": "Jezik",
+    "prop_name": "lang",
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
     "required": true,
     "description": "",
-    "ui_prop": "settings",
+    "ui_prop": "xyz",
     "sortable": true,
     "input_type": "select",
     "options": [],
@@ -30,19 +46,29 @@
   },
   {
     "field_name": "Jezik",
-    "prop_name": "lang",
+    "prop_name": "lang_name",
+    "in_main_table": true,
+    "in_details": false,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
+    "field_name": "Slug",
+    "prop_name": "slug",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": true,
+    "required": false,
     "description": "",
-    "ui_prop": "settings",
+    "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "select",
-    "options": [],
-    "fillFromApi": "admin/category-product/seo/ddl",
-    "usePropName": true
+    "input_type": "input"
   },
   {
     "field_name": "Meta naslov",
@@ -53,7 +79,20 @@
     "disabled": false,
     "required": false,
     "description": "",
-    "ui_prop": "settings",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
+    "field_name": "Meta ključne reči",
+    "prop_name": "meta_keywords",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
   },
@@ -66,26 +105,13 @@
     "disabled": false,
     "required": false,
     "description": "",
-    "ui_prop": "settings",
+    "ui_prop": "xyz",
     "sortable": true,
     "input_type": "input"
   },
   {
-    "field_name": "Meta url",
+    "field_name": "Meta link",
     "prop_name": "meta_url",
-    "in_main_table": true,
-    "in_details": true,
-    "editable": true,
-    "disabled": false,
-    "required": false,
-    "description": "",
-    "ui_prop": "settings",
-    "sortable": true,
-    "input_type": "input"
-  },
-  {
-    "field_name": "Status",
-    "prop_name": "status",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -94,16 +120,19 @@
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "select",
-    "options": [
-      {
-        "id": "on",
-        "name": "on"
-      },
-      {
-        "id": "off",
-        "name": "off"
-      }
-    ]
+    "input_type": "input"
+  },
+  {
+    "field_name": "",
+    "prop_name": "action",
+    "in_main_table": true,
+    "in_details": false,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "edit_delete"
   }
 ]

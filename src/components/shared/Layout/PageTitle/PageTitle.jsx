@@ -52,11 +52,11 @@ const PageTitle = ({ title, back, actions = [] }) => {
             icon={"arrow_back"}
             label="Nazad"
             onClick={back}
-          // sx={{
-          //   "@media (max-width: 900px)": {
-          //     display: "none",
-          //   },
-          // }}
+            sx={{
+              "@media print": {
+                display: "none",
+              },
+            }}
           />}
       </Box>
 

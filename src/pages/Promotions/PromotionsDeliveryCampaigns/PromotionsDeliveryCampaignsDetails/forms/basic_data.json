@@ -81,20 +81,17 @@
     "input_type": "date_time"
   },
   {
-    "field_name": "Primeni i na ostale akcije",
-    "prop_name": "connect_other_actions",
-    "in_main_table": true,
+    "field_name": "Potreban iznos do besplatne dostave",
+    "prop_name": "free_delivery_amount",
+    "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
     "required": false,
-    "description": "Odabirom opcije `DA` popust će se obračunavati na prethodno postavljenim akcijama koje imaju isti prodajni asortiman kao i akcija koju kreirate.",
+    "description": "Unešena vrednost je informativnog karaktera za potrebe prikaza u korpi. Ne utiče na izračunavanje cene dostave.",
     "ui_prop": "xyz",
     "sortable": true,
-    "input_type": "select",
-    "options": [],
-    "fillFromApi": "admin/campaigns/cart-delivery/basic-data/ddl",
-    "usePropName": true
+    "input_type": "number"
   },
   {
     "field_name": "Status",
