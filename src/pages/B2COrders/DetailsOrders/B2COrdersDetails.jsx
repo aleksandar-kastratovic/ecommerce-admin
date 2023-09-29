@@ -52,12 +52,6 @@ const B2COrdersDetails = () => {
     window.print();
   };
 
-  const scrollToBottom = () => {
-    if (notesBoxRef.current) {
-      notesBoxRef.current.scrollTop = notesBoxRef.current.scrollHeight;
-    }
-  };
-
   const submitHandlerNotes = (event) => {
     event.preventDefault();
     if (search.trim() !== '') {
@@ -67,7 +61,6 @@ const B2COrdersDetails = () => {
           setSearch('');
           refetch();
           toast.success("Uspešno ste dodali napomenu!");
-          scrollToBottom();
         })
         .catch((error) => { console.log(error); toast.warning("Greška!"); });
     } else {
@@ -198,7 +191,7 @@ const B2COrdersDetails = () => {
               sx={{ height: "10rem", overflowX: "auto", borderRadius: "0.25rem", border: "1px solid red", borderColor: "rgba(0, 0, 0, 0.23)" }}
             >
               {orderNotes && orderNotes.map((text, index) => (
-                <Box key={index} sx={{ width: "75%" }}>
+                <Box key={index} sx={{ padding: "0 0.5rem" }}>
                   <Box sx={{ margin: "0.2rem 0", display: "flex", flexDirection: "column", alignItems: "end" }}>
                     <span className={styles.createdAt}>{text.first_name + " " + text.last_name} / {text.created_at}</span>
                   </Box>

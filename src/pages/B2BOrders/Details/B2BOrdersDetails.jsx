@@ -234,7 +234,7 @@ const B2BOrdersDetails = () => {
               sx={{ height: "10rem", overflowX: "auto", borderRadius: "0.25rem", border: "1px solid red", borderColor: "rgba(0, 0, 0, 0.23)" }}
             >
               {orderNotes && orderNotes.map((text, index) => (
-                <Box key={index} sx={{ width: "75%" }}>
+                <Box key={index} sx={{ padding: "0 0.5rem" }}>
                   <Box sx={{ margin: "0.2rem 0", display: "flex", flexDirection: "column", alignItems: "end" }}>
                     <span className={styles.createdAt}>{text.first_name + " " + text.last_name} / {text.created_at}</span>
                   </Box>
