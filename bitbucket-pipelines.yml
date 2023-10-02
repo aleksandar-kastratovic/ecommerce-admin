@@ -302,3 +302,9 @@ pipelines:
           <<: *execute
           name: FashionDemo
           deployment: fashiondemo
+
+    prod-itlalupvc:
+      - step:
+          <<: *execute
+          name: ITLAluPvc
+          deployment: itlalupvc
