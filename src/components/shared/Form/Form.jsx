@@ -223,7 +223,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
         <Buttons styleWrapperButtons={styleWrapperButtons}>
           {cancelButton && <Button label="Odustani" onClick={onCancel} />}
           {submitButton && <Button type="submit" label={isLoading ? <CircularProgress size="1.5rem" /> : (label ? label : "Sačuvaj")} variant="contained" disabled={isLoading} sx={styleButtonSubmit} />}
-          {closeButton && <Button label={(label ? label : "Sačuvaj")} variant="contained" onClick={onCloseModalButton} />}
+          {closeButton && <Button type="submit" label={(label ? label : "Sačuvaj")} variant="contained" onClick={onCloseModalButton} />}
         </Buttons>
 
       </Box>
