@@ -128,7 +128,7 @@ export const InputNumber = ({ label, required, disabled, error = null, name, val
         error={error !== null}
         autoFocus={autoFocus}
         type="number"
-        inputProps={{ min: 0 }}
+        inputProps={{ min: 0, step: "any" }}
         sx={{
           "& legend": { display: "none" },
           "& fieldset": { top: 0 },
