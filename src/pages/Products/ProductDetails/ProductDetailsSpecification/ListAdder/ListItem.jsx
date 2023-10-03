@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
 import Box from "@mui/system/Box";
@@ -52,9 +52,10 @@ const ListItem = ({ index, onDelete = () => { }, title = "", selectedSet = undef
     setLoaded(true);
   }, []);
 
-  const changeHandler = (data, attributes, attributeValues) => {
+
+  const changeHandler = useCallback((data, attributes, attributeValues) => {
     onChange(data, attributes, attributeValues);
-  }
+  }, [onChange]);
 
   return (
     <>
