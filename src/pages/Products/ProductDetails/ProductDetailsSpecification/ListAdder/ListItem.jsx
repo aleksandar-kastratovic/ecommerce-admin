@@ -53,8 +53,8 @@ const ListItem = ({ index, onDelete = () => { }, title = "", selectedSet = undef
   }, []);
 
 
-  const changeHandler = useCallback((data, attributes, attributeValues) => {
-    onChange(data, attributes, attributeValues);
+  const changeHandler = useCallback((data, attributes, attributeValues, field_change_id) => {
+    onChange(data, attributes, attributeValues, field_change_id);
   }, [onChange]);
 
   return (

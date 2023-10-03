@@ -20,6 +20,8 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
 
+  let timer = null;
+
   const groupFiledsHandler = async () => {
     api.get(`${apiPath}/group-attributes/${groupId}`)
       .then((response) => {
@@ -66,10 +68,8 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
 
 
   const formFields = useMemo(() => {
-
     return attributes.map((item) => {
       let additional = {};
-
       if (item.field_type === "multi_select" || item.field_type === "select") {
         api.get(`${apiPath}/attribute-values/${item.id}`)
           .then((response) => {
@@ -106,9 +106,26 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
     });
   }, [attributes]);
 
-  const changeHandler = (data) => {
-    onChange(data, attributes, attributeValues);
-    setData(data);
+  const changeHandler = (data, field_change_id) => {
+    for (const attribute of attributes) {
+      // lastChange
+      if (attribute.slug === field_change_id) {
+        switch (attribute.field_type) {
+          case 'input':
+          case 'textarea':
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+              onChange(data, attributes, attributeValues, field_change_id);
+              setData(data);
+            }, 500);
+            break;
+          default:
+            onChange(data, attributes, attributeValues, field_change_id);
+            setData(data);
+            break;
+        }
+      }
+    }
   };
 
   return (
