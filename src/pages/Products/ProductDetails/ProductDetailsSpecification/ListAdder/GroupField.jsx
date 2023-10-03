@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import Box from "@mui/system/Box";
 
@@ -24,7 +24,6 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
     api.get(`${apiPath}/group-attributes/${groupId}`)
       .then((response) => {
         setAttributes(response?.payload)
-
       })
       .catch((error) => console.warn(error));
   };
@@ -65,43 +64,47 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
     groupFiledsDataHandler();
   }, [attributes]);
 
-  const formFields = attributes.map((item) => {
-    let additional = {};
 
-    if (item.field_type === "multi_select" || item.field_type === "select") {
-      api.get(`${apiPath}/attribute-values/${item.id}`)
-        .then((response) => {
+  const formFields = useMemo(() => {
 
-          setAttributeValues((attributeValues) => {
-            attributeValues[item.id] = response?.payload;
-            return attributeValues;
+    return attributes.map((item) => {
+      let additional = {};
+
+      if (item.field_type === "multi_select" || item.field_type === "select") {
+        api.get(`${apiPath}/attribute-values/${item.id}`)
+          .then((response) => {
+
+            setAttributeValues((attributeValues) => {
+              attributeValues[item.id] = response?.payload;
+              return attributeValues;
+            });
+          })
+          .catch((error) => {
+            console.warn(error);
           });
-        })
-        .catch((error) => {
-          console.warn(error);
-        });
 
-      additional = {
-        fillFromApi: `${apiPath}/attribute-values/${item.id}`,
-        usePropName: false,
-        options: [],
+        additional = {
+          fillFromApi: `${apiPath}/attribute-values/${item.id}`,
+          usePropName: false,
+          options: [],
+        };
+      }
+      return {
+        field_name: item.name,
+        prop_name: item.slug,
+        in_main_table: true,
+        in_details: true,
+        editable: true,
+        disabled: false,
+        required: item.required,
+        description: "",
+        ui_prop: "xyz",
+        sortable: true,
+        input_type: item.field_type,
+        ...additional,
       };
-    }
-    return {
-      field_name: item.name,
-      prop_name: item.slug,
-      in_main_table: true,
-      in_details: true,
-      editable: true,
-      disabled: false,
-      required: item.required,
-      description: "",
-      ui_prop: "xyz",
-      sortable: true,
-      input_type: item.field_type,
-      ...additional,
-    };
-  });
+    });
+  }, [attributes]);
 
   const changeHandler = (data) => {
     onChange(data, attributes, attributeValues);

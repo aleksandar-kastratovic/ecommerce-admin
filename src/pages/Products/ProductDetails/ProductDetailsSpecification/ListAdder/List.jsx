@@ -12,6 +12,7 @@ import DeleteModal from "../../../../../components/shared/Dialogs/DeleteDialog";
 import Typography from "@mui/material/Typography";
 import CircularProgress from "@mui/material/CircularProgress";
 import AuthContext from "../../../../../store/auth-contex";
+import useDebounce from "../../../../../hooks/useDebounce";
 
 const List = ({ productId, apiPath }) => {
   const [fields, setFields] = useState([]);
@@ -49,9 +50,7 @@ const List = ({ productId, apiPath }) => {
   const saveGroups = async (selectedIds) => {
     api.post(`${apiPath}/groups/${productId}`, { selected: selectedIds })
       .then((response) => {
-        console.log("Responseee:::", response)
         const remove = response?.payload?.remove;
-        console.log("Remove", remove);
         if (remove) {
           setOpenModalUncheckedSet({ show: true, type: 'remove' });
           setStateRemove(remove)
@@ -92,6 +91,7 @@ const List = ({ productId, apiPath }) => {
   }
 
   const onChangeData = async (data, attributes, attributeValues, set, group) => {
+
     for (const attribute of attributes) {
       if (data[attribute.slug]) {
         let attribute_value = (attributeValues[attribute.id] ?? []).filter((item) => item.id === data[attribute.slug])[0];
@@ -111,7 +111,13 @@ const List = ({ productId, apiPath }) => {
           slug_attribute_value: attribute.field_type === "select" ? attribute_value.slug : null,
           name_attribute_value: attribute.field_type === "select" ? attribute_value.name : data[attribute.slug],
         };
-        await api.post(`${apiPath}`, req);
+        if (attribute.field_type === "input") {
+          setTimeout(() => {
+            api.post(`${apiPath}`, req);
+          }, 1000)
+        } else {
+          api.post(`${apiPath}`, req);
+        }
         getList();
       } else {
         await api.delete(`${apiPath}/attribute/${productId}/${set?.id}/${group?.id}/${attribute.id}`);
@@ -127,6 +133,7 @@ const List = ({ productId, apiPath }) => {
       setShowProgress(false);
     }, 1000)
   }
+
 
   return (
     <div className={styles.list}>
