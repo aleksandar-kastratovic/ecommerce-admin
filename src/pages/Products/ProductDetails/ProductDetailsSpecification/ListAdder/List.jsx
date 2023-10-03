@@ -90,38 +90,34 @@ const List = ({ productId, apiPath }) => {
     setOpenModal({ show: false, id: null })
   }
 
-  const onChangeData = async (data, attributes, attributeValues, set, group) => {
-
+  const onChangeData = async (data, attributes, attributeValues, field_change_id, set, group) => {
     for (const attribute of attributes) {
-      if (data[attribute.slug]) {
-        let attribute_value = (attributeValues[attribute.id] ?? []).filter((item) => item.id === data[attribute.slug])[0];
-        let req = {
-          id: data.id[attribute.slug] ?? null,
-          id_product: productId,
-          id_set: set?.id,
-          slug_set: set?.slug,
-          set_name: set?.name,
-          id_group: group?.id,
-          slug_group: group?.slug,
-          group_name: group?.name,
-          id_attribute: attribute.id,
-          slug_attribute: attribute.slug,
-          name_attribute: attribute.name,
-          id_attribute_value: attribute.field_type === "select" ? data[attribute.slug] : null,
-          slug_attribute_value: attribute.field_type === "select" ? attribute_value.slug : null,
-          name_attribute_value: attribute.field_type === "select" ? attribute_value.name : data[attribute.slug],
-        };
-        if (attribute.field_type === "input") {
-          setTimeout(() => {
-            api.post(`${apiPath}`, req);
-          }, 1000)
-        } else {
+      // lastChange
+      if (attribute.slug === field_change_id) {
+        if (data[attribute.slug]) {
+          let attribute_value = (attributeValues[attribute.id] ?? []).filter((item) => item.id === data[attribute.slug])[0];
+          let req = {
+            id: data.id[attribute.slug] ?? null,
+            id_product: productId,
+            id_set: set?.id,
+            slug_set: set?.slug,
+            set_name: set?.name,
+            id_group: group?.id,
+            slug_group: group?.slug,
+            group_name: group?.name,
+            id_attribute: attribute.id,
+            slug_attribute: attribute.slug,
+            name_attribute: attribute.name,
+            id_attribute_value: attribute.field_type === "select" ? data[attribute.slug] : null,
+            slug_attribute_value: attribute.field_type === "select" ? attribute_value.slug : null,
+            name_attribute_value: attribute.field_type === "select" ? attribute_value.name : data[attribute.slug],
+          };
+
+          // TODO: dodati proveru da li je vrednost sacuvana
           api.post(`${apiPath}`, req);
+        } else {
+          await api.delete(`${apiPath}/attribute/${productId}/${set?.id}/${group?.id}/${attribute.id}`);
         }
-        getList();
-      } else {
-        await api.delete(`${apiPath}/attribute/${productId}/${set?.id}/${group?.id}/${attribute.id}`);
-        getList();
       }
     }
 
@@ -159,8 +155,8 @@ const List = ({ productId, apiPath }) => {
               apiPath={apiPath}
               set={set}
               group={group}
-              onChange={(data, attributes, attributeValues) => {
-                onChangeData(data, attributes, attributeValues, set, group);
+              onChange={(data, attributes, attributeValues, field_change_id) => {
+                onChangeData(data, attributes, attributeValues, field_change_id, set, group);
               }}
             />
           );
