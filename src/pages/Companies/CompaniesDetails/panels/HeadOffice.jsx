@@ -95,12 +95,14 @@ const HeadOffice = ({ companyId }) => {
               if (res.length > 0) {
                 return {
                   ...item,
-                  in_details: false
+                  in_details: false,
+                  required: false
                 }
               } else {
                 return {
                   ...item,
-                  in_details: true
+                  in_details: true,
+                  required: true
                 }
               }
             }
