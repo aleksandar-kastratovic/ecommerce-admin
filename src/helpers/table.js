@@ -116,6 +116,8 @@ export const columnCell = (value, column, rowType) => {
                 return <span style={{ backgroundColor: "var(--statusReady)", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#af8452", fontWeight: "500" }}>{value}</span>;
             } else if (value === "Porudžbina je dostavljena") {
                 return <span style={{ backgroundColor: "var(--statusDelivered)", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#a3a373", fontWeight: "500" }}>{value}</span>;
+            } else if (value === "Porudžbina je na čekanju") {
+                return <span style={{ backgroundColor: "var(--statusPending)", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#a3a373", fontWeight: "500" }}>{value}</span>;
             } else {
                 if (value && /<\/?[a-z][\s\S]*>/i.test(value)) {
                     const plainText = htmlToPlainText(value);
