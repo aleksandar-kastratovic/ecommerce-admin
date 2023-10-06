@@ -20,6 +20,7 @@ import Tooltip from "@mui/material/Tooltip";
 import PrintIcon from '@mui/icons-material/Print';
 import Box from "@mui/material/Box";
 import { InputInput } from "../../../components/shared/Form/FormInputs/FormInputs";
+import { currencyFormat } from "../../../helpers/functions";
 
 const B2BOrdersDetails = () => {
   const navigate = useNavigate();
@@ -40,14 +41,38 @@ const B2BOrdersDetails = () => {
   const { isLoading: isBillingLoading, data: billingData } = useQuery(["billing"], () => api.list(`${apiPathBilling}/${orderId}`).then((response) => response?.payload?.items[0]));
   const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
   const { isLoading: isNotesLoading, data: orderNotes, refetch } = useQuery(["notes"], () => api.list(`${apiPathNotes}/${orderId}`).then((response) => response?.payload?.items));
+
   const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () =>
     api.list(`${apiPathItems}/${orderId}`).then((response) =>
-      response?.payload?.items.map((itemName) => {
+      response?.payload?.items.map((itemRow) => {
 
-        if (itemName.item.attributes_text) {
-          itemName.item.name += ` (${itemName.item.attributes_text})`;
+        let rebate = [];
+        if (itemRow?.price?.price_rebate_amount && itemRow?.price_campaigns?.length > 0) {
+          itemRow?.price_campaigns.map((campaignItem) => {
+            if (campaignItem?.campaign_type === "b2b_rebate") {
+              rebate.push(campaignItem?.calc_name);
+            }
+            return false;
+          })
         }
-        return itemName;
+
+        let temp = {
+          id: itemRow?.item?.id,
+          id_product: itemRow?.item?.id_product,
+          image: itemRow?.item?.image,
+          name: itemRow?.item?.name + " " + (itemRow?.item?.attributes_text ? " (" + itemRow?.item?.attributes_text + ")" : ""),
+          attributes_text: itemRow?.item?.attributes_text,
+          sku: itemRow?.item?.sku,
+          quantity: itemRow?.price?.quantity,
+          price_with_out_vat: itemRow?.price?.price_with_out_vat,
+          rebate: rebate?.length > 0 ? rebate.join(", ") : "-0,00%",
+          discount: "-" + currencyFormat(Number(itemRow?.price?.price_discount_amount)),
+          price_subtotal: Number(itemRow?.price?.price_subtotal),
+          vat_procent: currencyFormat(Number(itemRow?.price?.price_vat_procent)) + "%",
+          total_with_vat: Number(itemRow?.price?.total)
+        };
+
+        return temp;
       })
 
     ));
@@ -67,7 +92,6 @@ const B2BOrdersDetails = () => {
     if (search.trim() !== '') {
       api.post(`admin/orders-b2b/notes`, { id: null, id_order: Number(orderId), description: search })
         .then((response) => {
-          console.log(response, "response")
           setSearch('');
           refetch();
           toast.success("Uspešno ste dodali napomenu!");
@@ -78,7 +102,6 @@ const B2BOrdersDetails = () => {
       toast.warning("Unesite tekst napomene.");
     }
   }
-
   return (
     <PageWrapper
       title={`Porudžbina: ${orderData?.slug}`}
@@ -276,14 +299,14 @@ const B2BOrdersDetails = () => {
             total_original={orderData?.total_original}
             total_with_out_vat={orderData?.total_with_out_vat}
             total_delivery_amount={orderData?.total_delivery_amount}
-            total_discount={orderData?.total_discount}
             total_promo_code={orderData?.total_promo_code}
-            total_rabat_1={orderData?.total_rabat_1}
-            total_rabat_2={orderData?.total_rabat_2}
+            total_rabat_1={orderData?.total_rebate_amount}
+            total_discount={Number(orderData?.total_items_discount_amount) + Number(orderData?.total_cart_discount_amount)}
             total_vat={orderData?.total_vat}
             total_with_vat={orderData?.total_with_vat}
             total={orderData?.total}
             currency={orderData?.currency}
+            subtotal={orderData?.subtotal}
           />
           <Tooltip title="Izbrišite narudžbenicu" arrow placement="top">
             <Box sx={{
