@@ -43,6 +43,27 @@
     --text-login-color: #212529;
     --login-white-background: #ffffff;
     --bg-green: #32eb844d;
+    --theme: #28a86e;
+    --green: #43fa2b;
+    --red: #d32f2f;
+    --orange: #ff9800;
+    --blue: #2196f3;
+    --petroleum: #17a2b9;
+    --white: #ffffff;
+    --dashboardBlue: #3d76bb;
+    --dashboardBlueOp: #3d76bb66;
+    --dashboardGreenOp: #28a86e66;
+    --dashboardOrange: #ffc000;
+    --dashboardOrangeOp: #ffc00066;
+
+    --statusNew: #bae1ff;
+    --statusCompleted: #baffc9;
+    --statusCanceled: #ffb3ba;
+    --statusPending: #ffffba;
+    --statusReady: #ffdfba;
+    --statusDelivered: #ededaf;
+    --statusTaken: #caacf9;
+    --statusArchived: #cfcfc4;
 }
 
 .theme-dark {
@@ -166,6 +187,38 @@ form label {
 }
 
 /*---------------------- SORTABLE TREE END -----------------*/
+
+/*---------------------- DASHBOARD -----------------*/
+.dashboardTable {
+    // background-color: red;
+    thead {
+        tr {
+            th {
+                border-bottom: 0;
+                padding: 0.5rem;
+            }
+        }
+    }
+    tbody {
+        tr {
+            td {
+                border-bottom: 0;
+                padding: 0.7rem;
+                font-size: 0.813rem;
+
+                a {
+                    color: var(--theme);
+                    text-overflow: ellipsis;
+                    -webkit-line-clamp: 1;
+                    -webkit-box-orient: vertical;
+                    overflow: hidden;
+                    display: -webkit-box;
+                    line-height: initial;
+                }
+            }
+        }
+    }
+}
 
 /*---------------- COMMON STYLES START -----------------*/
 .accordion-button:not(.collapsed)::after {

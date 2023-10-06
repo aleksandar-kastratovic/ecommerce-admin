@@ -102,28 +102,22 @@ export const columnCell = (value, column, rowType) => {
             }
         case "input":
         default:
-            if (value === "Vidljiv" || value === "on" || value === "Objavljen" || value === "Aktivno") {
-                return <span style={{ backgroundColor: "#28a86e36", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#28a86e", fontWeight: "500" }}>{value}</span>;
-            } else if (value === "Nevidljiv" || value === "off" || value === "Blokiran" || value === "Neaktivno") {
-                return <span style={{ backgroundColor: "#ff000024", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#d32f2f", fontWeight: "500" }}>{value}</span>;
-            } else if (value === "Kompletirano") {
-                return <span style={{ backgroundColor: "#28a86e", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
-            } else if (value === "Otkazano") {
-                return <span style={{ backgroundColor: "#d32f2f", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
+            if (value === "Vidljiv" || value === "on" || value === "Objavljen" || value === "Aktivno" || value === "Kompletirano" || value === "Potvrđeno") {
+                return <span style={{ backgroundColor: "var(--statusCompleted)", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#62ad71", fontWeight: "500" }}>{value}</span>;
+            } else if (value === "Nevidljiv" || value === "off" || value === "Blokiran" || value === "Neaktivno" || value === "Otkazano") {
+                return <span style={{ backgroundColor: "var(--statusCanceled)", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#c35b64", fontWeight: "500" }}>{value}</span>;
             } else if (value === "Arhiviran") {
-                return <span style={{ backgroundColor: "#e1e1e3", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#696969", fontWeight: "500" }}>{value}</span>;
-            } else if (value === "Potvrđeno") {
-                return <span style={{ backgroundColor: "#7cd992", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
-            } else if (value === "U izradi") {
-                return <span style={{ backgroundColor: "#5bc0de", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
-            } else if (value === "Novo") {
-                return <span style={{ backgroundColor: "#0275d8", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
+                return <span style={{ backgroundColor: "var(--statusArchived)", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#696969", fontWeight: "500" }}>{value}</span>;
+            } else if (value === "Novo" || value === "U izradi") {
+                return <span style={{ backgroundColor: "var(--statusNew)", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#5e9ac9", fontWeight: "500" }}>{value}</span>;
             } else if (value === "Paket je preuzet") {
-                return <span style={{ backgroundColor: "#f0b24f", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
+                return <span style={{ backgroundColor: "var(--statusTaken)", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#766493", fontWeight: "500" }}>{value}</span>;
             } else if (value === "Paket spreman za slanje") {
-                return <span style={{ backgroundColor: "#aea7ff", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
+                return <span style={{ backgroundColor: "var(--statusReady)", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#af8452", fontWeight: "500" }}>{value}</span>;
             } else if (value === "Porudžbina je dostavljena") {
-                return <span style={{ backgroundColor: "#681cff", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#ffff", fontWeight: "500" }}>{value}</span>;
+                return <span style={{ backgroundColor: "var(--statusDelivered)", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#a3a373", fontWeight: "500" }}>{value}</span>;
+            } else if (value === "Porudžbina je na čekanju") {
+                return <span style={{ backgroundColor: "var(--statusPending)", padding: "0.1rem 0.7rem", borderRadius: "0.6rem", color: "#a3a373", fontWeight: "500" }}>{value}</span>;
             } else {
                 if (value && /<\/?[a-z][\s\S]*>/i.test(value)) {
                     const plainText = htmlToPlainText(value);

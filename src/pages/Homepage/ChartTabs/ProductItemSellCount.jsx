@@ -1,0 +1,20 @@
+import { BarChart } from '@mui/x-charts/BarChart';
+
+const ProductItemSellCount = ({ itemSellChart }) => {
+
+  return (
+    <>
+      {itemSellChart && itemSellChart?.series?.length !== 0 && (
+        <BarChart
+          sx={{ height: "auto !important", width: "100% !important", ".MuiChartsLegend-root": { display: "none" }, ".MuiBarElement-root": { fill: "var(--theme)" } }}
+          width={700}
+          height={350}
+          series={itemSellChart?.series}
+          xAxis={itemSellChart?.xAxis}
+        />
+      )}
+    </>
+  )
+}
+
+export default ProductItemSellCount

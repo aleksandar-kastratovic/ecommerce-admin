@@ -49,13 +49,11 @@ const OrderItemsTable = ({ items, fields }) => {
       </TableHead>
       <TableBody>
         {items.map((item) => (
-          <TableRow key={item.item.id}>
+          <TableRow key={item.id}>
             {fields.map((field, index) => {
               let value = null;
-              if (item.item != null && item.item.hasOwnProperty(field.prop_name)) {
-                value = item.item[field.prop_name];
-              } else if (item.price != null && item.price.hasOwnProperty(field.prop_name)) {
-                value = item.price[field.prop_name];
+              if (item != null && item.hasOwnProperty(field.prop_name)) {
+                value = item[field.prop_name];
               } else {
                 value = null;
               }
@@ -74,17 +72,17 @@ const OrderItemsTable = ({ items, fields }) => {
                     //   display: (field.prop_name === "price_with_out_vat" || field.prop_name === "price_rabat_1_percent" || field.prop_name === "total_rabat_1" || field.prop_name === "price_vat_procent" || field.prop_name === "total_vat") && "none !important",
                     // },
                   }}
-                  width={field.prop_name === "name" || field.prop_name === "sku" ? specificFieldWidth : `${totalWidthWithoutSpecificFields}%`}
+                //width={field.prop_name === "name" || field.prop_name === "sku" ? specificFieldWidth : `${totalWidthWithoutSpecificFields}%`}
                 >
                   {/* <Link to={`/products/${item.item.id_product}`} className={styles.productCellLink}>
                     {getField(field.input_type, value)}
                   </Link> */}
-                  <Link to={`/products/${item.item.id_product}`} className={styles.productCellLink}>
+                  <Link to={`/products/${item.id_product}`} className={styles.productCellLink}>
                     {field.prop_name === "total_discount_amount" ? "-" : null}
                     {getField(field.input_type, value)}
-                    {field.prop_name === "name" && item.item.attributes_text ? (
+                    {field.prop_name === "name" && item.attributes_text ? (
                       <span style={{ fontWeight: "400", fontSize: "0.75rem", marginLeft: "0.2rem" }}>
-                        ({item.item.attributes_text})
+                        ({item.attributes_text})
                       </span>
                     ) : null}
                   </Link>
