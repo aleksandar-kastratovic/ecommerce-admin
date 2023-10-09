@@ -40,7 +40,7 @@ const Status = ({ statusCount }) => {
             title={
               <Box sx={{ display: "flex", alignItems: "flex-end" }}>
                 <Typography variant="h6" sx={{ color: "var(--text-color)" }}>
-                  Statusi kupovina <span style={{ fontWeight: "400", fontSize: "0.875rem" }}>(poslednjih 30 dana)</span>
+                  Statusi kupovina
                 </Typography>
               </Box>
             }
