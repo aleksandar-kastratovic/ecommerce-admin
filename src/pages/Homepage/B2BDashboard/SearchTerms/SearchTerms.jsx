@@ -1,22 +1,14 @@
 import { useEffect, useState, useContext } from "react";
 import { useQuery } from "react-query";
 
-import Card from "../../../components/shared/Card/Card";
+import Card from "../../../../components/shared/Card/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
-// import Table from '@mui/material/Table';
-// import TableBody from '@mui/material/TableBody';
-// import TableCell from '@mui/material/TableCell';
-// import TableContainer from '@mui/material/TableContainer';
-// import TableHead from '@mui/material/TableHead';
-// import TableRow from '@mui/material/TableRow';
-// import Box from "@mui/material/Box";
-// import CircularProgress from "@mui/material/CircularProgress";
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import AuthContext from "../../../store/auth-contex";
+import AuthContext from "../../../../store/auth-contex";
 import SearchTermsLatest from "./SearchTermsLatest";
 import SearchTermsTop from "./SearchTermsTop";
 
@@ -49,8 +41,8 @@ const SearchTerms = () => {
 
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
-  const searchTermsLatest = "admin/dashboard/b2c/product-item-search-terms-latest";
-  const searchTermsTop = "admin/dashboard/b2c/product-item-search-terms-top";
+  const searchTermsLatest = "admin/dashboard/b2b/product-item-search-terms-latest";
+  const searchTermsTop = "admin/dashboard/b2b/product-item-search-terms-top";
 
   const [value, setValue] = useState(0);
 
@@ -83,12 +75,11 @@ const SearchTerms = () => {
     }
   }, []);
 
-  console.log("sTermsLatest", sTermsLatest)
 
   return (
     <>
       <Card
-        styleCard={{ display: "flex", flexDirection: "column", gridColumn: "3/-1", boxShadow: "none" }}
+        styleCard={{ display: "flex", flexDirection: "column", gridColumn: "3/-1", boxShadow: "none", "@media (max-width: 1200px)": { gridColumn: "1/-1" } }}
         children={
           <>
             <CardHeader

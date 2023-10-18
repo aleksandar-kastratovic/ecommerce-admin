@@ -8,14 +8,14 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Link } from "react-router-dom";
-import Card from "../../../components/shared/Card/Card";
+import Card from "../../../../components/shared/Card/Card";
 import Box from "@mui/material/Box";
 
-const ProductTopSelling = ({ productTopSelling, productActiveCount, productLowStockCount }) => {
+const ProductTopSelling = ({ productTopSellingB2C, productActiveCountB2C, productLowStockCountB2C }) => {
 
   return (
     <Card
-      styleCard={{ display: "flex", flexDirection: "column", gridColumn: "1/2", boxShadow: "none" }}
+      styleCard={{ display: "flex", flexDirection: "column", gridColumn: "1/2", boxShadow: "none", "@media (max-width: 1200px)": { gridColumn: "1/-1" } }}
       children={
         <>
           <CardHeader
@@ -25,19 +25,19 @@ const ProductTopSelling = ({ productTopSelling, productActiveCount, productLowSt
             <Box sx={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem", marginBottom: "1.5rem" }}>
               <Box sx={{ textAlign: "center", fontSize: "0.875rem", color: "var(--text-color)" }}>
                 <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  {productActiveCount?.count ?? 0}
+                  {productActiveCountB2C?.count ?? 0}
                 </Typography>
                 Aktivnih proizvoda
               </Box>
               <Box sx={{ textAlign: "center", fontSize: "0.875rem", color: "var(--text-color)" }}>
                 <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                  {productLowStockCount?.count ?? 0}
+                  {productLowStockCountB2C?.count ?? 0}
                 </Typography>
                 Male količine
               </Box>
             </Box>
             <TableContainer>
-              {productTopSelling?.length > 0 ?
+              {productTopSellingB2C?.length > 0 ?
                 <Table className="dashboardTable">
                   <TableHead>
                     <TableRow>
@@ -47,7 +47,7 @@ const ProductTopSelling = ({ productTopSelling, productActiveCount, productLowSt
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {productTopSelling?.map((row) => (
+                    {productTopSellingB2C?.map((row) => (
                       <TableRow key={row.id_product} sx={{ "&:nth-of-type(odd)": { backgroundColor: "var(--main-bg-color)" }, border: 0 }}>
                         <TableCell>
                           <Link to={`/products/${row.id_product}`}>

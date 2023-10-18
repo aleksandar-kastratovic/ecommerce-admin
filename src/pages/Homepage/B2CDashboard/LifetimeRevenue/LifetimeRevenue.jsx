@@ -1,11 +1,10 @@
-import Card from "../../../components/shared/Card/Card";
+import Card from "../../../../components/shared/Card/Card";
 import CardHeader from "@mui/material/CardHeader";
-import PaymentsIcon from '@mui/icons-material/Payments';
 import Typography from '@mui/material/Typography';
-import img from "../../../assets/images/ukupan-prihod-prodaja.png";
+import img from "../../../../assets/images/ukupan-prihod-prodaja.png";
 import { Box, CardContent } from "@mui/material";
 
-const LifetimeRevenue = ({ lifetimeRevenue }) => {
+const LifetimeRevenue = ({ lifetimeRevenueB2C }) => {
 
   return (
     <Card
@@ -28,7 +27,7 @@ const LifetimeRevenue = ({ lifetimeRevenue }) => {
 
           />
           <CardContent sx={{ "&.MuiCardContent-root:last-child": { paddingBottom: "1rem" }, paddingTop: "0.5rem" }}>
-            {lifetimeRevenue?.map((total) => {
+            {lifetimeRevenueB2C?.map((total) => {
               return (
                 <Typography key={total?.total} variant="h5" sx={{ fontWeight: 600, fontSize: "1.4rem", color: "var(--text-color)" }}>
                   {total?.total ?? "-"}  <span style={{ marginRight: "0.5rem" }}>{total?.currency.toUpperCase()}</span>

@@ -1,11 +1,10 @@
-import Card from "../../../components/shared/Card/Card";
+import Card from "../../../../components/shared/Card/Card";
 import CardHeader from "@mui/material/CardHeader";
-import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import Typography from '@mui/material/Typography';
 import { Box, CardContent } from "@mui/material";
-import img from "../../../assets/images/ukupno-kupaca.png";
+import img from "../../../../assets/images/ukupno-kupaca.png";
 
-const TotalCustomers = ({ totalCustomersData }) => {
+const TotalCustomers = ({ totalCustomersDataB2B }) => {
 
   return (
     <Card
@@ -21,13 +20,13 @@ const TotalCustomers = ({ totalCustomersData }) => {
             }
             title={
               <Typography variant="h6" sx={{ color: "var(--text-color)", lineHeight: "1.3", fontSize: "0.9rem" }}>
-                Ukupno <br /> registrovanih kupaca
+                Ukupno <br /> kompanija
               </Typography>
             }
           />
           <CardContent sx={{ "&.MuiCardContent-root:last-child": { paddingBottom: "1rem", paddingTop: "0.5rem" } }}>
             <Typography variant="h5" sx={{ fontWeight: 600, fontSize: "1.4rem", color: "var(--text-color)" }}>
-              {totalCustomersData?.count ?? "-"}
+              {totalCustomersDataB2B?.count ?? "-"}
             </Typography>
           </CardContent>
         </>

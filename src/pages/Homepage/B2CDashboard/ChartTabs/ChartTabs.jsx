@@ -7,9 +7,9 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
-import AuthContext from "../../../store/auth-contex";
-import { InputSelect } from "../../../components/shared/Form/FormInputs/FormInputs";
-import Card from "../../../components/shared/Card/Card";
+import AuthContext from "../../../../store/auth-contex";
+import { InputSelect } from "../../../../components/shared/Form/FormInputs/FormInputs";
+import Card from "../../../../components/shared/Card/Card";
 import CardContent from "@mui/material/CardContent";
 import ProductItemSellCount from "./ProductItemSellCount";
 
@@ -100,11 +100,11 @@ const ChartTabs = () => {
       setValue(index);
     }
   }, []);
-  console.log("countChart", countChart)
+
   return (
     <>
       <Card
-        styleCard={{ gridColumn: "1/2", boxShadow: "none" }}
+        styleCard={{ gridColumn: "1/3", boxShadow: "none", "@media (max-width: 1200px)": { gridColumn: "1/-1" } }}
         children={
           <>
             <CardContent>
