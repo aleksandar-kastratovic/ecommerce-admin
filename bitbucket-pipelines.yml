@@ -308,3 +308,9 @@ pipelines:
           <<: *execute
           name: ITLAluPvc
           deployment: itlalupvc
+
+    prod-janagio:
+      - step:
+          <<: *execute
+          name: Janagio
+          deployment: janagio
