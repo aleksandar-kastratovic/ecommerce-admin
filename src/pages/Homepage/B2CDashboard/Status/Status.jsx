@@ -1,14 +1,12 @@
-import Card from "../../../components/shared/Card/Card";
+import Card from "../../../../components/shared/Card/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Badge from "@mui/material/Badge";
 
-const Status = ({ statusCount }) => {
+const Status = ({ statusCountB2C }) => {
 
   const getStatusColor = (statusName) => {
     switch (statusName) {
@@ -47,11 +45,10 @@ const Status = ({ statusCount }) => {
 
             subheader={
               <Box>
-                <List sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem" }}>
-                  {statusCount?.map((status) => {
-                    console.log("status", status)
+                <List sx={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "1rem", "@media (max-width: 1200px)": { display: "flex", flexWrap: "wrap", gap: "2rem" } }}>
+                  {statusCountB2C?.map((status) => {
                     return (
-                      <ListItem key={status?.name} sx={{ padding: 0 }}>
+                      <ListItem key={status?.name} sx={{ padding: 0, "@media (max-width: 1200px)": { width: "fit-content" } }}>
                         <ListItemText
                           primary={
                             <Typography variant="body2" sx={{ color: "var(--text-color)", fontWeight: "500" }}>

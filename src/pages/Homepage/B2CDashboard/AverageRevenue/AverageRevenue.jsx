@@ -1,14 +1,12 @@
-import Card from "../../../components/shared/Card/Card";
+import Card from "../../../../components/shared/Card/Card";
 import CardHeader from "@mui/material/CardHeader";
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import PaymentsIcon from '@mui/icons-material/Payments';
 import Typography from '@mui/material/Typography';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import { Box, CardContent } from "@mui/material";
-import img from "../../../assets/images/prosecan-iznos-korpe.png";
+import img from "../../../../assets/images/prosecan-iznos-korpe.png";
 
-const AverageRevenue = ({ averageRevenue }) => {
+const AverageRevenue = ({ averageRevenueB2C }) => {
 
   return (
     <Card
@@ -30,7 +28,7 @@ const AverageRevenue = ({ averageRevenue }) => {
             }
           />
           <CardContent sx={{ "&.MuiCardContent-root:last-child": { paddingBottom: "1rem", paddingTop: "0.5rem" } }}>
-            {averageRevenue?.map((total) => {
+            {averageRevenueB2C?.map((total) => {
               return (
                 <Typography key={total?.total} variant="h5" sx={{ fontWeight: 600, fontSize: "1.4rem", position: "relative", width: "fit-content", color: "var(--text-color)" }}>
                   {total?.total ?? "-"} <span style={{ marginRight: "0.5rem" }}>{total?.currency.toUpperCase()}</span>

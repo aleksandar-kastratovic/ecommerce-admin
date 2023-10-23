@@ -1,4 +1,4 @@
-import Card from "../../../components/shared/Card/Card";
+import Card from "../../../../components/shared/Card/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
@@ -14,11 +14,11 @@ import HowToRegIcon from '@mui/icons-material/HowToReg';
 import { Tooltip } from "@mui/material";
 
 
-const TopBuyer = ({ cusTopBuyer, cusGuestOrderedPercentage, cusNeverOrderedPercentage, cusSingleOrderPercentage }) => {
+const TopBuyer = ({ cusTopBuyerB2C, cusGuestOrderedPercentageB2C, cusNeverOrderedPercentageB2C, cusSingleOrderPercentageB2C }) => {
 
   return (
     <Card
-      styleCard={{ display: "flex", flexDirection: "column", gridColumn: "2/3", boxShadow: "none" }}
+      styleCard={{ display: "flex", flexDirection: "column", gridColumn: "2/3", boxShadow: "none", "@media (max-width: 1200px)": { gridColumn: "1/-1" } }}
       children={
         <>
           <CardHeader
@@ -28,7 +28,7 @@ const TopBuyer = ({ cusTopBuyer, cusGuestOrderedPercentage, cusNeverOrderedPerce
             <Box sx={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginBottom: "1.5rem" }}>
               <Box sx={{ textAlign: "center" }}>
                 <Box sx={{ position: 'relative', display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "0.5rem" }}>
-                  <CircularProgress variant="determinate" value={parseFloat(cusSingleOrderPercentage?.label)} sx={{ color: "var(--dashboardOrange)" }} size={65} />
+                  <CircularProgress variant="determinate" value={parseFloat(cusSingleOrderPercentageB2C?.label)} sx={{ color: "var(--dashboardOrange)" }} size={65} />
                   <Box
                     sx={{
                       top: 0,
@@ -45,7 +45,7 @@ const TopBuyer = ({ cusTopBuyer, cusGuestOrderedPercentage, cusNeverOrderedPerce
                       sx={{ fontWeight: "600", fontSize: "0.875rem" }}
                       variant="caption"
                       component="div"
-                    >{`${Math.round(cusSingleOrderPercentage?.percentage)}%`}</Typography>
+                    >{`${Math.round(cusSingleOrderPercentageB2C?.percentage)}%`}</Typography>
                   </Box>
                 </Box>
                 <span style={{ fontSize: "0.875rem" }}>Sa jednom <br /> kupovinom</span>
@@ -53,7 +53,7 @@ const TopBuyer = ({ cusTopBuyer, cusGuestOrderedPercentage, cusNeverOrderedPerce
 
               <Box sx={{ textAlign: "center" }}>
                 <Box sx={{ position: 'relative', display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "0.5rem" }}>
-                  <CircularProgress variant="determinate" value={parseFloat(cusNeverOrderedPercentage?.label)} sx={{ color: "var(--dashboardBlue)" }} size={65} />
+                  <CircularProgress variant="determinate" value={parseFloat(cusNeverOrderedPercentageB2C?.label)} sx={{ color: "var(--dashboardBlue)" }} size={65} />
                   <Box
                     sx={{
                       top: 0,
@@ -70,7 +70,7 @@ const TopBuyer = ({ cusTopBuyer, cusGuestOrderedPercentage, cusNeverOrderedPerce
                       sx={{ fontWeight: "600", fontSize: "0.875rem" }}
                       variant="caption"
                       component="div"
-                    >{`${Math.round(cusNeverOrderedPercentage?.percentage)}%`}</Typography>
+                    >{`${Math.round(cusNeverOrderedPercentageB2C?.percentage)}%`}</Typography>
                   </Box>
                 </Box>
                 <span style={{ fontSize: "0.875rem" }}>Nemaju <br /> kupovinu</span>
@@ -79,7 +79,7 @@ const TopBuyer = ({ cusTopBuyer, cusGuestOrderedPercentage, cusNeverOrderedPerce
 
               <Box sx={{ textAlign: "center" }}>
                 <Box sx={{ position: 'relative', display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "0.5rem" }}>
-                  <CircularProgress variant="determinate" value={parseFloat(cusGuestOrderedPercentage?.label)} size={65} />
+                  <CircularProgress variant="determinate" value={parseFloat(cusGuestOrderedPercentageB2C?.label)} size={65} />
                   <Box
                     sx={{
                       top: 0,
@@ -96,7 +96,7 @@ const TopBuyer = ({ cusTopBuyer, cusGuestOrderedPercentage, cusNeverOrderedPerce
                       sx={{ fontWeight: "600", fontSize: "0.875rem" }}
                       variant="caption"
                       component="div"
-                    >{`${Math.round(cusGuestOrderedPercentage?.percentage)}%`}</Typography>
+                    >{`${Math.round(cusGuestOrderedPercentageB2C?.percentage)}%`}</Typography>
                   </Box>
                 </Box>
                 <span style={{ fontSize: "0.875rem" }}>Neregistrovan <br /> kupac</span>
@@ -104,7 +104,7 @@ const TopBuyer = ({ cusTopBuyer, cusGuestOrderedPercentage, cusNeverOrderedPerce
 
             </Box>
             <TableContainer>
-              {cusTopBuyer?.length > 0 ?
+              {cusTopBuyerB2C?.length > 0 ?
                 <Table className="dashboardTable">
                   <TableHead>
                     <TableRow>
@@ -115,7 +115,7 @@ const TopBuyer = ({ cusTopBuyer, cusGuestOrderedPercentage, cusNeverOrderedPerce
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {cusTopBuyer?.map((row) => (
+                    {cusTopBuyerB2C?.map((row) => (
                       <TableRow key={row.name} sx={{ "&:nth-of-type(odd)": { backgroundColor: "var(--main-bg-color)" }, border: 0 }}>
                         <TableCell sx={{ display: "flex", alignItems: "center" }}>
                           {row.name}{row.type === "register" ? <Tooltip title="Registrovan kupac" arrow placement="top"><HowToRegIcon sx={{ color: "var(--theme)", fontSize: "1.2rem", marginLeft: "0.3rem" }} /></Tooltip> : null}</TableCell>

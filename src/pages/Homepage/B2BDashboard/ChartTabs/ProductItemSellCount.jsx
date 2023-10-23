@@ -6,8 +6,8 @@ const ProductItemSellCount = ({ itemSellChart }) => {
     <>
       {itemSellChart && itemSellChart?.series?.length !== 0 && (
         <BarChart
-          sx={{ height: "auto !important", width: "100% !important", ".MuiChartsLegend-root": { display: "none" }, ".MuiBarElement-root": { fill: "var(--theme)" } }}
-          width={700}
+          sx={{ height: "auto !important", width: "100% !important", ".MuiChartsLegend-root": { display: "none" }, ".MuiBarElement-root": { fill: "var(--theme)" }, ".MuiChartsAxis-bottom .MuiChartsAxis-tickLabel": { transform: "rotate(90deg)", textAnchor: "start !important" } }}
+          width={1000}
           height={350}
           series={itemSellChart?.series}
           xAxis={itemSellChart?.xAxis}
