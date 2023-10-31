@@ -1,10 +1,12 @@
 import Card from "../../../../components/shared/Card/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from '@mui/material/Typography';
-import { Box, CardContent } from "@mui/material";
 import img from "../../../../assets/images/ukupno-kupaca.png";
+import Box from "@mui/material/Box";
+import CardContent from "@mui/material/CardContent";
+import Skeleton from "@mui/material/Skeleton";
 
-const TotalCustomers = ({ totalCustomersDataB2C }) => {
+const TotalCustomers = ({ totalCustomersDataB2C, isLoadingTotalCustomersDataB2C }) => {
 
   return (
     <Card
@@ -25,9 +27,15 @@ const TotalCustomers = ({ totalCustomersDataB2C }) => {
             }
           />
           <CardContent sx={{ "&.MuiCardContent-root:last-child": { paddingBottom: "1rem", paddingTop: "0.5rem" } }}>
-            <Typography variant="h5" sx={{ fontWeight: 600, fontSize: "1.4rem", color: "var(--text-color)" }}>
-              {totalCustomersDataB2C?.count ?? "-"}
-            </Typography>
+            {
+              isLoadingTotalCustomersDataB2C ? (
+                <Skeleton variant="rounded" width={40} height={15} />
+              ) : (
+                <Typography variant="h5" sx={{ fontWeight: 600, fontSize: "1.4rem", color: "var(--text-color)" }}>
+                  {totalCustomersDataB2C?.count ?? "-"}
+                </Typography>
+              )
+            }
           </CardContent>
         </>
       }

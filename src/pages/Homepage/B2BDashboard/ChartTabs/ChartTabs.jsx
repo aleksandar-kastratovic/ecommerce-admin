@@ -23,7 +23,7 @@ const CustomTabPanel = ({ children, value, index, ...other }) => {
       {...other}
     >
       {value === index && (
-        <Box sx={{ overflowX: "auto" }}>
+        <Box component={"div"} sx={{ overflowX: "auto" }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -65,7 +65,7 @@ const ChartTabs = () => {
     color: " var(--text-color)",
     border: "none",
     borderRadius: "0.25rem",
-    fontSize: "0.9rem",
+    fontSize: "0.8rem",
     minHeight: "0",
     "&.Mui-selected": { backgroundColor: "var(--theme)", color: "var(--white)" },
   };
@@ -127,8 +127,6 @@ const ChartTabs = () => {
                   </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                  {/* {countChart.length > 0 ?
-                    <> */}
                   <InputSelect
                     styleFormControl={{ width: "35%", ".MuiFormLabel-root": { fontSize: "0.875rem" } }}
                     label={"Izaberite period prikaza"}
@@ -155,9 +153,7 @@ const ChartTabs = () => {
                     value={periodOrderCountChart}
                     onChange={(res) => handleChangePeriodOrderCountChart(res)}
                   />
-                  <OrderCountChart countChart={countChart} />
-                  {/* </>
-                    : <Typography variant="body2" sx={{ color: "var(--text-color)", fontSize: "0.875rem", marginTop: "2rem" }}>Trenutno nema podataka za prikaz.</Typography>} */}
+                  <OrderCountChart countChart={countChart} isLoadingOrderCountChart={isLoadingOrderCountChart} />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
                   <InputSelect
@@ -186,7 +182,7 @@ const ChartTabs = () => {
                     value={periodOrderAmountChart}
                     onChange={(res) => handleChangePeriodOrderAmountChart(res)}
                   />
-                  <OrderAmountChart amountChart={amountChart} />
+                  <OrderAmountChart amountChart={amountChart} isLoadingOrderAmountChart={isLoadingOrderAmountChart} />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
                   <InputSelect
@@ -215,7 +211,7 @@ const ChartTabs = () => {
                     value={periodItemSellChart}
                     onChange={(res) => handleChangePeriodItemSellChart(res)}
                   />
-                  <ProductItemSellCount itemSellChart={itemSellChart} />
+                  <ProductItemSellCount itemSellChart={itemSellChart} isLoadingItemSellChart={isLoadingItemSellChart} />
                 </CustomTabPanel>
               </Box>
             </CardContent>
