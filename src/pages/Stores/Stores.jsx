@@ -122,8 +122,6 @@ const Stores = () => {
       }
     });
 
-    console.log("options", options)
-
     return {
       'setData': true,
       'data': options.connectedData,

@@ -100,7 +100,7 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
     setPage(1);
     setSearch(value);
   };
-  console.log(page)
+
   const handleDeleteModalData = (data) => {
     setDeleteModalData(data);
     return data;

@@ -37,7 +37,6 @@ const B2CNewsCategoryListDetails = () => {
     api.get(`${apiPath}/${cid}`)
       .then((response) => {
         setData(response?.payload);
-        console.log(response?.payload);
         setIsLoading(false);
       })
       .catch((error) => {

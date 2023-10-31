@@ -275,7 +275,7 @@ const Conditions = ({ campaignId }) => {
           rules: addComponent(t_row.rules, parentId, componentType, componentTypeComponent),
         };
       }
-      console.log("t row", t_row);
+
       return t_row;
     });
   };

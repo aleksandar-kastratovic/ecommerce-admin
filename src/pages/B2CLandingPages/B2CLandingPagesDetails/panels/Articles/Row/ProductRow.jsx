@@ -52,7 +52,6 @@ const Row = ({ data, id, handleRemoveComponent }) => {
   return (
     <div className={scss.rowHolder}>
       {(rowData?.fields ?? []).map((item, index) => {
-        console.log("item product", item)
         if (
           index > 0 &&
           (rowData?.fields[index - 1]?.selected?.id == null ||
@@ -111,7 +110,7 @@ const Row = ({ data, id, handleRemoveComponent }) => {
                 usePropName={true}
                 queryString={queryString}
                 value={item?.selected?.id ?? 0}
-                onDataReceived={(options) => { console.log("options", options); onDataReceived(options, index) }}
+                onDataReceived={(options) => { onDataReceived(options, index) }}
                 onChange={({ target }, { props }) => {
                   if (item.field === 'condition' && props.props != null) {
                     setValueOptions(props.props);

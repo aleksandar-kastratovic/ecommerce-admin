@@ -89,7 +89,6 @@ const VariationSection = ({
     if (deleteUrl !== "") {
       api.delete(`${deleteUrl}/${id}`)
         .then((response) => {
-          console.log(response);
           toast.success("Uspešno");
           if (getUrl !== "") {
             getData();

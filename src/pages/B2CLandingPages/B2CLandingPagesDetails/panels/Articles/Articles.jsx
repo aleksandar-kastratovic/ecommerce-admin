@@ -228,7 +228,6 @@ const Articles = ({ pageId }) => {
       return param_data;
     }
     return param_data.map((t_row) => {
-      console.log("t_row", t_row)
       if (t_row.id === parentId) {
         if (componentType === 'group') {
           let group_file = [];

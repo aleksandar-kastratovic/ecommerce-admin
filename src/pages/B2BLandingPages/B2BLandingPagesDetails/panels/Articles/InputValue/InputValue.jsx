@@ -51,7 +51,6 @@ const InputValue = ({
         });
     };
 
-    console.log(opt)
 
     if (fillFromApi) {
       fillDdl();

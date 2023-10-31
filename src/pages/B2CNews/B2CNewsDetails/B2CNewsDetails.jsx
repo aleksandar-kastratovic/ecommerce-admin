@@ -41,7 +41,6 @@ const B2CNewsDetails = () => {
     api.get(`${apiPath}/${nid}`)
       .then((response) => {
         setData(response?.payload);
-        console.log(response?.payload);
         setIsLoading(false);
       })
       .catch((error) => {

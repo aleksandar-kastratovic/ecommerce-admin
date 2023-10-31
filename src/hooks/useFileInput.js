@@ -21,7 +21,6 @@ const useFileInput = (handler: function) => {
     const handleFiles = (files) => {
         if (files.length > 0) {
             const file = { ...files[0] };
-            console.log("Files 0:", files[0]);
             blobToData(files[0]).then((result) => handler(file.name, result));
             inputElementRef.current.value = null;
         }

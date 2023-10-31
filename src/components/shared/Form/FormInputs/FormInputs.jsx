@@ -135,6 +135,9 @@ export const InputNumber = ({ label, required, disabled, error = null, name, val
           ".MuiInputBase-input": { padding: "0.8rem", fontSize: "0.875rem" }
         }}
         onWheel={(e) => e.target.blur()}
+        onFocus={event => {
+          event.target.select();
+        }}
       />
     </InputWrapper>
   );
@@ -626,7 +629,6 @@ export const InputMultiSelect = ({
         .then((response) => {
           if (isMounted) {
             setOpt(response?.payload);
-            console.log("Multiple select payload:", response?.payload);
           }
         })
         .catch((error) => {

@@ -79,8 +79,6 @@ const PromotionsCartItemsPageDetails = () => {
 
   const validateData = (data, field) => {
     let ret = data;
-    console.log("data", ret);
-    console.log("field", field);
     switch (field) {
       case "discount_type":
         if (ret.discount_type === "percentage") {

@@ -35,7 +35,6 @@ const Content = ({ id, file }) => {
     api.put(`${getImport}/${id}`)
       .then((response) => {
         setDataImport(response?.payload);
-        console.log(dataImport)
         setIsLoading(false);
       })
       .catch((error) => {
@@ -48,7 +47,6 @@ const Content = ({ id, file }) => {
     setIsLoadingOnSubmit(true);
     api.post(postImportExecute, data)
       .then((response) => {
-        console.log(response)
         toast.success("Uspešno ste uvezli dokument!");
         setIsLoadingOnSubmit(false);
       })
@@ -77,7 +75,6 @@ const Content = ({ id, file }) => {
 
         <TableBody>
           {dataImport && dataImport.preview && rotateMatrix(dataImport.preview).map((row, index) => {
-            console.log(index)
             return (
 
               <TableRow key={index}>
