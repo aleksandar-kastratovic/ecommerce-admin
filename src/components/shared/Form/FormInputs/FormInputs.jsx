@@ -13,7 +13,7 @@ import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Chip from "@mui/material/Chip";
-import Input from '@mui/material/Input';
+import Input, { inputClasses } from '@mui/material/Input';
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -24,6 +24,20 @@ import ButtonBase from "@mui/material/ButtonBase";
 import { blobToData } from "../../../../helpers/data";
 import { toast } from "react-toastify";
 import AuthContext from "../../../../store/auth-contex";
+
+const generateBootstrapClasses = (columns) => {
+  if (columns) {
+    const columnClasses = [];
+    Object.keys(columns).forEach(screenSize => {
+      const columnValue = columns[screenSize];
+      if (columnValue) {
+        columnClasses.push(`col-${screenSize}-${columnValue}`);
+      }
+    });
+    return columnClasses.join(" ");
+  }
+  return "";
+};
 
 /**
  * Wrapper for the input element
@@ -38,9 +52,10 @@ import AuthContext from "../../../../store/auth-contex";
  * @return {JSX.Element}
  */
 
-export const InputWrapper = ({ children = null, label, required, disabled, margin = "dense", error = null, fullWidth = true, styleFormControl }) => {
+export const InputWrapper = ({ children = null, label, required, disabled, margin = "dense", error = null, fullWidth = true, styleFormControl, inputClasses }) => {
+
   return (
-    <FormControl fullWidth={fullWidth} margin={margin} error={error !== null} sx={styleFormControl}>
+    <FormControl fullWidth={fullWidth} margin={margin} error={error !== null} sx={{ padding: "0 0.3rem", ...styleFormControl }} className={inputClasses} >
       <FormLabel required={required} disabled={disabled}>
         {label}
       </FormLabel>
@@ -76,8 +91,11 @@ export const InputInput = ({ label, required, disabled, name, value, autoFocus, 
     ".MuiInputBase-root": { overflow: "hidden" },
     ".MuiInputBase-input": { padding: "0.7rem", fontSize: "0.875rem" },
   };
+
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={uiProp?.wrapper_props?.custom_sx}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={uiProp?.wrapper_props?.custom_sx} inputClasses={inputClasses} >
       <TextField
         type={type}
         name={name}
@@ -115,9 +133,12 @@ export const InputInput = ({ label, required, disabled, name, value, autoFocus, 
  * @return {JSX.Element}
  */
 
-export const InputNumber = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, placeholder, autoFocus }) => {
+export const InputNumber = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, placeholder, autoFocus, uiProp }) => {
+
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
       <TextField
         name={name}
         value={value}
@@ -159,9 +180,12 @@ export const InputNumber = ({ label, required, disabled, error = null, name, val
  * @return {JSX.Element}
  */
 
-export const InputCheckbox = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, labelStyle, styleCheckbox, styleCheckBoxWrapp }) => {
+export const InputCheckbox = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, labelStyle, styleCheckbox, styleCheckBoxWrapp, uiProp }) => {
+
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleCheckBoxWrapp}>
+    <InputWrapper required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleCheckBoxWrapp} inputClasses={inputClasses}>
       <FormControlLabel control={<Checkbox name={name} checked={value} onChange={onChange} disabled={disabled} sx={styleCheckbox} />} label={label} sx={{ ".MuiTypography-root": { fontSize: "14px" }, ...labelStyle }} />
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>
@@ -184,9 +208,12 @@ export const InputCheckbox = ({ label, required, disabled, name, value, error = 
  * @return {JSX.Element}
  */
 
-export const InputRadio = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description }) => {
+export const InputRadio = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, uiProp }) => {
+
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
       <FormControlLabel sx={{ ".MuiTypography-root": { fontSize: "0.875rem" } }} control={<Radio name={name} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>
@@ -209,9 +236,12 @@ export const InputRadio = ({ label, required, disabled, name, value, error = nul
  * @return {JSX.Element}
  */
 
-export const InputSwitch = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, fullWidth = true }) => {
+export const InputSwitch = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, fullWidth = true, uiProp }) => {
+
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper required={required} disabled={disabled} margin={margin} error={error} fullWidth={fullWidth}>
+    <InputWrapper required={required} disabled={disabled} margin={margin} error={error} fullWidth={fullWidth} inputClasses={inputClasses}>
       <FormControlLabel sx={{ ".MuiTypography-root": { fontSize: "0.875rem" } }} control={<Switch name={name} value={value} checked={value} onChange={onChange} disabled={disabled} />} label={label} />
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>
@@ -257,6 +287,7 @@ export const InputSelect = ({
   onDataReceived = () => null,
   styleFormControl,
   // defaultOption
+  uiProp
 }) => {
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
@@ -301,9 +332,10 @@ export const InputSelect = ({
     setOpt(opt?.length > 0 ? opt : options);
   }, [options, opt]);
 
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
 
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleFormControl}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleFormControl} inputClasses={inputClasses}>
       <Select
         className={className}
         name={name}
@@ -363,7 +395,8 @@ export const AutocompleteInput = ({
   usePropName,
   options,
   queryString = "",
-  optionsIsEmpty = () => { }
+  optionsIsEmpty = () => { },
+  uiProp
 }) => {
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
@@ -411,8 +444,10 @@ export const AutocompleteInput = ({
     }
   }, [opt]);
 
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
       <Autocomplete
         value={myValue}
         onInputChange={(event, newInputValue) => {
@@ -474,7 +509,8 @@ export const AutocompleteTagsFilled = ({
   usePropName,
   options,
   queryString = "",
-  optionsIsEmpty = () => { }
+  optionsIsEmpty = () => { },
+  uiProp
 }) => {
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
@@ -528,8 +564,10 @@ export const AutocompleteTagsFilled = ({
     }
   }, [opt]);
 
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
       <Autocomplete
         multiple
         value={myValue}
@@ -615,7 +653,8 @@ export const InputMultiSelect = ({
   options,
   queryString = "",
   optionsIsEmpty = () => { },
-  styleMultiSelect
+  styleMultiSelect,
+  uiProp
 }) => {
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
@@ -661,8 +700,10 @@ export const InputMultiSelect = ({
     }
   }, [options, opt]);
 
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleMultiSelect}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleMultiSelect} inputClasses={inputClasses}>
       <Select
         name={name}
         value={(opt ?? []).length === 0 ? "" : value}
@@ -716,9 +757,12 @@ export const InputMultiSelect = ({
  * @return {JSX.Element}
  */
 
-export const InputText = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, placeholder }) => {
+export const InputText = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, placeholder, uiProp }) => {
+
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
       <TextField
         name={name}
         value={value}
@@ -756,7 +800,7 @@ export const InputText = ({ label, required, disabled, error = null, name, value
  * @return {JSX.Element}
  */
 
-export const InputDateTime = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description }) => {
+export const InputDateTime = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, uiProp }) => {
   const handleChange = (newValue) => {
     const ev = {
       target: {
@@ -766,8 +810,11 @@ export const InputDateTime = ({ label, required, disabled, error = null, name, v
     };
     onChange(ev, "date_time");
   };
+
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DateTimePicker
           value={value !== "" ? value : null}
@@ -809,7 +856,7 @@ export const InputDateTime = ({ label, required, disabled, error = null, name, v
  * @return {JSX.Element}
  */
 
-export const InputDate = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description }) => {
+export const InputDate = ({ label, required, disabled, error = null, name, value, margin = "dense", onChange = () => null, description, uiProp }) => {
   const handleChange = (newValue) => {
     const ev = {
       target: {
@@ -819,8 +866,11 @@ export const InputDate = ({ label, required, disabled, error = null, name, value
     };
     onChange(ev, "date");
   };
+
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <DatePicker
           value={value !== "" ? value : null}
@@ -863,16 +913,19 @@ export const InputDate = ({ label, required, disabled, error = null, name, value
  * @return {JSX.Element}
  */
 
-export const InputHtml = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description }) => {
+export const InputHtml = ({ label, required, disabled, name, value, error = null, margin = "dense", onChange = () => null, description, uiProp }) => {
+
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
       <HtmlEditor name={name} value={value} onChange={onChange} />
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>
   );
 };
 
-export const ImportPicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile }) => {
+export const ImportPicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile, uiProp }) => {
   const ref = useRef();
   const [attachment, setAttachment] = useState(null);
   // const isFileTypeAllowed = (fileExtension) => allowedFileTypes.includes(fileExtension);
@@ -882,11 +935,6 @@ export const ImportPicker = ({ label, required, disabled, margin, error = null, 
     const [file] = files;
 
     const fileExtension = file.name.split('.').pop().toLowerCase();
-
-    // if (!isFileTypeAllowed(fileExtension)) {
-    //   toast.error('Pogrešan tip fajla.');
-    //   return;
-    // }
 
     if (fileExtension !== 'csv' && fileExtension !== 'xml' && fileExtension !== 'json') {
       toast.error('Pogrešan tip fajla.');
@@ -903,8 +951,10 @@ export const ImportPicker = ({ label, required, disabled, margin, error = null, 
     setAttachment(file);
   };
 
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
       <ButtonBase
         component="label"
         sx={{
@@ -936,7 +986,7 @@ export const ImportPicker = ({ label, required, disabled, margin, error = null, 
 }
 
 
-export const FilePicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile }) => {
+export const FilePicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile, uiProp }) => {
   const ref = useRef();
   const [attachment, setAttachment] = useState(null);
 
@@ -961,8 +1011,10 @@ export const FilePicker = ({ label, required, disabled, margin, error = null, on
     setAttachment(file);
   };
 
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
   return (
-    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
       <ButtonBase
         component="label"
         sx={{

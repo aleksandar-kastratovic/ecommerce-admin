@@ -8,7 +8,15 @@
     "disabled": false,
     "required": false,
     "description": "",
-    "ui_prop": "xyz",
+    "ui_prop": {
+      "columns": {
+        "xs": 12,
+        "sm": 12,
+        "md": 12,
+        "lg": 12,
+        "xl": 12
+      }
+    },
     "sortable": true,
     "input_type": "textarea"
   },
@@ -34,7 +42,15 @@
     "disabled": false,
     "required": false,
     "description": "",
-    "ui_prop": "xyz",
+    "ui_prop": {
+      "columns": {
+        "xs": 4,
+        "sm": 4,
+        "md": 4,
+        "lg": 4,
+        "xl": 4
+      }
+    },
     "sortable": true,
     "input_type": "select",
     "options": [],
@@ -50,7 +66,15 @@
     "disabled": false,
     "required": false,
     "description": "",
-    "ui_prop": "xyz",
+    "ui_prop": {
+      "columns": {
+        "xs": 4,
+        "sm": 4,
+        "md": 4,
+        "lg": 4,
+        "xl": 4
+      }
+    },
     "sortable": true,
     "input_type": "select",
     "options": [],
@@ -66,7 +90,15 @@
     "disabled": false,
     "required": false,
     "description": "",
-    "ui_prop": "xyz",
+    "ui_prop": {
+      "columns": {
+        "xs": 4,
+        "sm": 4,
+        "md": 4,
+        "lg": 4,
+        "xl": 4
+      }
+    },
     "sortable": true,
     "input_type": "multi_select",
     "options": [],

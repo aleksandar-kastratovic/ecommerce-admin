@@ -173,7 +173,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
 
   return (
     <>
-      <Box component="form" autoComplete="off" onSubmit={submitHandler}>
+      <Box component="form" autoComplete="off" onSubmit={submitHandler} sx={{ display: "flex", flexWrap: "wrap" }} >
         {(filteredFields ?? [])
           .filter((field) => field.croonus_use_in_details)
           .map((item, index) => {
@@ -227,6 +227,7 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
         </Buttons>
 
       </Box>
+
       <ImageDialog
         title="Obrada slike"
         openImageDialog={openImageDialog}
