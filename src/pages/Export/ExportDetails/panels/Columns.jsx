@@ -44,7 +44,7 @@ const Columns = ({ data, file }) => {
     setDataModalContent(data);
   }, [data]);
 
-  console.log(dataModalContent)
+
 
   const handleCheckboxChange = (event) => {
     const { name, checked } = event.target;

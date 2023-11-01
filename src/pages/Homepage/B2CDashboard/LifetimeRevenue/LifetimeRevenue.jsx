@@ -2,9 +2,12 @@ import Card from "../../../../components/shared/Card/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Typography from '@mui/material/Typography';
 import img from "../../../../assets/images/ukupan-prihod-prodaja.png";
-import { Box, CardContent } from "@mui/material";
+import Box from "@mui/material/Box";
+import CardContent from "@mui/material/CardContent";
+import Skeleton from "@mui/material/Skeleton";
+import { v4 } from "uuid";
 
-const LifetimeRevenue = ({ lifetimeRevenueB2C }) => {
+const LifetimeRevenue = ({ lifetimeRevenueB2C, isLoadingLifetimeRevenueB2C }) => {
 
   return (
     <Card
@@ -27,13 +30,23 @@ const LifetimeRevenue = ({ lifetimeRevenueB2C }) => {
 
           />
           <CardContent sx={{ "&.MuiCardContent-root:last-child": { paddingBottom: "1rem" }, paddingTop: "0.5rem" }}>
-            {lifetimeRevenueB2C?.map((total) => {
-              return (
-                <Typography key={total?.total} variant="h5" sx={{ fontWeight: 600, fontSize: "1.4rem", color: "var(--text-color)" }}>
-                  {total?.total ?? "-"}  <span style={{ marginRight: "0.5rem" }}>{total?.currency.toUpperCase()}</span>
-                </Typography>
+            {
+              isLoadingLifetimeRevenueB2C ? (
+                <Skeleton variant="rounded" width={40} height={15} />
+              ) : (
+                lifetimeRevenueB2C?.length === 0 ? (
+                  <Typography variant="h5" sx={{ fontWeight: 600, fontSize: "1.4rem", color: "var(--text-color)" }}>
+                    -
+                  </Typography>
+                ) : (
+                  lifetimeRevenueB2C?.map((total) => (
+                    <Typography key={v4()} variant="h5" sx={{ fontWeight: 600, fontSize: "1.4rem", color: "var(--text-color)" }}>
+                      {total?.total}  <span style={{ marginRight: "0.5rem" }}>{total?.currency.toUpperCase()}</span>
+                    </Typography>
+                  ))
+                )
               )
-            })}
+            }
           </CardContent>
         </>
       }

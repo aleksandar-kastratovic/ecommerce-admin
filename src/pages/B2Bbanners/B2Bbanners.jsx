@@ -28,7 +28,6 @@ const B2Bbanners = ({ }) => {
       clickHandler: {
         type: 'modal_form',
         fnc: (rowData) => {
-          console.log("Row data::", rowData)
           setIdPosition(rowData?.id_position);
           filterFields(formFieldsTemp, rowData?.position_type);
           getForm();
@@ -107,7 +106,6 @@ const B2Bbanners = ({ }) => {
           .then((response) => {
             const idPositionArr = response?.payload;
             const selectedIdPositionItem = idPositionArr.find((systemItem) => systemItem.id === ret.id_position);
-            console.log("selectedIdPositionItem", selectedIdPositionItem)
             if (selectedIdPositionItem) {
               filterFields(formFieldsTemp, selectedIdPositionItem.type);
               setIdPosition(ret?.id_position);

@@ -26,7 +26,7 @@
     "input_type": "input"
   },
   {
-    "field_name": "Ime i prezime",
+    "field_name": "Naziv",
     "prop_name": "ship_to_name",
     "in_main_table": true,
     "in_details": true,

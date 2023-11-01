@@ -39,7 +39,6 @@ const Seo = ({ categoryId }) => {
         console.warn(error);
         toast.warn(error);
       });
-    console.log(data);
   };
 
   const handleDelete = (token, id) => {

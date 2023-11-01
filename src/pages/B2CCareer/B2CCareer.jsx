@@ -76,7 +76,6 @@ const B2CCareer = () => {
             }
           }
         });
-        console.log("arr", arr)
         setFormFieldsTemp([...arr]);
       })
       .catch((error) => {

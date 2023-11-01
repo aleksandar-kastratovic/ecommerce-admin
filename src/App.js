@@ -44,7 +44,6 @@ const App = () => {
                         })
                         .catch((error) => {
                             console.warn(error);
-                            console.log(error?.response);
                         });
                 }
             };

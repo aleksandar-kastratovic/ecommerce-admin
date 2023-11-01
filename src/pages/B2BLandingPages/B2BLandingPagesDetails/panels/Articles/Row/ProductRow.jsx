@@ -110,7 +110,7 @@ const Row = ({ data, id, handleRemoveComponent }) => {
                 usePropName={true}
                 queryString={queryString}
                 value={item?.selected?.id ?? 0}
-                onDataReceived={(options) => { console.log("options", options); onDataReceived(options, index) }}
+                onDataReceived={(options) => { onDataReceived(options, index) }}
                 onChange={({ target }, { props }) => {
                   if (item.field === 'condition' && props.props != null) {
                     setValueOptions(props.props);

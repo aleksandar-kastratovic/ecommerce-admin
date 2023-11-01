@@ -70,7 +70,7 @@ const DeliveryAdresss = ({ companyId, data }) => {
       .get(path)
       .then((response) => {
         let res = response?.payload;
-        console.log(res, "res")
+
         let arr = formFields.map((item, i) => {
           if (item.prop_name === 'id_town') {
             if (res.length > 0) {
@@ -140,7 +140,6 @@ const DeliveryAdresss = ({ companyId, data }) => {
       }
     });
 
-    console.log("options", options)
 
     return {
       'setData': true,

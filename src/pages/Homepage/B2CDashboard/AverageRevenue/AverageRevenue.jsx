@@ -3,10 +3,13 @@ import CardHeader from "@mui/material/CardHeader";
 import Typography from '@mui/material/Typography';
 import ArrowCircleDownIcon from '@mui/icons-material/ArrowCircleDown';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
-import { Box, CardContent } from "@mui/material";
+import Box from "@mui/material/Box";
+import CardContent from "@mui/material/CardContent";
+import Skeleton from "@mui/material/Skeleton";
 import img from "../../../../assets/images/prosecan-iznos-korpe.png";
+import { v4 } from "uuid";
 
-const AverageRevenue = ({ averageRevenueB2C }) => {
+const AverageRevenue = ({ averageRevenueB2C, isLoadingAverageRevenueB2C }) => {
 
   return (
     <Card
@@ -28,18 +31,30 @@ const AverageRevenue = ({ averageRevenueB2C }) => {
             }
           />
           <CardContent sx={{ "&.MuiCardContent-root:last-child": { paddingBottom: "1rem", paddingTop: "0.5rem" } }}>
-            {averageRevenueB2C?.map((total) => {
-              return (
-                <Typography key={total?.total} variant="h5" sx={{ fontWeight: 600, fontSize: "1.4rem", position: "relative", width: "fit-content", color: "var(--text-color)" }}>
-                  {total?.total ?? "-"} <span style={{ marginRight: "0.5rem" }}>{total?.currency.toUpperCase()}</span>
-                  {total?.status !== null &&
-                    <span style={{ display: "flex", alignItems: "center", fontSize: "0.7rem", color: total?.status === "plus" ? "var(--green)" : "var(--red)" }}>
-                      {total?.status === "plus" ? <ArrowCircleUpIcon sx={{ fontSize: "1.3rem", marginRight: "0.1rem" }} /> : <ArrowCircleDownIcon sx={{ fontSize: "1.3rem", marginRight: "0.1rem" }} />}
-                      {total?.percentage} (za period od 90 dana)
-                    </span>}
-                </Typography>
+            {
+              isLoadingAverageRevenueB2C ? (
+                <Skeleton variant="rounded" width={40} height={15} />
+              ) : (
+                averageRevenueB2C?.length === 0 ? (
+                  <Typography variant="h5" sx={{ fontWeight: 600, fontSize: "1.4rem", color: "var(--text-color)" }}>
+                    -
+                  </Typography>
+                ) : (
+                  averageRevenueB2C?.map((total) => {
+                    return (
+                      <Typography key={v4()} variant="h5" sx={{ fontWeight: 600, fontSize: "1.4rem", position: "relative", width: "fit-content", color: "var(--text-color)" }}>
+                        {total?.total} <span style={{ marginRight: "0.5rem" }}>{total?.currency.toUpperCase()}</span>
+                        {total?.status !== null &&
+                          <span style={{ display: "flex", alignItems: "center", fontSize: "0.7rem", color: total?.status === "plus" ? "var(--green)" : "var(--red)" }}>
+                            {total?.status === "plus" ? <ArrowCircleUpIcon sx={{ fontSize: "1.3rem", marginRight: "0.1rem" }} /> : <ArrowCircleDownIcon sx={{ fontSize: "1.3rem", marginRight: "0.1rem" }} />}
+                            {total?.percentage} (za period od 90 dana)
+                          </span>}
+                      </Typography>
+                    )
+                  })
+                )
               )
-            })}
+            }
           </CardContent>
         </>
       }

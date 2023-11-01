@@ -57,7 +57,6 @@ const B2COrdersDetails = () => {
     if (search.trim() !== '') {
       api.post(`admin/orders-b2c/notes`, { id: null, id_order: Number(orderId), description: search })
         .then((response) => {
-          console.log(response, "response")
           setSearch('');
           refetch();
           toast.success("Uspešno ste dodali napomenu!");

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useContext } from "react";
 
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
@@ -14,6 +14,9 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import styles from "./ImageEditorComponent.module.scss";
 import Cropper from "react-easy-crop";
 import { getCroppedImg } from "./util";
+import { InputNumber } from "../Form/FormInputs/FormInputs";
+import AuthContext from "../../../store/auth-contex";
+import { toast } from "react-toastify";
 
 const ImageEditorComponent = ({
   handleCloseEditMode = () => { },
@@ -25,12 +28,38 @@ const ImageEditorComponent = ({
   imageName,
   showDimensions = true,
 }) => {
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [rotation, setRotation] = useState(0);
+  const [showDimensionFromApi, setShowDimensionFromApi] = useState({});
   const [cropSize, setCropSize] = useState({
-    width: imageWidth,
-    height: imageHeight,
+    width: typeof imageWidth !== 'number' ? imageWidth = 800 : imageWidth,
+    height: typeof imageHeight !== 'number' ? imageHeight = 600 : imageHeight
   });
+
+  const handleDataDimension = () => {
+    api.get(`admin/product-items/gallery/image-dimension`)
+      .then((response) => {
+        const dimensionsFromApi = response?.payload;
+        if (Object.keys(dimensionsFromApi).length > 0 && dimensionsFromApi.width > 0 && dimensionsFromApi.height > 0) {
+          setShowDimensionFromApi(dimensionsFromApi);
+          setCropSize(dimensionsFromApi);
+        }
+      })
+      .catch((error) => console.warn(error));
+  };
+
+  // if (typeof imageWidth !== 'number') {
+  //   toast.error("Širina slike mora biti broj. Koristićemo podrazumevanu vrednost (800).");
+  //   imageWidth = 800;
+  // }
+  // if (typeof imageHeight !== 'number') {
+  //   toast.error("Visina slike mora biti broj. Koristićemo podrazumevanu vrednost (600).");
+  //   imageHeight = 600;
+  // }
+
   const [roundCrop, setRoundCrop] = useState(false);
   const [zoom, setZoom] = useState(1);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
@@ -61,6 +90,10 @@ const ImageEditorComponent = ({
     }
   }, [croppedAreaPixels]);
 
+  useEffect(() => {
+    handleDataDimension();
+  }, []);
+
   return (
     <>
       <div className={styles.cropContainer}>
@@ -84,17 +117,17 @@ const ImageEditorComponent = ({
       </div>
 
       <Grid container spacing={1} className={styles.btnGroup}>
-        <Grid item xs={4}>
-          <Box width={200}>
-            <Typography id="zoom-slider" gutterBottom>
+        <Grid item xs={12} sx={{ display: "flex" }}>
+          <Box width={200} sx={{ marginRight: "2rem" }}>
+            <Typography id="zoom-slider" sx={{ lineHeight: "normal" }}>
               Uvećaj
             </Typography>
             <Slider aria-labelledby="zoom-slider" value={typeof rotation === "number" ? zoom : 0} onChange={(e, zoom) => setZoom(zoom)} min={0.5} max={5} step={0.1} marks />
           </Box>
-        </Grid>
-        <Grid item xs={4}>
+          {/* </Grid>
+        <Grid item xs={2}> */}
           <Box width={200}>
-            <Typography id="rotation-slider" gutterBottom>
+            <Typography id="rotation-slider" sx={{ lineHeight: "normal" }}>
               Rotiraj
             </Typography>
             <Slider
@@ -112,10 +145,10 @@ const ImageEditorComponent = ({
           <Grid item xs={8}>
             <Stack direction="row" alignItems="center" spacing={1}>
               <Box width={150}>
-                <Typography id="width-slider" gutterBottom>
+                {/* <Typography id="width-slider" gutterBottom>
                   Širina oblasti
-                </Typography>
-                <Slider
+                </Typography> */}
+                {/* <Slider
                   aria-labelledby="width-slider"
                   min={50}
                   max={900}
@@ -127,13 +160,27 @@ const ImageEditorComponent = ({
                       width: width,
                     })
                   }
+                /> */}
+                <InputNumber
+                  label="Širina oblasti"
+                  value={cropSize.width}
+                  onChange={(e) => {
+                    const value = e.target.value.trim();
+
+                    console.log("value width::", value)
+
+                    setCropSize({
+                      ...cropSize,
+                      width: value === "" ? 50 : parseInt(value) || 0,
+                    });
+                  }}
                 />
               </Box>
               <Box width={150}>
-                <Typography id="height-slider" gutterBottom>
+                {/* <Typography id="height-slider" gutterBottom>
                   Visina oblasti
-                </Typography>
-                <Slider
+                </Typography> */}
+                {/* <Slider
                   aria-labelledby="height-slider"
                   min={50}
                   max={400}
@@ -145,12 +192,24 @@ const ImageEditorComponent = ({
                       height: height,
                     })
                   }
+                /> */}
+                <InputNumber
+                  label="Visina oblasti"
+                  value={cropSize.height}
+                  onChange={(e) => {
+                    const value = e.target.value.trim();
+                    console.log("value height::", value)
+                    setCropSize({
+                      ...cropSize,
+                      height: value === "" ? 50 : parseInt(value) || 0,
+                    });
+                  }}
                 />
               </Box>
-              <FormControlLabel
+              {/* <FormControlLabel
                 control={<Switch checked={roundCrop} onChange={(event) => setRoundCrop(event.target.checked)} inputProps={{ "aria-label": "controlled" }} />}
                 label="Okrugla oblast"
-              />
+              /> */}
             </Stack>
           </Grid>
         )}
@@ -169,7 +228,7 @@ const ImageEditorComponent = ({
             </Button>
           </Stack>
         </Grid>
-      </Grid>
+      </Grid >
     </>
   );
 };

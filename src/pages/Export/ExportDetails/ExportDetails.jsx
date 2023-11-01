@@ -58,7 +58,6 @@ const ExportDetails = () => {
     api.post(apiPath, { ...data, file: file.base_64 })
       .then((response) => {
         setData(response?.payload);
-        console.log("dataaa", data)
         if (oldId === null) {
           let tId = response?.payload?.id;
           navigate(`/import/${tId}`, { replace: true });

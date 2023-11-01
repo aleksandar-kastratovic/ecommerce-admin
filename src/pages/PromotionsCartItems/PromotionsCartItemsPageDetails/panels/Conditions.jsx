@@ -94,7 +94,7 @@ const Conditions = ({ campaignId }) => {
               }
             }
           } else {
-            console.log('Not defined type for component.');
+            ('Not defined type for component.');
             return null;
           }
         })}

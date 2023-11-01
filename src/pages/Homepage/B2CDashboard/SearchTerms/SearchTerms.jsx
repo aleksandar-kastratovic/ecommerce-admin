@@ -11,6 +11,7 @@ import Box from '@mui/material/Box';
 import AuthContext from "../../../../store/auth-contex";
 import SearchTermsLatest from "./SearchTermsLatest";
 import SearchTermsTop from "./SearchTermsTop";
+import Skeleton from "@mui/material/Skeleton";
 
 const CustomTabPanel = ({ children, value, index, ...other }) => {
   return (
@@ -22,7 +23,7 @@ const CustomTabPanel = ({ children, value, index, ...other }) => {
       {...other}
     >
       {value === index && (
-        <Box sx={{ overflowX: "auto" }}>
+        <Box component={"div"} sx={{ overflowX: "auto" }}>
           <Typography>{children}</Typography>
         </Box>
       )}
@@ -46,8 +47,8 @@ const SearchTerms = () => {
 
   const [value, setValue] = useState(0);
 
-  const { data: sTermsLatest } = useQuery(["searchTermsLatest"], () => api.get(`${searchTermsLatest}`).then((response) => response?.payload));
-  const { data: sTermsTop } = useQuery(["searchTermsTop"], () => api.get(`${searchTermsTop}`).then((response) => response?.payload));
+  const { data: sTermsLatest, isLoading: isLoadingStermsLatest } = useQuery(["searchTermsLatest"], () => api.get(`${searchTermsLatest}`).then((response) => response?.payload));
+  const { data: sTermsTop, isLoading: isLoadingStermsTop } = useQuery(["searchTermsTop"], () => api.get(`${searchTermsTop}`).then((response) => response?.payload));
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -58,7 +59,7 @@ const SearchTerms = () => {
     border: "none",
     borderRadius: "0.25rem",
     minHeight: "0",
-    fontSize: "0.9rem",
+    fontSize: "0.8rem",
     "&.Mui-selected": { backgroundColor: "var(--theme)", color: "var(--white)" },
   };
 
@@ -83,7 +84,7 @@ const SearchTerms = () => {
         children={
           <>
             <CardHeader
-              title={<Typography variant="h6" sx={{ color: "var(--text-color)" }}>Pretraga</Typography>}
+              title={<Typography variant="h6" sx={{ color: "var(--text-color)", backgroundColor: "var(--main-bg-color)", padding: "0.5rem 1rem", borderRadius: "0.4rem", lineHeight: "1", fontSize: "1rem" }}>Pretraga</Typography>}
             />
             <CardContent>
               <Box sx={{ width: "100%" }}>
@@ -106,10 +107,26 @@ const SearchTerms = () => {
                   </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                  {sTermsLatest?.length > 0 ? <SearchTermsLatest sTermsLatest={sTermsLatest} /> : <Typography variant="body2" sx={{ color: "var(--text-color)", fontSize: "0.875rem", marginTop: "2rem" }}>Trenutno nema podataka za prikaz.</Typography>}
+                  {isLoadingStermsLatest ? (
+                    <>
+                      <Skeleton variant="rounded" sx={{ marginBottom: "0.5rem" }} />
+                      <Skeleton variant="rounded" sx={{ marginBottom: "0.5rem" }} />
+                      <Skeleton variant="rounded" sx={{ marginBottom: "0.5rem" }} />
+                    </>
+                  ) : (
+                    sTermsLatest?.length > 0 ? <SearchTermsLatest sTermsLatest={sTermsLatest} /> : <Typography variant="body2" sx={{ color: "var(--text-color)", fontSize: "0.875rem", marginTop: "2rem" }}>Trenutno nema podataka za prikaz.</Typography>
+                  )}
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
-                  {sTermsTop?.length > 0 ? <SearchTermsTop sTermsTop={sTermsTop} /> : <Typography variant="body2" sx={{ color: "var(--text-color)", fontSize: "0.875rem", marginTop: "2rem" }}>Trenutno nema podataka za prikaz.</Typography>}
+                  {isLoadingStermsTop ? (
+                    <>
+                      <Skeleton variant="rounded" sx={{ marginBottom: "0.5rem" }} />
+                      <Skeleton variant="rounded" sx={{ marginBottom: "0.5rem" }} />
+                      <Skeleton variant="rounded" sx={{ marginBottom: "0.5rem" }} />
+                    </>
+                  ) : (
+                    sTermsTop?.length > 0 ? <SearchTermsTop sTermsTop={sTermsTop} /> : <Typography variant="body2" sx={{ color: "var(--text-color)", fontSize: "0.875rem", marginTop: "2rem" }}>Trenutno nema podataka za prikaz.</Typography>
+                  )}
                 </CustomTabPanel>
               </Box>
             </CardContent>
