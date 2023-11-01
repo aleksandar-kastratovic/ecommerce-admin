@@ -20,8 +20,12 @@ import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
 import TextField from "@mui/material/TextField";
 import CheckIcon from "@mui/icons-material/Check";
-
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import styles from "./ImageDialogFullPage.module.scss";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import { set } from "lodash";
 
 const ImageDialogFullPage = ({
   openFullPageDialog,
@@ -36,6 +40,7 @@ const ImageDialogFullPage = ({
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
+  const [bttnText, setBttnText] = useState("Kopirajte link");
 
   const handleCloseEditMode = () => {
     setEditMode(false);
@@ -67,6 +72,7 @@ const ImageDialogFullPage = ({
       alt: openFullPageDialog.alt,
       size: openFullPageDialog.size,
       type: openFullPageDialog.type,
+      path: openFullPageDialog.path,
       name: imageName,
       src: base64Image,
     };
@@ -88,6 +94,20 @@ const ImageDialogFullPage = ({
     // in this state is everything you need for POST API
     // but please keep in mind to use state from parent component
     setImageList(newState);
+  };
+
+  const copyCode = () => {
+    navigator.clipboard
+      .writeText(openFullPageDialog?.path)
+      .then(() => {
+        setBttnText("Link je kopiran");
+        setTimeout(() => {
+          setBttnText("Kopirajte link");
+        }, 3000);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
   };
 
   return (
@@ -144,6 +164,21 @@ const ImageDialogFullPage = ({
                       <TextField fullWidth type="text" disabled label="Alt slike" value={openFullPageDialog?.alt} variant="outlined" />
                       <TextField fullWidth type="text" disabled label="Velicina slike" value={openFullPageDialog?.size} variant="outlined" />
                       <TextField fullWidth type="text" disabled label="Tip slike" value={openFullPageDialog?.type} variant="outlined" />
+                      <TextField fullWidth type="text" disabled label="Link slike" value={openFullPageDialog?.path} variant="outlined" InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            <IconButton
+                              onClick={() => {
+                                copyCode()
+                              }}
+                            >
+                              <Tooltip title={bttnText} placement="top" arrow>
+                                <ContentCopyIcon sx={{ color: "rgba(0, 0, 0, 0.38)" }} />
+                              </Tooltip>
+                            </IconButton>
+                          </InputAdornment>
+                        )
+                      }} />
                     </form>
                   </Grid>
                 </Grid>
