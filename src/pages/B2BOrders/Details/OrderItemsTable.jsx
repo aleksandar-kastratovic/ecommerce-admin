@@ -8,6 +8,7 @@ import TableRow from "@mui/material/TableRow";
 import { currencyFormat } from "../../../helpers/functions";
 
 import styles from "./B2BOrdersDetails.module.scss";
+import Icon from "@mui/material/Icon";
 
 
 const OrderItemsTable = ({ items, fields }) => {
