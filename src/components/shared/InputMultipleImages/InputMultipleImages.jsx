@@ -45,6 +45,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => { }, ac
     name: "",
     size: "",
     type: "",
+    path: "",
     position: 0,
   };
 
@@ -93,7 +94,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => { }, ac
   };
 
   //MODAL OPEN HANDLER
-  const handleModalOpen = (e, src, alt, name, size, type, id, position) => {
+  const handleModalOpen = (e, src, alt, name, size, type, id, position, path) => {
     setOpenFullPageDialog({
       show: true,
       id: id,
@@ -102,6 +103,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => { }, ac
       name: name,
       size: size,
       type: type,
+      path: path,
       position: position,
     });
   };
@@ -141,6 +143,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => { }, ac
       size: selectedFile.size,
       type: selectedFile.type,
       name: selectedFile.name,
+      path: selectedFile.path,
       src: result,
     };
 
@@ -162,6 +165,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => { }, ac
       alt: selectedFile.name,
       size: selectedFile.size,
       type: selectedFile.type,
+      path: selectedFile.path,
     });
   };
 

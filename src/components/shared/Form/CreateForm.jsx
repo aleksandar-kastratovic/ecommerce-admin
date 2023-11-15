@@ -115,10 +115,31 @@ const CreateForm = ({
           );
           break;
         case "checkbox":
-          formItem = <InputCheckbox styleCheckbox={styleCheckbox} name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "checkbox")} disabled={disabled} label={item.field_name} autoFocus={autoFocus} />;
+          formItem = (
+            <InputCheckbox
+              styleCheckbox={styleCheckbox}
+              name={item.prop_name}
+              value={Boolean(Number(value))}
+              onChange={(e) => onChangeHandler(e, "checkbox")}
+              disabled={disabled}
+              label={item.field_name}
+              autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
+            />
+          )
           break;
         case "radio":
-          formItem = <InputRadio name={item.prop_name} value={Boolean(Number(value))} onChange={(e) => onChangeHandler(e, "radio")} disabled={disabled} label={item.field_name} autoFocus={autoFocus} />;
+          formItem = (
+            <InputRadio
+              name={item.prop_name}
+              value={Boolean(Number(value))}
+              onChange={(e) => onChangeHandler(e, "radio")}
+              disabled={disabled}
+              label={item.field_name}
+              autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
+            />
+          )
           break;
         case "switch":
           formItem = (
@@ -131,6 +152,7 @@ const CreateForm = ({
               error={error}
               description={item.description}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;
@@ -151,6 +173,7 @@ const CreateForm = ({
               queryString={item.queryString ?? queryString}
               optionsIsEmpty={optionsIsEmpty}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;
@@ -171,6 +194,7 @@ const CreateForm = ({
               queryString={item?.queryString ?? queryString}
               optionsIsEmpty={optionsIsEmpty}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;
@@ -191,6 +215,7 @@ const CreateForm = ({
               queryString={queryString}
               optionsIsEmpty={optionsIsEmpty}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;
@@ -211,6 +236,7 @@ const CreateForm = ({
               queryString={queryString}
               optionsIsEmpty={optionsIsEmpty}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;
@@ -226,6 +252,7 @@ const CreateForm = ({
               onChange={onChangeHandler}
               disabled={disabled}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;
@@ -241,6 +268,7 @@ const CreateForm = ({
               onChange={onChangeHandler}
               disabled={disabled}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;
@@ -256,6 +284,7 @@ const CreateForm = ({
               onChange={onChangeHandler}
               disabled={disabled}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;
@@ -274,7 +303,14 @@ const CreateForm = ({
           );
           break;
         case "multiple_files": //TODO
-          formItem = <InputMultipleFiles list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} autoFocus={autoFocus} />;
+          formItem = (
+            <InputMultipleFiles
+              list={Array.isArray(value) ? value : []}
+              name={item.prop_name}
+              onChangeHandler={onChangeHandler}
+              autoFocus={autoFocus}
+            />
+          )
           break;
         case "file_button":
           formItem = (
@@ -304,6 +340,7 @@ const CreateForm = ({
               onChange={onChangeHandler}
               disabled={disabled}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;
@@ -319,6 +356,7 @@ const CreateForm = ({
               onChange={onChangeHandler}
               disabled={disabled}
               autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
             />
           );
           break;
@@ -351,7 +389,7 @@ const CreateForm = ({
               value={value}
               description={item.description}
               selectedFile={selectedFile}
-            // allowedFileTypes={allowedFileTypes}
+              uiProp={item?.ui_prop}
             />
           )
           break;
@@ -367,6 +405,7 @@ const CreateForm = ({
               value={value}
               description={item.description}
               selectedFile={selectedFile}
+              uiProp={item?.ui_prop}
             />
           )
           break;
