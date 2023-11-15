@@ -320,3 +320,9 @@ pipelines:
           <<: *execute
           name: Croonus
           deployment: croonus
+
+    prod-asholding:
+      - step:
+          <<: *execute
+          name: ASHolding
+          deployment: asholding
