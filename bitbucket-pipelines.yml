@@ -314,3 +314,9 @@ pipelines:
           <<: *execute
           name: Janagio
           deployment: janagio
+
+    prod-croonus:
+      - step:
+          <<: *execute
+          name: Croonus
+          deployment: croonus
