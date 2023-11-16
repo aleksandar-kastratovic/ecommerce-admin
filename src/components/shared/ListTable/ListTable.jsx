@@ -22,13 +22,15 @@ const ListTable = ({ fields = [], listData = [], isLoading = false, onPageChange
     setOrderBy(property);
   };
 
-  useEffect(() => {
-    if (tableContainerRef.current) {
-      tableContainerRef.current.scrollTop = 0;
-    }
-  }, [pagination]);
+  // useEffect(() => {
+  //   if (tableContainerRef.current) {
+  //     const rowHeight = 48;
+  //     tableContainerRef.current.scrollTop = 0;
+  //   }
+  // }, [pagination]);
 
   // Show the table
+
   return (
     <>
       <TableContainer ref={tableContainerRef} className={styles.wrapper}>

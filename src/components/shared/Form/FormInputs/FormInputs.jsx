@@ -11,7 +11,7 @@ import Radio from "@mui/material/Radio";
 import Select from "@mui/material/Select";
 import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import Chip from "@mui/material/Chip";
 import Input, { inputClasses } from '@mui/material/Input';
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -24,6 +24,8 @@ import ButtonBase from "@mui/material/ButtonBase";
 import { blobToData } from "../../../../helpers/data";
 import { toast } from "react-toastify";
 import AuthContext from "../../../../store/auth-contex";
+import Box from "@mui/material/Box";
+import CloseIcon from "@mui/icons-material/Close";
 
 const generateBootstrapClasses = (columns) => {
   if (columns) {
@@ -296,6 +298,9 @@ export const InputSelect = ({
   useEffect(() => {
     let isMounted = true;
     let path = usePropName ? `${fillFromApi}/${name}?${queryString}` : `${fillFromApi}?${queryString}`;
+    console.log("create form path", path)
+
+    console.log("queryString", queryString)
     const fillDdl = async () => {
       await api
         .get(path)
@@ -468,6 +473,115 @@ export const AutocompleteInput = ({
           ".MuiInputBase-root": { padding: "0.23rem !important" }
         }}
         renderInput={(params) => <TextField {...params} />}
+      />
+      <FormHelperText>{error ? error : description}</FormHelperText>
+    </InputWrapper>
+  );
+};
+
+
+export const AutocompleteInputFreeSolo = ({
+  label,
+  required,
+  disabled,
+  error = null,
+  name,
+  value,
+  margin = "dense",
+  onChange = () => { },
+  description,
+  fillFromApi,
+  usePropName,
+  options,
+  queryString = "",
+  optionsIsEmpty = () => { },
+  uiProp
+}) => {
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
+  const [opt, setOpt] = useState([]);
+  const [myValue, setMyValue] = useState(null);
+  const filter = createFilterOptions();
+
+  useEffect(() => {
+    let isMounted = true;
+    let path = usePropName ? `${fillFromApi}/${name}?${queryString}` : `${fillFromApi}?${queryString}`;
+    const fillDdl = async () => {
+      await api
+        .get(path, false)
+        .then((response) => {
+          if (isMounted) {
+            const { payload } = response;
+            setOpt(payload);
+          }
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
+    };
+
+    if (fillFromApi) {
+      fillDdl();
+    }
+
+    return () => {
+      isMounted = false;
+    };
+  }, [fillFromApi, queryString]);
+
+  const inputClasses = generateBootstrapClasses(uiProp?.columns);
+
+  return (
+    <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
+      <Autocomplete
+        disabled={disabled}
+        value={value}
+        onChange={(event, newInputValue) => {
+          let newIval = newInputValue ? newInputValue : "";
+          setMyValue(newIval);
+          if (opt.length > 0) {
+            let selectedOption = opt.find((o) => o.name === newInputValue);
+            if (selectedOption) {
+              newIval = selectedOption.id;
+            }
+          }
+          onChange(name, newIval);
+        }}
+        options={options?.length > 0 ? options : opt}
+        renderOption={(props, option) => <li {...props}>{option.name}</li>}
+        filterOptions={(options, params) => {
+          const filtered = filter(options, params);
+          const { inputValue } = params;
+          // Suggest the creation of a new value
+          const isExisting = options.some((option) => inputValue === option.name);
+          if (inputValue !== "" && !isExisting) {
+            filtered.push({
+              inputValue,
+              name: `Dodaj: "${inputValue}"`,
+            });
+          }
+          return filtered;
+        }}
+        getOptionLabel={(option) => {
+          // Value selected with enter, right from the input
+          if (typeof option === "string") {
+            return option;
+          }
+          // Add "xxx" option created dynamically
+          if (option.inputValue) {
+            return option.inputValue;
+          }
+          // Regular option
+          return option.name;
+        }}
+        sx={{
+          "& legend": { display: "none" },
+          "& fieldset": { top: 0 },
+          ".MuiInputBase-root": { padding: "0 !important" },
+          ".MuiOutlinedInput-root .MuiAutocomplete-input": { padding: "0.7rem !important", fontSize: "0.875rem" },
+        }}
+        renderInput={(params) => <TextField {...params} />}
+        freeSolo={true}
       />
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>
@@ -986,17 +1100,18 @@ export const ImportPicker = ({ label, required, disabled, margin, error = null, 
 }
 
 
-export const FilePicker = ({ label, required, disabled, margin, error = null, onFilePicked, description, selectedFile, uiProp }) => {
+export const FilePicker = ({ label, required, disabled, margin, error = null, onFilePicked = () => { }, description, selectedFile, uiProp, multipleFileSelection = false, handleRemoveFile = () => { } }) => {
   const ref = useRef();
   const [attachment, setAttachment] = useState(null);
 
   const handleChange = (event) => {
     const files = Array.from(event.target.files);
     const [file] = files;
-
     const fileExtension = file.name.split('.').pop().toLowerCase();
 
-    if (fileExtension !== 'txt' && fileExtension !== 'pdf' && fileExtension !== 'png' && fileExtension !== 'jpg' && fileExtension !== 'jpeg') {
+    if (
+      fileExtension !== 'txt' && fileExtension !== 'pdf' && fileExtension !== 'png' && fileExtension !== 'jpg' && fileExtension !== 'jpeg' && fileExtension !== "mp4" && fileExtension !== "mov" && fileExtension !== "avi" && fileExtension !== "wmv" && fileExtension !== "flv" && fileExtension !== "mkv" && fileExtension !== "webm" && fileExtension !== "txt" && fileExtension !== "pdf"
+    ) {
       toast.error('Pogrešan tip fajla.');
       return;
     }
@@ -1008,7 +1123,58 @@ export const FilePicker = ({ label, required, disabled, margin, error = null, on
       }
       onFilePicked(obj);
     });
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const base64 = e.target.result;
+      const obj = {
+        base_64: base64,
+        name: file?.name,
+      };
+      onFilePicked(obj);
+    };
+    reader.readAsDataURL(file);
     setAttachment(file);
+  };
+
+  const renderSelectedFiles = () => {
+    if (multipleFileSelection) {
+      return (
+        selectedFile && (
+          <span style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial", display: "flex" }}>
+            Izabrani fajlovi:
+            {selectedFile.length > 0
+              ? selectedFile.map((file, index) => {
+                return (
+                  <Box key={file.name} sx={{ marginLeft: index === 0 ? "0.3rem" : "0" }}>
+                    {index > 0 && ", "}
+                    {file.name}
+                  </Box>
+                );
+              })
+              : " Kliknite ovde kako biste odabrali fajl."}
+          </span>
+        )
+      );
+    } else {
+      return selectedFile ? (
+        <span style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Izabrani fajl: {selectedFile.name}</span>
+      ) : (
+        <span style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Kliknite ovde kako biste odabrali fajl.</span>
+      );
+    }
+  };
+
+  const renderRemoveFilesList = () => {
+    if (multipleFileSelection) {
+      return selectedFile?.map((item, i) => (
+        <span span key={item?.name} style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial", display: "flex", alignItems: "center", marginRight: "0.8rem" }}>
+          {item?.name}
+          < CloseIcon sx={{ fontSize: "0.9rem", cursor: "pointer", marginLeft: "0.2rem" }
+          } onClick={() => handleRemoveFile(item)} />
+        </span>
+      ));
+    }
   };
 
   const inputClasses = generateBootstrapClasses(uiProp?.columns);
@@ -1026,20 +1192,10 @@ export const FilePicker = ({ label, required, disabled, margin, error = null, on
           paddingLeft: "0.875rem",
         }}
       >
-        {selectedFile ? (
-          <span style={{ fontSize: "0.875rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Izabrani fajl: {selectedFile.name}</span>
-        ) : (
-          <span style={{ fontSize: "0.875rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Kliknite ovde kako biste odabrali fajl.</span>
-        )}
-        <Input
-          type="file"
-          onChange={handleChange}
-          inputRef={ref}
-          disabled={disabled}
-          sx={{ display: "none" }}
-          error={error !== null}
-        />
+        <Input type="file" onChange={handleChange} inputRef={ref} disabled={disabled} error={error !== null} sx={{ display: "none" }} multiple />
+        {renderSelectedFiles()}
       </ButtonBase>
+      <Box sx={{ display: "flex" }}>{renderRemoveFilesList()}</Box>
       <FormHelperText>{error ? error : description}</FormHelperText>
     </InputWrapper>
   )

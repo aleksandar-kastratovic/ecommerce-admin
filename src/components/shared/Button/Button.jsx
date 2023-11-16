@@ -1,6 +1,7 @@
 import { Button as MaterialButton } from "@mui/material";
 import scss from "./Button.module.scss";
 import Icon from "@mui/material/Icon";
+import { ClassNames } from "@emotion/react";
 
 /**
  * A standardized button with an optional icon.
@@ -17,12 +18,12 @@ import Icon from "@mui/material/Icon";
  * @return {JSX.Element}
  * @constructor
  */
-const Button = ({ icon, label, onClick, type = "button", variant = "outlined", disabled = false, sx = {}, href }) => {
+const Button = ({ icon, label, onClick, type = "button", variant = "outlined", disabled = false, sx = {}, href, className }) => {
   return (
-    <MaterialButton onClick={onClick} variant={variant} className={scss.button} type={type} disabled={disabled} sx={sx} href={href}>
+    <MaterialButton onClick={onClick} variant={variant} className={`${scss.button}`} type={type} disabled={disabled} sx={sx} href={href} >
       {icon && <Icon className={scss.icon}>{icon}</Icon>}
       {label}
-    </MaterialButton>
+    </MaterialButton >
   );
 };
 

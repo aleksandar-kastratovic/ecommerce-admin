@@ -12,7 +12,7 @@ import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
 
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), onCloseModalButton = () => { }, cancelButton = false, submitButton = true, closeButton = false, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked, selectedFile, styleButtonSubmit, styleWrapperButtons }) => {
+const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), onCloseModalButton = () => { }, cancelButton = false, submitButton = true, closeButton = false, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked = () => { }, selectedFile, styleButtonSubmit, styleWrapperButtons }) => {
   const navigate = useNavigate();
 
   const [data, setData] = useState(initialData ?? {});

@@ -222,6 +222,12 @@ form label {
     }
 }
 
+/*---------------------- SLIDER -----------------*/
+.image-gallery-left-nav .image-gallery-svg,
+.image-gallery-right-nav .image-gallery-svg {
+    height: 50px;
+}
+
 /*---------------- COMMON STYLES START -----------------*/
 .accordion-button:not(.collapsed)::after {
     background-image: $arrow-black;

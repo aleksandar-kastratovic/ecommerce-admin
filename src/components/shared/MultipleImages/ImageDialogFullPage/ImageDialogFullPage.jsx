@@ -25,7 +25,7 @@ import styles from "./ImageDialogFullPage.module.scss";
 import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
-import { set } from "lodash";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const ImageDialogFullPage = ({
   openFullPageDialog,
@@ -96,19 +96,19 @@ const ImageDialogFullPage = ({
     setImageList(newState);
   };
 
-  const copyCode = () => {
-    navigator.clipboard
-      .writeText(openFullPageDialog?.path)
-      .then(() => {
-        setBttnText("Link je kopiran");
-        setTimeout(() => {
-          setBttnText("Kopirajte link");
-        }, 3000);
-      })
-      .catch((err) => {
-        console.log(err.message);
-      });
-  };
+  // const copyCode = () => {
+  //   navigator.clipboard
+  //     .writeText(openFullPageDialog?.path)
+  //     .then(() => {
+  //       setBttnText("Link je kopiran");
+  //       setTimeout(() => {
+  //         setBttnText("Kopirajte link");
+  //       }, 3000);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.message);
+  //     });
+  // };
 
   return (
     <Dialog open={openFullPageDialog.show} fullScreen aria-labelledby="delete-dialog-title" aria-describedby="delete-dialog-description">
@@ -167,14 +167,20 @@ const ImageDialogFullPage = ({
                       <TextField fullWidth type="text" disabled label="Link slike" value={openFullPageDialog?.path} variant="outlined" InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
-                            <IconButton
-                              onClick={() => {
-                                copyCode()
-                              }}
-                            >
-                              <Tooltip title={bttnText} placement="top" arrow>
-                                <ContentCopyIcon sx={{ color: "rgba(0, 0, 0, 0.38)" }} />
-                              </Tooltip>
+                            <IconButton>
+                              <CopyToClipboard
+                                text={openFullPageDialog?.path}
+                                onCopy={() => {
+                                  setBttnText("Link je kopiran");
+                                  setTimeout(() => {
+                                    setBttnText("Kopirajte link");
+                                  }, 3000);
+                                }}
+                              >
+                                <Tooltip title={bttnText} placement="top" arrow>
+                                  <ContentCopyIcon sx={{ color: "rgba(0, 0, 0, 0.38)" }} />
+                                </Tooltip>
+                              </CopyToClipboard>
                             </IconButton>
                           </InputAdornment>
                         )
@@ -211,7 +217,7 @@ const ImageDialogFullPage = ({
           </Stack>
         )}
       </DialogActions>
-    </Dialog>
+    </Dialog >
   );
 };
 
