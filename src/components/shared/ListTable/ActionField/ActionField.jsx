@@ -65,20 +65,37 @@ const ActionField = ({ fieldType, systemRequired, handleOnClickActions, customAc
     <div className={scss.wrapper}>
       <div className={scss.wrapper}>
         {Object.entries(actions()).map((item) => {
-
-          return (
-            item[1]?.title ? (
-              <Tooltip key={item[0]} title={item[1].title} placement="top" arrow>
-                <span key={item[0]} className={`${scss.icon}`} onClick={handleOnClickActions(rowData.id, item[1].type, rowData, item[1])}>
+          let haveDisplayCondition = item[1].displayCondition !== undefined ? true : false;
+          if (haveDisplayCondition) {
+            let visibility = item[1]?.displayCondition.fnc(rowData);
+            if (visibility) {
+              return (
+                item[1]?.title ? (
+                  <Tooltip key={item[0]} title={item[1].title} placement="top" arrow>
+                    <span key={item[0]} className={`${scss.icon}`} onClick={handleOnClickActions(rowData.id, item[1].type, rowData, item[1])}>
+                      <Icon className={item[1].icon} >{item[1].icon} </Icon>
+                    </span>
+                  </Tooltip>
+                ) : (<span key={item[0]} className={`${scss.icon} `} onClick={handleOnClickActions(rowData.id, item[1].type, rowData, item[1])}>
                   <Icon className={item[1].icon} >{item[1].icon} </Icon>
                 </span>
-              </Tooltip>
-            ) : (
-              <span key={item[0]} className={`${scss.icon} `} onClick={handleOnClickActions(rowData.id, item[1].type, rowData, item[1])}>
+                )
+              );
+            }
+          } else {
+            return (
+              item[1]?.title ? (
+                <Tooltip key={item[0]} title={item[1].title} placement="top" arrow>
+                  <span key={item[0]} className={`${scss.icon}`} onClick={handleOnClickActions(rowData.id, item[1].type, rowData, item[1])}>
+                    <Icon className={item[1].icon} >{item[1].icon} </Icon>
+                  </span>
+                </Tooltip>
+              ) : (<span key={item[0]} className={`${scss.icon} `} onClick={handleOnClickActions(rowData.id, item[1].type, rowData, item[1])}>
                 <Icon className={item[1].icon} >{item[1].icon} </Icon>
               </span>
-            )
-          );
+              )
+            );
+          }
         })}
       </div>
 

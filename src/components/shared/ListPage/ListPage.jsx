@@ -38,7 +38,55 @@ import { queryKeys } from "../../../helpers/const";
  *
  * @constructor
  */
-const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, columnFields, showDatePicker, modifyItems, additionalButtons = [], showNewButton = true, actionNewButton, filters = {}, previewColumn = "id", customActions = {}, showAddButtonTableRow, tooltipAddButtonTableRow, addFieldLabel = "", showAddButton = false, initialData = {}, modalFormChildren, deleteNewButton, deleteModalChildren, listPageId, validateData, onNewButtonPress = () => { }, prepareInitialData, withoutSetterFunction, submitButtonForm, clearButton, closeButtonModalForm, customTitleModalForm, modalObject, customTitleDataNameForEditModal, selectableCountryTown, useColumnFields = false, useModalGalleryInjection = false, savePrapareDataHandler = null, onModalCancel = () => { }, onClickFieldBehavior, customFields = null, customNewButtonPath, onFilePicked, selectedFile }) => {
+const ListPage = ({
+  apiUrl,
+  deleteUrl,
+  editUrl,
+  editUrlQueryString = [],
+  title, columnFields,
+  showDatePicker,
+  modifyItems,
+  additionalButtons = [],
+  showNewButton = true,
+  actionNewButton,
+  filters = {},
+  filterFields,
+  previewColumn = "id",
+  customActions = {},
+  showAddButtonTableRow,
+  tooltipAddButtonTableRow,
+  addFieldLabel = "",
+  showAddButton = false,
+  initialData = {},
+  modalFormChildren,
+  deleteNewButton,
+  deleteModalChildren,
+  listPageId,
+  validateData,
+  onNewButtonPress = () => { },
+  prepareInitialData,
+  withoutSetterFunction,
+  submitButtonForm,
+  clearButton,
+  closeButtonModalForm,
+  customTitleModalForm,
+  cancelButton,
+  modalObject,
+  customTitleDataNameForEditModal,
+  selectableCountryTown,
+  useColumnFields = false,
+  useModalGalleryInjection = false,
+  savePrapareDataHandler = null,
+  onModalCancel = () => { },
+  onClickFieldBehavior,
+  customFields = null,
+  customNewButtonPath,
+  onFilePicked,
+  selectedFile,
+  openModalGlobal = {},
+  onDismissModal = () => { },
+  listData = false
+}) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
 
@@ -73,12 +121,10 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
 
   // Load the data
   const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, openModal.show], () => api.list(apiUrl, { page, search, ...filters }));
-
   // Modify the data
   if (response?.payload && modifyItems) {
     response.payload.items = modifyItems(response.payload.items);
   }
-
 
   useEffect(() => {
     if (openDeleteDialog.mutate === 1) {
@@ -230,6 +276,8 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
    * based on data from ListPage!
    */
 
+  // When useColumnFields is set to true, the component will use the value of the columnFields prop to define the table columns. This means that the column fields will be taken directly from the columnFields prop. This is useful if you want full control over the column definitions and want to manually configure how the data will be displayed in the table.
+  // When useColumnFields is set to false (or not defined), the component will use fieldsColumns to define the table columns. This approach allows for dynamic changes to the table columns during runtime. This is useful when you want users to have the ability to choose which columns they want to see in the table or when you want to update columns based on some dynamic behavior or settings.
   const getFormFieldsForModal = () => {
     if (customFields) {
       return customFields.filter((field) => field.in_details);
@@ -281,13 +329,23 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
 
   }, [search, page]);
 
+
   return (
     <>
       <PageWrapper title={title} actions={actions}>
-        <ListTableToolbar searchValue={search} listPageId={listPageId} onColumnsChange={setFieldsColumns} fields={fieldsColumns} filters={filters} onSearch={handleSearch} showDatePicker={showDatePicker} />
+        <ListTableToolbar
+          searchValue={search}
+          listPageId={listPageId}
+          onColumnsChange={setFieldsColumns}
+          fields={fieldsColumns}
+          filters={filters}
+          filterFields={filterFields}
+          onSearch={handleSearch}
+          showDatePicker={showDatePicker}
+        />
         <ListTable
           fields={flatten(fieldsColumns).filter((field) => field.in_main_table)}
-          listData={response?.payload}
+          listData={listData ? listData : response?.payload}
           handleOnClickActions={handleOnClickActions}
           isLoading={isLoading}
           page={page}
@@ -321,7 +379,34 @@ const ListPage = ({ apiUrl, deleteUrl, editUrl, editUrlQueryString = [], title, 
 
       </PageWrapper >
 
-      <ModalForm validateData={validateData} children={modalFormChildren} selectedRowData={selectedRowData} anchor="right" openModal={openModal} setOpenModal={(modalObj) => { onModalCancel(); setOpenModal(modalObj) }} apiPathFormModal={editUrl} queryString={editUrlQueryString} formFields={getFormFieldsForModal()} initialData={initialData} sx={{ padding: "2rem" }} prepareInitialData={prepareInitialData} withoutSetterFunction={withoutSetterFunction} submitButton={submitButtonForm} clearButton={clearButton} closeButtonModalForm={closeButtonModalForm} customTitle={customTitleModalForm} modalObject={modalObject} customTitleDataNameForEdit={customTitleDataNameForEditModal} selectableCountryTown={selectableCountryTown} useModalGalleryInjection={useModalGalleryInjection} savePrapareDataHandler={savePrapareDataHandler} onFilePicked={onFilePicked} selectedFile={selectedFile} />
+      <ModalForm
+        onDismissModal={() => { onDismissModal() }}
+        cancelButton={cancelButton}
+        validateData={validateData}
+        children={modalFormChildren}
+        selectedRowData={selectedRowData}
+        anchor="right"
+        openModal={openModalGlobal?.id !== undefined ? openModalGlobal : openModal}
+        setOpenModal={(modalObj) => { onModalCancel(); setOpenModal(modalObj) }}
+        apiPathFormModal={editUrl}
+        queryString={editUrlQueryString}
+        formFields={getFormFieldsForModal()}
+        initialData={initialData}
+        sx={{ padding: "2rem" }}
+        prepareInitialData={prepareInitialData}
+        withoutSetterFunction={withoutSetterFunction}
+        submitButton={submitButtonForm}
+        clearButton={clearButton}
+        closeButtonModalForm={closeButtonModalForm}
+        customTitle={customTitleModalForm}
+        modalObject={modalObject}
+        customTitleDataNameForEdit={customTitleDataNameForEditModal}
+        selectableCountryTown={selectableCountryTown}
+        useModalGalleryInjection={useModalGalleryInjection}
+        savePrapareDataHandler={savePrapareDataHandler}
+        onFilePicked={onFilePicked}
+        selectedFile={selectedFile}
+      />
       <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
   );

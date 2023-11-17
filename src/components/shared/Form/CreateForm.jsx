@@ -18,10 +18,12 @@ import {
   AutocompleteInput,
   AutocompleteTagsFilled,
   ImportPicker,
-  FilePicker
+  FilePicker,
+  AutocompleteInputFreeSolo
 } from "./FormInputs/FormInputs";
 import FileButton from "../FileButton/FileButton";
 import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
+import Slider from "../Slider/Slider";
 
 const CreateForm = ({
   item = {},
@@ -38,7 +40,7 @@ const CreateForm = ({
   optionsIsEmpty = () => { },
   styleCheckbox,
   autoFocus,
-  onFilePicked,
+  onFilePicked = () => { },
   selectedFile,
   // allowedFileTypes,
 }) => {
@@ -180,6 +182,27 @@ const CreateForm = ({
         case "autocomplete":
           formItem = (
             <AutocompleteInput
+              label={item.field_name}
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
+              name={item.prop_name}
+              disabled={disabled}
+              error={error}
+              value={value}
+              options={item.options}
+              onChange={onChangeAutoHandler}
+              description={item.description}
+              fillFromApi={item.fillFromApi}
+              usePropName={item.usePropName}
+              queryString={item?.queryString ?? queryString}
+              optionsIsEmpty={optionsIsEmpty}
+              autoFocus={autoFocus}
+              uiProp={item?.ui_prop}
+            />
+          );
+          break;
+        case "autocomplete_free_solo":
+          formItem = (
+            <AutocompleteInputFreeSolo
               label={item.field_name}
               required={typeof item.required === "number" ? item.required === 1 : item.required}
               name={item.prop_name}
@@ -406,9 +429,17 @@ const CreateForm = ({
               description={item.description}
               selectedFile={selectedFile}
               uiProp={item?.ui_prop}
+              multipleFileSelection={item?.multipleFileSelection}
             />
           )
           break;
+        case "slider":
+          formItem = (
+            <Slider
+              label={item.field_name}
+              name={item.prop_name}
+            />
+          )
         default:
           formItem = null;
       }

@@ -81,6 +81,11 @@ import PromotionsRecommendedDetails from "../pages/Promotions/PromotionsRecommen
 import PromotionsCrossSellsDetails from "../pages/Promotions/PromotionsCrossSells/PromotionsCrossSellsDetails/PromotionsCrossSellsDetails";
 import PromotionsUpSellsDetails from "../pages/Promotions/PromotionsUpSells/PromotionsUpSellsDetails/PromotionsUpSellsDetails";
 
+import B2BReclamations from "../pages/B2BReclamations/B2BReclamations";
+import B2BReclamationsDetails from "../pages/B2BReclamations/B2BReclamationsDetails/B2BReclamationsDetails";
+// import B2CReclamations from "../pages/B2CReclamations/B2CReclamations";
+// import B2CReclamationsDetails from "../pages/B2CReclamations/B2CReclamationsDetails/B2CReclamationsDetails";
+
 /** The list of available screens. */
 const { PRODUCT, SALE, B2B, B2C, COMPANY_SETTINGS, SETTINGS } = MenuGroup;
 const screens = {
@@ -146,6 +151,7 @@ const screens = {
     B2B_NOTIFICATIONS: ["/b2b-notifications", "Notifikacije", IconList.notifications, B2B, Notifications],
     B2B_CONTACT_FORMS: ["/b2b-contact", "Kontakt forma", IconList.markunreadMailbox, B2B, B2BContactForm, [[":id", B2BContactFormDetails]]],
     B2B_STATIC_PAGES: ["/b2b-staticpages", "Statičke strane", IconList.autoStories, B2B, B2BStaticPages, [[":spid", B2BStaticPagesDetails]]],
+    RECLAMATIONS_B2B: ["/b2b-reclamations", "Reklamacije", IconList.receiptLong, B2B, B2BReclamations, [[":rid", B2BReclamationsDetails]]],
 
     B2C_NEWS: [
         "/b2c-news",
@@ -166,6 +172,7 @@ const screens = {
     B2C_EMPLOYEES: ["/b2c-employees", "Zaposleni", IconList.badge, B2C, B2CEmployees],
     B2C_WORKING_UNITS: ["/b2c-working-unit", "Radne jedinice", IconList.engineering, B2C, B2CWorkingUnit],
     B2C_CAREER: ["/b2c-career", "Karijera", IconList.notes, B2C, B2CCareer],
+    // RECLAMATIONS_B2C: ["/b2c-reclamations", "Reklamacije", IconList.receiptLong, B2C, B2CReclamations, [[":rid", B2CReclamationsDetails]]],
 
     ROLES: ["/roles", "Uloge", IconList.reduceCapacity, COMPANY_SETTINGS, RolesListPage, [[":roleId", RolesDetailsPage]]],
     USERS: ["/users", "Korisnici", IconList.group, COMPANY_SETTINGS, Users],

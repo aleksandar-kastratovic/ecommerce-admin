@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
@@ -13,11 +13,13 @@ import IconList from "../../../../helpers/icons";
 import Box from "@mui/system/Box";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 // https://github.com/atlassian/react-beautiful-dnd
 
 const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { }, handleDeleteImage = () => { }, handleReorder = () => { } }) => {
   const [bttnText, setBttnText] = useState("Kopirajte link");
+  const myButtonCopyRef = useRef(null);
   const onDragEnd = ({ destination, source }) => {
     // dropped outside the list
     if (!destination) return;
@@ -88,21 +90,20 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { 
                         </IconButton>
                         <IconButton
                           sx={{ color: "#ffff", gridArea: "2 / 2 / auto / span 1" }}
-                          onClick={() => {
-                            navigator.clipboard.writeText(item?.path)
-                              .then(() => {
-                                setBttnText("Link je kopiran");
-                                setTimeout(() => {
-                                  setBttnText("Kopirajte link");
-                                }, 3000);
-                              })
-                              .catch((error) => {
-                                console.error("Greška pri kopiranju u međuspremnik:", error);
-                              });
-                          }}>
-                          <Tooltip title={bttnText} placement="bottom" arrow>
-                            <ContentCopyIcon sx={{ fontSize: "1.3rem" }} />
-                          </Tooltip>
+                        >
+                          <CopyToClipboard
+                            text={item?.path}
+                            onCopy={() => {
+                              setBttnText("Link je kopiran");
+                              setTimeout(() => {
+                                setBttnText("Kopirajte link");
+                              }, 3000);
+                            }}
+                          >
+                            <Tooltip title={bttnText} placement="bottom" arrow>
+                              <ContentCopyIcon sx={{ fontSize: "1.3rem" }} />
+                            </Tooltip>
+                          </CopyToClipboard>
                         </IconButton>
                       </Stack>
                     </Box>

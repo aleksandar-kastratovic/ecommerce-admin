@@ -9,11 +9,14 @@ import scss from "./Buttons.module.scss"
  * @return {JSX.Element}
  * @constructor
  */
-const Buttons = ({ children, styleWrapperButtons }) => (
+const Buttons = ({ children, styleWrapperButtons, className }) => {
 
-  <Box className={scss.wrapper} sx={styleWrapperButtons}>
-    {children}
-  </Box>
-)
+  const combinedStyles = `${scss.wrapper} ${className}`;
+  return (
+    <Box className={combinedStyles} sx={styleWrapperButtons} >
+      {children}
+    </Box>
+  )
+}
 
 export default Buttons
