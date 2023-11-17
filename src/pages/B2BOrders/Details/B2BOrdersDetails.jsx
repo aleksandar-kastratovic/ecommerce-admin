@@ -104,7 +104,7 @@ const B2BOrdersDetails = () => {
   }
   return (
     <PageWrapper
-      title={`Porudžbina: ${orderData?.slug}`}
+      title={`Narudžbenica: ${orderData?.slug}`}
       back={() => {
         navigate(-1);
       }}
@@ -123,7 +123,7 @@ const B2BOrdersDetails = () => {
 
         <OrderSection title="Podaci partnera:" className={styles.orderSection50}>
           <Box className={styles.orderDataSection}>
-            <Box className={styles.orderDataDisplay}>
+            <Box className={styles.orderSection100}>
               <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Kompanija:</span>
                 {billingData?.company_name}
@@ -138,106 +138,59 @@ const B2BOrdersDetails = () => {
               </p>
               <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Adresa:</span>
-                {addressTemplate(billingData?.address, billingData?.object_number, billingData?.floor, billingData?.apartment_number)}
-              </p>
-              <p style={{ fontSize: "0.875rem" }}>
-                <span className={styles.dataLabel}>Grad:</span>
-                {billingData?.town_display_name ?? billingData?.town_name}
-              </p>
-            </Box>
-            <Box className={styles.orderDataDisplay}>
-              <p style={{ fontSize: "0.875rem" }}>
-                <span className={styles.dataLabel}>Poštanski broj:</span>
-                {billingData?.zip_code}
-              </p>
-              <p style={{ fontSize: "0.875rem" }}>
-                <span className={styles.dataLabel}>Država:</span>
-                {billingData?.country_name}
+                {addressTemplate(billingData?.address, billingData?.object_number, billingData?.floor, billingData?.apartment_number, billingData?.zip_code, billingData?.town_name, billingData?.country_name)}
               </p>
               <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Telefon:</span>
                 {billingData?.phone}
               </p>
               <p style={{ fontSize: "0.875rem" }}>
-                <span className={styles.dataLabel}>Mobilni telefon:</span>
-                {billingData?.phone}
-              </p>
-              <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>E-mail:</span>
                 {billingData?.email}
               </p>
+              {billingData?.note && (
+                <p style={{ fontSize: "0.875rem" }}>
+                  <span className={styles.dataLabel}>Napomena:</span>
+                  {billingData?.note}
+                </p>
+              )}
             </Box>
           </Box>
-          {billingData?.note && (
-            <p style={{ fontSize: "0.875rem" }}>
-              <span className={styles.dataLabel}>Napomena:</span>
-              {billingData?.note}
-            </p>
-          )}
         </OrderSection>
+                
         <OrderSection title="Adresa za dostavu:" className={styles.orderSection50}>
           <Box className={styles.orderDataSection}>
-            <Box className={styles.orderDataDisplay}>
+            <Box className={styles.orderSection100}>
+              <p style={{ fontSize: "0.875rem" }}>
+                <span className={styles.dataLabel}>Kompanija:</span>
+                {shippingData?.company_name}
+              </p>
+              <p style={{ fontSize: "0.875rem" }}>
+                <span className={styles.dataLabel}>Ime:</span>
+                {shippingData?.first_name + " " + shippingData?.last_name}
+              </p>
               <p style={{ fontSize: "0.875rem" }}>
                 <span className={styles.dataLabel}>Adresa:</span>
-                {addressTemplate(shippingData?.address, shippingData?.object_number, shippingData?.floor, shippingData?.apartment_number)}
+                {addressTemplate(shippingData?.address, shippingData?.object_number, shippingData?.floor, shippingData?.apartment_number, shippingData?.zip_code, shippingData?.town_name, shippingData?.country_name)}
               </p>
               <p style={{ fontSize: "0.875rem" }}>
-                <span className={styles.dataLabel}>Grad:</span>
-                {shippingData?.town_display_name ?? shippingData?.town_name}
+                <span className={styles.dataLabel}>Telefon:</span>
+                {shippingData?.phone}
               </p>
               <p style={{ fontSize: "0.875rem" }}>
-                <span className={styles.dataLabel}>Poštanski broj:</span>
-                {shippingData?.zip_code}
+                <span className={styles.dataLabel}>E-mail:</span>
+                {shippingData?.email}
               </p>
-              <p style={{ fontSize: "0.875rem" }}>
-                <span className={styles.dataLabel}>Država:</span>
-                {shippingData?.country_name}
-              </p>
-            </Box>
-            <Box className={styles.orderDataDisplay}>
-              <p style={{ fontSize: "0.875rem" }}>
-                <span className={styles.dataLabel}>Način plaćanja:</span>
-                {orderData?.payment_method_name}
-              </p>
-              <p style={{ fontSize: "0.875rem" }}>
-                <span className={styles.dataLabel}> Način dostave:</span>
-                {orderData?.delivery_method_name}
-              </p>
-              <p style={{ fontSize: "0.875rem" }}>
-                <span className={styles.dataLabel}>Poručilac:</span>
-                {orderData?.ship_to_name}
-              </p>
-              <p style={{ fontSize: "0.875rem" }}>
-                <span className={styles.dataLabel}>Datum porudžbine:</span>
-                {orderData?.created_at}
-              </p>
+              {shippingData?.note && (
+                <p style={{ fontSize: "0.875rem" }}>
+                  <span className={styles.dataLabel}>Napomena:</span>
+                  {shippingData?.note}
+                </p>
+              )}
             </Box>
           </Box>
-          {shippingData?.note && (
-            <p style={{ fontSize: "0.875rem" }}>
-              <span className={styles.dataLabel}>Napomena:</span>
-              {shippingData?.note}
-            </p>
-          )}
-          {orderData?.note && (
-            <p style={{ fontSize: "0.875rem" }}>
-              <span className={styles.dataLabel}>Dodatna napomena:</span>
-              {orderData?.note}
-            </p>
-          )}
         </OrderSection>
-        <OrderSection
-          title="Status porudžbine:"
-          className={styles.orderSection50}
-          styleWrapperOfOrderSection={{
-            "@media print": {
-              display: "none",
-            },
-          }}
-        >
-          <OrderStatus orderId={orderData?.id} status={orderData?.status} />
-        </OrderSection>
+
         <OrderSection
           title="Interna napomena:"
           className={styles.orderSection50}
@@ -254,9 +207,9 @@ const B2BOrdersDetails = () => {
           >
             <Box
               ref={notesBoxRef}
-              sx={{ height: "10rem", overflowX: "auto", borderRadius: "0.25rem", border: "1px solid red", borderColor: "rgba(0, 0, 0, 0.23)" }}
+              sx={{ height: "5rem", overflowX: "auto", borderRadius: "0.25rem", border: "1px solid red", borderColor: "rgba(0, 0, 0, 0.23)" }}
             >
-              {orderNotes && orderNotes.map((text, index) => (
+              {orderNotes?.length > 0 ? orderNotes.map((text, index) => (
                 <Box key={index} sx={{ padding: "0 0.5rem" }}>
                   <Box sx={{ margin: "0.2rem 0", display: "flex", flexDirection: "column", alignItems: "end" }}>
                     <span className={styles.createdAt}>{text.first_name + " " + text.last_name} / {text.created_at}</span>
@@ -265,10 +218,16 @@ const B2BOrdersDetails = () => {
                     {text.description}
                   </Box>
                 </Box>
-              ))}
+              )) : (
+                <Box sx={{ padding: "0 0.5rem" }}>
+                  <Box sx={{ margin: "0.2rem 0", display: "flex", flexDirection: "column", alignItems: "start", fontSize: "0.875rem" }}>
+                    Trenutno nema internih napomena.
+                  </Box>
+                </Box>
+              )}
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <InputInput value={search} onChange={(event) => setSearch(event.target.value)} />
+              <InputInput value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Unesite tekst napomene" />
               <Button
                 type="submit"
                 label={"Sačuvaj"}
@@ -279,11 +238,47 @@ const B2BOrdersDetails = () => {
             </Box>
           </Box>
         </OrderSection>
+
+        <OrderSection title="Podaci narudžbenice:" className={styles.orderSection50}>
+          <Box className={styles.orderDataSection}>
+            <Box className={styles.orderSection100}>
+              <p style={{ fontSize: "0.875rem" }}>
+                    <span className={styles.dataLabel}>Plaćanje:</span>
+                    {orderData?.payment_method_name}
+                  </p>
+                  <p style={{ fontSize: "0.875rem" }}>
+                    <span className={styles.dataLabel}>Dostava:</span>
+                    {orderData?.delivery_method_name}
+                  </p>
+                  <p style={{ fontSize: "0.875rem" }}>
+                    <span className={styles.dataLabel}>Vreme kupovine:</span>
+                    {orderData?.created_at}
+                  </p>
+                  <p style={{ fontSize: "0.875rem" }}>
+                    <span className={styles.dataLabel}>Napomena:</span>
+                    {orderData?.note ? orderData?.note : "/"}
+                  </p>
+            </Box>
+          </Box>
+        </OrderSection>
+
+        <OrderSection
+          title="Status narudžbenice:"
+          className={styles.orderSection50}
+          styleWrapperOfOrderSection={{
+            "@media print": {
+              display: "none",
+            },
+          }}
+        >
+          <OrderStatus orderId={orderData?.id} status={orderData?.status} />
+        </OrderSection>
+        
       </Box>
       <Box
         sx={{ display: "grid", gridTemplateColumns: "78% auto", gap: "2rem", "@media (max-width: 1536px)": { gridTemplateColumns: "1fr" }, }}
       >
-        <OrderSection title="Proizvodi u porudžbini:" styleBodyProductOrders={{ paddingTop: "0.5rem", overflowX: "auto" }} styleWrapperOfOrderSection={{ maxWidth: "100%", overflowX: "hidden" }}>
+        <OrderSection title="Proizvodi u narudžbenici:" styleBodyProductOrders={{ paddingTop: "0.5rem", overflowX: "auto" }} styleWrapperOfOrderSection={{ maxWidth: "100%", overflowX: "hidden" }}>
           <OrderItemsTable fields={tableFields} items={orderItems} />
         </OrderSection>
         <OrderSection
