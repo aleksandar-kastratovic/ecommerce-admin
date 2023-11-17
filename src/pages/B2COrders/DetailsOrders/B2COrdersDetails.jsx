@@ -187,9 +187,9 @@ const B2COrdersDetails = () => {
           >
             <Box
               ref={notesBoxRef}
-              sx={{ height: "10rem", overflowX: "auto", borderRadius: "0.25rem", border: "1px solid red", borderColor: "rgba(0, 0, 0, 0.23)" }}
+              sx={{ height: "5rem", overflowX: "auto", borderRadius: "0.25rem", border: "1px solid red", borderColor: "rgba(0, 0, 0, 0.23)" }}
             >
-              {orderNotes && orderNotes.map((text, index) => (
+              {orderNotes?.length > 0 ? orderNotes.map((text, index) => (
                 <Box key={index} sx={{ padding: "0 0.5rem" }}>
                   <Box sx={{ margin: "0.2rem 0", display: "flex", flexDirection: "column", alignItems: "end" }}>
                     <span className={styles.createdAt}>{text.first_name + " " + text.last_name} / {text.created_at}</span>
@@ -198,10 +198,16 @@ const B2COrdersDetails = () => {
                     {text.description}
                   </Box>
                 </Box>
-              ))}
+              )) : (
+                <Box sx={{ padding: "0 0.5rem" }}>
+                  <Box sx={{ margin: "0.2rem 0", display: "flex", flexDirection: "column", alignItems: "start", fontSize: "0.875rem" }}>
+                    Trenutno nema internih napomena.
+                  </Box>
+                </Box>
+              )}
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              <InputInput value={search} onChange={(event) => setSearch(event.target.value)} />
+              <InputInput value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Unesite tekst napomene" />
               <Button
                 type="submit"
                 label={"Sačuvaj"}
