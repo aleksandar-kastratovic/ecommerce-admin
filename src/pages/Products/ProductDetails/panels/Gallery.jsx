@@ -11,23 +11,22 @@ const Gallery = ({ productId }) => {
   const [data, setData] = useState([]);
   const apiPath = "admin/product-items/gallery";
   const [loading, setLoading] = useState(false);
+  // const [listOrder, setListOrder] = useState([]);
 
   const handleData = () => {
-    setLoading(true);
+    // setLoading(true);
     api.list(`${apiPath}/${productId}`)
       .then((response) => {
         setData(response?.payload?.items);
-        console.log("handleData data", data)
-        setLoading(false);
+        // setLoading(false);
       })
       .catch((error) => {
         console.warn(error);
-        setLoading(false);
+        // setLoading(false);
       });
   };
 
   const handleSubmit = (data) => {
-    console.log("handleSubmit data", data)
     setLoading(true);
     let req = { id: data.new ? null : data.id, id_product: productId, file_base64: data.src, order: data.position ?? 0, title: null, subtitle: null, short_description: null, description: null, path: data.file };
     api.post(`${apiPath}`, req)
@@ -59,16 +58,17 @@ const Gallery = ({ productId }) => {
   };
 
   const handleReorder = (id, destination) => {
-    setLoading(true);
+    // setLoading(true);
     api.put(`${apiPath}/order`, { id: id, order: destination })
       .then((response) => {
         toast.success("Uspešno");
-        setLoading(false);
+        // setLoading(false);
+        handleData();
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
-        setLoading(false);
+        // setLoading(false);
       });
   };
 
@@ -81,7 +81,6 @@ const Gallery = ({ productId }) => {
       const size = base64.length * (3 / 4) - y;
       return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64, path: item.file };
     });
-
 
   useEffect(() => {
     handleData();

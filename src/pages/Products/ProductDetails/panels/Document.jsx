@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import formFields from "../forms/document.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
 import AuthContext from "../../../../store/auth-contex";
-
+import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const Document = ({ productId }) => {
 
@@ -14,7 +14,6 @@ const Document = ({ productId }) => {
 
   const customActions = {
     delete: {
-
       clickHandler: {
         type: 'dialog_delete',
         fnc: (rowData) => {
@@ -45,7 +44,6 @@ const Document = ({ productId }) => {
       clickHandler: {
         type: 'modal_form',
         fnc: (rowData) => {
-
           api.get(`admin/product-items/documents/basic-data/${rowData.id}`)
             .then((response) => {
               setFile({
@@ -58,6 +56,42 @@ const Document = ({ productId }) => {
             show: true,
             id: rowData.id
           };
+        },
+      },
+    },
+    downloadFile: {
+      type: "custom",
+      display: true,
+      position: 2,
+      icon: "download",
+      title: "Preuzmite dokument",
+      clickHandler: {
+        type: '',
+        fnc: (rowData) => {
+          console.log(rowData, "rowData")
+          const fileId = rowData?.file;
+          window.open(`${fileId}`, "_blank");
+        },
+      },
+    },
+    copyFile: {
+      type: "custom",
+      display: true,
+      position: 3,
+      icon: "content_copy",
+      title: "Kopirajte putanju fajla",
+      clickHandler: {
+        type: '',
+        fnc: (rowData) => {
+          const filePath = rowData?.file;
+          navigator.clipboard.writeText(filePath)
+            .then(() => {
+              toast.success("Putanja fajla je kopirana.");
+            })
+            .catch((error) => {
+              toast.error("Došlo je do greške pri kopiranju putanje fajla.");
+            });
+          // }
         },
       },
     },
