@@ -14,6 +14,7 @@ import Box from "@mui/system/Box";
 import Typography from "@mui/material/Typography";
 import Tooltip from "@mui/material/Tooltip";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import DownloadIcon from '@mui/icons-material/Download';
 
 // https://github.com/atlassian/react-beautiful-dnd
 
@@ -56,7 +57,6 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { 
                             loading="lazy"
                             style={{
                               height: "10rem",
-
                             }}
                             onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path)}
                           />
@@ -76,35 +76,50 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { 
                           </Box>
                         )}
                       </ImageListItem>
-                      <Stack sx={{ background: "rgba(0, 0 , 0,0.4)", borderRadius: "0 0 0.25rem 0.25rem", display: "grid", gridTemplateRows: "auto auto", gridTemplateColumns: "1fr auto", gap: "0.2rem", alignItems: "center", position: "absolute", bottom: 0, width: "100%" }}>
-                        <Typography variant="subtitle2" noWrap style={{ cursor: "pointer", color: "#ffff", fontSize: "0.75rem", gridRow: "1", gridColumn: "1", padding: "0.3rem 0 0 0.3rem" }} onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position)}>
+                      <Stack sx={{ background: "rgba(0, 0 , 0,0.4)", borderRadius: "0 0 0.25rem 0.25rem", position: "absolute", bottom: 0, width: "100%" }}>
+                        <Typography variant="subtitle2" noWrap style={{ cursor: "pointer", color: "#ffff", fontSize: "0.75rem", padding: "0.3rem 0 0 0.3rem" }} onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position)}>
                           Naziv: {item?.name}
                         </Typography>
 
-                        <Typography variant="subtitle2" noWrap style={{ cursor: "pointer", color: "#ffff", fontSize: "0.625rem", gridRow: "2", gridColumn: "1 / span 2", padding: "0 0 0.3rem 0.3rem" }} onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position)}>
+                        <Typography variant="subtitle2" noWrap style={{ cursor: "pointer", color: "#ffff", fontSize: "0.625rem", padding: "0 0 0 0.3rem" }} onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position)}>
                           Veličina: {Math.round((item?.size / 1024 / 1024) * 1000) / 1000} MB
                         </Typography>
 
-                        <IconButton sx={{ color: "#ffff", gridArea: "1 / 2 / auto / span 1" }} aria-label={`delete ${item.name}`} onClick={(e) => handleDeleteImage(e, item.id, item.new)}>
-                          <DeleteOutlineIcon />
-                        </IconButton>
-                        <IconButton
-                          sx={{ color: "#ffff", gridArea: "2 / 2 / auto / span 1" }}
-                        >
-                          <CopyToClipboard
-                            text={item?.path}
-                            onCopy={() => {
-                              setBttnText("Link je kopiran");
-                              setTimeout(() => {
-                                setBttnText("Kopirajte link");
-                              }, 3000);
-                            }}
+                        <Box sx={{ display: "flex" }}>
+                          <IconButton
+                            sx={{ color: "#ffff" }}
                           >
-                            <Tooltip title={bttnText} placement="bottom" arrow>
-                              <ContentCopyIcon sx={{ fontSize: "1.3rem" }} />
+                            <CopyToClipboard
+                              text={item?.path}
+                              onCopy={() => {
+                                setBttnText("Link je kopiran");
+                                setTimeout(() => {
+                                  setBttnText("Kopirajte link");
+                                }, 3000);
+                              }}
+                            >
+                              <Tooltip title={bttnText} placement="bottom" arrow>
+                                <ContentCopyIcon sx={{ fontSize: "1.35rem" }} />
+                              </Tooltip>
+                            </CopyToClipboard>
+                          </IconButton>
+
+                          <IconButton
+                            sx={{ color: "#ffff" }}
+                          >
+                            <Tooltip title={"Preuzmite sliku"} placement="bottom" arrow>
+                              <DownloadIcon onClick={() => {
+                                const image = item?.path;
+                                window.open(`${image}`, "_blank");
+                              }} />
                             </Tooltip>
-                          </CopyToClipboard>
-                        </IconButton>
+                          </IconButton>
+
+                          <IconButton sx={{ color: "#ffff", marginLeft: "auto" }} aria-label={`delete ${item.name}`} onClick={(e) => handleDeleteImage(e, item.id, item.new)}>
+                            <DeleteOutlineIcon />
+                          </IconButton>
+                        </Box>
+
                       </Stack>
                     </Box>
                   )}
