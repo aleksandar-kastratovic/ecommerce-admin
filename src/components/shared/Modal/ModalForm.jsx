@@ -109,17 +109,21 @@ const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = n
       if (modalObject) {
         objectForServer.id = modalObject?.id
       }
-      api.post(`${modalUrl !== null ? modalUrl['save']?.url : apiPathFormModal}`, objectForServer)
-        .then((response) => {
-          toast.success(`Uspešno`);
-          setOpenModal({ ...openModal, show: false });
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.warn(error);
-          toast.warning("Greška");
-          setIsLoading(false);
-        });
+      {
+        !closeButtonModalForm &&
+          api.post(`${modalUrl !== null ? modalUrl['save']?.url : apiPathFormModal}`, objectForServer)
+            .then((response) => {
+              toast.success(`Uspešno`);
+              setOpenModal({ ...openModal, show: false });
+              setIsLoading(false);
+            })
+            .catch((error) => {
+              console.warn(error);
+              toast.warning("Greška");
+              setIsLoading(false);
+            });
+      }
+
     }
   };
 

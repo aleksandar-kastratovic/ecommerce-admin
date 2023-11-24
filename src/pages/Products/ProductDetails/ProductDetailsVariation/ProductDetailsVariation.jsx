@@ -110,7 +110,6 @@ const ProductDetailsVariation = ({ parentId }) => {
         setTableLoading(false);
       })
       .catch((error) => {
-        console.warn("Aloo:", error);
         setTableLoading(false);
       });
   };

@@ -203,7 +203,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => { }, ac
   }, [imageList]);
 
   return (
-    <Grid container spacing={1} direction="row" sx={{ width: "auto", margin: "2rem 0 0 0" }}>
+    <Grid container spacing={1} direction="row" sx={{ width: "100%", margin: "2rem 0 0 0" }}>
 
       <MultipleImages handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} />
 

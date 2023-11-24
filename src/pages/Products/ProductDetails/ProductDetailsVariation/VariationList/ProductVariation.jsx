@@ -27,7 +27,6 @@ const ProductVariation = ({ parentId, tblFields }) => {
     switch (type) {
       case 'click':
         const { show_fields } = fieldBhavior;
-        console.log(show_fields, "showFields")
         switch (show_fields) {
           case 'seo_field':
             setFields(seo);
@@ -80,7 +79,7 @@ const ProductVariation = ({ parentId, tblFields }) => {
           const type = base64.split(";")[0].split(":")[1];
           let y = base64[base64.length - 2] === "=" ? 2 : 1;
           const size = base64.length * (3 / 4) - y;
-          return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64 };
+          return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64, path: item.file };
         });
     }
     return values;
@@ -201,6 +200,7 @@ const ProductVariation = ({ parentId, tblFields }) => {
       useModalGalleryInjection={true}
       submitButtonForm={showSubmitModalButton}
       closeButtonModalForm={!showSubmitModalButton}
+      labelSaveButton="Zatvori modal"
     />
   );
 };

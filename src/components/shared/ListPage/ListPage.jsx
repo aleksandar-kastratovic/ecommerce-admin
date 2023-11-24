@@ -85,7 +85,8 @@ const ListPage = ({
   selectedFile,
   openModalGlobal = {},
   onDismissModal = () => { },
-  listData = false
+  listData = false,
+  labelSaveButton
 }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
@@ -406,6 +407,7 @@ const ListPage = ({
         savePrapareDataHandler={savePrapareDataHandler}
         onFilePicked={onFilePicked}
         selectedFile={selectedFile}
+        label={labelSaveButton}
       />
       <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>
