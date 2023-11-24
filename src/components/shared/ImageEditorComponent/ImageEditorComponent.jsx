@@ -51,14 +51,6 @@ const ImageEditorComponent = ({
       .catch((error) => console.warn(error));
   };
 
-  // if (typeof imageWidth !== 'number') {
-  //   toast.error("Širina slike mora biti broj. Koristićemo podrazumevanu vrednost (800).");
-  //   imageWidth = 800;
-  // }
-  // if (typeof imageHeight !== 'number') {
-  //   toast.error("Visina slike mora biti broj. Koristićemo podrazumevanu vrednost (600).");
-  //   imageHeight = 600;
-  // }
 
   const [roundCrop, setRoundCrop] = useState(false);
   const [zoom, setZoom] = useState(1);

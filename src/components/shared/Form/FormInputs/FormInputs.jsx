@@ -298,9 +298,6 @@ export const InputSelect = ({
   useEffect(() => {
     let isMounted = true;
     let path = usePropName ? `${fillFromApi}/${name}?${queryString}` : `${fillFromApi}?${queryString}`;
-    console.log("create form path", path)
-
-    console.log("queryString", queryString)
     const fillDdl = async () => {
       await api
         .get(path)
