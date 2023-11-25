@@ -31,6 +31,7 @@ import B2CCustomersDetails from "../pages/B2CCustomers/B2CCustomersDetails/B2CCu
 import Promotions from "../pages/Promotions/Promotions";
 import Newsletter from "../pages/Newsletter/Newsletter";
 import B2CContactForm from "../pages/B2CContactForm/B2CContactForm";
+import AdminSettings from "./../pages/AdminSettings/AdminSettings";
 import B2Bsettings from "./../pages/B2Bsettings/B2Bsettings";
 import B2Cbanners from "./../pages/B2Cbanners/B2Cbanners";
 import B2CSettings from "./../pages/B2CSettings/B2CSettings";
@@ -55,6 +56,7 @@ import B2BOrdersDetails from "../pages/B2BOrders/Details/B2BOrdersDetails";
 import RolesListPage from "../pages/Roles/RolesListPage";
 import RolesDetailsPage from "../pages/Roles/RolesDetails/RolesDetailsPage";
 import Users from "../pages/Users/Users";
+import AdminSettingsDetails from "../pages/AdminSettings/SettingsDetails/AdminSettingsDetails";
 import B2BSettingsDetails from "../pages/B2Bsettings/SettingsDetails/B2BSettingsDetails";
 import B2CSettingsDetails from "../pages/B2CSettings/SettingsDetails/B2CSettingsDetails";
 import B2BContactForm from "../pages/B2BContactForm/B2BContactForm";
@@ -185,6 +187,7 @@ const screens = {
     STORES: ["/stores", "Skladišta", IconList.store, COMPANY_SETTINGS, Stores],
     MANUFACTURERS: ["/manufacturers", "Proizvođači", IconList.factory, COMPANY_SETTINGS, Manufacturers],
 
+    ADMINCFG: ["/admin-settings", "Admin podešavanja", IconList.settings, SETTINGS, AdminSettings, [[":AdminId", AdminSettingsDetails]]],
     B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, SETTINGS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
     B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, SETTINGS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
     ADMIN_SCRIPTS: ["/scripts", "Skripte", IconList.description, SETTINGS, Scripts],
