@@ -322,6 +322,7 @@ const CreateForm = ({
               handleReorder={item?.handleReorder}
               onChangeHandler={onChangeHandler}
               autoFocus={autoFocus}
+              description={item.description}
             />
           );
           break;

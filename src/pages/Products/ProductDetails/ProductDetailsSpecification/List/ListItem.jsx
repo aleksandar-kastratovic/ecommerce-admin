@@ -27,8 +27,6 @@ const ListItem = ({ productId, apiPath }) => {
     setListHandler();
   }, []);
 
-  console.log("Fields:", fields)
-
   return (
     <>
       {
@@ -39,7 +37,6 @@ const ListItem = ({ productId, apiPath }) => {
                 {field.name}
               </Typography>
               <Box sx={{ display: "flex", alignItems: "center" }}>
-
                 <Typography variant="subtitle1">Naziv atributa</Typography>
                 <InputSelect label={""} />
               </Box>

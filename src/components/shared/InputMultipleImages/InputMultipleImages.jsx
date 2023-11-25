@@ -28,7 +28,16 @@ const getLoadedFile = (file, i, len) => {
   });
 };
 
-export const InputMultipleImages = ({ list = [], onChangeHandler = () => { }, accept = "image/*", name = "", uploadHandler = () => { }, deleteHandler = () => { }, handleReorder }) => {
+export const InputMultipleImages = ({
+  list = [],
+  onChangeHandler = () => { },
+  accept = "image/*",
+  name = "",
+  uploadHandler = () => { },
+  deleteHandler = () => { },
+  handleReorder,
+  description
+}) => {
   const [imageList, setImageList] = useState(list);
   const [dragActive, setDragActive] = useState(false);
 
@@ -203,11 +212,25 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => { }, ac
   }, [imageList]);
 
   return (
-    <Grid container spacing={1} direction="row" sx={{ width: "auto", margin: "2rem 0 0 0" }}>
+    <Grid container spacing={1} direction="row" sx={{ width: "100%", margin: "2rem 0 0 0" }}>
 
-      <MultipleImages handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} />
+      <MultipleImages
+        description={description}
+        handleMultipleImageUpload={handleUpload}
+        handleDrag={handleDrag}
+        handleDrop={handleUpload}
+        dragActive={dragActive}
+        accept={accept}
+      />
 
-      <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} handleReorder={handleReorder} />
+      <ImageListRow
+        setImageList={setImageList}
+        imageList={imageList}
+        handleModalOpen={handleModalOpen}
+        handleDeleteImage={handleDeleteImage}
+        handleReorder={handleReorder}
+      />
+
       <ImageDialogFullPage
         openFullPageDialog={openFullPageDialog}
         setOpenFullPageDialog={setOpenFullPageDialog}
@@ -218,6 +241,7 @@ export const InputMultipleImages = ({ list = [], onChangeHandler = () => { }, ac
         handleDeleteImage={handleDeleteImage}
         uploadHandler={uploadHandler}
       />
+
       <DeleteDialog
         title="Brisanje"
         description="Da li ste sigurni da želite da obrišete?"

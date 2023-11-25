@@ -2646,4 +2646,11 @@ div.rowContents {
     .mediaPrintLogo {
         display: block !important;
     }
+    .router-container.side-open {
+        padding-left: 0 !important;
+        width: auto !important;
+    }
+    .side-open #sidebar {
+        display: none !important;
+    }
 }

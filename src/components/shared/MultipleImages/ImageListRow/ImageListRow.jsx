@@ -35,96 +35,98 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { 
         <Droppable droppableId="droppable" direction="horizontal">
           {(provided, snapshot) => (
             <ImageList ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} {...provided.droppableProps}>
-              {imageList.map((item, index) => (
-                <Draggable key={item.id} draggableId={item.name ?? item.id + "drag"} index={index}>
-                  {(provided, snapshot) => (
-                    <Box sx={{ position: "relative" }}>
-                      <ImageListItem
-                        key={item.image}
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
-                      // TODO moze i ovako da se podesava stil na drag slika/elemenata
-                      // className={snapshot.isDragging ? "class1" : "class2"}
-                      >
-                        {item.src.includes("image") ? (
-                          <img
-                            key={item.src}
-                            src={item?.src}
-                            srcSet={item?.src}
-                            alt={item?.name}
-                            loading="lazy"
-                            style={{
-                              height: "10rem",
-                            }}
-                            onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path)}
-                          />
-                        ) : (
-                          <Box
-                            key={item.src}
-                            style={{
-                              height: "10rem",
-                              background: "white",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                            }}
-                            onClick={(e) => handleModalOpen(e, item)}
-                          >
-                            {item.thumb_image ? <img src={item.thumb_image} width="100%" height="100%" /> : <Icon fontSize="large">{IconList.editDocument}</Icon>}
-                          </Box>
-                        )}
-                      </ImageListItem>
-                      <Stack sx={{ background: "rgba(0, 0 , 0,0.4)", borderRadius: "0 0 0.25rem 0.25rem", position: "absolute", bottom: 0, width: "100%" }}>
-                        <Typography variant="subtitle2" noWrap style={{ cursor: "pointer", color: "#ffff", fontSize: "0.75rem", padding: "0.3rem 0 0 0.3rem" }} onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path)}>
-                          Naziv: {item?.name}
-                        </Typography>
-
-                        <Typography variant="subtitle2" noWrap style={{ cursor: "pointer", color: "#ffff", fontSize: "0.625rem", padding: "0 0 0 0.3rem" }} onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path)}>
-                          Veličina: {Math.round((item?.size / 1024 / 1024) * 1000) / 1000} MB
-                        </Typography>
-
-                        <Box sx={{ display: "flex" }}>
-                          <IconButton
-                            sx={{ color: "#ffff" }}
-                          >
-                            <CopyToClipboard
-                              text={item?.path}
-                              onCopy={() => {
-                                setBttnText("Link je kopiran");
-                                setTimeout(() => {
-                                  setBttnText("Kopirajte link");
-                                }, 3000);
+              {imageList.map((item, index) => {
+                return (
+                  <Draggable Draggable key={item.id} draggableId={item.name ?? item.id + "drag"} index={index} >
+                    {(provided, snapshot) => (
+                      <Box sx={{ position: "relative" }}>
+                        <ImageListItem
+                          key={item.image}
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
+                          style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+                        // TODO moze i ovako da se podesava stil na drag slika/elemenata
+                        // className={snapshot.isDragging ? "class1" : "class2"}
+                        >
+                          {item.src.includes("image") ? (
+                            <img
+                              key={item.src}
+                              src={item?.src}
+                              srcSet={item?.src}
+                              alt={item?.name}
+                              loading="lazy"
+                              style={{
+                                height: "10rem",
                               }}
+                              onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path)}
+                            />
+                          ) : (
+                            <Box
+                              key={item.src}
+                              style={{
+                                height: "10rem",
+                                background: "white",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                              }}
+                              onClick={(e) => handleModalOpen(e, item)}
                             >
-                              <Tooltip title={bttnText} placement="bottom" arrow>
-                                <ContentCopyIcon sx={{ fontSize: "1.35rem" }} />
+                              {item.thumb_image ? <img src={item.thumb_image} width="100%" height="100%" /> : <Icon fontSize="large">{IconList.editDocument}</Icon>}
+                            </Box>
+                          )}
+                        </ImageListItem>
+                        <Stack sx={{ background: "rgba(0, 0 , 0,0.4)", borderRadius: "0 0 0.25rem 0.25rem", position: "absolute", bottom: 0, width: "100%" }}>
+                          <Typography variant="subtitle2" noWrap style={{ cursor: "pointer", color: "#ffff", fontSize: "0.75rem", padding: "0.3rem 0 0 0.3rem" }} onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path)}>
+                            Naziv: {item?.name}
+                          </Typography>
+
+                          <Typography variant="subtitle2" noWrap style={{ cursor: "pointer", color: "#ffff", fontSize: "0.625rem", padding: "0 0 0 0.3rem" }} onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path)}>
+                            Veličina: {Math.round((item?.size / 1024 / 1024) * 1000) / 1000} MB
+                          </Typography>
+
+                          <Box sx={{ display: "flex" }}>
+                            <IconButton
+                              sx={{ color: "#ffff" }}
+                            >
+                              <CopyToClipboard
+                                text={item?.path}
+                                onCopy={() => {
+                                  setBttnText("Link je kopiran");
+                                  setTimeout(() => {
+                                    setBttnText("Kopirajte link");
+                                  }, 3000);
+                                }}
+                              >
+                                <Tooltip title={bttnText} placement="bottom" arrow>
+                                  <ContentCopyIcon sx={{ fontSize: "1.35rem" }} />
+                                </Tooltip>
+                              </CopyToClipboard>
+                            </IconButton>
+
+                            <IconButton
+                              sx={{ color: "#ffff" }}
+                            >
+                              <Tooltip title={"Preuzmite sliku"} placement="bottom" arrow>
+                                <DownloadIcon onClick={() => {
+                                  const image = item?.path;
+                                  window.open(`${image}`, "_blank");
+                                }} />
                               </Tooltip>
-                            </CopyToClipboard>
-                          </IconButton>
+                            </IconButton>
 
-                          <IconButton
-                            sx={{ color: "#ffff" }}
-                          >
-                            <Tooltip title={"Preuzmite sliku"} placement="bottom" arrow>
-                              <DownloadIcon onClick={() => {
-                                const image = item?.path;
-                                window.open(`${image}`, "_blank");
-                              }} />
-                            </Tooltip>
-                          </IconButton>
+                            <IconButton sx={{ color: "#ffff", marginLeft: "auto" }} aria-label={`delete ${item.name}`} onClick={(e) => handleDeleteImage(e, item.id, item.new)}>
+                              <DeleteOutlineIcon />
+                            </IconButton>
+                          </Box>
 
-                          <IconButton sx={{ color: "#ffff", marginLeft: "auto" }} aria-label={`delete ${item.name}`} onClick={(e) => handleDeleteImage(e, item.id, item.new)}>
-                            <DeleteOutlineIcon />
-                          </IconButton>
-                        </Box>
-
-                      </Stack>
-                    </Box>
-                  )}
-                </Draggable>
-              ))}
+                        </Stack>
+                      </Box>
+                    )}
+                  </Draggable>
+                )
+              })}
               {provided.placeholder}
             </ImageList>
           )}
