@@ -3,7 +3,6 @@ import { toast } from "react-toastify";
 import InputMultipleImages from "../../../../components/shared/InputMultipleImages/InputMultipleImages";
 import GallerySkeleton from "../../../../components/shared/Loading/GallerySkeleton";
 import AuthContext from "../../../../store/auth-contex";
-import { convertHeicToPng } from "../../../../helpers/functions"
 
 const Gallery = ({ productId }) => {
 
@@ -38,11 +37,10 @@ const Gallery = ({ productId }) => {
 
   const handleSubmit = (data) => {
     setLoading(true);
-    console.log("data", data)
     const allowedFormats = imageInfo ? imageInfo.allow_format.map(format => format.toLowerCase()) : [];
     const allowSize = imageInfo ? imageInfo.allow_size : 0;
     const fileExtension = data.name.split('.').pop().toLowerCase();
-    const fileSizeInMB = data.size / (1024 * 1024);
+    const fileSizeInKB = data.size;
 
     if (allowedFormats.length > 0 && !allowedFormats.includes(fileExtension)) {
       toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
@@ -50,7 +48,7 @@ const Gallery = ({ productId }) => {
       return;
     }
 
-    if (allowSize > 0 && fileSizeInMB > allowSize) {
+    if (allowSize > 0 && fileSizeInKB > allowSize) {
       toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize} MB.`);
       setLoading(false);
       return;
