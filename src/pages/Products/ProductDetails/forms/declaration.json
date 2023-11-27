@@ -46,7 +46,7 @@
   },
   {
     "field_name": "Zemlja porekla",
-    "prop_name": "declaration_id_country",
+    "prop_name": "declaration_country_name",
     "in_main_table": true,
     "in_details": true,
     "editable": true,
@@ -63,10 +63,7 @@
       }
     },
     "sortable": true,
-    "input_type": "select",
-    "options": [],
-    "fillFromApi": "admin/product-items/declaration/ddl",
-    "usePropName": true
+    "input_type": "input"
   },
   {
     "field_name": "Uvoznik",
