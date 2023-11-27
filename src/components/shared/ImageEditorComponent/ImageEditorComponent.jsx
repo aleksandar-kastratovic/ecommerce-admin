@@ -16,7 +16,6 @@ import Cropper from "react-easy-crop";
 import { getCroppedImg } from "./util";
 import { InputNumber } from "../Form/FormInputs/FormInputs";
 import AuthContext from "../../../store/auth-contex";
-import { toast } from "react-toastify";
 
 const ImageEditorComponent = ({
   handleCloseEditMode = () => { },
@@ -39,10 +38,13 @@ const ImageEditorComponent = ({
     height: typeof imageHeight !== 'number' ? imageHeight = 600 : imageHeight
   });
 
+  const [infoCrop, setInfoCrop] = useState([]);
+
   const handleDataDimension = () => {
-    api.get(`admin/product-items/gallery/image-dimension`)
+    api.get(`admin/product-items/gallery/crop-options`)
       .then((response) => {
         const dimensionsFromApi = response?.payload;
+        setInfoCrop(dimensionsFromApi);
         if (Object.keys(dimensionsFromApi).length > 0 && dimensionsFromApi.width > 0 && dimensionsFromApi.height > 0) {
           setShowDimensionFromApi(dimensionsFromApi);
           setCropSize(dimensionsFromApi);
@@ -50,7 +52,6 @@ const ImageEditorComponent = ({
       })
       .catch((error) => console.warn(error));
   };
-
 
   const [roundCrop, setRoundCrop] = useState(false);
   const [zoom, setZoom] = useState(1);
@@ -166,6 +167,7 @@ const ImageEditorComponent = ({
                       width: value === "" ? 50 : parseInt(value) || 0,
                     });
                   }}
+                  disabled={infoCrop.allow_change_options ? false : true}
                 />
               </Box>
               <Box width={150}>
@@ -196,6 +198,7 @@ const ImageEditorComponent = ({
                       height: value === "" ? 50 : parseInt(value) || 0,
                     });
                   }}
+                  disabled={infoCrop.allow_change_options ? false : true}
                 />
               </Box>
               {/* <FormControlLabel

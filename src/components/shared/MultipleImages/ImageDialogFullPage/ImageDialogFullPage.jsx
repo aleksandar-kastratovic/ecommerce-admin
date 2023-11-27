@@ -77,7 +77,7 @@ const ImageDialogFullPage = ({
       src: base64Image,
     };
 
-    uploadHandler(imageItem);
+    uploadHandler(imageItem, { crop: true });
 
     setOpenFullPageDialog({
       ...openFullPageDialog,
@@ -201,15 +201,15 @@ const ImageDialogFullPage = ({
             <Button variant="outlined" onClick={handleCloseImageDialog} color="success" startIcon={<CheckIcon />}>
               Sačuvaj
             </Button>
-            <Button variant="outlined" component="label" startIcon={<PhotoCamera />}>
+            {/* <Button variant="outlined" component="label" startIcon={<PhotoCamera />}>
               Nova slika
               <Input name="image" inputProps={{ accept: "image/*" }} id={openFullPageDialog.name} onChange={(e) => handleImageUpload(e)} type="file" sx={{ display: "none" }} />
-            </Button>
+            </Button> */}
             <Button variant="outlined" onClick={handleOpenEditMode} color="info" startIcon={<EditOutlinedIcon />}>
               Obradi sliku
             </Button>
             <Button variant="outlined" color="error" onClick={(e) => handleDeleteImage(e, openFullPageDialog.id)} startIcon={<DeleteOutlineOutlinedIcon />}>
-              Obrisi
+              Obriši
             </Button>
             <Button variant="outlined" color="secondary" onClick={handleCloseImageDialog} startIcon={<CancelOutlinedIcon />}>
               Otkaži
