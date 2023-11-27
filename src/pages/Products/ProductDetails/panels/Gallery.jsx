@@ -10,9 +10,9 @@ const Gallery = ({ productId }) => {
   const { api } = authCtx;
   const [data, setData] = useState([]);
   const apiPath = "admin/product-items/gallery";
+  const apiPathCrop = "admin/product-items/gallery/image-crop";
   const [loading, setLoading] = useState(false);
   const [imageInfo, setImageInfo] = useState(null);
-  // const [listOrder, setListOrder] = useState([]);
 
   const handleData = () => {
     // setLoading(true);
@@ -28,19 +28,20 @@ const Gallery = ({ productId }) => {
   };
 
   const handleInformationImage = () => {
-    api.get(`admin/product-items/gallery/image-dimension`)
+    api.get(`admin/product-items/gallery/upload-options`)
       .then((response) => {
         setImageInfo(response.payload);
       })
       .catch((error) => console.warn(error));
   };
 
-  const handleSubmit = (data) => {
+
+  const handleSubmit = (data, options = {}) => {
     setLoading(true);
-    const allowedFormats = imageInfo ? imageInfo.allow_format.map(format => format.toLowerCase()) : [];
-    const allowSize = imageInfo ? imageInfo.allow_size : 0;
-    const fileExtension = data.name.split('.').pop().toLowerCase();
-    const fileSizeInKB = data.size;
+    const allowedFormats = imageInfo ? imageInfo.allow_format.map(format => format?.mime_type.toLowerCase()) : [];
+    const allowSize = imageInfo ? Number(imageInfo.allow_size) : 0;
+    const fileExtension = data?.type.toLowerCase();
+    const fileSizeInB = Number(data.size);
 
     if (allowedFormats.length > 0 && !allowedFormats.includes(fileExtension)) {
       toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
@@ -48,14 +49,16 @@ const Gallery = ({ productId }) => {
       return;
     }
 
-    if (allowSize > 0 && fileSizeInKB > allowSize) {
-      toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize} MB.`);
+    if (fileSizeInB > allowSize) {
+      console.log("ruza")
+      toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
       setLoading(false);
       return;
     }
 
     let req = { id: data.new ? null : data.id, id_product: productId, file_base64: data.src, order: data.position ?? 0, title: null, subtitle: null, short_description: null, description: null, path: data.file };
-    api.post(`${apiPath}`, req)
+    let postApi = options?.crop ? apiPathCrop : apiPath;
+    api.post(`${postApi}`, req)
       .then((response) => {
         toast.success("Uspešno");
         handleData();
@@ -66,6 +69,8 @@ const Gallery = ({ productId }) => {
         console.warn(error);
         setLoading(false);
       })
+
+
   };
 
   const handleDelete = (id) => {
@@ -126,7 +131,7 @@ const Gallery = ({ productId }) => {
           uploadHandler={handleSubmit}
           deleteHandler={handleDelete}
           handleReorder={handleReorder}
-          description={`Veličina slike ne sme biti veća od ${imageInfo ? (imageInfo.allow_size / 1024).toFixed(2) : ""}MB. Dozvoljeni formati slika: ${imageInfo ? imageInfo.allow_format.join(", ") : ""}`}
+          description={`Veličina fajla ne sme biti veća od ${imageInfo ? (imageInfo.allow_size / (1024 * 1024)).toFixed(2) : ""}MB. Dozvoljeni formati fajla: ${imageInfo ? imageInfo.allow_format.map((format) => format.name).join(", ") : ""}`}
         />
       )}
     </>
