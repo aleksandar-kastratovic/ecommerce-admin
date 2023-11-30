@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import InputMultipleImages from "../../../../components/shared/InputMultipleImages/InputMultipleImages";
 import GallerySkeleton from "../../../../components/shared/Loading/GallerySkeleton";
 import AuthContext from "../../../../store/auth-contex";
+import UploadLoading from "../../../../components/shared/Loading/UploadSkeleton";
 
 const Gallery = ({ productId }) => {
 
@@ -13,17 +14,24 @@ const Gallery = ({ productId }) => {
   const apiPathCrop = "admin/product-items/gallery/image-crop";
   const [loading, setLoading] = useState(false);
   const [imageInfo, setImageInfo] = useState(null);
+  const [imageUploadLoading, setImageUploadLoading] = useState(false);
 
-  const handleData = () => {
-    // setLoading(true);
+  const handleData = (showLoader = false) => {
+    if (showLoader) {
+      setLoading(true)
+    }
     api.list(`${apiPath}/${productId}`)
       .then((response) => {
         setData(response?.payload?.items);
-        // setLoading(false);
+        if (showLoader) {
+          setLoading(false)
+        }
       })
       .catch((error) => {
         console.warn(error);
-        // setLoading(false);
+        if (showLoader) {
+          setLoading(false)
+        }
       });
   };
 
@@ -35,9 +43,9 @@ const Gallery = ({ productId }) => {
       .catch((error) => console.warn(error));
   };
 
-
   const handleSubmit = (data, options = {}) => {
-    setLoading(true);
+    // setLoading(true);
+    setImageUploadLoading(true);
     const allowedFormats = imageInfo ? imageInfo.allow_format.map(format => format?.mime_type.toLowerCase()) : [];
     const allowSize = imageInfo ? Number(imageInfo.allow_size) : 0;
     const fileExtension = data?.type.toLowerCase();
@@ -45,14 +53,15 @@ const Gallery = ({ productId }) => {
 
     if (allowedFormats.length > 0 && !allowedFormats.includes(fileExtension)) {
       toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
-      setLoading(false);
+      // setLoading(false);
+      setImageUploadLoading(false);
       return;
     }
 
     if (fileSizeInB > allowSize) {
-      console.log("ruza")
       toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
       setLoading(false);
+      setImageUploadLoading(false);
       return;
     }
 
@@ -62,39 +71,42 @@ const Gallery = ({ productId }) => {
       .then((response) => {
         toast.success("Uspešno");
         handleData();
-        setLoading(false);
+        // setLoading(false);
+        setImageUploadLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
-        setLoading(false);
+        // setLoading(false);
+        setImageUploadLoading(false);
       })
 
 
   };
 
   const handleDelete = (id) => {
-    setLoading(true);
+    // setLoading(true);
     api.delete(`${apiPath}/${id}`)
       .then((response) => {
         toast.success("Uspešno");
-        handleData();
-        setLoading(false);
+        handleData(false);
+        // setLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
-        setLoading(false);
+        // setLoading(false);
       });
   };
 
   const handleReorder = (id, destination) => {
+    console.log(id, destination)
     // setLoading(true);
     api.put(`${apiPath}/order`, { id: id, order: destination })
       .then((response) => {
         toast.success("Uspešno");
+        handleData(false);
         // setLoading(false);
-        handleData();
       })
       .catch((error) => {
         toast.warn("Greška");
@@ -115,14 +127,18 @@ const Gallery = ({ productId }) => {
 
 
   useEffect(() => {
-    handleData();
+    handleData(true);
     handleInformationImage();
   }, []);
 
   return (
     <>
-      {loading ? (
-        <GallerySkeleton />
+      {imageUploadLoading ? (
+        <UploadLoading
+          textUploading={"Učitavanje slike je u toku.."}
+        />
+      ) : loading ? (
+        < GallerySkeleton />
       ) : (
         <InputMultipleImages
           list={list}

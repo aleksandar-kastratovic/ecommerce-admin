@@ -36,7 +36,8 @@ export const InputMultipleImages = ({
   uploadHandler = () => { },
   deleteHandler = () => { },
   handleReorder,
-  description
+  description,
+  validate = null
 }) => {
   const [imageList, setImageList] = useState(list);
   const [dragActive, setDragActive] = useState(false);
@@ -87,7 +88,6 @@ export const InputMultipleImages = ({
       let newImagesArray = [];
 
       let len = imageList === undefined ? 0 : imageList.length;
-
       for (let i = 0; i < selectedFiles.length; i++) {
         var file = selectedFiles[i];
         const obj = await getLoadedFile(file, i, len);
@@ -97,8 +97,25 @@ export const InputMultipleImages = ({
       if (Array.isArray(imageList)) {
         newImagesArray = [...imageList, ...newImagesArray];
       }
-
-      setImageList(newImagesArray);
+      if (validate !== undefined && validate !== null) {
+        let image = selectedFiles[0];
+        const { size, type } = image;
+        const { imageUpload } = validate;
+        const { allow_size, allow_format } = imageUpload;
+        let allowedFormatMime = allow_format?.map((item, i) => { return item?.mime_type });
+        if (allowedFormatMime.includes(type)) {
+          if (size > allow_size) {
+            console.log("Image size is too big");
+          } else {
+            console.log("Not too big");
+            setImageList(newImagesArray);
+          }
+        } else {
+          console.log("Image format is not allowed");
+        }
+      } else {
+        setImageList(newImagesArray);
+      }
     }
   };
 
@@ -185,6 +202,7 @@ export const InputMultipleImages = ({
   const handleCancel = () => {
     setOpenDeleteDialog({ show: false, id: null, isNew: false });
   };
+
   const handleConfirm = () => {
     // If it is an edit mode it value of property src/image should be string "DELETE"
     // but if it is a first upload it should be removed from images array

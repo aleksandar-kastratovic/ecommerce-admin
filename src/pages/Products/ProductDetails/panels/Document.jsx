@@ -1,16 +1,25 @@
 
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import formFields from "../forms/document.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
 import AuthContext from "../../../../store/auth-contex";
-import { CopyToClipboard } from "react-copy-to-clipboard";
 
 const Document = ({ productId }) => {
 
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
   const [file, setFile] = useState(null);
+
+  const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
+
+  const handleInformationImage = () => {
+    api.get(`admin/product-items/gallery/upload-options`)
+      .then((response) => {
+        formatFormFields(response?.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
 
   const customActions = {
     delete: {
@@ -68,7 +77,6 @@ const Document = ({ productId }) => {
       clickHandler: {
         type: '',
         fnc: (rowData) => {
-          console.log(rowData, "rowData")
           const fileId = rowData?.file;
           window.open(`${fileId}`, "_blank");
         },
@@ -91,11 +99,37 @@ const Document = ({ productId }) => {
             .catch((error) => {
               toast.error("Došlo je do greške pri kopiranju putanje fajla.");
             });
-          // }
         },
       },
     },
   };
+
+  const formatFormFields = (data) => {
+    if (data) {
+      const { allow_size, allow_format } = data;
+      const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+      let arr = formFields.map((field) => {
+        if (field?.prop_name === 'thumb_image_base64') {
+          return {
+            ...field,
+            description: descripiton,
+            validate: {
+              imageUpload: data
+            }
+          };
+        } else {
+          return {
+            ...field
+          }
+        }
+      });
+      setFormFieldsTemp([...arr]);
+    }
+  }
+
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
 
   return (
     <>
@@ -104,7 +138,8 @@ const Document = ({ productId }) => {
         apiUrl={`admin/product-items/documents/list/${productId}`}
         editUrl={`admin/product-items/documents/basic-data`}
         title=" "
-        columnFields={formFields}
+        columnFields={formFieldsTemp}
+        useColumnFields={true}
         actionNewButton="modal"
         initialData={{ id_product: productId, file_base64: file?.base_64 }}
         addFieldLabel="Dodajte novi dokument"

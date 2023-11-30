@@ -127,6 +127,7 @@ const App = () => {
                             />
                             <Header
                                 openSidenav={() => setSidenav(!sidenav)}
+                                isSideNavOpen={sidenav}
                                 activeTheme={activeTheme}
                                 changeTheme={() => {
                                     setActiveTheme(!activeTheme);

@@ -36,8 +36,9 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { 
           {(provided, snapshot) => (
             <ImageList ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} {...provided.droppableProps}>
               {imageList.map((item, index) => {
+                console.log("item", item)
                 return (
-                  <Draggable Draggable key={item.id} draggableId={item.name ?? item.id + "drag"} index={index} >
+                  <Draggable key={item.id} draggableId={item.id + "drag"} index={index} >
                     {(provided, snapshot) => (
                       <Box sx={{ position: "relative" }}>
                         <ImageListItem

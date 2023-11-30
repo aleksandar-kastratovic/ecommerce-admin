@@ -46,7 +46,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
 
     const toggleGroup = (groupName) => {
         setOpenGroups((prevOpenGroups) => ({
-            ...prevOpenGroups,
+            // ...prevOpenGroups,
             [groupName]: !prevOpenGroups[groupName],
         }));
     };
