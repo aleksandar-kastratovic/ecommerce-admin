@@ -100,14 +100,18 @@ const Gallery = ({ productId }) => {
   };
 
   const handleReorder = (id, destination) => {
+    console.log(id, destination)
+    // setLoading(true);
     api.put(`${apiPath}/order`, { id: id, order: destination })
       .then((response) => {
         toast.success("Uspešno");
-        handleData();
+        handleData(false);
+        // setLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
+        // setLoading(false);
       });
   };
 
@@ -134,7 +138,7 @@ const Gallery = ({ productId }) => {
           textUploading={"Učitavanje slike je u toku.."}
         />
       ) : loading ? (
-        <GallerySkeleton />
+        < GallerySkeleton />
       ) : (
         <InputMultipleImages
           list={list}

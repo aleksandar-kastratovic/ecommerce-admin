@@ -102,11 +102,12 @@ const ImageButton = ({
                   </span>
                 </span>
               </ButtonBase>
+              <FormHelperText>{description}</FormHelperText>
             </FormControl>
           </Grid>
         </Box>
       ) : (
-        <Box>
+        <Box sx={{ width: "100%", marginTop: "0.5rem", padding: "0 0.3rem" }}>
           <Grid
             container
             alignItems="center"
@@ -119,12 +120,8 @@ const ImageButton = ({
               <FormControl error={error !== null} sx={{ width: "100%" }}>
                 <FormLabel required={required}>{label}</FormLabel>
                 <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
-                <Typography variant="caption" display="block" gutterBottom>
-                  <br />
-                  {description}
-                </Typography>
                 <label htmlFor={label}>
-                  <Input multiple name={name} inputProps={{ accept: "image/*" }} id={label} onChange={(e) => onImageUpload(e)} type="file" sx={{ display: "none" }} />
+                  <Input multiple name={name} inputProps={{ accept: "image/*" }} id={label} onChange={(e) => { onImageUpload(e); }} type="file" sx={{ display: "none" }} />
                   <Button variant="contained" component="span" className={styles.buttonStyle}>
                     <Box className={styles.avatarBoxStyle}>
                       <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -137,7 +134,7 @@ const ImageButton = ({
                     </Box>
                   </Button>
                 </label>
-                <FormHelperText>Maximum file size: 2MB, Allowed types: JPG, GIF, PNG, ICO, APNG, Not all browsers support these formats</FormHelperText>
+                <FormHelperText>{description}</FormHelperText>
               </FormControl>
             </Grid>
           </Grid>

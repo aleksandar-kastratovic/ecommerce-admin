@@ -154,7 +154,22 @@ const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = n
             <FormWrapper title={customTitle ? customTitle : (data?.id === null ? "Novi unos" : (data?.name ?? customTitleDataNameForEdit))}>
               {shortText ? <Typography variant="body2" sx={{ marginBottom: "0.8rem" }}>{shortText}</Typography> : null}
               {clearButton && <Button label="Resetujte vrednosti" onClick={() => { onClearDataPress() }} variant="contained" />}
-              <Form formFields={formFields} initialData={data} onSubmit={saveData} label={label} cancelButton={cancelButton} submitButton={submitButton} closeButton={closeButtonModalForm} onCancel={() => setOpenModal({ ...openModal, show: false })} styleCheckbox={styleCheckbox} validateData={validateData} onCloseModalButton={() => { setOpenModal({ show: false }) }} allowedFileTypes={allowedFileTypes} onFilePicked={onFilePicked} selectedFile={selectedFile} />
+              <Form
+                formFields={formFields}
+                initialData={data}
+                onSubmit={saveData}
+                label={label}
+                cancelButton={cancelButton}
+                submitButton={submitButton}
+                closeButton={closeButtonModalForm}
+                onCancel={() => setOpenModal({ ...openModal, show: false })}
+                styleCheckbox={styleCheckbox}
+                validateData={validateData}
+                onCloseModalButton={() => { setOpenModal({ show: false }) }}
+                allowedFileTypes={allowedFileTypes}
+                onFilePicked={onFilePicked}
+                selectedFile={selectedFile}
+              />
             </FormWrapper>
           </>)
         : <Box sx={{ width: "100%", display: "flex", justifyContent: "center" }}><CircularProgress size="2rem" sx={{ marginTop: "50vh" }} /></Box>}

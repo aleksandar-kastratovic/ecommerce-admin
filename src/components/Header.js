@@ -4,8 +4,9 @@ import AuthContext from "../store/auth-contex";
 import Loader from "./shared/Loading/Loading";
 
 import DehazeIcon from "@mui/icons-material/Dehaze";
+// import KeyboardBackspaceIcon from "@mui/icons-material/KeyboardBackspace";
+import EastIcon from "@mui/icons-material/East";
 
-// import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
@@ -17,7 +18,7 @@ import { toast } from "react-toastify";
 import sideNavIcon from "../assets/images/croonus-sidebar-icon.svg";
 import logoMediaPrint from "../assets/images/croonus-sidebar-logo-dark.svg";
 
-const Header = ({ openSidenav, changeTheme, activeTheme }) => {
+const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
     const apiPath = "admin/profile/logout";
     const navigate = useNavigate();
 
@@ -28,6 +29,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
 
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
+
     useEffect(() => {
         return () => {
             setIsLoading(false);
@@ -119,11 +121,16 @@ const Header = ({ openSidenav, changeTheme, activeTheme }) => {
                                 "@media (max-width: 900px)": {
                                     order: 1,
                                 },
+                                display: "flex",
+                                alignItems: "center",
                             }}
                         >
-                            <IconButton onClick={openSidenav}>
-                                <DehazeIcon sx={{ color: "var(--third-color)" }} />
-                            </IconButton>
+                            {!isSideNavOpen && (
+                                <Box>
+                                    <img src={sideNavIcon} alt="Croonus" width={60} />
+                                </Box>
+                            )}
+                            <IconButton onClick={openSidenav}>{isSideNavOpen ? <DehazeIcon sx={{ color: "var(--third-color)" }} /> : <EastIcon sx={{ color: "var(--third-color)" }} />}</IconButton>
                         </Grid>
 
                         <Grid container alignItems="center" width="auto">

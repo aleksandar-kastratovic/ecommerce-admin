@@ -96,12 +96,15 @@
   {
     "field_name": "Naslovna slika",
     "prop_name": "thumb_image_base64",
+    "validate": {
+      "imageUpload": null
+    },
     "in_main_table": false,
     "in_details": true,
     "editable": true,
     "disabled": false,
     "required": false,
-    "description": "",
+    "description": "aaaa",
     "ui_prop": "xyz",
     "sortable": true,
     "input_type": "image_button"

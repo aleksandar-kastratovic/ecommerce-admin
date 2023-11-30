@@ -323,6 +323,7 @@ const CreateForm = ({
               onChangeHandler={onChangeHandler}
               autoFocus={autoFocus}
               description={item.description}
+              validate={item.validate}
             />
           );
           break;
