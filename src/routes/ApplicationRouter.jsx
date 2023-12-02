@@ -15,7 +15,7 @@ const ApplicationRouter = () => {
   const authContext: { isLoggedIn: boolean, userScreens: [{ screen_code: string }], startScreen: null } = useContext(AuthContext);
 
   // Get the default screen for the user
-  const defaultPath = availableScreens[authContext.startScreen]?.path ?? "/login";
+  const defaultPath = availableScreens[authContext.startScreen]?.path ?? "/homepage";
 
   // Unauthorized users
   const unauthorizedRoutes = (

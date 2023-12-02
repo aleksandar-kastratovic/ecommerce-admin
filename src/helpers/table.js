@@ -79,6 +79,27 @@ export const columnCell = (value, column, rowType) => {
             } else {
                 return value;
             }
+        case "multiple_images_one":
+            if (column === "input") {
+                const arrParsed = JSON.parse(value);
+                return (
+                    <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
+                        {arrParsed.length > 0 ? (
+                            arrParsed.map((item) => {
+                                return (
+                                    <div key={item.id} style={{ height: "100%", width: "30px", display: "flex", alignItems: "center", marginRight: "0.3rem" }}>
+                                        <img src={item.file + `?time=${time}`} style={{ height: "100%", width: "100%", objectFit: "cover" }} alt="Slika" />
+                                    </div>
+                                );
+                            })
+                        ) : (
+                            <Icon sx={{ color: "#b3b3b3" }}>no_photography</Icon>
+                        )}
+                    </div>
+                );
+            } else {
+                return value;
+            }
         case "gallery":
             // varijacije tabela
             if (column === "gallery") {
@@ -86,9 +107,11 @@ export const columnCell = (value, column, rowType) => {
                     <div style={{ height: "30px", display: "flex", alignItems: "center" }}>
                         {value.length > 0 ? (
                             value.map((item) => {
+                                let time = new Date().getTime().toString();
+                                let imagePath = item.file + `?time=${time}`;
                                 return (
                                     <div key={item.id} style={{ height: "100%", width: "30px", marginRight: "0.3rem" }}>
-                                        <img src={item.file} style={{ height: "100%", width: "100%", objectFit: "cover" }} alt="Slika" />
+                                        <img src={imagePath} style={{ height: "100%", width: "100%", objectFit: "cover" }} alt="Slika" />
                                     </div>
                                 );
                             })

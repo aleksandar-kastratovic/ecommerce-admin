@@ -44,7 +44,6 @@ const ProductDetails = () => {
   const [basicDataTemp, setBasicDataTemp] = useState(basic_data);
 
   const updateNewFieldsInDetails = (data, isNew) => {
-
     data.map((item, i) => {
       if (isNew) {
         if (item.prop_name === 'new_from' || item.prop_name === 'new_to') {
@@ -95,6 +94,7 @@ const ProductDetails = () => {
   const validateData = (data, field) => {
     let ret = data;
     switch (field) {
+
       case "new":
         updateNewFieldsInDetails(basic_data, ret.new);
         return ret;

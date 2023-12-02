@@ -18,9 +18,10 @@ const ProductVariation = ({ parentId, tblFields }) => {
   const [fields, setFields] = useState(null);
   const [selectedColumn, setSelectedColumn] = useState(null);
   const [showSubmitModalButton, setShowSubmitModalButton] = useState(true);
+  const [imageInfo, setImageInfo] = useState(null);
   const apiPathGallery = "admin/product-items/variants/gallery";
-
-  const galleryFormFields = gallery;
+  // const galleryFormFields = gallery;
+  const [galleryFormFields, setGalleryFormFields] = useState(gallery);
 
   const filterFields = (event, fieldBhavior, column) => {
     const { type } = fieldBhavior;
@@ -54,7 +55,7 @@ const ProductVariation = ({ parentId, tblFields }) => {
             setFields([...arr]);
             break;
           case 'gallery_field':
-            // setFields(gallery);
+            // setFields(null);
             break;
           default:
             setFields(null);
@@ -85,29 +86,53 @@ const ProductVariation = ({ parentId, tblFields }) => {
     return values;
   }
 
+  const handleInformationImage = () => {
+    api.get(`admin/product-items/variants/gallery/upload-options`)
+      .then((response) => {
+        setImageInfo(response.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
+
   const handleSubmitWrapper = (parentId, selectedColumn) => {
     const { urls, row } = selectedColumn;
-    const handleSubmit = (data) => {
-      let req = {
-        id: data.new ? null : data.id,
-        id_product: row?.id ?? null,
-        id_product_parent: parentId ?? null,
-        file_base64: data.src,
-        order: data.position ?? 0,
-        title: null,
-        subtitle: null,
-        short_description: null,
-        description: null,
-      };
-      api.post(`${urls['save']?.url}`, req)
-        .then((response) => {
-          toast.success("Uspešno");
-        })
-        .catch((error) => {
-          toast.warn("Greška");
-          console.warn(error);
-        });
-    };
+    const handleSubmit = (data, options = {}) => {
+      const allowedFormats = imageInfo ? imageInfo.allow_format.map(format => format?.mime_type.toLowerCase()) : [];
+      const allowSize = imageInfo ? Number(imageInfo.allow_size) : 0;
+      const fileExtension = data?.type.toLowerCase();
+      const fileSizeInB = Number(data.size);
+
+      if (allowedFormats.length > 0 && allowedFormats.includes(fileExtension)) {
+        if (fileSizeInB > allowSize) {
+          toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
+        } else {
+          let req = {
+            id: data.new ? null : data.id,
+            id_product: row?.id ?? null,
+            id_product_parent: parentId ?? null,
+            file_base64: data.src,
+            order: data.position ?? 0,
+            title: null,
+            subtitle: null,
+            short_description: null,
+            description: null,
+          };
+
+          let postApi = options?.crop ? urls['save_crop']?.url : urls['save']?.url;
+          api.post(`${postApi}`, req)
+            .then((response) => {
+              toast.success("Uspešno");
+            })
+            .catch((error) => {
+              toast.warn("Greška");
+              console.warn(error);
+            });
+        };
+
+      } else {
+        toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
+      }
+    }
     return handleSubmit;
   }
 
@@ -137,17 +162,25 @@ const ProductVariation = ({ parentId, tblFields }) => {
     if (selectedColumn) {
       const { galleryData, column } = selectedColumn;
       if (column?.prop_name === 'gallery') {
+        let allowFormats = imageInfo ? imageInfo.allow_format.map(format => format?.name.toLowerCase()) : [];
+        let description = `Dozvoljeni formati su: ${allowFormats.join(", ")}. Maksimalna dozvoljena veličina je ${imageInfo?.allow_size / (1024 * 1024)} MB.`;
         galleryFormFields?.map((item) => {
           if (item?.prop_name === 'gallery') {
             item.uploadHandler = handleSubmitWrapper(parentId, galleryData);
             item.deleteHandler = handleDelete;
             item.handleReorder = handleReorder;
+            item.description = description;
+            item.validate.imageUpload = imageInfo
           }
         });
         setFields(galleryFormFields);
       }
     }
   }, [selectedColumn])
+
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
 
   const validateData = (data, field) => {
     let ret = data;
@@ -186,6 +219,13 @@ const ProductVariation = ({ parentId, tblFields }) => {
         (event, fieldBhavior, column, row, galleryData) => {
           if (column?.prop_name === 'gallery') {
             setShowSubmitModalButton(false);
+            let arr = galleryFormFields?.map((item, i) => {
+              return {
+                ...item,
+                additionalData: { column, galleryData }
+              }
+            })
+            setGalleryFormFields([...arr]);
           } else {
             setShowSubmitModalButton(true);
           }

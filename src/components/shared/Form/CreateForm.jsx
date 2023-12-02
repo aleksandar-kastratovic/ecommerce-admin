@@ -24,6 +24,7 @@ import {
 import FileButton from "../FileButton/FileButton";
 import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
 import Slider from "../Slider/Slider";
+import InputMultipleImagesOne from "../InputMultipleImages/InputMultipleImagesOne";
 
 const CreateForm = ({
   item = {},
@@ -53,7 +54,6 @@ const CreateForm = ({
   const onInputChangeHandler = (event) => {
     onChangeHandler(event);
   };
-
   let formItem = null;
   if (Array.isArray(item)) {
     formItem = (
@@ -311,6 +311,24 @@ const CreateForm = ({
             />
           );
           break;
+        case "multiple_images_one":
+          formItem = (
+            <InputMultipleImagesOne
+              label={item.field_name}
+              list={Array.isArray(value) ? value : []}
+              name={item.prop_name}
+              uploadHandler={item?.uploadHandler}
+              deleteHandler={item?.deleteHandler}
+              handleReorder={item?.handleReorder}
+              onChangeHandler={onChangeHandler}
+              autoFocus={autoFocus}
+              description={item.description}
+              validate={item.validate}
+              images={item.images && item.images !== undefined ? item.images : null}
+              additionalData={item?.additionalData}
+            />
+          )
+          break;
         case "multiple_images":
           formItem = (
             <InputMultipleImages
@@ -324,6 +342,7 @@ const CreateForm = ({
               autoFocus={autoFocus}
               description={item.description}
               validate={item.validate}
+              images={item.images && item.images !== undefined ? item.images : null}
             />
           );
           break;

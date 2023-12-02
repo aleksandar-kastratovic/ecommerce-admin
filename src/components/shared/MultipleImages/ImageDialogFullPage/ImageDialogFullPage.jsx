@@ -66,11 +66,15 @@ const ImageDialogFullPage = ({
     // with all the data that you need to save image
     // please keep in mind that this is an array of images
 
+    let base64 = base64Image;
+    const typeBase64 = base64.split(";")[0].split(":")[1];
+    let y = base64[base64.length - 2] === "=" ? 2 : 1;
+    const sizeBase64 = base64.length * (3 / 4) - y;
     let imageItem = {
       id: openFullPageDialog.id,
       position: openFullPageDialog.position,
       alt: openFullPageDialog.alt,
-      size: openFullPageDialog.size,
+      size: sizeBase64,
       type: openFullPageDialog.type,
       path: openFullPageDialog.path,
       name: imageName,
@@ -90,7 +94,7 @@ const ImageDialogFullPage = ({
       }
       return img;
     });
-
+    handleCloseEditMode();
     // in this state is everything you need for POST API
     // but please keep in mind to use state from parent component
     setImageList(newState);
