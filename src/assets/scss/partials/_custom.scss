@@ -2636,6 +2636,13 @@ div.rowContents {
     }
 }
 
+@media (max-width: 380px) {
+    .side-open #sidebar {
+        min-width: 12rem;
+        max-width: 12rem;
+    }
+}
+
 @media print {
     .main-wrapper {
         padding: 0;

@@ -69,7 +69,7 @@ const B2COrdersDetails = () => {
 
   return (
     <PageWrapper
-      title={`Narudžbenica: ${orderData?.slug}`}
+      title={`Narudžbenica:  ${orderData?.slug}`}
       back={() => {
         navigate(-1);
       }}
@@ -83,7 +83,7 @@ const B2COrdersDetails = () => {
       <Box
         className={styles.orderData}
         sx={{
-          marginBottom: "1rem", "@media (max-width: 1536px)": { flexDirection: "column", },
+          marginBottom: "1rem", "@media (max-width: 1200px)": { flexDirection: "column", },
         }}
       >
         <OrderSection title="Podaci kupca:" className={styles.orderSection50}>
@@ -91,9 +91,13 @@ const B2COrdersDetails = () => {
           <Box
             className={styles.orderDataSection}
             sx={{
+              "@media (max-width: 1536px)": {
+                flexDirection: "column",
+              },
               "@media print": {
                 display: "none",
               },
+
             }}>
             <Box className={styles.orderDataDisplay}>
               <p style={{ fontSize: "0.875rem" }}>
@@ -206,14 +210,27 @@ const B2COrdersDetails = () => {
                 </Box>
               )}
             </Box>
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box sx={{
+              display: "flex",
+              alignItems: "center",
+              "@media (max-width: 1350px)": {
+                flexDirection: "column",
+              },
+            }}>
               <InputInput value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Unesite tekst napomene" />
               <Button
                 type="submit"
                 label={"Sačuvaj"}
                 variant="contained"
                 disabled={isItemsLoading}
-                sx={{ marginLeft: "0.5rem", padding: "0.55rem", marginTop: "0.2rem" }}
+                sx={{
+                  marginLeft: "0.5rem",
+                  padding: "0.55rem",
+                  marginTop: "0.2rem",
+                  "@media (max-width: 1350px)": {
+                    marginLeft: "auto"
+                  },
+                }}
               />
             </Box>
           </Box>
@@ -221,7 +238,17 @@ const B2COrdersDetails = () => {
       </Box >
 
       <Box
-        sx={{ display: "grid", gridTemplateColumns: "78% auto", gap: "2rem", "@media (max-width: 1536px)": { gridTemplateColumns: "1fr" }, }}
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "78% auto",
+          gap: "2rem",
+          "@media (max-width: 1500px)":
+            { gridTemplateColumns: "60% auto" },
+          "@media (max-width: 1400px)":
+            { gridTemplateColumns: "55% auto" },
+          "@media (max-width: 1024px)":
+            { gridTemplateColumns: "1fr" },
+        }}
       >
         <OrderSection title="Proizvodi u narudžbenici:" styleBodyProductOrders={{ paddingTop: "0.5rem", overflowX: "auto" }} styleWrapperOfOrderSection={{ maxWidth: "100%", overflowX: "hidden" }} >
           <OrderItemsTable fields={tableFields} items={orderItems} />
