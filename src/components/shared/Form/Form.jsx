@@ -28,9 +28,11 @@ const Form = ({
   label, styleCheckbox,
   isLoading,
   onFilePicked = () => { },
+  handleRemoveFile = () => { },
   selectedFile,
   styleButtonSubmit,
-  styleWrapperButtons
+  styleWrapperButtons,
+  dataFromServer
 }) => {
   const navigate = useNavigate();
   const [data, setData] = useState(initialData ?? {});
@@ -264,6 +266,8 @@ const Form = ({
                   setData({ ...data, import: fileObject.name, file: fileObject.name });
                 }}
                 selectedFile={selectedFile}
+                handleRemoveFile={handleRemoveFile}
+                dataFromServer={dataFromServer}
               />
             );
           })}

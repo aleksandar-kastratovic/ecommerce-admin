@@ -1,20 +1,23 @@
 import React, { useEffect, useState } from "react";
-import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
+// import FormLabel from "@mui/material/FormLabel";
+// import FormControl from "@mui/material/FormControl";
 import "react-image-gallery/styles/css/image-gallery.css";
 import ReactImageGallery from "react-image-gallery";
 import Typography from "@mui/material/Typography";
 import images from "../../../assets/images/download.png"
+import { InputWrapper } from "../Form/FormInputs/FormInputs";
 
 const Slider = ({
   name = "",
   label = "",
   required = false,
-  description = "",
-  value = "",
+  // description = "",
+  // value = "",
   error = "",
   emptyMessage = "Trenutno nema slike/videa za prikaz.",
   dataFromServer = [],
+  margin,
+  disabled,
   sliderOptions = {
     lazyLoad: true,
     showThumbnails: true,
@@ -30,9 +33,6 @@ const Slider = ({
 }) => {
   const [items, setItems] = useState([]);
 
-  // useEffect(() => {
-  //   setItems(dataFromServer);
-  // }, [dataFromServer]);
   useEffect(() => {
     if (JSON.stringify(dataFromServer) !== JSON.stringify(items)) {
       setItems(dataFromServer);
@@ -53,8 +53,9 @@ const Slider = ({
 
   return (
     <>
-      <FormControl>
-        <FormLabel required={required}>{label}</FormLabel>
+      <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error}>
+        {/* <FormControl>
+        <FormLabel required={required}>{label}</FormLabel> */}
         {items.length > 0 ? (
           <ReactImageGallery
 
@@ -72,7 +73,8 @@ const Slider = ({
             {emptyMessage}
           </Typography>
         )}
-      </FormControl>
+        {/* </FormControl> */}
+      </InputWrapper>
     </>
   );
 };

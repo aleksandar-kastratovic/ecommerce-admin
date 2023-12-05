@@ -82,11 +82,13 @@ const ListPage = ({
   customFields = null,
   customNewButtonPath,
   onFilePicked,
+  handleRemoveFile,
   selectedFile,
   openModalGlobal = {},
   onDismissModal = () => { },
   listData = false,
-  labelSaveButton
+  labelSaveButton,
+  dataFromServer
 }) => {
   // TODO Sorting is disabled as it does not work with pagination
   columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
@@ -406,8 +408,10 @@ const ListPage = ({
         useModalGalleryInjection={useModalGalleryInjection}
         savePrapareDataHandler={savePrapareDataHandler}
         onFilePicked={onFilePicked}
+        handleRemoveFile={handleRemoveFile}
         selectedFile={selectedFile}
         label={labelSaveButton}
+        dataFromServer={dataFromServer}
       />
       <DeleteDialog children={deleteModalChildren} selectedRowData={selectedRowData} handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} />
     </>

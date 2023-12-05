@@ -43,6 +43,8 @@ const CreateForm = ({
   autoFocus,
   onFilePicked = () => { },
   selectedFile,
+  handleRemoveFile = () => { },
+  dataFromServer,
   // allowedFileTypes,
 }) => {
   // depending on input type in fields you will get a control
@@ -451,6 +453,7 @@ const CreateForm = ({
               selectedFile={selectedFile}
               uiProp={item?.ui_prop}
               multipleFileSelection={item?.multipleFileSelection}
+              handleRemoveFile={handleRemoveFile}
             />
           )
           break;
@@ -459,8 +462,14 @@ const CreateForm = ({
             <Slider
               label={item.field_name}
               name={item.prop_name}
+              disabled={disabled}
+              error={error}
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
+              sliderOptions={item.sliderOptions}
+              dataFromServer={dataFromServer}
             />
           )
+          break;
         default:
           formItem = null;
       }
