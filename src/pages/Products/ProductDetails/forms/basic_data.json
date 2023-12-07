@@ -39,9 +39,7 @@
       }
     },
     "sortable": false,
-    "input_type": "input",
-    "in_details_new_display": false,
-    "in_details_edit_display": true
+    "input_type": "input"
   },
   {
     "field_name": "Šifra",

@@ -1138,19 +1138,21 @@ export const FilePicker = ({ label, required, disabled, margin, error = null, on
     if (multipleFileSelection) {
       return (
         selectedFile && (
-          <span style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial", display: "flex" }}>
+          <span style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial", display: "flex", width: "100%" }}>
             Izabrani fajlovi:
             {selectedFile.length > 0
               ? selectedFile.map((file, index) => {
                 return (
-                  <Box key={file.name} sx={{ marginLeft: index === 0 ? "0.3rem" : "0" }}>
+                  <Box key={file.name} sx={{
+                    marginLeft: index === 0 ? "0.3rem" : "0", whiteSpace: "wrap", overflow: "hidden", textOverflow: "ellipsis",
+                  }}>
                     {index > 0 && ", "}
                     {file.name}
                   </Box>
                 );
               })
               : " Kliknite ovde kako biste odabrali fajl."}
-          </span>
+          </span >
         )
       );
     } else {
@@ -1168,7 +1170,7 @@ export const FilePicker = ({ label, required, disabled, margin, error = null, on
         <span span key={item?.name} style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial", display: "flex", alignItems: "center", marginRight: "0.8rem" }}>
           {item?.name}
           < CloseIcon sx={{ fontSize: "0.9rem", cursor: "pointer", marginLeft: "0.2rem" }
-          } onClick={() => handleRemoveFile(item)} />
+          } onClick={() => { handleRemoveFile(item) }} />
         </span>
       ));
     }

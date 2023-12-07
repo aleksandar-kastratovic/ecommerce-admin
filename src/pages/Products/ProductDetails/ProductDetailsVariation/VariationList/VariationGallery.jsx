@@ -16,6 +16,7 @@ const VariationGallery = ({ productParentId, productId }) => {
   };
 
   const handleSubmit = (data) => {
+
     let req = {
       id: data.new ? null : data.id,
       id_product_parent: productParentId,
@@ -29,6 +30,7 @@ const VariationGallery = ({ productParentId, productId }) => {
     };
     api.post(`${apiPath}`, req)
       .then((response) => {
+        console.log(response, "response")
         toast.success("Uspešno");
         handleData();
       })

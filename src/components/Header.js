@@ -17,6 +17,7 @@ import MenuItem from "@mui/material/MenuItem";
 import { toast } from "react-toastify";
 import sideNavIcon from "../assets/images/croonus-sidebar-icon.svg";
 import logoMediaPrint from "../assets/images/croonus-sidebar-logo-dark.svg";
+import { set } from "lodash";
 
 const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
     const apiPath = "admin/profile/logout";
@@ -95,7 +96,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
                             },
                         }}
                     >
-                        <img src={sideNavIcon} alt="Croonus" width={60} className="sideNavIcon" />
+                        {/* <img src={sideNavIcon} alt="Croonus" width={60} className="sideNavIcon" /> */}
                         <img src={logoMediaPrint} alt="Croonus" width={300} className="mediaPrintLogo" />
                     </Box>
 
@@ -118,11 +119,12 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
                             xs={1}
                             sx={{
                                 pr: 1,
-                                "@media (max-width: 900px)": {
-                                    order: 1,
-                                },
+                                // "@media (max-width: 900px)": {
+                                //     order: 1,
+                                // },
                                 display: "flex",
                                 alignItems: "center",
+                                marginRight: "auto",
                             }}
                         >
                             {!isSideNavOpen && (
@@ -130,7 +132,23 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
                                     <img src={sideNavIcon} alt="Croonus" width={60} />
                                 </Box>
                             )}
-                            <IconButton onClick={openSidenav}>{isSideNavOpen ? <DehazeIcon sx={{ color: "var(--third-color)" }} /> : <EastIcon sx={{ color: "var(--third-color)" }} />}</IconButton>
+                            <IconButton onClick={openSidenav}>
+                                {isSideNavOpen ? (
+                                    <DehazeIcon
+                                        sx={{
+                                            color: "var(--third-color)",
+                                            "@media (max-width: 899px)": {
+                                                paddingLeft: "14rem",
+                                            },
+                                            "@media (max-width: 380px)": {
+                                                paddingLeft: "10.5rem",
+                                            },
+                                        }}
+                                    />
+                                ) : (
+                                    <EastIcon sx={{ color: "var(--third-color)" }} />
+                                )}
+                            </IconButton>
                         </Grid>
 
                         <Grid container alignItems="center" width="auto">

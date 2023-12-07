@@ -10,11 +10,31 @@ import { formatDate, formatDateTime } from "../../../helpers/dateFormat";
 import ImageDialog from "../Dialogs/ImageDialog";
 import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
+import { toast } from "react-toastify";
 
 
-const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCancel = () => navigate(-1), onCloseModalButton = () => { }, cancelButton = false, submitButton = true, closeButton = false, queryString = "", onChange = () => { }, validateData = (data) => data, label, styleCheckbox, isLoading, onFilePicked = () => { }, selectedFile, styleButtonSubmit, styleWrapperButtons }) => {
+const Form = ({
+  formFields = [],
+  initialData = {},
+  onSubmit = () => null,
+  onCancel = () => navigate(-1),
+  onCloseModalButton = () => { },
+  cancelButton = false,
+  submitButton = true,
+  closeButton = false,
+  queryString = "",
+  onChange = () => { },
+  validateData = (data) => data,
+  label, styleCheckbox,
+  isLoading,
+  onFilePicked = () => { },
+  handleRemoveFile = () => { },
+  selectedFile,
+  styleButtonSubmit,
+  styleWrapperButtons,
+  dataFromServer
+}) => {
   const navigate = useNavigate();
-
   const [data, setData] = useState(initialData ?? {});
   const [inputsError, setInputsError] = useState([]);
   const [openImageDialog, setOpenImageDialog] = useState({
@@ -35,7 +55,6 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
       return inputsError;
     });
   }
-
 
   const submitHandler = (event) => {
     event.preventDefault && event.preventDefault();
@@ -86,18 +105,48 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
   };
 
   const formImageUpload = useCallback(
-    (event) => {
-      event.preventDefault();
-      const selectedFile = event.target.files[0];
+    (event, validation) => {
+      if (validation) {
+        event.preventDefault();
+        const selectedFile = event.target.files[0];
+        const { size } = selectedFile;
+        const { allow_size, allow_format } = validation;
+        let arrOfMimeTypes = allow_format.map((format) => format.mime_type);
 
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const timeOutId = setTimeout(() => {
-          setter(event, reader.result);
-        }, 500);
-        return () => clearTimeout(timeOutId);
-      };
-      reader.readAsDataURL(selectedFile);
+        const allowSize = allow_size ? Number(allow_size) : 0;
+        const fileSizeInB = Number(size);
+        let isSizeAllowed = fileSizeInB < allowSize;
+        let isFormatAllowed = arrOfMimeTypes.includes(selectedFile.type);
+        if (!isFormatAllowed) {
+          toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${arrOfMimeTypes.join(", ")}`);
+          return;
+        }
+        if (!isSizeAllowed) {
+          toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
+          return;
+        }
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const timeOutId = setTimeout(() => {
+            setter(event, reader.result);
+          }, 500);
+          return () => clearTimeout(timeOutId);
+        };
+        reader.readAsDataURL(selectedFile);
+
+      } else {
+        event.preventDefault();
+        const selectedFile = event.target.files[0];
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          const timeOutId = setTimeout(() => {
+            setter(event, reader.result);
+          }, 500);
+          return () => clearTimeout(timeOutId);
+        };
+        reader.readAsDataURL(selectedFile);
+      }
     },
     [data]
   );
@@ -180,7 +229,6 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
 
             // Priprema vrednosti pre nego sto se prosledi u komponentu
             let temp_value = Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name];
-
             // Provera da li input ima vrednost, ukoliko nema prvi input koji nema vrednost se fokusira da bi korisnik mogao da nesmetano unosi podatke
             if (temp_value === null && !checkIsFocused) {
               checkIsFocused = true;
@@ -194,7 +242,10 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
                 data-test-id="admin-form"
                 onChangeHandler={formItemChangeHandler}
                 onChangeAutoHandler={formItemAutoCompleteChangeHandler}
-                onImageUpload={formImageUpload}
+                onImageUpload={(ev) => {
+                  let validation = item?.validate?.imageUpload !== null && item?.validate?.imageUpload !== undefined ? item?.validate?.imageUpload : null;
+                  formImageUpload(ev, validation);
+                }}
                 onOpenImageDialog={onOpenImageDialog}
                 item={item}
                 key={index}
@@ -215,6 +266,8 @@ const Form = ({ formFields = [], initialData = {}, onSubmit = () => null, onCanc
                   setData({ ...data, import: fileObject.name, file: fileObject.name });
                 }}
                 selectedFile={selectedFile}
+                handleRemoveFile={handleRemoveFile}
+                dataFromServer={dataFromServer}
               />
             );
           })}

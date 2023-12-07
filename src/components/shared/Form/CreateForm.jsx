@@ -24,6 +24,7 @@ import {
 import FileButton from "../FileButton/FileButton";
 import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
 import Slider from "../Slider/Slider";
+import InputMultipleImagesOne from "../InputMultipleImages/InputMultipleImagesOne";
 
 const CreateForm = ({
   item = {},
@@ -42,6 +43,8 @@ const CreateForm = ({
   autoFocus,
   onFilePicked = () => { },
   selectedFile,
+  handleRemoveFile = () => { },
+  dataFromServer,
   // allowedFileTypes,
 }) => {
   // depending on input type in fields you will get a control
@@ -53,7 +56,6 @@ const CreateForm = ({
   const onInputChangeHandler = (event) => {
     onChangeHandler(event);
   };
-
   let formItem = null;
   if (Array.isArray(item)) {
     formItem = (
@@ -311,6 +313,24 @@ const CreateForm = ({
             />
           );
           break;
+        case "multiple_images_one":
+          formItem = (
+            <InputMultipleImagesOne
+              label={item.field_name}
+              list={Array.isArray(value) ? value : []}
+              name={item.prop_name}
+              uploadHandler={item?.uploadHandler}
+              deleteHandler={item?.deleteHandler}
+              handleReorder={item?.handleReorder}
+              onChangeHandler={onChangeHandler}
+              autoFocus={autoFocus}
+              description={item.description}
+              validate={item.validate}
+              images={item.images && item.images !== undefined ? item.images : null}
+              additionalData={item?.additionalData}
+            />
+          )
+          break;
         case "multiple_images":
           formItem = (
             <InputMultipleImages
@@ -324,6 +344,7 @@ const CreateForm = ({
               autoFocus={autoFocus}
               description={item.description}
               validate={item.validate}
+              images={item.images && item.images !== undefined ? item.images : null}
             />
           );
           break;
@@ -432,6 +453,7 @@ const CreateForm = ({
               selectedFile={selectedFile}
               uiProp={item?.ui_prop}
               multipleFileSelection={item?.multipleFileSelection}
+              handleRemoveFile={handleRemoveFile}
             />
           )
           break;
@@ -440,8 +462,14 @@ const CreateForm = ({
             <Slider
               label={item.field_name}
               name={item.prop_name}
+              disabled={disabled}
+              error={error}
+              required={typeof item.required === "number" ? item.required === 1 : item.required}
+              sliderOptions={item.sliderOptions}
+              dataFromServer={dataFromServer}
             />
           )
+          break;
         default:
           formItem = null;
       }

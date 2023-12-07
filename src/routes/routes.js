@@ -12,6 +12,7 @@ import Municipalities from "../pages/Municipalities/Municipalities";
 import Manufacturers from "../pages/Manufacturers/Manufacturers";
 import ProductDetails from "../pages/Products/ProductDetails/ProductDetails";
 import ProductGroupDetails from "../pages/ProductSpecs/ProductGroupDetails/ProductGroupDetails";
+import ProductsPriceMarkets from "../pages/ProductsPriceMarkets/ProductsPriceMarkets";
 import ProductSpecsGroups from "../pages/ProductSpecs/ProductSpecsGroups";
 // import ProductVariantsAttributes from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
 import ProductVariantsAttributesDetails from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
@@ -137,6 +138,7 @@ const screens = {
         [
             [":prodId", ProductDetails],
             ["prices-groups", PricesGroupsListPage],
+            ["price-markets", ProductsPriceMarkets],
             ["product-items-variants-attributes/group-attribute", ProductVariantsAttributesDetails],
             ["product-specs/groups", ProductSpecsGroups],
             ["product-specs/groups/:groupId", ProductGroupDetails],

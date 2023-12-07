@@ -14,24 +14,22 @@ const Status = ({ statusCountB2C, isLoadingStatusCountB2C }) => {
     switch (statusName) {
       case 'Novo':
         return 'var(--statusNew)';
-      case 'Potvrđeno':
-        return 'var(--statusConfirmed)';
-      case 'Paket spreman za slanje':
-        return 'var(--statusReady)';
-      case 'Paket je preuzet':
-        return 'var(--statusTaken)';
-      case 'Porudžbina je dostavljena':
-        return 'var(--statusDelivered)';
+      // case 'Potvrđeno':
+      //   return 'var(--statusConfirmed)';
+      // case 'Paket spreman za slanje':
+      //   return 'var(--statusReady)';
+      // case 'Paket je preuzet':
+      //   return 'var(--statusTaken)';
+      // case 'Porudžbina je dostavljena':
+      //   return 'var(--statusDelivered)';
       case 'Kompletirano':
         return 'var(--statusCompleted)';
       case 'Otkazano':
         return 'var(--statusCanceled)';
-      case 'Porudžbina je na čekanju':
-        return 'var(--statusOrderPanding)';
-      case 'Potvrđeno':
-        return 'var(--statusCanceled)';
+      // case 'Porudžbina je na čekanju':
+      //   return 'var(--statusOrderPanding)';
       default:
-        return 'defaultnaBoja';
+        return 'var(--statusOther)';
     }
   };
 
