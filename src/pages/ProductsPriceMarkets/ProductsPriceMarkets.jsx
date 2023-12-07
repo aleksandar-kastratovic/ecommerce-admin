@@ -70,7 +70,7 @@ const ProductsPriceMarkets = () => {
   return (
     <ListPage
       listPageId="ProductsPriceMarkets"
-      title="Cenovnik"
+      title="Tržište"
       customActions={customActions}
       apiUrl="admin/product-items/prices-markets"
       columnFields={tblFields}

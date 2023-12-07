@@ -9,6 +9,13 @@ const PricesGroupsListPage = () => {
 
   const additionalButtons = [
     {
+      label: "Tržište",
+      icon: false,
+      action: () => {
+        navigate("/products/price-markets");
+      },
+    },
+    {
       label: "Nazad",
       icon: IconList.arrowBack,
       action: () => navigate(-1),
