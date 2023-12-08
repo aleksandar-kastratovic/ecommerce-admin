@@ -36,7 +36,7 @@ const Gallery = ({ productId }) => {
   };
 
   const handleInformationImage = () => {
-    api.get(`admin/product-items/gallery/upload-options`)
+    api.get(`admin/product-items/gallery/options/upload`)
       .then((response) => {
         setImageInfo(response.payload);
       })
@@ -53,14 +53,12 @@ const Gallery = ({ productId }) => {
 
     if (allowedFormats.length > 0 && !allowedFormats.includes(fileExtension)) {
       toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
-      // setLoading(false);
       setImageUploadLoading(false);
       return;
     }
 
     if (fileSizeInB > allowSize) {
       toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
-      setLoading(false);
       setImageUploadLoading(false);
       return;
     }
@@ -71,13 +69,11 @@ const Gallery = ({ productId }) => {
       .then((response) => {
         toast.success("Uspešno");
         handleData();
-        // setLoading(false);
         setImageUploadLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
-        // setLoading(false);
         setImageUploadLoading(false);
       })
 
@@ -85,33 +81,26 @@ const Gallery = ({ productId }) => {
   };
 
   const handleDelete = (id) => {
-    // setLoading(true);
     api.delete(`${apiPath}/${id}`)
       .then((response) => {
         toast.success("Uspešno");
         handleData(false);
-        // setLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
-        // setLoading(false);
       });
   };
 
   const handleReorder = (id, destination) => {
-    console.log(id, destination)
-    // setLoading(true);
     api.put(`${apiPath}/order`, { id: id, order: destination })
       .then((response) => {
         toast.success("Uspešno");
         handleData(false);
-        // setLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
-        // setLoading(false);
       });
   };
 
