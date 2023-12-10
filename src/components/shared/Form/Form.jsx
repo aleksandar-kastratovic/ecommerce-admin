@@ -32,7 +32,9 @@ const Form = ({
   selectedFile,
   styleButtonSubmit,
   styleWrapperButtons,
-  dataFromServer
+  dataFromServer,
+  widthOfElement,
+  heightOfElement
 }) => {
   const navigate = useNavigate();
   const [data, setData] = useState(initialData ?? {});
@@ -41,8 +43,8 @@ const Form = ({
     show: false,
     image: null,
     label: "",
-    width: 800,
-    height: 600,
+    width: widthOfElement,
+    height: heightOfElement,
     name: "",
   });
 
@@ -173,7 +175,7 @@ const Form = ({
         width: width,
         height: height,
         name: imageName,
-        showDimensions: false,
+        showDimensions: true,
       });
     }
   };

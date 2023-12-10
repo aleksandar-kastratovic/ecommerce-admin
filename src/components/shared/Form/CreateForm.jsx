@@ -355,6 +355,9 @@ const CreateForm = ({
               name={item.prop_name}
               onChangeHandler={onChangeHandler}
               autoFocus={autoFocus}
+              validate={item.validate}
+              images={item.images && item.images !== undefined ? item.images : null}
+              description={item.description}
             />
           )
           break;

@@ -14,6 +14,7 @@ import AuthContext from "../../../store/auth-contex";
 
 const CategoriesDetails = () => {
   const { gid, cid } = useParams();
+
   const init = {
     id: null,
     name: null,
@@ -25,17 +26,28 @@ const CategoriesDetails = () => {
     short_description: null,
     status: "on",
   };
+
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+  const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
   const apiPath = "admin/category-product/categories";
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
 
+  const handleInformationImage = () => {
+    api.get(`admin/category-product/categories/options/upload`)
+      .then((response) => {
+        formatFormFields(response?.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
+
   const handleSubmit = (data) => {
     setIsLoadingOnSubmit(true);
+
     let oldId = data.id;
     api.post(apiPath, { ...data, id_category_product_groups: gid })
       .then((response) => {
@@ -71,13 +83,40 @@ const CategoriesDetails = () => {
     handleData();
   }, []);
 
+  const formatFormFields = (data) => {
+    if (data) {
+      const { allow_size, allow_format } = data;
+      const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+      let arr = formFields.map((field) => {
+        if (field?.prop_name === 'image') {
+          return {
+            ...field,
+            description: descripiton,
+            validate: {
+              imageUpload: data
+            }
+          };
+        } else {
+          return {
+            ...field
+          }
+        }
+      });
+      setFormFieldsTemp([...arr]);
+    }
+  }
+
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
+
   const fields = [
     {
       id: "basic",
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={formFields} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}&id_category_product=${data?.id}`} isLoading={isLoadingOnSubmit} />,
+      component: <Form formFields={formFieldsTemp} initialData={data} onSubmit={handleSubmit} queryString={`id_category_product_groups=${gid}&id_category_product=${data?.id}`} isLoading={isLoadingOnSubmit} />,
     },
     {
       id: "seo",

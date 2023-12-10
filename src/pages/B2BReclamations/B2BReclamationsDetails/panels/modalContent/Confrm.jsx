@@ -52,7 +52,6 @@ const Confrm = ({ onClickSubmitHandler = () => { }, infoRow, onClickUpdateData =
     getData();
   }, [])
 
-  console.log("getdatainfo", getDataInfo.file)
 
   return (
     <Box sx={{ width: "100%" }}>

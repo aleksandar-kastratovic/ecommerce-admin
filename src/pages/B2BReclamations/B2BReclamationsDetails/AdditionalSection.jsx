@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AutocompleteInputFreeSolo, FilePicker, InputCheckbox, InputDateTime, InputInput, InputText } from "../../../components/shared/Form/FormInputs/FormInputs";
 import AuthContext from "../../../store/auth-contex";
 import Buttons from "../../../components/shared/Form/Buttons/Buttons";
@@ -27,6 +27,8 @@ const AdditionalSection = ({ basicData, openModal, onClickSubmitHandler = () => 
   const [basicDataOrderNumber, setBasicDataOrderNumber] = useState([]);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [additionalSectionBasic, setAdditionalSectionBasic] = useState(basicData);
+
+  const [fileInfo, setFileInfo] = useState(null);
 
   const apiPathNew = `admin/reclamations-b2b/items/order_items/${selectedValue}?id_company=${additionalSectionBasic?.id_company}`;
 
@@ -60,6 +62,14 @@ const AdditionalSection = ({ basicData, openModal, onClickSubmitHandler = () => 
     description: descriptionReclamatins ?? "",
     responsive_type: formattedCheckedValues ?? [],
     file: fileBase64 ?? [],
+  };
+
+  const handleInformationImage = () => {
+    api.get(`admin/reclamations-b2b/items/options/upload`)
+      .then((response) => {
+        setFileInfo(response.payload);
+      })
+      .catch((error) => console.warn(error));
   };
 
   const submitHandlerReclamationsNewId = () => {
@@ -167,6 +177,12 @@ const AdditionalSection = ({ basicData, openModal, onClickSubmitHandler = () => 
         toast.warn("Greška");
       });
   }
+
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
+
+
 
   return (
     <>
@@ -339,10 +355,25 @@ const AdditionalSection = ({ basicData, openModal, onClickSubmitHandler = () => 
           </Box>
 
           <FilePicker
+            description={`Veličina fajla ne sme biti veća od ${fileInfo ? (fileInfo.allow_size / (1024 * 1024)).toFixed(2) : ""}MB. Dozvoljeni formati fajla: ${fileInfo ? fileInfo.allow_format.map((format) => format.name).join(", ") : ""}`}
             label="Odabir fajla"
             selectedFile={selectedFiles}
-            onFilePicked={(file) => {
-              setSelectedFiles([...selectedFiles, file]);
+            onFilePicked={(fileObject) => {
+              const { allow_format, allow_size } = fileInfo
+              const { file } = fileObject;
+              const { type, size } = file;
+              const allowedFormats = allow_format.map(format => format?.mime_type.toLowerCase());
+              const isFormatAllowed = allowedFormats.includes(type.toLowerCase());
+              const fileSizeInB = Number(size);
+              if (isFormatAllowed) {
+                if (fileSizeInB < Number(allow_size)) {
+                  setSelectedFiles([...selectedFiles, file]);
+                } else {
+                  toast.error(`Veličina fila je prevelika. Maksimalna dozvoljena veličina je ${allow_size / (1024 * 1024)} MB.`);
+                }
+              } else {
+                toast.error(`Nedozvoljeni format fila. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
+              }
             }}
             multipleFileSelection={true}
             handleRemoveFile={(file) => {

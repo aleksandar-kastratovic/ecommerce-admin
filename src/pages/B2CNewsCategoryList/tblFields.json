@@ -41,6 +41,9 @@
   {
     "field_name": "Ikonica",
     "prop_name": "icon",
+    "validate": {
+      "imageUpload": null
+    },
     "in_main_table": true,
     "in_details": true,
     "editable": true,

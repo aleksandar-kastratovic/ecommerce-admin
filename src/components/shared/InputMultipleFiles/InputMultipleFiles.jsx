@@ -40,6 +40,8 @@ export const InputMultipleFiles = ({
   handleReorder,
   dialogFormFields = [],
   dialogGetPath,
+  description,
+  validate = null
 }) => {
   const [imageList, setImageList] = useState(list);
   const [dragActive, setDragActive] = useState(false);
@@ -95,7 +97,25 @@ export const InputMultipleFiles = ({
         newImagesArray = [...imageList, ...newImagesArray];
       }
 
-      setImageList(newImagesArray);
+      if (validate !== undefined && validate !== null) {
+        let image = selectedFiles[0];
+        const { size, type } = image;
+        const { imageUpload } = validate;
+        const { allow_size, allow_format } = imageUpload;
+        let allowedFormatMime = allow_format?.map((item, i) => { return item?.mime_type });
+        if (allowedFormatMime.includes(type)) {
+          if (size > allow_size) {
+            console.log("Image size is too big");
+          } else {
+            console.log("Not too big");
+            setImageList(newImagesArray);
+          }
+        } else {
+          console.log("Image format is not allowed");
+        }
+      } else {
+        setImageList(newImagesArray);
+      }
     }
   };
 
@@ -104,6 +124,13 @@ export const InputMultipleFiles = ({
     setOpenFullPageDialog({
       show: true,
       item: item,
+      image: src,
+      alt: alt,
+      name: name,
+      size: size,
+      type: type,
+      path: path,
+      position: position,
     });
   };
 
@@ -142,6 +169,7 @@ export const InputMultipleFiles = ({
       size: selectedFile.size,
       type: selectedFile.type,
       name: selectedFile.name,
+      path: selectedFile.path,
       src: result,
     };
 
@@ -196,9 +224,24 @@ export const InputMultipleFiles = ({
 
   return (
     <Grid container spacing={1} direction="row" sx={{ width: "auto", margin: "2rem 0 0 0" }}>
-      <MultipleImages handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} icon={IconList.uploadFile} />
+      <MultipleImages
+        handleMultipleImageUpload={handleUpload}
+        handleDrag={handleDrag}
+        handleDrop={handleUpload}
+        dragActive={dragActive}
+        accept={accept}
+        icon={IconList.uploadFile}
+        description={description}
+      />
 
-      <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} handleReorder={handleReorder} />
+      <ImageListRow
+        setImageList={setImageList}
+        imageList={imageList}
+        handleModalOpen={handleModalOpen}
+        handleDeleteImage={handleDeleteImage}
+        handleReorder={handleReorder}
+      />
+
       <FileDialog
         openFullPageDialog={openFullPageDialog}
         setOpenFullPageDialog={setOpenFullPageDialog}
@@ -209,6 +252,7 @@ export const InputMultipleFiles = ({
         formFields={dialogFormFields}
         getPath={dialogGetPath}
       />
+
       <DeleteDialog
         title="Brisanje"
         description="Da li ste sigurni da želite da obrišete?"

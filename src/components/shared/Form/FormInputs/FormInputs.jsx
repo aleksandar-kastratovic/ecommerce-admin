@@ -1113,13 +1113,13 @@ export const FilePicker = ({ label, required, disabled, margin, error = null, on
       return;
     }
 
-    blobToData(file).then((result) => {
-      let obj = {
-        base_64: result,
-        name: file?.name
-      }
-      onFilePicked(obj);
-    });
+    // blobToData(file).then((result) => {
+    //   let obj = {
+    //     base_64: result,
+    //     name: file?.name,
+    //     file: file
+    //   }
+    // });
 
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -1127,7 +1127,9 @@ export const FilePicker = ({ label, required, disabled, margin, error = null, on
       const obj = {
         base_64: base64,
         name: file?.name,
+        file: file
       };
+      console.log("obj, obj", obj)
       onFilePicked(obj);
     };
     reader.readAsDataURL(file);

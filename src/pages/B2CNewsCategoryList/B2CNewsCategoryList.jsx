@@ -50,7 +50,16 @@ const B2CNewsCategorylist = () => {
   };
 
 
-  return <ListPage listPageId="B2CNewsCategorylist" apiUrl="admin/news-b2c/category/list" title="Vesti kategorije" columnFields={tblFields} additionalButtons={newsButtons} customActions={customActions} />;
+  return (
+    <ListPage
+      listPageId="B2CNewsCategorylist"
+      apiUrl="admin/news-b2c/category/list"
+      title="Vesti kategorije"
+      columnFields={tblFields}
+      additionalButtons={newsButtons}
+      customActions={customActions}
+    />
+  );
 };
 
 export default B2CNewsCategorylist;

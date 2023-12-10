@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import InputMultipleImages from "../../../../components/shared/InputMultipleImages/InputMultipleImages";
 import GallerySkeleton from "../../../../components/shared/Loading/GallerySkeleton";
 import AuthContext from "../../../../store/auth-contex";
+import UploadSkeleton from "../../../../components/shared/Loading/UploadSkeleton";
 
 const Gallery = ({ pageId }) => {
 
@@ -10,25 +11,62 @@ const Gallery = ({ pageId }) => {
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
   const apiPath = "admin/landing-pages-b2b/gallery";
+  const apiPathCrop = "admin/landing-pages-b2b/gallery/image-crop";
   const [loading, setLoading] = useState(false);
+  const [imageInfo, setImageInfo] = useState(null);
+  const [imageUploadLoading, setImageUploadLoading] = useState(false);
 
-  const handleData = () => {
-    setLoading(true);
+  const handleData = (showLoader = false) => {
+    if (showLoader) {
+      setLoading(true)
+    }
     api.list(`${apiPath}/${pageId}`)
       .then((response) => {
         setData(response?.payload?.items);
-        setLoading(false);
+        if (showLoader) {
+          setLoading(false)
+        }
       })
       .catch((error) => {
-        console.warn(error)
-        setLoading(false);
+        console.warn(error);
+        if (showLoader) {
+          setLoading(false)
+        }
       });
   };
 
-  const handleSubmit = (data) => {
-    setLoading(true);
+  const handleInformationImage = () => {
+    api.get(`admin/landing-pages-b2b/gallery/options/upload`)
+      .then((response) => {
+        setImageInfo(response.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
+
+
+  const handleSubmit = (data, options = {}) => {
+    setImageUploadLoading(true);
+
+    const allowedFormats = imageInfo ? imageInfo.allow_format.map(format => format?.mime_type.toLowerCase()) : [];
+    const allowSize = imageInfo ? Number(imageInfo.allow_size) : 0;
+    const fileExtension = data?.type.toLowerCase();
+    const fileSizeInB = Number(data.size);
+
+    if (allowedFormats.length > 0 && !allowedFormats.includes(fileExtension)) {
+      toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
+      // setLoading(false);
+      setImageUploadLoading(false);
+      return;
+    }
+
+    if (fileSizeInB > allowSize) {
+      toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
+      // setLoading(false);
+      setImageUploadLoading(false);
+      return;
+    }
     let req = {
-      // id: data.id,
+      id: data.new ? null : data.id,
       id_landing_page: pageId,
       file_base64: data.src,
       order: data.position ?? 0,
@@ -38,46 +76,49 @@ const Gallery = ({ pageId }) => {
       description: null,
       path: data.file ?? null,
     };
-
-    api.post(`${apiPath}`, req)
+    let postApi = options?.crop ? apiPathCrop : apiPath;
+    api.post(`${postApi}`, req)
       .then((response) => {
         toast.success("Uspešno");
         handleData();
-        setLoading(false);
+        // setLoading(false);
+        setImageUploadLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
-        setLoading(false);
+        // setLoading(false);
+        setImageUploadLoading(false);
       });
   };
 
   const handleDelete = (id) => {
-    setLoading(true);
+    // setLoading(true);
     api.delete(`${apiPath}/${id}`)
       .then((response) => {
         toast.success("Uspešno");
-        handleData();
-        setLoading(false);
+        handleData(false);
+        // setLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
-        setLoading(false);
+        // setLoading(false);
       });
   };
 
   const handleReorder = (id, destination) => {
-    setLoading(true);
+    // setLoading(true);
     api.put(`${apiPath}/order`, { id: id, order: destination })
       .then((response) => {
+        handleData(false);
         toast.success("Uspešno");
-        setLoading(false);
+        // setLoading(false);
       })
       .catch((error) => {
         toast.warn("Greška");
         console.warn(error);
-        setLoading(false);
+        // setLoading(false);
       });
   };
 
@@ -92,13 +133,29 @@ const Gallery = ({ pageId }) => {
     });
 
   useEffect(() => {
-    handleData();
+    handleData(true);
+    handleInformationImage();
   }, []);
 
   return (
     <>
-      {loading ? <GallerySkeleton /> : <InputMultipleImages list={list} name="Galerija" onChangeHandler={() => { }} uploadHandler={handleSubmit} deleteHandler={handleDelete} handleReorder={handleReorder} />}
-
+      {imageUploadLoading ? (
+        <UploadSkeleton
+          textUploading={"Učitavanje slike je u toku.."}
+        />
+      ) : loading ? (
+        < GallerySkeleton />
+      ) : (
+        <InputMultipleImages
+          list={list}
+          name="Galerija"
+          onChangeHandler={() => { }}
+          uploadHandler={handleSubmit}
+          deleteHandler={handleDelete}
+          handleReorder={handleReorder}
+          description={`Veličina fajla ne sme biti veća od ${imageInfo ? (imageInfo.allow_size / (1024 * 1024)).toFixed(2) : ""}MB. Dozvoljeni formati fajla: ${imageInfo ? imageInfo.allow_format.map((format) => format.name).join(", ") : ""}`}
+        />
+      )}
     </>
   )
 };

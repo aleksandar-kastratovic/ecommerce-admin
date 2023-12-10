@@ -1,9 +1,9 @@
 import formFields from "./formFields.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
-import { deepClone } from "@mui/x-data-grid/utils/utils";
+// import { deepClone } from "@mui/x-data-grid/utils/utils";
 import { toast } from "react-toastify";
 import ModalContent from "../../ModalContent";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../../../store/auth-contex";
 
 const GroupValues = ({ groupId }) => {
@@ -11,9 +11,15 @@ const GroupValues = ({ groupId }) => {
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
 
-  let newFields = deepClone(formFields);
+  // let newFields = deepClone(formFields);
 
-  let currencyField = newFields.find((item) => item.prop_name === "id_group_attribute")
+  // let currencyField = newFields.find((item) => item.prop_name === "id_group_attribute")
+  // if (currencyField == undefined) {
+  //   console.warn("Polje currency nije pronadjeno!");
+  //   return;
+  // }
+  const [tblFiedlsTemp, setTblFiedlsTemp] = useState(formFields);
+  let currencyField = tblFiedlsTemp.find((item) => item.prop_name === "id_group_attribute")
   if (currencyField == undefined) {
     console.warn("Polje currency nije pronadjeno!");
     return;
@@ -22,6 +28,38 @@ const GroupValues = ({ groupId }) => {
   const queryString = `id_group=${groupId}`;
 
   currencyField.queryString = queryString
+
+  const handleInformationImage = () => {
+    api.get(`admin/product-item-specifications/group-attribute-values/options/upload`)
+      .then((response) => {
+        formatFormFields(response?.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
+
+
+  const formatFormFields = (data) => {
+    if (data) {
+      const { allow_size, allow_format } = data;
+      const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+      let arr = formFields.map((field) => {
+        if (field?.prop_name === 'image') {
+          return {
+            ...field,
+            description: descripiton,
+            validate: {
+              imageUpload: data
+            }
+          };
+        } else {
+          return {
+            ...field
+          }
+        }
+      });
+      setTblFiedlsTemp([...arr]);
+    }
+  }
 
   const customActions = {
     delete: {
@@ -56,6 +94,10 @@ const GroupValues = ({ groupId }) => {
     },
   };
 
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
+
   return (
     <>
       <ListPage
@@ -69,7 +111,8 @@ const GroupValues = ({ groupId }) => {
           }
         ]}
         title=" "
-        columnFields={newFields}
+        columnFields={tblFiedlsTemp}
+        useColumnFields={true}
         actionNewButton="modal"
         addFieldLabel="Dodajte novu vrednost"
         showAddButton={true}

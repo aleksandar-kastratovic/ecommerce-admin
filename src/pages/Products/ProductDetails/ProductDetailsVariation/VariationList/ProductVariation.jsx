@@ -87,9 +87,10 @@ const ProductVariation = ({ parentId, tblFields }) => {
   }
 
   const handleInformationImage = () => {
-    api.get(`admin/product-items/variants/gallery/upload-options`)
+    api.get(`admin/product-items/variants/gallery/options/upload`)
       .then((response) => {
         setImageInfo(response.payload);
+
       })
       .catch((error) => console.warn(error));
   };

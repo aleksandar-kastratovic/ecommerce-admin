@@ -12,7 +12,6 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import ImageEditorComponent from "../../ImageEditorComponent/ImageEditorComponent";
-import Input from "@mui/material/Input";
 import CircularProgress from "@mui/material/CircularProgress";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -48,6 +47,7 @@ const ImageDialogFullPage = ({
 
   const handleOpenEditMode = () => {
     setEditMode(true);
+
   };
 
   const handleImageUpload = (e) => {
@@ -207,7 +207,7 @@ const ImageDialogFullPage = ({
             </Button>
             {/* <Button variant="outlined" component="label" startIcon={<PhotoCamera />}>
               Nova slika
-              <Input name="image" inputProps={{ accept: "image/*" }} id={openFullPageDialog.name} onChange={(e) => handleImageUpload(e)} type="file" sx={{ display: "none" }} />
+              <InputInput name="image" inputProps={{ accept: "image/*" }} id={openFullPageDialog.name} onChange={(e) => handleImageUpload(e)} type="file" sx={{ display: "none" }} />
             </Button> */}
             <Button variant="outlined" onClick={handleOpenEditMode} color="info" startIcon={<EditOutlinedIcon />}>
               Obradi sliku

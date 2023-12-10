@@ -19,6 +19,7 @@ const B2CNewsDetails = () => {
   const apiPath = "admin/news-b2c/news/basic-data";
   const navigate = useNavigate();
   const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
+  const [formFieldsTemp, setFormFieldsTemp] = useState(basic_data);
 
   const init = {
     id: null,
@@ -30,11 +31,22 @@ const B2CNewsDetails = () => {
     description: null,
     id_news_category: null,
     thumb_image: null,
+    file: null,
+    file_base64: null,
+    file_filename: null,
   };
 
   const [data, setData] = useState(init);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+
+  const handleInformationImage = () => {
+    api.get(`admin/news-b2c/news/basic-data/options/upload`)
+      .then((response) => {
+        formatFormFields(response?.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
 
   const handleData = async () => {
     setIsLoading(true);
@@ -74,13 +86,51 @@ const B2CNewsDetails = () => {
     handleData();
   }, []);
 
+  const validateData = (data, field) => {
+    let ret = data;
+    switch (field) {
+      case 'thumb_image':
+        return ret;
+      default:
+        return ret;
+    }
+  };
+
+  const formatFormFields = (data) => {
+    if (data) {
+      const { allow_size, allow_format } = data;
+      const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+      let arr = basic_data.map((field) => {
+        if (field?.prop_name === 'thumb_image') {
+          return {
+            ...field,
+            description: descripiton,
+            validate: {
+              imageUpload: data
+            }
+          };
+        } else {
+          return {
+            ...field
+          }
+        }
+      });
+      setFormFieldsTemp([...arr]);
+    }
+  }
+
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
+
+
   const fields = [
     {
       id: "basic",
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
+      component: <Form formFields={formFieldsTemp} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} validateData={validateData} onOpenImageDialog={e => { console.log(e) }} />,
     },
     {
       id: "gallery",

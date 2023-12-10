@@ -25,6 +25,7 @@ const B2CLandingPagesDetails = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+  const [formFieldsTmp, setFormFieldsTmp] = useState(basic_data);
 
   const handleData = async () => {
     setIsLoading(true);
@@ -39,7 +40,13 @@ const B2CLandingPagesDetails = () => {
       });
   };
 
-
+  const handleInformationImage = () => {
+    api.get(`admin/landing-pages-b2c/basic-data/options/upload`)
+      .then((response) => {
+        formatFormFields(response?.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
 
   const saveData = async (data) => {
     setIsLoadingOnSubmit(true);
@@ -63,9 +70,36 @@ const B2CLandingPagesDetails = () => {
       });
   };
 
+  const formatFormFields = (data) => {
+    if (data) {
+      const { allow_size, allow_format } = data;
+      const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+      let arr = basic_data.map((field) => {
+        if (field?.prop_name === 'image') {
+          return {
+            ...field,
+            description: descripiton,
+            validate: {
+              imageUpload: data
+            }
+          };
+        } else {
+          return {
+            ...field
+          }
+        }
+      });
+      setFormFieldsTmp([...arr]);
+    }
+  }
+
   useEffect(() => {
     handleData();
   }, []);
+
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
 
   const fields = [
     {
@@ -73,7 +107,7 @@ const B2CLandingPagesDetails = () => {
       name: "Osnovno",
       icon: IconList.inventory,
       enabled: true,
-      component: <Form formFields={basic_data} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
+      component: <Form formFields={formFieldsTmp} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
     },
     {
       id: "gallery",

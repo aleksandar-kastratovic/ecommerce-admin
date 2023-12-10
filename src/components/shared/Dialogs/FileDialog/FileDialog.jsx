@@ -22,7 +22,16 @@ import styles from "./FileDialog.module.scss";
 import Form from "../../Form/Form";
 import AuthContext from "../../../../store/auth-contex";
 
-const FileDialog = ({ openFullPageDialog, title = "", onImageUpload = () => { }, handleCloseImageDialog = () => { }, handleDeleteImage = () => { }, saveHandler = () => { }, formFields, getPath }) => {
+const FileDialog = ({
+  openFullPageDialog,
+  title = "",
+  onImageUpload = () => { },
+  handleCloseImageDialog = () => { },
+  handleDeleteImage = () => { },
+  saveHandler = () => { },
+  formFields,
+  getPath
+}) => {
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
   const [loadingImage, setLoadingImage] = useState(false);

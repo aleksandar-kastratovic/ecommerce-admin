@@ -34,8 +34,41 @@ import AuthContext from "../../../store/auth-contex";
  * @constructor
  */
 
-const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = null, sx, variant, apiPathFormModal, formFields, initialData = {}, label, customTitle, shortText, cancelButton, submitButton, closeButtonModalForm, clearButton = false, withoutSetterFunction = false, styleCheckbox, children, queryString = [], validateData, prepareInitialData = () => { }, modalObject = null, customTitleDataNameForEdit = "Izmeni", selectableCountryTown = false, useModalGalleryInjection = false, onCloseModalButton, allowedFileTypes, onFilePicked, selectedFile, onDismissModal = () => { } }) => {
-
+const ModalForm = ({
+  anchor,
+  openModal,
+  setOpenModal,
+  savePrapareDataHandler = null,
+  sx,
+  variant,
+  apiPathFormModal,
+  formFields,
+  initialData = {},
+  label,
+  customTitle,
+  shortText,
+  cancelButton,
+  submitButton,
+  closeButtonModalForm,
+  clearButton = false,
+  withoutSetterFunction = false,
+  styleCheckbox,
+  children,
+  queryString = [],
+  validateData,
+  prepareInitialData = () => { },
+  modalObject = null,
+  customTitleDataNameForEdit = "Izmeni",
+  selectableCountryTown = false,
+  useModalGalleryInjection = false,
+  onCloseModalButton,
+  allowedFileTypes,
+  onFilePicked,
+  selectedFile,
+  onDismissModal = () => { },
+  handleRemoveFile,
+  dataFromServer
+}) => {
   const { id, modalUrl = null } = openModal;
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
@@ -169,6 +202,8 @@ const ModalForm = ({ anchor, openModal, setOpenModal, savePrapareDataHandler = n
                 allowedFileTypes={allowedFileTypes}
                 onFilePicked={onFilePicked}
                 selectedFile={selectedFile}
+                handleRemoveFile={handleRemoveFile}
+                dataFromServer={dataFromServer}
               />
             </FormWrapper>
           </>)

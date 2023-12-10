@@ -31,6 +31,9 @@
     "field_name": "Slika",
     "prop_name": "image",
     "in_main_table": true,
+    "validate": {
+      "imageUpload": null
+    },
     "in_details": true,
     "editable": true,
     "disabled": false,

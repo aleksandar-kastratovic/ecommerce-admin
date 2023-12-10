@@ -14,7 +14,7 @@ const Document = ({ productId }) => {
   const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
 
   const handleInformationImage = () => {
-    api.get(`admin/product-items/gallery/upload-options`)
+    api.get(`admin/product-items/documents/basic-data/options/upload`)
       .then((response) => {
         formatFormFields(response?.payload);
       })

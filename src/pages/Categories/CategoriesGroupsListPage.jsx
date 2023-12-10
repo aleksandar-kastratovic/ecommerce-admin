@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 

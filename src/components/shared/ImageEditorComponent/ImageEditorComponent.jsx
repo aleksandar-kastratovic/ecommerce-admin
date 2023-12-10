@@ -32,26 +32,12 @@ const ImageEditorComponent = ({
 
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [rotation, setRotation] = useState(0);
-  const [showDimensionFromApi, setShowDimensionFromApi] = useState({});
   const [cropSize, setCropSize] = useState({
     width: typeof imageWidth !== 'number' ? imageWidth = 800 : imageWidth,
     height: typeof imageHeight !== 'number' ? imageHeight = 600 : imageHeight
   });
 
   const [infoCrop, setInfoCrop] = useState([]);
-
-  const handleDataDimension = () => {
-    api.get(`admin/product-items/gallery/crop-options`)
-      .then((response) => {
-        const dimensionsFromApi = response?.payload;
-        setInfoCrop(dimensionsFromApi);
-        if (Object.keys(dimensionsFromApi).length > 0 && dimensionsFromApi.width > 0 && dimensionsFromApi.height > 0) {
-          setShowDimensionFromApi(dimensionsFromApi);
-          setCropSize(dimensionsFromApi);
-        }
-      })
-      .catch((error) => console.warn(error));
-  };
 
   const [roundCrop, setRoundCrop] = useState(false);
   const [zoom, setZoom] = useState(1);
@@ -82,10 +68,6 @@ const ImageEditorComponent = ({
       console.error(e);
     }
   }, [croppedAreaPixels]);
-
-  useEffect(() => {
-    handleDataDimension();
-  }, []);
 
   return (
     <>
@@ -159,9 +141,6 @@ const ImageEditorComponent = ({
                   value={cropSize.width}
                   onChange={(e) => {
                     const value = e.target.value.trim();
-
-                    console.log("value width::", value)
-
                     setCropSize({
                       ...cropSize,
                       width: value === "" ? 50 : parseInt(value) || 0,
@@ -192,7 +171,6 @@ const ImageEditorComponent = ({
                   value={cropSize.height}
                   onChange={(e) => {
                     const value = e.target.value.trim();
-                    console.log("value height::", value)
                     setCropSize({
                       ...cropSize,
                       height: value === "" ? 50 : parseInt(value) || 0,

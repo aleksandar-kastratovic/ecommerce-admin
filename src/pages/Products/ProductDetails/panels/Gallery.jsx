@@ -43,6 +43,14 @@ const Gallery = ({ productId }) => {
       .catch((error) => console.warn(error));
   };
 
+  const handleCropInformationImage = () => {
+    api.get(`admin/product-items/gallery/options/crop`)
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => console.warn(error));
+  };
+
   const handleSubmit = (data, options = {}) => {
     // setLoading(true);
     setImageUploadLoading(true);

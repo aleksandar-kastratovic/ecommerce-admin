@@ -161,7 +161,6 @@ export const InputMultipleImages = ({
       return item.name === event.target.id;
     });
     const found = find[0];
-
     let imageItem = {
       id: found.id,
       position: found.position,
@@ -194,8 +193,8 @@ export const InputMultipleImages = ({
       path: selectedFile.path,
     });
   };
-
-  const handleDeleteImage = (e, deleteImgId, isNew) => {
+  //TODO prosledjen item
+  const handleDeleteImage = (e, deleteImgId, isNew, item) => {
     setOpenDeleteDialog({ show: true, id: deleteImgId, isNew: isNew, mutate: null });
   };
 

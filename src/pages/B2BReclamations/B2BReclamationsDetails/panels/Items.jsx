@@ -23,7 +23,6 @@ const Items = ({ rId, basicData }) => {
   const [content, setContent] = useState("");
   // const [stateOnClose, setStateOnClose] = useState(false);
 
-
   // fetch
   const fetch = () => {
     api.list(`admin/reclamations-b2b/items/${rId}`)
@@ -39,7 +38,6 @@ const Items = ({ rId, basicData }) => {
   useEffect(() => {
     fetch()
   }, []);
-
 
   const customActions = {
     edit: {

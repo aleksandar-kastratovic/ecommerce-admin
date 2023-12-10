@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import formFields from "./formFields.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
 import ModalContent from "../../ModalContent";
@@ -7,8 +7,44 @@ import AuthContext from "../../../../store/auth-contex";
 
 const GroupValues = () => {
 
+
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
+  const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
+
+  const handleInformationImage = () => {
+    api.get(`admin/product-items-variants-attributes/group-attribute-values/options/upload`)
+      .then((response) => {
+        formatFormFields(response?.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
+
+
+  const formatFormFields = (data) => {
+    if (data) {
+      console.log("data", data)
+      const { allow_size, allow_format } = data;
+      const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+      let arr = formFields.map((field) => {
+        console.log(field)
+        if (field?.prop_name === 'image') {
+          return {
+            ...field,
+            description: descripiton,
+            validate: {
+              imageUpload: data
+            }
+          };
+        } else {
+          return {
+            ...field
+          }
+        }
+      });
+      setFormFieldsTemp([...arr]);
+    }
+  }
 
   const customActions = {
     delete: {
@@ -43,6 +79,11 @@ const GroupValues = () => {
     },
   };
 
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
+
+
   return (
     <>
       <ListPage
@@ -51,7 +92,8 @@ const GroupValues = () => {
         apiUrl={`admin/product-items-variants-attributes/group-attribute-values`}
         editUrl={`admin/product-items-variants-attributes/group-attribute-values`}
         title=" "
-        columnFields={formFields}
+        columnFields={formFieldsTemp}
+        useColumnFields={true}
         actionNewButton="modal"
         addFieldLabel="Dodajte novu vrednost"
         showAddButton={true}

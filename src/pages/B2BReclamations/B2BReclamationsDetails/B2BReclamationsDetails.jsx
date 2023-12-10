@@ -49,7 +49,6 @@ const B2BReclamationsDetails = () => {
   const { api } = authCtx;
   const [data, setData] = useState(init);
 
-
   const handleData = () => {
     api.get(`admin/reclamations-b2b/basic-data/${rid}`)
       .then((response) => {

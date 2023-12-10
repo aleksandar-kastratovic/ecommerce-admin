@@ -21,6 +21,8 @@ const B2Cbanners = ({ }) => {
     },
   ];
 
+
+
   const customActions = {
     edit: {
       clickHandler: {
@@ -37,6 +39,14 @@ const B2Cbanners = ({ }) => {
       },
     },
   }
+
+  const handleInformationImage = () => {
+    api.get(`admin/product-items/gallery/options/upload?id_position=${idPosition}`)
+      .then((response) => {
+        formatFormFields(response?.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
 
   const filterFields = (fields, type) => {
     let arr = [];
@@ -182,11 +192,38 @@ const B2Cbanners = ({ }) => {
       });
   };
 
+  const formatFormFields = (data) => {
+    if (data) {
+      const { allow_size, allow_format } = data;
+      const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+      let arr = tblFields.map((field) => {
+        if (field?.prop_name === 'image') {
+          return {
+            ...field,
+            description: descripiton,
+            validate: {
+              imageUpload: data
+            }
+          };
+        } else {
+          return {
+            ...field
+          }
+        }
+      });
+      setFormFieldsTemp([...arr]);
+    }
+  }
+
   useEffect(() => {
     if (idPosition) {
       getForm();
     }
   }, [idPosition]);
+
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
 
   return (
     <ListPage

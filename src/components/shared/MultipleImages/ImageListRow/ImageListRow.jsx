@@ -36,7 +36,6 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { 
           {(provided, snapshot) => (
             <ImageList ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} {...provided.droppableProps}>
               {imageList.map((item, index) => {
-                console.log("item", item)
                 return (
                   <Draggable key={item.id} draggableId={item.id + "drag"} index={index} >
                     {(provided, snapshot) => (
@@ -117,7 +116,7 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => { 
                               </Tooltip>
                             </IconButton>
 
-                            <IconButton sx={{ color: "#ffff", marginLeft: "auto" }} aria-label={`delete ${item.name}`} onClick={(e) => handleDeleteImage(e, item.id, item.new)}>
+                            <IconButton sx={{ color: "#ffff", marginLeft: "auto" }} aria-label={`delete ${item.name}`} onClick={(e) => handleDeleteImage(e, item.id, item.new, item)}>
                               <DeleteOutlineIcon />
                             </IconButton>
                           </Box>

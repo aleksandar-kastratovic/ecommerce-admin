@@ -13,6 +13,14 @@ const B2Bbanners = ({ }) => {
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
 
+  const handleInformationImage = () => {
+    api.get(`admin/product-items/gallery/options/upload`)
+      .then((response) => {
+        formatFormFields(response?.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
+
   const buttons = [
     {
       label: "Pozicije",
@@ -21,7 +29,6 @@ const B2Bbanners = ({ }) => {
       },
     },
   ];
-
 
   const customActions = {
     edit: {
@@ -186,11 +193,39 @@ const B2Bbanners = ({ }) => {
       });
   };
 
+  const formatFormFields = (data) => {
+    if (data) {
+      const { allow_size, allow_format } = data;
+      const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+      let arr = tblFields.map((field) => {
+        if (field?.prop_name === 'image') {
+          return {
+            ...field,
+            description: descripiton,
+            validate: {
+              imageUpload: data
+            }
+          };
+        } else {
+          return {
+            ...field
+          }
+        }
+      });
+      setFormFieldsTemp([...arr]);
+    }
+  }
+
   useEffect(() => {
     if (idPosition) {
       getForm();
     }
   }, [idPosition]);
+
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
+
 
   return (
     <ListPage

@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 import { toast } from "react-toastify";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../store/auth-contex";
 
 
@@ -11,6 +11,15 @@ const B2CEmployees = () => {
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
   const navigate = useNavigate();
+  const [formFieldsTemp, setFormFieldsTemp] = useState(tblFields);
+
+  const handleInformationImage = () => {
+    api.get(`admin/employees-b2c/basic-data/options/upload`)
+      .then((response) => {
+        formatFormFields(response?.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
 
   const customActions = {
     delete: {
@@ -52,6 +61,34 @@ const B2CEmployees = () => {
     },
   ];
 
+  const formatFormFields = (data) => {
+    if (data) {
+      const { allow_size, allow_format } = data;
+      const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+      let arr = tblFields.map((field) => {
+        if (field?.prop_name === 'image') {
+          return {
+            ...field,
+            description: descripiton,
+            validate: {
+              imageUpload: data
+            }
+          };
+        } else {
+          return {
+            ...field
+          }
+        }
+      });
+      setFormFieldsTemp([...arr]);
+    }
+  }
+
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
+
+
   return (
     <ListPage
       listPageId="B2CEmployees"
@@ -59,7 +96,8 @@ const B2CEmployees = () => {
       editUrl="admin/employees-b2c/basic-data"
       title="Zaposleni"
       actionNewButton="modal"
-      columnFields={tblFields}
+      columnFields={formFieldsTemp}
+      useColumnFields={true}
       additionalButtons={buttons}
       customActions={customActions}
     />

@@ -2,13 +2,23 @@ import formFields from "../forms/thumbs.json";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
 // import ModalContent from "../../ModalContent";
 import { toast } from "react-toastify";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import AuthContext from "../../../../store/auth-contex";
 
 const Thumbs = ({ pageId }) => {
 
   const authCtx = useContext(AuthContext);
   const { api } = authCtx;
+  const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
+
+  const handleInformationImage = () => {
+    api.get(`admin/landing-pages-b2b/thumb/options/upload`)
+      .then((response) => {
+        console.log(response, "response thumb b1b")
+        formatFormFields(response?.payload);
+      })
+      .catch((error) => console.warn(error));
+  };
 
   const customActions = {
     delete: {
@@ -40,6 +50,34 @@ const Thumbs = ({ pageId }) => {
     },
   };
 
+  const formatFormFields = (data) => {
+    if (data) {
+      const { allow_size, allow_format } = data;
+      const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+      let arr = formFields.map((field) => {
+        if (field?.prop_name === 'thumb_image') {
+          return {
+            ...field,
+            description: descripiton,
+            validate: {
+              imageUpload: data
+            }
+          };
+        } else {
+          return {
+            ...field
+          }
+        }
+      });
+      setFormFieldsTemp([...arr]);
+    }
+  }
+
+  useEffect(() => {
+    handleInformationImage();
+  }, [])
+
+
   return (
     <>
       <ListPage
@@ -47,7 +85,8 @@ const Thumbs = ({ pageId }) => {
         apiUrl={`admin/landing-pages-b2b/thumb/${pageId}`}
         editUrl={`admin/landing-pages-b2b/thumb`}
         title=" "
-        columnFields={formFields}
+        columnFields={formFieldsTemp}
+        useColumnFields={true}
         actionNewButton="modal"
         addFieldLabel="Dodajte novu vrednost"
         showAddButton={true}

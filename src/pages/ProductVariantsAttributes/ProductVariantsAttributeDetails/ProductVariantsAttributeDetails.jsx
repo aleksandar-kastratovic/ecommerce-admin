@@ -21,7 +21,7 @@ const ProductVariantsAttributeDetails = () => {
     },
     {
       id: "attributes_values",
-      name: "Vrednosti",
+      name: "VrednostiIIII",
       icon: IconList.list,
       enabled: true,
       component: <GroupValues />,
