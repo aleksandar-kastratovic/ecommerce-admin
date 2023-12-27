@@ -17,7 +17,7 @@ const Gallery = ({ newsId }) => {
 
   const handleSubmit = (data) => {
     let req = {
-      id: data.id,
+      id: data.new ? null : data.id,
       id_news: newsId,
       file_base64: data.src,
       order: data.position ?? 0,
