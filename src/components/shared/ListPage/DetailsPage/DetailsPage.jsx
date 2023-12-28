@@ -18,53 +18,53 @@ import styles from "./DetailsPage.module.scss";
  * @return {JSX.Element}
  * @constructor
  */
-const DetailsPage = ({ title, fields, ready, additionalButtons = [], selectedPanel, panelHandleSelect = () => { } }) => {
-  // Make sure all fields have and id and the enabled flag
-  fields = (fields ?? []).map((field, index) => ({ ...field, id: field?.id ?? index, enabled: field?.enabled !== undefined ? !!field?.enabled : true }));
+const DetailsPage = ({ title, fields, ready, additionalButtons = [], selectedPanel, panelHandleSelect = () => {} }) => {
+    // Make sure all fields have and id and the enabled flag
+    fields = (fields ?? []).map((field, index) => ({ ...field, id: field?.id ?? index, enabled: field?.enabled !== undefined ? !!field?.enabled : true }));
 
-  // Set active panel, use received else get first from fields
-  let selectedPanelData = selectedPanel;
-  if (!selectedPanelData) {
-    selectedPanelData = fields[0]?.id ?? null;
-  }
-
-  // Set selected panel
-  const [selected, setSelected] = useState(selectedPanelData);
-
-  // Get the active panel
-  const activePanel = fields.find((field) => field.id === selected);
-
-  // Handle action after click on panel tab
-  const handleSelect = (field) => {
-    if (field.enabled) {
-      // Do extra functions if necessary
-      const handlerData = panelHandleSelect(field);
-
-      // Check if panelHandlerSelect allow to change panel tab
-      if (typeof handlerData == 'object' && 'doTabChange' in handlerData) {
-        if (handlerData.doTabChange) {
-          setSelected(field.id);
-        }
-      } else {
-        // Set selected panel tab
-        setSelected(field.id);
-      }
+    // Set active panel, use received else get first from fields
+    let selectedPanelData = selectedPanel;
+    if (!selectedPanelData) {
+        selectedPanelData = fields[0]?.id ?? null;
     }
-  }
 
-  return (
-    <PageWrapper title={title} back={true} actions={additionalButtons} ready={ready}>
-      <Box className={styles.details}>
-        {/* Panel selector */}
-        <Box className={styles.list}>
-          <DetailsList fields={fields} handleSelect={handleSelect} selected={selected} />
-        </Box>
+    // Set selected panel
+    const [selected, setSelected] = useState(selectedPanelData);
 
-        {/* Active panel */}
-        <Box className={styles.main}>{activePanel?.component ?? null}</Box>
-      </Box>
-    </PageWrapper>
-  );
+    // Get the active panel
+    const activePanel = fields.find((field) => field.id === selected);
+
+    // Handle action after click on panel tab
+    const handleSelect = (field) => {
+        if (field.enabled) {
+            // Do extra functions if necessary
+            const handlerData = panelHandleSelect(field);
+
+            // Check if panelHandlerSelect allow to change panel tab
+            if (typeof handlerData == "object" && "doTabChange" in handlerData) {
+                if (handlerData.doTabChange) {
+                    setSelected(field.id);
+                }
+            } else {
+                // Set selected panel tab
+                setSelected(field.id);
+            }
+        }
+    };
+
+    return (
+        <PageWrapper title={title} back={true} actions={additionalButtons} ready={ready}>
+            <Box className={styles.details}>
+                {/* Panel selector */}
+                <Box className={styles.list}>
+                    <DetailsList fields={fields} handleSelect={handleSelect} selected={selected} />
+                </Box>
+
+                {/* Active panel */}
+                <Box className={styles.main}>{activePanel?.component ?? null}</Box>
+            </Box>
+        </PageWrapper>
+    );
 };
 
 export default DetailsPage;
