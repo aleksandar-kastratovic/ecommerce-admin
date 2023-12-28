@@ -77,6 +77,51 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         }
     );
 
+    const { data: badgeNumberContactB2B } = useQuery(
+        "badgeNumberContactB2B",
+        async () => {
+            if (api?.user) {
+                const response = await api?.get(`admin/contact-form-b2b/badge-count`);
+                return response?.payload;
+            }
+        },
+        {
+            refetchInterval: 5000,
+        }
+    );
+
+    const { data: badgeNumberContactB2C } = useQuery(
+        "badgeNumberContactB2C",
+        async () => {
+            if (api?.user) {
+                const response = await api?.get(`admin/contact-form-b2c/badge-count`);
+                return response?.payload;
+            }
+        },
+        {
+            refetchInterval: 5000,
+        }
+    );
+
+    const badgets = [
+        {
+            "path": "/b2c-orders",
+            "counts": badgeNumberB2c || []
+        },
+        {
+            "path": "/b2b-orders",
+            "counts": badgeNumberB2b || []
+        },
+        {
+            "path": "/b2b-contact",
+            "counts": badgeNumberContactB2B || []
+        },
+        {
+            "path": "/b2c-contactform",
+            "counts": badgeNumberContactB2C || []
+        }
+    ];
+
     useEffect(() => {
         const storedOpenGroups = JSON.parse(localStorage.getItem("openGroups")) || {};
         if (Object.keys(storedOpenGroups).length === 0) {
@@ -139,14 +184,13 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
                             {openGroups[menuGroup.name] && (
                                 <>
                                     {menuGroup.items.map((item, index) => {
-                                        let renderedLink;
+                                        let renderedLink = null;
                                         if ((isSmallScreen && item.path === "/b2c-orders") || !isSmallScreen) {
-                                            switch (item?.path) {
-                                                case "/b2c-orders":
-                                                    const badgeB2c = badgeNumberB2c || [];
+                                            badgets.forEach((badget) => {
+                                                if(item?.path === badget.path) {
                                                     renderedLink = (
                                                         <Badge
-                                                            badgeContent={badgeB2c.find((item) => item.status === "new")?.count || 0}
+                                                            badgeContent={badget.counts.find((item) => item.status === "new")?.count || 0}
                                                             showZero
                                                             sx={{
                                                                 ".MuiBadge-badge": { backgroundColor: "#d32f2f", fontSize: "0.625rem", top: "50%", transform: "translateY(-50%)", right: "1rem" },
@@ -166,35 +210,16 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
                                                             )}
                                                         </Badge>
                                                     );
-                                                    break;
+                                                }
+                                            });
 
-                                                case "/b2b-orders":
-                                                    const badgeB2b = badgeNumberB2b || [];
-                                                    renderedLink = (
-                                                        <Badge
-                                                            badgeContent={badgeB2b.find((item) => item.status === "new")?.count || 0}
-                                                            showZero
-                                                            sx={{
-                                                                ".MuiBadge-badge": { backgroundColor: "#d32f2f", fontSize: "0.625rem", top: "50%", transform: "translateY(-50%)", right: "1rem" },
-                                                                width: "100%",
-                                                            }}
-                                                        >
-                                                            <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")} style={{ width: "100%" }}>
-                                                                <Unicon icon={item?.icon} />
-                                                                {item?.name}
-                                                            </NavLink>
-                                                        </Badge>
-                                                    );
-                                                    break;
-
-                                                default:
-                                                    renderedLink = (
-                                                        <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")}>
-                                                            <Unicon icon={item.icon} />
-                                                            {item.name}
-                                                        </NavLink>
-                                                    );
-                                                    break;
+                                            if(renderedLink === null) {
+                                                renderedLink = (
+                                                    <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")}>
+                                                        <Unicon icon={item.icon} />
+                                                        {item.name}
+                                                    </NavLink>
+                                                );
                                             }
 
                                             return <li key={item.path}>{renderedLink}</li>;
