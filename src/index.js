@@ -10,8 +10,8 @@ const staging = "https://api.staging.croonus.com/api/v1/";
 const matija = "http://192.168.1.79:4400/api/v1/";
 
 // Assert sure base URL for the API set
-if (process.env.REACT_APP_URL || local) {
-    localStorage.setItem("api", process.env.REACT_APP_URL || local);
+if (process.env.REACT_APP_URL || staging) {
+    localStorage.setItem("api", process.env.REACT_APP_URL || staging);
 
     ReactDOM.render(
         <AuthContextProvider>

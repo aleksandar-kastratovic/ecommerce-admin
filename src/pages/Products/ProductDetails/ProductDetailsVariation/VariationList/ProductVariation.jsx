@@ -11,238 +11,235 @@ import { toast } from "react-toastify";
 import AuthContext from "../../../../../store/auth-contex";
 
 const ProductVariation = ({ parentId, tblFields }) => {
+    const authCtx = useContext(AuthContext);
+    const { api } = authCtx;
 
-  const authCtx = useContext(AuthContext);
-  const { api } = authCtx;
+    const [fields, setFields] = useState(null);
+    const [selectedColumn, setSelectedColumn] = useState(null);
+    const [showSubmitModalButton, setShowSubmitModalButton] = useState(true);
+    const [imageInfo, setImageInfo] = useState(null);
+    const apiPathGallery = "admin/product-items/variants/gallery";
+    // const galleryFormFields = gallery;
+    const [galleryFormFields, setGalleryFormFields] = useState(gallery);
 
-  const [fields, setFields] = useState(null);
-  const [selectedColumn, setSelectedColumn] = useState(null);
-  const [showSubmitModalButton, setShowSubmitModalButton] = useState(true);
-  const [imageInfo, setImageInfo] = useState(null);
-  const apiPathGallery = "admin/product-items/variants/gallery";
-  // const galleryFormFields = gallery;
-  const [galleryFormFields, setGalleryFormFields] = useState(gallery);
-
-  const filterFields = (event, fieldBhavior, column) => {
-    const { type } = fieldBhavior;
-    switch (type) {
-      case 'click':
-        const { show_fields } = fieldBhavior;
-        switch (show_fields) {
-          case 'seo_field':
-            setFields(seo);
-            break;
-          case 'basic_data':
-            setFields(basicData);
-            break;
-          case 'lager_field':
-            setFields(lagerData);
-            break;
-          case 'price_field':
-            let arr = prices;
-            if (column.prop_name === "price_1") {
-              let index = arr.findIndex((item) => item.prop_name === "exclude_from_rebates");
-              let indexOne = arr.findIndex((item) => item.prop_name === "exclude_from_discount");
-              arr[index] = { ...arr[index], in_details: false };
-              arr[indexOne] = { ...arr[indexOne], in_details: true };
-
-            } else if (column.prop_name === "price_2") {
-              let index = arr.findIndex((item) => item.prop_name === "exclude_from_rebates");
-              let indexOne = arr.findIndex((item) => item.prop_name === "exclude_from_discount");
-              arr[index] = { ...arr[index], in_details: true };
-              arr[indexOne] = { ...arr[indexOne], in_details: true };
-            }
-            setFields([...arr]);
-            break;
-          case 'gallery_field':
-            // setFields(null);
-            break;
-          default:
-            setFields(null);
-            break
+    const filterFields = (event, fieldBhavior, column) => {
+        const { type } = fieldBhavior;
+        switch (type) {
+            case "click":
+                const { show_fields } = fieldBhavior;
+                switch (show_fields) {
+                    case "seo_field":
+                        setFields(seo);
+                        break;
+                    case "basic_data":
+                        setFields(basicData);
+                        break;
+                    case "lager_field":
+                        setFields(lagerData);
+                        break;
+                    case "price_field":
+                        let arr = prices;
+                        if (column.prop_name === "price_1") {
+                            let index = arr.findIndex((item) => item.prop_name === "exclude_from_rebates");
+                            let indexOne = arr.findIndex((item) => item.prop_name === "exclude_from_discount");
+                            arr[index] = { ...arr[index], in_details: false };
+                            arr[indexOne] = { ...arr[indexOne], in_details: true };
+                        } else if (column.prop_name === "price_2") {
+                            let index = arr.findIndex((item) => item.prop_name === "exclude_from_rebates");
+                            let indexOne = arr.findIndex((item) => item.prop_name === "exclude_from_discount");
+                            arr[index] = { ...arr[index], in_details: true };
+                            arr[indexOne] = { ...arr[indexOne], in_details: true };
+                        }
+                        setFields([...arr]);
+                        break;
+                    case "gallery_field":
+                        // setFields(null);
+                        break;
+                    default:
+                        setFields(null);
+                        break;
+                }
+                break;
+            case "double_click":
+                console.log("Double click");
+                break;
+            default:
+                console.log("Default");
+                break;
         }
-        break;
-      case 'double_click':
-        console.log("Double click");
-        break;
-      default:
-        console.log("Default");
-        break;
-    }
-  }
+    };
 
-  const prepareInitialData = (values) => {
-    if (values?.gallery) {
-      values.gallery = (values?.gallery ?? [])
-        .filter((item) => item.file_base64 != null)
-        .map((item) => {
-          let base64 = item.file_base64;
-          const type = base64.split(";")[0].split(":")[1];
-          let y = base64[base64.length - 2] === "=" ? 2 : 1;
-          const size = base64.length * (3 / 4) - y;
-          return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64, path: item.file };
-        });
-    }
-    return values;
-  }
+    const prepareInitialData = (values) => {
+        if (values?.gallery) {
+            values.gallery = (values?.gallery ?? [])
+                .filter((item) => item.file_base64 != null)
+                .map((item) => {
+                    let base64 = item.file_base64;
+                    const type = base64.split(";")[0].split(":")[1];
+                    let y = base64[base64.length - 2] === "=" ? 2 : 1;
+                    const size = base64.length * (3 / 4) - y;
+                    return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64, path: item.file };
+                });
+        }
+        return values;
+    };
 
-  const handleInformationImage = () => {
-    api.get(`admin/product-items/variants/gallery/upload-options`)
-      .then((response) => {
-        setImageInfo(response.payload);
-      })
-      .catch((error) => console.warn(error));
-  };
-
-  const handleSubmitWrapper = (parentId, selectedColumn) => {
-    const { urls, row } = selectedColumn;
-    const handleSubmit = (data, options = {}) => {
-      const allowedFormats = imageInfo ? imageInfo.allow_format.map(format => format?.mime_type.toLowerCase()) : [];
-      const allowSize = imageInfo ? Number(imageInfo.allow_size) : 0;
-      const fileExtension = data?.type.toLowerCase();
-      const fileSizeInB = Number(data.size);
-
-      if (allowedFormats.length > 0 && allowedFormats.includes(fileExtension)) {
-        if (fileSizeInB > allowSize) {
-          toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
-        } else {
-          let req = {
-            id: data.new ? null : data.id,
-            id_product: row?.id ?? null,
-            id_product_parent: parentId ?? null,
-            file_base64: data.src,
-            order: data.position ?? 0,
-            title: null,
-            subtitle: null,
-            short_description: null,
-            description: null,
-          };
-
-          let postApi = options?.crop ? urls['save_crop']?.url : urls['save']?.url;
-          api.post(`${postApi}`, req)
+    const handleInformationImage = () => {
+        api.get(`admin/product-items/variants/gallery/options/upload`)
             .then((response) => {
-              toast.success("Uspešno");
+                setImageInfo(response.payload);
+            })
+            .catch((error) => console.warn(error));
+    };
+
+    const handleSubmitWrapper = (parentId, selectedColumn) => {
+        const { urls, row } = selectedColumn;
+        const handleSubmit = (data, options = {}) => {
+            const allowedFormats = imageInfo ? imageInfo.allow_format.map((format) => format?.mime_type.toLowerCase()) : [];
+            const allowSize = imageInfo ? Number(imageInfo.allow_size) : 0;
+            const fileExtension = data?.type.toLowerCase();
+            const fileSizeInB = Number(data.size);
+
+            if (allowedFormats.length > 0 && allowedFormats.includes(fileExtension)) {
+                if (fileSizeInB > allowSize) {
+                    toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
+                } else {
+                    let req = {
+                        id: data.new ? null : data.id,
+                        id_product: row?.id ?? null,
+                        id_product_parent: parentId ?? null,
+                        file_base64: data.src,
+                        order: data.position ?? 0,
+                        title: null,
+                        subtitle: null,
+                        short_description: null,
+                        description: null,
+                    };
+
+                    let postApi = options?.crop ? urls["save_crop"]?.url : urls["save"]?.url;
+                    api.post(`${postApi}`, req)
+                        .then((response) => {
+                            toast.success("Uspešno");
+                        })
+                        .catch((error) => {
+                            toast.warn("Greška");
+                            console.warn(error);
+                        });
+                }
+            } else {
+                toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
+            }
+        };
+        return handleSubmit;
+    };
+
+    const handleDelete = (id) => {
+        api.delete(`${apiPathGallery}/${id}`)
+            .then((response) => {
+                toast.success("Uspešno");
             })
             .catch((error) => {
-              toast.warn("Greška");
-              console.warn(error);
+                toast.warn("Greška");
+                console.warn(error);
             });
-        };
+    };
 
-      } else {
-        toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
-      }
-    }
-    return handleSubmit;
-  }
-
-  const handleDelete = (id) => {
-    api.delete(`${apiPathGallery}/${id}`)
-      .then((response) => {
-        toast.success("Uspešno");
-      })
-      .catch((error) => {
-        toast.warn("Greška");
-        console.warn(error);
-      });
-  };
-
-  const handleReorder = (id, destination) => {
-    api.put(`${apiPathGallery}/order`, { id: id, order: destination })
-      .then((response) => {
-        toast.success("Uspešno");
-      })
-      .catch((error) => {
-        toast.warn("Greška");
-        console.warn(error);
-      });
-  };
-
-  useEffect(() => {
-    if (selectedColumn) {
-      const { galleryData, column } = selectedColumn;
-      if (column?.prop_name === 'gallery') {
-        let allowFormats = imageInfo ? imageInfo.allow_format.map(format => format?.name.toLowerCase()) : [];
-        let description = `Dozvoljeni formati su: ${allowFormats.join(", ")}. Maksimalna dozvoljena veličina je ${imageInfo?.allow_size / (1024 * 1024)} MB.`;
-        galleryFormFields?.map((item) => {
-          if (item?.prop_name === 'gallery') {
-            item.uploadHandler = handleSubmitWrapper(parentId, galleryData);
-            item.deleteHandler = handleDelete;
-            item.handleReorder = handleReorder;
-            item.description = description;
-            item.validate.imageUpload = imageInfo
-          }
-        });
-        setFields(galleryFormFields);
-      }
-    }
-  }, [selectedColumn])
-
-  useEffect(() => {
-    handleInformationImage();
-  }, [])
-
-  const validateData = (data, field) => {
-    let ret = data;
-    switch (field) {
-      case "price_single_with_out_vat":
-      case "price_vat_procent":
-      case "price_quantity":
-        ret.price_with_out_vat = Math.round(ret.price_quantity * ret.price_single_with_out_vat * 100) / 100;
-        ret.price_with_vat = Math.round((ret.price_vat_procent / 100 + 1) * ret.price_with_out_vat * 100) / 100;
-        return ret;
-      case "price_with_out_vat":
-        ret.price_with_vat = Math.round((ret.price_vat_procent / 100 + 1) * ret.price_with_out_vat * 100) / 100;
-        ret.price_single_with_out_vat = Math.round((ret.price_with_out_vat / ret.price_quantity) * 100) / 100;
-        return ret;
-      case "price_with_vat":
-        ret.price_with_out_vat = Math.round((ret.price_with_vat / (ret.price_vat_procent / 100 + 1)) * 100) / 100;
-        ret.price_single_with_out_vat = Math.round((ret.price_with_out_vat / ret.price_quantity) * 100) / 100;
-        return ret;
-      default:
-        return ret;
-    }
-  };
-
-  return (
-    <ListPage
-      validateData={validateData}
-      columnFields={tblFields}
-      useColumnFields={true}
-      showNewButton={false}
-      listPageId="ListVariants"
-      apiUrl={`admin/product-items/variants/list/${parentId}`}
-      title=" "
-      actionNewButton="modal"
-      initialData={{ id_product_parent: parentId }}
-      onClickFieldBehavior={
-        (event, fieldBhavior, column, row, galleryData) => {
-          if (column?.prop_name === 'gallery') {
-            setShowSubmitModalButton(false);
-            let arr = galleryFormFields?.map((item, i) => {
-              return {
-                ...item,
-                additionalData: { column, galleryData }
-              }
+    const handleReorder = (id, destination) => {
+        api.put(`${apiPathGallery}/order`, { id: id, order: destination })
+            .then((response) => {
+                toast.success("Uspešno");
             })
-            setGalleryFormFields([...arr]);
-          } else {
-            setShowSubmitModalButton(true);
-          }
-          filterFields(event, fieldBhavior, column);
-          setSelectedColumn({ column, galleryData });
+            .catch((error) => {
+                toast.warn("Greška");
+                console.warn(error);
+            });
+    };
+
+    useEffect(() => {
+        if (selectedColumn) {
+            const { galleryData, column } = selectedColumn;
+            if (column?.prop_name === "gallery") {
+                let allowFormats = imageInfo ? imageInfo.allow_format.map((format) => format?.name.toLowerCase()) : [];
+                let description = `Dozvoljeni formati su: ${allowFormats.join(", ")}. Maksimalna dozvoljena veličina je ${imageInfo?.allow_size / (1024 * 1024)} MB.`;
+                galleryFormFields?.map((item) => {
+                    if (item?.prop_name === "gallery") {
+                        item.uploadHandler = handleSubmitWrapper(parentId, galleryData);
+                        item.deleteHandler = handleDelete;
+                        item.handleReorder = handleReorder;
+                        item.description = description;
+                        item.validate.imageUpload = imageInfo;
+                    }
+                });
+                setFields(galleryFormFields);
+            }
         }
-      }
-      customFields={fields}
-      onModalCancel={() => { setFields(null) }}
-      withoutSetterFunction
-      prepareInitialData={prepareInitialData}
-      useModalGalleryInjection={true}
-      submitButtonForm={showSubmitModalButton}
-      closeButtonModalForm={!showSubmitModalButton}
-      labelSaveButton="Zatvori modal"
-    />
-  );
+    }, [selectedColumn]);
+
+    useEffect(() => {
+        handleInformationImage();
+    }, []);
+
+    const validateData = (data, field) => {
+        let ret = data;
+        switch (field) {
+            case "price_single_with_out_vat":
+            case "price_vat_procent":
+            case "price_quantity":
+                ret.price_with_out_vat = Math.round(ret.price_quantity * ret.price_single_with_out_vat * 100) / 100;
+                ret.price_with_vat = Math.round((ret.price_vat_procent / 100 + 1) * ret.price_with_out_vat * 100) / 100;
+                return ret;
+            case "price_with_out_vat":
+                ret.price_with_vat = Math.round((ret.price_vat_procent / 100 + 1) * ret.price_with_out_vat * 100) / 100;
+                ret.price_single_with_out_vat = Math.round((ret.price_with_out_vat / ret.price_quantity) * 100) / 100;
+                return ret;
+            case "price_with_vat":
+                ret.price_with_out_vat = Math.round((ret.price_with_vat / (ret.price_vat_procent / 100 + 1)) * 100) / 100;
+                ret.price_single_with_out_vat = Math.round((ret.price_with_out_vat / ret.price_quantity) * 100) / 100;
+                return ret;
+            default:
+                return ret;
+        }
+    };
+
+    return (
+        <ListPage
+            validateData={validateData}
+            columnFields={tblFields}
+            useColumnFields={true}
+            showNewButton={false}
+            listPageId="ListVariants"
+            apiUrl={`admin/product-items/variants/list/${parentId}`}
+            title=" "
+            actionNewButton="modal"
+            initialData={{ id_product_parent: parentId }}
+            onClickFieldBehavior={(event, fieldBhavior, column, row, galleryData) => {
+                if (column?.prop_name === "gallery") {
+                    setShowSubmitModalButton(false);
+                    let arr = galleryFormFields?.map((item, i) => {
+                        return {
+                            ...item,
+                            additionalData: { column, galleryData },
+                        };
+                    });
+                    setGalleryFormFields([...arr]);
+                } else {
+                    setShowSubmitModalButton(true);
+                }
+                filterFields(event, fieldBhavior, column);
+                setSelectedColumn({ column, galleryData });
+            }}
+            customFields={fields}
+            onModalCancel={() => {
+                setFields(null);
+            }}
+            withoutSetterFunction
+            prepareInitialData={prepareInitialData}
+            useModalGalleryInjection={true}
+            submitButtonForm={showSubmitModalButton}
+            closeButtonModalForm={!showSubmitModalButton}
+            labelSaveButton="Zatvori modal"
+        />
+    );
 };
 
 export default ProductVariation;
