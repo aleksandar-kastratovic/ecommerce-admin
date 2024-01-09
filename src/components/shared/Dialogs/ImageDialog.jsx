@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -16,158 +16,125 @@ import Input from "@mui/material/Input";
 import CircularProgress from "@mui/material/CircularProgress";
 
 import styles from "./ImageDialog.module.scss";
+import AuthContext from "../../../store/auth-contex";
+import { getCroppedImg } from "../ImageEditorComponent/util";
+import { useFileSize, useImageSize } from "../../../hooks/useFileSize";
+import { toast } from "react-toastify";
 
 const ImageDialog = ({
-  openImageDialog,
-  title = "",
-  onImageUpload = () => { },
-  handleCloseImageDialog = () => { },
-  handleSaveEditImage = () => { },
-  handleDeleteImage = () => { },
+    openImageDialog,
+    title = "",
+    onImageUpload = () => {},
+    handleCloseImageDialog = () => {},
+    handleSaveEditImage = () => {},
+    handleDeleteImage = () => {},
+    imageWidth,
+    imageHeight,
+    imageURL,
+    imageName,
+    apiPathCrop,
+    base64Image,
 }) => {
-  const [editMode, setEditMode] = useState(false);
-  const [loadingImage, setLoadingImage] = useState(false);
+    const authCtx = useContext(AuthContext);
 
-  const handleCloseEditMode = () => {
-    setEditMode(false);
-  };
+    const [editMode, setEditMode] = useState(false);
+    const [loadingImage, setLoadingImage] = useState(false);
 
-  const handleOpenEditMode = () => {
-    setEditMode(true);
-  };
+    const handleCloseEditMode = () => {
+        setEditMode(false);
+    };
 
-  const onDeleteImageClick = () => {
-    handleDeleteImage(openImageDialog.name);
-    handleCloseImageDialog();
-  };
+    const handleOpenEditMode = () => {
+        setEditMode(true);
+    };
 
-  const handleImageUpload = (e) => {
-    setLoadingImage(true);
-    onImageUpload(e);
-    const timeOutId = setTimeout(() => {
-      setLoadingImage(false);
-      handleCloseImageDialog();
-    }, 1000);
-    return () => clearTimeout(timeOutId);
-  };
+    const onDeleteImageClick = () => {
+        handleDeleteImage(openImageDialog.name);
+        handleCloseImageDialog();
+    };
 
-  return (
-    <Dialog
-      open={openImageDialog.show}
-      fullScreen
-      maxWidth={"xl"}
-      aria-labelledby="delete-dialog-title"
-      aria-describedby="delete-dialog-description"
-    >
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        {editMode ? (
-          <Box
-            sx={{
-              width: 900,
-              height: 600,
-            }}
-          >
-            <ImageEditorComponent
-              handleCloseEditMode={handleCloseEditMode}
-              handleCloseImageDialog={handleCloseImageDialog}
-              imageURL={openImageDialog.image}
-              imageName={openImageDialog.name}
-              imageWidth={openImageDialog.width}
-              imageHeight={openImageDialog.height}
-              handleSaveEditImage={handleSaveEditImage}
-              showDimensions={openImageDialog.showDimensions}
-            />
-          </Box>
-        ) : (
-          <Box>
-            {loadingImage ? (
-              <div>
-                <CircularProgress
-                  size={50}
-                  sx={{ ml: "45%" }}
-                  disableShrink
-                />
-              </div>
-            ) : (
-              <div>
-                Naziv slike:{" "}
-                <span className={styles.labelStyle}>
-                  {openImageDialog?.label}
-                </span>
-                <div className={styles.imageStyle}>
-                  {openImageDialog.image && (
-                    <img
-                      style={{
-                        maxWidth: "100%",
-                        maxHeight: "calc(100vh - 64px)",
-                      }}
-                      src={openImageDialog?.image}
-                      alt={openImageDialog?.label}
-                    />
-                  )}
-                </div>
-              </div>
-            )}
-          </Box>
-        )}
-      </DialogContent>
-      <DialogActions>
-        {editMode ? (
-          <div />
-        ) : (
-          <Stack
-            direction="row"
-            alignItems="center"
-            spacing={2}
-            className={styles.btnGroup}
-          >
-            {/* <input hidden accept="image/*" type="file" onImageUpload /> */}
-            <Button
-              variant="outlined"
-              component="label"
-              startIcon={<PhotoCamera />}
-            >
-              Nova slika
-              <Input
-                multiple
-                name={openImageDialog.name}
-                accept="image/*"
-                id={openImageDialog.label}
-                onChange={(e) => handleImageUpload(e)}
-                type="file"
-                sx={{ display: "none" }}
-              />
-            </Button>
-            <Button
-              variant="outlined"
-              onClick={handleOpenEditMode}
-              color="success"
-              startIcon={<EditOutlinedIcon />}
-            >
-              Obradi sliku
-            </Button>
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={onDeleteImageClick}
-              startIcon={<DeleteOutlineOutlinedIcon />}
-            >
-              Obrisi
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={handleCloseImageDialog}
-              startIcon={<CancelOutlinedIcon />}
-            >
-              Otkaži
-            </Button>
-          </Stack>
-        )}
-      </DialogActions>
-    </Dialog>
-  );
+    const handleImageUpload = (e) => {
+        setLoadingImage(true);
+        onImageUpload(e);
+        const timeOutId = setTimeout(() => {
+            setLoadingImage(false);
+            handleCloseImageDialog();
+        }, 1000);
+        return () => clearTimeout(timeOutId);
+    };
+    return (
+        <Dialog open={openImageDialog.show} fullScreen maxWidth={"xl"} aria-labelledby="delete-dialog-title" aria-describedby="delete-dialog-description">
+            <DialogTitle>{title}</DialogTitle>
+            <DialogContent>
+                {editMode ? (
+                    <Box
+                        sx={{
+                            width: 900,
+                            height: 600,
+                        }}
+                    >
+                        <ImageEditorComponent
+                            handleCloseEditMode={handleCloseEditMode}
+                            handleCloseImageDialog={handleCloseImageDialog}
+                            imageURL={openImageDialog.image}
+                            imageName={openImageDialog.name}
+                            imageWidth={openImageDialog.width}
+                            imageHeight={openImageDialog.height}
+                            handleSaveEditImage={handleSaveEditImage}
+                            showDimensions={openImageDialog.showDimensions}
+                            apiPath={apiPathCrop}
+                        />
+                    </Box>
+                ) : (
+                    <Box>
+                        {loadingImage ? (
+                            <div>
+                                <CircularProgress size={50} sx={{ ml: "45%" }} disableShrink />
+                            </div>
+                        ) : (
+                            <div>
+                                Naziv slike: <span className={styles.labelStyle}>{openImageDialog?.label}</span>
+                                <div className={styles.imageStyle}>
+                                    {openImageDialog.image && (
+                                        <img
+                                            style={{
+                                                maxWidth: "100%",
+                                                maxHeight: "calc(100vh - 64px)",
+                                            }}
+                                            src={openImageDialog?.image}
+                                            alt={openImageDialog?.label}
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                        )}
+                    </Box>
+                )}
+            </DialogContent>
+            <DialogActions>
+                {editMode ? (
+                    <div />
+                ) : (
+                    <Stack direction="row" alignItems="center" spacing={2} className={styles.btnGroup}>
+                        {/* <input hidden accept="image/*" type="file" onImageUpload /> */}
+                        <Button variant="outlined" component="label" startIcon={<PhotoCamera />}>
+                            Nova slika
+                            <Input multiple name={openImageDialog.name} accept="image/*" id={openImageDialog.label} onChange={(e) => handleImageUpload(e)} type="file" sx={{ display: "none" }} />
+                        </Button>
+                        <Button variant="outlined" onClick={handleOpenEditMode} color="success" startIcon={<EditOutlinedIcon />}>
+                            Obradi sliku
+                        </Button>
+                        <Button variant="outlined" color="error" onClick={onDeleteImageClick} startIcon={<DeleteOutlineOutlinedIcon />}>
+                            Obrisi
+                        </Button>
+                        <Button variant="outlined" color="secondary" onClick={handleCloseImageDialog} startIcon={<CancelOutlinedIcon />}>
+                            Otkaži
+                        </Button>
+                    </Stack>
+                )}
+            </DialogActions>
+        </Dialog>
+    );
 };
 
 export default ImageDialog;

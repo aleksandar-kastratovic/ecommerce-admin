@@ -36,7 +36,7 @@ const ImageDialogFullPage = ({
   onImageUpload = () => { },
   handleCloseImageDialog = () => { },
   handleDeleteImage = () => { },
-  uploadHandler = () => { },
+  uploadHandler = () => { },apiPathCrop
 }) => {
   const [editMode, setEditMode] = useState(false);
   const [loadingImage, setLoadingImage] = useState(false);
@@ -137,6 +137,7 @@ const ImageDialogFullPage = ({
               imageURL={openFullPageDialog.image}
               imageName={openFullPageDialog.name}
               handleSaveEditImage={handleSaveEdited}
+              apiPath={apiPathCrop}
             />
           </Box>
         ) : (

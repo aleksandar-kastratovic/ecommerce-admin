@@ -12,285 +12,306 @@ import { isUrlValid } from "./util";
 import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
 
-
 const Form = ({
-  formFields = [],
-  initialData = {},
-  onSubmit = () => null,
-  onCancel = () => navigate(-1),
-  onCloseModalButton = () => { },
-  cancelButton = false,
-  submitButton = true,
-  closeButton = false,
-  queryString = "",
-  onChange = () => { },
-  validateData = (data) => data,
-  label, styleCheckbox,
-  isLoading,
-  onFilePicked = () => { },
-  handleRemoveFile = () => { },
-  selectedFile,
-  styleButtonSubmit,
-  styleWrapperButtons,
-  dataFromServer
+    formFields = [],
+    initialData = {},
+    onSubmit = () => null,
+    onCancel = () => navigate(-1),
+    onCloseModalButton = () => {},
+    cancelButton = false,
+    submitButton = true,
+    closeButton = false,
+    queryString = "",
+    onChange = () => {},
+    validateData = (data) => data,
+    label,
+    styleCheckbox,
+    isLoading,
+    onFilePicked = () => {},
+    handleRemoveFile = () => {},
+    selectedFile,
+    styleButtonSubmit,
+    styleWrapperButtons,
+    dataFromServer,
+    apiPathCrop,
 }) => {
-  const navigate = useNavigate();
-  const [data, setData] = useState(initialData ?? {});
-  const [inputsError, setInputsError] = useState([]);
-  const [openImageDialog, setOpenImageDialog] = useState({
-    show: false,
-    image: null,
-    label: "",
-    width: 800,
-    height: 600,
-    name: "",
-  });
-
-  let propAutoFocus = false;
-  let checkIsFocused = false;
-
-  function setInputErrors(name) {
-    setInputsError((inputsError) => {
-      delete inputsError[name];
-      return inputsError;
+    const navigate = useNavigate();
+    const [data, setData] = useState(initialData ?? {});
+    const [inputsError, setInputsError] = useState([]);
+    const [openImageDialog, setOpenImageDialog] = useState({
+        show: false,
+        image: null,
+        label: "",
+        width: 800,
+        height: 600,
+        name: "",
+        ui_prop: {
+            imageButton: {
+                crop: {
+                    fillFromApi: apiPathCrop,
+                },
+            },
+        },
     });
-  }
 
-  const submitHandler = (event) => {
-    event.preventDefault && event.preventDefault();
+    let propAutoFocus = false;
+    let checkIsFocused = false;
 
-    const errors = {};
-    for (const field of formFields) {
-      if (field.required && field.input_type !== "switch" && (data[field.prop_name] === "" || data[field.prop_name] == null)) {
-        errors[field.prop_name] = {
-          content: "Polje je obavezno, molim Vas unesite vrednost.",
-        };
-      }
-    }
-    if (!isEmpty(errors)) {
-      console.error("Nisu popunjena sva obavezna polja. ", errors);
+    function setInputErrors(name) {
+        setInputsError((inputsError) => {
+            delete inputsError[name];
+            return inputsError;
+        });
     }
 
-    isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
+    const submitHandler = (event) => {
+        event.preventDefault && event.preventDefault();
 
-  };
-
-  const formItemAutoCompleteChangeHandler = (name, value) => {
-    let newData = { ...data, [name]: value };
-    setData(validateData(newData, name));
-    setInputErrors(name);
-  };
-
-  const formItemChangeHandler = ({ target }, type) => {
-    let newData;
-    switch (type) {
-      case "date":
-        newData = { ...data, [target.name]: formatDate(target.value) };
-        break;
-      case "date_time":
-        newData = { ...data, [target.name]: formatDateTime(target.value) };
-        break;
-      case "checkbox":
-      case "switch":
-        newData = { ...data, [target.name]: target.checked ? 1 : 0 };
-        break;
-      default:
-        newData = { ...data, [target.name]: target.value };
-    }
-
-    newData = validateData(newData, target.name);
-    setData(newData);
-    onChange(newData, target.name)
-    setInputErrors(target.name);
-  };
-
-  const formImageUpload = useCallback(
-    (event, validation) => {
-      if (validation) {
-        event.preventDefault();
-        const selectedFile = event.target.files[0];
-        const { size } = selectedFile;
-        const { allow_size, allow_format } = validation;
-        let arrOfMimeTypes = allow_format.map((format) => format.mime_type);
-
-        const allowSize = allow_size ? Number(allow_size) : 0;
-        const fileSizeInB = Number(size);
-        let isSizeAllowed = fileSizeInB < allowSize;
-        let isFormatAllowed = arrOfMimeTypes.includes(selectedFile.type);
-        if (!isFormatAllowed) {
-          toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${arrOfMimeTypes.join(", ")}`);
-          return;
-        }
-        if (!isSizeAllowed) {
-          toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
-          return;
-        }
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const timeOutId = setTimeout(() => {
-            setter(event, reader.result);
-          }, 500);
-          return () => clearTimeout(timeOutId);
-        };
-        reader.readAsDataURL(selectedFile);
-
-      } else {
-        event.preventDefault();
-        const selectedFile = event.target.files[0];
-
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          const timeOutId = setTimeout(() => {
-            setter(event, reader.result);
-          }, 500);
-          return () => clearTimeout(timeOutId);
-        };
-        reader.readAsDataURL(selectedFile);
-      }
-    },
-    [data]
-  );
-
-  const onOpenImageDialog = (img, label, imageName, width, height) => {
-    const found = data[imageName];
-    const checkImage = isUrlValid(img);
-
-    if (checkImage) {
-      setOpenImageDialog({
-        show: true,
-        image: found,
-        label: label,
-        width: width,
-        height: height,
-        name: imageName,
-        showDimensions: false,
-      });
-    } else {
-      setOpenImageDialog({
-        show: true,
-        image: img,
-        label: label,
-        width: width,
-        height: height,
-        name: imageName,
-        showDimensions: false,
-      });
-    }
-  };
-
-  const handleCloseImageDialog = () => {
-    setOpenImageDialog({ show: false, image: null, label: "", name: "" });
-  };
-
-  const handleSaveEditImage = (imageName, image) => {
-    setData({ ...data, [imageName]: image });
-  };
-
-  const handleDeleteImage = (imageName) => {
-    setData({ ...data, [imageName]: "DELETE" });
-  };
-
-  const setter = (event, result) => {
-    setData({ ...data, [event.target.name]: result });
-  };
-
-  useEffect(() => {
-    setData(initialData);
-  }, [initialData]);
-
-  const filteredFields = formFields.filter((field) => {
-
-    // Default value for display field in form
-    field.croonus_use_in_details = field.in_details;
-
-    // Check if field need to display on new or edit form
-    if (field?.in_details) {
-      if ('id' in data) {
-        if (data.id === null) {
-          if ('in_details_new_display' in field) {
-            field.croonus_use_in_details = field.in_details_new_display;
-          }
-        } else {
-          if ('in_details_edit_display' in field) {
-            field.croonus_use_in_details = field.in_details_edit_display;
-          }
-        }
-      }
-    }
-    return field;
-  });
-
-  return (
-    <>
-      <Box component="form" autoComplete="off" onSubmit={submitHandler} sx={{ display: "flex", flexWrap: "wrap" }} >
-        {(filteredFields ?? [])
-          .filter((field) => field.croonus_use_in_details)
-          .map((item, index) => {
-
-            // Priprema vrednosti pre nego sto se prosledi u komponentu
-            let temp_value = Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name];
-            // Provera da li input ima vrednost, ukoliko nema prvi input koji nema vrednost se fokusira da bi korisnik mogao da nesmetano unosi podatke
-            if (temp_value === null && !checkIsFocused) {
-              checkIsFocused = true;
-              propAutoFocus = true;
-            } else {
-              propAutoFocus = false;
+        const errors = {};
+        for (const field of formFields) {
+            if (field.required && field.input_type !== "switch" && (data[field.prop_name] === "" || data[field.prop_name] == null)) {
+                errors[field.prop_name] = {
+                    content: "Polje je obavezno, molim Vas unesite vrednost.",
+                };
             }
+        }
+        if (!isEmpty(errors)) {
+            console.error("Nisu popunjena sva obavezna polja. ", errors);
+        }
 
-            return (
-              <CreateForm
-                data-test-id="admin-form"
-                onChangeHandler={formItemChangeHandler}
-                onChangeAutoHandler={formItemAutoCompleteChangeHandler}
-                onImageUpload={(ev) => {
-                  let validation = item?.validate?.imageUpload !== null && item?.validate?.imageUpload !== undefined ? item?.validate?.imageUpload : null;
-                  formImageUpload(ev, validation);
-                }}
-                onOpenImageDialog={onOpenImageDialog}
-                item={item}
-                key={index}
-                error={inputsError[item.prop_name] ? inputsError[item.prop_name].content : null}
-                value={temp_value}
-                queryString={queryString}
-                disabled={item.disabled || (item.prop_name === "slug" && data.system_required === 1)}
-                styleCheckbox={styleCheckbox}
-                autoFocus={propAutoFocus}
-                onFilePicked={(fileObject) => {
-                  //passing object to upper level
-                  onFilePicked(fileObject);
-                  //deleting import error object:
-                  setInputErrors("import");
-                  //deleting file error object:
-                  setInputErrors("file");
-                  //setting data to be defiend in value: 
-                  setData({ ...data, import: fileObject.name, file: fileObject.name });
-                }}
-                selectedFile={selectedFile}
-                handleRemoveFile={handleRemoveFile}
-                dataFromServer={dataFromServer}
-              />
-            );
-          })}
+        isEmpty(errors) ? onSubmit(data) : setInputsError(errors);
+    };
 
+    const formItemAutoCompleteChangeHandler = (name, value) => {
+        let newData = { ...data, [name]: value };
+        setData(validateData(newData, name));
+        setInputErrors(name);
+    };
 
-        <Buttons styleWrapperButtons={styleWrapperButtons}>
-          {cancelButton && <Button label="Odustani" onClick={onCancel} />}
-          {submitButton && <Button type="submit" label={isLoading ? <CircularProgress size="1.5rem" /> : (label ? label : "Sačuvaj")} variant="contained" disabled={isLoading} sx={styleButtonSubmit} />}
-          {closeButton && <Button type="submit" label={(label ? label : "Sačuvaj")} variant="contained" onClick={onCloseModalButton} />}
-        </Buttons>
+    const formItemChangeHandler = ({ target }, type) => {
+        let newData;
+        switch (type) {
+            case "date":
+                newData = { ...data, [target.name]: formatDate(target.value) };
+                break;
+            case "date_time":
+                newData = { ...data, [target.name]: formatDateTime(target.value) };
+                break;
+            case "checkbox":
+            case "switch":
+                newData = { ...data, [target.name]: target.checked ? 1 : 0 };
+                break;
+            default:
+                newData = { ...data, [target.name]: target.value };
+        }
 
-      </Box>
+        newData = validateData(newData, target.name);
+        setData(newData);
+        onChange(newData, target.name);
+        setInputErrors(target.name);
+    };
 
-      <ImageDialog
-        title="Obrada slike"
-        openImageDialog={openImageDialog}
-        handleCloseImageDialog={handleCloseImageDialog}
-        onImageUpload={formImageUpload}
-        handleSaveEditImage={handleSaveEditImage}
-        handleDeleteImage={handleDeleteImage}
-      />
-    </>
-  );
+    const formImageUpload = useCallback(
+        (event, validation) => {
+            if (validation) {
+                event.preventDefault();
+                const selectedFile = event.target.files[0];
+                const { size } = selectedFile;
+                const { allow_size, allow_format } = validation;
+                let arrOfMimeTypes = allow_format?.map((format) => format?.mime_type);
+
+                const allowSize = allow_size ? Number(allow_size) : 0;
+                const fileSizeInB = Number(size);
+                let isSizeAllowed = fileSizeInB < allowSize;
+                let isFormatAllowed = arrOfMimeTypes?.includes(selectedFile?.type);
+                if (!isFormatAllowed) {
+                    toast.error(`Nedozvoljeni format slike.`);
+                    return;
+                }
+                if (!isSizeAllowed) {
+                    toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
+                    return;
+                }
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const timeOutId = setTimeout(() => {
+                        setter(event, reader.result);
+                    }, 500);
+                    return () => clearTimeout(timeOutId);
+                };
+                reader.readAsDataURL(selectedFile);
+            } else {
+                event.preventDefault();
+                const selectedFile = event.target.files[0];
+
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    const timeOutId = setTimeout(() => {
+                        setter(event, reader.result);
+                    }, 500);
+                    return () => clearTimeout(timeOutId);
+                };
+                reader.readAsDataURL(selectedFile);
+            }
+        },
+        [data]
+    );
+
+    const onOpenImageDialog = (img, label, imageName, width, height, item) => {
+        const found = data[imageName];
+        const checkImage = isUrlValid(img);
+
+        if (checkImage) {
+            setOpenImageDialog({
+                show: true,
+                image: found,
+                label: label,
+                width: width,
+                height: height,
+                name: imageName,
+                showDimensions: true,
+                ui_prop: item,
+            });
+        } else {
+            setOpenImageDialog({
+                show: true,
+                image: img,
+                label: label,
+                width: width,
+                height: height,
+                name: imageName,
+                ui_prop: item,
+                showDimensions: true,
+            });
+        }
+    };
+
+    const handleCloseImageDialog = () => {
+        setOpenImageDialog({ show: false, image: null, label: "", name: "" });
+    };
+
+    const handleSaveEditImage = (imageName, image) => {
+        setData({ ...data, [imageName]: image });
+    };
+
+    const handleDeleteImage = (imageName) => {
+        setData({ ...data, [imageName]: "DELETE" });
+    };
+
+    const setter = (event, result) => {
+        setData({ ...data, [event.target.name]: result });
+    };
+
+    useEffect(() => {
+        setData(initialData);
+    }, [initialData]);
+
+    const filteredFields = formFields.filter((field) => {
+        // Default value for display field in form
+        field.croonus_use_in_details = field.in_details;
+
+        // Check if field need to display on new or edit form
+        if (field?.in_details) {
+            if ("id" in data) {
+                if (data.id === null) {
+                    if ("in_details_new_display" in field) {
+                        field.croonus_use_in_details = field.in_details_new_display;
+                    }
+                } else {
+                    if ("in_details_edit_display" in field) {
+                        field.croonus_use_in_details = field.in_details_edit_display;
+                    }
+                }
+            }
+        }
+        return field;
+    });
+
+    const [itemImage, setItemImage] = useState(null);
+    //TODO: postaviti da vuce event handler na nivou polja koje se koristi iz JSON-a
+    return (
+        <>
+            <Box component="form" autoComplete="off" onSubmit={submitHandler} sx={{ display: "flex", flexWrap: "wrap" }}>
+                {(filteredFields ?? [])
+                    .filter((field) => field.croonus_use_in_details)
+                    .map((item, index) => {
+                        // Priprema vrednosti pre nego sto se prosledi u komponentu
+                        let temp_value = Array.isArray(item) && data ? data[item.prop_name] : data[item.prop_name];
+                        // Provera da li input ima vrednost, ukoliko nema prvi input koji nema vrednost se fokusira da bi korisnik mogao da nesmetano unosi podatke
+                        if (temp_value === null && !checkIsFocused) {
+                            checkIsFocused = true;
+                            propAutoFocus = true;
+                        } else {
+                            propAutoFocus = false;
+                        }
+
+                        return (
+                            <CreateForm
+                                data-test-id="admin-form"
+                                onChangeHandler={formItemChangeHandler}
+                                onChangeAutoHandler={formItemAutoCompleteChangeHandler}
+                                onImageUpload={(ev) => {
+                                    formImageUpload(ev, openImageDialog?.ui_prop?.ui_prop?.fileUpload?.image ? openImageDialog?.ui_prop?.ui_prop?.fileUpload : item?.ui_prop?.fileUpload);
+                                }}
+                                onOpenImageDialog={onOpenImageDialog}
+                                item={item}
+                                key={index}
+                                setItemImage={setItemImage}
+                                error={inputsError[item.prop_name] ? inputsError[item.prop_name].content : null}
+                                value={temp_value}
+                                queryString={queryString}
+                                disabled={item.disabled || (item.prop_name === "slug" && data.system_required === 1)}
+                                styleCheckbox={styleCheckbox}
+                                autoFocus={propAutoFocus}
+                                onFilePicked={(fileObject) => {
+                                    //passing object to upper level
+                                    onFilePicked(fileObject);
+                                    //deleting import error object:
+                                    setInputErrors("import");
+                                    //deleting file error object:
+                                    setInputErrors("file");
+                                    //setting data to be defiend in value:
+                                    setData({ ...data, import: fileObject.name, file: fileObject.name });
+                                }}
+                                selectedFile={selectedFile}
+                                handleRemoveFile={handleRemoveFile}
+                                dataFromServer={dataFromServer}
+                                apiPathCrop={openImageDialog?.ui_prop?.ui_prop?.imageButton?.crop?.fillFromApi} //TODO
+                                handleCloseImageDialog={handleCloseImageDialog} //TODO
+                                handleSaveEditImage={handleSaveEditImage} //TODO
+                                handleDeleteImage={handleDeleteImage} //TODO
+                                itemImage={itemImage} //TODO
+                                openImageDialog={openImageDialog} //TODO
+                            />
+                        );
+                    })}
+
+                <Buttons styleWrapperButtons={styleWrapperButtons}>
+                    {cancelButton && <Button label="Odustani" onClick={onCancel} />}
+                    {submitButton && (
+                        <Button type="submit" label={isLoading ? <CircularProgress size="1.5rem" /> : label ? label : "Sačuvaj"} variant="contained" disabled={isLoading} sx={styleButtonSubmit} />
+                    )}
+                    {closeButton && <Button type="submit" label={label ? label : "Sačuvaj"} variant="contained" onClick={onCloseModalButton} />}
+                </Buttons>
+            </Box>
+
+            {/*DEPRECATED - treba izbaciti iz koda*/}
+            {/*ako u formFields ne postoji nijedan ui_prop.imageButton, prikazi dugme za upload slike*/}
+            {formFields?.every((field) => !field?.ui_prop?.imageButton) && (
+                <ImageDialog
+                    title="Obrada slike"
+                    openImageDialog={openImageDialog}
+                    handleCloseImageDialog={handleCloseImageDialog}
+                    onImageUpload={(ev) => {
+                        formImageUpload(ev, openImageDialog?.ui_prop?.ui_prop?.fileUpload?.image ? openImageDialog?.ui_prop?.ui_prop?.fileUpload : itemImage?.ui_prop?.fileUpload);
+                    }}
+                    handleSaveEditImage={handleSaveEditImage}
+                    handleDeleteImage={handleDeleteImage}
+                    apiPathCrop={apiPathCrop}
+                />
+            )}
+        </>
+    );
 };
 
 export default Form;

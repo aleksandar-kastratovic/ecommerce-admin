@@ -21,47 +21,41 @@ import Unicon from "../../Unicon/Unicon";
  * @constructor
  */
 const DetailsList = ({ fields = [], selected = 0, handleSelect, isLoadingList, isErrorList }) => {
-  return (
-    <>
-      <Box>
-        <List className="no-padding">
-          {!isLoadingList ? (
-            <>
-              {fields.map((field) => (
-                <ListItem
-                  key={field.id}
-                  disablePadding
-                  selected={field.id === selected}
-                  onClick={() => handleSelect(field)}
-                  disabled={!field.enabled}
-                >
-                  <ListItemButton>
-                    <ListItemIcon><Unicon icon={field.icon} /></ListItemIcon>
-                    <ListItemText primary={field.name} />
-                    <ChevronRightIcon />
-                  </ListItemButton>
-                </ListItem>
-              ))}
-            </>
-          ) : (
-            <Stack spacing={1}>
-              <Skeleton variant="text" height={50} />
-              <Skeleton variant="text" height={50} />
-              <Skeleton variant="text" height={50} />
-              <Skeleton variant="text" height={50} />
-            </Stack>
-          )}
-        </List>
-      </Box>
-      {isErrorList && (
-        <Stack sx={{ width: "100%" }}>
-          <Alert severity="error">
-            Doslo je do greske. Molim Vas pokusajte kasnije.
-          </Alert>
-        </Stack>
-      )}
-    </>
-  )
-}
+    return (
+        <>
+            <Box>
+                <List className="no-padding">
+                    {!isLoadingList ? (
+                        <>
+                            {fields.map((field) => (
+                                <ListItem key={field.id} disablePadding selected={field.id === selected} onClick={() => handleSelect(field)} disabled={!field.enabled}>
+                                    <ListItemButton>
+                                        <ListItemIcon>
+                                            <Unicon icon={field.icon} />
+                                        </ListItemIcon>
+                                        <ListItemText primary={field.name} />
+                                        <ChevronRightIcon />
+                                    </ListItemButton>
+                                </ListItem>
+                            ))}
+                        </>
+                    ) : (
+                        <Stack spacing={1}>
+                            <Skeleton variant="text" height={50} />
+                            <Skeleton variant="text" height={50} />
+                            <Skeleton variant="text" height={50} />
+                            <Skeleton variant="text" height={50} />
+                        </Stack>
+                    )}
+                </List>
+            </Box>
+            {isErrorList && (
+                <Stack sx={{ width: "100%" }}>
+                    <Alert severity="error">Doslo je do greske. Molim Vas pokusajte kasnije.</Alert>
+                </Stack>
+            )}
+        </>
+    );
+};
 
-export default DetailsList
+export default DetailsList;
