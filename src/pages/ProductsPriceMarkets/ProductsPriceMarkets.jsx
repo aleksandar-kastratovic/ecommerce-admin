@@ -72,7 +72,6 @@ const ProductsPriceMarkets = () => {
     <ListPage
       listPageId="ProductsPriceMarkets"
       title="Tržište"
-      customActions={customActions}
       apiUrl="admin/product-items/prices-markets"
       columnFields={tblFields}
       additionalButtons={additionalButtons}
