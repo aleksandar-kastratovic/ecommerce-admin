@@ -46,17 +46,18 @@ const ProductsPriceMarkets = () => {
             id: rowData.id,
             mutate: null,
             children: (
-              <ModalContent />
+              <ModalContent apiPath={`admin/product-items/prices-markets/message/${rowData.id}`} rowData={rowData} handleDeleteModalData={handleDeleteModalData} />
             )
           };
         },
       },
       deleteClickHandler: {
         type: 'dialog_delete',
-        fnc: (rowData) => {
-          api.delete(`admin/product-items/prices-markets/${rowData.id}`)
+        fnc: (rowData, deleteModalData) => {
+          api.delete(`admin/product-items/prices-markets/confirm/${rowData.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
             .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+
           return {
             show: false,
             id: rowData.id,
@@ -76,6 +77,7 @@ const ProductsPriceMarkets = () => {
       columnFields={tblFields}
       additionalButtons={additionalButtons}
       actionNewButton="modal"
+      customActions={customActions}
     />
   );
 };
