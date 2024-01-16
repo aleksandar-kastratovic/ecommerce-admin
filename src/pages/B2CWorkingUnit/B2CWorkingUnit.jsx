@@ -1,10 +1,11 @@
+import { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ListPage from "../../components/shared/ListPage/ListPage";
+
 import tblFields from "./tblFields.json";
-import { toast } from "react-toastify";
-import ModalContent from "./ModalContent";
-import { useContext } from "react";
 import AuthContext from "../../store/auth-contex";
+import ModalContent from "./ModalContent";
+import { toast } from "react-toastify";
 
 const B2CWorkingUnit = () => {
 
@@ -30,15 +31,22 @@ const B2CWorkingUnit = () => {
       deleteClickHandler: {
         type: 'dialog_delete',
         fnc: (rowData, deleteModalData) => {
-          api.delete(`admin/working-units-b2c/list/confirm/${rowData.id}`)
-            .then(() => toast.success("Zapis je uspešno obrisan"))
-            .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
 
-          return {
-            show: false,
-            id: rowData.id,
-            mutate: 1,
-          };
+          if(deleteModalData.all_fill) {
+            api.delete(`admin/working-units-b2c/list/confirm/${rowData.id}`, deleteModalData)
+              .then(() => toast.success("Zapis je uspešno obrisan"))
+              .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+
+            return {
+              show: false,
+              id: rowData.id,
+              mutate: 1,
+            };
+          } else {
+            toast.warning("Potrebno je da povežete sve opcije koje se brišu");
+            return false;
+          }
+          
         }
       },
     },
