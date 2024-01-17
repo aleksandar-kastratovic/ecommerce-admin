@@ -16,6 +16,9 @@
                     "convert_use": null,
                     "width": "1920",
                     "height": "1080"
+                },
+                "imageButton": {
+                    "apiPathCrop": "admin/product-items/variants/gallery/options/crop"
                 }
             }
         },

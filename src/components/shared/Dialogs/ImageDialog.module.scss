@@ -28,3 +28,16 @@
 .btnGroup {
     margin: 1rem;
 }
+
+.imageHolder {
+    display: flex;
+    gap: 5rem;
+}
+
+.formFieldsStyle * {
+    margin: 0.2rem !important;
+}
+
+.formFieldsStyle {
+    max-width: 600px;
+}

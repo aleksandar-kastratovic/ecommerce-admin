@@ -41,7 +41,15 @@ export const InputMultipleImagesOne = ({
     description,
     validate = null,
     additionalData = null,
+    ui_prop,
+    allowedFileTypes,
 }) => {
+    const {
+        fileUpload: {
+            allow_format,
+            imageButton: { apiPathCrop },
+        },
+    } = ui_prop;
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
 
@@ -264,9 +272,18 @@ export const InputMultipleImagesOne = ({
         onChangeHandler({ target: { value: imageList, name: name } });
     }, [imageList]);
 
+    const acceptedFormats = (allowedFileTypes ?? allow_format ?? [])?.map((item, i) => item?.mime_type);
+
     return (
         <Grid container spacing={1} direction="row" sx={{ width: "100%", margin: "2rem 0 0 0" }}>
-            <MultipleImages description={description} handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} />
+            <MultipleImages
+                description={description}
+                handleMultipleImageUpload={handleUpload}
+                handleDrag={handleDrag}
+                handleDrop={handleUpload}
+                dragActive={dragActive}
+                accept={acceptedFormats ?? accept}
+            />
 
             <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} handleReorder={handleReorder} />
 
@@ -277,6 +294,7 @@ export const InputMultipleImagesOne = ({
                     setImageList(images);
                     handleCloseImageDialog();
                 }}
+                apiPathCrop={apiPathCrop}
                 imageList={imageList}
                 handleCloseImageDialog={handleCloseImageDialog}
                 onImageUpload={formImageUpload}

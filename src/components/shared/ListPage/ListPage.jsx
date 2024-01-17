@@ -41,6 +41,8 @@ import { queryKeys } from "../../../helpers/const";
 const ListPage = ({
     apiUrl,
     deleteUrl,
+    isArray,
+    accept,
     editUrl,
     editUrlQueryString = [],
     title,
@@ -89,7 +91,9 @@ const ListPage = ({
     onDismissModal = () => {},
     listData = false,
     labelSaveButton,
-    dataFromServer,apiPathCrop
+    dataFromServer,
+    apiPathCrop,
+    setPropName,
 }) => {
     // TODO Sorting is disabled as it does not work with pagination
     columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
@@ -129,7 +133,6 @@ const ListPage = ({
     if (response?.payload && modifyItems) {
         response.payload.items = modifyItems(response.payload.items);
     }
-
     useEffect(() => {
         if (openDeleteDialog.mutate === 1) {
             setOpenDeleteDialog({ show: false, id: null, mutate: 0 });
@@ -418,11 +421,16 @@ const ListPage = ({
                 selectedFile={selectedFile}
                 label={labelSaveButton}
                 dataFromServer={dataFromServer}
-                allowedFileTypes={columnFields
-                    ?.filter((field) => field?.ui_prop?.fileUpload?.allow_format)
-                    ?.map((field) => field?.ui_prop?.fileUpload?.allow_format)
-                    ?.flat()}
+                isArray={isArray}
+                allowedFileTypes={
+                    accept ??
+                    columnFields
+                        ?.filter((field) => field?.ui_prop?.fileUpload?.allow_format)
+                        ?.map((field) => field?.ui_prop?.fileUpload?.allow_format)
+                        ?.flat()
+                }
                 apiPathCrop={apiPathCrop}
+                setPropName={setPropName}
             />
             <DeleteDialog
                 children={deleteModalChildren}

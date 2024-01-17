@@ -18,6 +18,7 @@ import { getImageRatio } from "../../../helpers/imageSize";
 
 import styles from "./ImageButton.module.scss";
 import IconList from "../../../helpers/icons";
+import { useImageFileType } from "../../../hooks/useFileType";
 
 const ImageButton = ({
     name = "",
@@ -32,6 +33,8 @@ const ImageButton = ({
     onOpenImageDialog = () => {},
     icon = IconList.cloudUpload,
     item,
+    allowedFileTypes,
+    setPropName = () => {},
 }) => {
     const [imageDimensions, setImageDimensions] = useState({
         width: imgWidth ?? 0,
@@ -39,7 +42,6 @@ const ImageButton = ({
     });
     const [loadingImage, setLoadingImage] = useState(false);
     const [loaded, setLoaded] = useState(false);
-
     useEffect(() => {
         if (loaded) {
             const loadImage = async (url) => {
@@ -59,6 +61,7 @@ const ImageButton = ({
         setLoaded(true);
     }, []);
 
+    const { fileType } = useImageFileType(value);
     return (
         <>
             {value ? (
@@ -67,20 +70,50 @@ const ImageButton = ({
                         <FormControl className={styles.formStyle} fullWidth>
                             <FormLabel required={required}>{label}</FormLabel>
                             <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
-                            <ButtonBase focusRipple className={styles.imageButtonStyled} onClick={() => onOpenImageDialog(value, label, name, imgWidth, imgHeight, item)}>
-                                <span
-                                    style={{
-                                        backgroundImage: `url(${value})`,
-                                        position: "absolute",
-                                        left: 0,
-                                        right: 0,
-                                        top: 0,
-                                        bottom: 0,
-                                        backgroundSize: imageDimensions.width > 200 ? "cover" : "contain",
-                                        backgroundRepeat: "no-repeat",
-                                        backgroundPosition: "center 40%",
-                                    }}
-                                />
+                            <ButtonBase
+                                focusRipple
+                                className={styles.imageButtonStyled}
+                                onClick={() => {
+                                    onOpenImageDialog(value, label, name, imgWidth, imgHeight, item);
+                                }}
+                            >
+                                {value && (
+                                    <>
+                                        {fileType === "image" ? (
+                                            <span
+                                                style={{
+                                                    backgroundImage: `url(${value})`,
+                                                    position: "absolute",
+                                                    left: 0,
+                                                    right: 0,
+                                                    top: 0,
+                                                    bottom: 0,
+                                                    backgroundSize: imageDimensions.width > 200 ? "cover" : "contain",
+                                                    backgroundRepeat: "no-repeat",
+                                                    backgroundPosition: "center 40%",
+                                                }}
+                                            />
+                                        ) : (
+                                            <video
+                                                autoPlay={true}
+                                                muted={true}
+                                                loop={true}
+                                                style={{
+                                                    position: "absolute",
+                                                    left: 0,
+                                                    right: 0,
+                                                    top: 0,
+                                                    bottom: 0,
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    objectFit: "cover",
+                                                }}
+                                            >
+                                                <source src={value} type="video/mp4" />
+                                            </video>
+                                        )}
+                                    </>
+                                )}
 
                                 <span className={styles.imageBackdrop} />
                                 <span className={styles.imageWrap}>
@@ -125,10 +158,18 @@ const ImageButton = ({
                                     <Input
                                         multiple
                                         name={name}
-                                        inputProps={{ accept: "image/*" }}
+                                        inputProps={{
+                                            accept: allowedFileTypes
+                                                ? allowedFileTypes
+                                                      .map(({ mime_type }) => mime_type)
+                                                      .flat()
+                                                      .join(", ")
+                                                : "*",
+                                        }}
                                         id={label}
                                         onChange={(e) => {
                                             onImageUpload(e);
+                                            setPropName(name);
                                         }}
                                         type="file"
                                         sx={{ display: "none" }}

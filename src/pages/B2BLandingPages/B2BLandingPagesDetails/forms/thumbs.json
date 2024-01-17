@@ -24,7 +24,18 @@
     "disabled": false,
     "required": false,
     "description": "",
-    "ui_prop": "xyz",
+      "ui_prop": {
+          "fileUpload": {
+              "fillFromApi": "admin/landing-pages-b2b/thumb/options/upload",
+              "allow_format": [],
+              "allow_size": "",
+              "image": {
+                  "convert_use": null,
+                  "width": "1920",
+                  "height": "1080"
+              }
+          }
+      },
     "sortable": true,
     "input_type": "image_button"
   },

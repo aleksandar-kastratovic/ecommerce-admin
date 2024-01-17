@@ -46,6 +46,9 @@
                     "convert_use": null,
                     "width": "1920",
                     "height": "1080"
+                },
+                "imageButton": {
+                    "apiPathCrop": "admin/product-items/documents/basic-data/options/crop?field=file"
                 }
             }
         },
@@ -106,7 +109,7 @@
     },
     {
         "field_name": "Naslovna slika",
-        "prop_name": "thumb_image_base64",
+        "prop_name": "thumb_image",
         "validate": {
             "imageUpload": null
         },
@@ -118,13 +121,16 @@
         "description": "",
         "ui_prop": {
             "fileUpload": {
-                "fillFromApi": "admin/product-items/documents/basic-data/options/upload?field=thumb_image_base64",
+                "fillFromApi": "admin/product-items/documents/basic-data/options/upload?field=thumb_image",
                 "allow_format": [],
                 "allow_size": "",
                 "image": {
                     "convert_use": null,
                     "width": "1920",
                     "height": "1080"
+                },
+                "imageButton": {
+                    "apiPathCrop": "admin/product-items/documents/basic-data/options/crop?field=thumb_image"
                 }
             }
         },
