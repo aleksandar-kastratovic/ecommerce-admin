@@ -68,7 +68,7 @@ const CategoriesGroupsListPage = () => {
               mutate: 1,
             };
           } else {
-            toast.warning("Potrebno je da povežete sve opcije koje se brišu");
+            toast.warning("Potrebno je da odaberete koju akciju želite da preduzmete.");
             return false;
           }
           
