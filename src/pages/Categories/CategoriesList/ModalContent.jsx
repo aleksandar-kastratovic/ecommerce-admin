@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import CircularProgress from "@mui/material/CircularProgress";
-import AuthContext from "../../store/auth-contex";
+import AuthContext from "../../../store/auth-contex";
 
 const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
 

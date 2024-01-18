@@ -326,3 +326,9 @@ pipelines:
           <<: *execute
           name: ASHolding
           deployment: asholding
+
+    prod-alphamob:
+      - step:
+          <<: *execute
+          name: AlphaMob
+          deployment: alphamob

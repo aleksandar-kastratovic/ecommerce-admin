@@ -45,25 +45,25 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
               label={dialogData.main_checkbox}
             />
           </span>
-          {dialogData.price_structure !== false && (
+          {dialogData.brand_manufacturer !== false && (
             <span style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
               <Typography variant="string">
-                {dialogData.price_structure_line}
+                {dialogData.brand_manufacturer_line}
               </Typography>
               <FormControlLabel
                 control={<Checkbox checked={checkedMainCheckbox} disabled />}
-                label={dialogData.price_structure_checkbox}
+                label={dialogData.brand_manufacturer_checkbox}
               />
             </span>
           )}
-          {dialogData.product_price !== false && (
+          {dialogData.product_manufacturer !== false && (
             <span style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
               <Typography variant="string">
-                {dialogData.product_price_line}
+                {dialogData.product_manufacturer_line}
               </Typography>
               <FormControlLabel
                 control={<Checkbox checked={checkedMainCheckbox} disabled />}
-                label={dialogData.product_price_checkbox}
+                label={dialogData.product_manufacturer_checkbox}
               />
             </span>
           )}

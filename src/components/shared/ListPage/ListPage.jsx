@@ -167,7 +167,9 @@ const ListPage = ({
                 switch (inputOpts.clickHandler.type) {
                     case "navigate":
                         let navigate_path = inputOpts.clickHandler.fnc(rowData);
-                        navigate(navigate_path);
+                        if(navigate_path) {
+                            navigate(navigate_path);
+                        }
                         break;
                     case "dialog_delete":
                         let dialog_delete_opt = inputOpts.clickHandler.fnc(rowData, handleDeleteModalData);
@@ -213,15 +215,21 @@ const ListPage = ({
             switch (selectedActionsButton.deleteClickHandler.type) {
                 case "navigate":
                     let navigate_path = selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
-                    navigate(navigate_path);
+                    if(navigate_path) {
+                        navigate(navigate_path);
+                    }
                     break;
                 case "dialog_delete":
                     let dialog_delete_opt = selectedActionsButton.deleteClickHandler.fnc(selectedRowData, deleteModalData);
-                    setOpenDeleteDialog(dialog_delete_opt);
+                    if(dialog_delete_opt) {
+                        setOpenDeleteDialog(dialog_delete_opt);
+                    }
                     break;
                 case "modal_form":
                     let modal_form_opt = selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
-                    setOpenModal(modal_form_opt);
+                    if(modal_form_opt) {
+                        setOpenModal(modal_form_opt);
+                    }
                     break;
                 default:
                     selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
