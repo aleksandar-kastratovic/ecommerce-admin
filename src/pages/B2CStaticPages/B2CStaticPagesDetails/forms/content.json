@@ -74,7 +74,8 @@
                     "convert_use": null,
                     "width": "1920",
                     "height": "1080"
-                }
+                },
+                "isArray": true
             }
         },
         "sortable": true,

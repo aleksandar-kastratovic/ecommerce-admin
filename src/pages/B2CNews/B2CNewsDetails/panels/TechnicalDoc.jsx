@@ -22,6 +22,7 @@ const TechnicalDoc = ({ newsId }) => {
     const apiPath = "admin/news-b2c/news/technical-doc";
     const apiPathCrop = "admin/news-b2c/news/technical-doc/options/crop";
     const [fileTypes, setFileTypes] = useState([]);
+
     const handleInformationImage = () => {
         api.get(`admin/news-b2c/news/technical-doc/options/upload`)
             .then((response) => {

@@ -1118,7 +1118,6 @@ export const FilePicker = ({
         const supportedTypes = uiProp?.fileUpload?.allow_format?.map((format) => format?.mime_type);
         const allowedSize = uiProp?.fileUpload?.allow_size;
         if (type) {
-            console.log(supportedTypes, type);
             if (!supportedTypes?.includes(type)) {
                 toast.error("Pogrešan tip fajla.");
                 return;
@@ -1211,7 +1210,6 @@ export const FilePicker = ({
     };
 
     const inputClasses = generateBootstrapClasses(uiProp?.columns);
-console.log(uiProp)
     return (
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
             <ButtonBase

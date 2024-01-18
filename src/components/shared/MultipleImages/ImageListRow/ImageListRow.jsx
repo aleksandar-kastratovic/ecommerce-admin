@@ -36,7 +36,6 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}
                     {(provided, snapshot) => (
                         <ImageList ref={provided.innerRef} style={getListStyle(snapshot.isDraggingOver)} {...provided.droppableProps}>
                             {imageList.map((item, index) => {
-                                console.log(item)
                                 return (
                                     <Draggable key={item.id} draggableId={item.id + "drag"} index={index}>
                                         {(provided, snapshot) => (
@@ -47,21 +46,42 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}
                                                     {...provided.draggableProps}
                                                     {...provided.dragHandleProps}
                                                     style={getItemStyle(snapshot.isDragging, provided.draggableProps.style)}
+
                                                     // TODO moze i ovako da se podesava stil na drag slika/elemenata
                                                     // className={snapshot.isDragging ? "class1" : "class2"}
                                                 >
-                                                    {item.src.includes("image") ? (
-                                                        <img
-                                                            key={item.src}
-                                                            src={item?.src}
-                                                            srcSet={item?.src}
-                                                            alt={item?.name}
-                                                            loading="lazy"
-                                                            style={{
-                                                                height: "10rem",
-                                                            }}
-                                                            onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path)}
-                                                        />
+                                                    {item.src.includes("image") || item?.src?.includes("video") ? (
+                                                        item?.src?.includes("image") ? (
+                                                            <img
+                                                                key={item.src}
+                                                                src={item?.src}
+                                                                srcSet={item?.src}
+                                                                alt={item?.name}
+                                                                loading="lazy"
+                                                                style={{
+                                                                    height: "10rem",
+                                                                    maxWidth: "9rem"
+                                                                }}
+                                                                onClick={(e) =>
+                                                                    handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path, item.dimensions)
+                                                                }
+                                                            />
+                                                        ) : (
+                                                            <video
+                                                                key={item.src}
+                                                                src={item?.src}
+                                                                autoPlay={true}
+                                                                style={{
+                                                                    height: "10rem",
+                                                                    maxWidth: "9rem"
+                                                                }}
+                                                                onClick={(e) =>
+                                                                    handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path, item.dimensions)
+                                                                }
+                                                            >
+                                                                <source src={item?.src} type="video/mp4" />
+                                                            </video>
+                                                        )
                                                     ) : (
                                                         <Box
                                                             key={item.src}
@@ -83,7 +103,7 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}
                                                         variant="subtitle2"
                                                         noWrap
                                                         style={{ cursor: "pointer", color: "#ffff", fontSize: "0.75rem", padding: "0.3rem 0 0 0.3rem" }}
-                                                        onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path)}
+                                                        onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path, item.dimensions)}
                                                     >
                                                         Naziv: {item?.name}
                                                     </Typography>
@@ -92,7 +112,7 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}
                                                         variant="subtitle2"
                                                         noWrap
                                                         style={{ cursor: "pointer", color: "#ffff", fontSize: "0.625rem", padding: "0 0 0 0.3rem" }}
-                                                        onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path)}
+                                                        onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path, item.dimensions)}
                                                     >
                                                         Veličina: {Math.round((item?.size / 1024 / 1024) * 1000) / 1000} MB
                                                     </Typography>

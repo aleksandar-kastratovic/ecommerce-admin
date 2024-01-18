@@ -11,6 +11,7 @@ import Seo from "./panels/Seo";
 import TechnicalDoc from "./panels/TechnicalDoc";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 import AuthContext from "../../../store/auth-contex";
+import Document from "./panels/Document";
 
 const B2CNewsDetails = () => {
     const { nid } = useParams();
@@ -159,10 +160,10 @@ const B2CNewsDetails = () => {
         },
         {
             id: "documentation",
-            name: "Dokumentacija",
+            name: "Dokumenta",
             icon: IconList.documentScanner,
             enabled: data?.id,
-            component: <TechnicalDoc newsId={data?.id} />,
+            component: <Document newsId={data?.id} />,
         },
         {
             id: "categories",

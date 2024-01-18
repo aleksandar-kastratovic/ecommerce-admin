@@ -165,7 +165,6 @@ const ImageEditorComponent = ({
                                     onChange={(e) => {
                                         const value = e.target.value.trim();
 
-                                        console.log("value width::", value);
 
                                         setCropSize({
                                             ...cropSize,
@@ -197,7 +196,6 @@ const ImageEditorComponent = ({
                                     value={cropSize.height}
                                     onChange={(e) => {
                                         const value = e.target.value.trim();
-                                        console.log("value height::", value);
                                         setCropSize({
                                             ...cropSize,
                                             height: value === "" ? 50 : parseInt(value) || 0,

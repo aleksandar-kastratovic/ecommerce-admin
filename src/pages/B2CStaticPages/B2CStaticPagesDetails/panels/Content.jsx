@@ -170,6 +170,7 @@ const Content = ({ pageId }) => {
                         },
                         ui_prop: {
                             fileUpload: {
+                                ...field?.ui_prop?.fileUpload,
                                 allow_format,
                                 allow_size,
                                 image,
@@ -238,6 +239,7 @@ const Content = ({ pageId }) => {
                     };
                     item.ui_prop = {
                         fileUpload: {
+                            ...item?.ui_prop?.fileUpload,
                             allow_size: validation?.allow_size,
                             allow_format: validation?.allow_format,
                             image: validation?.image,
@@ -280,7 +282,6 @@ const Content = ({ pageId }) => {
         <>
             <ListPage
                 validateData={validateData}
-                isArray={true}
                 accept={validationFields?.allow_format}
                 listPageId="B2CContent"
                 apiPathCrop={`admin/static-pages-b2c/gallery/options/crop`}

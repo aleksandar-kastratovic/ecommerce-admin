@@ -170,6 +170,7 @@ const Content = ({ pageId }) => {
                         },
                         ui_prop: {
                             fileUpload: {
+                                ...field?.ui_prop?.fileUpload,
                                 allow_format,
                                 allow_size,
                                 image,
@@ -186,11 +187,9 @@ const Content = ({ pageId }) => {
             setFormFieldsTemp([...arr]);
         }
     };
-
     useEffect(() => {
         handleInformationImage();
     }, []);
-    console.log(selectedRow);
     const updateNewFieldsInDetails = (fields, field, edit, data, disableType = false, validation) => {
         if (field === "") {
             handleSubmitWrapper(pageId, selectedRow?.id);
@@ -238,13 +237,14 @@ const Content = ({ pageId }) => {
                     };
                     item.ui_prop = {
                         fileUpload: {
+                            ...item?.ui_prop?.fileUpload,
                             allow_size: validation?.allow_size,
                             allow_format: validation?.allow_format,
                             image: validation?.image,
                         },
                     };
                     item.dimensions = { width: image?.width, height: image?.height };
-                    console.log("item", item);
+
                 }
             }
         });
@@ -280,7 +280,6 @@ const Content = ({ pageId }) => {
         <>
             <ListPage
                 validateData={validateData}
-                isArray={true}
                 accept={validationFields?.allow_format}
                 listPageId="b2bContent"
                 apiPathCrop={`admin/static-pages-b2b/gallery/options/crop`}

@@ -35,7 +35,7 @@
         "in_details": true,
         "editable": true,
         "disabled": false,
-        "required": true,
+        "required": false,
         "description": "",
         "ui_prop": {
             "fileUpload": {

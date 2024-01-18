@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 import AuthContext from "../../store/auth-contex";
+import { useQuery } from "react-query";
 
 const B2Cbanners = ({}) => {
     const navigate = useNavigate();
@@ -12,13 +13,18 @@ const B2Cbanners = ({}) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
 
-    const handleInformationImage = () => {
-        api.get(`admin/banners-b2c/main/options/upload?id_position=${idPosition}`)
-            .then(async (response) => {
-                await formatFormFields(response?.payload);
-            })
-            .catch((error) => console.warn(error));
-    };
+    const {} = useQuery(
+        ["b2b-banners", idPosition],
+        async () => {
+            return await api
+                .get(`admin/banners-b2c/main/options/upload?id_position=${idPosition}`)
+                .then(async (response) => {
+                    await formatFormFields(response?.payload);
+                })
+                .catch((error) => console.warn(error));
+        },
+        { refetchOnWindowFocus: false }
+    );
 
     const buttons = [
         {
@@ -150,10 +156,6 @@ const B2Cbanners = ({}) => {
             setFormFieldsTemp([...arr]);
         }
     };
-
-    useEffect(() => {
-        handleInformationImage();
-    }, [idPosition]);
 
     return (
         <ListPage

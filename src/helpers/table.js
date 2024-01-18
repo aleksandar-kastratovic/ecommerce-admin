@@ -42,7 +42,7 @@ const htmlToPlainText = (html) => {
     return doc.body.textContent || "";
 };
 
-export const columnCell = (value, column, rowType) => {
+export const columnCell = (value, column, rowType, events) => {
     switch (rowType !== undefined ? rowType : column) {
         case "boolean":
             return value ? <Unicon icon={IconList.check} styleIcon={{ color: "#28a86e" }} /> : <Unicon icon={IconList.close} styleIcon={{ color: "#D32F2E" }} />;

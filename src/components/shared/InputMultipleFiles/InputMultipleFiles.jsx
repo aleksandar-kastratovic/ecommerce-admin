@@ -106,13 +106,10 @@ export const InputMultipleFiles = ({
                 });
                 if (allowedFormatMime.includes(type)) {
                     if (size > allow_size) {
-                        console.log("Image size is too big");
                     } else {
-                        console.log("Not too big");
                         setImageList(newImagesArray);
                     }
                 } else {
-                    console.log("Image format is not allowed");
                 }
             } else {
                 setImageList(newImagesArray);
@@ -122,7 +119,6 @@ export const InputMultipleFiles = ({
 
     //MODAL OPEN HANDLER
     const handleModalOpen = (e, item) => {
-        console.log(item);
         setOpenFullPageDialog({
             show: true,
             item: item,

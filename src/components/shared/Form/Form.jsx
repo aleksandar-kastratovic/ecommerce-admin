@@ -53,7 +53,6 @@ const Form = ({
         height: heightOfElement,
         name: "",
     });
-
     let propAutoFocus = false;
     let checkIsFocused = false;
 
@@ -112,7 +111,6 @@ const Form = ({
 
     const formImageUpload = useCallback(
         (event, validation) => {
-            console.log(validation);
             if (validation) {
                 event.preventDefault();
                 const selectedFile = event.target.files[0];
@@ -157,7 +155,7 @@ const Form = ({
         [data]
     );
 
-    const onOpenImageDialog = (img, label, imageName, width, height, item) => {
+    const onOpenImageDialog = (img, label, imageName, width, height, item, size, dimensions) => {
         const found = data[imageName];
         const checkImage = isUrlValid(img);
         let image_name = item?.prop_name + "_filename";
@@ -174,8 +172,10 @@ const Form = ({
                 item: item,
                 image_name: image_Name,
                 image_url: image_Url,
+                dimensions: dimensions,
                 apiPathCrop: item?.ui_prop?.fileUpload?.imageButton?.apiPathCrop ?? apiPathCrop,
                 width: width,
+                size: size,
                 height: height,
                 name: imageName,
                 showDimensions: false,
@@ -188,9 +188,11 @@ const Form = ({
                 item: item,
                 image_name: image_Name,
                 image_url: image_Url,
+                size: size,
                 apiPathCrop: item?.ui_prop?.fileUpload?.imageButton?.apiPathCrop ?? apiPathCrop,
                 width: width,
                 height: height,
+                dimensions: dimensions,
                 name: imageName,
                 showDimensions: true,
             });

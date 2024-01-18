@@ -77,7 +77,6 @@ const ModalForm = ({
     const { api } = authCtx;
     const [data, setData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
-
     const handleData = async () => {
         setIsLoading(true);
         // The queryStringLink array is initialized to store the formatted key-value pairs from the queryString prop.

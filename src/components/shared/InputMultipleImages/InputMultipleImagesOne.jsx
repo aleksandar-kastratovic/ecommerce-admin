@@ -71,6 +71,7 @@ export const InputMultipleImagesOne = ({
         type: "",
         path: "",
         position: 0,
+        dimensions: {},
     };
 
     const [openFullPageDialog, setOpenFullPageDialog] = useState(init);
@@ -164,7 +165,7 @@ export const InputMultipleImagesOne = ({
     };
 
     //MODAL OPEN HANDLER
-    const handleModalOpen = (e, src, alt, name, size, type, id, position, path) => {
+    const handleModalOpen = (e, src, alt, name, size, type, id, position, path, dimensions) => {
         setOpenFullPageDialog({
             show: true,
             id: id,
@@ -175,6 +176,7 @@ export const InputMultipleImagesOne = ({
             type: type,
             path: path,
             position: position,
+            dimensions: dimensions,
         });
     };
 

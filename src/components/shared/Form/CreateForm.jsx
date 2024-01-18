@@ -335,6 +335,7 @@ const CreateForm = ({
                             label={item.field_name}
                             list={Array.isArray(value) ? value : []}
                             name={item.prop_name}
+                            isArray={item?.ui_prop?.fileUpload?.isArray ?? isArray}
                             uploadHandler={item?.uploadHandler}
                             deleteHandler={item?.deleteHandler}
                             handleReorder={item?.handleReorder}
@@ -350,11 +351,10 @@ const CreateForm = ({
                     );
                     break;
                 case "multiple_images":
-
                     formItem = (
                         <InputMultipleImages
                             label={item.field_name}
-                            isArray={isArray}
+                            isArray={item?.ui_prop?.fileUpload?.isArray ?? isArray}
                             list={Array.isArray(value) ? value : []}
                             name={item.prop_name}
                             uploadHandler={item?.uploadHandler}

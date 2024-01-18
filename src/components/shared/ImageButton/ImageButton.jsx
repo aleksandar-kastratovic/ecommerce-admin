@@ -61,7 +61,8 @@ const ImageButton = ({
         setLoaded(true);
     }, []);
 
-    const { fileType } = useImageFileType(value);
+    const { fileType, sizeInMB } = useImageFileType(value);
+
     return (
         <>
             {value ? (
@@ -69,12 +70,12 @@ const ImageButton = ({
                     <Grid container spacing={2} alignItems="center" margin={0} padding={0} width="100%">
                         <FormControl className={styles.formStyle} fullWidth>
                             <FormLabel required={required}>{label}</FormLabel>
-                            <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
+                            <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight} px`}</FormLabel>
                             <ButtonBase
                                 focusRipple
                                 className={styles.imageButtonStyled}
                                 onClick={() => {
-                                    onOpenImageDialog(value, label, name, imgWidth, imgHeight, item);
+                                    onOpenImageDialog(value, label, name, imgWidth, imgHeight, item, sizeInMB);
                                 }}
                             >
                                 {value && (
@@ -153,7 +154,7 @@ const ImageButton = ({
                         <Grid item margin={0} padding={0} sx={{ padding: 0 }}>
                             <FormControl error={error !== null} sx={{ width: "100%" }}>
                                 <FormLabel required={required}>{label}</FormLabel>
-                                <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight}`}</FormLabel>
+                                <FormLabel>{`Dimenzije: ${imgWidth} x ${imgHeight} px`}</FormLabel>
                                 <label htmlFor={label}>
                                     <Input
                                         multiple

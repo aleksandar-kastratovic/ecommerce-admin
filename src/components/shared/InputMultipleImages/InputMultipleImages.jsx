@@ -44,7 +44,6 @@ export const InputMultipleImages = ({
 }) => {
     const [imageList, setImageList] = useState(list);
     const [dragActive, setDragActive] = useState(false);
-
     const [openDeleteDialog, setOpenDeleteDialog] = useState({
         show: false,
         id: null,
@@ -60,9 +59,11 @@ export const InputMultipleImages = ({
         type: "",
         path: "",
         position: 0,
+        dimensions: {},
     };
 
     const [openFullPageDialog, setOpenFullPageDialog] = useState(init);
+    console.log("init", openFullPageDialog);
 
     //DRAG EVENT HANDLER
     const handleDrag = function (e) {
@@ -117,7 +118,6 @@ export const InputMultipleImages = ({
                     if (size > allow_size) {
                         toast.error(`Slika je prevelika. Maksimalna dozvoljena veličina je ${convertToMB(allow_size)}MB.`);
                     } else {
-                        console.log("Not too big");
                         setImageList(newImagesArray);
                     }
                 } else {
@@ -130,7 +130,7 @@ export const InputMultipleImages = ({
     };
 
     //MODAL OPEN HANDLER
-    const handleModalOpen = (e, src, alt, name, size, type, id, position, path) => {
+    const handleModalOpen = (e, src, alt, name, size, type, id, position, path, dimensions) => {
         setOpenFullPageDialog({
             show: true,
             id: id,
@@ -141,6 +141,7 @@ export const InputMultipleImages = ({
             type: type,
             path: path,
             position: position,
+            dimensions: dimensions,
         });
     };
 
@@ -237,7 +238,6 @@ export const InputMultipleImages = ({
     useEffect(() => {
         onChangeHandler({ target: { value: imageList, name: name } });
     }, [imageList]);
-
     return (
         <Grid container spacing={1} direction="row" sx={{ width: "100%", margin: "2rem 0 0 0" }}>
             <MultipleImages

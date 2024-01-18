@@ -25,6 +25,7 @@ import Tooltip from "@mui/material/Tooltip";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import { useImageFileType } from "../../../../hooks/useFileType";
 
 const ImageDialogFullPage = ({
     openFullPageDialog,
@@ -114,6 +115,8 @@ const ImageDialogFullPage = ({
     //     });
     // };
 
+    const { fileType } = useImageFileType(openFullPageDialog?.image ?? "");
+
     return (
         <Dialog open={openFullPageDialog.show} fullScreen aria-labelledby="delete-dialog-title" aria-describedby="delete-dialog-description">
             <AppBar sx={{ position: "relative" }}>
@@ -151,23 +154,42 @@ const ImageDialogFullPage = ({
                                 <Grid container spacing={2}>
                                     <Grid item xs={8}>
                                         <div className={styles.imageStyle}>
-                                            {openFullPageDialog.image && (
-                                                <img
-                                                    style={{
-                                                        maxWidth: "90%",
-                                                        maxHeight: "calc(90vh - 64px)",
-                                                    }}
-                                                    src={openFullPageDialog?.image}
-                                                    alt={openFullPageDialog?.name}
-                                                />
-                                            )}
+                                            {openFullPageDialog.image &&
+                                                (fileType === "image" ? (
+                                                    <img
+                                                        style={{
+                                                            maxWidth: "90%",
+                                                            maxHeight: "calc(90vh - 64px)",
+                                                        }}
+                                                        src={openFullPageDialog?.image}
+                                                        alt={openFullPageDialog?.name}
+                                                    />
+                                                ) : (
+                                                    <video
+                                                        style={{
+                                                            maxWidth: "90%",
+                                                            maxHeight: "calc(90vh - 64px)",
+                                                        }}
+                                                        autoPlay={true}
+                                                    >
+                                                        <source src={openFullPageDialog?.image} type="video/mp4" />
+                                                    </video>
+                                                ))}
                                         </div>
                                     </Grid>
                                     <Grid item xs={4}>
                                         <form className={styles.formFieldsStyle}>
                                             <TextField fullWidth type="text" disabled label="Naziv slike" value={openFullPageDialog?.name} variant="outlined" />
                                             <TextField fullWidth type="text" disabled label="Alt slike" value={openFullPageDialog?.alt} variant="outlined" />
-                                            <TextField fullWidth type="text" disabled label="Velicina slike" value={openFullPageDialog?.size} variant="outlined" />
+                                            <TextField fullWidth type="text" disabled label="Velicina slike" value={`${(openFullPageDialog?.size / (1024 * 1024))?.toFixed(2)}MB`} variant="outlined" />
+                                            <TextField
+                                                fullWidth
+                                                type="text"
+                                                disabled
+                                                label="Dimenzija slike (širina x visina)"
+                                                value={`${openFullPageDialog?.dimensions?.width} x ${openFullPageDialog?.dimensions?.height} px`}
+                                                variant="outlined"
+                                            />
                                             <TextField fullWidth type="text" disabled label="Tip slike" value={openFullPageDialog?.type} variant="outlined" />
                                             <TextField
                                                 fullWidth
@@ -218,9 +240,11 @@ const ImageDialogFullPage = ({
               Nova slika
               <InputInput name="image" inputProps={{ accept: "image/*" }} id={openFullPageDialog.name} onChange={(e) => handleImageUpload(e)} type="file" sx={{ display: "none" }} />
             </Button> */}
-                        <Button variant="outlined" onClick={handleOpenEditMode} color="info" startIcon={<EditOutlinedIcon />}>
-                            Obradi sliku
-                        </Button>
+                        {fileType === "image" && (
+                            <Button variant="outlined" onClick={handleOpenEditMode} color="info" startIcon={<EditOutlinedIcon />}>
+                                Obradi sliku
+                            </Button>
+                        )}
                         <Button variant="outlined" color="error" onClick={(e) => handleDeleteImage(e, openFullPageDialog.id)} startIcon={<DeleteOutlineOutlinedIcon />}>
                             Obriši
                         </Button>

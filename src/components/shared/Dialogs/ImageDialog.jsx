@@ -46,10 +46,8 @@ const ImageDialog = ({
 }) => {
     const authCtx = useContext(AuthContext);
     const [bttnText, setBttnText] = useState("Kopirajte link");
-
     const [editMode, setEditMode] = useState(false);
     const [loadingImage, setLoadingImage] = useState(false);
-
     const handleCloseEditMode = () => {
         setEditMode(false);
     };
@@ -135,9 +133,10 @@ const ImageDialog = ({
                                 <Grid item xs={4}>
                                     <form className={styles.formFieldsStyle}>
                                         <TextField fullWidth type="text" disabled label="Naziv slike" value={openImageDialog?.image_name} variant="outlined" />
-                                        <TextField fullWidth type="text" disabled label="Alt slike" value={openImageDialog?.alt} variant="outlined" />
-                                        <TextField fullWidth type="text" disabled label="Velicina slike" value={`${openImageDialog?.width}px x ${openImageDialog?.height}px`} variant="outlined" />
-                                        <TextField fullWidth type="text" disabled label="Tip slike" value={openImageDialog?.type} variant="outlined" />
+                                        <TextField fullWidth type="text" disabled label="Alt slike" value={openImageDialog?.alt ?? openImageDialog?.image_name} variant="outlined" />
+                                        <TextField fullWidth type="text" disabled label="Veličina slike" value={`${openImageDialog?.size?.toFixed(2)}MB`} variant="outlined" />
+                                        <TextField fullWidth type="text" disabled label="Dimenzija slike (širina x visina)" value={`${openImageDialog?.width} x ${openImageDialog?.height} px`} variant="outlined" />
+                                        <TextField fullWidth type="text" disabled label="Tip slike" value={openImageDialog?.image?.split(":")[1]?.split(";")[0] ?? "image"} variant="outlined" />
                                         <TextField
                                             fullWidth
                                             type="text"

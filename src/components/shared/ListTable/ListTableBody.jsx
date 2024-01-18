@@ -88,6 +88,7 @@ const ListTableBody = ({
 
     // What to show
     let content;
+
     switch (true) {
         case error !== null:
             content = <EmptyList span={fields.length} message={`Greška: ${error}`} />;

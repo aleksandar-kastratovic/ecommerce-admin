@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 import AuthContext from "../../store/auth-contex";
+import { useQuery } from "react-query";
 
 const B2Bbanners = ({}) => {
     const navigate = useNavigate();
@@ -12,13 +13,20 @@ const B2Bbanners = ({}) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
 
-    const handleInformationImage = () => {
-        api.get(`admin/banners-b2b/main/options/upload?id_position=${idPosition}`)
-            .then(async (response) => {
-                await formatFormFields(response?.payload);
-            })
-            .catch((error) => console.warn(error));
-    };
+    const {} = useQuery(
+        ["b2b-banners", idPosition],
+        async () => {
+            return await api
+                .get(`admin/banners-b2b/main/options/upload?id_position=${idPosition}`)
+                .then(async (response) => {
+                    await formatFormFields(response?.payload);
+                })
+                .catch((error) => console.warn(error));
+        },
+        { refetchOnWindowFocus: false }
+    );
+
+    const handleInformationImage = () => {};
 
     const buttons = [
         {
@@ -150,10 +158,6 @@ const B2Bbanners = ({}) => {
             setFormFieldsTemp([...arr]);
         }
     };
-
-    useEffect(() => {
-        handleInformationImage();
-    }, [idPosition]);
 
     return (
         <ListPage

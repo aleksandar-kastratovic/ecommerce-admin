@@ -50,6 +50,6 @@ export const getListStyle = (isDraggingOver) => {
         display: "grid",
         gridTemplateColumns: gridTemplateColumns,
         gap: "1rem",
-        overflow: "auto",
+        overflow: "hidden",
     };
 };
