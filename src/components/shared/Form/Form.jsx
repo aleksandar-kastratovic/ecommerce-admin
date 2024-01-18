@@ -33,7 +33,11 @@ const Form = ({
     styleButtonSubmit,
     styleWrapperButtons,
     dataFromServer,
+    widthOfElement,
+    heightOfElement,
     apiPathCrop,
+    allowedFileTypes,
+    isArray,
 }) => {
     const navigate = useNavigate();
     const [data, setData] = useState(initialData ?? {});
@@ -42,18 +46,13 @@ const Form = ({
         show: false,
         image: null,
         label: "",
-        width: 800,
-        height: 600,
+        item: null,
+        path: "",
+        apiPathCrop: "",
+        width: widthOfElement,
+        height: heightOfElement,
         name: "",
-        ui_prop: {
-            imageButton: {
-                crop: {
-                    fillFromApi: apiPathCrop,
-                },
-            },
-        },
     });
-
     let propAutoFocus = false;
     let checkIsFocused = false;
 
@@ -63,7 +62,6 @@ const Form = ({
             return inputsError;
         });
     }
-
     const submitHandler = (event) => {
         event.preventDefault && event.preventDefault();
 
@@ -118,14 +116,14 @@ const Form = ({
                 const selectedFile = event.target.files[0];
                 const { size } = selectedFile;
                 const { allow_size, allow_format } = validation;
-                let arrOfMimeTypes = allow_format?.map((format) => format?.mime_type);
+                let arrOfMimeTypes = allow_format.map((format) => format.mime_type);
 
                 const allowSize = allow_size ? Number(allow_size) : 0;
                 const fileSizeInB = Number(size);
                 let isSizeAllowed = fileSizeInB < allowSize;
-                let isFormatAllowed = arrOfMimeTypes?.includes(selectedFile?.type);
+                let isFormatAllowed = arrOfMimeTypes.includes(selectedFile.type);
                 if (!isFormatAllowed) {
-                    toast.error(`Nedozvoljeni format slike.`);
+                    toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${arrOfMimeTypes.join(", ")}`);
                     return;
                 }
                 if (!isSizeAllowed) {
@@ -157,30 +155,45 @@ const Form = ({
         [data]
     );
 
-    const onOpenImageDialog = (img, label, imageName, width, height, item) => {
+    const onOpenImageDialog = (img, label, imageName, width, height, item, size, dimensions) => {
         const found = data[imageName];
         const checkImage = isUrlValid(img);
+        let image_name = item?.prop_name + "_filename";
+        let image_url = item?.prop_name + "_url";
+
+        const image_Name = data[image_name];
+        const image_Url = data[image_url];
 
         if (checkImage) {
             setOpenImageDialog({
                 show: true,
                 image: found,
                 label: label,
+                item: item,
+                image_name: image_Name,
+                image_url: image_Url,
+                dimensions: dimensions,
+                apiPathCrop: item?.ui_prop?.fileUpload?.imageButton?.apiPathCrop ?? apiPathCrop,
                 width: width,
+                size: size,
                 height: height,
                 name: imageName,
-                showDimensions: true,
-                ui_prop: item,
+                showDimensions: false,
             });
         } else {
             setOpenImageDialog({
                 show: true,
                 image: img,
                 label: label,
+                item: item,
+                image_name: image_Name,
+                image_url: image_Url,
+                size: size,
+                apiPathCrop: item?.ui_prop?.fileUpload?.imageButton?.apiPathCrop ?? apiPathCrop,
                 width: width,
                 height: height,
+                dimensions: dimensions,
                 name: imageName,
-                ui_prop: item,
                 showDimensions: true,
             });
         }
@@ -227,8 +240,6 @@ const Form = ({
         return field;
     });
 
-    const [itemImage, setItemImage] = useState(null);
-    //TODO: postaviti da vuce event handler na nivou polja koje se koristi iz JSON-a
     return (
         <>
             <Box component="form" autoComplete="off" onSubmit={submitHandler} sx={{ display: "flex", flexWrap: "wrap" }}>
@@ -251,12 +262,12 @@ const Form = ({
                                 onChangeHandler={formItemChangeHandler}
                                 onChangeAutoHandler={formItemAutoCompleteChangeHandler}
                                 onImageUpload={(ev) => {
-                                    formImageUpload(ev, openImageDialog?.ui_prop?.ui_prop?.fileUpload?.image ? openImageDialog?.ui_prop?.ui_prop?.fileUpload : item?.ui_prop?.fileUpload);
+                                    let validation = item?.validate?.imageUpload !== null && item?.validate?.imageUpload !== undefined ? item?.validate?.imageUpload : null;
+                                    formImageUpload(ev, validation);
                                 }}
                                 onOpenImageDialog={onOpenImageDialog}
                                 item={item}
                                 key={index}
-                                setItemImage={setItemImage}
                                 error={inputsError[item.prop_name] ? inputsError[item.prop_name].content : null}
                                 value={temp_value}
                                 queryString={queryString}
@@ -276,12 +287,9 @@ const Form = ({
                                 selectedFile={selectedFile}
                                 handleRemoveFile={handleRemoveFile}
                                 dataFromServer={dataFromServer}
-                                apiPathCrop={openImageDialog?.ui_prop?.ui_prop?.imageButton?.crop?.fillFromApi} //TODO
-                                handleCloseImageDialog={handleCloseImageDialog} //TODO
-                                handleSaveEditImage={handleSaveEditImage} //TODO
-                                handleDeleteImage={handleDeleteImage} //TODO
-                                itemImage={itemImage} //TODO
-                                openImageDialog={openImageDialog} //TODO
+                                apiPathCrop={apiPathCrop}
+                                allowedFileTypes={allowedFileTypes}
+                                isArray={isArray}
                             />
                         );
                     })}
@@ -295,21 +303,16 @@ const Form = ({
                 </Buttons>
             </Box>
 
-            {/*DEPRECATED - treba izbaciti iz koda*/}
-            {/*ako u formFields ne postoji nijedan ui_prop.imageButton, prikazi dugme za upload slike*/}
-            {formFields?.every((field) => !field?.ui_prop?.imageButton) && (
-                <ImageDialog
-                    title="Obrada slike"
-                    openImageDialog={openImageDialog}
-                    handleCloseImageDialog={handleCloseImageDialog}
-                    onImageUpload={(ev) => {
-                        formImageUpload(ev, openImageDialog?.ui_prop?.ui_prop?.fileUpload?.image ? openImageDialog?.ui_prop?.ui_prop?.fileUpload : itemImage?.ui_prop?.fileUpload);
-                    }}
-                    handleSaveEditImage={handleSaveEditImage}
-                    handleDeleteImage={handleDeleteImage}
-                    apiPathCrop={apiPathCrop}
-                />
-            )}
+            <ImageDialog
+                title="Obrada slike"
+                apiPathCrop={apiPathCrop}
+                allowedFileTypes={openImageDialog?.item?.validate?.imageUpload?.allow_format ?? openImageDialog?.item?.ui_prop?.fileUpload?.allow_format ?? allowedFileTypes}
+                openImageDialog={openImageDialog}
+                handleCloseImageDialog={handleCloseImageDialog}
+                onImageUpload={formImageUpload}
+                handleSaveEditImage={handleSaveEditImage}
+                handleDeleteImage={handleDeleteImage}
+            />
         </>
     );
 };

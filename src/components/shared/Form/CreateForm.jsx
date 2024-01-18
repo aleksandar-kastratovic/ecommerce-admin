@@ -46,16 +46,10 @@ const CreateForm = ({
     selectedFile,
     handleRemoveFile = () => {},
     dataFromServer,
-    setItemImage,
-    openImageDialog,
-    handleCloseImageDialog,
-    formImageUpload,
-    handleSaveEditImage,
-    handleDeleteImage,
+    allowedFileTypes,
+    setPropName,
     apiPathCrop,
-    itemImage,
-
-    // allowedFileTypes,
+    isArray,
 }) => {
     // depending on input type in fields you will get a control
     // value is obvious
@@ -66,9 +60,6 @@ const CreateForm = ({
     const onInputChangeHandler = (event) => {
         onChangeHandler(event);
     };
-    if (item?.input_type === "image_button") {
-        setItemImage(item);
-    }
     let formItem = null;
     if (Array.isArray(item)) {
         formItem = (
@@ -122,36 +113,25 @@ const CreateForm = ({
                     );
                     break;
                 case "image_button": //TODO
-
                     formItem = (
-                        <>
-                            <ImageButton
-                                name={item.prop_name}
-                                label={item.field_name}
-                                required={typeof item.required === "number" ? item.required === 1 : item.required}
-                                description={item.description}
-                                value={value}
-                                error={error}
-                                imgWidth={item?.ui_prop ? item?.ui_prop?.fileUpload?.image?.width : 800}
-                                imgHeight={item?.ui_prop ? item?.ui_prop?.fileUpload?.image?.height : 600}
-                                onImageUpload={onImageUpload}
-                                item={item}
-                                onOpenImageDialog={onOpenImageDialog}
-                                disabled={disabled}
-                                autoFocus={autoFocus}
-                            />
-                            {item?.ui_prop?.imageButton?.crop?.fillFromApi ? (
-                                <ImageDialog
-                                    title="Obrada slike"
-                                    openImageDialog={openImageDialog}
-                                    handleCloseImageDialog={handleCloseImageDialog}
-                                    onImageUpload={onImageUpload}
-                                    handleSaveEditImage={handleSaveEditImage}
-                                    handleDeleteImage={handleDeleteImage}
-                                    apiPathCrop={apiPathCrop}
-                                />
-                            ) : null}
-                        </>
+                        <ImageButton
+                            name={item.prop_name}
+                            label={item.field_name}
+                            required={typeof item.required === "number" ? item.required === 1 : item.required}
+                            description={item.description}
+                            value={value}
+                            item={item}
+                            error={error}
+                            imgWidth={item.dimensions ? item.dimensions.width : 800}
+                            imgHeight={item.dimensions ? item.dimensions.height : 600}
+                            onImageUpload={onImageUpload}
+                            onOpenImageDialog={onOpenImageDialog}
+                            disabled={disabled}
+                            selectedFile={selectedFile}
+                            allowedFileTypes={allowedFileTypes ?? item?.ui_prop?.fileUpload?.allow_format}
+                            autoFocus={autoFocus}
+                            setPropName={setPropName}
+                        />
                     );
                     break;
                 case "checkbox":
@@ -355,10 +335,13 @@ const CreateForm = ({
                             label={item.field_name}
                             list={Array.isArray(value) ? value : []}
                             name={item.prop_name}
+                            isArray={item?.ui_prop?.fileUpload?.isArray ?? isArray}
                             uploadHandler={item?.uploadHandler}
                             deleteHandler={item?.deleteHandler}
                             handleReorder={item?.handleReorder}
                             onChangeHandler={onChangeHandler}
+                            ui_prop={item?.ui_prop}
+                            allowedFileTypes={allowedFileTypes ?? item?.ui_prop?.fileUpload?.allow_format}
                             autoFocus={autoFocus}
                             description={item.description}
                             validate={item.validate}
@@ -371,13 +354,16 @@ const CreateForm = ({
                     formItem = (
                         <InputMultipleImages
                             label={item.field_name}
+                            isArray={item?.ui_prop?.fileUpload?.isArray ?? isArray}
                             list={Array.isArray(value) ? value : []}
                             name={item.prop_name}
                             uploadHandler={item?.uploadHandler}
                             deleteHandler={item?.deleteHandler}
                             handleReorder={item?.handleReorder}
                             onChangeHandler={onChangeHandler}
+                            accept={allowedFileTypes ?? item?.ui_prop?.fileUpload ?? item?.validate?.imageUpload}
                             autoFocus={autoFocus}
+                            apiPathCrop={apiPathCrop}
                             description={item.description}
                             validate={item.validate}
                             images={item.images && item.images !== undefined ? item.images : null}
@@ -385,7 +371,17 @@ const CreateForm = ({
                     );
                     break;
                 case "multiple_files": //TODO
-                    formItem = <InputMultipleFiles list={Array.isArray(value) ? value : []} name={item.prop_name} onChangeHandler={onChangeHandler} autoFocus={autoFocus} />;
+                    formItem = (
+                        <InputMultipleFiles
+                            list={Array.isArray(value) ? value : []}
+                            name={item.prop_name}
+                            onChangeHandler={onChangeHandler}
+                            autoFocus={autoFocus}
+                            validate={item.validate}
+                            images={item.images && item.images !== undefined ? item.images : null}
+                            description={item.description}
+                        />
+                    );
                     break;
                 case "file_button":
                     formItem = (

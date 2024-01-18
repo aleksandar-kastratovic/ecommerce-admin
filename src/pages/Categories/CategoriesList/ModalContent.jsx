@@ -6,7 +6,7 @@ import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import CircularProgress from "@mui/material/CircularProgress";
-import AuthContext from "../../store/auth-contex";
+import AuthContext from "../../../store/auth-contex";
 
 const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
 
@@ -47,7 +47,7 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
   // Provera da li su vrednosti za sve prikazane elemente odabrana zeljena akcija
   const AllOptionListFill = (allSelected) => {
     let all_fill = true;
-    dialogData?.employees_list.map((list_item) => {
+    dialogData?.products_list.map((list_item) => {
       let find_items = allSelected.filter((item) => {
         return item?.old_id === list_item?.old_id;
       });
@@ -110,24 +110,24 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
               label={dialogData.main_checkbox}
             />
           </span>          
-          {dialogData.working_units_children !== false && (
-            <span key="dialogData_working_units_children" style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
+          {dialogData.category_children !== false && (
+            <span key="dialogData_category_children" style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
               <Typography variant="string">
-                {dialogData.working_units_children_line}
+                {dialogData.category_children_line}
               </Typography>
               <FormControlLabel
                 control={<Checkbox checked={checked} disabled />}
-                label={dialogData.working_units_children_checkbox}
+                label={dialogData.category_children_checkbox}
               />
             </span>
           )}
-          {dialogData.employees !== false && (
-            <span key="dialogData_employees" style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
+          {dialogData.products !== false && (
+            <span key="dialogData_products" style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
               <Typography variant="string">
-                {dialogData.employees_line}
+                {dialogData.products_line}
               </Typography>
               
-              {dialogData?.employees_list?.map( (item, index) => {
+              {dialogData?.products_list?.map( (item, index) => {
                   return (
                     <>
                       <Typography variant="string" sx={{marginTop: "1rem"}}>

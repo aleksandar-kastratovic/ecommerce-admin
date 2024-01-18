@@ -12,6 +12,7 @@ import { Divider } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const MultipleImages = ({ description, handleMultipleImageUpload = () => {}, handleDrag = () => {}, handleDrop = () => {}, accept = "image/*", dragActive = false, icon = IconList.addAPhoto }) => {
+
     return (
         <>
             <Box className={styles.formUpload} onDragEnter={handleDrag}>

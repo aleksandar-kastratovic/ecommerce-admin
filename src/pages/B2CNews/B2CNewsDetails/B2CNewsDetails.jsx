@@ -11,6 +11,7 @@ import Seo from "./panels/Seo";
 import TechnicalDoc from "./panels/TechnicalDoc";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 import AuthContext from "../../../store/auth-contex";
+import Document from "./panels/Document";
 
 const B2CNewsDetails = () => {
     const { nid } = useParams();
@@ -19,6 +20,7 @@ const B2CNewsDetails = () => {
     const apiPath = "admin/news-b2c/news/basic-data";
     const navigate = useNavigate();
     const activeTab = getUrlQueryStringParam("tab") ?? "basic";
+    const [formFieldsTemp, setFormFieldsTemp] = useState(basic_data);
 
     const init = {
         id: null,
@@ -30,11 +32,24 @@ const B2CNewsDetails = () => {
         description: null,
         id_news_category: null,
         thumb_image: null,
+        file: null,
+        file_base64: null,
+        file_filename: null,
     };
+    const [fileTypes, setFileTypes] = useState([]);
 
     const [data, setData] = useState(init);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+
+    const handleInformationImage = () => {
+        api.get(`admin/news-b2c/news/basic-data/options/upload`)
+            .then((response) => {
+                formatFormFields(response?.payload);
+                setFileTypes(response?.payload?.allow_format);
+            })
+            .catch((error) => console.warn(error));
+    };
 
     const handleData = async () => {
         setIsLoading(true);
@@ -74,34 +89,32 @@ const B2CNewsDetails = () => {
         handleData();
     }, []);
 
-    const [formFieldsTemp, setFormFieldsTemp] = useState(basic_data);
+    const validateData = (data, field) => {
+        let ret = data;
+        switch (field) {
+            case "thumb_image":
+                return ret;
+            default:
+                return ret;
+        }
+    };
 
-    const formatFormFields = (data, segment) => {
-        const {
-            allow_size,
-            allow_format,
-            image: { width, height },
-        } = data;
-        const description = `Veličina  fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+    const formatFormFields = (data) => {
         if (data) {
-            const arr = formFieldsTemp?.map((field) => {
-                if (field?.prop_name === segment) {
+            const { allow_size, allow_format, image } = data;
+            const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+            let arr = basic_data.map((field) => {
+                if (field?.prop_name === "thumb_image") {
                     return {
                         ...field,
-                        description: description,
+                        description: descripiton,
                         validate: {
                             imageUpload: data,
                         },
                         ui_prop: {
-                            fileUpload: {
-                                allow_format: allow_format,
-                                allow_size: allow_size,
-                                image: {
-                                    width: width,
-                                    height: height,
-                                },
-                            },
+                            fileUpload: data,
                         },
+                        dimensions: { width: image?.width, height: image?.height },
                     };
                 } else {
                     return {
@@ -109,30 +122,13 @@ const B2CNewsDetails = () => {
                     };
                 }
             });
-
             setFormFieldsTemp([...arr]);
         }
     };
 
-    const handleInformationImage = () => {
-        //url api-ja se nalazi u formFields => ui_prop => imageUpload => fillFromApi
-        formFieldsTemp?.forEach((field) => {
-            const fillFromApi = field?.ui_prop?.fileUpload?.fillFromApi;
-            if (fillFromApi) {
-                api.get(fillFromApi)
-                    .then((response) => {
-                        if (response?.payload) {
-                            formatFormFields(response?.payload, field?.prop_name);
-                        }
-                    })
-                    .catch((error) => console.warn(error));
-            }
-        });
-    };
-
     useEffect(() => {
         handleInformationImage();
-    }, [formFieldsTemp]);
+    }, []);
 
     const fields = [
         {
@@ -140,21 +136,34 @@ const B2CNewsDetails = () => {
             name: "Osnovno",
             icon: IconList.inventory,
             enabled: true,
-            component: <Form formFields={formFieldsTemp} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} apiPathCrop={`admin/news-b2c/category/basic-data/options/crop`} />,
+            component: (
+                <Form
+                    formFields={formFieldsTemp}
+                    initialData={data}
+                    onSubmit={saveData}
+                    isLoading={isLoadingOnSubmit}
+                    allowedFileTypes={fileTypes}
+                    validateData={validateData}
+                    onOpenImageDialog={(e) => {
+                        console.log(e);
+                    }}
+                    apiPathCrop={`admin/news-b2c/news/basic-data/options/crop`}
+                />
+            ),
         },
         {
             id: "gallery",
             name: "Galerija",
             icon: IconList.browseGallery,
             enabled: data?.id,
-            component: <Gallery newsId={data?.id} apiPathCrop={`admin/news-b2c/news/gallery/options/crop`} />,
+            component: <Gallery newsId={data?.id} apiPathForCrop={`admin/news-b2c/news/gallery/options/crop`} allowedFileTypes={fileTypes} />,
         },
         {
             id: "documentation",
-            name: "Dokumentacija",
+            name: "Dokumenta",
             icon: IconList.documentScanner,
             enabled: data?.id,
-            component: <TechnicalDoc newsId={data?.id} apiPathCrop={`admin/news-b2c/news/technical-doc/options/crop`} />,
+            component: <Document newsId={data?.id} />,
         },
         {
             id: "categories",
@@ -179,11 +188,7 @@ const B2CNewsDetails = () => {
         navigate(`/b2c-news/${id}?${queryString}`, { replace: true });
     };
 
-    return (
-        <>
-            <DetailsPage title={data?.id == null ? "Nova vest" : data?.title} fields={fields} ready={[nid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />
-        </>
-    );
+    return <DetailsPage title={data?.id == null ? "Nova vest" : data?.title} fields={fields} ready={[nid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default B2CNewsDetails;

@@ -3,11 +3,10 @@ import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 import ModalContent from "./ModalContent";
 import { toast } from "react-toastify";
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import AuthContext from "../../store/auth-contex";
 
 const B2CNewsCategorylist = () => {
-    const [formFieldsTemp, setFormFieldsTemp] = useState(tblFields);
     const navigate = useNavigate();
     const newsPage = () => {
         navigate("/b2c-news");
@@ -48,14 +47,12 @@ const B2CNewsCategorylist = () => {
         },
     };
 
-
-
     return (
         <ListPage
             listPageId="B2CNewsCategorylist"
             apiUrl="admin/news-b2c/category/list"
             title="Vesti kategorije"
-            columnFields={formFieldsTemp}
+            columnFields={tblFields}
             additionalButtons={newsButtons}
             customActions={customActions}
         />

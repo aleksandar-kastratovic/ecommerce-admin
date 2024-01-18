@@ -9,6 +9,7 @@ import formFields from "./formFields.json";
 import Seo from "./panels/Seo";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 import AuthContext from "../../../store/auth-contex";
+import { useQuery } from "react-query";
 
 const B2CNewsCategoryListDetails = () => {
     const authCtx = useContext(AuthContext);
@@ -17,7 +18,9 @@ const B2CNewsCategoryListDetails = () => {
     const apiPath = "admin/news-b2c/category/basic-data";
     const navigate = useNavigate();
     const activeTab = getUrlQueryStringParam("tab") ?? "basic";
-
+    const [formFieldsTmp, setFormFieldsTmp] = useState(formFields);
+    const [fileTypes, setFileTypes] = useState([]);
+    const [isDone, setIsDone] = useState(false); // TODO: Remove this state
     const init = {
         id: null,
         slug: null,
@@ -46,9 +49,11 @@ const B2CNewsCategoryListDetails = () => {
     };
 
     const saveData = async (data) => {
+        setIsLoading(true);
         api.post(apiPath, { ...data, image: data.image })
             .then((response) => {
                 setData(response?.payload);
+                setIsLoading(false);
                 toast.success("Uspešno");
             })
             .catch((error) => {
@@ -57,39 +62,58 @@ const B2CNewsCategoryListDetails = () => {
             });
     };
 
-    useEffect(() => {
-        handleData();
-    }, []);
+    const fetchInformationImageIcon = async () => {
+        try {
+            const response = await api.get("admin/news-b2c/category/basic-data/options/upload?field=icon");
+            return response.payload;
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
-    const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
+    const { data: iconInfo } = useQuery(["informationImageIcon"], fetchInformationImageIcon, {
+        onSuccess: (data) => {
+            formatFormFields(data, "icon");
+            const interval = setInterval(() => {
+                setIsDone(true);
+            }, 1000);
+            return () => clearInterval(interval);
+        },
+        onError: (error) => console.warn(error),
+    });
 
-    const formatFormFields = (data, segment) => {
-        const {
-            allow_size,
-            allow_format,
-            image: { width, height },
-        } = data;
-        const description = `Veličina  fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+    const handleInformationImageImage = () => {
+        api.get(`admin/news-b2c/category/basic-data/options/upload?field=image`)
+            .then((response) => {
+                formatFormFields(response?.payload, "image");
+            })
+            .catch((error) => console.warn(error));
+    };
+
+    const formatFormFields = (data, prop_name) => {
         if (data) {
-            const arr = formFieldsTemp?.map((field) => {
-                if (field?.prop_name === segment) {
+            const { allow_size, allow_format, image } = data;
+            const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+            let arr = formFieldsTmp.map((field) => {
+                if (field?.prop_name === prop_name) {
                     return {
                         ...field,
-                        description: description,
+                        description: descripiton,
                         validate: {
                             imageUpload: data,
                         },
                         ui_prop: {
-                            ...field?.ui_prop,
                             fileUpload: {
+                                ...field?.ui_prop?.fileUpload,
                                 allow_format: allow_format,
                                 allow_size: allow_size,
                                 image: {
-                                    width: width,
-                                    height: height,
+                                    width: image?.width,
+                                    height: image?.height,
                                 },
                             },
                         },
+                        dimensions: { width: image?.width, height: image?.height },
                     };
                 } else {
                     return {
@@ -97,31 +121,17 @@ const B2CNewsCategoryListDetails = () => {
                     };
                 }
             });
-
-            setFormFieldsTemp([...arr]);
+            setFormFieldsTmp([...arr]);
         }
     };
 
-    const handleInformationImage = () => {
-        //url api-ja se nalazi u formFields => ui_prop => imageUpload => fillFromApi
-        formFieldsTemp?.forEach((field) => {
-            const fillFromApi = field?.ui_prop?.fileUpload?.fillFromApi;
-            if (fillFromApi) {
-                api.get(fillFromApi)
-                    .then((response) => {
-                        //proveravamo da li je prethodni response stigao i funkcija odradjena, da bismo pozvali novi api
-                        if (response?.payload) {
-                            formatFormFields(response?.payload, field?.prop_name);
-                        }
-                    })
-                    .catch((error) => console.warn(error));
-            }
-        });
-    };
+    useEffect(() => {
+        isDone && handleInformationImageImage();
+    }, [isDone]);
 
     useEffect(() => {
-        handleInformationImage();
-    }, [formFieldsTemp]);
+        handleData();
+    }, []);
 
     const fields = [
         {
@@ -129,7 +139,7 @@ const B2CNewsCategoryListDetails = () => {
             name: "Osnovno",
             icon: IconList.category,
             enabled: true,
-            component: <Form apiPathCrop={``} formFields={formFieldsTemp} initialData={data} onSubmit={saveData} />,
+            component: <Form formFields={formFieldsTmp} initialData={data} onSubmit={saveData} apiPathCrop={`admin/news-b2c/category/basic-data/options/crop`} isLoading={isLoading} />,
         },
         {
             id: "seo",

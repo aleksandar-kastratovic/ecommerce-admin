@@ -16,6 +16,7 @@ import Cropper from "react-easy-crop";
 import { getCroppedImg } from "./util";
 import { InputNumber } from "../Form/FormInputs/FormInputs";
 import AuthContext from "../../../store/auth-contex";
+import { useImageFileType } from "../../../hooks/useFileType";
 
 const ImageEditorComponent = ({
     handleCloseEditMode = () => {},
@@ -78,6 +79,7 @@ const ImageEditorComponent = ({
     const showCroppedImage = useCallback(async () => {
         try {
             const croppedImg = await getCroppedImg(croppedImage, croppedAreaPixels, rotation, { width: cropSize.width, height: cropSize.height });
+
             handleSave(croppedImg);
         } catch (e) {
             console.error(e);
@@ -87,6 +89,8 @@ const ImageEditorComponent = ({
     useEffect(() => {
         handleDataDimension();
     }, []);
+
+    const { fileType } = useImageFileType(imageURL);
 
     return (
         <>
@@ -161,7 +165,6 @@ const ImageEditorComponent = ({
                                     onChange={(e) => {
                                         const value = e.target.value.trim();
 
-                                        console.log("value width::", value);
 
                                         setCropSize({
                                             ...cropSize,
@@ -193,7 +196,6 @@ const ImageEditorComponent = ({
                                     value={cropSize.height}
                                     onChange={(e) => {
                                         const value = e.target.value.trim();
-                                        console.log("value height::", value);
                                         setCropSize({
                                             ...cropSize,
                                             height: value === "" ? 50 : parseInt(value) || 0,

@@ -1,5 +1,6 @@
 import deepRenameKeys from "deep-rename-keys";
 import { useLocation, useParams } from "react-router-dom";
+// import heic2any from "heic2any";
 
 export const addTabName = (tabsList, tabData) => {
     let data;
@@ -119,3 +120,23 @@ export const setUrlQueryStringParam = (queryKey, queryValue, queryString = null)
     params.set(queryKey, queryValue);
     return params.toString();
 };
+
+// export const convertHeicToPng = async (file) => {
+//     if (file.type === "image/heic") {
+//         try {
+//             const pngBuffer = await heic2any({
+//                 blob: file,
+//                 toType: "image/png",
+//             });
+
+//             const pngBlob = new Blob([pngBuffer], { type: "image/png" });
+//             const pngFile = new File([pngBlob], file.name.replace(/\.heic$/, ".png"), { type: "image/png" });
+
+//             return pngFile;
+//         } catch (error) {
+//             console.error("Greška pri konverziji HEIC slike:", error);
+//             throw error;
+//         }
+//     }
+//     return file;
+// };

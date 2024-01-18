@@ -36,6 +36,7 @@ import AuthContext from "../../../store/auth-contex";
 
 const ModalForm = ({
     anchor,
+    setPropName,
     openModal,
     setOpenModal,
     savePrapareDataHandler = null,
@@ -65,7 +66,11 @@ const ModalForm = ({
     allowedFileTypes,
     onFilePicked,
     selectedFile,
-    onDismissModal = () => {},apiPathCrop
+    onDismissModal = () => {},
+    handleRemoveFile,
+    dataFromServer,
+    apiPathCrop,
+    isArray,
 }) => {
     const { id, modalUrl = null } = openModal;
     const authCtx = useContext(AuthContext);
@@ -168,13 +173,11 @@ const ModalForm = ({
             email: "",
         });
     };
-
     useEffect(() => {
         if (openModal.show) {
             handleData();
         }
     }, [openModal.show]);
-
     return (
         <ListPageModalWrapper
             anchor={anchor}
@@ -222,10 +225,14 @@ const ModalForm = ({
                                 onCloseModalButton={() => {
                                     setOpenModal({ show: false });
                                 }}
+                                apiPathCrop={apiPathCrop}
                                 allowedFileTypes={allowedFileTypes}
                                 onFilePicked={onFilePicked}
                                 selectedFile={selectedFile}
-                                apiPathCrop={apiPathCrop}
+                                handleRemoveFile={handleRemoveFile}
+                                dataFromServer={dataFromServer}
+                                setPropName={setPropName}
+                                isArray={isArray}
                             />
                         </FormWrapper>
                     </>

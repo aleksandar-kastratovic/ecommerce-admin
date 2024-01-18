@@ -4,14 +4,27 @@ import { useNavigate } from "react-router-dom";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 import AuthContext from "../../store/auth-contex";
-import { set } from "lodash";
+import { useQuery } from "react-query";
 
 const B2Cbanners = ({}) => {
     const navigate = useNavigate();
-    const authCtx = useContext(AuthContext);
-    const { api } = authCtx;
     const [formFieldsTemp, setFormFieldsTemp] = useState(tblFields);
     const [idPosition, setIdPosition] = useState(null);
+    const authCtx = useContext(AuthContext);
+    const { api } = authCtx;
+
+    const {} = useQuery(
+        ["b2b-banners", idPosition],
+        async () => {
+            return await api
+                .get(`admin/banners-b2c/main/options/upload?id_position=${idPosition}`)
+                .then(async (response) => {
+                    await formatFormFields(response?.payload);
+                })
+                .catch((error) => console.warn(error));
+        },
+        { refetchOnWindowFocus: false }
+    );
 
     const buttons = [
         {
@@ -29,7 +42,7 @@ const B2Cbanners = ({}) => {
                 fnc: (rowData) => {
                     setIdPosition(rowData?.id_position);
                     filterFields(formFieldsTemp, rowData?.position_type);
-                    getForm();
+                    // getForm();
                     return {
                         show: true,
                         id: rowData.id,
@@ -41,6 +54,7 @@ const B2Cbanners = ({}) => {
 
     const filterFields = (fields, type) => {
         let arr = [];
+
         if (type === "gallery") {
             arr = fields?.map((item, i) => {
                 const { prop_name } = item;
@@ -116,133 +130,22 @@ const B2Cbanners = ({}) => {
         }
     };
 
-    const [imageData, setImageData] = useState(null);
-
-    const getForm = async () => {
-        let res;
-        await api
-            .get(`admin/banners-b2c/positions/slug/${idPosition}`)
-            .then((response) => {
-                res = response?.payload;
-                if (res) {
-                    let dimensions = { width: res.width, height: res.height };
-                    let arr = [];
-                    switch (res.type) {
-                        case "image":
-                            arr = formFieldsTemp?.map((formItem, i) => {
-                                const { prop_name } = formItem;
-                                if (prop_name === "image") {
-                                    return {
-                                        ...formItem,
-                                        dimensions: dimensions,
-                                        ui_prop: {
-                                            fileUpload: {
-                                                image: {
-                                                    width: dimensions.width,
-                                                    height: dimensions.height,
-                                                },
-                                                allow_format: imageData.allow_format,
-                                                allow_size: imageData.allow_size,
-                                            },
-                                        },
-                                    };
-                                }
-                                return {
-                                    ...formItem,
-                                };
-                            });
-                            setFormFieldsTemp([...arr]);
-                            break;
-                        case "image_description":
-                            arr = formFieldsTemp?.map((formItem, i) => {
-                                const { prop_name } = formItem;
-                                if (prop_name === "image") {
-                                    return {
-                                        ...formItem,
-                                        dimensions: dimensions,
-                                        ui_prop: {
-                                            fileUpload: {
-                                                image: {
-                                                    width: dimensions.width,
-                                                    height: dimensions.height,
-                                                },
-                                                allow_format: imageData.allow_format,
-                                                allow_size: imageData.allow_size,
-                                            },
-                                        },
-                                    };
-                                }
-                                return {
-                                    ...formItem,
-                                };
-                            });
-                            setFormFieldsTemp([...arr]);
-                            break;
-                        case "gallery":
-                            arr = formFieldsTemp?.map((formItem, i) => {
-                                const { prop_name } = formItem;
-                                if (prop_name === "image") {
-                                    return {
-                                        ...formItem,
-                                        dimensions: dimensions,
-                                        ui_prop: {
-                                            fileUpload: {
-                                                image: {
-                                                    width: dimensions.width,
-                                                    height: dimensions.height,
-                                                },
-                                                allow_format: imageData.allow_format,
-                                                allow_size: imageData.allow_size,
-                                            },
-                                        },
-                                    };
-                                }
-                                return {
-                                    ...formItem,
-                                };
-                            });
-                            setFormFieldsTemp([...arr]);
-                            break;
-                        default:
-                            console.log("deafult");
-                            break;
-                    }
-                }
-            })
-            .catch((error) => {
-                console.warn(error);
-            });
-    };
-
-    useEffect(() => {
-        if (idPosition) {
-            getForm();
-        }
-    }, [idPosition]);
-
-    const formatFormFields = (data, segment) => {
+    const formatFormFields = (data) => {
         if (data) {
-            const {
-                allow_size,
-                allow_format,
-                image: { width, height },
-            } = data;
-            const description = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+            const { allow_size, allow_format, image } = data;
+            const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
             let arr = formFieldsTemp.map((field) => {
-                if (field?.prop_name === segment) {
+                if (field?.prop_name === "image") {
                     return {
                         ...field,
-                        description: description,
-                        ui_prop: {
-                            fileUpload: {
-                                allow_format: allow_format,
-                                allow_size: allow_size,
-                                image: {
-                                    width: width,
-                                    height: height,
-                                },
-                            },
+                        description: descripiton,
+                        validate: {
+                            imageUpload: data,
                         },
+                        ui_prop: {
+                            fileUpload: data,
+                        },
+                        dimensions: { width: image?.width, height: image?.height },
                     };
                 } else {
                     return {
@@ -250,41 +153,21 @@ const B2Cbanners = ({}) => {
                     };
                 }
             });
-
             setFormFieldsTemp([...arr]);
         }
     };
 
-    const handleInformationImage = () => {
-        //url api-ja se nalazi u formFields => ui_prop => imageUpload => fillFromApi
-        formFieldsTemp?.forEach((field) => {
-            const fillFromApi = field?.ui_prop?.fileUpload?.fillFromApi;
-            if (fillFromApi && idPosition !== null) {
-                api.get(`${fillFromApi}?id_position=${idPosition}`)
-                    .then((response) => {
-                        formatFormFields(response?.payload, field?.prop_name);
-                        setImageData(response?.payload);
-                    })
-                    .catch((error) => console.warn(error));
-            }
-        });
-    };
-
-    useEffect(() => {
-        handleInformationImage();
-    }, [formFieldsTemp, idPosition]);
-    console.log(formFieldsTemp);
     return (
         <ListPage
             validateData={validateData}
             customActions={customActions}
             listPageId="B2Cbanners"
             title={"B2C baneri"}
-            apiUrl="admin/banners-b2c/main"
             apiPathCrop={`admin/banners-b2c/main/options/crop?id_position=${idPosition}`}
+            apiUrl="admin/banners-b2c/main"
             columnFields={formFieldsTemp}
-            additionalButtons={buttons}
             actionNewButton="modal"
+            additionalButtons={buttons}
             useColumnFields={true}
             onNewButtonPress={() => {
                 setFormFieldsTemp(tblFields);

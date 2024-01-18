@@ -1,11 +1,17 @@
 import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import ListPage from "../../components/shared/ListPage/ListPage";
 import IconList from "../../helpers/icons";
 
 import tblFields from "./tblFields.json";
+import AuthContext from "../../store/auth-contex";
+import ModalContent from "./ModalContent";
+import { toast } from "react-toastify";
 
 const PricesGroupsListPage = () => {
   const navigate = useNavigate();
+  const authCtx = useContext(AuthContext);
+  const { api } = authCtx;
 
   const additionalButtons = [
     {
@@ -22,6 +28,38 @@ const PricesGroupsListPage = () => {
     },
   ];
 
+  const customActions = {
+    delete: {
+      clickHandler: {
+        type: 'dialog_delete',
+        fnc: (rowData, handleDeleteModalData) => {
+          return {
+            show: true,
+            id: rowData.id,
+            mutate: null,
+            children: (
+              <ModalContent apiPath={`admin/product-items/prices-structure/message/${rowData.id}`} rowData={rowData} handleDeleteModalData={handleDeleteModalData} />
+            )
+          };
+        },
+      },
+      deleteClickHandler: {
+        type: 'dialog_delete',
+        fnc: (rowData, deleteModalData) => {
+          api.delete(`admin/product-items/prices-structure/confirm/${rowData.id}`)
+            .then(() => toast.success("Zapis je uspešno obrisan"))
+            .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+
+          return {
+            show: false,
+            id: rowData.id,
+            mutate: 1,
+          };
+        }
+      },
+    },
+  }
+
   return (
     <ListPage
       listPageId="PricesGroupsListPage"
@@ -30,6 +68,7 @@ const PricesGroupsListPage = () => {
       columnFields={tblFields}
       additionalButtons={additionalButtons}
       actionNewButton="modal"
+      customActions={customActions}
     />
   );
 };

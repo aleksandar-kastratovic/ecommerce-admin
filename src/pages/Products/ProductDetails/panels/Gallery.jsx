@@ -51,7 +51,7 @@ const Gallery = ({ productId }) => {
         const fileSizeInB = Number(data.size);
 
         if (allowedFormats.length > 0 && !allowedFormats.includes(fileExtension)) {
-            toast.error(`Nedozvoljeni format slike.}`);
+            toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
             setImageUploadLoading(false);
             return;
         }
@@ -118,7 +118,8 @@ const Gallery = ({ productId }) => {
             const type = base64.split(";")[0].split(":")[1];
             let y = base64[base64.length - 2] === "=" ? 2 : 1;
             const size = base64.length * (3 / 4) - y;
-            return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64, path: item.file };
+            const dimensions = imageInfo?.image ?? {};
+            return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64, path: item.file, dimensions: dimensions };
         });
 
     useEffect(() => {
@@ -135,15 +136,17 @@ const Gallery = ({ productId }) => {
             ) : (
                 <InputMultipleImages
                     list={list}
+                    apiPathCrop={`admin/product-items/gallery/options/crop`}
                     name="Galerija"
+                    accept={imageInfo ? imageInfo.allow_format : []}
+                    isArray={true}
                     onChangeHandler={() => {}}
                     uploadHandler={handleSubmit}
                     deleteHandler={handleDelete}
                     handleReorder={handleReorder}
-                    description={`Veličina fajla ne sme biti veća od ${imageInfo ? (imageInfo.allow_size / (1024 * 1024)).toFixed(2) : ""}MB. Dozvoljeni formati fajla: ${
-                        imageInfo ? imageInfo.allow_format.map((format) => format.name).join(", ") : ""
-                    }`}
-
+                    description={`Dimenzije: ${imageInfo?.image?.width ?? ""} x ${imageInfo?.image?.height ?? ""} px. Veličina fajla ne sme biti veća od ${
+                        imageInfo ? (imageInfo.allow_size / (1024 * 1024)).toFixed(2) : ""
+                    }MB. Dozvoljeni formati fajla: ${imageInfo ? imageInfo.allow_format.map((format) => format.name).join(", ") : ""}`}
                 />
             )}
         </>

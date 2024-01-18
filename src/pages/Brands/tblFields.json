@@ -28,11 +28,14 @@
   {
     "field_name": "Logo",
     "prop_name": "logo",
+    "validate": {
+      "imageUpload": null
+    },
     "in_main_table": true,
     "in_details": true,
     "editable": true,
     "disabled": false,
-    "required": true,
+    "required": false,
     "description": "",
     "ui_prop": "xyz",
     "sortable": true,

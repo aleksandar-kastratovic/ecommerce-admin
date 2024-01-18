@@ -73,6 +73,6 @@
             }
         },
         "sortable": true,
-        "input_type": "multiple_images"
+        "input_type": "image_button"
     }
 ]

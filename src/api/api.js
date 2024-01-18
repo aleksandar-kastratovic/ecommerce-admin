@@ -96,11 +96,12 @@ class ApiService {
      * Execute the delete API call
      *
      * @param {string} path The path to the API, without the domain and API version suffix.
+     * @param {?{}} payload The payload to send in the request.
      *
      * @return {Promise<APIResponse>}
      */
-    delete(path) {
-        return this._execute("DELETE", path);
+    delete(path, payload) {
+        return this._execute("DELETE", path, payload);
     }
 
     /**

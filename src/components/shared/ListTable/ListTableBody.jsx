@@ -11,7 +11,6 @@ import EmptyList from "../Empty/EmptyList";
 import LoadingTableRows from "../Loading/LoadingTableRows";
 import ActionField from "./ActionField/ActionField";
 
-
 /**
  * Show the table body and handle lifecycle and events.
  *
@@ -28,150 +27,151 @@ import ActionField from "./ActionField/ActionField";
  * @return {JSX.Element}
  * @constructor
  */
-const ListTableBody = ({ items, fields, handleOnClickActions, isLoading = false, error = null, previewColumn = "id", showAddButtonTableRow = false, tooltipAddButtonTableRow, customActions, onClickFieldBehavior }) => {
+const ListTableBody = ({
+    items,
+    fields,
+    handleOnClickActions,
+    isLoading = false,
+    error = null,
+    previewColumn = "id",
+    showAddButtonTableRow = false,
+    tooltipAddButtonTableRow,
+    customActions,
+    onClickFieldBehavior,
+}) => {
+    const [clickTimeout, setClickTimeout] = useState(null);
 
-  const [clickTimeout, setClickTimeout] = useState(null);
+    const actionButtons = () => {
+        let buttons = {};
 
+        buttons.edit = {
+            type: "edit",
+            display: true,
+            icon: "edit",
+            title: "Izmeni",
+            position: 1,
+        };
 
-  const actionButtons = () => {
-    let buttons = {};
+        buttons.delete = {
+            type: "delete",
+            display: true,
+            icon: "delete",
+            title: "Obriši",
+            position: 1000,
+        };
 
-    buttons.edit = {
-      type: "edit",
-      display: true,
-      icon: "edit",
-      title: "Izmeni",
-      position: 1,
-    };
+        buttons.preview = {
+            type: "preview",
+            display: false,
+            icon: "preview",
+            title: "Pregledaj",
+            position: 2,
+        };
 
-    buttons.delete = {
-      type: "delete",
-      display: true,
-      icon: "delete",
-      title: "Obriši",
-      position: 1000,
-    };
-
-    buttons.preview = {
-      type: "preview",
-      display: false,
-      icon: "preview",
-      title: "Pregledaj",
-      position: 2,
-    };
-
-    if (typeof customActions === "object") {
-      Object.keys(customActions).map((key) => {
-
-        switch (true) {
-          case key == 'edit':
-          case key == 'delete':
-          case key == 'preview':
-            buttons[key] = Object.assign({}, buttons[key], { ...customActions[key] });
-            break;
-          default:
-            buttons[key] = customActions[key];
-            break;
+        if (typeof customActions === "object") {
+            Object.keys(customActions).map((key) => {
+                switch (true) {
+                    case key == "edit":
+                    case key == "delete":
+                    case key == "preview":
+                        buttons[key] = Object.assign({}, buttons[key], { ...customActions[key] });
+                        break;
+                    default:
+                        buttons[key] = customActions[key];
+                        break;
+                }
+            });
         }
-      });
+
+        return buttons;
+    };
+
+    // What to show
+    let content;
+
+    switch (true) {
+        case error !== null:
+            content = <EmptyList span={fields.length} message={`Greška: ${error}`} />;
+            break;
+
+        case isLoading:
+            content = <LoadingTableRows columns={fields.length} />;
+            break;
+
+        case (items ?? []).length === 0:
+            content = <EmptyList span={fields.length} />;
+            break;
+
+        default:
+            content = (items ?? []).map((row) => {
+                let actionButtonsObject = actionButtons();
+                return (
+                    <TableRow hover key={row.id}>
+                        {/* TODO typeannotation sluzi samo u typescript, da li je ovde podrebna anotacija i cemu sluzi? */}
+                        {fields.map((column) => (
+                            <TableCell
+                                key={`${row.id}-${column.prop_name}`}
+                                {...columnProps(column)}
+                                onClick={(event) => {
+                                    if (!column.field_behavior) return;
+                                    const { onDoubleClick, onClick } = column.field_behavior;
+                                    if (clickTimeout !== null) {
+                                        clearTimeout(clickTimeout);
+                                        setClickTimeout(null);
+                                        onClickFieldBehavior(event, onDoubleClick, column, row);
+                                    } else {
+                                        setClickTimeout(
+                                            setTimeout(() => {
+                                                setClickTimeout(null);
+                                                onClickFieldBehavior(event, onClick, column, row);
+                                            }, 500)
+                                        );
+                                    }
+                                }}
+                                sx={{ cursor: column.field_behavior && "pointer", fontSize: "0.813rem" }}
+                            >
+                                {column.prop_name !== "action" ? (
+                                    column.field_behavior ? (
+                                        <span style={{ display: "flex", alignItems: "center" }}>
+                                            {columnCell(row[column.prop_name], column.input_type, column.input_type)}
+                                            <IconButton>
+                                                <Icon sx={{ fontSize: "1.1rem", opacity: "0.3" }}>edit</Icon>
+                                            </IconButton>
+                                        </span>
+                                    ) : (
+                                        columnCell(row[column.prop_name], column.input_type, row.input_type)
+                                    )
+                                ) : (
+                                    <ActionField
+                                        fieldType={column.input_type}
+                                        systemRequired={row.system_required}
+                                        customActions={actionButtonsObject}
+                                        handleOnClickActions={handleOnClickActions}
+                                        rowData={row}
+                                    />
+                                )}
+                            </TableCell>
+                        ))}
+                    </TableRow>
+                );
+            });
+
+            if (showAddButtonTableRow) {
+                content.push(
+                    <TableRow hover key="add">
+                        <TableCell colSpan={fields.length} align="center">
+                            <Tooltip title={tooltipAddButtonTableRow} placement="top" arrow>
+                                <IconButton size="small">
+                                    <Icon>add</Icon>
+                                </IconButton>
+                            </Tooltip>
+                        </TableCell>
+                    </TableRow>
+                );
+            }
     }
 
-    return buttons;
-  };
-
-  // What to show
-  let content;
-  switch (true) {
-    case error !== null:
-      content = <EmptyList span={fields.length} message={`Greška: ${error}`} />;
-      break;
-
-    case isLoading:
-      content = <LoadingTableRows columns={fields.length} />;
-      break;
-
-    case (items ?? []).length === 0:
-      content = <EmptyList span={fields.length} />;
-      break;
-
-    default:
-      content = (items ?? []).map((row) => {
-        let actionButtonsObject = actionButtons();
-        return (
-          < TableRow
-            hover
-            key={row.id}
-
-          >
-            {/* TODO typeannotation sluzi samo u typescript, da li je ovde podrebna anotacija i cemu sluzi? */}
-            {
-              fields.map((column) => (
-                <TableCell
-                  key={`${row.id}-${column.prop_name}`}
-                  {...columnProps(column)}
-                  onClick={(event) => {
-                    if (!column.field_behavior) return;
-                    const { onDoubleClick, onClick } = column.field_behavior;
-                    if (clickTimeout !== null) {
-                      clearTimeout(clickTimeout);
-                      setClickTimeout(null);
-                      onClickFieldBehavior(event, onDoubleClick, column, row)
-                    } else {
-                      setClickTimeout(setTimeout(() => {
-                        setClickTimeout(null);
-                        onClickFieldBehavior(event, onClick, column, row)
-                      }, 500));
-                    }
-                  }}
-                  sx={{ cursor: column.field_behavior && "pointer", fontSize: "0.813rem" }}
-                >
-                  {column.prop_name !== "action" ? (
-                    column.field_behavior ? (
-                      <span style={{ display: "flex", alignItems: "center" }}>
-                        {columnCell(row[column.prop_name], column.input_type, column.input_type)}
-                        <IconButton>
-                          <Icon sx={{ fontSize: "1.1rem", opacity: "0.3" }}>edit</Icon>
-                        </IconButton>
-                      </span>
-                    ) : (
-                      columnCell(row[column.prop_name], column.input_type, row.input_type)
-                    )
-
-                  ) : (
-                    <ActionField
-                      fieldType={column.input_type}
-                      systemRequired={row.system_required}
-                      customActions={actionButtonsObject}
-                      handleOnClickActions={handleOnClickActions}
-                      rowData={row}
-                    />
-                  )}
-                </TableCell>
-              ))
-            }
-          </ TableRow >
-        )
-      });
-
-      if (showAddButtonTableRow) {
-        content.push(
-          <TableRow hover key="add">
-            <TableCell colSpan={fields.length} align="center">
-              <Tooltip title={tooltipAddButtonTableRow} placement="top" arrow>
-                <IconButton
-                  size="small"
-                >
-                  <Icon>add</Icon>
-                </IconButton>
-              </Tooltip>
-            </TableCell>
-          </TableRow>
-        );
-      }
-
-  }
-
-  return <TableBody>{content}</TableBody>;
+    return <TableBody>{content}</TableBody>;
 };
 
 export default ListTableBody;

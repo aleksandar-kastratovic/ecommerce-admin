@@ -26,6 +26,7 @@ import { toast } from "react-toastify";
 import AuthContext from "../../../../store/auth-contex";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
+import { useFileSize } from "../../../../hooks/useFileSize";
 
 const generateBootstrapClasses = (columns) => {
     if (columns) {
@@ -1108,34 +1109,34 @@ export const FilePicker = ({
     const ref = useRef();
     const [attachment, setAttachment] = useState(null);
 
+    const { size, type } = useFileSize(selectedFile);
+
     const handleChange = (event) => {
         const files = Array.from(event.target.files);
         const [file] = files;
-
-        //vadimo ekstenziju fajla
-        const fileExtension = "." + file.name.split(".").pop().toLowerCase();
-
-        //idemo kroz niz uiProp.fileUpload.allow_format da proverimo da li je dozvoljen format koji se upload-uje
-        let isAllowed = false;
-        if (uiProp?.fileUpload?.allow_format) {
-            //pravimo niz dozvoljenih ekstenzija bez parametra "name"
-            let allowedFileTypes = uiProp.fileUpload.allow_format.map((item) => item.name);
-            //proveravamo da li je ekstenzija dozvoljena
-            isAllowed = allowedFileTypes.includes(fileExtension);
-            //ako nije, prikazujemo gresku
-            if (!isAllowed) {
+        const fileExtension = file.name.split(".").pop().toLowerCase();
+        const supportedTypes = uiProp?.fileUpload?.allow_format?.map((format) => format?.mime_type);
+        const allowedSize = uiProp?.fileUpload?.allow_size;
+        if (type) {
+            if (!supportedTypes?.includes(type)) {
                 toast.error("Pogrešan tip fajla.");
                 return;
             }
         }
+        if (size) {
+            if (size > allowedSize) {
+                toast.error("Fajl je prevelik.");
+                return;
+            }
+        }
 
-        blobToData(file).then((result) => {
-            let obj = {
-                base_64: result,
-                name: file?.name,
-            };
-            onFilePicked(obj);
-        });
+        // blobToData(file).then((result) => {
+        //   let obj = {
+        //     base_64: result,
+        //     name: file?.name,
+        //     file: file
+        //   }
+        // });
 
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -1143,7 +1144,9 @@ export const FilePicker = ({
             const obj = {
                 base_64: base64,
                 name: file?.name,
+                file: file,
             };
+
             onFilePicked(obj);
         };
         reader.readAsDataURL(file);
@@ -1207,7 +1210,6 @@ export const FilePicker = ({
     };
 
     const inputClasses = generateBootstrapClasses(uiProp?.columns);
-
     return (
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} inputClasses={inputClasses}>
             <ButtonBase
@@ -1221,7 +1223,18 @@ export const FilePicker = ({
                     paddingLeft: "0.875rem",
                 }}
             >
-                <Input type="file" onChange={handleChange} inputRef={ref} disabled={disabled} error={error !== null} sx={{ display: "none" }} multiple />
+                <Input
+                    type="file"
+                    onChange={handleChange}
+                    inputRef={ref}
+                    disabled={disabled}
+                    error={error !== null}
+                    sx={{ display: "none" }}
+                    multiple
+                    inputProps={{
+                        accept: uiProp?.fileUpload?.allow_format?.map((format) => format?.mime_type),
+                    }}
+                />
                 {renderSelectedFiles()}
             </ButtonBase>
             <Box sx={{ display: "flex" }}>{renderRemoveFilesList()}</Box>

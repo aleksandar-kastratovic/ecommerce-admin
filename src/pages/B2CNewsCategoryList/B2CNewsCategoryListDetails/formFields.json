@@ -71,11 +71,9 @@
                     "convert_use": null,
                     "width": "1920",
                     "height": "1080"
-                }
-            },
-            "imageButton": {
-                "crop": {
-                    "fillFromApi": "admin/news-b2c/category/basic-data/options/crop?field=icon"
+                },
+                "imageButton": {
+                    "apiPathCrop": "admin/news-b2c/category/basic-data/options/crop?field=icon"
                 }
             }
         },
@@ -100,16 +98,13 @@
                     "convert_use": null,
                     "width": "1920",
                     "height": "1080"
+                },
+                "imageButton": {
+                    "apiPathCrop": "admin/news-b2c/category/basic-data/options/crop?field=image"
                 }
             },
-            "imageButton": {
-                "crop": {
-                    "fillFromApi": "admin/news-b2c/category/basic-data/options/crop?field=image"
-                }
-            },
-            "eventHandler": {
 
-            }
+            "eventHandler": {}
         },
         "sortable": true,
         "input_type": "image_button"

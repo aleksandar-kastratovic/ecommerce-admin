@@ -40,10 +40,10 @@ export const InputMultipleImages = ({
     description,
     validate = null,
     apiPathCrop,
+    isArray = false,
 }) => {
     const [imageList, setImageList] = useState(list);
     const [dragActive, setDragActive] = useState(false);
-
     const [openDeleteDialog, setOpenDeleteDialog] = useState({
         show: false,
         id: null,
@@ -59,9 +59,11 @@ export const InputMultipleImages = ({
         type: "",
         path: "",
         position: 0,
+        dimensions: {},
     };
 
     const [openFullPageDialog, setOpenFullPageDialog] = useState(init);
+    console.log("init", openFullPageDialog);
 
     //DRAG EVENT HANDLER
     const handleDrag = function (e) {
@@ -108,29 +110,18 @@ export const InputMultipleImages = ({
                     return item?.mime_type;
                 });
 
+                const convertToMB = (bytes) => {
+                    return bytes / (1024 * 1024);
+                };
+
                 if (allowedFormatMime.includes(type)) {
                     if (size > allow_size) {
-                        console.log("Image size is too big");
+                        toast.error(`Slika je prevelika. Maksimalna dozvoljena veličina je ${convertToMB(allow_size)}MB.`);
                     } else {
-                        console.log("Not too big");
                         setImageList(newImagesArray);
                     }
                 } else {
-                    console.log("Image format is not allowed");
-                }
-
-                const {
-                    imageUpload: { allow_format: allowedFormat, allow_size: allowedSize },
-                } = validate;
-                const allowedFormatsArr = allowedFormat.map((item) => item.name);
-                const imageSize = selectedFiles[0].size;
-                const imageExt = "." + selectedFiles[0].name.split(".").pop();
-
-                if (imageSize > allowedSize) {
-                    toast.error(`Veličina fajla ne sme biti veća od ${allowedSize / (1024 * 1024).toFixed(2)}MB.`);
-                }
-                if (!allowedFormatsArr.includes(imageExt)) {
-                    toast.error(`Pogrešan format fajla.`);
+                    toast.error(`Nedozvoljen format slike.`);
                 }
             } else {
                 setImageList(newImagesArray);
@@ -139,7 +130,7 @@ export const InputMultipleImages = ({
     };
 
     //MODAL OPEN HANDLER
-    const handleModalOpen = (e, src, alt, name, size, type, id, position, path) => {
+    const handleModalOpen = (e, src, alt, name, size, type, id, position, path, dimensions) => {
         setOpenFullPageDialog({
             show: true,
             id: id,
@@ -150,6 +141,7 @@ export const InputMultipleImages = ({
             type: type,
             path: path,
             position: position,
+            dimensions: dimensions,
         });
     };
 
@@ -180,7 +172,6 @@ export const InputMultipleImages = ({
             return item.name === event.target.id;
         });
         const found = find[0];
-
         let imageItem = {
             id: found.id,
             position: found.position,
@@ -213,8 +204,8 @@ export const InputMultipleImages = ({
             path: selectedFile.path,
         });
     };
-
-    const handleDeleteImage = (e, deleteImgId, isNew) => {
+    //TODO prosledjen item
+    const handleDeleteImage = (e, deleteImgId, isNew, item) => {
         setOpenDeleteDialog({ show: true, id: deleteImgId, isNew: isNew, mutate: null });
     };
 
@@ -247,10 +238,16 @@ export const InputMultipleImages = ({
     useEffect(() => {
         onChangeHandler({ target: { value: imageList, name: name } });
     }, [imageList]);
-
     return (
         <Grid container spacing={1} direction="row" sx={{ width: "100%", margin: "2rem 0 0 0" }}>
-            <MultipleImages description={description} handleMultipleImageUpload={handleUpload} handleDrag={handleDrag} handleDrop={handleUpload} dragActive={dragActive} accept={accept} />
+            <MultipleImages
+                description={description}
+                handleMultipleImageUpload={handleUpload}
+                handleDrag={handleDrag}
+                handleDrop={handleUpload}
+                dragActive={dragActive}
+                accept={isArray ? accept?.map((item) => item?.mime_type) : accept?.allow_format}
+            />
 
             <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} handleReorder={handleReorder} />
 

@@ -13,7 +13,7 @@ import AuthContext from "../../../../../store/auth-contex";
 const ProductVariation = ({ parentId, tblFields }) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
-
+    const [formFieldsTemp, setFormFieldsTemp] = useState(tblFields);
     const [fields, setFields] = useState(null);
     const [selectedColumn, setSelectedColumn] = useState(null);
     const [showSubmitModalButton, setShowSubmitModalButton] = useState(true);
@@ -78,20 +78,67 @@ const ProductVariation = ({ parentId, tblFields }) => {
                     const type = base64.split(";")[0].split(":")[1];
                     let y = base64[base64.length - 2] === "=" ? 2 : 1;
                     const size = base64.length * (3 / 4) - y;
-                    return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64, path: item.file };
+                    const dimensions = imageInfo?.image ?? {};
+                    return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64, path: item.file, dimensions: dimensions };
                 });
         }
         return values;
+    };
+
+    const formatFormFields = (data) => {
+        const {
+            allow_size,
+            allow_format,
+            image: { width, height },
+        } = data;
+        const description = `Veličina  fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format.map((format) => format.name).join(", ")}`;
+        if (data) {
+            const arr = formFieldsTemp?.map((field) => {
+                if (field?.prop_name === "gallery") {
+                    return {
+                        ...field,
+                        description: description,
+                        validate: {
+                            imageUpload: data,
+                        },
+                        ui_prop: {
+                            fileUpload: {
+                                ...field?.ui_prop?.fileUpload,
+                                allow_format: allow_format,
+                                allow_size: allow_size,
+                                image: {
+                                    width: width,
+                                    height: height,
+                                },
+                                imageButton: {
+                                    apiPathCrop: "admin/product-items/variants/gallery/options/crop",
+                                },
+                            },
+                        },
+                        dimensions: {
+                            width: width,
+                            height: height,
+                        },
+                    };
+                } else {
+                    return {
+                        ...field,
+                    };
+                }
+            });
+
+            setFormFieldsTemp([...arr]);
+        }
     };
 
     const handleInformationImage = () => {
         api.get(`admin/product-items/variants/gallery/options/upload`)
             .then((response) => {
                 setImageInfo(response.payload);
+                formatFormFields(response?.payload);
             })
             .catch((error) => console.warn(error));
     };
-
     const handleSubmitWrapper = (parentId, selectedColumn) => {
         const { urls, row } = selectedColumn;
         const handleSubmit = (data, options = {}) => {
@@ -160,7 +207,9 @@ const ProductVariation = ({ parentId, tblFields }) => {
             const { galleryData, column } = selectedColumn;
             if (column?.prop_name === "gallery") {
                 let allowFormats = imageInfo ? imageInfo.allow_format.map((format) => format?.name.toLowerCase()) : [];
-                let description = `Dozvoljeni formati su: ${allowFormats.join(", ")}. Maksimalna dozvoljena veličina je ${imageInfo?.allow_size / (1024 * 1024)} MB.`;
+                let description = `Dimenzije: ${imageInfo?.image?.width ?? ""} x ${imageInfo?.image?.height ?? ""} px. Veličina fajla ne sme biti veća od ${
+                    imageInfo ? (imageInfo.allow_size / (1024 * 1024)).toFixed(2) : ""
+                }MB. Dozvoljeni formati fajla: ${imageInfo ? imageInfo.allow_format.map((format) => format.name).join(", ") : ""}`;
                 galleryFormFields?.map((item) => {
                     if (item?.prop_name === "gallery") {
                         item.uploadHandler = handleSubmitWrapper(parentId, galleryData);
@@ -168,6 +217,17 @@ const ProductVariation = ({ parentId, tblFields }) => {
                         item.handleReorder = handleReorder;
                         item.description = description;
                         item.validate.imageUpload = imageInfo;
+                        item.ui_prop.fileUpload = {
+                            allow_format: allowFormats,
+                            allow_size: imageInfo?.allow_size,
+                            image: {
+                                width: imageInfo?.image?.width,
+                                height: imageInfo?.image?.height,
+                            },
+                            imageButton: {
+                                apiPathCrop: "admin/product-items/variants/gallery/options/crop",
+                            },
+                        };
                     }
                 });
                 setFields(galleryFormFields);
@@ -200,16 +260,17 @@ const ProductVariation = ({ parentId, tblFields }) => {
                 return ret;
         }
     };
-
     return (
         <ListPage
             validateData={validateData}
-            columnFields={tblFields}
+            accept={imageInfo?.allow_format}
+            columnFields={formFieldsTemp}
             useColumnFields={true}
             showNewButton={false}
             listPageId="ListVariants"
             apiUrl={`admin/product-items/variants/list/${parentId}`}
             title=" "
+            apiPathCrop={`admin/product-items/variants/gallery/options/crop`}
             actionNewButton="modal"
             initialData={{ id_product_parent: parentId }}
             onClickFieldBehavior={(event, fieldBhavior, column, row, galleryData) => {

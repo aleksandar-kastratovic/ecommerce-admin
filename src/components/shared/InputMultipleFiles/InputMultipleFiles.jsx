@@ -41,6 +41,7 @@ export const InputMultipleFiles = ({
     dialogFormFields = [],
     dialogGetPath,
     description,
+    validate = null,
 }) => {
     const [imageList, setImageList] = useState(list);
     const [dragActive, setDragActive] = useState(false);
@@ -57,7 +58,6 @@ export const InputMultipleFiles = ({
     };
 
     const [openFullPageDialog, setOpenFullPageDialog] = useState(init);
-
     //DRAG EVENT HANDLER
     const handleDrag = function (e) {
         e.preventDefault();
@@ -90,17 +90,30 @@ export const InputMultipleFiles = ({
                 var file = selectedFiles[i];
                 const obj = await getLoadedFile(file, i, len);
                 await uploadHandler(obj);
-
-
-
-
                 newImagesArray.push(obj);
             }
             if (Array.isArray(imageList)) {
                 newImagesArray = [...imageList, ...newImagesArray];
             }
 
-            setImageList(newImagesArray);
+            if (validate !== undefined && validate !== null) {
+                let image = selectedFiles[0];
+                const { size, type } = image;
+                const { imageUpload } = validate;
+                const { allow_size, allow_format } = imageUpload;
+                let allowedFormatMime = allow_format?.map((item, i) => {
+                    return item?.mime_type;
+                });
+                if (allowedFormatMime.includes(type)) {
+                    if (size > allow_size) {
+                    } else {
+                        setImageList(newImagesArray);
+                    }
+                } else {
+                }
+            } else {
+                setImageList(newImagesArray);
+            }
         }
     };
 
@@ -109,6 +122,14 @@ export const InputMultipleFiles = ({
         setOpenFullPageDialog({
             show: true,
             item: item,
+            image: item?.src,
+            alt: item?.alt,
+            name: item?.name,
+            src: item?.thumb_image,
+            size: item?.size,
+            type: item?.type,
+            path: item?.path,
+            position: item?.position,
         });
     };
 
@@ -122,7 +143,6 @@ export const InputMultipleFiles = ({
         (event) => {
             event.preventDefault();
             const selectedFile = event.target.files[0];
-
             const reader = new FileReader();
             reader.onloadend = () => {
                 const timeOutId = setTimeout(() => {
@@ -148,6 +168,7 @@ export const InputMultipleFiles = ({
             size: selectedFile.size,
             type: selectedFile.type,
             name: selectedFile.name,
+            path: selectedFile.path,
             src: result,
         };
 
@@ -203,16 +224,17 @@ export const InputMultipleFiles = ({
     return (
         <Grid container spacing={1} direction="row" sx={{ width: "auto", margin: "2rem 0 0 0" }}>
             <MultipleImages
-                description={description}
                 handleMultipleImageUpload={handleUpload}
                 handleDrag={handleDrag}
                 handleDrop={handleUpload}
                 dragActive={dragActive}
                 accept={accept}
                 icon={IconList.uploadFile}
+                description={description}
             />
 
             <ImageListRow setImageList={setImageList} imageList={imageList} handleModalOpen={handleModalOpen} handleDeleteImage={handleDeleteImage} handleReorder={handleReorder} />
+
             <FileDialog
                 openFullPageDialog={openFullPageDialog}
                 setOpenFullPageDialog={setOpenFullPageDialog}
@@ -223,6 +245,7 @@ export const InputMultipleFiles = ({
                 formFields={dialogFormFields}
                 getPath={dialogGetPath}
             />
+
             <DeleteDialog
                 title="Brisanje"
                 description="Da li ste sigurni da želite da obrišete?"

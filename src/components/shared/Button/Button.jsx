@@ -19,12 +19,12 @@ import { ClassNames } from "@emotion/react";
  * @constructor
  */
 const Button = ({ icon, label, onClick, type = "button", variant = "outlined", disabled = false, sx = {}, href, className }) => {
-  return (
-    <MaterialButton onClick={onClick} variant={variant} className={`${scss.button}`} type={type} disabled={disabled} sx={sx} href={href} >
-      {icon && <Icon className={scss.icon}>{icon}</Icon>}
-      {label}
-    </MaterialButton >
-  );
+    return (
+        <MaterialButton onClick={onClick} variant={variant} className={`${scss.button}`} type={type} disabled={disabled} sx={sx} href={href}>
+            {icon && <Icon className={scss.icon}>{icon}</Icon>}
+            {label}
+        </MaterialButton>
+    );
 };
 
 export default Button;

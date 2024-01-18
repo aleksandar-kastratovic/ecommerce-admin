@@ -6,7 +6,7 @@ import AuthContext from "../../../../store/auth-contex";
 import { useFileSize } from "../../../../hooks/useFileSize";
 import { useQuery } from "react-query";
 
-const Document = ({ productId }) => {
+const Document = ({ newsId }) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
     const [file, setFile] = useState(null);
@@ -28,7 +28,7 @@ const Document = ({ productId }) => {
             deleteClickHandler: {
                 type: "dialog_delete",
                 fnc: (rowData) => {
-                    api.delete(`admin/product-items/documents/list/${rowData.id}`)
+                    api.delete(`admin/news-b2c/news/documents/list/${rowData.id}`)
                         .then(() => toast.success("Zapis je uspešno obrisan"))
                         .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
 
@@ -45,7 +45,7 @@ const Document = ({ productId }) => {
                 type: "modal_form",
                 fnc: (rowData) => {
                     setOpenModal(true);
-                    api.get(`admin/product-items/documents/basic-data/${rowData.id}`)
+                    api.get(`admin/news-b2c/news/documents/basic-data/${rowData.id}`)
                         .then((response) => {
                             setFile({
                                 name: response?.payload?.file_filename,
@@ -83,6 +83,7 @@ const Document = ({ productId }) => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
+                    // na MAC-u ne radi u developmentu jer nije HTTPS, za vise detalja procitati: https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText
                     const filePath = rowData?.file;
                     navigator.clipboard
                         .writeText(filePath)
@@ -143,7 +144,7 @@ const Document = ({ productId }) => {
 
     const fetchInformationFile = async () => {
         try {
-            const response = await api.get("admin/product-items/documents/basic-data/options/upload?field=file");
+            const response = await api.get("admin/news-b2c/news/documents/basic-data/options/upload?field=file");
             return response.payload;
         } catch (error) {
             console.log(error);
@@ -162,7 +163,7 @@ const Document = ({ productId }) => {
     });
 
     const handleInformationImage = () => {
-        api.get(`admin/product-items/documents/basic-data/options/upload?field=thumb_image`)
+        api.get(`admin/news-b2c/news/documents/basic-data/options/upload?field=thumb_image`)
             .then((response) => {
                 formatFormFields(response?.payload, "thumb_image");
             })
@@ -194,13 +195,13 @@ const Document = ({ productId }) => {
             <ListPage
                 accept={allowedFormat}
                 listPageId="Documents"
-                apiUrl={`admin/product-items/documents/list/${productId}`}
-                editUrl={`admin/product-items/documents/basic-data`}
+                apiUrl={`admin/news-b2c/news/documents/list/${newsId}`}
+                editUrl={`admin/news-b2c/news/documents/basic-data`}
                 title=" "
                 columnFields={formFieldsTemp}
                 useColumnFields={true}
                 actionNewButton="modal"
-                initialData={{ id_product: productId, file: file?.base_64 }}
+                initialData={{ id_news: newsId, file: file?.base_64 }}
                 addFieldLabel="Dodajte novi dokument"
                 showAddButton={true}
                 customActions={customActions}

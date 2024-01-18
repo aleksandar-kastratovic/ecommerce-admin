@@ -41,6 +41,8 @@ import { queryKeys } from "../../../helpers/const";
 const ListPage = ({
     apiUrl,
     deleteUrl,
+    isArray,
+    accept,
     editUrl,
     editUrlQueryString = [],
     title,
@@ -89,7 +91,9 @@ const ListPage = ({
     onDismissModal = () => {},
     listData = false,
     labelSaveButton,
-    dataFromServer,apiPathCrop
+    dataFromServer,
+    apiPathCrop,
+    setPropName,
 }) => {
     // TODO Sorting is disabled as it does not work with pagination
     columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
@@ -129,7 +133,6 @@ const ListPage = ({
     if (response?.payload && modifyItems) {
         response.payload.items = modifyItems(response.payload.items);
     }
-
     useEffect(() => {
         if (openDeleteDialog.mutate === 1) {
             setOpenDeleteDialog({ show: false, id: null, mutate: 0 });
@@ -164,7 +167,9 @@ const ListPage = ({
                 switch (inputOpts.clickHandler.type) {
                     case "navigate":
                         let navigate_path = inputOpts.clickHandler.fnc(rowData);
-                        navigate(navigate_path);
+                        if(navigate_path) {
+                            navigate(navigate_path);
+                        }
                         break;
                     case "dialog_delete":
                         let dialog_delete_opt = inputOpts.clickHandler.fnc(rowData, handleDeleteModalData);
@@ -210,15 +215,21 @@ const ListPage = ({
             switch (selectedActionsButton.deleteClickHandler.type) {
                 case "navigate":
                     let navigate_path = selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
-                    navigate(navigate_path);
+                    if(navigate_path) {
+                        navigate(navigate_path);
+                    }
                     break;
                 case "dialog_delete":
                     let dialog_delete_opt = selectedActionsButton.deleteClickHandler.fnc(selectedRowData, deleteModalData);
-                    setOpenDeleteDialog(dialog_delete_opt);
+                    if(dialog_delete_opt) {
+                        setOpenDeleteDialog(dialog_delete_opt);
+                    }
                     break;
                 case "modal_form":
                     let modal_form_opt = selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
-                    setOpenModal(modal_form_opt);
+                    if(modal_form_opt) {
+                        setOpenModal(modal_form_opt);
+                    }
                     break;
                 default:
                     selectedActionsButton.deleteClickHandler.fnc(selectedRowData);
@@ -418,11 +429,16 @@ const ListPage = ({
                 selectedFile={selectedFile}
                 label={labelSaveButton}
                 dataFromServer={dataFromServer}
-                allowedFileTypes={columnFields
-                    ?.filter((field) => field?.ui_prop?.fileUpload?.allow_format)
-                    ?.map((field) => field?.ui_prop?.fileUpload?.allow_format)
-                    ?.flat()}
+                isArray={isArray}
+                allowedFileTypes={
+                    accept ??
+                    columnFields
+                        ?.filter((field) => field?.ui_prop?.fileUpload?.allow_format)
+                        ?.map((field) => field?.ui_prop?.fileUpload?.allow_format)
+                        ?.flat()
+                }
                 apiPathCrop={apiPathCrop}
+                setPropName={setPropName}
             />
             <DeleteDialog
                 children={deleteModalChildren}

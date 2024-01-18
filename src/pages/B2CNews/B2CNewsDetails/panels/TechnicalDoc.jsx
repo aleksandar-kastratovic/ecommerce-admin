@@ -3,8 +3,10 @@ import { toast } from "react-toastify";
 import InputMultipleFiles from "../../../../components/shared/InputMultipleFiles/InputMultipleFiles";
 import formFields from "../forms/technical_doc.json";
 import AuthContext from "../../../../store/auth-contex";
+import UploadSkeleton from "../../../../components/shared/Loading/UploadSkeleton";
+import GallerySkeleton from "../../../../components/shared/Loading/GallerySkeleton";
 
-const TechnicalDoc = ({ newsId, apiPathCrop }) => {
+const TechnicalDoc = ({ newsId }) => {
     const init = {
         id: null,
         id_news: newsId,
@@ -12,17 +14,64 @@ const TechnicalDoc = ({ newsId, apiPathCrop }) => {
         technical_doc: null,
     };
     const [data, setData] = useState([]);
+    const [imageInfo, setImageInfo] = useState(null);
+    const [documentUploadLoading, setDocumentUploadLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
     const apiPath = "admin/news-b2c/news/technical-doc";
-    const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
-    const handleData = () => {
-        api.list(`${apiPath}/${newsId}`)
-            .then((response) => setData(response?.payload?.items))
+    const apiPathCrop = "admin/news-b2c/news/technical-doc/options/crop";
+    const [fileTypes, setFileTypes] = useState([]);
+
+    const handleInformationImage = () => {
+        api.get(`admin/news-b2c/news/technical-doc/options/upload`)
+            .then((response) => {
+                setImageInfo(response.payload);
+                setFileTypes(response?.payload?.allow_format);
+            })
             .catch((error) => console.warn(error));
     };
 
-    const handleSubmit = (data) => {
+    const handleData = (showLoader = false) => {
+        if (showLoader) {
+            setLoading(true);
+        }
+        api.list(`${apiPath}/${newsId}`)
+            .then((response) => {
+                console.log("response", response);
+                setData(response?.payload?.items);
+                if (showLoader) {
+                    setLoading(false);
+                }
+            })
+            .catch((error) => {
+                console.warn(error);
+                if (showLoader) {
+                    setLoading(false);
+                }
+            });
+    };
+
+    const handleSubmit = (data, options = {}) => {
+        setDocumentUploadLoading(true);
+        const allowedFormats = imageInfo ? imageInfo.allow_format.map((format) => format?.mime_type.toLowerCase()) : [];
+        const allowSize = imageInfo ? Number(imageInfo.allow_size) : 0;
+        const fileExtension = data?.type.toLowerCase();
+        const fileSizeInB = Number(data.size);
+
+        if (allowedFormats.length > 0 && !allowedFormats.includes(fileExtension)) {
+            toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
+            // setLoading(false);
+            setDocumentUploadLoading(false);
+            return;
+        }
+
+        if (fileSizeInB > allowSize) {
+            toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
+            // setLoading(false);
+            setDocumentUploadLoading(false);
+            return;
+        }
         let req = {
             id: data.new ? null : data.id,
             id_news: newsId,
@@ -36,14 +85,18 @@ const TechnicalDoc = ({ newsId, apiPathCrop }) => {
             thumb_image_base64: data.thumb_image_base64 ?? null,
             thumb_filename: data.thumb_filename ?? null,
         };
-        api.post(`${apiPath}`, req)
+
+        let postApi = options?.crop ? apiPathCrop : apiPath;
+        api.post(`${postApi}`, req)
             .then((response) => {
                 toast.success("Uspešno");
                 handleData();
+                setDocumentUploadLoading(false);
             })
             .catch((error) => {
                 toast.warn("Greška");
                 console.warn(error);
+                setDocumentUploadLoading(false);
             });
     };
 
@@ -63,7 +116,7 @@ const TechnicalDoc = ({ newsId, apiPathCrop }) => {
         api.delete(`${apiPath}/${id}`)
             .then((response) => {
                 toast.success("Uspešno");
-                handleData();
+                handleData(false);
             })
             .catch((error) => {
                 toast.warn("Greška");
@@ -75,6 +128,7 @@ const TechnicalDoc = ({ newsId, apiPathCrop }) => {
         api.put(`${apiPath}/order`, { id: id, order: destination })
             .then((response) => {
                 toast.success("Uspešno");
+                handleData(false);
             })
             .catch((error) => {
                 toast.warn("Greška");
@@ -91,23 +145,36 @@ const TechnicalDoc = ({ newsId, apiPathCrop }) => {
     });
 
     useEffect(() => {
-        handleData();
+        handleData(true);
+        handleInformationImage();
     }, []);
 
     return (
-        <InputMultipleFiles
-            list={list}
-            name="technical_doc"
-            onChangeHandler={() => {}}
-            uploadHandler={handleSubmit}
-            deleteHandler={handleDelete}
-            handleReorder={handleReorder}
-            changeFileData={() => {}}
-            accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf"
-            dialogFormFields={formFieldsTemp}
-            dialogGetPath={apiPath}
-            saveDataHandler={handleSaveForm}
-        />
+        <>
+            {documentUploadLoading ? (
+                <UploadSkeleton textUploading={"Učitavanje dokumenta je u toku.."} />
+            ) : loading ? (
+                <GallerySkeleton />
+            ) : (
+                <InputMultipleFiles
+                    description={`Veličina fajla ne sme biti veća od ${imageInfo ? (imageInfo.allow_size / (1024 * 1024)).toFixed(2) : ""}MB. Dozvoljeni formati fajla: ${
+                        imageInfo ? imageInfo.allow_format.map((format) => format.name).join(", ") : ""
+                    }`}
+                    list={list}
+                    accept={fileTypes?.map((type) => type?.mime_type)}
+                    name="technical_doc"
+                    onChangeHandler={() => {}}
+                    uploadHandler={handleSubmit}
+                    deleteHandler={handleDelete}
+                    handleReorder={handleReorder}
+                    changeFileData={() => {}}
+                    // accept=".xlsx,.xls,.doc, .docx,.ppt, .pptx,.txt,.pdf"
+                    dialogFormFields={formFields}
+                    dialogGetPath={apiPath}
+                    saveDataHandler={handleSaveForm}
+                />
+            )}
+        </>
     );
 };
 

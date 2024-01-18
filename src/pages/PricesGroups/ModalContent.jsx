@@ -45,17 +45,6 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
               label={dialogData.main_checkbox}
             />
           </span>
-          {dialogData.price_structure !== false && (
-            <span style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
-              <Typography variant="string">
-                {dialogData.price_structure_line}
-              </Typography>
-              <FormControlLabel
-                control={<Checkbox checked={checkedMainCheckbox} disabled />}
-                label={dialogData.price_structure_checkbox}
-              />
-            </span>
-          )}
           {dialogData.product_price !== false && (
             <span style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
               <Typography variant="string">
