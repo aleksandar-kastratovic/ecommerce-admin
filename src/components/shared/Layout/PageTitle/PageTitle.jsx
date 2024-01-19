@@ -23,6 +23,7 @@ const PageTitle = ({ title, back, actions = [] }) => {
                     return (
                         <Button
                             key={index}
+                            disabled={button.disabled}
                             icon={button.icon}
                             label={button.label}
                             onClick={button.action}

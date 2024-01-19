@@ -52,6 +52,7 @@ const EOffer = () => {
                 getFile.refetch();
             },
             icon: "download",
+            disabled: getFile.isFetching,
             title: "Preuzmi fajl",
             label: `${getFile.isFetching ? `Preuzimanje u toku...` : "Preuzmi fajl"}`,
         },
@@ -60,6 +61,7 @@ const EOffer = () => {
             action: () => {
                 exportData();
             },
+            disabled: isLoading,
             icon: "upload",
             title: "Export E-ponude",
             label: `${isLoading ? `Export u toku...` : "Export e-ponude"}`,
