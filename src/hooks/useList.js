@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { removeAtIndex } from "../helpers/data";
 
 /**
@@ -10,7 +10,7 @@ import { removeAtIndex } from "../helpers/data";
  */
 const useFileInput = (initialList: [] = []) => {
     const [state, setState] = useState(initialList);
-
+    const [mount, setMount] = useState(false);
     // Set a value
     const set = (id) => {
         if (!state.includes(id)) {
@@ -36,7 +36,13 @@ const useFileInput = (initialList: [] = []) => {
 
     const clear = () => setState([]);
 
-    return { list: state, set, unset, toggle, has, clear };
+    useEffect(() => {
+        setState(initialList);
+    }, [mount]);
+
+    const toggleMount = () => setMount(!mount);
+
+    return { list: state, set, unset, toggle, has, clear, toggleMount };
 };
 
 export default useFileInput;

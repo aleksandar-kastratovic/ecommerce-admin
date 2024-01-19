@@ -21,56 +21,65 @@ import CircularProgress from "@mui/material/CircularProgress";
  * @constructor
  */
 const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll = false, toggleShowSelected = true, sx, onChange = () => null, selectOne = false, isLoading }) => {
-  const { list, toggle, has, set, clear } = useList(selected ?? []);
-  const [search, setSearch] = useState("");
+    const { list, toggle, has, set, clear, toggleMount } = useList(selected ?? []);
+    const [search, setSearch] = useState("");
 
-  const [showSelected, setShowSelected] = useState(false);
+    const [showSelected, setShowSelected] = useState(false);
 
-  // Filter the available
-  available = available.filter((item) => search === "" || item.name.toLowerCase().includes(search.toLowerCase()));
+    // Filter the availablee
+    available = available.filter((item) => search === "" || item.name.toLowerCase().includes(search.toLowerCase()));
 
-  const toggleSelectAll = (selected) => {
-    if (!selected) {
-      clear();
-    } else {
-      for (const item of available) {
-        set(item.id);
-      }
+    const toggleSelectAll = (selected) => {
+        if (!selected) {
+            clear();
+        } else {
+            for (const item of available) {
+                set(item.id);
+            }
+        }
+    };
+
+    if (showSelected) {
+        available = available.filter((item) => list.includes(item.id));
     }
-  };
 
-  if (showSelected) {
-    available = available.filter((item) => list.includes(item.id));
-  }
+    useEffect(() => {
+        onChange(list);
+    }, [list]);
 
-  useEffect(() => {
-    onChange(list);
-  }, [list])
+    return (
+        <>
+            {/* show only selected options */}
+            {toggleShowSelected && <InputCheckbox label="Prikaži samo izabrane" value={showSelected} onChange={({ target }) => setShowSelected(target.checked)} />}
+            {/* select all options */}
+            {selectAll && <InputCheckbox label="Izaberi sve" value={available.length === list.length && available.length > 0} onChange={({ target }) => toggleSelectAll(target.checked)} />}
 
-  return (
-    <>
-      {/* show only selected options */}
-      {toggleShowSelected && <InputCheckbox label="Prikaži samo izabrane" value={showSelected} onChange={({ target }) => setShowSelected(target.checked)} />}
-      {/* select all options */}
-      {selectAll && <InputCheckbox label="Izaberi sve" value={available.length === list.length && available.length > 0} onChange={({ target }) => toggleSelectAll(target.checked)} />}
+            <InputInput placeholder="Pretraga" value={search} onChange={(event) => setSearch(event.target.value)} />
+            {/* The list of available items */}
+            <div className={styles.optionsList}>
+                {available.map((brand) => (
+                    <InputCheckbox
+                        key={brand.id}
+                        value={has(brand.id)}
+                        label={brand.name}
+                        onChange={() => {
+                            if (selectOne) {
+                                clear();
+                            }
+                            toggle(brand.id);
+                        }}
+                    />
+                ))}
+            </div>
 
-      <InputInput placeholder="Pretraga" value={search} onChange={(event) => setSearch(event.target.value)} />
-      {/* The list of available items */}
-      <div className={styles.optionsList}>
-        {available.map((brand) => (
-          <InputCheckbox key={brand.id} value={has(brand.id)} label={brand.name} onChange={() => { if (selectOne) { clear(); } toggle(brand.id); }} />
-        ))}
-      </div>
+            {/* There are no available to show */}
+            {available.length === 0 && <NoteBox message="Lista je prazna" className="mt" />}
 
-      {/* There are no available to show */}
-      {available.length === 0 && <NoteBox message="Lista je prazna" className="mt" />}
-
-
-      <Buttons>
-        <Button sx={sx} label={isLoading ? <CircularProgress size="1.5rem" /> : "Sačuvaj"} disabled={isLoading} variant="contained" onClick={() => onSubmit(list)} />
-      </Buttons>
-    </>
-  );
+            <Buttons>
+                <Button sx={sx} label={isLoading ? <CircularProgress size="1.5rem" /> : "Sačuvaj"} disabled={isLoading} variant="contained" onClick={() => onSubmit(list)} />
+            </Buttons>
+        </>
+    );
 };
 
 export default SearchableListForm;
