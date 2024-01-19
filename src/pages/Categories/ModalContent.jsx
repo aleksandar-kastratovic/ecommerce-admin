@@ -15,7 +15,6 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
 
   const [dialogData, setDialogData] = useState({})
   const [isLoading, setIsLoading] = useState(false);
-  const [checked, setChecked] = useState(true);
   const [checkedMainCheckbox, setCheckedMainCheckbox] = useState(true);
   const [selectedOptions, setSelectedOptions] = useState([]);
 
@@ -47,7 +46,7 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
   // Provera da li su vrednosti za sve prikazane elemente odabrana zeljena akcija
   const AllOptionListFill = (allSelected) => {
     let all_fill = true;
-    dialogData?.employees_list.map((list_item) => {
+    dialogData?.category_children_list.map((list_item) => {
       let find_items = allSelected.filter((item) => {
         return item?.old_id === list_item?.old_id;
       });
@@ -109,25 +108,14 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
               control={<Checkbox checked={checkedMainCheckbox} disabled />}
               label={dialogData.main_checkbox}
             />
-          </span>          
-          {dialogData.working_units_children !== false && (
-            <span key="dialogData_working_units_children" style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
+          </span>
+          {dialogData.category_children !== false && (
+            <span key="dialogData_category_children" style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
               <Typography variant="string">
-                {dialogData.working_units_children_line}
-              </Typography>
-              <FormControlLabel
-                control={<Checkbox checked={checked} disabled />}
-                label={dialogData.working_units_children_checkbox}
-              />
-            </span>
-          )}
-          {dialogData.employees !== false && (
-            <span key="dialogData_employees" style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
-              <Typography variant="string">
-                {dialogData.employees_line}
+                {dialogData.category_children_line}
               </Typography>
               
-              {dialogData?.employees_list?.map( (item, index) => {
+              {dialogData?.category_children_list?.map( (item, index) => {
                   return (
                     <>
                       <Typography variant="string" sx={{marginTop: "1rem"}}>
