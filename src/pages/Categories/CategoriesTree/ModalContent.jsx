@@ -92,7 +92,6 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
                             all_fill: true,
                         });
                     }
-
                 })
                 .catch((error) => {
                     console.warn(error);
@@ -101,6 +100,8 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
         };
         handleData();
     }, []);
+
+    console.log(dialogData);
 
     return (
         <>

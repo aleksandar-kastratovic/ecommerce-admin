@@ -14,6 +14,7 @@ import ProductDetails from "../pages/Products/ProductDetails/ProductDetails";
 import ProductGroupDetails from "../pages/ProductSpecs/ProductGroupDetails/ProductGroupDetails";
 import ProductsPriceMarkets from "../pages/ProductsPriceMarkets/ProductsPriceMarkets";
 import ProductSpecsGroups from "../pages/ProductSpecs/ProductSpecsGroups";
+import EOffer from "../pages/EOffer/EOffer";
 // import ProductVariantsAttributes from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
 import ProductVariantsAttributesDetails from "../pages/ProductVariantsAttributes/ProductVariantsAttributeDetails/ProductVariantsAttributeDetails";
 import AdminForm from "../pages/AdminForm/AdminForm";
@@ -86,6 +87,7 @@ import PromotionsUpSellsDetails from "../pages/Promotions/PromotionsUpSells/Prom
 
 import B2BReclamations from "../pages/B2BReclamations/B2BReclamations";
 import B2BReclamationsDetails from "../pages/B2BReclamations/B2BReclamationsDetails/B2BReclamationsDetails";
+import EOfferDetails from "../pages/EOffer/EOfferDetails/EOfferDetails";
 // import B2CReclamations from "../pages/B2CReclamations/B2CReclamations";
 // import B2CReclamationsDetails from "../pages/B2CReclamations/B2CReclamationsDetails/B2CReclamationsDetails";
 
@@ -147,7 +149,7 @@ const screens = {
     //PRODUCT_SPEC: ["/product-specs/groups", "Specifikacija", IconList.inventory, PRODUCT, ProductSpecsGroups, [[":groupId", ProductGroupDetails]]],
     IMPORT: ["/import", "Uvoz podataka", IconList.upload, PRODUCT, Import, [[":upId", ImportDetails]]],
     // EXPORT: ["/export", "Izvoz podataka", IconList.upload, PRODUCT, Export, [[":exId", ExportDetails]]],
-
+    EPONUDA: ["/eponuda", "E-ponuda", IconList.inventory, PRODUCT, EOffer, [["details", EOfferDetails]]],
     COMPN: ["/b2b-companies", "Kompanije", IconList.locationCity, B2B, Companies, [[":comId", CompaniesDetails]]],
     REBATE_TIERS: ["/b2b-rebate-tiers", "Rabatne skale", IconList.barChart, B2B, B2BRebateTiersListPage],
     REBATES: ["/b2b-rebates", "Rabati", IconList.percent, B2B, B2BRebatesListPage, [[":rebateId", B2BRebatesDetails]]],

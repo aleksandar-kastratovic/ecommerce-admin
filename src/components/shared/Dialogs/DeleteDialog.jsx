@@ -57,7 +57,6 @@ const DeleteModal = ({
                 );
         }
     };
-
     return (
         <Dialog open={openDeleteDialog.show ?? false} sx={{ "& .MuiDialog-paper": { maxWidth: "900px" } }}>
             <DialogTitle>{title ?? "Brisanje"}</DialogTitle>
