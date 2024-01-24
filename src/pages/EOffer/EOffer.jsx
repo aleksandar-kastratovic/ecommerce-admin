@@ -17,7 +17,7 @@ const EOffer = () => {
         ["export-eponuda-basic-data"],
         async () => {
             return await api
-                .post("admin/export-eponuda/basic-data")
+                .post("admin/export-eponuda/list")
                 .then((res) => {
                     toast.success(`Uspešno pokrenut export e-ponude!`);
                     return res?.payload;
@@ -35,7 +35,7 @@ const EOffer = () => {
         ["export-eponuda-download"],
         async () => {
             return await api
-                .get("admin/export-eponuda/basic-data")
+                .get("admin/export-eponuda/list")
                 .then((res) => {
                     setDownloadLink(res?.payload);
                 })
@@ -52,7 +52,7 @@ const EOffer = () => {
                 getFile.refetch();
             },
             icon: "download",
-            disabled: getFile.isFetching,
+            disabled: getFile.isFetching || isLoading,
             title: "Preuzmi fajl",
             label: `${getFile.isFetching ? `Preuzimanje u toku...` : "Preuzmi fajl"}`,
         },
@@ -61,7 +61,7 @@ const EOffer = () => {
             action: () => {
                 exportData();
             },
-            disabled: isLoading,
+            disabled: isLoading || getFile.isFetching,
             icon: "upload",
             title: "Export E-ponude",
             label: `${isLoading ? `Export u toku...` : "Export e-ponude"}`,
@@ -77,7 +77,7 @@ const EOffer = () => {
         },
     ];
 
-    //download fajla, appendujemo a tag u DOM, pa ga kliknemo, a onda ga uklonimo
+    //download fajla: appendujemo a tag u DOM, pa ga kliknemo, a onda ga uklonimo
     useEffect(() => {
         if (downloadLink) {
             const a = document.createElement("a");
