@@ -109,15 +109,13 @@ const OrderStatus = ({ orderId, status }) => {
     const [opt, setOpt] = useState();
 
     useEffect(() => {
-        const interval = setInterval(() => {
-            getAvailableStatuses();
-        }, 500);
+        getAvailableStatuses();
+        getAllStatuses();
         if (!done && isSuccess) {
             if (allStatuses && availableStatuses) {
                 setOpt(renderStatuses(allStatuses, availableStatuses));
             }
         }
-        return () => clearInterval(interval);
     }, [done, isSuccess, data?.status]);
 
     return (
