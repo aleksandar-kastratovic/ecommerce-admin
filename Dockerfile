@@ -8,7 +8,7 @@
 ########################################################################################################################
 
 # Build the react app for the production
-FROM node:20.11.0-bullseye-slim as build
+FROM node:18.19.0-bullseye-slim as build
 LABEL org.label-schema.schema-version="1.0.0" \
       org.label-schema.vendor="Croonus" \
       org.label-schema.name="croonus.ecommerce-admin"
