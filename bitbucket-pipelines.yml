@@ -43,6 +43,10 @@ definitions:
 pipelines:
   branches:
     master:
+      - step:
+          name: Install SSH Client
+          script:
+            - apk --no-cache add openssh-client
       - step: *execute
 
     demo:
