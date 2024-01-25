@@ -47,7 +47,7 @@ import CategoriesDetails from "../pages/Categories/CategoriesDetails/CategoriesD
 import Notifications from "../pages/Notifications/Notifications";
 import { makeScreen, MenuGroup } from "./utils";
 import CategoriesListPage from "../pages/Categories/CategoriesList/CategoriseListPage";
-import CategoriesTree from "../pages/Categories/CategoriesTree/CategoriesTree";
+// import CategoriesTree from "../pages/Categories/CategoriesTree/CategoriesTree";
 import Companies from "../pages/Companies/Companies";
 import CompaniesDetails from "../pages/Companies/CompaniesDetails/CompaniesDetails";
 import SaleOfficers from "../pages/SaleOfficers/SaleOfficers";
@@ -126,7 +126,7 @@ const screens = {
         PRODUCT,
         CategoriesGroupsListPage,
         [
-            ["tree/:gid", CategoriesTree],
+            // ["tree/:gid", CategoriesTree],
             ["category/:gid", CategoriesListPage],
             ["category/:gid/:cid", CategoriesDetails],
         ],
