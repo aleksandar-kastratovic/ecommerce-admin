@@ -66,7 +66,6 @@ export const imageForId = (gallery, id) => {
 /**
  * Format number in currency.
  *
- * @author Predrag Lević <predrag.levic@croonus.com>
  * @param {Number} num
  * @returns {String}
  */
