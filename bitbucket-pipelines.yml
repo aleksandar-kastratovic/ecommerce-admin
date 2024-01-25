@@ -1,4 +1,4 @@
-image: node:18.19.0
+image: node:18.19.0-bullseye-slim
 
 definitions:
   services:
@@ -17,7 +17,7 @@ definitions:
           #- ./deploy/deploy_status.sh ${BITBUCKET_DEPLOYMENT_ENVIRONMENT} "pocetak" - slanje na url status da bi mogli da napravimo konzolu aplikaciju da sama radi update
 
           - export IMAGE=$DOCKER_ACCOUNT/$DOCKER_IMAGE
-          - printf "\nDeploy\n    env  $BITBUCKET_DEPLOYMENT_ENVIRONMENT\n    img  $IMAGE\n\nServer\n    host $SERVER_HOST\n    port $SERVER_PORT\n    user $SERVER_USER\n\nApp\n    port $PORT\n    url  $API_URL\n     deploy  $DEPLOY\n";
+          - printf "\nDeploy\n    env  $BITBUCKET_DEPLOYMENT_ENVIRONMENT\n    img  $IMAGE\n\nServer\n    host $SERVER_HOST\n    port $SERVER_PORT\n    user $SERVER_USER\n\nApp\n    port $PORT\n    url  $API_URL\n";
 
           # Build the image
           - docker build --build-arg API_URL=$API_URL -t $IMAGE .
