@@ -5,10 +5,10 @@ definitions:
     docker:
       memory: 3072
   steps:
-    - step: &install_ssh
-        name: Install SSH Client
-        script:
-          - apk --no-cache add openssh-client
+    - step:
+          name: Install SSH Client
+          script:
+            - apt-get update && apt-get install -y openssh-client
     - step: &execute
         name: Staging
         deployment: staging
@@ -47,13 +47,292 @@ definitions:
 pipelines:
   branches:
     master:
-      - step: *install_ssh
       - step: *execute
 
     demo:
-      - step: *install_ssh
       - step:
           <<: *execute
           name: Demo
           deployment: demo
 
+    prod-stojic:
+      - step:
+          <<: *execute
+          name: Stojić
+          deployment: stojic
+
+    prod-lastva:
+      - step:
+          <<: *execute
+          name: Lastva
+          deployment: Lastva
+
+    prod-reflekta:
+      - step:
+          <<: *execute
+          name: Reflekta
+          deployment: reflekta
+
+    prod-akt:
+      - step:
+          <<: *execute
+          name: Akt
+          deployment: akt
+    
+    prod-maximon:
+      - step:
+          <<: *execute
+          name: Maximon
+          deployment: maximon
+
+    prod-ringzandtingz:
+      - step:
+          <<: *execute
+          name: RingzAndThingz
+          deployment: ringzandthingz
+
+    prod-mobs:
+      - step:
+          <<: *execute
+          name: Mobs
+          deployment: mobs
+
+    prod-ukusnoizdravo:
+      - step:
+          <<: *execute
+          name: Ukusnoizdravo
+          deployment: ukusnoizdravo
+                    
+    prod-tiffany:
+      - step:
+          <<: *execute
+          name: Tiffany
+          deployment: tiffany
+                              
+    prod-zenit:
+      - step:
+          <<: *execute
+          name: Zenit
+          deployment: zenit
+
+    prod-nimaco:
+      - step:
+          <<: *execute
+          name: Nimaco
+          deployment: nimaco
+
+    prod-timcards:
+      - step:
+          <<: *execute
+          name: Timcards
+          deployment: timcards
+
+    prod-kruska:
+      - step:
+          <<: *execute
+          name: Kruska
+          deployment: kruska
+
+    prod-lucani:
+      - step:
+          <<: *execute
+          name: Lucani
+          deployment: lucani
+
+    prod-heklanisvet:
+      - step:
+          <<: *execute
+          name: HeklaniSvet
+          deployment: heklanisvet
+          
+    prod-magnetic:
+      - step:
+          <<: *execute
+          name: Magnetic
+          deployment: magnetic
+          
+    prod-karat:
+      - step:
+          <<: *execute
+          name: Karat
+          deployment: karat
+                    
+    prod-marela:
+      - step:
+          <<: *execute
+          name: Marela
+          deployment: marela
+                    
+    prod-whollywear:
+      - step:
+          <<: *execute
+          name: WhollyWear
+          deployment: whollywear
+                              
+    prod-realmaverse:
+      - step:
+          <<: *execute
+          name: Realmaverse
+          deployment: realmaverse
+
+    prod-adnetics:
+      - step:
+          <<: *execute
+          name: Adnetics
+          deployment: adnetics
+
+    prod-agropremium:
+      - step:
+          <<: *execute
+          name: AgroPremium
+          deployment: agropremium
+                                                
+    prod-elestra:
+      - step:
+          <<: *execute
+          name: Elestra
+          deployment: elestra
+                                                
+    prod-velvet:
+      - step:
+          <<: *execute
+          name: Velvet
+          deployment: velvet
+                                                
+    prod-klimatrade:
+      - step:
+          <<: *execute
+          name: KlimaTrade
+          deployment: klimatrade
+                                                
+    prod-migservis:
+      - step:
+          <<: *execute
+          name: MigServis
+          deployment: migservis
+                                                
+    prod-ristictrade:
+      - step:
+          <<: *execute
+          name: RisticTrade
+          deployment: ristictrade
+                                     
+    prod-zutilist:
+      - step:
+          <<: *execute
+          name: ZutiList
+          deployment: zutilist
+                                     
+    prod-raika:
+      - step:
+          <<: *execute
+          name: Raika
+          deployment: raika
+                                     
+    prod-psihum:
+      - step:
+          <<: *execute
+          name: Psihum
+          deployment: psihum
+                                                                   
+    prod-helivez:
+      - step:
+          <<: *execute
+          name: HeliVez
+          deployment: helivez
+                                                                   
+    prod-orginaltd:
+      - step:
+          <<: *execute
+          name: OrginalTd
+          deployment: orginaltd
+                                                                   
+    prod-rover:
+      - step:
+          <<: *execute
+          name: Rover
+          deployment: rover
+                                                                             
+    prod-gojkovicmed:
+      - step:
+          <<: *execute
+          name: GojkovicMed
+          deployment: gojkovicmed
+                                                                             
+    prod-zlataranova:
+      - step:
+          <<: *execute
+          name: ZlataraNova
+          deployment: zlataranova
+                                                                             
+    prod-absolem:
+      - step:
+          <<: *execute
+          name: Absolem
+          deployment: absolem
+
+    prod-pazarishop:
+      - step:
+          <<: *execute
+          name: PazariShop
+          deployment: pazarishop
+
+    prod-hunnybunny:
+      - step:
+          <<: *execute
+          name: HunnyBunny
+          deployment: hunnybunny
+
+    prod-winea:
+      - step:
+          <<: *execute
+          name: Winea
+          deployment: winea
+
+    prod-aztech:
+      - step:
+          <<: *execute
+          name: Aztech
+          deployment: aztech
+
+    prod-agscustom:
+      - step:
+          <<: *execute
+          name: AGSCustom
+          deployment: agscustom
+
+    prod-fashiondemo:
+      - step:
+          <<: *execute
+          name: FashionDemo
+          deployment: fashiondemo
+
+    prod-itlalupvc:
+      - step:
+          <<: *execute
+          name: ITLAluPvc
+          deployment: itlalupvc
+
+    prod-janagio:
+      - step:
+          <<: *execute
+          name: Janagio
+          deployment: janagio
+
+    prod-croonus:
+      - step:
+          <<: *execute
+          name: Croonus
+          deployment: croonus
+
+    prod-asholding:
+      - step:
+          <<: *execute
+          name: ASHolding
+          deployment: asholding
+
+    prod-alphamob:
+      - step:
+          <<: *execute
+          name: AlphaMob
+          deployment: alphamob
