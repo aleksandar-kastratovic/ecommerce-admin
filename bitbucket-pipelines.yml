@@ -5,10 +5,6 @@ definitions:
     docker:
       memory: 3072
   steps:
-    - step:
-          name: Install SSH Client
-          script:
-            - apt-get update && apt-get install -y openssh-client
     - step: &execute
         name: Staging
         deployment: staging
@@ -47,6 +43,10 @@ definitions:
 pipelines:
   branches:
     master:
+    - step:
+          name: Install SSH Client
+          script:
+            - apt-get update && apt-get install -y openssh-client
       - step: *execute
 
     demo:
