@@ -30,7 +30,7 @@ RUN echo && \
     echo && \
     echo "Environment:" && cat /app/.env.production && \
     \
-	npm ci --quiet > /dev/null && \
+	npm install && \
 	npm run build
 
 # Serve the build folder via nginx
