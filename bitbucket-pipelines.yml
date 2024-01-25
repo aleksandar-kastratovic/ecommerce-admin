@@ -1,14 +1,10 @@
-image: node:18.19.0-bullseye-slim
+image: node:18.19.0-alpine
 
 definitions:
   services:
     docker:
       memory: 3072
   steps:
-    - step:
-          name: Install SSH Client
-          script:
-            - apt-get update && apt-get install -y openssh-client
     - step: &execute
         name: Staging
         deployment: staging
