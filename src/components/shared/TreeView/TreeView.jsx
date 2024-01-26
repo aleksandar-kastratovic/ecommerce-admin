@@ -434,7 +434,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                             </Buttons>
                         </Box>
 
-                        <div style={{ height: 700 }}>
+                        <div style={{ height: 700, padding: 0 }}>
                             <SortableTree
                                 className={scss.sortableTree}
                                 searchMethod={customSearchMethod}
