@@ -109,13 +109,16 @@ const OrderStatus = ({ orderId, status }) => {
     const [opt, setOpt] = useState();
 
     useEffect(() => {
-        getAvailableStatuses();
-        getAllStatuses();
+        const timeout = setTimeout(() => {
+            getAvailableStatuses();
+            getAllStatuses();
+        }, 500);
         if (!done && isSuccess) {
             if (allStatuses && availableStatuses) {
                 setOpt(renderStatuses(allStatuses, availableStatuses));
             }
         }
+        return () => clearTimeout(timeout);
     }, [done, isSuccess, data?.status]);
 
     return (
