@@ -772,6 +772,7 @@ export const InputMultiSelect = ({
     optionsIsEmpty = () => {},
     styleMultiSelect,
     uiProp,
+    limitTags,
 }) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
@@ -825,6 +826,7 @@ export const InputMultiSelect = ({
                 name={name}
                 value={(opt ?? []).length === 0 ? "" : value}
                 onChange={onChange}
+
                 disabled={disabled}
                 multiple={true}
                 renderValue={(selected) => {
