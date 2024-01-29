@@ -12,10 +12,10 @@ import Loader from "./components/shared/Loading/Loading";
 import CroonusTheme from "./theme";
 import useAPI from "./api/api";
 import DeleteModal from "./components/shared/Dialogs/DeleteDialog";
+import { useIsIdle } from "./hooks/isIdle";
 
 const App = () => {
     const api = useAPI();
-
     const queryClient = new QueryClient();
     const authCtx = useContext(AuthContext);
     let navigate = useNavigate();
@@ -26,49 +26,15 @@ const App = () => {
     useEffect(() => {
         //seting global api:
         authCtx?.setGlobalApiFile(api);
-        if (authCtx.isRefreshingToken) {
-            const refreshToken = async () => {
-                if (authCtx?.api?.get) {
-                    await authCtx?.api
-                        .get(`admin/profile/refresh-token`)
-                        .then((response) => {
-                            const data = response?.payload;
-
-                            if (!data) {
-                                toast.warning("Greška!");
-                            }
-
-                            const expirationTime = new Date(new Date().getTime() + +data.expires_in * 1000);
-                            authCtx.login(data, expirationTime);
-                            authCtx?.api?.userDataUpdate(data);
-                        })
-                        .catch((error) => {
-                            console.warn(error);
-                        });
-                }
-            };
-
-            refreshToken();
-        }
-    }, [authCtx?.isRefreshingToken, authCtx?.api]);
-
-    useEffect(() => {
-        if (authCtx.isTokenExpired) {
-            // toast.warning("Istekao Vam je token!");
-            authCtx.changeTokenExpired(false);
-            // navigate(`/`);
-        }
-    }, [authCtx.isTokenExpired]);
+    }, [authCtx?.api]);
 
     useEffect(() => {
         if (authCtx.isLoggedIn) {
             // Update user data after login
             api.userDataUpdate(authCtx.user);
-
             const setUserScreens = (userScreens) => {
                 authCtx.getUserScreens(userScreens);
             };
-
             const userScreens = async () => {
                 if (authCtx?.api?.get) {
                     setIsLoading(true);
@@ -114,6 +80,54 @@ const App = () => {
         document.body.classList.remove("theme-dark");
     }
 
+    const isIdle = useIsIdle();
+    useEffect(() => {
+        //token_expires_at je unix timestamp
+        let token_expires_at = authCtx?.user?.expires_in * 1000 + authCtx?.user?.loggedAt;
+
+        let time_left = (token_expires_at - new Date().getTime()) / 1000;
+
+        //svaki sekund oduzimamo 1 od vremena
+        const interval = setInterval(() => {
+            time_left--;
+            //ako je time_left = 300 ( 5 minuta ), i ako je isIdle = true, onda prikazi modal
+            if (time_left <= 300 && isIdle) {
+                authCtx.setShowModal(true);
+            }
+            //ako je time_left = 300, i isIdle = false, osvezava se token
+            if (time_left <= 300 && !isIdle) {
+                authCtx?.setIsRefreshingToken(true);
+                authCtx.setShowModal(false);
+                if (authCtx?.api?.get) {
+                    authCtx?.api
+                        .get(`admin/profile/refresh-token`)
+                        .then((response) => {
+                            const data = response?.payload;
+
+                            if (!data) {
+                                toast.warning("Greška!");
+                            }
+
+                            const expirationTime = new Date(new Date().getTime() + +data.expires_in * 1000);
+                            authCtx.login(
+                                {
+                                    ...data,
+                                    loggedAt: new Date().getTime(),
+                                },
+                                expirationTime
+                            );
+                            authCtx?.api?.userDataUpdate(data);
+                        })
+                        .catch((error) => {
+                            console.warn(error);
+                        });
+                }
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    });
+
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={CroonusTheme}>
@@ -147,6 +161,7 @@ const App = () => {
 
                     {isLoading && <Loader size={50} />}
                 </div>
+
                 <DeleteModal
                     title="Obaveštenje"
                     openDeleteDialog={{ show: authCtx.modal }}
@@ -157,6 +172,30 @@ const App = () => {
                     handleConfirm={() => {
                         authCtx.setShowModal(false);
                         authCtx?.setIsRefreshingToken(true);
+                        if (authCtx?.api?.get) {
+                            authCtx?.api
+                                .get(`admin/profile/refresh-token`)
+                                .then((response) => {
+                                    const data = response?.payload;
+
+                                    if (!data) {
+                                        toast.warning("Greška!");
+                                    }
+
+                                    const expirationTime = new Date(new Date().getTime() + +data.expires_in * 1000);
+                                    authCtx.login(
+                                        {
+                                            ...data,
+                                            loggedAt: new Date().getTime(),
+                                        },
+                                        expirationTime
+                                    );
+                                    authCtx?.api?.userDataUpdate(data);
+                                })
+                                .catch((error) => {
+                                    console.warn(error);
+                                });
+                        }
                     }}
                     sx={{ backgroundColor: "#28a86e", "&:hover": { backgroundColor: "rgb(28, 117, 77)" } }}
                     handleCancel={async () => {

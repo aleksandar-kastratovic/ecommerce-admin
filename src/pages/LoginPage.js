@@ -32,7 +32,13 @@ const LoginPage = () => {
 
     const setLoginData = (userData) => {
         const expirationTime = new Date(new Date().getTime() + +userData.expires_in * 1000);
-        authCtx.login(userData, expirationTime);
+        authCtx.login(
+            {
+                ...userData,
+                loggedAt: new Date().getTime(),
+            },
+            expirationTime
+        );
         navigate(`/`);
     };
 
