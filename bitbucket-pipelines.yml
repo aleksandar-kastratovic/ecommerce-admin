@@ -332,3 +332,9 @@ pipelines:
           <<: *execute
           name: AlphaMob
           deployment: alphamob
+
+    prod-londessa:
+        - step:
+              <<: *execute
+              name: Londessa
+              deployment: londessa
