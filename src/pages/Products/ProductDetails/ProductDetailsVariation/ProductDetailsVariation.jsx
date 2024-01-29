@@ -352,6 +352,7 @@ const ProductDetailsVariation = ({ parentId }) => {
                                         <InputMultiSelect
                                             error={isErrorExists ? "Izaberite vrednosti" : null}
                                             value={checkedValues}
+                                            limitTags={10}
                                             label="Vrednosti"
                                             options={values}
                                             onChange={(res) => {

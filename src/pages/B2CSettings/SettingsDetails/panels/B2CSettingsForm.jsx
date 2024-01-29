@@ -5,46 +5,46 @@ import { toast } from "react-toastify";
 import AuthContext from "../../../../store/auth-contex";
 
 const B2CSettingsForm = ({ form_slug, config_module_id, module, submodule }) => {
-  const authCtx = useContext(AuthContext);
-  const { api } = authCtx;
+    const authCtx = useContext(AuthContext);
+    const { api } = authCtx;
 
-  const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
-  const [formFields, setFormFields] = useState([]);
-  const [formData, setFormData] = useState([]);
+    const [formFields, setFormFields] = useState([]);
+    const [formData, setFormData] = useState([]);
 
-  const dataHandler = () => {
-    setIsLoading(true);
-    api.get(`admin/form/data/${form_slug}`)
-      .then((response) => {
-        setFormFields(response?.payload);
+    const dataHandler = () => {
+        setIsLoading(true);
+        api.get(`admin/form/data/${form_slug}`)
+            .then((response) => {
+                setFormFields(response?.payload);
 
-        setIsLoading(false);
-      })
-      .catch((error) => console.warn(error));
-    api.get(`admin/configuration-b2c/main/${module}/${submodule}`)
-      .then((response) => setFormData(response?.payload))
-      .catch((error) => console.warn(error));
-  };
+                setIsLoading(false);
+            })
+            .catch((error) => console.warn(error));
+        api.get(`admin/configuration-b2c/main/${module}/${submodule}`)
+            .then((response) => setFormData(response?.payload))
+            .catch((error) => console.warn(error));
+    };
 
-  useEffect(() => {
-    dataHandler();
-  }, []);
+    useEffect(() => {
+        dataHandler();
+    }, []);
 
-  const initialData = {};
-  for (const item of formData?.items ?? []) {
-    initialData[item.slug] = item.type === "image" ? item?.base64 : item?.value;
-  }
+    const initialData = {};
+    for (const item of formData?.items ?? []) {
+        initialData[item.slug] = item.type === "image" ? item?.base64 : item?.value;
+    }
 
-  const submitHandler = (data) => {
-    api.post(`admin/configuration-b2c/main/${module}/${submodule}`, data)
-      .then((response) => {
-        setFormData(response?.payload)
-        toast.success("Uspešno");
-      })
-      .catch((error) => console.warn(error));
-  };
-  return !isLoading ? <Form formFields={formFields} onSubmit={submitHandler} initialData={initialData} /> : <Loading />;
+    const submitHandler = (data) => {
+        api.post(`admin/configuration-b2c/main/${module}/${submodule}`, data)
+            .then((response) => {
+                setFormData(response?.payload);
+                toast.success("Uspešno");
+            })
+            .catch((error) => console.warn(error));
+    };
+    return !isLoading ? <Form formFields={formFields} onSubmit={submitHandler} initialData={initialData} /> : <Loading />;
 };
 
 export default B2CSettingsForm;

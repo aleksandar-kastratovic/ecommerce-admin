@@ -241,6 +241,7 @@ const ProductVariation = ({ parentId, tblFields }) => {
 
     const validateData = (data, field) => {
         let ret = data;
+
         switch (field) {
             case "price_single_with_out_vat":
             case "price_vat_procent":
@@ -255,6 +256,9 @@ const ProductVariation = ({ parentId, tblFields }) => {
             case "price_with_vat":
                 ret.price_with_out_vat = Math.round((ret.price_with_vat / (ret.price_vat_procent / 100 + 1)) * 100) / 100;
                 ret.price_single_with_out_vat = Math.round((ret.price_with_out_vat / ret.price_quantity) * 100) / 100;
+                return ret;
+            case "quantity":
+                ret.total = +ret.quantity - (+ret.b2b_reserve ?? 0) - (+ret.b2c_reserve ?? 0);
                 return ret;
             default:
                 return ret;
@@ -298,7 +302,7 @@ const ProductVariation = ({ parentId, tblFields }) => {
             useModalGalleryInjection={true}
             submitButtonForm={showSubmitModalButton}
             closeButtonModalForm={!showSubmitModalButton}
-            labelSaveButton="Zatvori modal"
+            labelSaveButton="Sačuvaj"
         />
     );
 };
