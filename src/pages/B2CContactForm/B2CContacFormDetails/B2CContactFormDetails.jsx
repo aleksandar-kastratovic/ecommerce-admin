@@ -20,7 +20,7 @@ const B2CContactFormDetails = () => {
   const { data, isLoading } = useQuery(["ContactForm.details"], () => api.get(`${apiPath}/${id}`).then((response) => response?.payload));
 
   if (data) {
-    formFields = formFields.filter((item) => data[item.prop_name] != null);
+    formFields = formFields.filter((item) => data[item?.prop_name] != null);
   }
   return (
     <FormWrapper title={data?.customer_name != null ? `Poruka od: ${data?.customer_name}` : " "} back={() => navigate(-1)} ready={!isLoading}>
