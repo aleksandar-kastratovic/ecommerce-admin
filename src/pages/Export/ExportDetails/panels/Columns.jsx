@@ -1,71 +1,105 @@
-import React, { useContext, useEffect, useState } from 'react';
-import AuthContext from '../../../../store/auth-contex';
+import React, { useContext, useEffect, useState } from "react";
+import AuthContext from "../../../../store/auth-contex";
+import { InputCheckbox } from "../../../../components/shared/Form/FormInputs/FormInputs";
+import { useQuery } from "react-query";
+import Button from "../../../../components/shared/Button/Button";
+import classes from "../../../EOffer/AddProducts/styles.module.css";
+import CircularProgress from "@mui/material/CircularProgress";
+import { toast } from "react-toastify";
 
-const Columns = ({ data, file }) => {
-  const authCtx = useContext(AuthContext);
-  const { api } = authCtx;
-  const apiPathExport = "admin/import/connect";
+const Columns = ({ id }) => {
+    const authCtx = useContext(AuthContext);
+    const { api } = authCtx;
+    const apiPathExport = "admin/export/connect";
+    const apiPathExportPost = "admin/export/columns";
+    const [dataModalContent, setDataModalContent] = useState([]);
 
-  const [dataModalContent, setDataModalContent] = useState([]);
+    const [dataExport, setDataExport] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isChecked, setIsChecked] = useState([]);
+    // const handleData = async () => {
+    //     setIsLoading(true);
+    //     api.put(`${getImport}/${id}`)
+    //         .then((response) => {
+    //             setDataImport(response?.payload);
+    //             console.log(dataImport);
+    //             setIsLoading(false);
+    //         })
+    //         .catch((error) => {
+    //             console.warn(error);
+    //             setIsLoading(false);
+    //         });
+    // };
+    //
+    const submitHandler = (data) => {
+        setIsLoading(true);
+        api.post(apiPathExportPost, {
+            id_admin_export_set: id,
+            columns: data?.map((item) => item?.id),
+        })
+            .then((response) => {
+                console.log(response);
+                toast.success("Uspešno!");
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                toast.error("Došlo je do greške!");
+                setIsLoading(false);
+            });
+    };
 
-  // const [dataExport, setDataExport] = useState(null);
-  // const [isLoading, setIsLoading] = useState(false);
-  const [isChecked, setIsChecked] = useState([]);
+    const { data } = useQuery(
+        ["export", id],
+        async () => {
+            return await api.get(`admin/export/columns/${id}`).then((res) => setDataModalContent(res?.payload));
+        },
+        {
+            refetchOnWindowFocus: false,
+        }
+    );
 
-  // const handleData = async () => {
-  //   setIsLoading(true);
-  //   api.put(`${getImport}/${id}`)
-  //     .then((response) => {
-  //       setDataImport(response?.payload);
-  //       console.log(dataImport)
-  //       setIsLoading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.warn(error);
-  //       setIsLoading(false);
-  //     });
-  // };
+    const handleCheckboxChange = (event) => {
+        const { name, checked, id } = event.target;
+        if (checked) {
+            setIsChecked((prevChecked) => [
+                ...prevChecked,
+                {
+                    name: name,
+                    id: id,
+                },
+            ]);
+        } else {
+            setIsChecked((prevChecked) => prevChecked.filter((item) => item.id !== id));
+        }
+    };
 
-  // const submitHandler = (data) => {
-  //   setIsLoadingOnSubmit(true);
-  //   api.post(postImportExecute, data)
-  //     .then((response) => {
-  //       console.log(response)
-  //       toast.success("Uspešno ste uvezli dokument!");
-  //       setIsLoadingOnSubmit(false);
-  //     })
-  //     .catch((error) => {
-  //       toast.error("Došlo je do greške prilikom uvoza dokumenta!");
-  //       setIsLoadingOnSubmit(false);
-  //     });
-  // };
-
-  useEffect(() => {
-    setDataModalContent(data);
-  }, [data]);
-
-
-
-  const handleCheckboxChange = (event) => {
-    const { name, checked } = event.target;
-    if (checked) {
-      setIsChecked((prevChecked) => [...prevChecked, name]);
-    } else {
-      setIsChecked((prevChecked) => prevChecked.filter((item) => item !== name));
-    }
-  };
-
-
-  return (
-    <>
-      {/* <InputCheckbox onChange={handleCheckboxChange} key="{item.name}" name="{item.slug}" label="{item.name}" styleCheckbox={{ padding: "0 0.563rem 0 0.563rem" }} value="ruza"/> */}
-      {/* {Array.isArray(dataModalContent) &&
-        dataModalContent.map((item) => {
-          const isCheckedItem = isChecked.includes(item.filename);
-          return (<InputCheckbox onChange={handleCheckboxChange} key={item.filename} name={item.slug} label={item.filename} styleCheckbox={{ padding: "0 0.563rem 0 0.563rem" }} value={isCheckedItem} />);
-        })} */}
-    </>
-  );
-}
+    return (
+        <>
+            {dataModalContent?.map((item) => {
+                const isCheckedItem = Boolean(isChecked.find((el) => el.id === item.id));
+                return (
+                    <InputCheckbox
+                        onChange={handleCheckboxChange}
+                        key={item.id}
+                        id={item?.id}
+                        name={item.name}
+                        label={item.name}
+                        styleCheckbox={{ padding: "0 0.563rem 0 0.563rem" }}
+                        value={isCheckedItem}
+                    />
+                );
+            })}
+            <div className={`mt-5`}>
+                <Button
+                    disabled={isLoading}
+                    onClick={() => submitHandler(isChecked)}
+                    label={isLoading ? <CircularProgress size="1.5rem" /> : "Sačuvaj"}
+                    variant={`contained`}
+                    className={classes.button}
+                ></Button>
+            </div>
+        </>
+    );
+};
 
 export default Columns;

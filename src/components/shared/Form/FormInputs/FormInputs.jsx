@@ -195,13 +195,14 @@ export const InputCheckbox = ({
     styleCheckbox,
     styleCheckBoxWrapp,
     uiProp,
+    id,
 }) => {
     const inputClasses = generateBootstrapClasses(uiProp?.columns);
 
     return (
         <InputWrapper required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleCheckBoxWrapp} inputClasses={inputClasses}>
             <FormControlLabel
-                control={<Checkbox name={name} checked={value} onChange={onChange} disabled={disabled} sx={styleCheckbox} />}
+                control={<Checkbox name={name} id={id} checked={value} onChange={onChange} disabled={disabled} sx={styleCheckbox} />}
                 label={label}
                 sx={{ ".MuiTypography-root": { fontSize: "14px" }, ...labelStyle }}
             />
@@ -826,7 +827,6 @@ export const InputMultiSelect = ({
                 name={name}
                 value={(opt ?? []).length === 0 ? "" : value}
                 onChange={onChange}
-
                 disabled={disabled}
                 multiple={true}
                 renderValue={(selected) => {
