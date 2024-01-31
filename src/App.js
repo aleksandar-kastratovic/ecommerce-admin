@@ -99,7 +99,6 @@ const App = () => {
         //svaki sekund oduzimamo 1 od vremena
         const interval = setInterval(() => {
             time_left--;
-            console.log(time_left)
             //ako je time_left = 300 ( 5 minuta ), i ako je isIdle = true, onda prikazi modal
             if (time_left <= 300 && isIdle) {
                 authCtx.setShowModal(true);
