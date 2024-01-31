@@ -15,7 +15,7 @@ export const useIsIdle = () => {
     const setTimeoutFunc = () => {
         timeout = window.setTimeout(() => {
             setIsIdle(true);
-        }, 5 * 60 * 1000);
+        }, 10000);
     };
 
     useEffect(() => {
@@ -31,6 +31,5 @@ export const useIsIdle = () => {
             }
         };
     }, []);
-    console.log("isIdle", isIdle);
     return isIdle;
 };

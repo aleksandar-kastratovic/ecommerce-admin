@@ -55,10 +55,11 @@ const ExportDetails = () => {
         let oldId = data.id;
         api.post(apiPath, data)
             .then((response) => {
+                navigate(`/export/${response?.payload?.id}?tab=columns`, { replace: true });
+
                 setData(response?.payload);
                 if (oldId === null) {
                     let tId = response?.payload?.id;
-                    navigate(`/export/${tId}`, { replace: true });
                 }
                 toast.success("Uspešno");
                 setIsLoadingOnSubmit(false);
@@ -100,14 +101,14 @@ const ExportDetails = () => {
             id: "columns",
             name: "Kolone",
             icon: IconList.viewColumn,
-            enabled: data?.id,
+            enabled: true,
             component: <Columns id={exId} />,
         },
         {
             id: "content",
             name: "Sadržaj",
             icon: IconList.contentPasteSearch,
-            enabled: data?.id,
+            enabled: true,
             component: <Content file={file} id={data?.id} />,
         },
     ];
@@ -118,7 +119,7 @@ const ExportDetails = () => {
         navigate(`/export/${id}?${queryString}`, { replace: true });
     };
 
-    return <DetailsPage title={data?.id == null ? "Unos nove stranice" : file?.name} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
+    return <DetailsPage title={`Izvoz`} fields={fields} ready={!isLoading} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default ExportDetails;

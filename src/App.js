@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { ThemeProvider } from "@mui/material";
 import ApplicationRouter from "./routes/ApplicationRouter";
 import AuthContext from "./store/auth-contex";
@@ -56,12 +56,21 @@ const App = () => {
             };
 
             userScreens();
-        } else {
-            if (authCtx.modal) {
-                authCtx.setShowModal(false);
-            }
         }
     }, [authCtx.isLoggedIn, authCtx?.api]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            authCtx?.api?.get(`admin/profile/user-permissions`).then((response) => {
+                const setUserScreens = (userScreens) => {
+                    authCtx.getUserScreens(userScreens);
+                };
+                setUserScreens(response?.payload);
+            });
+        }, 5 * 60 * 1000);
+
+        return () => clearInterval(interval);
+    });
 
     let routerClass;
     if (!authCtx.isLoggedIn) {

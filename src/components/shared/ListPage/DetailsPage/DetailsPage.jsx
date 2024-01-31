@@ -52,6 +52,11 @@ const DetailsPage = ({ title, fields, ready, additionalButtons = [], selectedPan
         }
     };
 
+    //re-render na promenu selectedPanel
+    if (selectedPanel !== selected) {
+        setSelected(selectedPanel);
+    }
+
     return (
         <PageWrapper title={title} back={true} actions={additionalButtons} ready={ready}>
             <Box className={styles.details}>

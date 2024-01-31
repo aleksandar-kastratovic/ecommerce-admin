@@ -3,18 +3,36 @@ import tblFields from "./tblFields.json";
 import { useQuery } from "react-query";
 import useAPI from "../../api/api";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Export = () => {
     const api = useAPI();
-    const [fileId, setFileId] = useState(null); //id fajla koji se skida [downloadFile]
+    const [fileId, setFileId] = useState({
+        id_file: null,
+        id_row: null,
+    }); //id fajla koji se skida [downloadFile]
     const [file, setFile] = useState(null);
     const downloadFile = useQuery(
-        ["downloadFile", fileId],
+        ["downloadFile", fileId.id_row, fileId.id_file],
         async () => {
-            return await api.get(`admin/export/list/${fileId}`).then((res) => {
-                setFile(res?.payload);
-                setFileId(null);
-            });
+            return await api
+                .get(`admin/export/list/${fileId?.id_file}`)
+                .then((res) => {
+                    setFile(res?.payload);
+                    setFileId({
+                        id_file: null,
+                        id_row: null,
+                    });
+                })
+                .catch((error) => {
+                    setFile(null);
+                    setFileId({
+                        id_file: null,
+                        id_row: null,
+                    });
+                    toast.error(error.response?.data?.message);
+                });
         },
         { refetchOnWindowFocus: false, enabled: false }
     );
@@ -37,18 +55,22 @@ const Export = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    setFileId(rowData?.id_file);
+                    setFileId({
+                        id_file: rowData?.id_file,
+                        id_row: rowData?.id,
+                    });
                 },
             },
         },
     };
-
+    console.log(fileId);
     useEffect(() => {
-        if (fileId) {
+        if (fileId?.id_row) {
             downloadFile.refetch();
         }
-    }, [fileId]);
+    }, [fileId?.id_row]);
 
+    const navigate = useNavigate();
     useEffect(() => {
         if (file) {
             const a = document.createElement("a");
@@ -61,7 +83,29 @@ const Export = () => {
         }
     }, [file]);
 
-    return <ListPage listPageId="Export" apiUrl="admin/export/list" title="Izvoz podataka iz fajla" columnFields={tblFields} customActions={customActions} />;
+    const buttons = [
+        {
+            type: "contained",
+            label: "Izvezi",
+            title: "Izvezi",
+
+            action: () => {
+                navigate("/export/new");
+            },
+        },
+    ];
+
+    return (
+        <ListPage
+            showNewButton={false}
+            additionalButtons={buttons}
+            listPageId="Export"
+            apiUrl="admin/export/list"
+            title="Izvoz podataka iz fajla"
+            columnFields={tblFields}
+            customActions={customActions}
+        />
+    );
 };
 
 export default Export;
