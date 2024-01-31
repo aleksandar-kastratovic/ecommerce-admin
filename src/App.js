@@ -1,6 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
+import { QueryClient, QueryClientProvider, useQuery } from "react-query";
 import { ThemeProvider } from "@mui/material";
 import ApplicationRouter from "./routes/ApplicationRouter";
 import AuthContext from "./store/auth-contex";
@@ -56,12 +56,21 @@ const App = () => {
             };
 
             userScreens();
-        } else {
-            if (authCtx.modal) {
-                authCtx.setShowModal(false);
-            }
         }
     }, [authCtx.isLoggedIn, authCtx?.api]);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            authCtx?.api?.get(`admin/profile/user-permissions`).then((response) => {
+                const setUserScreens = (userScreens) => {
+                    authCtx.getUserScreens(userScreens);
+                };
+                setUserScreens(response?.payload);
+            });
+        }, 5 * 60 * 1000);
+
+        return () => clearInterval(interval);
+    });
 
     let routerClass;
     if (!authCtx.isLoggedIn) {
@@ -90,6 +99,7 @@ const App = () => {
         //svaki sekund oduzimamo 1 od vremena
         const interval = setInterval(() => {
             time_left--;
+            console.log(time_left)
             //ako je time_left = 300 ( 5 minuta ), i ako je isIdle = true, onda prikazi modal
             if (time_left <= 300 && isIdle) {
                 authCtx.setShowModal(true);

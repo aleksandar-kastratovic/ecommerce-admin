@@ -49,6 +49,6 @@
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "preview"
+        "input_type": ""
     }
 ]

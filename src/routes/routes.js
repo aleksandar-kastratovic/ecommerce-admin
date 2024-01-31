@@ -146,7 +146,7 @@ const screens = {
         ],
     ],
     //PRODUCT_SPEC: ["/product-specs/groups", "Specifikacija", IconList.inventory, PRODUCT, ProductSpecsGroups, [[":groupId", ProductGroupDetails]]],
-    IMPORT: ["/import", "Uvoz podataka", IconList.upload, PRODUCT, Import, [[":upId", ImportDetails]]],
+    IMPORT: ["/import", "Uvoz podataka", IconList.download, PRODUCT, Import, [[":upId", ImportDetails]]],
     EXPORT: ["/export", "Izvoz podataka", IconList.upload, PRODUCT, Export, [[":exId", ExportDetails]]],
     EPONUDA: ["/eponuda", "E-ponuda", IconList.inventory, PRODUCT, EOffer, [["details", EOfferDetails]]],
     COMPN: ["/b2b-companies", "Kompanije", IconList.locationCity, B2B, Companies, [[":comId", CompaniesDetails]]],

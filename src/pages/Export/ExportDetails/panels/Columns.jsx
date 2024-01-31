@@ -6,6 +6,7 @@ import Button from "../../../../components/shared/Button/Button";
 import classes from "../../../EOffer/AddProducts/styles.module.css";
 import CircularProgress from "@mui/material/CircularProgress";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const Columns = ({ id }) => {
     const authCtx = useContext(AuthContext);
@@ -31,6 +32,7 @@ const Columns = ({ id }) => {
     //         });
     // };
     //
+    const navigate = useNavigate();
     const submitHandler = (data) => {
         setIsLoading(true);
         api.post(apiPathExportPost, {
@@ -41,6 +43,7 @@ const Columns = ({ id }) => {
                 console.log(response);
                 toast.success("Uspešno!");
                 setIsLoading(false);
+                navigate(`/export/${id}?tab=content`, { replace: true });
             })
             .catch((error) => {
                 toast.error("Došlo je do greške!");
@@ -73,8 +76,26 @@ const Columns = ({ id }) => {
         }
     };
 
+    const selectAll = () => {
+        if (isChecked?.length === dataModalContent?.length) {
+            setIsChecked([]);
+        } else {
+            setIsChecked(dataModalContent?.map((item) => ({ name: item.name, id: item.id })));
+        }
+    };
+
     return (
         <>
+            <div style={{ display: "flex", justifyContent: "flex-end", borderBottom: "1px solid", borderBottomColor: "lightgray" }}>
+                <InputCheckbox
+                    value={isChecked?.length === dataModalContent?.length}
+                    onChange={selectAll}
+                    id="selectAll"
+                    name="selectAll"
+                    label="Selektuj sve"
+                    styleCheckbox={{ padding: "0 0.563rem 0 0.563rem" }}
+                />
+            </div>
             {dataModalContent?.map((item) => {
                 const isCheckedItem = Boolean(isChecked.find((el) => el.id === item.id));
                 return (
@@ -89,7 +110,14 @@ const Columns = ({ id }) => {
                     />
                 );
             })}
-            <div className={`mt-5`}>
+            <div
+                style={{
+                    marginTop: "2rem",
+                    marginLeft: "auto",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                }}
+            >
                 <Button
                     disabled={isLoading}
                     onClick={() => submitHandler(isChecked)}
