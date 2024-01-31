@@ -72,8 +72,8 @@ import Error404 from "../pages/Error/Error404";
 import B2BContactFormDetails from "../pages/B2BContactForm/DetailsContactForm/B2BContactFormDetails";
 import B2CWorkingUnit from "../pages/B2CWorkingUnit/B2CWorkingUnit";
 import B2CCareer from "../pages/B2CCareer/B2CCareer";
-// import Export from "../pages/Export/Export";
-// import ExportDetails from "../pages/Export/ExportDetails/ExportDetails";
+import Export from "../pages/Export/Export";
+import ExportDetails from "../pages/Export/ExportDetails/ExportDetails";
 import B2BStaticPages from "../pages/B2BStaticPages/B2BStaticPages";
 import B2BStaticPagesDetails from "../pages/B2BStaticPages/B2BStaticPagesDetails/B2BStaticPagesDetails";
 import B2BLandingPages from "../pages/B2BLandingPages/B2BLandingPages";
@@ -84,7 +84,6 @@ import PromotionsDeliveryCampaignsDetails from "../pages/Promotions/PromotionsDe
 import PromotionsRecommendedDetails from "../pages/Promotions/PromotionsRecommended/PromotionsRecommendedDetails/PromotionsRecommendedDetails";
 import PromotionsCrossSellsDetails from "../pages/Promotions/PromotionsCrossSells/PromotionsCrossSellsDetails/PromotionsCrossSellsDetails";
 import PromotionsUpSellsDetails from "../pages/Promotions/PromotionsUpSells/PromotionsUpSellsDetails/PromotionsUpSellsDetails";
-
 import B2BReclamations from "../pages/B2BReclamations/B2BReclamations";
 import B2BReclamationsDetails from "../pages/B2BReclamations/B2BReclamationsDetails/B2BReclamationsDetails";
 import EOfferDetails from "../pages/EOffer/EOfferDetails/EOfferDetails";
@@ -148,7 +147,7 @@ const screens = {
     ],
     //PRODUCT_SPEC: ["/product-specs/groups", "Specifikacija", IconList.inventory, PRODUCT, ProductSpecsGroups, [[":groupId", ProductGroupDetails]]],
     IMPORT: ["/import", "Uvoz podataka", IconList.upload, PRODUCT, Import, [[":upId", ImportDetails]]],
-    // EXPORT: ["/export", "Izvoz podataka", IconList.upload, PRODUCT, Export, [[":exId", ExportDetails]]],
+    EXPORT: ["/export", "Izvoz podataka", IconList.upload, PRODUCT, Export, [[":exId", ExportDetails]]],
     EPONUDA: ["/eponuda", "E-ponuda", IconList.inventory, PRODUCT, EOffer, [["details", EOfferDetails]]],
     COMPN: ["/b2b-companies", "Kompanije", IconList.locationCity, B2B, Companies, [[":comId", CompaniesDetails]]],
     REBATE_TIERS: ["/b2b-rebate-tiers", "Rabatne skale", IconList.barChart, B2B, B2BRebateTiersListPage],
