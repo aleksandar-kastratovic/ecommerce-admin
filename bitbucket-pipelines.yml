@@ -338,3 +338,9 @@ pipelines:
               <<: *execute
               name: Londessa
               deployment: londessa
+
+    prod-bojanvukadinov:
+        - step:
+              <<: *execute
+              name: BojanVukadinov
+              deployment: bojanvukadinov
