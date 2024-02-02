@@ -38,7 +38,7 @@ const B2CSettingsDetails = () => {
         };
     });
 
-    return <DetailsPage title={B2BId} fields={fields.length > 0 ? fields : [{}]} ready={!isLoading} />;
+    return <DetailsPage adminSettings={true} title={B2BId} fields={fields.length > 0 ? fields : [{}]} ready={!isLoading} />;
 };
 
 export default B2CSettingsDetails;

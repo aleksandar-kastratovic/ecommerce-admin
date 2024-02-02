@@ -18,7 +18,7 @@ import styles from "./DetailsPage.module.scss";
  * @return {JSX.Element}
  * @constructor
  */
-const DetailsPage = ({ title, fields, ready, additionalButtons = [], selectedPanel, panelHandleSelect = () => {} }) => {
+const DetailsPage = ({ adminSettings = false, title, fields, ready, additionalButtons = [], selectedPanel, panelHandleSelect = () => {} }) => {
     // Make sure all fields have and id and the enabled flag
     fields = (fields ?? []).map((field, index) => ({ ...field, id: field?.id ?? index, enabled: field?.enabled !== undefined ? !!field?.enabled : true }));
 
@@ -53,7 +53,7 @@ const DetailsPage = ({ title, fields, ready, additionalButtons = [], selectedPan
     };
 
     //re-render na promenu selectedPanel
-    if (selectedPanel !== selected) {
+    if (!adminSettings && selectedPanel !== selected) {
         setSelected(selectedPanel);
     }
 
