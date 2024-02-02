@@ -28,7 +28,6 @@ const B2CSettingsDetails = () => {
                 setIsLoading(false);
             });
     }, []);
-
     const fields = (data?.items ?? []).map((panel) => {
         return {
             name: panel?.name,
@@ -38,7 +37,7 @@ const B2CSettingsDetails = () => {
         };
     });
 
-    return <DetailsPage title={B2CId} fields={fields.length > 0 ? fields : [{}]} ready={!isLoading} />;
+    return <DetailsPage adminSettings={true} title={B2CId} fields={fields.length > 0 ? fields : [{}]} ready={!isLoading} />;
 };
 
 export default B2CSettingsDetails;
