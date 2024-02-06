@@ -1,122 +1,117 @@
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import calc from "../../forms/calc.json"
+import calc from "../../forms/calc.json";
 import Form from "../../../../../../components/shared/Form/Form";
 import { deepClone } from "@mui/x-data-grid/utils/utils";
 import { toast } from "react-toastify";
 import AuthContext from "../../../../../../store/auth-contex";
 
 const CalculateForm = ({ campaignId }) => {
+    const authCtx = useContext(AuthContext);
+    const { api } = authCtx;
 
-  const authCtx = useContext(AuthContext);
-  const { api } = authCtx;
+    const { nid } = useParams();
+    const apiPath = "admin/campaigns/cart-summary/calculations";
+    const [formFields, setFormFields] = useState(calc);
 
-  const { nid } = useParams();
-  const apiPath = "admin/campaigns/cart-summary/calculations";
-  const [formFields, setFormFields] = useState(calc);
+    const init = {
+        id_campaign: campaignId,
+        currency: null,
+        discount_type: null,
+        discount_value: null,
+    };
 
-  const init = {
-    id_campaign: campaignId,
-    currency: null,
-    discount_type: null,
-    discount_value: null
-  };
+    const [data, setData] = useState(init);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
-  const [data, setData] = useState(init);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+    const saveData = async (data) => {
+        setIsLoadingOnSubmit(true);
+        api.post(apiPath, data)
+            .then((response) => {
+                setData(response?.payload);
+                toast.success("Uspešno");
+                setIsLoadingOnSubmit(false);
+            })
+            .catch((error) => {
+                console.warn(error);
+                toast.warning("Greška");
+                setIsLoadingOnSubmit(false);
+            });
+    };
 
-  const saveData = async (data) => {
-    setIsLoadingOnSubmit(true);
-    api.post(apiPath, data)
-      .then((response) => {
-        setData(response?.payload);
-        toast.success("Uspešno");
-        setIsLoadingOnSubmit(false);
-      })
-      .catch((error) => {
-        console.warn(error);
-        toast.warning("Greška");
-        setIsLoadingOnSubmit(false);
-      });
-  };
+    const chageHandler = (data, fieldName) => {
+        api.get(`admin/campaigns/cart-summary/calculations/ddl/currency?discount_type=${data.discount_type}`)
+            .then((response) => {
+                if (fieldName != "discount_type") {
+                    return;
+                }
 
-  const chageHandler = (data, fieldName) => {
-    api.get(`admin/campaigns/cart-summary/calculations/ddl/currency?discount_type=${data.discount_type}`)
-      .then((response) => {
+                let discountTypeValue = data.discount_type;
+                if (discountTypeValue == undefined) {
+                    console.warn("Vrednost data.discount nije pronadjena!");
+                    return;
+                }
 
-        if (fieldName != "discount_type") {
-          return;
-        }
+                let newFields = deepClone(formFields);
 
-        let discountTypeValue = data.discount_type;
-        if (discountTypeValue == undefined) {
-          console.warn("Vrednost data.discount nije pronadjena!");
-          return;
-        }
+                let currencyField = newFields.find((item) => item.prop_name === "currency");
+                if (currencyField == undefined) {
+                    console.warn("Polje currency nije pronadjeno!");
+                    return;
+                }
 
-        let newFields = deepClone(formFields);
+                const queryString = `discount_type=${discountTypeValue}`;
 
-        let currencyField = newFields.find((item) => item.prop_name === "currency")
-        if (currencyField == undefined) {
-          console.warn("Polje currency nije pronadjeno!");
-          return;
-        }
+                currencyField.queryString = queryString;
 
-        const queryString = `discount_type=${discountTypeValue}`;
+                let newData = { ...data };
+                newData.currency = "0";
+                if (response.payload.length === 2) {
+                    newData.currency = response.payload[1].id;
+                }
+                setData(newData);
+                setFormFields(newFields);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
 
-        currencyField.queryString = queryString
+    useEffect(() => {
+        setIsLoading(true);
+        api.get(`${apiPath}/${nid}`)
+            .then((response) => {
+                setData(response?.payload);
 
-        let newData = { ...data };
-        newData.currency = "0";
-        if (response.payload.length === 2) {
-          newData.currency = response.payload[1].id;
-        }
-        setData(newData);
-        setFormFields(newFields);
+                if (response?.payload?.id) {
+                    if (response?.payload?.discount_type == undefined) {
+                        console.warn("Vrednost data.discount nije pronadjena!");
+                        return;
+                    }
 
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  }
+                    let newFields = deepClone(formFields);
+                    let currencyField = newFields.find((item) => item.prop_name === "currency");
+                    if (currencyField == undefined) {
+                        console.warn("Polje currency nije pronadjeno!");
+                        return;
+                    }
 
-  useEffect(() => {
-    setIsLoading(true);
-    api.get(`${apiPath}/${nid}`)
-      .then((response) => {
-        setData(response?.payload);
+                    const queryString = `discount_type=${response?.payload?.discount_type}`;
+                    currencyField.queryString = queryString;
 
-        if (response?.payload?.id) {
-          if (response?.payload?.discount_type == undefined) {
-            console.warn("Vrednost data.discount nije pronadjena!");
-            return;
-          }
+                    setFormFields(newFields);
+                }
 
-          let newFields = deepClone(formFields);
-          let currencyField = newFields.find((item) => item.prop_name === "currency")
-          if (currencyField == undefined) {
-            console.warn("Polje currency nije pronadjeno!");
-            return;
-          }
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                console.warn(error);
+                setIsLoading(false);
+            });
+    }, []);
 
-          const queryString = `discount_type=${response?.payload?.discount_type}`;
-          currencyField.queryString = queryString;
-
-          setFormFields(newFields);
-        }
-
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.warn(error);
-        setIsLoading(false);
-      });
-  }, []);
-
-
-
-  return <Form formFields={formFields} initialData={data} onSubmit={saveData} onChange={chageHandler} isLoading={isLoadingOnSubmit} />;
-}
+    return <Form formFields={formFields} initialData={data} onSubmit={saveData} onChange={chageHandler} isLoading={isLoadingOnSubmit} />;
+};
 
 export default CalculateForm;

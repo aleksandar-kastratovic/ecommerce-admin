@@ -179,8 +179,6 @@ const App = () => {
                     deafultDeleteIcon={false}
                     description={`Vaša sesija ističe za 5 minuta. Da li želite da nastavite rad?`}
                     handleConfirm={() => {
-                        authCtx.setShowModal(false);
-                        authCtx?.setIsRefreshingToken(true);
                         if (authCtx?.api?.get) {
                             authCtx?.api
                                 .get(`admin/profile/refresh-token`)
@@ -200,6 +198,8 @@ const App = () => {
                                         expirationTime
                                     );
                                     authCtx?.api?.userDataUpdate(data);
+                                    authCtx.setShowModal(false);
+                                    authCtx?.setIsRefreshingToken(true);
                                 })
                                 .catch((error) => {
                                     console.warn(error);

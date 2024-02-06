@@ -63,7 +63,6 @@ const Export = () => {
             },
         },
     };
-    console.log(fileId);
     useEffect(() => {
         if (fileId?.id_row) {
             downloadFile.refetch();
