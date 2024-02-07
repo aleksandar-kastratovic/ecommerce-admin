@@ -7,7 +7,7 @@
     "editable": true,
     "disabled": false,
     "required": false,
-    "description": "",
+    "description": "Maksimalan broj karaktera je 255 ( uključujući i razmake )",
     "ui_prop": {
       "columns": {
         "xs": 12,

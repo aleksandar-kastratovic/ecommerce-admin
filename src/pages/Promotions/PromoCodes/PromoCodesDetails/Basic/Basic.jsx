@@ -20,7 +20,7 @@ const Basic = () => {
                 .post(`admin/campaigns/promo-codes/basic-data`, data)
                 .then((res) => {
                     toast.success(`Uspešno!`);
-                    navigate(`/promotions/promo-codes/${res?.payload?.id}`);
+                    navigate(`/promotions/promo-codes/${res?.payload?.id}?system=${res?.payload?.system}`);
                 })
                 .catch((error) => {
                     toast.error(error.response?.data?.message || error.response?.data?.payload?.message || "Greška!");
@@ -34,6 +34,9 @@ const Basic = () => {
         async () => {
             return await api.get(`admin/campaigns/product-catalog/basic-data/${pid}`).then((res) => {
                 setData(res?.payload);
+                if (res?.payload?.system) {
+                    navigate(`/promotions/promo-codes/${pid}?system=${res?.payload?.system}`);
+                }
             });
         },
         {}

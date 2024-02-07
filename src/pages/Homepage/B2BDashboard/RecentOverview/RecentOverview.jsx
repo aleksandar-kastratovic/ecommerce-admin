@@ -45,7 +45,7 @@ const RecentOverview = ({ recentOverviewB2B, isLoadingRecentOverviewB2B }) => {
                       {recentOverviewB2B?.items.map((row) => (
                         <TableRow key={row.id} sx={{ "&:nth-of-type(odd)": { backgroundColor: "var(--main-bg-color)" }, border: 0 }}>
                           <TableCell>
-                            <Link to={`/b2c-orders/${row.id}`} style={{ display: "flex", flexDirection: "column", width: "fit-content", textAlign: "center" }}>
+                            <Link to={`/b2c-orders/${row.id}`} style={{ display: "flex", flexDirection: "column", width: "fit-content", textAlign: "left" }}>
                               <span>{row.slug}</span>
                               <span style={{ color: "var(--text-color)", fontWeight: "600" }}>{row.bill_to_name}</span>
                             </Link>
