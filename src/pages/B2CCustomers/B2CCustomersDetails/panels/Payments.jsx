@@ -46,7 +46,7 @@ const Payments = ({ data, customerId }) => {
         fnc: (rowData) => {
           api.delete(`admin/customers-b2c/billing-address/${rowData.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
-            .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+            .catch((err) => toast.warning(err?.response?.data?.message ?? err?.response?.data?.payload?.message ?? "Došlo je do greške prilikom brisanja"));
           return {
             show: false,
             id: rowData.id,

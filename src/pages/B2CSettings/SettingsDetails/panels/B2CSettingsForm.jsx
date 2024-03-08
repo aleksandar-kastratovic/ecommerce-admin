@@ -44,6 +44,9 @@ const B2CSettingsForm = ({ form_slug, config_module_id, module, submodule }) => 
             })
             .catch((error) => console.warn(error));
     };
+
+    console.log(formData)
+
     return !isLoading ? <Form formFields={formFields} onSubmit={submitHandler} initialData={initialData} /> : <Loading />;
 };
 

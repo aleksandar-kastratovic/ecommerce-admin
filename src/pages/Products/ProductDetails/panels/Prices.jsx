@@ -116,7 +116,7 @@ const Prices = ({ productId }) => {
 
           api.delete(`admin/product-items/prices/${rowData.id}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
-            .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+            .catch((err) => toast.warning(err?.response?.data?.message ?? err?.response?.data?.payload?.message ?? "Došlo je do greške prilikom brisanja"));
 
           return {
             show: false,

@@ -7,7 +7,7 @@ export const config = {
 	timeout  : 20000,
 	login    : {
 		user : "info@croonus.com",
-		pass : "CroonusTech22!",
+		pass : "CroonusTechMasterAdmin923!",
 		sleep: 1000
 	},
 	element  : {

@@ -6,6 +6,7 @@ import Form from "../../../components/shared/Form/Form";
 import basic_data from "../tblFields.json";
 import InputFields from "./panels/InputFields";
 import AuthContext from "../../../store/auth-contex";
+import {toast} from "react-toastify";
 
 const AdminFormDetails = () => {
 
@@ -58,7 +59,7 @@ const AdminFormDetails = () => {
       })
       .catch((error) => {
         console.warn(error);
-        toast.warn("Greška");
+          toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
         // setIsLoadingOnSubmit(false);
       });
   };

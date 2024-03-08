@@ -110,16 +110,8 @@
         "ui_prop": "xyz",
         "sortable": true,
         "input_type": "select",
-        "options": [
-            {
-                "id": "on",
-                "name": "On"
-            },
-            {
-                "id": "off",
-                "name": "Off"
-            }
-        ]
+        "usePropName": true,
+        "fillFromApi": "admin/manufacturers/ddl"
     },
     {
         "field_name": "",

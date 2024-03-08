@@ -94,6 +94,8 @@ const ListPage = ({
     dataFromServer,
     apiPathCrop,
     setPropName,
+    doesRefetch = false,
+    setDoesRefetch = () => {},
 }) => {
     // TODO Sorting is disabled as it does not work with pagination
     columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
@@ -128,7 +130,11 @@ const ListPage = ({
     const [selectedActionsButton, setSelectedActionsButton] = useState({});
 
     // Load the data
-    const { data: response, isLoading, isError } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, openModal.show], () => api.list(apiUrl, { page, search, ...filters }));
+    const {
+        data: response,
+        isLoading,
+        isError,
+    } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, openModal.show, doesRefetch], () => api.list(apiUrl, { page, search, ...filters }));
     // Modify the data
     if (response?.payload && modifyItems) {
         response.payload.items = modifyItems(response.payload.items);
@@ -237,7 +243,7 @@ const ListPage = ({
         } else {
             api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
                 .then(() => toast.success("Zapis je uspešno obrisan"))
-                .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+                .catch((err) => toast.warning(err?.response?.data?.message ?? err?.response?.data?.payload?.message ?? "Došlo je do greške prilikom brisanja"));
 
             setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
         }
@@ -438,6 +444,8 @@ const ListPage = ({
                 }
                 apiPathCrop={apiPathCrop}
                 setPropName={setPropName}
+                setDoesRefetch={setDoesRefetch}
+                doesRefetch={doesRefetch}
             />
             <DeleteDialog
                 children={deleteModalChildren}

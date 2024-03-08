@@ -37,7 +37,7 @@ const ChangePasswordDialog = ({ openDialog, setOpenDialog, apiUrl }) => {
           setOpenDialog({ show: false });
         })
         .catch((error) => {
-          console.warn(error);
+            toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
         });
     } else {
       toast.warn("Lozinke se ne poklapaju!");

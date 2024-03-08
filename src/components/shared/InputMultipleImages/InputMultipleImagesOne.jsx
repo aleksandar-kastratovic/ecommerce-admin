@@ -154,7 +154,7 @@ export const InputMultipleImagesOne = ({
                                 setImageList([...imageList, ...newImagesArray]);
                             })
                             .catch((err) => {
-                                console.log("Error uplad image:", err);
+                                toast.warning(err.response.data.message ?? err?.response?.data?.payload?.message ?? "Greška");
                             });
                     }
                 } else {

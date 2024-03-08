@@ -31,7 +31,7 @@ const GroupAttributes = ({ groupId }) => {
 
           api.delete(`admin/product-item-specifications/group-attribute/confirm/${rowData.id}?delete_product_attributes=${deleteModalData.delete_product_attributes}`)
             .then(() => toast.success("Zapis je uspešno obrisan"))
-            .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+            .catch((err) => toast.warning(err?.response?.data?.message ?? err?.response?.data?.payload?.message ?? "Došlo je do greške prilikom brisanja"));
 
           return {
             show: false,
