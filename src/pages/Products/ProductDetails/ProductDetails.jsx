@@ -73,7 +73,7 @@ const ProductDetails = () => {
             })
             .catch((error) => {
                 console.warn(error);
-                toast.warning("Greška");
+                toast.warning(error?.response?.data?.message ?? error?.response?.data?.payload?.message ?? "Greška");
                 setIsLoadingOnSubmit(false);
             });
     };

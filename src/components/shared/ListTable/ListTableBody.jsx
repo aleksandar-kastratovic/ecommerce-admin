@@ -105,9 +105,11 @@ const ListTableBody = ({
         default:
             content = (items ?? []).map((row) => {
                 let actionButtonsObject = actionButtons();
+
+                let enable_delete = true;
+
                 return (
                     <TableRow hover key={row.id}>
-                        {/* TODO typeannotation sluzi samo u typescript, da li je ovde podrebna anotacija i cemu sluzi? */}
                         {fields.map((column) => (
                             <TableCell
                                 key={`${row.id}-${column.prop_name}`}

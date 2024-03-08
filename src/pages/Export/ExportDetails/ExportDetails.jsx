@@ -66,7 +66,7 @@ const ExportDetails = () => {
             })
             .catch((error) => {
                 console.warn(error);
-                toast.warn(error.response.data.message);
+                toast.warn(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
                 setIsLoadingOnSubmit(false);
             });
     };

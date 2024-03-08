@@ -87,6 +87,9 @@ import PromotionsUpSellsDetails from "../pages/Promotions/PromotionsUpSells/Prom
 import B2BReclamations from "../pages/B2BReclamations/B2BReclamations";
 import B2BReclamationsDetails from "../pages/B2BReclamations/B2BReclamationsDetails/B2BReclamationsDetails";
 import EOfferDetails from "../pages/EOffer/EOfferDetails/EOfferDetails";
+import PromoCodes from "../pages/Promotions/PromoCodes/PromoCodes";
+import PromoCodesDetails from "../pages/Promotions/PromoCodes/PromoCodesDetails/PromoCodesDetails";
+import Codes from "../pages/Promotions/PromoCodes/PromoCodesDetails/Codes/Codes";
 // import B2CReclamations from "../pages/B2CReclamations/B2CReclamations";
 // import B2CReclamationsDetails from "../pages/B2CReclamations/B2CReclamationsDetails/B2CReclamationsDetails";
 
@@ -116,6 +119,8 @@ const screens = {
             ["promotions-recommended/:rid", PromotionsRecommendedDetails],
             ["promotions-cross-sells/:rid", PromotionsCrossSellsDetails],
             ["promotions-up-sells/:rid", PromotionsUpSellsDetails],
+            ["promo-codes/:pid", PromoCodesDetails],
+            ["promo-codes/:pId/new", Codes],
         ],
     ],
     CATEG: [

@@ -71,6 +71,8 @@ const ModalForm = ({
     dataFromServer,
     apiPathCrop,
     isArray,
+    setDoesRefetch,
+    doesRefetch,
 }) => {
     const { id, modalUrl = null } = openModal;
     const authCtx = useContext(AuthContext);
@@ -134,10 +136,11 @@ const ModalForm = ({
                     toast.success(`Uspešno`);
                     setOpenModal({ ...openModal, show: false });
                     setIsLoading(false);
+                    setDoesRefetch(!doesRefetch);
                 })
                 .catch((error) => {
                     console.warn(error);
-                    toast.warning("Greška");
+                    toast.warning(error?.response?.data?.message ?? error?.response?.data?.payload?.message ?? "Greška");
                     setIsLoading(false);
                 });
         } else {
@@ -153,10 +156,13 @@ const ModalForm = ({
                             toast.success(`Uspešno`);
                             setOpenModal({ ...openModal, show: false });
                             setIsLoading(false);
+                            setDoesRefetch(!doesRefetch);
+
                         })
                         .catch((error) => {
                             console.warn(error);
-                            toast.warning("Greška");
+                            toast.warning(error?.response?.data?.message ?? error?.response?.data?.payload?.message ?? "Greška");
+
                             setIsLoading(false);
                         });
             }

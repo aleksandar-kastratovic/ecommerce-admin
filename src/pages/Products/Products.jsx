@@ -8,6 +8,8 @@ import ModalForm from "../../components/shared/Modal/ModalForm";
 const Products = () => {
     const [openModal, setOpenModal] = useState({ show: false, id: null, name: null });
 
+    const [doesRefetch, setDoesRefetch] = useState(false);
+
     const customActions = {
         contentCopy: {
             type: "custom",
@@ -26,7 +28,16 @@ const Products = () => {
 
     return (
         <>
-            <ListPage listPageId="Products" apiUrl="admin/product-items/list" deleteUrl="admin/product-items/basic-data" title="Proizvodi" columnFields={tblFields} customActions={customActions} />
+            <ListPage
+                listPageId="Products"
+                apiUrl="admin/product-items/list"
+                deleteUrl="admin/product-items/basic-data"
+                title="Proizvodi"
+                columnFields={tblFields}
+                customActions={customActions}
+                doesRefetch={doesRefetch}
+                setDoesRefetch={setDoesRefetch}
+            />
             <ModalForm
                 anchor="right"
                 openModal={openModal}
@@ -37,6 +48,8 @@ const Products = () => {
                 initialData={{ id_product: openModal.id }}
                 withoutSetterFunction
                 cancelButton
+                setDoesRefetch={setDoesRefetch}
+                doesRefetch={doesRefetch}
                 label="Dupliraj"
                 styleCheckbox={{ padding: "0 0.563rem 0 0.563rem" }}
                 customTitle={`Da li ste sigurni da želite da duplirate proizvod ${openModal.name}?`}

@@ -35,7 +35,7 @@ const B2CWorkingUnit = () => {
           if(deleteModalData.all_fill) {
             api.delete(`admin/working-units-b2c/list/confirm/${rowData.id}`, deleteModalData)
               .then(() => toast.success("Zapis je uspešno obrisan"))
-              .catch(() => toast.warning("Došlo je do greške prilikom brisanja"));
+              .catch((err) => toast.warning(err?.response?.data?.message ?? err?.response?.data?.payload?.message ?? "Došlo je do greške prilikom brisanja"));
 
             return {
               show: false,

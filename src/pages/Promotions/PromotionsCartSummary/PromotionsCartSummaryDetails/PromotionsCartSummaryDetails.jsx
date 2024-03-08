@@ -23,7 +23,6 @@ const PromotionsCartSummaryDetails = () => {
   const init = {
     id: null,
     calculation_type: null,
-    description: null,
     slug: null,
     name: null,
     description: null,

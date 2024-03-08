@@ -179,7 +179,7 @@ const Articles = ({ pageId }) => {
         toast.success('Uspešno!');
       })
       .catch((error) => {
-        toast.warn('Greška');
+          error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška"
         console.warn(error);
       });
   }
