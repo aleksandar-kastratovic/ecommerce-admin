@@ -18,7 +18,6 @@ const B2CSettingsForm = ({ form_slug, config_module_id, module, submodule }) => 
         api.get(`admin/form/data/${form_slug}`)
             .then((response) => {
                 setFormFields(response?.payload);
-
                 setIsLoading(false);
             })
             .catch((error) => console.warn(error));
@@ -45,7 +44,6 @@ const B2CSettingsForm = ({ form_slug, config_module_id, module, submodule }) => 
             .catch((error) => console.warn(error));
     };
 
-    console.log(formData)
 
     return !isLoading ? <Form formFields={formFields} onSubmit={submitHandler} initialData={initialData} /> : <Loading />;
 };
