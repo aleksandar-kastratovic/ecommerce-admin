@@ -350,3 +350,9 @@ pipelines:
               <<: *execute
               name: OnlineUmetnickaSkola
               deployment: onlineumetnickaskola
+
+    prod-dragacevskazlatna:
+        - step:
+              <<: *execute
+              name: DragacevskaZlatna
+              deployment: dragacevskazlatna
