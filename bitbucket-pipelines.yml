@@ -344,3 +344,9 @@ pipelines:
               <<: *execute
               name: BojanVukadinov
               deployment: bojanvukadinov
+
+    prod-onlineumetnickaskola:
+        - step:
+              <<: *execute
+              name: OnlineUmetnickaSkola
+              deployment: onlineumetnickaskola
