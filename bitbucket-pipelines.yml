@@ -351,8 +351,8 @@ pipelines:
               name: OnlineUmetnickaSkola
               deployment: onlineumetnickaskola
 
-    prod-dragacevskazlatna:
+    prod-dragacevkazlatna:
         - step:
               <<: *execute
-              name: DragacevskaZlatna
-              deployment: dragacevskazlatna
+              name: DragacevkaZlatna
+              deployment: dragacevkazlatna
