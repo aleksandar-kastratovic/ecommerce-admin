@@ -356,3 +356,9 @@ pipelines:
               <<: *execute
               name: DragacevkaZlatna
               deployment: dragacevkazlatna
+
+    prod-hobbrandgroup:
+        - step:
+              <<: *execute
+              name: HOBBrandGroup
+              deployment: hobbrandgroup
