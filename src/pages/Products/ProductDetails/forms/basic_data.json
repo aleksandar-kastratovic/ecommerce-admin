@@ -26,7 +26,7 @@
     "in_main_table": true,
     "in_details": true,
     "editable": true,
-    "disabled": false,
+    "disabled": true,
     "required": false,
     "description": "",
     "ui_prop": {
