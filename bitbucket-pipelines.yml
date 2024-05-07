@@ -362,3 +362,9 @@ pipelines:
               <<: *execute
               name: HOBBrandGroup
               deployment: hobbrandgroup
+
+    prod-tideup:
+        - step:
+              <<: *execute
+              name: TideUp
+              deployment: tideup
