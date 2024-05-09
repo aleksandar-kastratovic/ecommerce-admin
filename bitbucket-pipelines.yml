@@ -368,3 +368,9 @@ pipelines:
               <<: *execute
               name: TideUp
               deployment: tideup
+
+    prod-alesari:
+        - step:
+              <<: *execute
+              name: Alesari
+              deployment: alesari
