@@ -363,11 +363,11 @@ pipelines:
               name: HOBBrandGroup
               deployment: hobbrandgroup
 
-    prod-tideup:
+    prod-tiedup:
         - step:
               <<: *execute
-              name: TideUp
-              deployment: tideup
+              name: TiedUp
+              deployment: tiedup
 
     prod-alesari:
         - step:
