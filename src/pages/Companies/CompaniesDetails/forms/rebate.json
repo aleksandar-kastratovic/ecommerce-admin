@@ -12,7 +12,7 @@
     "sortable": false,
     "input_type": "select",
     "options": [],
-    "fillFromApi": "admin/customers-b2b/rebate/ddl",
+    "fillFromApi": "admin/customers-b2b/rebate-tiers/ddl",
     "usePropName": true
   }
 ]
