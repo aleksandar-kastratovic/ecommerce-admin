@@ -38,6 +38,10 @@ const Form = ({
     apiPathCrop,
     allowedFileTypes,
     isArray,
+    id,
+    inPlaceInput = {
+        enabled: false,
+    },
 }) => {
     const navigate = useNavigate();
     const [data, setData] = useState(initialData ?? {});
@@ -216,8 +220,20 @@ const Form = ({
     };
 
     useEffect(() => {
-        setData(initialData);
+        if (!inPlaceInput.enabled) {
+            setData(initialData);
+        }
     }, [initialData]);
+
+    useEffect(() => {
+        if (inPlaceInput?.enabled) {
+            const getData = async () => {
+                const data_tmp = await inPlaceInput.function(inPlaceInput.functionData);
+                setData(data_tmp);
+            };
+            getData();
+        }
+    }, []);
 
     const filteredFields = formFields.filter((field) => {
         // Default value for display field in form
@@ -242,7 +258,7 @@ const Form = ({
 
     return (
         <>
-            <Box component="form" autoComplete="off" onSubmit={submitHandler} sx={{ display: "flex", flexWrap: "wrap" }}>
+            <Box id={id ?? ""} component="form" autoComplete="off" onSubmit={submitHandler} sx={{ display: "flex", flexWrap: "wrap" }}>
                 {(filteredFields ?? [])
                     .filter((field) => field.croonus_use_in_details)
                     .map((item, index) => {

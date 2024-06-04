@@ -1,15 +1,21 @@
-import { useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
-
+import classes from "./classes.module.css";
 import { columnCell, columnProps } from "../../../helpers/table";
 import EmptyList from "../Empty/EmptyList";
 import LoadingTableRows from "../Loading/LoadingTableRows";
 import ActionField from "./ActionField/ActionField";
+import Form from "../Form/Form";
+import useAPI from "../../../api/api";
+import AuthContext from "../../../store/auth-contex";
+import Box from "@mui/system/Box";
+import Typography from "@mui/material/Typography";
+import { useMutation, useQuery } from "react-query";
 
 /**
  * Show the table body and handle lifecycle and events.
@@ -38,6 +44,7 @@ const ListTableBody = ({
     tooltipAddButtonTableRow,
     customActions,
     onClickFieldBehavior,
+    tableCellActions,
 }) => {
     const [clickTimeout, setClickTimeout] = useState(null);
 
@@ -67,7 +74,6 @@ const ListTableBody = ({
             title: "Pregledaj",
             position: 2,
         };
-
         if (typeof customActions === "object") {
             Object.keys(customActions).map((key) => {
                 switch (true) {
@@ -86,9 +92,117 @@ const ListTableBody = ({
         return buttons;
     };
 
+    const [selected, setSelected] = useState({
+        row: null,
+        column: null,
+        action: "",
+    });
+
+    const tableCellEvents = () => {
+        let events = {};
+        if (typeof tableCellActions?.actions === "object") {
+            Object.keys(tableCellActions?.actions).map((key) => {
+                switch (true) {
+                    default:
+                        events[key] = tableCellActions?.actions[key];
+                        break;
+                }
+            });
+        }
+        return events;
+    };
+
+    const handleCellRender = ({ selected, row, column, editable, columnCell, cell_data, ...props }) => {
+        const renderCell = () => {
+            if (selected?.action === "edit" || selected?.action === "active") {
+                const isActive = selected?.action === "active";
+                const isCellSelected = selected?.row?.id === row?.id && selected?.column === column.prop_name;
+                const content = columnCell(row[column.prop_name], column.input_type, row.input_type);
+
+                return isCellSelected && !cell_data?.system_required ? (
+                    isActive ? (
+                        content
+                    ) : (
+                        <Form
+                            id={`inPlaceInput`}
+                            initialData={{}}
+                            formFields={props.formFields}
+                            validateData={props.validateData}
+                            onChange={props.onChange}
+                            onSubmit={props.onSubmit}
+                            submitButton={false}
+                            inPlaceInput={{
+                                enabled: true,
+                                function: props.getTableCellFormData,
+                                functionData: {
+                                    cell_data: cell_data,
+                                    selected: {
+                                        column: column,
+                                        row: row,
+                                    },
+                                },
+                            }}
+                        />
+                    )
+                ) : (
+                    content
+                );
+            }
+            return columnCell(row[column.prop_name], column.input_type, row.input_type);
+        };
+
+        return editable ? renderCell() : columnCell(row[column.prop_name], column.input_type, row.input_type);
+    };
+
+    const handleInputInCellRender = ({ cell_data, ...props }) => {
+        const editable = cell_data?.editable;
+        const render_input = cell_data?.render_input;
+
+        if (editable && render_input && !cell_data?.system_required) {
+            return (
+                <Form
+                    initialData={{}}
+                    formFields={props.formFields}
+                    validateData={props.validateData}
+                    onChange={props.onChange}
+                    onSubmit={props.onSubmit}
+                    submitButton={false}
+                    inPlaceInput={{
+                        enabled: true,
+                        function: props.getTableCellFormData,
+                        functionData: {
+                            cell_data: cell_data,
+                            selected: {
+                                column: props?.column,
+                                row: props?.row,
+                            },
+                        },
+                    }}
+                />
+            );
+        } else {
+            return props.columnCell(props.row[props.column.prop_name], props.column.input_type, props.row.input_type);
+        }
+    };
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+            if (event.key === "Escape") {
+                setSelected({
+                    row: null,
+                    column: null,
+                    action: "",
+                });
+            }
+        };
+        window.addEventListener("keydown", handleKeyDown);
+        return () => {
+            window.removeEventListener("keydown", handleKeyDown);
+        };
+    }, []);
+
     // What to show
     let content;
-
     switch (true) {
         case error !== null:
             content = <EmptyList span={fields.length} message={`Greška: ${error}`} />;
@@ -105,55 +219,113 @@ const ListTableBody = ({
         default:
             content = (items ?? []).map((row) => {
                 let actionButtonsObject = actionButtons();
-
-                let enable_delete = true;
+                let tableCellActionsObject = tableCellEvents();
 
                 return (
-                    <TableRow hover key={row.id}>
-                        {fields.map((column) => (
-                            <TableCell
-                                key={`${row.id}-${column.prop_name}`}
-                                {...columnProps(column)}
-                                onClick={(event) => {
-                                    if (!column.field_behavior) return;
-                                    const { onDoubleClick, onClick } = column.field_behavior;
-                                    if (clickTimeout !== null) {
-                                        clearTimeout(clickTimeout);
-                                        setClickTimeout(null);
-                                        onClickFieldBehavior(event, onDoubleClick, column, row);
-                                    } else {
-                                        setClickTimeout(
-                                            setTimeout(() => {
-                                                setClickTimeout(null);
-                                                onClickFieldBehavior(event, onClick, column, row);
-                                            }, 500)
-                                        );
-                                    }
-                                }}
-                                sx={{ cursor: column.field_behavior && "pointer", fontSize: "0.813rem" }}
-                            >
-                                {column.prop_name !== "action" ? (
-                                    column.field_behavior ? (
-                                        <span style={{ display: "flex", alignItems: "center" }}>
-                                            {columnCell(row[column.prop_name], column.input_type, column.input_type)}
-                                            <IconButton>
-                                                <Icon sx={{ fontSize: "1.1rem", opacity: "0.3" }}>edit</Icon>
-                                            </IconButton>
-                                        </span>
+                    <TableRow
+                        hover
+                        key={row.id}
+                        sx={{
+                            position: selected?.row?.id && row?.id === selected?.row?.id ? "sticky" : "relative",
+                            top: 0,
+                            zIndex: 1000,
+                            background: "white",
+                            bottom: 0,
+                        }}
+                    >
+                        {fields?.map((column) => {
+
+                            const cell_data = {
+                                editable: column?.ui_prop?.table_cell?.cell?.editable,
+                                render_input: column?.ui_prop?.table_cell?.cell?.render_input,
+                                cell_fields: column?.ui_prop?.table_cell?.cell_behavior?.fields,
+                                api_path: column?.ui_prop?.table_cell?.api?.api_path,
+                                api_method: column?.ui_prop?.table_cell?.api?.method,
+                                api_save_path: column?.ui_prop?.table_cell?.api?.save?.api_path,
+                                api_save_method: column?.ui_prop?.table_cell?.api?.save?.method,
+                                queryString: column?.ui_prop?.table_cell?.api?.queryString ?? row?.id,
+                                system_required: row?.system_required,
+                            };
+
+                            let timer;
+
+                            return (
+                                <TableCell
+                                    onClick={({ detail }) => {
+                                        clearTimeout(timer);
+                                        if (detail === 1) {
+                                            timer = setTimeout(() => {
+                                                tableCellActionsObject?.click.handler(row, column, selected, setSelected);
+                                            }, 200);
+                                        } else if (detail === 2) {
+                                            tableCellActionsObject?.doubleClick.handler(row, column, selected, setSelected);
+                                        }
+                                    }}
+                                    key={`${row.id}-${column.prop_name}`}
+                                    {...columnProps(column)}
+                                    sx={{ cursor: cell_data?.editable && "pointer", fontSize: "0.813rem" }}
+                                >
+                                    {column.prop_name === "action" ? (
+                                        <ActionField
+                                            fieldType={column.input_type}
+                                            systemRequired={row.system_required}
+                                            customActions={actionButtonsObject}
+                                            handleOnClickActions={handleOnClickActions}
+                                            rowData={row}
+                                        />
+                                    ) : cell_data?.render_input ? (
+                                        handleInputInCellRender({
+                                            row: row,
+                                            column: column,
+                                            cell_data: cell_data,
+                                            formFields: tableCellActions?.cell_fields ?? cell_data?.cell_fields,
+                                            getTableCellFormData: tableCellActions?.getTableCellFormData,
+                                            validateData: (data) => {
+                                                return data;
+                                            },
+                                            onChange: (data, field) => {
+                                                tableCellActions?.onChange(data, row, field);
+                                            },
+                                            onSubmit: (data) => {
+                                                tableCellActions?.onSubmit(data, row, setSelected, cell_data?.api_save_path, cell_data?.api_save_method);
+                                            },
+                                        })
                                     ) : (
-                                        columnCell(row[column.prop_name], column.input_type, row.input_type)
-                                    )
-                                ) : (
-                                    <ActionField
-                                        fieldType={column.input_type}
-                                        systemRequired={row.system_required}
-                                        customActions={actionButtonsObject}
-                                        handleOnClickActions={handleOnClickActions}
-                                        rowData={row}
-                                    />
-                                )}
-                            </TableCell>
-                        ))}
+                                        handleCellRender({
+                                            selected: selected,
+                                            editable: cell_data?.editable,
+                                            row: row,
+                                            column: column,
+                                            cell_data: cell_data,
+                                            columnCell: columnCell,
+                                            formFields: tableCellActions?.cell_fields ?? cell_data?.cell_fields,
+                                            getTableCellFormData: tableCellActions?.getTableCellFormData,
+                                            validateData: (data) => {
+                                                return data;
+                                            },
+                                            onChange: (data, field) => {
+                                                tableCellActions?.onChange(data, row, field);
+                                            },
+                                            onSubmit: (data) => {
+                                                tableCellActions?.onSubmit(data, row, setSelected, cell_data?.api_save_path, cell_data?.api_save_method);
+                                            },
+                                        })
+                                    )}
+                                </TableCell>
+                            );
+                        })}
+                        {selected?.row && selected?.column && selected?.action === "edit" && (
+                            <div
+                                onClick={() => {
+                                    setSelected({
+                                        row: null,
+                                        column: null,
+                                        action: "",
+                                    });
+                                }}
+                                className={`${selected?.row?.id === row?.id ? "" : classes.overlay}`}
+                            />
+                        )}
                     </TableRow>
                 );
             });
@@ -173,7 +345,11 @@ const ListTableBody = ({
             }
     }
 
-    return <TableBody>{content}</TableBody>;
+    return (
+        <>
+            <TableBody>{content}</TableBody>
+        </>
+    );
 };
 
 export default ListTableBody;

@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 
 import { toast } from "react-toastify";
@@ -40,6 +40,7 @@ import { queryKeys } from "../../../helpers/const";
  */
 const ListPage = ({
     apiUrl,
+    tableCellActions,
     deleteUrl,
     isArray,
     accept,
@@ -98,20 +99,27 @@ const ListPage = ({
     setDoesRefetch = () => {},
 }) => {
     // TODO Sorting is disabled as it does not work with pagination
-    columnFields = columnFields.map((field) => ({ ...field, sortable: false }));
+    columnFields = useMemo(() => {
+        return columnFields.map((field) => ({ ...field, sortable: false }));
+    }, [columnFields]);
 
     const showAddButtonRef = useRef(null);
 
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
     const navigate = useNavigate();
-
     const location = useLocation();
     const { pathname, search: locationSearch } = location;
     const queryParams = new URLSearchParams(locationSearch);
     const currPage = queryParams.get(queryKeys.page);
     const currSearch = queryParams.get(queryKeys.search);
     const [fieldsColumns, setFieldsColumns] = useState(columnFields);
+
+    useEffect(() => {
+        console.log('ee')
+        setFieldsColumns(columnFields);
+    }, [columnFields]);
+
     const [search, setSearch] = useState(currSearch ? currSearch : "");
     // const [page, setPage] = useState(1);
     const [page, setPage] = useState(currPage ? currPage : 1);
@@ -134,7 +142,7 @@ const ListPage = ({
         data: response,
         isLoading,
         isError,
-    } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, openModal.show, doesRefetch], () => api.list(apiUrl, { page, search, ...filters }));
+    } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, openModal.show, doesRefetch, apiUrl], () => api.list(apiUrl, { page, search, ...filters }));
     // Modify the data
     if (response?.payload && modifyItems) {
         response.payload.items = modifyItems(response.payload.items);
@@ -362,6 +370,7 @@ const ListPage = ({
                     listData={listData ? listData : response?.payload}
                     handleOnClickActions={handleOnClickActions}
                     isLoading={isLoading}
+                    tableCellActions={tableCellActions}
                     page={page}
                     onPageChange={onPageChange}
                     previewColumn={previewColumn}

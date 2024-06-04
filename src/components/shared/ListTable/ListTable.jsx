@@ -19,7 +19,7 @@ const ListTable = ({
     showAddButtonTableRow,
     tooltipAddButtonTableRow,
     customActions,
-    onClickFieldBehavior,
+    onClickFieldBehavior,tableCellActions
 }) => {
     const { items, pagination } = listData;
     const [order, setOrder] = useState("asc");
@@ -41,7 +41,6 @@ const ListTable = ({
     // }, [pagination]);
 
     // Show the table
-
     return (
         <>
             <TableContainer ref={tableContainerRef} className={styles.wrapper}>
@@ -51,6 +50,7 @@ const ListTable = ({
                     <ListTableBody
                         items={items ?? []}
                         fields={fields}
+                        tableCellActions={tableCellActions}
                         isLoading={isLoading}
                         handleOnClickActions={handleOnClickActions}
                         error={null}

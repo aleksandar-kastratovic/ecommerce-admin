@@ -97,7 +97,15 @@ export const InputInput = ({ label, required, disabled, name, value, autoFocus, 
     const inputClasses = generateBootstrapClasses(uiProp?.columns);
 
     return (
-        <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={uiProp?.wrapper_props?.custom_sx} inputClasses={inputClasses}>
+        <InputWrapper
+            label={uiProp?.form?.input?.label === false ? null : label}
+            required={required}
+            disabled={disabled}
+            margin={margin}
+            error={error}
+            styleFormControl={uiProp?.wrapper_props?.custom_sx}
+            inputClasses={inputClasses}
+        >
             <TextField
                 type={type}
                 name={name}

@@ -34,7 +34,7 @@ const B2BRebatesDetails = () => {
 
   // Read data
   useEffect(() => {
-    // Rebate
+    // RebateScales
     api.get(`/admin/rebates/${rebateId ?? 0}`)
       .then((response) => updateStateKey(setData, "rebate", response?.payload))
       .catch(setError);

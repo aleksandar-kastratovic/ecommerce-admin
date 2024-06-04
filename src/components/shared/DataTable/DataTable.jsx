@@ -1,6 +1,6 @@
 import React from "react";
 import { DataGrid } from "@mui/x-data-grid/";
-
+import classes from './DataTable.module.css'
 const DataTable = ({
   getRowId,
   rows = [],
@@ -32,6 +32,7 @@ const DataTable = ({
       columns={columns}
       loading={loading}
       sx={sx}
+      className={classes.datatablegrid}
       checkboxSelection={true}
       onPaginationModelChange={onChangePage}
       rowCount={rowCount}
@@ -58,6 +59,7 @@ const DataTable = ({
       }}
 
       keepNonExistentRowsSelected
+
     />
   );
 };
