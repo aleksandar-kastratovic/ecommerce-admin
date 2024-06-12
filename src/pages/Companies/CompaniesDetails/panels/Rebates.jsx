@@ -15,6 +15,10 @@ import { useMutation, useQuery } from "react-query";
 import Button from "../../../../components/shared/Button/Button";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../../helpers/functions";
+import DeleteModal from "../../../../components/shared/Dialogs/DeleteDialog";
+import { DeleteModalContent } from "./delete-modal-content";
+import ListPageModalWrapper from "../../../../components/shared/Modal/ListPageModalWrapper";
+import { CopyModalContent } from "./copy-modal-content";
 
 export const Rebates = ({ companyId }) => {
     const api = useAPI();
@@ -105,7 +109,8 @@ export const Rebates = ({ companyId }) => {
         }
     }, [doesRefetch]);
 
-    const [openDialog, setOpenDialog] = useState({ show: false, rowId: null });
+    const [openDialog, setOpenDialog] = useState({ show: false, type: null });
+    const [openModal, setOpenModal] = useState({ show: false, type: null });
 
     const [options, setOptions] = useState([]);
 
@@ -199,6 +204,60 @@ export const Rebates = ({ companyId }) => {
         handleRebateTypeSelect(fields?.id);
     }, [fields?.id]);
 
+    const [selected, setSelected] = useState(["products", "categories", "brands"]);
+    const [selectedCompany, setSelectedCompany] = useState();
+
+    const { mutate: delete_all } = useMutation({
+        mutationKey: [selected, "deleteAllRebates"],
+        mutationFn: async () => {
+            return await api
+                .delete(`admin/customers-b2b/rebate-company/main/delete-all/${companyId}?sections=${selected?.map((i) => i)}`, {})
+                .then((res) => {
+                    toast.success(`Uspešno obrisano!`);
+                    setSelected(["products", "categories", "brands"]);
+                    setDoesRefetch(true);
+                    setOpenModal({ show: false });
+                })
+                .catch((err) => {
+                    toast.warn("Greška!");
+                });
+        },
+    });
+
+    const onDeleteChange = ({ target: { name, checked } }) => {
+        if (checked) {
+            setSelected([...selected, name]);
+        } else {
+            setSelected(selected.filter((item) => item !== name));
+        }
+    };
+
+    const onCopyChange = ({ target: { name, checked } }) => {
+        if (checked) {
+            setSelected([...selected, name]);
+        } else {
+            setSelected(selected.filter((item) => item !== name));
+        }
+    };
+
+    const { mutate: copy, isLoading: isCopying } = useMutation(["copyContent"], async () => {
+        return await api
+            .post(`admin/customers-b2b/rebate-company/main/clone-rebates`, {
+                company_id: companyId,
+                clone_source: "b2b_companies",
+                b2b_company: selectedCompany,
+                rebate_tier: null,
+                sections: selected?.map((i) => i),
+            })
+            .then((res) => {
+                toast.success("Uspešno kopirano");
+                setDoesRefetch(true);
+                setSelected(["products", "categories", "brands"]);
+                setOpenModal({ show: false });
+            })
+            .catch((err) => toast.error("Došlo je do greške"));
+    });
+
     return (
         <>
             {message?.status === false && <p>{message?.message}</p>}
@@ -210,7 +269,6 @@ export const Rebates = ({ companyId }) => {
                 }}
             >
                 <ListPage
-                    // additionalButtons={buttons}
                     doesRefetch={doesRefetch}
                     listPageId={`Rebates-${fields?.id}`}
                     customActions={customActions}
@@ -225,15 +283,37 @@ export const Rebates = ({ companyId }) => {
                                 label={`Izaberite tip rabata`}
                                 onChange={(e) => onRebateTypeChange(e)}
                             />
-                            <Button
-                                sx={{
-                                    marginBottom: "-1.7rem",
-                                }}
-                                label={`Novi unos`}
-                                variant={`contained`}
-                                icon={`add`}
-                                onClick={() => setOpenDialog({ show: true })}
-                            />
+                            <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                                <Button
+                                    sx={{
+                                        marginBottom: "-1.7rem",
+                                    }}
+                                    label={`Preslikaj`}
+                                    onClick={() => {
+                                        setOpenModal({ show: true, type: "copy" });
+                                    }}
+                                    variant={`outlined`}
+                                />
+                                <Button
+                                    sx={{
+                                        marginBottom: "-1.7rem",
+                                    }}
+                                    label={`Obriši sve`}
+                                    variant={`outlined`}
+                                    onClick={() => {
+                                        setOpenModal({ show: true, type: "delete" });
+                                    }}
+                                />
+                                <Button
+                                    sx={{
+                                        marginBottom: "-1.7rem",
+                                    }}
+                                    label={`Novi unos`}
+                                    variant={`contained`}
+                                    icon={`add`}
+                                    onClick={() => setOpenDialog({ show: true })}
+                                />
+                            </Box>
                         </Box>
                     }
                     columnFields={fields?.data}
@@ -269,6 +349,27 @@ export const Rebates = ({ companyId }) => {
                 opt={data}
                 setOptions={setOptions}
             />
+
+            {openModal?.type === "delete" && (
+                <DeleteModal
+                    nameOfButton={`Obriši`}
+                    nameOfButtonCancel={`Odustani`}
+                    title={`Brisanje`}
+                    handleConfirm={delete_all}
+                    setOpenDeleteDialog={setOpenModal}
+                    openDeleteDialog={{ show: openModal.show, children: <DeleteModalContent onChange={onDeleteChange} selected={selected} /> }}
+                    description={`Izaberite koje stavke želite da obrišete:`}
+                />
+            )}
+
+            <ListPageModalWrapper
+                anchor="right"
+                open={(openModal.show && openModal?.type === "copy") ?? false}
+                onClose={() => setOpenModal({ ...openModal, show: false })}
+                onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}
+            >
+                <CopyModalContent selected={selected} onChange={onCopyChange} setSelectedCompany={setSelectedCompany} mutate={copy} isPending={isCopying} />
+            </ListPageModalWrapper>
         </>
     );
 };

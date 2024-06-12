@@ -64,14 +64,14 @@ const Promotions = () => {
             component: <PromotionsCrossSells />,
             title: "Cross-sells proizvodi",
         },
-        // {
-        //     id: "promo_codes",
-        //     name: "Promo kodovi",
-        //     icon: IconList.list,
-        //     enabled: true,
-        //     component: <PromoCodes />,
-        //     title: "Promo kodovi",
-        // },
+        {
+            id: "promo_codes",
+            name: "Promo kodovi",
+            icon: IconList.list,
+            enabled: true,
+            component: <PromoCodes />,
+            title: "Promo kodovi",
+        },
     ];
 
     const [pageTitle, setPageTitle] = useState(`${fields.find((field) => field.id === activeTab)?.name}`);

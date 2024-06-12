@@ -148,7 +148,18 @@ const ListTableBody = ({
                     content
                 );
             }
-            return columnCell(row[column.prop_name], column.input_type, row.input_type);
+            if (column?.field_behavior) {
+                return (
+                    <span style={{ display: "flex", alignItems: "center" }}>
+                        {columnCell(row[column.prop_name], column.input_type, column.input_type)}
+                        <IconButton>
+                            <Icon sx={{ fontSize: "1.1rem", opacity: "0.3" }}>edit</Icon>
+                        </IconButton>
+                    </span>
+                );
+            } else {
+                return columnCell(row[column.prop_name], column.input_type, row.input_type);
+            }
         };
 
         return editable ? renderCell() : columnCell(row[column.prop_name], column.input_type, row.input_type);
@@ -181,7 +192,18 @@ const ListTableBody = ({
                 />
             );
         } else {
-            return props.columnCell(props.row[props.column.prop_name], props.column.input_type, props.row.input_type);
+            if (props?.column?.field_behavior) {
+                return (
+                    <span style={{ display: "flex", alignItems: "center" }}>
+                        {columnCell(props.row[props.column.prop_name], props.column.input_type, props.column.input_type)}
+                        <IconButton>
+                            <Icon sx={{ fontSize: "1.1rem", opacity: "0.3" }}>edit</Icon>
+                        </IconButton>
+                    </span>
+                );
+            } else {
+                return props.columnCell(props.row[props.column.prop_name], props.column.input_type, props.row.input_type);
+            }
         }
     };
 
@@ -234,7 +256,6 @@ const ListTableBody = ({
                         }}
                     >
                         {fields?.map((column) => {
-
                             const cell_data = {
                                 editable: column?.ui_prop?.table_cell?.cell?.editable,
                                 render_input: column?.ui_prop?.table_cell?.cell?.render_input,
@@ -251,21 +272,37 @@ const ListTableBody = ({
 
                             return (
                                 <TableCell
-                                    onClick={({ detail }) => {
-                                        clearTimeout(timer);
-                                        if (detail === 1) {
-                                            timer = setTimeout(() => {
-                                                tableCellActionsObject?.click.handler(row, column, selected, setSelected);
-                                            }, 200);
-                                        } else if (detail === 2) {
-                                            tableCellActionsObject?.doubleClick.handler(row, column, selected, setSelected);
+                                    onClick={(event) => {
+                                        if (column?.field_behavior) {
+                                            const { onDoubleClick, onClick } = column.field_behavior;
+                                            if (clickTimeout !== null) {
+                                                clearTimeout(clickTimeout);
+                                                setClickTimeout(null);
+                                                onClickFieldBehavior(event, onDoubleClick, column, row);
+                                            } else {
+                                                setClickTimeout(
+                                                    setTimeout(() => {
+                                                        setClickTimeout(null);
+                                                        onClickFieldBehavior(event, onClick, column, row);
+                                                    }, 500)
+                                                );
+                                            }
+                                        } else {
+                                            clearTimeout(timer);
+                                            if (event?.detail === 1) {
+                                                timer = setTimeout(() => {
+                                                    tableCellActionsObject?.click.handler(row, column, selected, setSelected);
+                                                }, 200);
+                                            } else if (event?.detail === 2) {
+                                                tableCellActionsObject?.doubleClick.handler(row, column, selected, setSelected);
+                                            }
                                         }
                                     }}
                                     key={`${row.id}-${column.prop_name}`}
                                     {...columnProps(column)}
                                     sx={{ cursor: cell_data?.editable && "pointer", fontSize: "0.813rem" }}
                                 >
-                                    {column.prop_name === "action" ? (
+                                    {column?.prop_name === "action" ? (
                                         <ActionField
                                             fieldType={column.input_type}
                                             systemRequired={row.system_required}
@@ -273,6 +310,13 @@ const ListTableBody = ({
                                             handleOnClickActions={handleOnClickActions}
                                             rowData={row}
                                         />
+                                    ) : column?.field_behavior ? (
+                                        <span style={{ display: "flex", alignItems: "center" }}>
+                                            {columnCell(row[column.prop_name], column.input_type, column.input_type)}
+                                            <IconButton>
+                                                <Icon sx={{ fontSize: "1.1rem", opacity: "0.3" }}>edit</Icon>
+                                            </IconButton>
+                                        </span>
                                     ) : cell_data?.render_input ? (
                                         handleInputInCellRender({
                                             row: row,
