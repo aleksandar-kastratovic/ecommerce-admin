@@ -204,17 +204,23 @@ export const Rebates = ({ companyId }) => {
         handleRebateTypeSelect(fields?.id);
     }, [fields?.id]);
 
-    const [selected, setSelected] = useState(["products", "categories", "brands"]);
-    const [selectedCompany, setSelectedCompany] = useState();
+    const [selectedFormValues, setSelectedFormValues] = useState({
+        sections: ["products", "categories", "brands"],
+        company: null,
+        clone_type: null,
+    });
 
     const { mutate: delete_all } = useMutation({
-        mutationKey: [selected, "deleteAllRebates"],
+        mutationKey: [selectedFormValues, "deleteAllRebates"],
         mutationFn: async () => {
             return await api
-                .delete(`admin/customers-b2b/rebate-company/main/delete-all/${companyId}?sections=${selected?.map((i) => i)}`, {})
+                .delete(`admin/customers-b2b/rebate-company/main/delete-all/${companyId}?sections=${selectedFormValues?.sections?.map((i) => i)}`, {})
                 .then((res) => {
                     toast.success(`Uspešno obrisano!`);
-                    setSelected(["products", "categories", "brands"]);
+                    setSelectedFormValues({
+                        ...selectedFormValues,
+                        sections: ["products", "categories", "brands"],
+                    });
                     setDoesRefetch(true);
                     setOpenModal({ show: false });
                 })
@@ -226,17 +232,29 @@ export const Rebates = ({ companyId }) => {
 
     const onDeleteChange = ({ target: { name, checked } }) => {
         if (checked) {
-            setSelected([...selected, name]);
+            setSelectedFormValues({
+                ...selectedFormValues,
+                sections: [...selectedFormValues?.sections, name],
+            });
         } else {
-            setSelected(selected.filter((item) => item !== name));
+            setSelectedFormValues({
+                ...selectedFormValues,
+                sections: selectedFormValues?.sections.filter((item) => item !== name),
+            });
         }
     };
 
     const onCopyChange = ({ target: { name, checked } }) => {
         if (checked) {
-            setSelected([...selected, name]);
+            setSelectedFormValues({
+                ...selectedFormValues,
+                sections: [...selectedFormValues?.sections, name],
+            });
         } else {
-            setSelected(selected.filter((item) => item !== name));
+            setSelectedFormValues({
+                ...selectedFormValues,
+                sections: selectedFormValues?.sections.filter((item) => item !== name),
+            });
         }
     };
 
@@ -245,14 +263,18 @@ export const Rebates = ({ companyId }) => {
             .post(`admin/customers-b2b/rebate-company/main/clone-rebates`, {
                 company_id: companyId,
                 clone_source: "b2b_companies",
-                b2b_company: selectedCompany,
+                b2b_company: selectedFormValues?.company,
                 rebate_tier: null,
-                sections: selected?.map((i) => i),
+                sections: selectedFormValues?.sections?.map((i) => i),
+                clone_type: selectedFormValues?.clone_type,
             })
             .then((res) => {
                 toast.success("Uspešno kopirano");
                 setDoesRefetch(true);
-                setSelected(["products", "categories", "brands"]);
+                setSelectedFormValues({
+                    ...selectedFormValues,
+                    sections: ["products", "categories", "brands"],
+                });
                 setOpenModal({ show: false });
             })
             .catch((err) => toast.error("Došlo je do greške"));
@@ -357,7 +379,7 @@ export const Rebates = ({ companyId }) => {
                     title={`Brisanje`}
                     handleConfirm={delete_all}
                     setOpenDeleteDialog={setOpenModal}
-                    openDeleteDialog={{ show: openModal.show, children: <DeleteModalContent onChange={onDeleteChange} selected={selected} /> }}
+                    openDeleteDialog={{ show: openModal.show, children: <DeleteModalContent onChange={onDeleteChange} selected={selectedFormValues?.sections} /> }}
                     description={`Izaberite koje stavke želite da obrišete:`}
                 />
             )}
@@ -368,7 +390,7 @@ export const Rebates = ({ companyId }) => {
                 onClose={() => setOpenModal({ ...openModal, show: false })}
                 onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}
             >
-                <CopyModalContent selected={selected} onChange={onCopyChange} setSelectedCompany={setSelectedCompany} mutate={copy} isPending={isCopying} />
+                <CopyModalContent setSelected={setSelectedFormValues} selected={selectedFormValues} onChange={onCopyChange} mutate={copy} isPending={isCopying} />
             </ListPageModalWrapper>
         </>
     );

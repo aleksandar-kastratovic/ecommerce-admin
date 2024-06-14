@@ -95,9 +95,12 @@ const CodesList = () => {
     return (
         <ListPage
             title={` `}
+            useColumnFields={true}
+            listPageId={`promo-codes-campaigns-list`}
             apiUrl={`admin/campaigns/promo-codes/codes/${pid}`}
             deleteUrl={`admin/campaigns/promo-codes/codes`}
-            columnFields={formFields}
+            columnFields={tblFields}
+
             showNewButton={true}
             additionalButtons={buttons}
             customActions={customActions}
