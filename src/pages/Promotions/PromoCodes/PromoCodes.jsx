@@ -7,6 +7,7 @@ const PromoCodes = () => {
     const [fields, setFields] = useState(tblfields);
     const navigate = useNavigate();
     const [rowData, setRowData] = useState(null);
+
     const buttons = [
         {
             type: "contained",
@@ -18,7 +19,6 @@ const PromoCodes = () => {
             },
         },
     ];
-
     const customActions = {
         edit: {
             type: "edit",
@@ -35,6 +35,8 @@ const PromoCodes = () => {
     return (
         <ListPage
             title={` `}
+            useColumnFields={true}
+            listPageId={`PromoCodesList`}
             apiUrl={`admin/campaigns/promo-codes/list`}
             deleteUrl={`admin/campaigns/promo-codes/list`}
             showNewButton={false}

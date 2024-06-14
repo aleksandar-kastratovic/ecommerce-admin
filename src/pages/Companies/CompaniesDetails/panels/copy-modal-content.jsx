@@ -11,15 +11,22 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Button from "../../../../components/shared/Button/Button";
 
-export const CopyModalContent = ({ onChange, selected, setSelectedCompany, mutate, isPending }) => {
+export const CopyModalContent = ({ onChange, selected, setSelected, mutate, isPending }) => {
     const api = useAPI();
     const [value, setValue] = useState("");
+
     const { data: opt } = useQuery(["copyModalContent", value], async () => {
         if (value?.length >= 3) {
             return await api.get(`admin/customers-b2b/rebate-company/main/ddl/b2b_company?search=${value}`).then((res) => {
                 return res?.payload;
             });
         }
+    });
+
+    const { data: clone_type } = useQuery(["copyModalContentCloneType"], async () => {
+        return await api.get(`admin/customers-b2b/rebate-company/main/ddl/clone_type`).then((res) => {
+            return res?.payload;
+        });
     });
 
     const [selectedDDL, setSelectedDDL] = useState();
@@ -46,7 +53,10 @@ export const CopyModalContent = ({ onChange, selected, setSelectedCompany, mutat
                                 newIval = selectedOption?.id;
                             }
                         }
-                        setSelectedCompany(newIval);
+                        setSelected({
+                            ...selected,
+                            company: newIval,
+                        });
                     }}
                     options={(opt ?? [])?.map((option) => option?.name)}
                     sx={{
@@ -56,20 +66,39 @@ export const CopyModalContent = ({ onChange, selected, setSelectedCompany, mutat
                     }}
                     renderInput={(params) => <TextField {...params} />}
                 />
-
-                <Box sx={{ marginTop: "1rem", display: "flex", flexDirection: "column" }}>
+            </InputWrapper>
+            <InputWrapper label={`Izaberite način kloniranja`}>
+                <Select
+                    onChange={(e) => {
+                        setSelected({
+                            ...selected,
+                            clone_type: e.target.value,
+                        });
+                    }}
+                >
+                    {clone_type?.map(({ id, name }) => {
+                        return (
+                            <MenuItem key={id} name={name} value={id}>
+                                {name}
+                            </MenuItem>
+                        );
+                    })}
+                </Select>
+            </InputWrapper>
+            <Box sx={{ marginTop: "1rem", display: "flex", flexDirection: "column" }}>
+                <InputWrapper label={`Izaberite tipove rabata:`}>
                     {(options ?? [])?.map((item) => {
                         return (
                             <FormControlLabel
-                                control={<Checkbox name={item?.id} onChange={onChange} checked={selected?.includes(item?.id)} />}
+                                control={<Checkbox name={item?.id} onChange={onChange} checked={selected?.sections?.includes(item?.id)} />}
                                 label={item?.name}
                                 sx={{ ".MuiTypography-root": { fontSize: "14px" } }}
                             />
                         );
                     })}
-                </Box>
-            </InputWrapper>
-            <Button label={`Kopiraj`} sx={{ marginTop: "1rem",float:"right" }} onClick={mutate} variant={`contained`} disabled={isPending} />
+                </InputWrapper>
+            </Box>
+            <Button label={`Kopiraj`} sx={{ marginTop: "1rem", float: "right" }} onClick={mutate} variant={`contained`} disabled={isPending} />
         </Box>
     );
 };
