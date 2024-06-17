@@ -9,15 +9,33 @@ import { useNavigate } from "react-router-dom";
 
 export const Reports = () => {
     const activeTab = getUrlQueryStringParam("tab") ?? "low-stock";
-
     const navigate = useNavigate();
+
+    const customActions = {
+        edit: {
+            type: "edit",
+            display: true,
+            clickHandler: {
+                type: "navigate",
+                fnc: (rowData) => {
+                    navigate(`/products/${rowData.id}?tab=lager`);
+                },
+            },
+        },
+        delete: {
+            display: false,
+        },
+    };
+
     const fields = [
         {
             id: "low-stock",
             name: "Male količine",
             icon: IconList.inventory,
             enabled: true,
-            component: <ListPage apiUrl={`admin/reports/products/low_stock`} columnFields={tblFields} listPageId={`reports`} useColumnFields={true} showNewButton={false} />,
+            component: (
+                <ListPage customActions={customActions} apiUrl={`admin/reports/products/low_stock`} columnFields={tblFields} listPageId={`reports`} useColumnFields={true} showNewButton={false} />
+            ),
         },
     ];
 

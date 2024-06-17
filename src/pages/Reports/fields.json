@@ -88,6 +88,6 @@
         "description": "",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "edit_delete"
+        "input_type": "edit"
     }
 ]
