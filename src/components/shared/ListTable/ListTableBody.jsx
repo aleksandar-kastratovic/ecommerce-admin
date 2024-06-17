@@ -47,7 +47,7 @@ const ListTableBody = ({
     tableCellActions,
 }) => {
     const [clickTimeout, setClickTimeout] = useState(null);
-
+    const [data, setData] = useState(null);
     const actionButtons = () => {
         let buttons = {};
 
@@ -222,7 +222,7 @@ const ListTableBody = ({
             window.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
-
+    console.log(data);
     // What to show
     let content;
     switch (true) {
@@ -272,6 +272,11 @@ const ListTableBody = ({
 
                             return (
                                 <TableCell
+                                    onBlur={(e) => {
+                                        if (cell_data?.editable && cell_data?.render_input && data) {
+                                            tableCellActions?.onSubmit(data, row, setSelected, cell_data?.api_save_path, cell_data?.api_save_method);
+                                        }
+                                    }}
                                     onClick={(event) => {
                                         if (column?.field_behavior) {
                                             const { onDoubleClick, onClick } = column.field_behavior;
@@ -329,6 +334,7 @@ const ListTableBody = ({
                                             },
                                             onChange: (data, field) => {
                                                 tableCellActions?.onChange(data, row, field);
+                                                setData(data);
                                             },
                                             onSubmit: (data) => {
                                                 tableCellActions?.onSubmit(data, row, setSelected, cell_data?.api_save_path, cell_data?.api_save_method);
@@ -349,6 +355,7 @@ const ListTableBody = ({
                                             },
                                             onChange: (data, field) => {
                                                 tableCellActions?.onChange(data, row, field);
+                                                setData(data);
                                             },
                                             onSubmit: (data) => {
                                                 tableCellActions?.onSubmit(data, row, setSelected, cell_data?.api_save_path, cell_data?.api_save_method);

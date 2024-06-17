@@ -67,24 +67,6 @@ export const CopyModalContent = ({ onChange, selected, setSelected, mutate, isPe
                     renderInput={(params) => <TextField {...params} />}
                 />
             </InputWrapper>
-            <InputWrapper label={`Izaberite način kloniranja`}>
-                <Select
-                    onChange={(e) => {
-                        setSelected({
-                            ...selected,
-                            clone_type: e.target.value,
-                        });
-                    }}
-                >
-                    {clone_type?.map(({ id, name }) => {
-                        return (
-                            <MenuItem key={id} name={name} value={id}>
-                                {name}
-                            </MenuItem>
-                        );
-                    })}
-                </Select>
-            </InputWrapper>
             <Box sx={{ marginTop: "1rem", display: "flex", flexDirection: "column" }}>
                 <InputWrapper label={`Izaberite tipove rabata:`}>
                     {(options ?? [])?.map((item) => {

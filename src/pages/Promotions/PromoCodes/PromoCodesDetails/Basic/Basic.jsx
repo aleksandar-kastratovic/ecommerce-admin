@@ -29,7 +29,7 @@ const Basic = () => {
         {}
     );
 
-    const { data: campaignInfo } = useQuery(
+    const { data: campaignInfo, refetch } = useQuery(
         ["campaignInfo", pid],
         async () => {
             return await api.get(`admin/campaigns/product-catalog/basic-data/${pid}`).then((res) => {

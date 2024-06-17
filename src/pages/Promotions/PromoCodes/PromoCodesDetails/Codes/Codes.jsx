@@ -54,7 +54,6 @@ const Codes = () => {
 
     const validateData = (data, field) => {
         let ret = data;
-        console.log(data);
         switch (field) {
             case "type":
                 if (ret?.type === "multiple") {
@@ -62,6 +61,7 @@ const Codes = () => {
                     temp = fields.find((f) => f?.prop_name === "quantity");
                     temp.editable = true;
                     temp.in_main_table = true;
+                    temp.required = true;
 
                     let temp2;
                     temp2 = fields.find((f) => f?.prop_name === "code");
