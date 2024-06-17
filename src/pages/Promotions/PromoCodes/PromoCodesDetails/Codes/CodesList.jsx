@@ -1,7 +1,7 @@
 import tblFields from "../Codes/tblFields.json";
 import { useState, useEffect } from "react";
 import ListPage from "../../../../../components/shared/ListPage/ListPage";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 import useAPI from "../../../../../api/api";
@@ -47,7 +47,7 @@ const CodesList = () => {
         ["export-promo kodova-download"],
         async () => {
             return await api
-                .get(`admin/campaigns/promo-codes/export/${pid}`)
+                .get(`admin/campaigns/promo-codes/export/${pid}?system=${system}`)
                 .then((res) => {
                     setDownloadLink(res?.payload);
                 })
@@ -92,6 +92,19 @@ const CodesList = () => {
         }
     }, [downloadLink]);
 
+    const navigate = useNavigate();
+    const {} = useQuery(
+        ["campaignInfoGetSystem", pid],
+        async () => {
+            return await api.get(`admin/campaigns/product-catalog/basic-data/${pid}`).then((res) => {
+                if (res?.payload?.system) {
+                    navigate(`/promotions/promo-codes/${pid}?tab=codes&system=${res?.payload?.system}`);
+                }
+            });
+        },
+        {}
+    );
+
     return (
         <ListPage
             title={` `}
@@ -100,7 +113,6 @@ const CodesList = () => {
             apiUrl={`admin/campaigns/promo-codes/codes/${pid}`}
             deleteUrl={`admin/campaigns/promo-codes/codes`}
             columnFields={tblFields}
-
             showNewButton={true}
             additionalButtons={buttons}
             customActions={customActions}

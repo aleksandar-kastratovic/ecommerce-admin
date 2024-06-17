@@ -53,16 +53,24 @@ const CampaignTable = ({ data, columns, options, setOptions, selected, onChange,
     const getFilters = () => {
         let filters = [];
 
-        if (showSelected && selected && selected.length) {
-            const columnFilterIndex = options.filters.findIndex((filter) => filter.column === "id");
-            if (columnFilterIndex !== -1) {
-                filters = [...options.filters];
-                filters[columnFilterIndex].value = selected.map((item) => item.id);
+        if (showSelected) {
+            if (selected && selected.length) {
+                const columnFilterIndex = options.filters.findIndex((filter) => filter.column === "id");
+                if (columnFilterIndex !== -1) {
+                    filters = [...options.filters];
+                    filters[columnFilterIndex].value = selected.map((item) => item.id);
+                } else {
+                    filters.push({
+                        column: "id",
+                        type: "in",
+                        value: selected.map((item) => item.id),
+                    });
+                }
             } else {
                 filters.push({
                     column: "id",
                     type: "in",
-                    value: selected.map((item) => item.id),
+                    value: [-1],
                 });
             }
         }

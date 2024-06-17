@@ -116,7 +116,6 @@ const ListPage = ({
     const [fieldsColumns, setFieldsColumns] = useState(columnFields);
 
     useEffect(() => {
-        console.log('ee')
         setFieldsColumns(columnFields);
     }, [columnFields]);
 
@@ -250,7 +249,11 @@ const ListPage = ({
             }
         } else {
             api.delete(`${deleteUrl}/${openDeleteDialog.id}`)
-                .then(() => toast.success("Zapis je uspešno obrisan"))
+                .then(() => {
+                    setDoesRefetch(!doesRefetch);
+
+                    toast.success("Zapis je uspešno obrisan");
+                })
                 .catch((err) => toast.warning(err?.response?.data?.message ?? err?.response?.data?.payload?.message ?? "Došlo je do greške prilikom brisanja"));
 
             setOpenDeleteDialog({ show: false, id: null, mutate: 1 });

@@ -19,6 +19,7 @@ import DeleteModal from "../../../../components/shared/Dialogs/DeleteDialog";
 import { DeleteModalContent } from "./delete-modal-content";
 import ListPageModalWrapper from "../../../../components/shared/Modal/ListPageModalWrapper";
 import { CopyModalContent } from "./copy-modal-content";
+import Tooltip from "@mui/material/Tooltip";
 
 export const Rebates = ({ companyId }) => {
     const api = useAPI();
@@ -87,7 +88,6 @@ export const Rebates = ({ companyId }) => {
 
     const onCellSubmit = (value, row, setSelected, api_url, api_method) => {
         //submit logika
-
         let ret = { ...value };
         if (value?.discount_value?.includes("%")) {
             ret.currency = "%";
@@ -103,22 +103,21 @@ export const Rebates = ({ companyId }) => {
         });
     };
 
-    useEffect(() => {
-        if (doesRefetch) {
-            setDoesRefetch(false);
-        }
-    }, [doesRefetch]);
-
     const [openDialog, setOpenDialog] = useState({ show: false, type: null });
     const [openModal, setOpenModal] = useState({ show: false, type: null });
 
     const [options, setOptions] = useState([]);
 
-    const { data, isFetching: isLoading } = useQuery(
-        ["rebatesSelect", options, companyId, fields?.id],
+    const {
+        data,
+        isFetching: isLoading,
+        refetch: refetchSelect,
+        isSuccess: isSelectSuccess,
+    } = useQuery(
+        ["rebatesSelect", options, companyId, fields?.id, doesRefetch, openDialog?.show],
         async () => {
             return await api
-                .post(`/admin/customers-b2b/rebate-company/${fields?.id}/select-${fields?.id}`, {
+                .post(`/admin/customers-b2b/rebate-company/${fields?.id}/select-${fields?.id}/${companyId}`, {
                     page: options?.page ?? 1,
                     search: options?.search ?? "",
                     limit: options?.limit ?? 10,
@@ -150,7 +149,11 @@ export const Rebates = ({ companyId }) => {
         { refetchOnWindowFocus: false }
     );
 
-    const { mutate: handleSave, isLoading: isPending } = useMutation(["rebatesSelectSave", selectedValues], async () => {
+    const {
+        mutate: handleSave,
+        isLoading: isPending,
+        isSuccess: isSaveSuccess,
+    } = useMutation(["rebatesSelectSave", selectedValues], async () => {
         let ret = {};
         switch (fields?.id) {
             case "products":
@@ -179,6 +182,8 @@ export const Rebates = ({ companyId }) => {
                 setSelectedValues([]);
                 setDoesRefetch(true);
                 refetch();
+                refetchSelect();
+                refetch_allow_clone();
             })
             .catch((err) => {
                 toast.error(err?.response?.data?.payload?.message ?? "Došlo je do greške");
@@ -210,7 +215,7 @@ export const Rebates = ({ companyId }) => {
         clone_type: null,
     });
 
-    const { mutate: delete_all } = useMutation({
+    const { mutate: delete_all, isSuccess } = useMutation({
         mutationKey: [selectedFormValues, "deleteAllRebates"],
         mutationFn: async () => {
             return await api
@@ -222,9 +227,13 @@ export const Rebates = ({ companyId }) => {
                         sections: ["products", "categories", "brands"],
                     });
                     setDoesRefetch(true);
+                    refetch();
+                    refetchSelect();
+                    refetch_allow_clone();
                     setOpenModal({ show: false });
                 })
                 .catch((err) => {
+                    setOpenModal({ show: false });
                     toast.warn("Greška!");
                 });
         },
@@ -258,7 +267,11 @@ export const Rebates = ({ companyId }) => {
         }
     };
 
-    const { mutate: copy, isLoading: isCopying } = useMutation(["copyContent"], async () => {
+    const {
+        mutate: copy,
+        isLoading: isCopying,
+        isSuccess: isCopySuccess,
+    } = useMutation(["copyContent"], async () => {
         return await api
             .post(`admin/customers-b2b/rebate-company/main/clone-rebates`, {
                 company_id: companyId,
@@ -266,7 +279,7 @@ export const Rebates = ({ companyId }) => {
                 b2b_company: selectedFormValues?.company,
                 rebate_tier: null,
                 sections: selectedFormValues?.sections?.map((i) => i),
-                clone_type: selectedFormValues?.clone_type,
+                clone_type: "replace",
             })
             .then((res) => {
                 toast.success("Uspešno kopirano");
@@ -276,9 +289,31 @@ export const Rebates = ({ companyId }) => {
                     sections: ["products", "categories", "brands"],
                 });
                 setOpenModal({ show: false });
+                refetch();
+                refetchSelect();
+                refetch_allow_clone();
             })
             .catch((err) => toast.error("Došlo je do greške"));
     });
+
+    const { data: allow_clone, refetch: refetch_allow_clone } = useQuery([companyId, "allow-clone-rebates"], async () => {
+        return await api
+            .get(`admin/customers-b2b/rebate-company/main/clone-rebates-allow-use/${companyId}`)
+            .then((res) => res?.payload)
+            ?.catch((e) => toast.error("Došlo je do greške"));
+    });
+
+    useEffect(() => {
+        if (doesRefetch) {
+            refetch();
+            refetch_allow_clone();
+            refetchSelect();
+            setDoesRefetch(false);
+        }
+        if(openDialog?.show) {
+            refetchSelect();
+        }
+    }, [doesRefetch,openDialog?.show]);
 
     return (
         <>
@@ -292,6 +327,7 @@ export const Rebates = ({ companyId }) => {
             >
                 <ListPage
                     doesRefetch={doesRefetch}
+                    setDoesRefetch={setDoesRefetch}
                     listPageId={`Rebates-${fields?.id}`}
                     customActions={customActions}
                     title={
@@ -306,16 +342,35 @@ export const Rebates = ({ companyId }) => {
                                 onChange={(e) => onRebateTypeChange(e)}
                             />
                             <Box sx={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                                <Button
-                                    sx={{
-                                        marginBottom: "-1.7rem",
-                                    }}
-                                    label={`Preslikaj`}
-                                    onClick={() => {
-                                        setOpenModal({ show: true, type: "copy" });
-                                    }}
-                                    variant={`outlined`}
-                                />
+                                {allow_clone?.status ? (
+                                    <Button
+                                        sx={{
+                                            marginBottom: "-1.7rem",
+                                        }}
+                                        label={`Preslikaj`}
+                                        onClick={() => {
+                                            setOpenModal({ show: true, type: "copy" });
+                                        }}
+                                        variant={`outlined`}
+                                    />
+                                ) : (
+                                    <Button
+                                        disabled={true}
+                                        sx={{
+                                            marginBottom: "-1.7rem",
+                                            pointerEvents: "inherit",
+                                        }}
+                                        label={`Preslikaj`}
+                                        tooltip={{
+                                            enable: true,
+                                            message: allow_clone?.message,
+                                        }}
+                                        onClick={() => {
+                                            setOpenModal({ show: true, type: "copy" });
+                                        }}
+                                        variant={`outlined`}
+                                    />
+                                )}
                                 <Button
                                     sx={{
                                         marginBottom: "-1.7rem",

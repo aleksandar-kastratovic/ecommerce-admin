@@ -2,6 +2,7 @@ import { Button as MaterialButton } from "@mui/material";
 import scss from "./Button.module.scss";
 import Icon from "@mui/material/Icon";
 import { ClassNames } from "@emotion/react";
+import Tooltip from "@mui/material/Tooltip";
 
 /**
  * A standardized button with an optional icon.
@@ -15,14 +16,23 @@ import { ClassNames } from "@emotion/react";
  * @param sx Button styling
  *
  *
+ * @param href
+ * @param className
+ * @param tooltip
  * @return {JSX.Element}
  * @constructor
  */
-const Button = ({ icon, label, onClick, type = "button", variant = "outlined", disabled = false, sx = {}, href, className }) => {
+const Button = ({ icon, label, onClick, type = "button", variant = "outlined", disabled = false, sx = {}, href, className, tooltip = { enable: false, message: "" } }) => {
     return (
-        <MaterialButton onClick={onClick} variant={variant} className={`${scss.button}`} type={type} disabled={disabled} sx={sx} href={href}>
+        <MaterialButton onClick={onClick} variant={variant} className={`${scss.button} ${tooltip?.enable ? scss.pointerEvents : ""}`} type={type} disabled={disabled} sx={sx} href={href}>
             {icon && <Icon className={scss.icon}>{icon}</Icon>}
-            {label}
+            {tooltip?.enable ? (
+                <Tooltip placement={`top`} title={`${tooltip?.message}`}>
+                    {label}
+                </Tooltip>
+            ) : (
+                label
+            )}
         </MaterialButton>
     );
 };
