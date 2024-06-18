@@ -19,7 +19,10 @@ const ListTable = ({
     showAddButtonTableRow,
     tooltipAddButtonTableRow,
     customActions,
-    onClickFieldBehavior,tableCellActions
+    onClickFieldBehavior,
+    tableCellActions,
+    setSort,
+    sort,
 }) => {
     const { items, pagination } = listData;
     const [order, setOrder] = useState("asc");
@@ -45,7 +48,7 @@ const ListTable = ({
         <>
             <TableContainer ref={tableContainerRef} className={styles.wrapper}>
                 <Table>
-                    <ListTableHead fields={fields} order={order} orderBy={orderBy} onRequestSort={handleSort} rowCount={fields.length} />
+                    <ListTableHead fields={fields} order={order} orderBy={orderBy} onRequestSort={handleSort} rowCount={fields.length} setSort={setSort} sort={sort} />
 
                     <ListTableBody
                         items={items ?? []}

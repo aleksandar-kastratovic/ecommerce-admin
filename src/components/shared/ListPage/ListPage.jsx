@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { toast } from "react-toastify";
 import ListTable from "../ListTable/ListTable";
@@ -97,6 +97,7 @@ const ListPage = ({
     setPropName,
     doesRefetch = false,
     setDoesRefetch = () => {},
+    defaultSort = [],
 }) => {
     // TODO Sorting is disabled as it does not work with pagination
     columnFields = useMemo(() => {
@@ -113,6 +114,21 @@ const ListPage = ({
     const queryParams = new URLSearchParams(locationSearch);
     const currPage = queryParams.get(queryKeys.page);
     const currSearch = queryParams.get(queryKeys.search);
+    const currSort = queryParams.get("sort");
+
+    const convertToSortArray = (sort) => {
+        const pairs = (sort || "::").split("::");
+
+        const res = pairs?.map((pair) => {
+            const [field, direction] = (pair || ":")?.split(":");
+            return { field, direction };
+        });
+
+        if (res?.every((x) => x?.field !== "" && x?.direction !== "")) {
+            return res;
+        }
+    };
+
     const [fieldsColumns, setFieldsColumns] = useState(columnFields);
 
     useEffect(() => {
@@ -122,6 +138,7 @@ const ListPage = ({
     const [search, setSearch] = useState(currSearch ? currSearch : "");
     // const [page, setPage] = useState(1);
     const [page, setPage] = useState(currPage ? currPage : 1);
+    const [sort, setSort] = useState(convertToSortArray(currSort) ?? defaultSort);
     const [deleteModalData, setDeleteModalData] = useState({});
 
     const [openModal, setOpenModal] = useState({ show: false, id: null });
@@ -141,7 +158,7 @@ const ListPage = ({
         data: response,
         isLoading,
         isError,
-    } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, openModal.show, doesRefetch, apiUrl], () => api.list(apiUrl, { page, search, ...filters }));
+    } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, sort, openModal.show, doesRefetch, apiUrl], () => api.list(apiUrl, { page, search, sort, ...filters }));
     // Modify the data
     if (response?.payload && modifyItems) {
         response.payload.items = modifyItems(response.payload.items);
@@ -369,6 +386,8 @@ const ListPage = ({
                     showDatePicker={showDatePicker}
                 />
                 <ListTable
+                    setSort={setSort}
+                    sort={sort}
                     fields={flatten(fieldsColumns).filter((field) => field.in_main_table)}
                     listData={listData ? listData : response?.payload}
                     handleOnClickActions={handleOnClickActions}

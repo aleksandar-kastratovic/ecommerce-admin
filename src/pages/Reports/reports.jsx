@@ -17,8 +17,12 @@ export const Reports = () => {
             display: true,
             clickHandler: {
                 type: "navigate",
-                fnc: (rowData) => {
-                    navigate(`/products/${rowData.id}?tab=lager`);
+                fnc: ({ id, attributes_text }) => {
+                    if (attributes_text) {
+                        navigate(`/products/${id}?tab=variation`);
+                    } else {
+                        navigate(`/products/${id}?tab=lager`);
+                    }
                 },
             },
         },
@@ -26,6 +30,7 @@ export const Reports = () => {
             display: false,
         },
     };
+
 
     const fields = [
         {
