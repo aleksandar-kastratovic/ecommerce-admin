@@ -30,77 +30,53 @@ const Products = () => {
         },
     };
 
-    // const testJSON = [
-    //     {
-    //         field_name: "Naziv",
-    //         prop_name: "name",
-    //         in_main_table: true,
-    //         in_details: true,
-    //         editable: true,
-    //         disabled: false,
-    //         required: true,
-    //         description: "",
-    //         ui_prop: {
-    //             columns: {
-    //                 xs: 12,
-    //                 sm: 12,
-    //                 md: 12,
-    //                 lg: 12,
-    //                 xl: 12,
-    //             },
-    //         },
-    //         sortable: true,
-    //         input_type: "input",
-    //     },
-    // ];
-
-    const api = useAPI();
-
-    const getTableCellFormData = useCallback(async (data) => {
-        switch (data?.selected?.column?.prop_name) {
-            case "sku":
-                switch (data?.api_params?.api_method) {
-                    case "GET":
-                       //ovde setovati fieldsTmp za prikaz zeljenog JSON u formi
-                        return await api.get(`${data?.api_params?.api_path}${data?.api_params?.queryString ? data?.api_params?.queryString : null}`).then((res) => {
-                            return res?.payload;
-                        });
-                }
-                break;
-            default:
-                switch (data?.api_params?.api_method) {
-                    case "GET":
-                        return await api.get(`${data?.api_params?.api_path}${data?.api_params?.queryString ? data?.api_params?.queryString : null}`).then((res) => {
-                            return res?.payload;
-                        });
-                }
-        }
-    });
-
-    const { customTableCellActions } = useTableCellActions({ clickAction: "edit", click: true, doubleClick: true, doubleClickAction: "none" });
-
-    const submitCell = useCellSubmit();
-
-    const cellValueChange = (value, row, column) => {
-        console.log(value, row, column);
-    };
-
-    const onCellSubmit = (value, row, setSelected, api_url, api_method) => {
-        //submit logika
-        submitCell(api_url, api_method, value);
-        setDoesRefetch(true);
-        setSelected({
-            row: null,
-            column: null,
-        });
-        setFieldsTmp(null);
-    };
-
-    useEffect(() => {
-        if (doesRefetch) {
-            setDoesRefetch(false);
-        }
-    }, [doesRefetch]);
+    // const api = useAPI();
+    //
+    // const getTableCellFormData = useCallback(async (data) => {
+    //     switch (data?.selected?.column?.prop_name) {
+    //         case "sku":
+    //             switch (data?.api_params?.api_method) {
+    //                 case "GET":
+    //                    //ovde setovati fieldsTmp za prikaz zeljenog JSON u formi
+    //                     return await api.get(`${data?.api_params?.api_path}${data?.api_params?.queryString ? data?.api_params?.queryString : null}`).then((res) => {
+    //                         return res?.payload;
+    //                     });
+    //             }
+    //             break;
+    //         default:
+    //             switch (data?.api_params?.api_method) {
+    //                 case "GET":
+    //                     return await api.get(`${data?.api_params?.api_path}${data?.api_params?.queryString ? data?.api_params?.queryString : null}`).then((res) => {
+    //                         return res?.payload;
+    //                     });
+    //             }
+    //     }
+    // });
+    //
+    // const { customTableCellActions } = useTableCellActions({ clickAction: "edit", click: true, doubleClick: true, doubleClickAction: "none" });
+    //
+    // const submitCell = useCellSubmit();
+    //
+    // const cellValueChange = (value, row, column) => {
+    //     console.log(value, row, column);
+    // };
+    //
+    // const onCellSubmit = (value, row, setSelected, api_url, api_method) => {
+    //     //submit logika
+    //     submitCell(api_url, api_method, value);
+    //     setDoesRefetch(true);
+    //     setSelected({
+    //         row: null,
+    //         column: null,
+    //     });
+    //     setFieldsTmp(null);
+    // };
+    //
+    // useEffect(() => {
+    //     if (doesRefetch) {
+    //         setDoesRefetch(false);
+    //     }
+    // }, [doesRefetch]);
 
     return (
         <>
@@ -111,13 +87,13 @@ const Products = () => {
                 title="Proizvodi"
                 columnFields={fields}
                 customActions={customActions}
-                tableCellActions={{
-                    actions: customTableCellActions,
-                    onChange: cellValueChange,
-                    onSubmit: onCellSubmit,
-                    getTableCellFormData: getTableCellFormData,
-                    cell_fields: fieldsTmp,
-                }}
+                // tableCellActions={{
+                //     actions: customTableCellActions,
+                //     onChange: cellValueChange,
+                //     onSubmit: onCellSubmit,
+                //     getTableCellFormData: getTableCellFormData,
+                //     cell_fields: fieldsTmp,
+                // }}
                 doesRefetch={doesRefetch}
                 setDoesRefetch={setDoesRefetch}
             />
