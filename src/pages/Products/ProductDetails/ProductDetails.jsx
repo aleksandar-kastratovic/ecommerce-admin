@@ -36,6 +36,7 @@ const ProductDetails = () => {
         new: false,
         new_from: null,
         new_to: null,
+        order: 0,
         status: "on",
     };
     const authCtx = useContext(AuthContext);

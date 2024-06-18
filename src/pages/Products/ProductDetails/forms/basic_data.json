@@ -76,8 +76,8 @@
         "xs": 12,
         "sm": 12,
         "md": 12,
-        "lg": 6,
-        "xl": 6
+        "lg": 3,
+        "xl": 3
       }
     },
     "sortable": true,
@@ -85,6 +85,27 @@
     "fillFromApi": "admin/product-items/basic-data/ddl",
     "usePropName": true,
     "options": []
+  },
+  {
+    "field_name": "Pozicija",
+    "prop_name": "order",
+    "in_main_table": true,
+    "in_details": true,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": {
+      "columns": {
+        "xs": 12,
+        "sm": 12,
+        "md": 12,
+        "lg": 3,
+        "xl": 3
+      }
+    },
+    "sortable": true,
+    "input_type": "input"
   },
   {
     "field_name": "Prikaz artikla na B2B",
