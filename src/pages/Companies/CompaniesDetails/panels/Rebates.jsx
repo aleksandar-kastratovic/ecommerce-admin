@@ -92,7 +92,7 @@ export const Rebates = ({ companyId }) => {
         if (value?.discount_value?.includes("%")) {
             ret.currency = "%";
         } else {
-            ret.currency = "rsd";
+            ret.currency = null;
         }
 
         submitCell(`admin/customers-b2b/rebate-company/${fields?.id}`, api_method, ret, setDoesRefetch);
@@ -445,7 +445,7 @@ export const Rebates = ({ companyId }) => {
                 onClose={() => setOpenModal({ ...openModal, show: false })}
                 onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}
             >
-                <CopyModalContent setSelected={setSelectedFormValues} selected={selectedFormValues} onChange={onCopyChange} mutate={copy} isPending={isCopying} />
+                <CopyModalContent setSelected={setSelectedFormValues} companyId={companyId} selected={selectedFormValues} onChange={onCopyChange} mutate={copy} isPending={isCopying} />
             </ListPageModalWrapper>
         </>
     );
