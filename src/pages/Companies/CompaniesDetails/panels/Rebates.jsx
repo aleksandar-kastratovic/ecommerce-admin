@@ -92,7 +92,7 @@ export const Rebates = ({ companyId }) => {
         if (value?.discount_value?.includes("%")) {
             ret.currency = "%";
         } else {
-            ret.currency = "rsd";
+            ret.currency = null;
         }
 
         submitCell(`admin/customers-b2b/rebate-company/${fields?.id}`, api_method, ret, setDoesRefetch);
