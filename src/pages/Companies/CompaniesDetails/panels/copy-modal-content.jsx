@@ -11,13 +11,13 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Button from "../../../../components/shared/Button/Button";
 
-export const CopyModalContent = ({ onChange, selected, setSelected, mutate, isPending }) => {
+export const CopyModalContent = ({ onChange, companyId, selected, setSelected, mutate, isPending }) => {
     const api = useAPI();
     const [value, setValue] = useState("");
 
     const { data: opt } = useQuery(["copyModalContent", value], async () => {
         if (value?.length >= 3) {
-            return await api.get(`admin/customers-b2b/rebate-company/main/ddl/b2b_company?search=${value}`).then((res) => {
+            return await api.get(`admin/customers-b2b/rebate-company/main/ddl/b2b_company?search=${value}&company_id=${companyId}`).then((res) => {
                 return res?.payload;
             });
         }

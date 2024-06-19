@@ -445,7 +445,7 @@ export const Rebates = ({ companyId }) => {
                 onClose={() => setOpenModal({ ...openModal, show: false })}
                 onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}
             >
-                <CopyModalContent setSelected={setSelectedFormValues} selected={selectedFormValues} onChange={onCopyChange} mutate={copy} isPending={isCopying} />
+                <CopyModalContent setSelected={setSelectedFormValues} companyId={companyId} selected={selectedFormValues} onChange={onCopyChange} mutate={copy} isPending={isCopying} />
             </ListPageModalWrapper>
         </>
     );
