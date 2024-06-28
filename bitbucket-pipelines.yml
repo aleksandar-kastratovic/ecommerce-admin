@@ -374,3 +374,9 @@ pipelines:
               <<: *execute
               name: Alesari
               deployment: alesari
+
+    prod-solarnarevolucija:
+        - step:
+              <<: *execute
+              name: SolarnaRevolucija
+              deployment: solarnarevolucija
