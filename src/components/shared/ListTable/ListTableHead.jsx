@@ -18,7 +18,7 @@ const ListTableHead = ({ fields = [], onRequestSort, order, orderBy, setSort = (
             {column.field_name}
         </TableSortLabel>
     );
-
+    console.log(fields);
     const [params, setParams] = useSearchParams();
     const filters_tmp = params.get("filters");
     const page_tmp = params.get("page");
@@ -91,15 +91,25 @@ const ListTableHead = ({ fields = [], onRequestSort, order, orderBy, setSort = (
                     return (
                         <TableCell
                             sx={{
-                                cursor:"pointer"
+                                cursor: column?.sortable ? "pointer" : "default",
                             }}
                             onClick={() => {
-                                handleSort(column?.prop_name);
+                                if (column?.sortable) {
+                                    handleSort(column?.prop_name);
+                                }
                             }}
                             sortDirection={sortingDirection(column)}
                             {...columnProps(column, true)}
                         >
-                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    "&:hover": {
+                                        textDecoration: column?.sortable ? "underline" : "none",
+                                    },
+                                }}
+                            >
                                 {getDirection(sort, column?.prop_name)}
                                 {column.field_name}
                                 {sort?.length > 1 && renderPositionInSortArray(column?.prop_name)}
