@@ -9,7 +9,7 @@
         "required": true,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": false,
+        "sortable": true,
         "input_type": "input"
     },
     {
@@ -22,7 +22,7 @@
         "required": true,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": false,
+        "sortable": true,
         "input_type": "input"
     },
     {
@@ -48,7 +48,7 @@
         "required": true,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": true,
+        "sortable": false,
         "input_type": "input"
     },
     {
@@ -61,7 +61,7 @@
         "required": true,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": true,
+        "sortable": false,
         "input_type": "input"
     },
     {
@@ -74,7 +74,7 @@
         "required": false,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": false,
+        "sortable": true,
         "input_type": "input"
     },
     {
@@ -87,7 +87,7 @@
         "required": false,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": false,
+        "sortable": true,
         "input_type": "input"
     },
     {
@@ -100,7 +100,7 @@
         "required": false,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": false,
+        "sortable": true,
         "input_type": "boolean"
     },
     {
@@ -113,7 +113,7 @@
         "required": false,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": false,
+        "sortable": true,
         "input_type": "boolean"
     },
     {
@@ -125,8 +125,54 @@
         "disabled": false,
         "required": false,
         "description": "",
-        "ui_prop": "xyz",
-        "sortable": false,
+        "ui_prop": {
+            "table_cell": {
+                "cell": {
+                    "editable": true,
+                    "render_input": true
+                },
+                "api": {
+                    "api_path": "admin/product-items/basic-data",
+                    "method": "GET",
+                    "queryString": null,
+                    "save": {
+                        "api_path": "admin/product-items/basic-data",
+                        "method": "POST"
+                    }
+                },
+                "cell_behavior": {
+                    "fields": [
+                        {
+                            "field_name": "Pozicija",
+                            "prop_name": "order",
+                            "in_main_table": true,
+                            "in_details": true,
+                            "editable": true,
+                            "disabled": false,
+                            "required": false,
+                            "description": "",
+                            "ui_prop": {
+                                "form": {
+                                    "input": {
+                                        "label": false
+                                    }
+                                },
+                                "columns": {
+                                    "xs": 12,
+                                    "sm": 12,
+                                    "md": 12,
+                                    "lg": 12,
+                                    "xl": 12
+                                }
+                            },
+                            "sortable": true,
+                            "input_type": "input"
+                        }
+                    ]
+                }
+            }
+        },
+        "sortable": true,
         "input_type": "input"
     },
     {
@@ -139,7 +185,7 @@
         "required": false,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": false,
+        "sortable": true,
         "input_type": "input"
     },
     {

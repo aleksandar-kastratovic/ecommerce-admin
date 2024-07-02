@@ -99,10 +99,10 @@ const ListPage = ({
     setDoesRefetch = () => {},
     defaultSort = [],
 }) => {
-    // TODO Sorting is disabled as it does not work with pagination
-    columnFields = useMemo(() => {
-        return columnFields.map((field) => ({ ...field, sortable: false }));
-    }, [columnFields]);
+    // // TODO Sorting is disabled as it does not work with pagination
+    // columnFields = useMemo(() => {
+    //     return columnFields.map((field) => ({ ...field, sortable: false }));
+    // }, [columnFields]);
 
     const showAddButtonRef = useRef(null);
 
