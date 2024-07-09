@@ -53,6 +53,7 @@ const Form = ({
         item: null,
         path: "",
         apiPathCrop: "",
+        alt: data.name,
         width: widthOfElement,
         height: heightOfElement,
         name: "",
@@ -159,7 +160,7 @@ const Form = ({
         [data]
     );
 
-    const onOpenImageDialog = (img, label, imageName, width, height, item, size, dimensions) => {
+    const onOpenImageDialog = (img, label, imageName, width, height, item, size, dimensions, alt) => {
         const found = data[imageName];
         const checkImage = isUrlValid(img);
         let image_name = item?.prop_name + "_filename";
@@ -179,6 +180,7 @@ const Form = ({
                 dimensions: dimensions,
                 apiPathCrop: item?.ui_prop?.fileUpload?.imageButton?.apiPathCrop ?? apiPathCrop,
                 width: width,
+                alt: alt,
                 size: size,
                 height: height,
                 name: imageName,
@@ -190,6 +192,7 @@ const Form = ({
                 image: img,
                 label: label,
                 item: item,
+                alt: alt,
                 image_name: image_Name,
                 image_url: image_Url,
                 size: size,

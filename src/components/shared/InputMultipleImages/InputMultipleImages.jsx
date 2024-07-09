@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, useContext } from "react";
 
 import Grid from "@mui/material/Grid";
 
@@ -7,8 +7,10 @@ import ImageListRow from "../MultipleImages/ImageListRow/ImageListRow";
 import MultipleImages from "../MultipleImages/MultipleImages";
 import DeleteDialog from "../Dialogs/DeleteDialog";
 import { toast } from "react-toastify";
+import AuthContext from "../../../store/auth-contex";
 
 const getLoadedFile = (file, i, len) => {
+
     return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -16,7 +18,7 @@ const getLoadedFile = (file, i, len) => {
                 id: i + 1 + len,
                 name: file.name,
                 position: i + 1 + len,
-                alt: file.name,
+                alt: file.alt,
                 size: file.size,
                 type: file.type,
                 src: reader.result,
@@ -31,17 +33,20 @@ const getLoadedFile = (file, i, len) => {
 
 export const InputMultipleImages = ({
     list = [],
-    onChangeHandler = () => {},
+    onChangeHandler = () => { },
     accept = "image/*",
     name = "",
-    uploadHandler = () => {},
-    deleteHandler = () => {},
+    uploadHandler = () => { },
+    deleteHandler = () => { },
+    handleChange = () => { },
     handleReorder,
     description,
     validate = null,
     apiPathCrop,
     isArray = false,
 }) => {
+    const authCtx = useContext(AuthContext);
+    const { api } = authCtx;
     const [imageList, setImageList] = useState(list);
     const [dragActive, setDragActive] = useState(false);
     const [openDeleteDialog, setOpenDeleteDialog] = useState({
@@ -63,7 +68,6 @@ export const InputMultipleImages = ({
     };
 
     const [openFullPageDialog, setOpenFullPageDialog] = useState(init);
-    console.log("init", openFullPageDialog);
 
     //DRAG EVENT HANDLER
     const handleDrag = function (e) {
@@ -130,7 +134,7 @@ export const InputMultipleImages = ({
     };
 
     //MODAL OPEN HANDLER
-    const handleModalOpen = (e, src, alt, name, size, type, id, position, path, dimensions) => {
+    const handleModalOpen = (e, src, alt, name, size, type, id, position, path, dimensions, id_product) => {
         setOpenFullPageDialog({
             show: true,
             id: id,
@@ -142,12 +146,36 @@ export const InputMultipleImages = ({
             path: path,
             position: position,
             dimensions: dimensions,
+            id_product: id_product
         });
     };
 
     //CLOSE MODAL
-    const handleCloseImageDialog = () => {
+    const handleCloseImageDialog = (data) => {
         setOpenFullPageDialog(init);
+    };
+    const handleSaveImageDialog = (data) => {
+        const dataForServer = {
+            id: data?.id,
+            id_product: data?.id_product,
+            title: data?.name,
+            subtitle: null,
+            short_description: data?.short_description,
+            description: data?.description,
+            alt: data?.alt,
+            file_base64: data?.image,
+            order: data?.position
+        }
+        api.post(`/admin/product-items/gallery`, dataForServer)
+            .then((response) => {
+                toast.success("Uspešno");
+                setOpenFullPageDialog(init);
+                handleChange();
+            })
+            .catch((error) => {
+                toast.warn("Greška");
+                console.warn(error);
+            });
     };
 
     //IMAGE UPLOAD FROM MODAL
@@ -172,10 +200,11 @@ export const InputMultipleImages = ({
             return item.name === event.target.id;
         });
         const found = find[0];
+
         let imageItem = {
             id: found.id,
             position: found.position,
-            alt: selectedFile.name,
+            alt: selectedFile.alt,
             size: selectedFile.size,
             type: selectedFile.type,
             name: selectedFile.name,
@@ -198,12 +227,13 @@ export const InputMultipleImages = ({
             show: true,
             image: result,
             name: selectedFile.name,
-            alt: selectedFile.name,
+            alt: selectedFile.alt,
             size: selectedFile.size,
             type: selectedFile.type,
             path: selectedFile.path,
         });
     };
+
     //TODO prosledjen item
     const handleDeleteImage = (e, deleteImgId, isNew, item) => {
         setOpenDeleteDialog({ show: true, id: deleteImgId, isNew: isNew, mutate: null });
@@ -238,6 +268,7 @@ export const InputMultipleImages = ({
     useEffect(() => {
         onChangeHandler({ target: { value: imageList, name: name } });
     }, [imageList]);
+
     return (
         <Grid container spacing={1} direction="row" sx={{ width: "100%", margin: "2rem 0 0 0" }}>
             <MultipleImages
@@ -256,6 +287,7 @@ export const InputMultipleImages = ({
                 setOpenFullPageDialog={setOpenFullPageDialog}
                 setImageList={setImageList}
                 imageList={imageList}
+                handleSaveImageDialog={(data) => { handleSaveImageDialog(data) }}
                 handleCloseImageDialog={handleCloseImageDialog}
                 onImageUpload={formImageUpload}
                 handleDeleteImage={handleDeleteImage}

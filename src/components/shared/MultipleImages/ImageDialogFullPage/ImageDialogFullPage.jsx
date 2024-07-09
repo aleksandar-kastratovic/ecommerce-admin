@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -33,15 +33,22 @@ const ImageDialogFullPage = ({
     title = "",
     setImageList,
     imageList = [],
-    onImageUpload = () => {},
-    handleCloseImageDialog = () => {},
-    handleDeleteImage = () => {},
-    uploadHandler = () => {},
+    onImageUpload = () => { },
+    handleCloseImageDialog = () => { },
+    handleSaveImageDialog = () => { },
+    handleDeleteImage = () => { },
+    uploadHandler = () => { },
     apiPathCrop,
 }) => {
     const [editMode, setEditMode] = useState(false);
     const [loadingImage, setLoadingImage] = useState(false);
     const [bttnText, setBttnText] = useState("Kopirajte link");
+    const [altText, setAltText] = useState(openFullPageDialog?.name);
+    useEffect(() => {
+        if (openFullPageDialog?.alt) {
+            setAltText(openFullPageDialog.alt);
+        }
+    }, [openFullPageDialog]);
 
     const handleCloseEditMode = () => {
         setEditMode(false);
@@ -71,6 +78,7 @@ const ImageDialogFullPage = ({
         const typeBase64 = base64.split(";")[0].split(":")[1];
         let y = base64[base64.length - 2] === "=" ? 2 : 1;
         const sizeBase64 = base64.length * (3 / 4) - y;
+
         let imageItem = {
             id: openFullPageDialog.id,
             position: openFullPageDialog.position,
@@ -81,7 +89,6 @@ const ImageDialogFullPage = ({
             name: imageName,
             src: base64Image,
         };
-
         uploadHandler(imageItem, { crop: true });
 
         setOpenFullPageDialog({
@@ -116,6 +123,18 @@ const ImageDialogFullPage = ({
     // };
 
     const { fileType } = useImageFileType(openFullPageDialog?.image ?? "");
+    const handleAltTextChange = (event) => {
+        setAltText(event.target.value);
+    };
+
+
+    const handleSaveImageDialogWithAlt = () => {
+        // setOpenFullPageDialog({
+        //     ...openFullPageDialog,
+        //     alt: altText,
+        // });
+        handleSaveImageDialog({...openFullPageDialog, alt: altText, title:"Alooo", subtitle: "Alo 1", short_description: "Ejjjj", description: "Ejjj ejjj", file_base64: null, order:null});
+    };
 
     return (
         <Dialog open={openFullPageDialog.show} fullScreen aria-labelledby="delete-dialog-title" aria-describedby="delete-dialog-description">
@@ -139,6 +158,7 @@ const ImageDialogFullPage = ({
                             handleCloseEditMode={handleCloseEditMode}
                             imageURL={openFullPageDialog.image}
                             imageName={openFullPageDialog.name}
+                            imageAlt={openFullPageDialog.alt}
                             handleSaveEditImage={handleSaveEdited}
                             apiPath={apiPathCrop}
                         />
@@ -162,7 +182,7 @@ const ImageDialogFullPage = ({
                                                             maxHeight: "calc(90vh - 64px)",
                                                         }}
                                                         src={openFullPageDialog?.image}
-                                                        alt={openFullPageDialog?.name}
+                                                        alt={openFullPageDialog?.alt}
                                                     />
                                                 ) : (
                                                     <video
@@ -180,7 +200,14 @@ const ImageDialogFullPage = ({
                                     <Grid item xs={4}>
                                         <form className={styles.formFieldsStyle}>
                                             <TextField fullWidth type="text" disabled label="Naziv slike" value={openFullPageDialog?.name} variant="outlined" />
-                                            <TextField fullWidth type="text" disabled label="Alt slike" value={openFullPageDialog?.alt} variant="outlined" />
+                                            <TextField
+                                                fullWidth
+                                                type="text"
+                                                label="Alt slike"
+                                                value={altText}
+                                                variant="outlined"
+                                                onChange={handleAltTextChange}
+                                            />
                                             <TextField fullWidth type="text" disabled label="Velicina slike" value={`${(openFullPageDialog?.size / (1024 * 1024))?.toFixed(2)}MB`} variant="outlined" />
                                             <TextField
                                                 fullWidth
@@ -233,7 +260,7 @@ const ImageDialogFullPage = ({
                     <div />
                 ) : (
                     <Stack direction="row" alignItems="center" spacing={2} className={styles.btnGroup}>
-                        <Button variant="outlined" onClick={handleCloseImageDialog} color="success" startIcon={<CheckIcon />}>
+                        <Button variant="outlined" onClick={handleSaveImageDialogWithAlt} color="success" startIcon={<CheckIcon />}>
                             Sačuvaj
                         </Button>
                         {/* <Button variant="outlined" component="label" startIcon={<PhotoCamera />}>
