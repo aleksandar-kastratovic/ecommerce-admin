@@ -19,7 +19,6 @@ const Payments = ({ data, customerId }) => {
       clickHandler: {
         type: 'modal_form',
         fnc: (rowData) => {
-          console.log("row data", rowData)
           api.get(`admin/customers-b2c/shipping-address/${rowData.id}`)
             .then((response) => {
               setShowResetButton(false);

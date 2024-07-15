@@ -31,7 +31,6 @@ export const Reports = () => {
         },
     };
 
-
     const fields = [
         {
             id: "low-stock",
@@ -39,7 +38,7 @@ export const Reports = () => {
             icon: IconList.inventory,
             enabled: true,
             component: (
-                <ListPage customActions={customActions} apiUrl={`admin/reports/products/low_stock`} columnFields={tblFields} listPageId={`reports`} useColumnFields={true} showNewButton={false} />
+                <ListPage customActions={customActions} apiUrl={`admin/reports/products/low-stock`} columnFields={tblFields} listPageId={`reports`} useColumnFields={true} showNewButton={false} />
             ),
         },
     ];
