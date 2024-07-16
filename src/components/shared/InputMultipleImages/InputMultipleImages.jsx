@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import AuthContext from "../../../store/auth-contex";
 
 const getLoadedFile = (file, i, len) => {
-
     return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -33,12 +32,12 @@ const getLoadedFile = (file, i, len) => {
 
 export const InputMultipleImages = ({
     list = [],
-    onChangeHandler = () => { },
+    onChangeHandler = () => {},
     accept = "image/*",
     name = "",
-    uploadHandler = () => { },
-    deleteHandler = () => { },
-    handleChange = () => { },
+    uploadHandler = () => {},
+    deleteHandler = () => {},
+    handleChange = () => {},
     handleReorder,
     description,
     validate = null,
@@ -146,7 +145,7 @@ export const InputMultipleImages = ({
             path: path,
             position: position,
             dimensions: dimensions,
-            id_product: id_product
+            id_product: id_product,
         });
     };
 
@@ -164,8 +163,8 @@ export const InputMultipleImages = ({
             description: data?.description,
             alt: data?.alt,
             file_base64: data?.image,
-            order: data?.position
-        }
+            order: data?.position,
+        };
         api.post(`/admin/product-items/gallery`, dataForServer)
             .then((response) => {
                 toast.success("Uspešno");
@@ -287,7 +286,9 @@ export const InputMultipleImages = ({
                 setOpenFullPageDialog={setOpenFullPageDialog}
                 setImageList={setImageList}
                 imageList={imageList}
-                handleSaveImageDialog={(data) => { handleSaveImageDialog(data) }}
+                handleSaveImageDialog={(data) => {
+                    handleSaveImageDialog(data);
+                }}
                 handleCloseImageDialog={handleCloseImageDialog}
                 onImageUpload={formImageUpload}
                 handleDeleteImage={handleDeleteImage}

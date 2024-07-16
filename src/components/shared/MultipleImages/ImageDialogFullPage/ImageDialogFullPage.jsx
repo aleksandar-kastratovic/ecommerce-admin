@@ -33,11 +33,11 @@ const ImageDialogFullPage = ({
     title = "",
     setImageList,
     imageList = [],
-    onImageUpload = () => { },
-    handleCloseImageDialog = () => { },
-    handleSaveImageDialog = () => { },
-    handleDeleteImage = () => { },
-    uploadHandler = () => { },
+    onImageUpload = () => {},
+    handleCloseImageDialog = () => {},
+    handleSaveImageDialog = () => {},
+    handleDeleteImage = () => {},
+    uploadHandler = () => {},
     apiPathCrop,
 }) => {
     const [editMode, setEditMode] = useState(false);
@@ -82,17 +82,20 @@ const ImageDialogFullPage = ({
         let imageItem = {
             id: openFullPageDialog.id,
             position: openFullPageDialog.position,
-            alt: openFullPageDialog.alt,
+            alt: altText,
             size: sizeBase64,
             type: openFullPageDialog.type,
             path: openFullPageDialog.path,
             name: imageName,
             src: base64Image,
         };
+
         uploadHandler(imageItem, { crop: true });
+        handleSaveImageDialog({ ...openFullPageDialog, title: "", subtitle: "", short_description: "", description: "", alt: altText, file_base64: null, order: null });
 
         setOpenFullPageDialog({
             ...openFullPageDialog,
+            alt: altText,
             image: base64Image,
         });
 
@@ -127,13 +130,12 @@ const ImageDialogFullPage = ({
         setAltText(event.target.value);
     };
 
-
     const handleSaveImageDialogWithAlt = () => {
         // setOpenFullPageDialog({
         //     ...openFullPageDialog,
         //     alt: altText,
         // });
-        handleSaveImageDialog({...openFullPageDialog, alt: altText, title:"Alooo", subtitle: "Alo 1", short_description: "Ejjjj", description: "Ejjj ejjj", file_base64: null, order:null});
+        handleSaveImageDialog({ ...openFullPageDialog, alt: altText, title: "", subtitle: "", short_description: "", description: "", file_base64: null, order: null });
     };
 
     return (
@@ -158,7 +160,7 @@ const ImageDialogFullPage = ({
                             handleCloseEditMode={handleCloseEditMode}
                             imageURL={openFullPageDialog.image}
                             imageName={openFullPageDialog.name}
-                            imageAlt={openFullPageDialog.alt}
+                            imageAlt={altText}
                             handleSaveEditImage={handleSaveEdited}
                             apiPath={apiPathCrop}
                         />
@@ -182,7 +184,7 @@ const ImageDialogFullPage = ({
                                                             maxHeight: "calc(90vh - 64px)",
                                                         }}
                                                         src={openFullPageDialog?.image}
-                                                        alt={openFullPageDialog?.alt}
+                                                        alt={altText}
                                                     />
                                                 ) : (
                                                     <video
@@ -200,14 +202,7 @@ const ImageDialogFullPage = ({
                                     <Grid item xs={4}>
                                         <form className={styles.formFieldsStyle}>
                                             <TextField fullWidth type="text" disabled label="Naziv slike" value={openFullPageDialog?.name} variant="outlined" />
-                                            <TextField
-                                                fullWidth
-                                                type="text"
-                                                label="Alt slike"
-                                                value={altText}
-                                                variant="outlined"
-                                                onChange={handleAltTextChange}
-                                            />
+                                            <TextField fullWidth type="text" label="Alt slike" value={altText} variant="outlined" onChange={handleAltTextChange} />
                                             <TextField fullWidth type="text" disabled label="Velicina slike" value={`${(openFullPageDialog?.size / (1024 * 1024))?.toFixed(2)}MB`} variant="outlined" />
                                             <TextField
                                                 fullWidth
