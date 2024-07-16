@@ -222,7 +222,6 @@ const ListTableBody = ({
             window.removeEventListener("keydown", handleKeyDown);
         };
     }, []);
-    console.log(data);
     // What to show
     let content;
     switch (true) {

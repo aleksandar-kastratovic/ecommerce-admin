@@ -41,7 +41,7 @@ const B2Cbanners = ({}) => {
                 type: "modal_form",
                 fnc: (rowData) => {
                     setIdPosition(rowData?.id_position);
-                    filterFields(formFieldsTemp, rowData?.position_type);
+                    filterFields(formFieldsTemp, rowData?.type);
                     // getForm();
                     return {
                         show: true,
@@ -53,55 +53,89 @@ const B2Cbanners = ({}) => {
     };
 
     const filterFields = (fields, type) => {
-        let arr = [];
+        const arr = fields?.map((field) => {
+            const { prop_name } = field;
 
-        if (type === "gallery") {
-            arr = fields?.map((item, i) => {
-                const { prop_name } = item;
-                if (prop_name === "position_name" || prop_name === "title" || prop_name === "subtitle" || prop_name === "text") {
-                    return {
-                        ...item,
-                        in_details: false,
-                    };
-                }
+            if (prop_name === "position_name") {
                 return {
-                    ...item,
-                    in_details: true,
+                    ...field,
+                    in_details: false,
                 };
-            });
-        } else if (type === "image") {
-            arr = fields?.map((item, i) => {
-                const { prop_name } = item;
-                if (prop_name === "position_name" || prop_name === "title" || prop_name === "subtitle" || prop_name === "text") {
-                    return {
-                        ...item,
-                        in_details: false,
-                    };
-                }
-                return {
-                    ...item,
-                    in_details: true,
-                };
-            });
-        } else if (type === "image_description") {
-            arr = fields?.map((item, i) => {
-                const { prop_name } = item;
-                if (prop_name === "position_name") {
-                    return {
-                        ...item,
-                        in_details: false,
-                    };
-                }
-                return {
-                    ...item,
-                    in_details: true,
-                };
-            });
-        } else {
-            arr = [...tblFields];
-        }
+            }
 
-        setFormFieldsTemp([...arr]);
+            if (type === "image" || type === "video") {
+                if (prop_name === "video_provider" || prop_name === "video_url") {
+                    return {
+                        ...field,
+                        in_details: false,
+                    };
+                } else {
+                    if (prop_name === "image" && type === "video") {
+                        return {
+                            ...field,
+                            field_name: "Video",
+                            in_details: true,
+                        };
+                    } else {
+                        if (prop_name === "image" && type === "image") {
+                            return {
+                                ...field,
+                                field_name: "Slika",
+                                in_details: true,
+                            };
+                        } else {
+                            return {
+                                ...field,
+                                in_details: true,
+                            };
+                        }
+                    }
+                }
+            }
+
+            if (type === "video") {
+                if (prop_name === "image" || prop_name === "video") {
+                    return {
+                        ...field,
+                        in_details: false,
+                    };
+                }
+
+                if (prop_name === "video_provider" || prop_name === "video_url") {
+                    return {
+                        ...field,
+                        in_details: true,
+                    };
+                }
+            }
+
+            if (type === "video_link") {
+                if (prop_name === "image" || prop_name === "video") {
+                    return {
+                        ...field,
+                        in_details: false,
+                    };
+                }
+
+                if (prop_name === "video_provider" || prop_name === "video_url") {
+                    return {
+                        ...field,
+                        in_details: true,
+                    };
+                } else {
+                    return {
+                        ...field,
+                        in_details: true,
+                    };
+                }
+            }
+
+            return {
+                ...field,
+            };
+        });
+
+        setFormFieldsTemp(arr || []);
     };
 
     const validateData = (data, field) => {
@@ -124,6 +158,9 @@ const B2Cbanners = ({}) => {
                     })
                     .catch((error) => console.log(error));
 
+                return ret;
+            case "type":
+                filterFields(formFieldsTemp, ret?.type);
                 return ret;
             default:
                 return ret;

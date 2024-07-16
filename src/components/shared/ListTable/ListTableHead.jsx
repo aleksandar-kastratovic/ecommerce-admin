@@ -18,7 +18,6 @@ const ListTableHead = ({ fields = [], onRequestSort, order, orderBy, setSort = (
             {column.field_name}
         </TableSortLabel>
     );
-    console.log(fields);
     const [params, setParams] = useSearchParams();
     const filters_tmp = params.get("filters");
     const page_tmp = params.get("page");
