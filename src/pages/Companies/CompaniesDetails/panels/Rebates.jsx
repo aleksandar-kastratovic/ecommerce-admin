@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 import SelectionModal from "./Conditions/SelectionModal/SelectionModal";
 import { useMutation, useQuery } from "react-query";
 import Button from "../../../../components/shared/Button/Button";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../../helpers/functions";
 import DeleteModal from "../../../../components/shared/Dialogs/DeleteDialog";
 import { DeleteModalContent } from "./delete-modal-content";
@@ -125,7 +125,15 @@ export const Rebates = ({ companyId }) => {
                     filters: options?.filters ?? [],
                 })
                 .then((res) => {
-                    return res?.payload;
+                    let ret = res?.payload;
+                    if (activeType === "products") {
+                        let nameField = ret.format.find((item) => item.field === "name");
+                        nameField.renderCell = (cellValues) => {
+                            return <a href={`/${activeType}/${cellValues.row.id}`}>{cellValues.row.name}</a>;
+                        };
+                    }
+
+                    return ret;
                 })
                 .catch((err) => toast.error(err?.response?.data?.message ?? err?.response?.data?.payload?.message ?? "Došlo je do greške"));
         },
@@ -310,10 +318,10 @@ export const Rebates = ({ companyId }) => {
             refetchSelect();
             setDoesRefetch(false);
         }
-        if(openDialog?.show) {
+        if (openDialog?.show) {
             refetchSelect();
         }
-    }, [doesRefetch,openDialog?.show]);
+    }, [doesRefetch, openDialog?.show]);
 
     return (
         <>
