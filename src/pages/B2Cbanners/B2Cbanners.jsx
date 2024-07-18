@@ -64,7 +64,7 @@ const B2Cbanners = ({}) => {
             }
 
             if (type === "image" || type === "video") {
-                if (prop_name === "video_provider" || prop_name === "video_url") {
+                if (prop_name === "video_url") {
                     return {
                         ...field,
                         in_details: false,
@@ -101,7 +101,7 @@ const B2Cbanners = ({}) => {
                     };
                 }
 
-                if (prop_name === "video_provider" || prop_name === "video_url") {
+                if (prop_name === "video_url") {
                     return {
                         ...field,
                         in_details: true,
@@ -117,7 +117,7 @@ const B2Cbanners = ({}) => {
                     };
                 }
 
-                if (prop_name === "video_provider" || prop_name === "video_url") {
+                if (prop_name === "video_url") {
                     return {
                         ...field,
                         in_details: true,
