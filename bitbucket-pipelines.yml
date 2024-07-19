@@ -380,3 +380,15 @@ pipelines:
               <<: *execute
               name: SolarnaRevolucija
               deployment: solarnarevolucija
+
+    prod-bogutovo:
+        - step:
+              <<: *execute
+              name: Bogutovo
+              deployment: bogutovo
+
+    prod-sovaprintfactory:
+        - step:
+              <<: *execute
+              name: SovaPrintFactory
+              deployment: sovaprintfactory
