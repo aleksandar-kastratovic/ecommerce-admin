@@ -18,8 +18,8 @@ const B2Bbanners = ({}) => {
         async () => {
             return await api
                 .get(`admin/banners-b2b/main/options/upload?id_position=${idPosition}`)
-                .then(async (response) => {
-                    await formatFormFields(response?.payload);
+                .then((response) => {
+                    formatFormFields(response?.payload);
                 })
                 .catch((error) => console.warn(error));
         },
@@ -154,7 +154,6 @@ const B2Bbanners = ({}) => {
                         const idPositionArr = response?.payload;
                         const selectedIdPositionItem = idPositionArr.find((systemItem) => systemItem.id === ret.id_position);
                         if (selectedIdPositionItem) {
-                            filterFields(formFieldsTemp, selectedIdPositionItem.type);
                             setIdPosition(ret?.id_position);
                         }
                     })
@@ -163,6 +162,9 @@ const B2Bbanners = ({}) => {
                 return ret;
             case "type":
                 filterFields(formFieldsTemp, ret?.type);
+                return ret;
+            case undefined:
+                setIdPosition(ret?.id_position);
                 return ret;
             default:
                 return ret;

@@ -14,12 +14,12 @@ const B2Cbanners = ({}) => {
     const { api } = authCtx;
 
     const {} = useQuery(
-        ["b2b-banners", idPosition],
+        ["b2c-banners", idPosition],
         async () => {
             return await api
                 .get(`admin/banners-b2c/main/options/upload?id_position=${idPosition}`)
-                .then(async (response) => {
-                    await formatFormFields(response?.payload);
+                .then((response) => {
+                    formatFormFields(response?.payload);
                 })
                 .catch((error) => console.warn(error));
         },
@@ -53,6 +53,7 @@ const B2Cbanners = ({}) => {
     };
 
     const filterFields = (fields, type) => {
+        console.log(fields, type);
         const arr = fields?.map((field) => {
             const { prop_name } = field;
 
@@ -145,22 +146,30 @@ const B2Cbanners = ({}) => {
                 let index = formFieldsTemp.findIndex((it) => {
                     return it.prop_name === "id_position";
                 });
+
                 let idPositionObject = formFieldsTemp[index];
                 let path = `${idPositionObject?.fillFromApi}/${idPositionObject?.prop_name}?id_position=${ret?.id_position}`;
+
                 api.get(path)
                     .then((response) => {
                         const idPositionArr = response?.payload;
+
                         const selectedIdPositionItem = idPositionArr.find((systemItem) => systemItem.id === ret.id_position);
+
                         if (selectedIdPositionItem) {
-                            filterFields(formFieldsTemp, selectedIdPositionItem.type);
                             setIdPosition(ret?.id_position);
                         }
                     })
-                    .catch((error) => console.log(error));
+                    .catch((error) => {
+                        console.warn(error);
+                    });
 
                 return ret;
             case "type":
                 filterFields(formFieldsTemp, ret?.type);
+                return ret;
+            case undefined:
+                setIdPosition(ret?.id_position);
                 return ret;
             default:
                 return ret;
