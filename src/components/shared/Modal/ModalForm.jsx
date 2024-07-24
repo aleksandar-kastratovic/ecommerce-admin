@@ -79,6 +79,7 @@ const ModalForm = ({
     const { api } = authCtx;
     const [data, setData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+
     const handleData = async () => {
         setIsLoading(true);
         // The queryStringLink array is initialized to store the formatted key-value pairs from the queryString prop.
@@ -99,9 +100,11 @@ const ModalForm = ({
             .get(modalUrl !== null ? modalUrl["data"]?.url : url)
             .then((response) => {
                 let modifiedData = response?.payload;
+
                 if (useModalGalleryInjection) {
                     modifiedData = prepareInitialData(modifiedData);
                 }
+                validateData(modifiedData);
                 setData(modifiedData);
                 setIsLoading(false);
             })
@@ -110,6 +113,7 @@ const ModalForm = ({
                 setIsLoading(false);
             });
     };
+
     const saveData = async (data) => {
         setIsLoading(true);
 
@@ -157,7 +161,6 @@ const ModalForm = ({
                             setOpenModal({ ...openModal, show: false });
                             setIsLoading(false);
                             setDoesRefetch(!doesRefetch);
-
                         })
                         .catch((error) => {
                             console.warn(error);
@@ -179,11 +182,13 @@ const ModalForm = ({
             email: "",
         });
     };
+
     useEffect(() => {
         if (openModal.show) {
             handleData();
         }
     }, [openModal.show]);
+
     return (
         <ListPageModalWrapper
             anchor={anchor}
