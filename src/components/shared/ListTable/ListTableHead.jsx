@@ -44,7 +44,7 @@ const ListTableHead = ({ fields = [], onRequestSort, order, orderBy, setSort = (
             })
             .join("::");
 
-        const newParams = {};
+        const newParams = Object.fromEntries(params.entries());
         if (search_tmp) {
             newParams.search = search_tmp;
         }

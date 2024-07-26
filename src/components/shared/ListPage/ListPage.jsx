@@ -112,6 +112,7 @@ const ListPage = ({
     const location = useLocation();
     const { pathname, search: locationSearch } = location;
     const queryParams = new URLSearchParams(locationSearch);
+
     const currPage = queryParams.get(queryKeys.page);
     const currSearch = queryParams.get(queryKeys.search);
     const currSort = queryParams.get("sort");
@@ -349,6 +350,7 @@ const ListPage = ({
                 // For each key in newQuery, set the corresponding value in URLSearchParams.
                 queryParams.set(key, newQuery[key]);
             }
+
             // Combine the updated query parameters into a string and navigate to the updated URL.
             navigate(`${pathname}?${queryParams.toString()}`);
         },
