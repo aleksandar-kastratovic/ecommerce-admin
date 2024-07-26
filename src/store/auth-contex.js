@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useIsIdle } from "../hooks/isIdle";
+import { useNavigate } from "react-router-dom";
 
 let logoutTimer;
 let refreshTokenTimer;
@@ -53,6 +54,7 @@ const retrieveStoredUser = () => {
 
 export const AuthContextProvider = (props) => {
     let userData = retrieveStoredUser();
+    let navigate = useNavigate();
 
     const [tokenExpired, setTokenExpired] = useState(false);
     const [showTokenExpiryModal, setShowTokenExpiryModal] = useState(false);
@@ -163,6 +165,30 @@ export const AuthContextProvider = (props) => {
             };
         }
     }, [userData, logoutHandler, refreshToken]);
+
+    useEffect(() => {
+        const handleStorageChange = (event) => {
+            if (event.key === "user") {
+                setShowTokenExpiryModal(false);
+                navigate(0);
+            }
+
+            if (event.key === "expirationTime") {
+            }
+        };
+
+        window.addEventListener("storage", handleStorageChange);
+
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+        };
+    }, []);
+
+    useEffect(() => {
+        if (!userIsLoggedIn) {
+            setShowTokenExpiryModal(false);
+        }
+    }, [userIsLoggedIn]);
 
     const userScreensHandler = (userScreens) => {
         setUserScreensData(userScreens);
