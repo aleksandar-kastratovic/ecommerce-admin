@@ -9,7 +9,7 @@
         "required": true,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": true,
+        "sortable": false,
         "input_type": "select",
         "options": [],
         "fillFromApi": "admin/campaigns/promo-codes/codes/ddl",
@@ -25,7 +25,7 @@
         "required": false,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": true,
+        "sortable": false,
         "input_type": "input"
     },
     {
@@ -76,7 +76,7 @@
         "required": true,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": true,
+        "sortable": false,
         "input_type": "input"
     },
     {
@@ -89,7 +89,7 @@
         "required": false,
         "description": "",
         "ui_prop": "xyz",
-        "sortable": true,
+        "sortable": false,
         "input_type": "delete"
     }
 ]
