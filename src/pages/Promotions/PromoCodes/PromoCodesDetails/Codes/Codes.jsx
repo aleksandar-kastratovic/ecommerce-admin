@@ -26,7 +26,7 @@ const Codes = () => {
                     navigate(`/promotions/promo-codes/${pId}?tab=codes`);
                 })
                 .catch((error) => {
-                    toast.error(error.response?.data?.message || error.response?.data?.payload?.message || "Greška!");
+                    toast.error(error.response?.data?.payload?.message || error.response?.data?.message || "Greška!");
                 });
         },
         {}

@@ -20,11 +20,11 @@ if (process.env.REACT_APP_URL || dejan) {
     localStorage.setItem("api", process.env.REACT_APP_URL || dejan);
 
     root.render(
-        <AuthContextProvider>
-            <BrowserRouter>
+        <BrowserRouter>
+            <AuthContextProvider>
                 <App />
-            </BrowserRouter>
-        </AuthContextProvider>
+            </AuthContextProvider>
+        </BrowserRouter>
     );
 } else {
     root.render(<h1>Required env variable is not set: REACT_APP_URL</h1>);
