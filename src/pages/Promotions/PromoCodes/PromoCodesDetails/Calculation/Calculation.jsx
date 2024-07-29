@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import useAPI from "../../../../../api/api";
 import PageWrapper from "../../../../../components/shared/Layout/PageWrapper/PageWrapper";
 import { useNavigate } from "react-router-dom";
+import { deepClone } from "@mui/x-data-grid/utils/utils";
 
 const Calculation = () => {
     const [fields, setFields] = useState(tblFields);
@@ -41,23 +42,47 @@ const Calculation = () => {
         { refetchOnWindowFocus: false }
     );
 
+    const chageHandler = (data, fieldName) => {
+        api.get(`admin/campaigns/promo-codes/calculations/ddl/currency?discount_type=${data.discount_type}`)
+            .then((response) => {
+                if (fieldName != "discount_type") {
+                    return;
+                }
+
+                let discountTypeValue = data.discount_type;
+                if (discountTypeValue == undefined) {
+                    console.warn("Vrednost data.discount nije pronadjena!");
+                    return;
+                }
+
+                let newFields = deepClone(fields);
+
+                let currencyField = newFields.find((item) => item.prop_name === "currency");
+                if (currencyField == undefined) {
+                    console.warn("Polje currency nije pronadjeno!");
+                    return;
+                }
+
+                const queryString = `discount_type=${discountTypeValue}`;
+
+                currencyField.queryString = queryString;
+
+                let newData = { ...data };
+                newData.currency = "0";
+                if (response.payload.length === 2) {
+                    newData.currency = response.payload[1].id;
+                }
+                setData(newData);
+                setFields(newFields);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
     console.log("data", data);
 
-    return (
-        <Form
-            formFields={fields}
-            initialData={data}
-            onSubmit={(data) => onSubmit(data)}
-            isLoading={isLoading}
-            queryString={data?.discount_type ? `discount_type=${data?.discount_type}` : null}
-            onChange={(ret) => {
-                setData({
-                    ...data,
-                    ...ret,
-                });
-            }}
-        />
-    );
+    return <Form formFields={fields} initialData={data} onSubmit={(data) => onSubmit(data)} isLoading={isLoading} onChange={chageHandler} />;
 };
 
 export default Calculation;
