@@ -10,7 +10,7 @@ import Calculation from "./Calculation/Calculation";
 import Conditions from "./Conditions/Conditions";
 
 const PromoCodesDetails = () => {
-    const activeTab = getUrlQueryStringParam("tab") ?? "basic";
+    const activeTab = getUrlQueryStringParam("tab");
     const navigate = useNavigate();
     const { pid } = useParams();
     const fields = [
@@ -54,7 +54,7 @@ const PromoCodesDetails = () => {
         navigate(`?${queryString}`, { replace: true });
     };
 
-    return <DetailsPage title={`Unos novog promo koda`} fields={fields} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
+    return <DetailsPage title={`Unos novog promo koda`} fields={fields} selectedPanel={activeTab ?? "basic"} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default PromoCodesDetails;

@@ -6,6 +6,7 @@ import { useMutation, useQuery } from "react-query";
 import useAPI from "../../../../../api/api";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
+import { setUrlQueryStringParam } from "../../../../../helpers/functions";
 
 const Basic = () => {
     const [fields, setFields] = useState(tblFields);
@@ -35,7 +36,8 @@ const Basic = () => {
             return await api.get(`admin/campaigns/product-catalog/basic-data/${pid}`).then((res) => {
                 setData(res?.payload);
                 if (res?.payload?.system) {
-                    navigate(`/promotions/promo-codes/${pid}?system=${res?.payload?.system}`);
+                    let queryString = setUrlQueryStringParam("system", res?.payload?.system);
+                    navigate(`?${queryString}`, { replace: true });
                 }
             });
         },
