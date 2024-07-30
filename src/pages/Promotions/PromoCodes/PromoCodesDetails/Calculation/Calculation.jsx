@@ -68,7 +68,7 @@ const Calculation = () => {
                 currencyField.queryString = queryString;
 
                 let newData = { ...data };
-                newData.currency = "0";
+                newData.currency = "";
                 if (response.payload.length === 2) {
                     newData.currency = response.payload[1].id;
                 }
@@ -80,7 +80,35 @@ const Calculation = () => {
             });
     };
 
-    console.log("data", data);
+    useEffect(() => {
+        if (data && data.discount_type) {
+            api.get(`admin/campaigns/promo-codes/calculations/ddl/currency?discount_type=${data.discount_type}`)
+                .then((response) => {
+                    let discountTypeValue = data.discount_type;
+                    if (discountTypeValue == undefined) {
+                        console.warn("Vrednost data.discount nije pronadjena!");
+                        return;
+                    }
+
+                    let newFields = deepClone(fields);
+
+                    let currencyField = newFields.find((item) => item.prop_name === "currency");
+                    if (currencyField == undefined) {
+                        console.warn("Polje currency nije pronadjeno!");
+                        return;
+                    }
+
+                    const queryString = `discount_type=${discountTypeValue}`;
+
+                    currencyField.queryString = queryString;
+
+                    setFields(newFields);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    }, [data]);
 
     return <Form formFields={fields} initialData={data} onSubmit={(data) => onSubmit(data)} isLoading={isLoading} onChange={chageHandler} />;
 };
