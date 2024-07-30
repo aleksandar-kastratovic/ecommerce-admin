@@ -66,7 +66,9 @@ const DetailsPage = ({ adminSettings = false, title, fields, ready, additionalBu
                 </Box>
 
                 {/* Active panel */}
-                <Box className={styles.main}>{activePanel?.component ?? null}</Box>
+                <Box className={styles.main} key={selected}>
+                    {activePanel?.component ?? null}
+                </Box>
             </Box>
         </PageWrapper>
     );

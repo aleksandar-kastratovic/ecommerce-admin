@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 import { toast } from "react-toastify";
 import useAPI from "../../../../../api/api";
+import { setUrlQueryStringParam } from "../../../../../helpers/functions";
 
 const CodesList = () => {
     const api = useAPI();
@@ -98,7 +99,8 @@ const CodesList = () => {
         async () => {
             return await api.get(`admin/campaigns/product-catalog/basic-data/${pid}`).then((res) => {
                 if (res?.payload?.system) {
-                    navigate(`/promotions/promo-codes/${pid}?tab=codes&system=${res?.payload?.system}`);
+                    let queryString = setUrlQueryStringParam("system", res?.payload?.system);
+                    navigate(`?${queryString}`, { replace: true });
                 }
             });
         },
