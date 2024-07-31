@@ -105,21 +105,21 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
 
     const badgets = [
         {
-            "path": "/b2c-orders",
-            "counts": badgeNumberB2c || []
+            path: "/b2c-orders",
+            counts: badgeNumberB2c || [],
         },
         {
-            "path": "/b2b-orders",
-            "counts": badgeNumberB2b || []
+            path: "/b2b-orders",
+            counts: badgeNumberB2b || [],
         },
         {
-            "path": "/b2b-contact",
-            "counts": badgeNumberContactB2B || []
+            path: "/b2b-contact",
+            counts: badgeNumberContactB2B || [],
         },
         {
-            "path": "/b2c-contactform",
-            "counts": badgeNumberContactB2C || []
-        }
+            path: "/b2c-contactform",
+            counts: badgeNumberContactB2C || [],
+        },
     ];
 
     useEffect(() => {
@@ -187,7 +187,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
                                         let renderedLink = null;
                                         if ((isSmallScreen && item.path === "/b2c-orders") || !isSmallScreen) {
                                             badgets.forEach((badget) => {
-                                                if(item?.path === badget.path) {
+                                                if (item?.path === badget.path) {
                                                     renderedLink = (
                                                         <Badge
                                                             badgeContent={badget.counts.find((item) => item.status === "new")?.count || 0}
@@ -213,7 +213,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
                                                 }
                                             });
 
-                                            if(renderedLink === null) {
+                                            if (renderedLink === null) {
                                                 renderedLink = (
                                                     <NavLink to={item.path} className={(navData) => (navData.isActive ? "active" : "")}>
                                                         <Unicon icon={item.icon} />
