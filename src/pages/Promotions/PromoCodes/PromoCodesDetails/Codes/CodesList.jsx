@@ -2,7 +2,7 @@ import tblFields from "../Codes/tblFields.json";
 import { useState, useEffect } from "react";
 import ListPage from "../../../../../components/shared/ListPage/ListPage";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "react-query";
+import { useQuery } from "react-query";
 import { toast } from "react-toastify";
 import useAPI from "../../../../../api/api";
 import { setUrlQueryStringParam } from "../../../../../helpers/functions";
@@ -19,64 +19,73 @@ const CodesList = () => {
     };
 
     const [downloadLink, setDownloadLink] = useState(null);
-    const params = new URLSearchParams(window.location.search);
-    const system = params.get("system");
+    const [isExporting, setIsExporting] = useState(false);
 
-    //POST za export kodova
-    const { mutate: exportData, isLoading } = useMutation(
-        ["export-promo-kodovi"],
-        async () => {
-            return await api
-                .post("admin/campaigns/promo-codes/export", {
-                    id_campaign: pid,
-                    system: system,
-                })
-                .then((res) => {
-                    toast.success(`Uspešno pokrenut export promo kodova!`);
-                    return res?.payload;
-                })
-                .catch((err) => {
-                    toast.error(`Došlo je do greške prilikom exporta promo kodova!`);
-                    console.log(err);
-                });
-        },
-        {}
-    );
+    const startExport = async () => {
+        setIsExporting(true);
+        await api
+            .post("admin/campaigns/promo-codes/export", {
+                campaign_id: pid,
+            })
+            .then((res) => {
+                checkExport();
+                return res?.payload;
+            })
+            .catch((err) => {
+                toast.error(`Došlo je do greške prilikom pokretanja exporta promo kodova!`);
+                console.warn(err);
+                setIsExporting(false);
+            });
+    };
 
-    //GET za download e-ponude
-    const getFile = useQuery(
-        ["export-promo kodova-download"],
-        async () => {
-            return await api
-                .get(`admin/campaigns/promo-codes/export/${pid}?system=${system}`)
-                .then((res) => {
-                    setDownloadLink(res?.payload);
-                })
-                ?.catch((err) => console.log(err));
-        },
-        { refetchOnWindowFocus: false, enabled: false }
-    );
+    const checkExport = async (idExport = -1) => {
+        let downloadStarted = false;
+        await api
+            .get(`admin/campaigns/promo-codes/export/info/${pid}/${idExport}`)
+            .then((res) => {
+                idExport = res?.payload?.id_export;
+                if (res?.payload.download_enabled) {
+                    downloadStarted = true;
+                    startDownload(idExport);
+                }
+                let checkTimeout;
+                if (checkTimeout) {
+                    clearTimeout(checkTimeout);
+                }
+                if (!downloadStarted) {
+                    checkTimeout = setTimeout(() => checkExport(idExport), 2 * 1000);
+                }
+            })
+            .catch((error) => {
+                console.warn(error);
+                toast.error(`Došlo je do greške prilikom provere exporta promo kodova!`);
+                setIsExporting(false);
+                return;
+            });
+    };
+
+    const startDownload = async (idExport) => {
+        await api
+            .get(`admin/campaigns/promo-codes/export/file/${pid}/${idExport}`)
+            .then((res) => {
+                setDownloadLink(res?.payload);
+            })
+            .catch((err) => {
+                toast.error(`Došlo je do greške prilikom preuzimanja promo kodova!`);
+                console.warn(err);
+            });
+
+        setIsExporting(false);
+    };
 
     const buttons = [
         {
-            position: 1,
-            action: () => {
-                getFile.refetch();
-            },
+            position: 0,
+            action: startExport,
             icon: "download",
-            disabled: getFile.isFetching || isLoading,
-            title: "Preuzmi fajl",
-            label: `${getFile.isFetching ? `Preuzimanje u toku...` : "Preuzmi fajl"}`,
-        },
-        {
-            position: 2,
-            action: () => {
-                exportData();
-            },
-            disabled: isLoading || getFile.isFetching,
-            icon: "upload",
-            title: "Export promo kodova",
-            label: `${isLoading ? `Export u toku...` : "Export promo kodova"}`,
+            disabled: isExporting,
+            title: "Preuzmi promo kodove",
+            label: `${isExporting ? `Preuzimanje u toku...` : "Preuzmi promo kodove"}`,
         },
     ];
 
