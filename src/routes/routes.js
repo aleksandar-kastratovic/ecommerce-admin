@@ -91,6 +91,7 @@ import PromoCodes from "../pages/Promotions/PromoCodes/PromoCodes";
 import PromoCodesDetails from "../pages/Promotions/PromoCodes/PromoCodesDetails/PromoCodesDetails";
 import Codes from "../pages/Promotions/PromoCodes/PromoCodesDetails/Codes/Codes";
 import { Reports } from "../pages/Reports/reports";
+import PromotionReports from "../pages/PromotionsReports/PromotionReports";
 // import B2CReclamations from "../pages/B2CReclamations/B2CReclamations";
 // import B2CReclamationsDetails from "../pages/B2CReclamations/B2CReclamationsDetails/B2CReclamationsDetails";
 
@@ -100,6 +101,7 @@ const screens = {
     HOMEPAGE: ["/homepage", "", "", "", Homepage],
     ERROR404: ["*", "", "", "", Error404, []],
     REPORTS_PRODUCTS: ["/reports/products", "Izveštaji", IconList.inventory, REPORTS, Reports, []],
+    REPORTS_CAMPAIGNS: ["/reports/promotions", "Promocije", IconList.celebration, REPORTS, PromotionReports, []],
     B2C_ORDERS: ["/b2c-orders", "Porudžbine", IconList.fileOpen, SALE, B2COrders, [[":orderId", B2COrdersDetails]]],
     B2B_ORDERS: ["/b2b-orders", "Porudžbine", IconList.fileOpen, SALE, B2BOrders, [[":orderId", B2BOrdersDetails]]],
     BANNERS_B2C: ["/b2c-banners", "Baneri", IconList.image, SALE, B2Cbanners, [["positions", B2CbannersPositions]]],

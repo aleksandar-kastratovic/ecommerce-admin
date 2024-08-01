@@ -58,6 +58,7 @@ export const AuthContextProvider = (props) => {
 
     const [tokenExpired, setTokenExpired] = useState(false);
     const [showTokenExpiryModal, setShowTokenExpiryModal] = useState(false);
+    const [lastActivityTime, setLastActivityTime] = useState(new Date().getTime());
 
     if (userData.duration <= 10000 && userData.user) {
         localStorage.removeItem("user");
@@ -139,6 +140,40 @@ export const AuthContextProvider = (props) => {
             refreshTokenTimer = setTimeout(refreshToken, 60000);
         }
     }, []);
+
+    const updateLastActivityTime = () => {
+        setLastActivityTime(new Date().getTime());
+    };
+
+    useEffect(() => {
+        const events = ["mousedown", "mousemove", "keydown", "touchstart", "scroll"];
+        events.forEach((event) => window.addEventListener(event, updateLastActivityTime));
+
+        return () => {
+            events.forEach((event) => window.removeEventListener(event, updateLastActivityTime));
+        };
+    }, []);
+
+    useEffect(() => {
+        let activityCheckTimer;
+        let activityTime = 20 * 60 * 1000;
+        let refreshTimer = 20 * 60 * 1000;
+        const checkLastActivityTime = () => {
+            const currentTime = new Date().getTime();
+            if (currentTime - lastActivityTime <= activityTime) {
+                refreshToken();
+            }
+            activityCheckTimer = setTimeout(checkLastActivityTime, refreshTimer);
+        };
+
+        activityCheckTimer = setTimeout(checkLastActivityTime, refreshTimer);
+
+        return () => {
+            if (activityCheckTimer) {
+                clearTimeout(activityCheckTimer);
+            }
+        };
+    }, [lastActivityTime, refreshToken]);
 
     useEffect(() => {
         if (userData?.user) {
