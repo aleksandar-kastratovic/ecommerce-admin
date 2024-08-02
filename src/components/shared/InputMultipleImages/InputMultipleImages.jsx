@@ -98,6 +98,7 @@ export const InputMultipleImages = ({
             for (let i = 0; i < selectedFiles.length; i++) {
                 var file = selectedFiles[i];
                 const obj = await getLoadedFile(file, i, len);
+
                 await uploadHandler(obj);
                 newImagesArray.push(obj);
             }

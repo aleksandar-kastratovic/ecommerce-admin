@@ -73,6 +73,7 @@ const ModalForm = ({
     isArray,
     setDoesRefetch,
     doesRefetch,
+    isUploading = false,
 }) => {
     const { id, modalUrl = null } = openModal;
     const authCtx = useContext(AuthContext);
@@ -244,6 +245,7 @@ const ModalForm = ({
                                 dataFromServer={dataFromServer}
                                 setPropName={setPropName}
                                 isArray={isArray}
+                                isUploading={isUploading}
                             />
                         </FormWrapper>
                     </>

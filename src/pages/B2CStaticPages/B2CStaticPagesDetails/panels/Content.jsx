@@ -82,9 +82,8 @@ const Content = ({ pageId }) => {
     };
 
     const handleSubmitWrapper = (pageId, id) => {
-        setLoading(true);
-
-        return (data) => {
+        return async (data) => {
+            setLoading(true);
             const req = {
                 id: data.new ? null : data.id,
                 id_static_pages: pageId ?? null,
@@ -96,13 +95,14 @@ const Content = ({ pageId }) => {
                 short_description: null,
                 description: null,
             };
-            api.post(`${apiPathGallery}`, req)
+            await api
+                .post(`${apiPathGallery}`, req)
                 .then((response) => {
-                    toast.success("Uspešno");
+                    toast.success("Uspešno dodata slika");
                     setLoading(false);
                 })
                 .catch((error) => {
-                    toast.warn("Greška");
+                    toast.warn("Greška pri dodavanju slike");
                     console.warn(error);
                     setLoading(false);
                 });
@@ -113,11 +113,11 @@ const Content = ({ pageId }) => {
         setLoading(true);
         api.delete(`${apiPathGallery}/${id}`)
             .then((response) => {
-                toast.success("Uspešno");
+                toast.success("Uspešno obrisana slika");
                 setLoading(false);
             })
             .catch((error) => {
-                toast.warn("Greška");
+                toast.warn("Greška pri brisanju slike");
                 console.warn(error);
                 setLoading(false);
             });
@@ -127,11 +127,11 @@ const Content = ({ pageId }) => {
         setLoading(true);
         api.put(`${apiPathGallery}/order`, { id: id, order: destination })
             .then((response) => {
-                toast.success("Uspešno");
+                toast.success("Uspešno promenjen raspored slika");
                 setLoading(false);
             })
             .catch((error) => {
-                toast.warn("Greška");
+                toast.warn("Greška pri promeni rasporeda slika");
                 console.warn(error);
                 setLoading(false);
             });
@@ -191,7 +191,7 @@ const Content = ({ pageId }) => {
     useEffect(() => {
         handleInformationImage();
     }, []);
-    console.log(selectedRow);
+
     const updateNewFieldsInDetails = (fields, field, edit, data, disableType = false, validation) => {
         if (field === "") {
             handleSubmitWrapper(pageId, selectedRow?.id);
@@ -246,7 +246,6 @@ const Content = ({ pageId }) => {
                         },
                     };
                     item.dimensions = { width: image?.width, height: image?.height };
-                    console.log("item", item);
                 }
             }
         });
@@ -278,6 +277,10 @@ const Content = ({ pageId }) => {
         }
     };
 
+    useEffect(() => {
+        console.log(loading);
+    }, [loading]);
+
     return (
         <>
             <ListPage
@@ -305,6 +308,7 @@ const Content = ({ pageId }) => {
                 useColumnFields={true}
                 useModalGalleryInjection={true}
                 customTitleModalForm={modalFormTitle}
+                isModalUploading={loading}
             />
         </>
     );

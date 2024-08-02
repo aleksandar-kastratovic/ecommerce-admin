@@ -98,6 +98,7 @@ const ListPage = ({
     doesRefetch = false,
     setDoesRefetch = () => {},
     defaultSort = [],
+    isModalUploading = false,
 }) => {
     // // TODO Sorting is disabled as it does not work with pagination
     // columnFields = useMemo(() => {
@@ -479,6 +480,7 @@ const ListPage = ({
                 setPropName={setPropName}
                 setDoesRefetch={setDoesRefetch}
                 doesRefetch={doesRefetch}
+                isUploading={isModalUploading}
             />
             <DeleteDialog
                 children={deleteModalChildren}
