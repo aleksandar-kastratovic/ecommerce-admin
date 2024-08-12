@@ -90,7 +90,6 @@ export const InputMultipleImages = ({
         } else if (e?.target?.files && e.target.files[0]) {
             selectedFiles = e.target.files;
         }
-
         if (selectedFiles.length > 0) {
             let newImagesArray = [];
 
@@ -98,41 +97,49 @@ export const InputMultipleImages = ({
             for (let i = 0; i < selectedFiles.length; i++) {
                 var file = selectedFiles[i];
                 const obj = await getLoadedFile(file, i, len);
-                if (typeof uploadHandler === "function") {
-                    await uploadHandler(obj);
+
+                if (validate !== undefined && validate !== null) {
+                    const { size, type } = obj;
+                    const { imageUpload } = validate;
+                    const { allow_size, allow_format } = imageUpload;
+
+                    let allowedFormatMime = allow_format?.map((item, i) => {
+                        return item?.mime_type;
+                    });
+
+                    const convertToMB = (bytes) => {
+                        return bytes / (1024 * 1024);
+                    };
+
+                    if (allowedFormatMime.includes(type)) {
+                        if (size > allow_size) {
+                            toast.error(`Slika je prevelika (${obj.name}). Maksimalna dozvoljena veličina je ${convertToMB(allow_size)}MB.`);
+                        } else {
+                            if (typeof uploadHandler === "function") {
+                                await uploadHandler(obj);
+                            }
+                            newImagesArray.push(obj);
+                        }
+                    } else {
+                        toast.error(`Nedozvoljen format slike.`);
+                    }
+                } else {
+                    if (typeof uploadHandler === "function") {
+                        await uploadHandler(obj);
+                    }
+                    newImagesArray.push(obj);
                 }
-                newImagesArray.push(obj);
             }
             if (Array.isArray(imageList)) {
                 newImagesArray = [...imageList, ...newImagesArray];
             }
-            if (validate !== undefined && validate !== null) {
-                let image = selectedFiles[0];
-                const { size, type } = image;
-                const { imageUpload } = validate;
-                const { allow_size, allow_format } = imageUpload;
-                let allowedFormatMime = allow_format?.map((item, i) => {
-                    return item?.mime_type;
-                });
-
-                const convertToMB = (bytes) => {
-                    return bytes / (1024 * 1024);
-                };
-
-                if (allowedFormatMime.includes(type)) {
-                    if (size > allow_size) {
-                        toast.error(`Slika je prevelika. Maksimalna dozvoljena veličina je ${convertToMB(allow_size)}MB.`);
-                    } else {
-                        setImageList(newImagesArray);
-                    }
-                } else {
-                    toast.error(`Nedozvoljen format slike.`);
-                }
-            } else {
-                setImageList(newImagesArray);
-            }
+            setImageList(newImagesArray);
         }
     };
+
+    useEffect(() => {
+        console.log("update");
+    }, [imageList]);
 
     //MODAL OPEN HANDLER
     const handleModalOpen = (e, src, alt, name, size, type, id, position, path, dimensions, id_product) => {
