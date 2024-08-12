@@ -43,6 +43,7 @@ const ModalForm = ({
     sx,
     variant,
     apiPathFormModal,
+    saveMethod = "post",
     formFields,
     initialData = {},
     label,
@@ -135,7 +136,7 @@ const ModalForm = ({
         }
 
         if (!withoutSetterFunction) {
-            api.post(`${modalUrl !== null ? modalUrl["save"]?.url : apiPathFormModal}`, sendData)
+            api[saveMethod](`${modalUrl !== null ? modalUrl["save"]?.url : apiPathFormModal}`, sendData)
                 .then((response) => {
                     setData(response?.payload);
                     toast.success(`Uspešno`);
@@ -155,8 +156,7 @@ const ModalForm = ({
             }
             {
                 !closeButtonModalForm &&
-                    api
-                        .post(`${modalUrl !== null ? modalUrl["save"]?.url : apiPathFormModal}`, objectForServer)
+                    api[saveMethod](`${modalUrl !== null ? modalUrl["save"]?.url : apiPathFormModal}`, objectForServer)
                         .then((response) => {
                             toast.success(`Uspešno`);
                             setOpenModal({ ...openModal, show: false });

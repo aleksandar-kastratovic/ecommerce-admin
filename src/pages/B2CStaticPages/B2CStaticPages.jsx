@@ -5,6 +5,7 @@ import Modal from "../../components/shared/Modal/Modal";
 import { useContext, useEffect, useState } from "react";
 import Button from "../../components/shared/Button/Button";
 import AuthContext from "../../store/auth-contex";
+import ModalForm from "../../components/shared/Modal/ModalForm";
 
 const B2CStaticPages = () => {
     const authCtx = useContext(AuthContext);
@@ -58,19 +59,22 @@ const B2CStaticPages = () => {
                 doesRefetch={doesRefetch}
                 setDoesRefetch={setDoesRefetch}
             />
-            <Modal
-                title={"Dupliranje stranice"}
-                open={openModal.show}
-                closeModal={() => {
-                    setOpenModal({ show: false, id: null, name: null });
-                }}
-                content={<p>{`Da li ste sigurni da zelite da duplirate stranicu ${openModal.name}`}</p>}
-                modalFooterButton={
-                    <div>
-                        <Button label="Da" variant="contained" onClick={copyHandler} />
-                        <Button label="Ne" variant="contained" onClick={() => setOpenModal({ show: false, id: null, name: null })} />
-                    </div>
-                }
+
+            <ModalForm
+                anchor="right"
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+                formFields={[]}
+                withoutSetterFunction
+                cancelButton
+                doesRefetch={doesRefetch}
+                setDoesRefetch={setDoesRefetch}
+                sx={{ padding: "2rem" }}
+                shortText={<p>{`Da li ste sigurni da zelite da duplirate stranicu ${openModal.name}`}</p>}
+                customTitle={"Dupliranje stranice"}
+                initialData={{ id: openModal.id }}
+                label="Dupliraj"
+                apiPathFormModal="admin/static-pages-b2c/basic-data/clone"
             />
         </>
     );
