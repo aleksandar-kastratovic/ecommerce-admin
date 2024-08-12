@@ -43,6 +43,7 @@ const ModalForm = ({
     sx,
     variant,
     apiPathFormModal,
+    saveMethod = "post",
     formFields,
     initialData = {},
     label,
@@ -73,6 +74,7 @@ const ModalForm = ({
     isArray,
     setDoesRefetch,
     doesRefetch,
+    isUploading = false,
 }) => {
     const { id, modalUrl = null } = openModal;
     const authCtx = useContext(AuthContext);
@@ -134,7 +136,7 @@ const ModalForm = ({
         }
 
         if (!withoutSetterFunction) {
-            api.post(`${modalUrl !== null ? modalUrl["save"]?.url : apiPathFormModal}`, sendData)
+            api[saveMethod](`${modalUrl !== null ? modalUrl["save"]?.url : apiPathFormModal}`, sendData)
                 .then((response) => {
                     setData(response?.payload);
                     toast.success(`Uspešno`);
@@ -154,8 +156,7 @@ const ModalForm = ({
             }
             {
                 !closeButtonModalForm &&
-                    api
-                        .post(`${modalUrl !== null ? modalUrl["save"]?.url : apiPathFormModal}`, objectForServer)
+                    api[saveMethod](`${modalUrl !== null ? modalUrl["save"]?.url : apiPathFormModal}`, objectForServer)
                         .then((response) => {
                             toast.success(`Uspešno`);
                             setOpenModal({ ...openModal, show: false });
@@ -244,6 +245,7 @@ const ModalForm = ({
                                 dataFromServer={dataFromServer}
                                 setPropName={setPropName}
                                 isArray={isArray}
+                                isUploading={isUploading}
                             />
                         </FormWrapper>
                     </>

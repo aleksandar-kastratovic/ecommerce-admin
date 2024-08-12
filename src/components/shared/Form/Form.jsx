@@ -42,6 +42,7 @@ const Form = ({
     inPlaceInput = {
         enabled: false,
     },
+    isUploading = false,
 }) => {
     const navigate = useNavigate();
     const [data, setData] = useState(initialData ?? {});
@@ -106,6 +107,7 @@ const Form = ({
                 break;
             default:
                 newData = { ...data, [target.name]: target.value };
+                break;
         }
 
         newData = validateData(newData, target.name);
@@ -316,7 +318,13 @@ const Form = ({
                 <Buttons styleWrapperButtons={styleWrapperButtons}>
                     {cancelButton && <Button label="Odustani" onClick={onCancel} />}
                     {submitButton && (
-                        <Button type="submit" label={isLoading ? <CircularProgress size="1.5rem" /> : label ? label : "Sačuvaj"} variant="contained" disabled={isLoading} sx={styleButtonSubmit} />
+                        <Button
+                            type="submit"
+                            label={isLoading || isUploading ? <CircularProgress size="1.5rem" /> : label ? label : "Sačuvaj"}
+                            variant="contained"
+                            disabled={isLoading || isUploading}
+                            sx={styleButtonSubmit}
+                        />
                     )}
                     {closeButton && <Button type="submit" label={label ? label : "Sačuvaj"} variant="contained" onClick={onCloseModalButton} />}
                 </Buttons>

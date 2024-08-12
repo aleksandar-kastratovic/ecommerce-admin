@@ -35,7 +35,7 @@ export const InputMultipleImages = ({
     onChangeHandler = () => {},
     accept = "image/*",
     name = "",
-    uploadHandler = () => {},
+    uploadHandler = null,
     deleteHandler = () => {},
     handleChange = () => {},
     handleReorder,
@@ -98,7 +98,9 @@ export const InputMultipleImages = ({
             for (let i = 0; i < selectedFiles.length; i++) {
                 var file = selectedFiles[i];
                 const obj = await getLoadedFile(file, i, len);
-                await uploadHandler(obj);
+                if (typeof uploadHandler === "function") {
+                    await uploadHandler(obj);
+                }
                 newImagesArray.push(obj);
             }
             if (Array.isArray(imageList)) {
@@ -154,27 +156,31 @@ export const InputMultipleImages = ({
         setOpenFullPageDialog(init);
     };
     const handleSaveImageDialog = (data) => {
-        const dataForServer = {
-            id: data?.id,
-            id_product: data?.id_product,
-            title: data?.name,
-            subtitle: null,
-            short_description: data?.short_description,
-            description: data?.description,
-            alt: data?.alt,
-            file_base64: data?.image,
-            order: data?.position,
-        };
-        api.post(`/admin/product-items/gallery`, dataForServer)
-            .then((response) => {
-                toast.success("Uspešno");
-                setOpenFullPageDialog(init);
-                handleChange();
-            })
-            .catch((error) => {
-                toast.warn("Greška");
-                console.warn(error);
-            });
+        if (uploadHandler === null) {
+            const dataForServer = {
+                id: data?.id,
+                id_product: data?.id_product,
+                title: data?.name,
+                subtitle: null,
+                short_description: data?.short_description,
+                description: data?.description,
+                alt: data?.alt,
+                file_base64: data?.image,
+                order: data?.position,
+            };
+            api.post(`/admin/product-items/gallery`, dataForServer)
+                .then((response) => {
+                    toast.success("Uspešno");
+                    setOpenFullPageDialog(init);
+                    handleChange();
+                })
+                .catch((error) => {
+                    toast.warn("Greška");
+                    console.warn(error);
+                });
+        } else {
+            setOpenFullPageDialog(init);
+        }
     };
 
     //IMAGE UPLOAD FROM MODAL
@@ -211,7 +217,9 @@ export const InputMultipleImages = ({
             src: result,
         };
 
-        uploadHandler(imageItem);
+        if (typeof uploadHandler === "function") {
+            uploadHandler(imageItem);
+        }
 
         const newState = imageList.map((img) => {
             if (img.id === found.id) {
@@ -292,7 +300,7 @@ export const InputMultipleImages = ({
                 handleCloseImageDialog={handleCloseImageDialog}
                 onImageUpload={formImageUpload}
                 handleDeleteImage={handleDeleteImage}
-                uploadHandler={uploadHandler}
+                uploadHandler={uploadHandler ? uploadHandler : () => null}
                 apiPathCrop={apiPathCrop}
             />
 
