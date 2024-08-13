@@ -36,7 +36,6 @@ const B2CSettingsDetails = () => {
             component: <B2CSettingsForm key={panel?.id} form_slug={panel?.form_slug} module={panel?.module} submodule={panel?.submodule} config_module_id={panel?.id} />,
         };
     });
-
     return <DetailsPage adminSettings={true} title={B2CId} fields={fields.length > 0 ? fields : [{}]} ready={!isLoading} />;
 };
 

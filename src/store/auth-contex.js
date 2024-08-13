@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { useIsIdle } from "../hooks/isIdle";
 import { useNavigate } from "react-router-dom";
@@ -58,7 +58,7 @@ export const AuthContextProvider = (props) => {
 
     const [tokenExpired, setTokenExpired] = useState(false);
     const [showTokenExpiryModal, setShowTokenExpiryModal] = useState(false);
-    const [lastActivityTime, setLastActivityTime] = useState(new Date().getTime());
+    const lastActivityTimeRef = useRef(new Date().getTime());
 
     if (userData.duration <= 10000 && userData.user) {
         localStorage.removeItem("user");
@@ -142,7 +142,7 @@ export const AuthContextProvider = (props) => {
     }, []);
 
     const updateLastActivityTime = () => {
-        setLastActivityTime(new Date().getTime());
+        lastActivityTimeRef.current = new Date().getTime();
     };
 
     useEffect(() => {
@@ -160,7 +160,7 @@ export const AuthContextProvider = (props) => {
         let refreshTimer = 20 * 60 * 1000;
         const checkLastActivityTime = () => {
             const currentTime = new Date().getTime();
-            if (currentTime - lastActivityTime <= activityTime) {
+            if (currentTime - lastActivityTimeRef.current <= activityTime) {
                 refreshToken();
             }
             activityCheckTimer = setTimeout(checkLastActivityTime, refreshTimer);
@@ -173,7 +173,7 @@ export const AuthContextProvider = (props) => {
                 clearTimeout(activityCheckTimer);
             }
         };
-    }, [lastActivityTime, refreshToken]);
+    }, [refreshToken]);
 
     useEffect(() => {
         if (userData?.user) {
