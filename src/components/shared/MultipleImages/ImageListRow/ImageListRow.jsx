@@ -60,10 +60,23 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}
                                                                 loading="lazy"
                                                                 style={{
                                                                     height: "10rem",
-                                                                    maxWidth: "9rem"
+                                                                    maxWidth: "9rem",
+                                                                    margin: "auto",
                                                                 }}
                                                                 onClick={(e) =>
-                                                                    handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path, item.dimensions, item.id_product)
+                                                                    handleModalOpen(
+                                                                        e,
+                                                                        item.src,
+                                                                        item.alt,
+                                                                        item.name,
+                                                                        item.size,
+                                                                        item.type,
+                                                                        item.id,
+                                                                        item.position,
+                                                                        item.path,
+                                                                        item.dimensions,
+                                                                        item.id_product
+                                                                    )
                                                                 }
                                                             />
                                                         ) : (
@@ -73,10 +86,23 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}
                                                                 autoPlay={true}
                                                                 style={{
                                                                     height: "10rem",
-                                                                    maxWidth: "9rem"
+                                                                    maxWidth: "9rem",
+                                                                    margin: "auto",
                                                                 }}
                                                                 onClick={(e) =>
-                                                                    handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path, item.dimensions, item.id_product)
+                                                                    handleModalOpen(
+                                                                        e,
+                                                                        item.src,
+                                                                        item.alt,
+                                                                        item.name,
+                                                                        item.size,
+                                                                        item.type,
+                                                                        item.id,
+                                                                        item.position,
+                                                                        item.path,
+                                                                        item.dimensions,
+                                                                        item.id_product
+                                                                    )
                                                                 }
                                                             >
                                                                 <source src={item?.src} type="video/mp4" />
@@ -103,7 +129,9 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}
                                                         variant="subtitle2"
                                                         noWrap
                                                         style={{ cursor: "pointer", color: "#ffff", fontSize: "0.75rem", padding: "0.3rem 0 0 0.3rem" }}
-                                                        onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path, item.dimensions, item.id_product)}
+                                                        onClick={(e) =>
+                                                            handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path, item.dimensions, item.id_product)
+                                                        }
                                                     >
                                                         Naziv: {item?.name}
                                                     </Typography>
@@ -112,7 +140,9 @@ const ImageListRow = ({ imageList = [], setImageList, handleModalOpen = () => {}
                                                         variant="subtitle2"
                                                         noWrap
                                                         style={{ cursor: "pointer", color: "#ffff", fontSize: "0.625rem", padding: "0 0 0 0.3rem" }}
-                                                        onClick={(e) => handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path, item.dimensions, item.id_product)}
+                                                        onClick={(e) =>
+                                                            handleModalOpen(e, item.src, item.alt, item.name, item.size, item.type, item.id, item.position, item.path, item.dimensions, item.id_product)
+                                                        }
                                                     >
                                                         Veličina: {Math.round((item?.size / 1024 / 1024) * 1000) / 1000} MB
                                                     </Typography>
