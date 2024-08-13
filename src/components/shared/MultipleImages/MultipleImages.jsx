@@ -11,11 +11,19 @@ import styles from "./MultipleImages.module.scss";
 import { Divider } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-const MultipleImages = ({ description, handleMultipleImageUpload = () => {}, handleDrag = () => {}, handleDrop = () => {}, accept = "image/*", dragActive = false, icon = IconList.addAPhoto }) => {
+const MultipleImages = ({
+    description,
+    handleMultipleImageUpload = async () => {},
+    handleDrag = () => {},
+    handleDrop = () => {},
+    accept = "image/*",
+    dragActive = false,
+    icon = IconList.addAPhoto,
+}) => {
     const inputRef = React.useRef(null);
 
-    const handleInputChange = (e) => {
-        handleMultipleImageUpload(e);
+    const handleInputChange = async (e) => {
+        await handleMultipleImageUpload(e);
         if (inputRef.current) {
             inputRef.current.value = "";
         }
