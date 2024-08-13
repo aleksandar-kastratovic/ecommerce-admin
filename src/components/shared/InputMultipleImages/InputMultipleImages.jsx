@@ -96,7 +96,9 @@ export const InputMultipleImages = ({
             let len = imageList === undefined ? 0 : imageList.length;
             for (let i = 0; i < selectedFiles.length; i++) {
                 var file = selectedFiles[i];
+
                 const obj = await getLoadedFile(file, i, len);
+
                 if (validate !== undefined && validate !== null) {
                     const { size, type } = obj;
                     const { imageUpload } = validate;
