@@ -12,6 +12,15 @@ import { Divider } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
 const MultipleImages = ({ description, handleMultipleImageUpload = () => {}, handleDrag = () => {}, handleDrop = () => {}, accept = "image/*", dragActive = false, icon = IconList.addAPhoto }) => {
+    const inputRef = React.useRef(null);
+
+    const handleInputChange = (e) => {
+        handleMultipleImageUpload(e);
+        if (inputRef.current) {
+            inputRef.current.value = "";
+        }
+    };
+
     return (
         <>
             <Box className={styles.formUpload} onDragEnter={handleDrag}>
@@ -24,7 +33,7 @@ const MultipleImages = ({ description, handleMultipleImageUpload = () => {}, han
                         </Typography>
                         <Divider className={styles.divider}>ili</Divider>
                         <Button variant="outlined" component="label" className={styles.buttonStyle}>
-                            <input hidden accept={accept} multiple type="file" onChange={(e) => handleMultipleImageUpload(e)} />
+                            <input hidden ref={inputRef} accept={accept} multiple type="file" onChange={handleInputChange} />
                             <Box sx={{ display: "flex", alignItems: "center" }}>
                                 <Icon className={styles.addAPhotoIcon}>{icon}</Icon>
                                 <Typography variant="subtitle1" className={styles.label}>

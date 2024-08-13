@@ -277,10 +277,6 @@ const Content = ({ pageId }) => {
         }
     };
 
-    useEffect(() => {
-        console.log(loading);
-    }, [loading]);
-
     return (
         <>
             <ListPage
