@@ -22,7 +22,7 @@ const Gallery = ({ productId }) => {
         api.list(`${apiPath}/${productId}`)
             .then((response) => {
                 setData(response?.payload?.items);
-              
+
                 if (showLoader) {
                     setLoading(false);
                 }
@@ -43,7 +43,7 @@ const Gallery = ({ productId }) => {
             .catch((error) => console.warn(error));
     };
 
-    const handleSubmit = (data, options = {}) => {
+    const handleSubmit = async (data, options = {}) => {
         // setLoading(true);
         setImageUploadLoading(true);
         const allowedFormats = imageInfo ? imageInfo.allow_format.map((format) => format?.mime_type.toLowerCase()) : [];
@@ -54,39 +54,39 @@ const Gallery = ({ productId }) => {
         if (allowedFormats.length > 0 && !allowedFormats.includes(fileExtension)) {
             toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
             setImageUploadLoading(false);
-            return;
-        }
-
-        if (fileSizeInB > allowSize) {
+            return false;
+        } else if (fileSizeInB > allowSize) {
             toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
             setImageUploadLoading(false);
-            return;
+            return false;
+        } else {
+            let req = {
+                id: data.new ? null : data.id,
+                id_product: productId,
+                file_base64: data.src,
+                order: data.position ?? 0,
+                title: null,
+                subtitle: null,
+                alt: data?.alt ?? null,
+                short_description: null,
+                description: null,
+                path: data.file,
+            };
+            let postApi = options?.crop ? apiPathCrop : apiPath;
+            await api
+                .post(`${postApi}`, req)
+                .then((response) => {
+                    toast.success("Uspešno");
+                    handleData();
+                    setImageUploadLoading(false);
+                })
+                .catch((error) => {
+                    toast.warn("Greška");
+                    console.warn(error);
+                    setImageUploadLoading(false);
+                });
+            return true;
         }
-
-        let req = {
-            id: data.new ? null : data.id,
-            id_product: productId,
-            file_base64: data.src,
-            order: data.position ?? 0,
-            title: null,
-            subtitle: null,
-            alt: data?.alt ?? null,
-            short_description: null,
-            description: null,
-            path: data.file,
-        };
-        let postApi = options?.crop ? apiPathCrop : apiPath;
-        api.post(`${postApi}`, req)
-            .then((response) => {
-                toast.success("Uspešno");
-                handleData();
-                setImageUploadLoading(false);
-            })
-            .catch((error) => {
-                toast.warn("Greška");
-                console.warn(error);
-                setImageUploadLoading(false);
-            });
     };
 
     const handleDelete = (id) => {
@@ -115,7 +115,7 @@ const Gallery = ({ productId }) => {
 
     const handleChange = () => {
         handleData(false);
-    }
+    };
 
     let list = (data ?? [])
         .filter((item) => item.file_base64 != null)
@@ -125,7 +125,18 @@ const Gallery = ({ productId }) => {
             let y = base64[base64.length - 2] === "=" ? 2 : 1;
             const size = base64.length * (3 / 4) - y;
             const dimensions = imageInfo?.image ?? {};
-            return { id: item.id, name: item.file_filename, position: item.order, alt: item.alt, size: size, type: type, src: base64, path: item.file, dimensions: dimensions, id_product: item.id_product, };
+            return {
+                id: item.id,
+                name: item.file_filename,
+                position: item.order,
+                alt: item.alt,
+                size: size,
+                type: type,
+                src: base64,
+                path: item.file,
+                dimensions: dimensions,
+                id_product: item.id_product,
+            };
         });
 
     useEffect(() => {

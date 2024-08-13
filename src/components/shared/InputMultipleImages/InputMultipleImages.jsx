@@ -97,7 +97,6 @@ export const InputMultipleImages = ({
             for (let i = 0; i < selectedFiles.length; i++) {
                 var file = selectedFiles[i];
                 const obj = await getLoadedFile(file, i, len);
-
                 if (validate !== undefined && validate !== null) {
                     const { size, type } = obj;
                     const { imageUpload } = validate;
@@ -125,9 +124,13 @@ export const InputMultipleImages = ({
                     }
                 } else {
                     if (typeof uploadHandler === "function") {
-                        await uploadHandler(obj);
+                        let resp = await uploadHandler(obj);
+                        if (resp) {
+                            newImagesArray.push(obj);
+                        }
+                    } else {
+                        newImagesArray.push(obj);
                     }
-                    newImagesArray.push(obj);
                 }
             }
             if (Array.isArray(imageList)) {
@@ -136,10 +139,6 @@ export const InputMultipleImages = ({
             setImageList(newImagesArray);
         }
     };
-
-    useEffect(() => {
-        console.log("update");
-    }, [imageList]);
 
     //MODAL OPEN HANDLER
     const handleModalOpen = (e, src, alt, name, size, type, id, position, path, dimensions, id_product) => {

@@ -13,15 +13,17 @@ const B2CSettingsForm = ({ form_slug, config_module_id, module, submodule }) => 
     const [formFields, setFormFields] = useState([]);
     const [formData, setFormData] = useState([]);
 
-    const dataHandler = () => {
+    const dataHandler = async () => {
         setIsLoading(true);
-        api.get(`admin/form/data/${form_slug}`)
+        await api
+            .get(`admin/form/data/${form_slug}`)
             .then((response) => {
                 setFormFields(response?.payload);
                 setIsLoading(false);
             })
             .catch((error) => console.warn(error));
-        api.get(`admin/configuration-b2c/main/${module}/${submodule}`)
+        await api
+            .get(`admin/configuration-b2c/main/${module}/${submodule}`)
             .then((response) => setFormData(response?.payload))
             .catch((error) => console.warn(error));
     };
@@ -43,7 +45,6 @@ const B2CSettingsForm = ({ form_slug, config_module_id, module, submodule }) => 
             })
             .catch((error) => console.warn(error));
     };
-
 
     return !isLoading ? <Form formFields={formFields} onSubmit={submitHandler} initialData={initialData} /> : <Loading />;
 };
