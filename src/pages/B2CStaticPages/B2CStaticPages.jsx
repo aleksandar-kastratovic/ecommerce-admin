@@ -1,17 +1,12 @@
 import ListPage from "../../components/shared/ListPage/ListPage";
 import tblFields from "./tblFields.json";
 
-import Modal from "../../components/shared/Modal/Modal";
-import { useContext, useEffect, useState } from "react";
-import Button from "../../components/shared/Button/Button";
-import AuthContext from "../../store/auth-contex";
+import { useEffect, useState } from "react";
 import ModalForm from "../../components/shared/Modal/ModalForm";
 
 const B2CStaticPages = () => {
-    const authCtx = useContext(AuthContext);
-    const { api } = authCtx;
-
-    const [openModal, setOpenModal] = useState({ show: false, id: null, name: "" });
+    const modalUrl = { save: { url: "admin/static-pages-b2c/list/clone" } };
+    const [openModal, setOpenModal] = useState({ show: false, id: null, name: "", modalUrl });
     const [doesRefetch, setDoesRefetch] = useState(false);
 
     const customActions = {
@@ -22,24 +17,12 @@ const B2CStaticPages = () => {
             clickHandler: {
                 type: "",
                 fnc: (data) => {
-                    setOpenModal({ show: true, id: data.id, name: data.name });
+                    setOpenModal({ show: true, id: data.id, name: data.name, modalUrl });
                 },
             },
             icon: "content_copy",
             title: "Dupliraj",
         },
-    };
-
-    const copyHandler = async () => {
-        try {
-            let res = await api.post("admin/static-pages-b2c/basic-data/clone", { id: openModal.id });
-            setDoesRefetch(true);
-            console.log(res);
-        } catch (error) {
-            console.warn(error);
-        }
-
-        setOpenModal({ show: false, id: null, name: "" });
     };
 
     useEffect(() => {
@@ -70,11 +53,10 @@ const B2CStaticPages = () => {
                 doesRefetch={doesRefetch}
                 setDoesRefetch={setDoesRefetch}
                 sx={{ padding: "2rem" }}
-                shortText={<p>{`Da li ste sigurni da zelite da duplirate stranicu ${openModal.name}`}</p>}
+                shortText={`Da li ste sigurni da zelite da duplirate stranicu ${openModal.name}`}
                 customTitle={"Dupliranje stranice"}
                 initialData={{ id: openModal.id }}
                 label="Dupliraj"
-                apiPathFormModal="admin/static-pages-b2c/basic-data/clone"
             />
         </>
     );
