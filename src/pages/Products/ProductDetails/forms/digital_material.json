@@ -119,7 +119,7 @@
         "editable": true,
         "disabled": false,
         "required": false,
-        "description": "Link do uzorka materijala",
+        "description": "Link do uzorka materijala.",
         "ui_prop": "xyz",
         "sortable": true,
         "input_type": "input"
