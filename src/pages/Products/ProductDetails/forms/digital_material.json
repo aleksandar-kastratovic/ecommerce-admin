@@ -57,13 +57,13 @@
     },
     {
         "field_name": "Materijal",
-        "prop_name": "download_file_link",
+        "prop_name": "download_link_path",
         "in_main_table": false,
         "in_details": false,
         "editable": true,
         "disabled": false,
         "required": true,
-        "description": "Link do maerijala",
+        "description": "Link do materijala",
         "ui_prop": "xyz",
         "sortable": true,
         "input_type": "input"
@@ -113,7 +113,7 @@
     },
     {
         "field_name": "Uzorak materijala",
-        "prop_name": "sample_file_link",
+        "prop_name": "sample_link_path",
         "in_main_table": false,
         "in_details": false,
         "editable": true,
@@ -220,5 +220,18 @@
         "options": [],
         "fillFromApi": "admin/product-items/digital-material/basic-data/ddl",
         "usePropName": true
+    },
+    {
+        "field_name": "",
+        "prop_name": "action",
+        "in_main_table": true,
+        "in_details": false,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "edit_delete"
     }
 ]
