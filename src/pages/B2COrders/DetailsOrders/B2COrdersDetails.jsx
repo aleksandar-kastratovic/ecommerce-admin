@@ -180,7 +180,7 @@ const B2COrdersDetails = () => {
                                 {orderData?.deliveries.map((item, index) => {
                                     return (
                                         <span>
-                                            {item.name ? item.name : "/"} {index < orderData?.deliveries.length - 1 && ","}
+                                            {item.format_data?.full_name ? item.format_data?.full_name : "/"} {index < orderData?.deliveries.length - 1 && ","}
                                         </span>
                                     );
                                 })}
