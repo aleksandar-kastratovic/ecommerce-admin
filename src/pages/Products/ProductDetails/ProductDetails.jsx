@@ -20,11 +20,14 @@ import DisplayIn from "./panels/DisplayIn";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 import AuthContext from "../../../store/auth-contex";
 import DigitalMaterial from "./panels/DigitalMaterial";
+import VariationDigitalMaterial from "./ProductDetailsVariation/VaritaionDigitalMaterial/VariationDigitalMaterial";
 
 const ProductDetails = () => {
     const { prodId } = useParams();
     const navigate = useNavigate();
     const activeTab = getUrlQueryStringParam("tab") ?? "basic";
+    const subtab = getUrlQueryStringParam("sub_tab");
+    const variantId = getUrlQueryStringParam("variant_id");
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
     const init = {
@@ -51,7 +54,12 @@ const ProductDetails = () => {
                 if (item.prop_name === "new_from" || item.prop_name === "new_to") {
                     item.in_details = isNew;
                 }
-                if (item.prop_name === "digital_type" || item.prop_name === "using_to" || item.prop_name === "using_from") {
+                if (item.prop_name === "digital_type") {
+                    item.in_details = isDigital;
+                    item.required = isDigital;
+                }
+
+                if (item.prop_name === "using_to" || item.prop_name === "using_from") {
                     item.in_details = isDigital;
                 }
                 return item;
@@ -189,7 +197,12 @@ const ProductDetails = () => {
             name: "Varijacije",
             icon: IconList.difference,
             enabled: data?.id,
-            component: <ProductDetailsVariation parentId={data?.id} />,
+            component:
+                subtab === "digital_material" && variantId ? (
+                    <VariationDigitalMaterial parentId={data?.id} variantId={variantId} />
+                ) : (
+                    <ProductDetailsVariation parentId={data?.id} isParentDigital={data?.is_digital} />
+                ),
         },
     ];
 
