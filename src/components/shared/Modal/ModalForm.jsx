@@ -57,7 +57,7 @@ const ModalForm = ({
     styleCheckbox,
     children,
     queryString = [],
-    validateData,
+    validateData = (data) => data,
     prepareInitialData = () => {},
     modalObject = null,
     customTitleDataNameForEdit = "Izmeni",
