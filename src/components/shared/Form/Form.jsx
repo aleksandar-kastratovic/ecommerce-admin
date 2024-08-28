@@ -303,7 +303,7 @@ const Form = ({
                                     //deleting file error object:
                                     setInputErrors("file");
                                     //setting data to be defiend in value:
-                                    setData({ ...data, import: fileObject.name, file: fileObject.name });
+                                    setData({ ...data, import: fileObject.name, file: fileObject.name, [item.prop_name]: fileObject.base_64 });
                                 }}
                                 selectedFile={selectedFile}
                                 handleRemoveFile={handleRemoveFile}

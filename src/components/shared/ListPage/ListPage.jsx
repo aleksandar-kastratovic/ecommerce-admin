@@ -13,6 +13,7 @@ import ButtonRef from "../Button/ButtonRef";
 import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
 import AuthContext from "../../../store/auth-contex";
 import { queryKeys } from "../../../helpers/const";
+import { connectTemplateFields } from "../../../helpers/urlTemplate";
 
 /**
  * Show a standardized list.
@@ -99,6 +100,7 @@ const ListPage = ({
     setDoesRefetch = () => {},
     defaultSort = [],
     isModalUploading = false,
+    back,
 }) => {
     // // TODO Sorting is disabled as it does not work with pagination
     // columnFields = useMemo(() => {
@@ -377,7 +379,7 @@ const ListPage = ({
 
     return (
         <>
-            <PageWrapper title={title} actions={actions}>
+            <PageWrapper title={title} actions={actions} back={back}>
                 <ListTableToolbar
                     searchValue={search}
                     listPageId={listPageId}
@@ -411,6 +413,10 @@ const ListPage = ({
                             setOpenModal({ show: true, id: id ? id : "new", modalUrl: urls });
                             let galleryData = { urls, row };
                             onClickFieldBehavior(event, fieldBhavior, column, row, galleryData);
+                        } else if (fieldBhavior?.action === "page") {
+                            const { result } = connectTemplateFields(fieldBhavior.url, row);
+                            navigate(result);
+                            onClickFieldBehavior(event, fieldBhavior, column, row, null);
                         } else {
                             onClickFieldBehavior(event, fieldBhavior, column, row, null);
                         }

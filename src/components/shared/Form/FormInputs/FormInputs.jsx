@@ -1108,6 +1108,7 @@ export const FilePicker = ({
     required,
     disabled,
     margin,
+    value,
     error = null,
     onFilePicked = () => {},
     description,
@@ -1118,12 +1119,14 @@ export const FilePicker = ({
 }) => {
     const ref = useRef();
     const [attachment, setAttachment] = useState(null);
+    const [filename, setFilename] = useState("");
 
     const { size, type } = useFileSize(selectedFile);
 
     const handleChange = (event) => {
         const files = Array.from(event.target.files);
         const [file] = files;
+
         const fileExtension = file.name.split(".").pop().toLowerCase();
         const supportedTypes = uiProp?.fileUpload?.allow_format?.map((format) => format?.mime_type);
         const allowedSize = uiProp?.fileUpload?.allow_size;
@@ -1157,6 +1160,7 @@ export const FilePicker = ({
                 file: file,
             };
 
+            setFilename(file.name);
             onFilePicked(obj);
         };
         reader.readAsDataURL(file);
@@ -1191,8 +1195,8 @@ export const FilePicker = ({
                 )
             );
         } else {
-            return selectedFile ? (
-                <span style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Izabrani fajl: {selectedFile.name}</span>
+            return filename || value ? (
+                <span style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Izabrani fajl: {filename || value}</span>
             ) : (
                 <span style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Kliknite ovde kako biste odabrali fajl.</span>
             );
