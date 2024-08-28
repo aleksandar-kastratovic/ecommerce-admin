@@ -44,7 +44,7 @@ const B2COrdersDetails = () => {
     const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
     const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
     const { isLoading: isNotesLoading, data: orderNotes, refetch } = useQuery(["notes"], () => api.list(`${apiPathNotes}/${orderId}`).then((response) => response?.payload?.items));
-
+    console.log(orderData);
     const handlePrint = () => {
         window.print();
     };
@@ -69,7 +69,7 @@ const B2COrdersDetails = () => {
 
     return (
         <PageWrapper
-            title={`Narudžbenica:  ${orderData?.slug}`}
+            title={`Narudžbenica:  ${orderData?.order.slug}`}
             back={() => {
                 navigate(-1);
             }}
@@ -103,7 +103,7 @@ const B2COrdersDetails = () => {
                         <Box className={styles.orderDataDisplay}>
                             <p style={{ fontSize: "0.875rem" }}>
                                 <span className={styles.dataLabel}>Kupac:</span>
-                                {orderData?.bill_to_name ? orderData?.bill_to_name : "/"}
+                                {orderData?.order.bill_to_name ? orderData?.order.bill_to_name : "/"}
                             </p>
                             <p style={{ fontSize: "0.875rem" }}>
                                 <span className={styles.dataLabel}>Adresa:</span>
@@ -129,50 +129,65 @@ const B2COrdersDetails = () => {
                         <Box className={styles.orderDataDisplay}>
                             <p style={{ fontSize: "0.875rem" }}>
                                 <span className={styles.dataLabel}>Plaćanje:</span>
-                                {orderData?.payment_method_status?.fields?.length > 0 ? (
-                                    <Tooltip
-                                        placement="top"
-                                        arrow={true}
-                                        title={
-                                            <Box>
-                                                {orderData?.payment_method_status?.fields?.map((item) => {
-                                                    return (
-                                                        <Typography>
-                                                            {item?.label}: {item?.value}
-                                                        </Typography>
-                                                    );
-                                                })}
-                                            </Box>
-                                        }
-                                    >
-                                        <span
-                                            style={{
-                                                cursor: "pointer",
-                                                fontWeight: "600",
-                                                color:
-                                                    orderData?.payment_method_status.status_info === "danger"
-                                                        ? "#d32f2f"
-                                                        : orderData?.payment_method_status.status_info === "success"
-                                                        ? "#28a86e"
-                                                        : orderData?.payment_method_status.status_info === "warning"
-                                                        ? "#FFCC00"
-                                                        : "black", // Default color
-                                            }}
-                                        >
-                                            {orderData?.payment_method_name ? orderData?.payment_method_name : "/"}
+                                {orderData?.payments.length === 0 && "/"}
+                                {orderData?.payments.map((payment, index) => {
+                                    return (
+                                        <span key={payment.id}>
+                                            {payment.data.status_info?.fields?.length > 0 ? (
+                                                <Tooltip
+                                                    placement="top"
+                                                    arrow={true}
+                                                    title={
+                                                        <Box>
+                                                            {payment.data.status_info?.fields?.map((item) => {
+                                                                return (
+                                                                    <Typography key={item?.label}>
+                                                                        {item?.label}: {item?.value}
+                                                                    </Typography>
+                                                                );
+                                                            })}
+                                                        </Box>
+                                                    }
+                                                >
+                                                    <span
+                                                        style={{
+                                                            cursor: "pointer",
+                                                            fontWeight: "600",
+                                                            color:
+                                                                payment.data.status_info.status_info === "danger"
+                                                                    ? "#d32f2f"
+                                                                    : payment.data.status_info.status_info === "success"
+                                                                    ? "#28a86e"
+                                                                    : payment.data.status_info.status_info === "warning"
+                                                                    ? "#FFCC00"
+                                                                    : "black", // Default color
+                                                        }}
+                                                    >
+                                                        {payment.name ? payment.name : "/"}
+                                                    </span>
+                                                </Tooltip>
+                                            ) : (
+                                                <>{payment.name ? payment.name : "/"}</>
+                                            )}
+                                            {index < orderData?.payments.length - 1 && ","}
                                         </span>
-                                    </Tooltip>
-                                ) : (
-                                    <>{orderData?.payment_method_name ? orderData?.payment_method_name : "/"}</>
-                                )}
+                                    );
+                                })}
                             </p>
                             <p style={{ fontSize: "0.875rem" }}>
                                 <span className={styles.dataLabel}>Dostava:</span>
-                                {orderData?.delivery_method_name ? orderData?.delivery_method_name : "/"}
+                                {orderData?.deliveries.length === 0 && "/"}
+                                {orderData?.deliveries.map((item, index) => {
+                                    return (
+                                        <span>
+                                            {item.format_data?.full_name ? item.format_data?.full_name : "/"} {index < orderData?.deliveries.length - 1 && ","}
+                                        </span>
+                                    );
+                                })}
                             </p>
                             <p style={{ fontSize: "0.875rem" }}>
                                 <span className={styles.dataLabel}>Vreme kupovine:</span>
-                                {orderData?.created_at ? orderData?.created_at : "/"}
+                                {orderData?.order.created_at ? orderData?.order.created_at : "/"}
                             </p>
                             <p style={{ fontSize: "0.875rem" }}>
                                 <span className={styles.dataLabel}>Napomena:</span>
@@ -190,7 +205,7 @@ const B2COrdersDetails = () => {
                         },
                     }}
                 >
-                    <OrderStatus orderId={orderData?.id} status={orderData?.status} />
+                    <OrderStatus orderId={orderData?.order.id} status={orderData?.order.status} />
                 </OrderSection>
 
                 <OrderSection
@@ -279,17 +294,17 @@ const B2COrdersDetails = () => {
                     }}
                 >
                     <OrderPrices
-                        total_with_out_vat={orderData?.total_with_out_vat}
-                        total_delivery_amount={orderData?.total_delivery_amount}
-                        total_discount={orderData?.total_discount}
-                        total_promo_code={orderData?.total_promo_code}
-                        total_vat={orderData?.total_vat}
-                        total_with_vat={orderData?.total_with_vat}
-                        total={orderData?.total}
-                        currency={orderData?.currency}
-                        total_items_discount_amount={orderData?.total_items_discount_amount}
-                        total_cart_discount_amount={orderData?.total_cart_discount_amount}
-                        total_promo_code_amount={orderData?.total_promo_code_amount}
+                        total_with_out_vat={orderData?.order.total_with_out_vat}
+                        total_delivery_amount={orderData?.order.total_delivery_amount}
+                        total_discount={orderData?.order.total_discount}
+                        total_promo_code={orderData?.order.total_promo_code}
+                        total_vat={orderData?.order.total_vat}
+                        total_with_vat={orderData?.order.total_with_vat}
+                        total={orderData?.order.total}
+                        currency={orderData?.order.currency}
+                        total_items_discount_amount={orderData?.order.total_items_discount_amount}
+                        total_cart_discount_amount={orderData?.order.total_cart_discount_amount}
+                        total_promo_code_amount={orderData?.order.total_promo_code_amount}
                     />
                     <Tooltip title="Izbrišite narudžbenicu" arrow placement="top">
                         <Box
