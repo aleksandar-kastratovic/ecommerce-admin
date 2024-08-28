@@ -19,11 +19,15 @@ import Document from "./panels/Document";
 import DisplayIn from "./panels/DisplayIn";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 import AuthContext from "../../../store/auth-contex";
+import DigitalMaterial from "./panels/DigitalMaterial";
+import VariationDigitalMaterial from "./ProductDetailsVariation/VaritaionDigitalMaterial/VariationDigitalMaterial";
 
 const ProductDetails = () => {
     const { prodId } = useParams();
     const navigate = useNavigate();
     const activeTab = getUrlQueryStringParam("tab") ?? "basic";
+    const subtab = getUrlQueryStringParam("sub_tab");
+    const variantId = getUrlQueryStringParam("variant_id");
     const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
     const init = {
@@ -44,19 +48,23 @@ const ProductDetails = () => {
     const [data, setData] = useState(init);
     const [basicDataTemp, setBasicDataTemp] = useState(basic_data);
 
-    const updateNewFieldsInDetails = (data, isNew) => {
-        data.map((item, i) => {
-            if (isNew) {
+    const updateNewFieldsInDetails = (isNew, isDigital) => {
+        setBasicDataTemp((old) => {
+            return old.map((item) => {
                 if (item.prop_name === "new_from" || item.prop_name === "new_to") {
-                    item.in_details = true;
+                    item.in_details = isNew;
                 }
-            } else {
-                if (item.prop_name === "new_from" || item.prop_name === "new_to") {
-                    item.in_details = false;
+                if (item.prop_name === "digital_type") {
+                    item.in_details = isDigital;
+                    item.required = isDigital;
                 }
-            }
+
+                if (item.prop_name === "using_to" || item.prop_name === "using_from") {
+                    item.in_details = isDigital;
+                }
+                return item;
+            });
         });
-        setBasicDataTemp([...data]);
     };
 
     const handleSubmit = (data) => {
@@ -83,7 +91,7 @@ const ProductDetails = () => {
         api.get(`admin/product-items/basic-data/${prodId}`)
             .then((response) => {
                 setData(response?.payload);
-                updateNewFieldsInDetails(basic_data, response?.payload?.new);
+                updateNewFieldsInDetails(response?.payload?.new, response?.payload?.is_digital);
             })
             .catch((error) => console.warn(error));
     };
@@ -96,8 +104,10 @@ const ProductDetails = () => {
         let ret = data;
         switch (field) {
             case "new":
-                updateNewFieldsInDetails(basic_data, ret.new);
+            case "is_digital":
+                updateNewFieldsInDetails(ret.new, ret.is_digital);
                 return ret;
+
             default:
                 return ret;
         }
@@ -167,6 +177,7 @@ const ProductDetails = () => {
             enabled: data?.id,
             component: <DisplayIn productId={data?.id} />,
         },
+        { id: "digital_material", name: "Digitalni materijal", icon: IconList.download, enabled: data?.id, component: <DigitalMaterial productId={data?.id} /> },
         {
             id: "document",
             name: "Dokumenta",
@@ -186,9 +197,18 @@ const ProductDetails = () => {
             name: "Varijacije",
             icon: IconList.difference,
             enabled: data?.id,
-            component: <ProductDetailsVariation parentId={data?.id} />,
+            component:
+                subtab === "digital_material" && variantId ? (
+                    <VariationDigitalMaterial parentId={data?.id} variantId={variantId} />
+                ) : (
+                    <ProductDetailsVariation parentId={data?.id} isParentDigital={data?.is_digital} />
+                ),
         },
     ];
+
+    if (!data.is_digital) {
+        fields.splice(fields.indexOf(fields.find((item) => item.id === "digital_material")), 1);
+    }
 
     // Handle after click on tab panel
     const panelHandleSelect = (field) => {

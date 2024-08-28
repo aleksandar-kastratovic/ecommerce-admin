@@ -15,7 +15,7 @@ import ProductVariation from "./VariationList/ProductVariation";
 import { Link } from "react-router-dom";
 import AuthContext from "../../../../store/auth-contex";
 
-const ProductDetailsVariation = ({ parentId }) => {
+const ProductDetailsVariation = ({ parentId, isParentDigital }) => {
     const [variants, setVariants] = useState([]);
     const [variantsData, setVariantsData] = useState([]);
     const [variationAttributes, setVariationAttributes] = useState([]); // svi sa disabled false
@@ -295,7 +295,12 @@ const ProductDetailsVariation = ({ parentId }) => {
     const getFormFields = () => {
         api.get(`admin/product-items/variants/list/table-structure`)
             .then((response) => {
-                setFormFields(response?.payload);
+                let fields = response?.payload;
+                if (!isParentDigital) {
+                    fields.splice(fields.indexOf(fields.find((item) => item.prop_name === "digital_material")), 1);
+                }
+
+                setFormFields(fields);
                 setTableLoading(false);
             })
             .catch((error) => {
