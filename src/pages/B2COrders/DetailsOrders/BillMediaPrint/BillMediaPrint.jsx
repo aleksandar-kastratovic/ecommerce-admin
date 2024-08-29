@@ -16,7 +16,7 @@ const BillMediaPrint = ({ orderData, billingData }) => {
             <Box className={styles.orderDataDisplay}>
                 <p>
                     <span className={styles.dataLabel}>Kupac:</span>
-                    {orderData?.bill_to_name ? orderData?.bill_to_name : "/"}
+                    {orderData?.order.bill_to_name ? orderData?.order.bill_to_name : "/"}
                 </p>
                 <p>
                     <span className={styles.dataLabel}>Adresa:</span>
@@ -84,7 +84,7 @@ const BillMediaPrint = ({ orderData, billingData }) => {
                 </p>
                 <p>
                     <span className={styles.dataLabel}>Vreme kupovine:</span>
-                    {orderData?.created_at ? orderData?.created_at : "/"}
+                    {orderData?.order.created_at ? orderData?.order.created_at : "/"}
                 </p>
                 <p>
                     <span className={styles.dataLabel}>Napomena:</span>
