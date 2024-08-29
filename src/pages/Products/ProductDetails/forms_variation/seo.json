@@ -84,8 +84,8 @@
         "input_type": "input"
     },
     {
-        "field_name": "Cannonical link",
-        "prop_name": "meta_cannonical_link",
+        "field_name": "Canonical link",
+        "prop_name": "meta_canonical_link",
         "in_main_table": true,
         "in_details": true,
         "editable": true,

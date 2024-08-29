@@ -16,7 +16,7 @@ const HtmlEditor = ({ name, value, onChange, disabled }) => {
                     menubar: false,
                     plugins: "advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount",
                     toolbar:
-                        "undo redo |h1 h2 h3 h4 h5 h6 | p  fullscreen | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link unlink | code | help",
+                        "undo redo |h1 h2 h3 h4 h5 h6 | p  | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | link unlink | code fullscreen | help",
                     content_style: "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
                     link_rel_list: [
                         { title: "None", value: "" },
