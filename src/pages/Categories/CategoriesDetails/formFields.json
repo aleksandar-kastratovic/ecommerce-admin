@@ -112,7 +112,7 @@
         "input_type": "html_editor"
     },
     {
-        "field_name": "Dug opis",
+        "field_name": "Dodatni opis",
         "prop_name": "long_description",
         "in_main_table": true,
         "in_details": true,
