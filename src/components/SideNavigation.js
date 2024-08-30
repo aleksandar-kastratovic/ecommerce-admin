@@ -61,6 +61,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         },
         {
             refetchInterval: 5000,
+            enabled: !!api?.user,
         }
     );
 
@@ -74,6 +75,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         },
         {
             refetchInterval: 5000,
+            enabled: !!api?.user,
         }
     );
 
@@ -87,6 +89,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         },
         {
             refetchInterval: 5000,
+            enabled: !!api?.user,
         }
     );
 
@@ -100,6 +103,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         },
         {
             refetchInterval: 5000,
+            enabled: !!api?.user,
         }
     );
 
@@ -187,7 +191,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
                                         let renderedLink = null;
                                         if ((isSmallScreen && item.path === "/b2c-orders") || !isSmallScreen) {
                                             badgets.forEach((badget) => {
-                                                if (item?.path === badget.path) {
+                                                if (item?.path === badget.path && badget.counts.find((item) => item.status === "new")?.count > 0) {
                                                     renderedLink = (
                                                         <Badge
                                                             badgeContent={badget.counts.find((item) => item.status === "new")?.count || 0}
