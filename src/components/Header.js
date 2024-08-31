@@ -18,8 +18,10 @@ import { toast } from "react-toastify";
 import sideNavIcon from "../assets/images/croonus-sidebar-icon.svg";
 import logoMediaPrint from "../assets/images/croonus-sidebar-logo-dark.svg";
 import { set } from "lodash";
+import { Switch } from "@mui/material";
+import SystemSwitch from "./shared/SystemSwitch/SystemSwitch";
 
-const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
+const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen, system, onChangeSystem }) => {
     const apiPath = "admin/profile/logout";
     const navigate = useNavigate();
 
@@ -63,7 +65,6 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
     const handleClose = () => {
         setAnchorEl(null);
     };
-
     const StyledNav = styled(Box)({
         backgroundColor: "var(--bg-color)",
         padding: "0.938rem 2rem",
@@ -149,6 +150,14 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
                                     <EastIcon sx={{ color: "var(--third-color)" }} />
                                 )}
                             </IconButton>
+                            <Box>
+                                <SystemSwitch
+                                    checked={system === "B2B"}
+                                    onChange={({ target }) => {
+                                        onChangeSystem(target.checked ? "B2B" : "B2C");
+                                    }}
+                                />
+                            </Box>
                         </Grid>
 
                         <Grid container alignItems="center" width="auto">

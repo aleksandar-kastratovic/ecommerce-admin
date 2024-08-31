@@ -54,3 +54,24 @@ export const makeRoute = (screen) =>
             <Route path={screen.path} element={React.createElement(screen.component)} />
         </Fragment>
     ) : null;
+
+export const filterScreens = (screens, system) => {
+    if (system !== "B2B" && system !== "B2C") {
+        return screens;
+    }
+
+    const saleGroup = MenuGroup.SALE;
+    const result = {};
+    for (const key in screens) {
+        const item = screens[key];
+        if (item.group.name === saleGroup.name) {
+            if (key.includes(system) || (!key.includes("B2B") && !key.includes("B2C"))) {
+                result[key] = item;
+            }
+        } else {
+            result[key] = item;
+        }
+    }
+
+    return result;
+};

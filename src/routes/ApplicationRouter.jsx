@@ -3,7 +3,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import AuthContext from "../store/auth-contex";
 import { availableScreens } from "./routes";
-import { makeRoute } from "./utils";
+import { filterScreens, makeRoute } from "./utils";
 
 /**
  * The main application router that takes the configuration from routes.js.
@@ -11,34 +11,31 @@ import { makeRoute } from "./utils";
  * @return {JSX.Element}
  * @constructor
  */
-const ApplicationRouter = () => {
-  const authContext: { isLoggedIn: boolean, userScreens: [{ screen_code: string }], startScreen: null } = useContext(AuthContext);
+const ApplicationRouter = ({ system }) => {
+    const authContext: { isLoggedIn: boolean, userScreens: [{ screen_code: string }], startScreen: null } = useContext(AuthContext);
 
-  // Get the default screen for the user
-  const defaultPath = availableScreens[authContext.startScreen]?.path ?? "/homepage";
+    const screens = filterScreens(availableScreens, system);
+    // Get the default screen for the user
+    const defaultPath = screens[authContext.startScreen]?.path ?? "/homepage";
 
-  // Unauthorized users
-  const unauthorizedRoutes = (
-    <>
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="*" element={<Navigate replace to="/login" />} />
-    </>
-  );
+    // Unauthorized users
+    const unauthorizedRoutes = (
+        <>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="*" element={<Navigate replace to="/login" />} />
+        </>
+    );
 
-  // Authorized users
-  const authorizedRoutes = (
-    <>
-      <Route key="" path="" exact element={<Navigate replace to={defaultPath} />} />
-      <Route key="/" path="/" exact element={<Navigate replace to={defaultPath} />} />
-      {authContext.userScreens?.map((userScreen) => makeRoute(availableScreens[userScreen.screen_code]))}
-    </>
-  );
+    // Authorized users
+    const authorizedRoutes = (
+        <>
+            <Route key="" path="" exact element={<Navigate replace to={defaultPath} />} />
+            <Route key="/" path="/" exact element={<Navigate replace to={defaultPath} />} />
+            {authContext.userScreens?.map((userScreen) => makeRoute(screens[userScreen.screen_code]))}
+        </>
+    );
 
-  return (
-    <Routes>
-      {authContext?.isLoggedIn ? authorizedRoutes : unauthorizedRoutes}
-    </Routes>
-  );
+    return <Routes>{authContext?.isLoggedIn ? authorizedRoutes : unauthorizedRoutes}</Routes>;
 };
 
 export default ApplicationRouter;
