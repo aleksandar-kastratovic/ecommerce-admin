@@ -22,6 +22,7 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [sidenav, setSidenav] = useState(true);
     const [activeTheme, setActiveTheme] = useState(localStorage.getItem("theme") === "true" ?? false);
+    const [system, setSystem] = useState("B2C");
 
     useEffect(() => {
         //seting global api:
@@ -147,6 +148,7 @@ const App = () => {
                                 openSidenav={() => setSidenav(!sidenav)}
                                 activeTheme={activeTheme}
                                 userName={(authCtx.user.user.first_name ?? "") + " " + (authCtx.user.user.last_name ?? "")}
+                                system={system}
                             />
                             <Header
                                 openSidenav={() => setSidenav(!sidenav)}
@@ -156,13 +158,15 @@ const App = () => {
                                     setActiveTheme(!activeTheme);
                                     localStorage.setItem("theme", !activeTheme);
                                 }}
+                                system={system}
+                                onChangeSystem={setSystem}
                             />
                         </>
                     )}
 
                     {/* Main content */}
                     <div className={authCtx.isLoggedIn ? "main-wrapper" : ""}>
-                        <ApplicationRouter />
+                        <ApplicationRouter system={system} />
                     </div>
 
                     {/* Toast */}

@@ -13,8 +13,9 @@ import Typography from "@mui/material/Typography";
 import { useQuery } from "react-query";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@emotion/react";
+import { filterScreens } from "../routes/utils";
 
-const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
+const SideNavigation = ({ activeTheme, userName, openSidenav, system }) => {
     const { userScreens, logout } = useContext(AuthContext);
     const authCtx = useContext(AuthContext);
     const sortedScreens = userScreens?.sort((a, b) => a.order - b.order);
@@ -26,11 +27,13 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
+    const screens = filterScreens(availableScreens, system);
+
     // Populate the menu
     let menu = [];
     for (const allowedScreen of sortedScreens ?? []) {
         // Check for local screen definition
-        const screen = availableScreens[allowedScreen.screen_code];
+        const screen = screens[allowedScreen.screen_code];
         if (screen) {
             screen.name = allowedScreen.screen;
             // Init
@@ -61,6 +64,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         },
         {
             refetchInterval: 5000,
+            enabled: !!api?.user,
         }
     );
 
@@ -74,6 +78,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         },
         {
             refetchInterval: 5000,
+            enabled: !!api?.user,
         }
     );
 
@@ -87,6 +92,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         },
         {
             refetchInterval: 5000,
+            enabled: !!api?.user,
         }
     );
 
@@ -100,6 +106,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         },
         {
             refetchInterval: 5000,
+            enabled: !!api?.user,
         }
     );
 
@@ -187,7 +194,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
                                         let renderedLink = null;
                                         if ((isSmallScreen && item.path === "/b2c-orders") || !isSmallScreen) {
                                             badgets.forEach((badget) => {
-                                                if (item?.path === badget.path) {
+                                                if (item?.path === badget.path && badget.counts.find((item) => item.status === "new")?.count > 0) {
                                                     renderedLink = (
                                                         <Badge
                                                             badgeContent={badget.counts.find((item) => item.status === "new")?.count || 0}
