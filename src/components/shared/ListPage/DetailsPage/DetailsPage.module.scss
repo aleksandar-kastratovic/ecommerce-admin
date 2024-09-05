@@ -7,8 +7,10 @@
 }
 
 .list {
+    overflow-y: auto;
     width: 100%;
     max-width: 250px;
+    max-height: 60vh;
     ul li div {
         div {
             &:nth-child(1) {
@@ -33,6 +35,7 @@
     width: 100%;
     overflow: hidden;
     max-width: 100%;
+    flex-grow: 1;
     form {
         label {
             font-size: 0.875rem;
