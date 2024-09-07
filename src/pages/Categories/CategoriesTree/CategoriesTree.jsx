@@ -28,20 +28,22 @@ const CategoriesTree = () => {
             clickHandler: {
                 type: "dialog_delete",
                 fnc: (rowData, handleDeleteModalData) => {
+                    console.log("f1", rowData);
                     return {
                         show: true,
                         id: rowData.id,
                         mutate: null,
-                        children: <ModalContent apiPath={`admin/category-product/tree/message/${rowData.id}`} rowData={rowData} handleDeleteModalData={handleDeleteModalData} />,
+                        children: <ModalContent apiPath={`/admin/category-product/tree/message/${rowData.id}`} rowData={rowData} handleDeleteModalData={handleDeleteModalData} />,
                     };
                 },
             },
             deleteClickHandler: {
                 type: "dialog_delete",
                 fnc: (rowData, deleteModalData) => {
+                    console.log(rowData);
                     setRestartTree(false);
                     if (deleteModalData.all_fill) {
-                        api.delete(`admin/category-product/tree/confirm/${rowData.id}`, deleteModalData)
+                        api.delete(`/admin/category-product/tree/confirm/${rowData.id}`, deleteModalData)
                             .then(() => {
                                 toast.success("Zapis je uspešno obrisan");
                                 setRestartTree(true);
@@ -67,7 +69,9 @@ const CategoriesTree = () => {
 
     return (
         <>
-            {restartTree && <TreeView customActions={customActions} apiUrl={`admin/category-product/tree/`} title="Kategorije" columnFields={tblFields} filters={{ id_category_product_group: gid }} />}
+            {restartTree && (
+                <TreeView customActions={customActions} apiUrl={`/admin/category-product/tree/`} title="Kategorije" columnFields={tblFields} filters={{ id_category_product_group: gid }} />
+            )}
         </>
     );
 };
