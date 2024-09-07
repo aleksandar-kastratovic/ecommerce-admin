@@ -14,8 +14,10 @@ import { useQuery } from "react-query";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@emotion/react";
 import { filterScreens } from "../routes/utils";
+import { useAppContext } from "../hooks/appContext";
 
-const SideNavigation = ({ activeTheme, userName, openSidenav, system }) => {
+const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
+    const { system } = useAppContext();
     const { userScreens, logout } = useContext(AuthContext);
     const authCtx = useContext(AuthContext);
     const sortedScreens = userScreens?.sort((a, b) => a.order - b.order);
