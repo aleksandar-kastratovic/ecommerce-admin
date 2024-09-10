@@ -75,6 +75,9 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
         "@media print": {
             padding: "0 1rem !important",
         },
+        position: "sticky",
+        zIndex: "100",
+        top: "0",
     });
 
     // const StyledToggleButton = styled(Switch)({
