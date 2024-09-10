@@ -16,6 +16,7 @@ import AuthContext from "../../../store/auth-contex";
 import Box from "@mui/system/Box";
 import Typography from "@mui/material/Typography";
 import { useMutation, useQuery } from "react-query";
+import styles from "./ListTable.module.scss";
 
 /**
  * Show the table body and handle lifecycle and events.
@@ -397,7 +398,7 @@ const ListTableBody = ({
 
     return (
         <>
-            <TableBody>{content}</TableBody>
+            <TableBody className={styles.tbody}>{content}</TableBody>
         </>
     );
 };
