@@ -20,8 +20,11 @@ import logoMediaPrint from "../assets/images/croonus-sidebar-logo-dark.svg";
 import { set } from "lodash";
 import { Switch } from "@mui/material";
 import SystemSwitch from "./shared/SystemSwitch/SystemSwitch";
+import { useAppContext } from "../hooks/appContext";
 
-const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen, system, onChangeSystem }) => {
+const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
+    const { system, setSystem } = useAppContext();
+
     const apiPath = "admin/profile/logout";
     const navigate = useNavigate();
 
@@ -72,6 +75,9 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen, system, 
         "@media print": {
             padding: "0 1rem !important",
         },
+        position: "sticky",
+        zIndex: "100",
+        top: "0",
     });
 
     // const StyledToggleButton = styled(Switch)({
@@ -154,7 +160,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen, system, 
                                 <SystemSwitch
                                     checked={system === "B2B"}
                                     onChange={({ target }) => {
-                                        onChangeSystem(target.checked ? "B2B" : "B2C");
+                                        setSystem(target.checked ? "B2B" : "B2C");
                                     }}
                                 />
                             </Box>

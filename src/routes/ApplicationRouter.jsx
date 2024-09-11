@@ -4,6 +4,7 @@ import LoginPage from "../pages/LoginPage";
 import AuthContext from "../store/auth-contex";
 import { availableScreens } from "./routes";
 import { filterScreens, makeRoute } from "./utils";
+import { useAppContext } from "../hooks/appContext";
 
 /**
  * The main application router that takes the configuration from routes.js.
@@ -11,7 +12,9 @@ import { filterScreens, makeRoute } from "./utils";
  * @return {JSX.Element}
  * @constructor
  */
-const ApplicationRouter = ({ system }) => {
+const ApplicationRouter = ({}) => {
+    const { system } = useAppContext();
+
     const authContext: { isLoggedIn: boolean, userScreens: [{ screen_code: string }], startScreen: null } = useContext(AuthContext);
 
     const screens = filterScreens(availableScreens, system);

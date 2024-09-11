@@ -9,6 +9,8 @@ import Typography from "@mui/material/Typography";
 import Icon from "@mui/material/Icon";
 import Box from "@mui/material/Box";
 
+import styles from "./ListTable.module.scss";
+
 const ListTableHead = ({ fields = [], onRequestSort, order, orderBy, setSort = () => {}, sort = [] }) => {
     // Sorting by column
     const createSortHandler = (column: FieldSpec) => (event) => onRequestSort && onRequestSort(event, column.prop_name);
@@ -84,7 +86,7 @@ const ListTableHead = ({ fields = [], onRequestSort, order, orderBy, setSort = (
     };
 
     return (
-        <TableHead>
+        <TableHead className={styles.thead}>
             <TableRow>
                 {fields.map((column: FieldSpec) => {
                     return (

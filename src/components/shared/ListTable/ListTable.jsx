@@ -47,7 +47,7 @@ const ListTable = ({
     return (
         <>
             <TableContainer ref={tableContainerRef} className={styles.wrapper}>
-                <Table>
+                <Table className={styles.table}>
                     <ListTableHead fields={fields} order={order} orderBy={orderBy} onRequestSort={handleSort} rowCount={fields.length} setSort={setSort} sort={sort} />
 
                     <ListTableBody

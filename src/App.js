@@ -13,6 +13,7 @@ import CroonusTheme from "./theme";
 import useAPI from "./api/api";
 import DeleteModal from "./components/shared/Dialogs/DeleteDialog";
 import { useIsIdle } from "./hooks/isIdle";
+import { AppContextProvider } from "./hooks/appContext";
 
 const App = () => {
     const api = useAPI();
@@ -22,7 +23,6 @@ const App = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [sidenav, setSidenav] = useState(true);
     const [activeTheme, setActiveTheme] = useState(localStorage.getItem("theme") === "true" ?? false);
-    const [system, setSystem] = useState("B2C");
 
     useEffect(() => {
         //seting global api:
@@ -141,92 +141,91 @@ const App = () => {
     return (
         <QueryClientProvider client={queryClient}>
             <ThemeProvider theme={CroonusTheme}>
-                <div className={routerClass}>
-                    {authCtx.isLoggedIn && (
-                        <>
-                            <SideNavigation
-                                openSidenav={() => setSidenav(!sidenav)}
-                                activeTheme={activeTheme}
-                                userName={(authCtx.user.user.first_name ?? "") + " " + (authCtx.user.user.last_name ?? "")}
-                                system={system}
-                            />
-                            <Header
-                                openSidenav={() => setSidenav(!sidenav)}
-                                isSideNavOpen={sidenav}
-                                activeTheme={activeTheme}
-                                changeTheme={() => {
-                                    setActiveTheme(!activeTheme);
-                                    localStorage.setItem("theme", !activeTheme);
-                                }}
-                                system={system}
-                                onChangeSystem={setSystem}
-                            />
-                        </>
-                    )}
+                <AppContextProvider>
+                    <div className={routerClass}>
+                        {authCtx.isLoggedIn && (
+                            <>
+                                <SideNavigation
+                                    openSidenav={() => setSidenav(!sidenav)}
+                                    activeTheme={activeTheme}
+                                    userName={(authCtx.user.user.first_name ?? "") + " " + (authCtx.user.user.last_name ?? "")}
+                                />
+                                <Header
+                                    openSidenav={() => setSidenav(!sidenav)}
+                                    isSideNavOpen={sidenav}
+                                    activeTheme={activeTheme}
+                                    changeTheme={() => {
+                                        setActiveTheme(!activeTheme);
+                                        localStorage.setItem("theme", !activeTheme);
+                                    }}
+                                />
+                            </>
+                        )}
 
-                    {/* Main content */}
-                    <div className={authCtx.isLoggedIn ? "main-wrapper" : ""}>
-                        <ApplicationRouter system={system} />
+                        {/* Main content */}
+                        <div className={authCtx.isLoggedIn ? "main-wrapper" : ""}>
+                            <ApplicationRouter />
+                        </div>
+
+                        {/* Toast */}
+                        <ToastContainer position="top-center" theme="colored" transition={Flip} autoClose={800} newestOnTop={false} draggable={false} closeOnClick hideProgressBar pauseOnHover />
+
+                        {isLoading && <Loader size={50} />}
                     </div>
 
-                    {/* Toast */}
-                    <ToastContainer position="top-center" theme="colored" transition={Flip} autoClose={800} newestOnTop={false} draggable={false} closeOnClick hideProgressBar pauseOnHover />
+                    <DeleteModal
+                        title="Obaveštenje"
+                        openDeleteDialog={{ show: authCtx.modal }}
+                        nameOfButtonCancel="Odjavite se"
+                        nameOfButton="Nastavite rad"
+                        deafultDeleteIcon={false}
+                        description={`Vaša sesija ističe za 5 minuta. Da li želite da nastavite rad?`}
+                        handleConfirm={() => {
+                            if (authCtx?.api?.get) {
+                                authCtx?.api
+                                    .get(`admin/profile/refresh-token`)
+                                    .then((response) => {
+                                        const data = response?.payload;
 
-                    {isLoading && <Loader size={50} />}
-                </div>
+                                        if (!data) {
+                                            toast.warning("Greška!");
+                                        }
 
-                <DeleteModal
-                    title="Obaveštenje"
-                    openDeleteDialog={{ show: authCtx.modal }}
-                    nameOfButtonCancel="Odjavite se"
-                    nameOfButton="Nastavite rad"
-                    deafultDeleteIcon={false}
-                    description={`Vaša sesija ističe za 5 minuta. Da li želite da nastavite rad?`}
-                    handleConfirm={() => {
-                        if (authCtx?.api?.get) {
-                            authCtx?.api
-                                .get(`admin/profile/refresh-token`)
+                                        const expirationTime = new Date(new Date().getTime() + +data.expires_in * 1000);
+                                        authCtx.login(
+                                            {
+                                                ...data,
+                                                loggedAt: new Date().getTime(),
+                                            },
+                                            expirationTime
+                                        );
+                                        authCtx?.api?.userDataUpdate(data);
+                                        authCtx.setShowModal(false);
+                                        authCtx?.setIsRefreshingToken(true);
+                                    })
+                                    .catch((error) => {
+                                        console.warn(error);
+                                    });
+                            }
+                        }}
+                        sx={{ backgroundColor: "#28a86e", "&:hover": { backgroundColor: "rgb(28, 117, 77)" } }}
+                        handleCancel={async () => {
+                            authCtx.setShowModal(false);
+                            await authCtx?.api
+                                .post("admin/profile/logout")
                                 .then((response) => {
-                                    const data = response?.payload;
-
-                                    if (!data) {
-                                        toast.warning("Greška!");
-                                    }
-
-                                    const expirationTime = new Date(new Date().getTime() + +data.expires_in * 1000);
-                                    authCtx.login(
-                                        {
-                                            ...data,
-                                            loggedAt: new Date().getTime(),
-                                        },
-                                        expirationTime
-                                    );
-                                    authCtx?.api?.userDataUpdate(data);
-                                    authCtx.setShowModal(false);
-                                    authCtx?.setIsRefreshingToken(true);
+                                    toast.success("Uspešno ste se odjavili!");
+                                    navigate(`/`);
+                                    authCtx.logout();
+                                    authCtx?.api?.userDataUpdate(null);
                                 })
                                 .catch((error) => {
                                     console.warn(error);
                                 });
-                        }
-                    }}
-                    sx={{ backgroundColor: "#28a86e", "&:hover": { backgroundColor: "rgb(28, 117, 77)" } }}
-                    handleCancel={async () => {
-                        authCtx.setShowModal(false);
-                        await authCtx?.api
-                            .post("admin/profile/logout")
-                            .then((response) => {
-                                toast.success("Uspešno ste se odjavili!");
-                                navigate(`/`);
-                                authCtx.logout();
-                                authCtx?.api?.userDataUpdate(null);
-                            })
-                            .catch((error) => {
-                                console.warn(error);
-                            });
-                    }}
-                    handleCancelToken={true}
-                />
+                        }}
+                        handleCancelToken={true}
+                    />
+                </AppContextProvider>
             </ThemeProvider>
         </QueryClientProvider>
     );
