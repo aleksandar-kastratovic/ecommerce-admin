@@ -59,7 +59,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
         };
 
         updateLink();
-    }, [system]);
+    }, [system, api]);
 
     const logoutHandler = async (e) => {
         //Uvek mora da izloguje korisnika bez obzira da li je api prosao ili ne

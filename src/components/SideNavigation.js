@@ -15,6 +15,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@emotion/react";
 import { filterScreens } from "../routes/utils";
 import { useAppContext } from "../hooks/appContext";
+import IconList from "../helpers/icons";
 
 const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
     const { system } = useAppContext();
@@ -25,15 +26,31 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         Prodaja: true,
     };
     const [openGroups, setOpenGroups] = useState(initialOpenGroups);
+    const [navMenu, setNavMenu] = useState([]);
     const { api } = authCtx;
 
     const theme = useTheme();
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("md"));
     const screens = filterScreens(availableScreens, system);
 
+    useEffect(() => {
+        const updateMenu = async () => {
+            await api
+                .get(`admin/profile/main-navigation-menu/${system?.toLowerCase()}`)
+                .then((response) => {
+                    setNavMenu(response.payload);
+                })
+                .catch((error) => {
+                    console.warn(error);
+                });
+        };
+
+        updateMenu();
+    }, [system, api.get]);
+
     // Populate the menu
     let menu = [];
-    for (const allowedScreen of sortedScreens ?? []) {
+    /* for (const allowedScreen of sortedScreens ?? []) {
         // Check for local screen definition
         const screen = screens[allowedScreen.screen_code];
         if (screen) {
@@ -47,6 +64,21 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
             // Add item
             menu[screen.group.order].items.push(screen);
         }
+    } */
+    for (const menuItem of navMenu ?? []) {
+        let obj = {
+            name: menuItem?.group.name,
+            items: [],
+        };
+
+        for (const item of menuItem?.items ?? []) {
+            const screen = availableScreens[item.code];
+            if (screen) {
+                obj.items.push({ icon: IconList[item.icon], name: item.name, path: screen?.path });
+            }
+        }
+
+        menu.push(obj);
     }
 
     const toggleGroup = (groupName) => {
