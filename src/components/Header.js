@@ -51,7 +51,6 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
                 await api
                     .get(`admin/profile/shop-url/${system?.toLowerCase()}`)
                     .then((response) => {
-                        console.log(response);
                         setLink(response.payload);
                     })
                     .catch((error) => {
