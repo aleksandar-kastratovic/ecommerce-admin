@@ -61,7 +61,6 @@ const Products = () => {
         }
     }, [doesRefetch]);
 
-
     return (
         <>
             <ListPage
@@ -88,7 +87,20 @@ const Products = () => {
                 formFields={listCheckbox}
                 sx={{ padding: "2rem" }}
                 apiPathFormModal="admin/product-items/list/clone"
-                initialData={{ id_product: openModal.id }}
+                initialData={{
+                    id_product: openModal.id,
+                    categories: 0,
+                    inventories: 0,
+                    prices: 0,
+                    seo: 0,
+                    crossselles: 0,
+                    upsells: 0,
+                    related: 0,
+                    attributes: 0,
+                    variantsAttributes: 0,
+                    gallery: 0,
+                    docs: 0,
+                }}
                 withoutSetterFunction
                 cancelButton
                 setDoesRefetch={setDoesRefetch}

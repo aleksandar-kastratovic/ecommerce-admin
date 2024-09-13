@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthContext from "../store/auth-contex";
 import Loader from "./shared/Loading/Loading";
 
@@ -11,7 +11,7 @@ import Grid from "@mui/material/Grid";
 import IconButton from "@mui/material/IconButton";
 import Box from "@mui/material/Box";
 
-import { styled } from "@mui/system";
+import { height, styled, width } from "@mui/system";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { toast } from "react-toastify";
@@ -21,6 +21,8 @@ import { set } from "lodash";
 import { Switch } from "@mui/material";
 import SystemSwitch from "./shared/SystemSwitch/SystemSwitch";
 import { useAppContext } from "../hooks/appContext";
+import Unicon from "./shared/Unicon/Unicon";
+import IconList from "../helpers/icons";
 
 const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
     const { system, setSystem } = useAppContext();
@@ -30,6 +32,7 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
 
     const [isLoading, setIsLoading] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [link, setLink] = useState(null);
 
     const open = Boolean(anchorEl);
 
@@ -41,6 +44,22 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
             setIsLoading(false);
         };
     }, []);
+
+    useEffect(() => {
+        const updateLink = async () => {
+            await api
+                .get(`admin/profile/shop-url/${system?.toLowerCase()}`)
+                .then((response) => {
+                    console.log(response);
+                    setLink(response.payload);
+                })
+                .catch((error) => {
+                    console.warn(error);
+                });
+        };
+
+        updateLink();
+    }, [system, api]);
 
     const logoutHandler = async (e) => {
         //Uvek mora da izloguje korisnika bez obzira da li je api prosao ili ne
@@ -170,7 +189,13 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
                             {/* <Grid item>
                                 <StyledToggleButton checked={activeTheme} onClick={changeTheme} name="themeSwitcher" inputProps={{ "aria-label": "toggle theme" }} />
                             </Grid> */}
-
+                            {link && link.status && (
+                                <Grid item>
+                                    <Link to={link.url} target="_blank" title={link.title}>
+                                        <Unicon icon={IconList[link.icon]} styleIcon={{ fontSize: 47, color: "black" }} />
+                                    </Link>
+                                </Grid>
+                            )}
                             <Grid item>
                                 <IconButton
                                     onClick={handleClick}
