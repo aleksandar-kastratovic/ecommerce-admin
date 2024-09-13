@@ -46,20 +46,22 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
     }, []);
 
     useEffect(() => {
-        const updateLink = async () => {
-            await api
-                .get(`admin/profile/shop-url/${system?.toLowerCase()}`)
-                .then((response) => {
-                    console.log(response);
-                    setLink(response.payload);
-                })
-                .catch((error) => {
-                    console.warn(error);
-                });
-        };
+        if (authCtx.isLoggedIn && api?.get && api.user) {
+            const updateLink = async () => {
+                await api
+                    .get(`admin/profile/shop-url/${system?.toLowerCase()}`)
+                    .then((response) => {
+                        console.log(response);
+                        setLink(response.payload);
+                    })
+                    .catch((error) => {
+                        console.warn(error);
+                    });
+            };
 
-        updateLink();
-    }, [system, api]);
+            updateLink();
+        }
+    }, [system, authCtx.isLoggedIn, api?.get, api.user]);
 
     const logoutHandler = async (e) => {
         //Uvek mora da izloguje korisnika bez obzira da li je api prosao ili ne
