@@ -26,7 +26,8 @@
 
 .wrapper {
     margin-top: 2rem;
-    max-height: calc(100vh - 26.75rem);
+    max-height: 50vh;
+    overflow-y: auto;
     position: relative;
 
     table {
@@ -52,40 +53,42 @@
     }
 }
 
-.table {
-    height: 50vh;
-    position: relative;
+table,
+thead,
+tbody,
+td,
+tr {
     border-collapse: collapse;
 }
 
+.table {
+    border-collapse: collapse;
+    width: 100%; /* Ensure the table takes full width */
+}
+
 .thead {
+    border: none !important; //rgba(224, 224, 224, 1);
     position: sticky;
-    top: 0;
-    z-index: 70;
+    top: -0.5px;
+    z-index: 10 !important; /* Ensure the thead stays above tbody */
     background-color: white;
 }
 
 .tbody {
-    z-index: 20;
-    height: 100%;
-    overflow-y: auto;
-    display: block;
+    width: 100%; /* Make tbody take full width */
+    display: block; /* Allow scrolling on tbody */
+    overflow-y: auto; /* Enable scrolling on tbody */
+    position: relative;
+    z-index: 1 !important;
 }
 
 .tbody tr {
-    display: table;
     width: 100%;
-    table-layout: fixed; /* Ensures the columns align with the thead */
+    table-layout: fixed; /* Keeps columns aligned */
 }
 
 .tbody td {
-    border-bottom: 1px solid gray; /* Optional: to style the rows */
-}
-
-.thead tr {
-    display: table;
-    width: 100%;
-    table-layout: fixed; /* Ensures the columns align with tbody */
+    border-bottom: 1px solid gray; /* Optional styling */
 }
 
 .toolbarButtonsGroup {

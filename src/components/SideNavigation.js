@@ -34,19 +34,21 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
     const screens = filterScreens(availableScreens, system);
 
     useEffect(() => {
-        const updateMenu = async () => {
-            await api
-                .get(`admin/profile/main-navigation-menu/${system?.toLowerCase()}`)
-                .then((response) => {
-                    setNavMenu(response.payload);
-                })
-                .catch((error) => {
-                    console.warn(error);
-                });
-        };
+        if (authCtx.isLoggedIn && api?.get && api.user) {
+            const updateMenu = async () => {
+                await api
+                    .get(`admin/profile/main-navigation-menu/${system?.toLowerCase()}`)
+                    .then((response) => {
+                        setNavMenu(response.payload);
+                    })
+                    .catch((error) => {
+                        console.warn(error);
+                    });
+            };
 
-        updateMenu();
-    }, [system, api.get]);
+            updateMenu();
+        }
+    }, [system, authCtx.isLoggedIn, api?.get, api.user]);
 
     // Populate the menu
     let menu = [];
@@ -77,8 +79,9 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
                 obj.items.push({ icon: IconList[item.icon], name: item.name, path: screen?.path });
             }
         }
-
-        menu.push(obj);
+        if (obj.items.length > 0) {
+            menu.push(obj);
+        }
     }
 
     const toggleGroup = (groupName) => {
