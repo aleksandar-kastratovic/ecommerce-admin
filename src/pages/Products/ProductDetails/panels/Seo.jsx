@@ -57,6 +57,7 @@ const Seo = ({ productId }) => {
         apiUrl={`admin/product-items/seo/${productId}`}
         editUrl={`admin/product-items/seo`}
         deleteUrl={`admin/product-items/seo`}
+        apiPathCrop={`admin/product-items/seo/options/crop`}
         title=" "
         columnFields={formFieldsTemp} 
         actionNewButton="modal"
