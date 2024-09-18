@@ -62,12 +62,14 @@ const App = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            authCtx?.api?.get(`admin/profile/user-permissions`).then((response) => {
-                const setUserScreens = (userScreens) => {
-                    authCtx.getUserScreens(userScreens);
-                };
-                setUserScreens(response?.payload);
-            });
+            if (authCtx.isLoggedIn) {
+                authCtx?.api?.get(`admin/profile/user-permissions`).then((response) => {
+                    const setUserScreens = (userScreens) => {
+                        authCtx.getUserScreens(userScreens);
+                    };
+                    setUserScreens(response?.payload);
+                });
+            }
         }, 5 * 60 * 1000);
 
         return () => clearInterval(interval);
