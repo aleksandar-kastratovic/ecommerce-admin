@@ -23,6 +23,7 @@ import SystemSwitch from "./shared/SystemSwitch/SystemSwitch";
 import { useAppContext } from "../hooks/appContext";
 import Unicon from "./shared/Unicon/Unicon";
 import IconList from "../helpers/icons";
+import SystemSelect from "./shared/SystemSwitch/SystemSelect";
 
 const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
     const { system, setSystem } = useAppContext();
@@ -177,11 +178,17 @@ const Header = ({ openSidenav, changeTheme, activeTheme, isSideNavOpen }) => {
                                 )}
                             </IconButton>
                             <Box>
-                                <SystemSwitch
+                                {/* <SystemSwitch
                                     checked={system === "B2B"}
                                     onChange={({ target }) => {
                                         setSystem(target.checked ? "B2B" : "B2C");
                                     }}
+                                /> */}
+                                <SystemSelect
+                                    onChange={(event) => {
+                                        setSystem(event.target.value);
+                                    }}
+                                    value={system}
                                 />
                             </Box>
                         </Grid>
