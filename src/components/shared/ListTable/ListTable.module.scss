@@ -26,7 +26,7 @@
 
 .wrapper {
     margin-top: 2rem;
-    max-height: 50vh;
+    max-height: calc(100vh - 438px);
     overflow-y: auto;
     position: relative;
 
@@ -85,10 +85,6 @@ tr {
 .tbody tr {
     width: 100%;
     table-layout: fixed; /* Keeps columns aligned */
-}
-
-.tbody td {
-    border-bottom: 1px solid gray; /* Optional styling */
 }
 
 .toolbarButtonsGroup {
