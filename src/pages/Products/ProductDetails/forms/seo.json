@@ -107,7 +107,7 @@
         "description": "Sažetak sadržaja stranice koji se prikazuje ispod naslova stranice u rezultatima pretraživača. Optimalna dužina je do 160 karaktera.",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "input"
+        "input_type": "textarea"
     },
     {
         "field_name": "Canonical link",
