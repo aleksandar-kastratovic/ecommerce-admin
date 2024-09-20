@@ -172,7 +172,7 @@
         "description": "Opis koji će se prikazati kada se sadržaj podeli na društvenim mrežama. Ukoliko je polje prazno uzima se vrednost iz polja Meta opis. Optimalna dužina je do 200 karaktera.",
         "ui_prop": "xyz",
         "sortable": true,
-        "input_type": "input"
+        "input_type": "textarea"
     },
     {
         "field_name": "Slika za društvene mreže",
@@ -187,20 +187,20 @@
         "required": false,
         "description": "Slika koji će se prikazati kada se sadržaj podeli na društvenim mrežama. Ukoliko je polje prazno uzima definisanu sliku proizvoda.",
         "ui_prop": {
-          "fileUpload": {
-              "fillFromApi": "admin/product-items/seo/options/upload",
-              "allow_format": [],
-              "allow_size": "",
-              "image": {
-                  "convert_use": null,
-                  "width": "1600",
-                  "height": "900"
-              },
-              "imageButton": {
-                "apiPathCrop": "admin/product-items/seo/options/crop"
+            "fileUpload": {
+                "fillFromApi": "admin/product-items/seo/options/upload",
+                "allow_format": [],
+                "allow_size": "",
+                "image": {
+                    "convert_use": null,
+                    "width": "1600",
+                    "height": "900"
+                },
+                "imageButton": {
+                    "apiPathCrop": "admin/product-items/seo/options/crop"
+                }
             }
-          }
-      },
+        },
         "sortable": true,
         "input_type": "image_button"
     },
