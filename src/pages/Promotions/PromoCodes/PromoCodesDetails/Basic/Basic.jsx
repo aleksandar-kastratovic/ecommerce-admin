@@ -1,14 +1,15 @@
 import tblFields from "../../tblFields.json";
 import { useEffect, useState } from "react";
-import ListPage from "../../../../../components/shared/ListPage/ListPage";
 import Form from "../../../../../components/shared/Form/Form";
 import { useMutation, useQuery } from "react-query";
 import useAPI from "../../../../../api/api";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
-import { setUrlQueryStringParam } from "../../../../../helpers/functions";
+import { useAppContext } from "../../../../../hooks/appContext";
 
 const Basic = () => {
+    const { system } = useAppContext();
+
     const [fields, setFields] = useState(tblFields);
     const [data, setData] = useState();
     const navigate = useNavigate();
@@ -21,7 +22,7 @@ const Basic = () => {
                 .post(`admin/campaigns/promo-codes/basic-data`, data)
                 .then((res) => {
                     toast.success(`Uspešno!`);
-                    navigate(`/promotions/promo-codes/${res?.payload?.id}?system=${res?.payload?.system}`);
+                    navigate(`/promotions/promo-codes/${res?.payload?.id}`);
                 })
                 .catch((error) => {
                     toast.error(error.response?.data?.message || error.response?.data?.payload?.message || "Greška!");
@@ -31,14 +32,10 @@ const Basic = () => {
     );
 
     const { data: campaignInfo, refetch } = useQuery(
-        ["campaignInfo", pid],
+        ["campaignInfo", pid, system],
         async () => {
             return await api.get(`admin/campaigns/product-catalog/basic-data/${pid}`).then((res) => {
-                setData(res?.payload);
-                if (res?.payload?.system) {
-                    let queryString = setUrlQueryStringParam("system", res?.payload?.system);
-                    navigate(`?${queryString}`, { replace: true });
-                }
+                setData(pid === "new" ? { ...res?.payload, system: system?.toLowerCase() } : res?.payload);
             });
         },
         {}

@@ -27,6 +27,7 @@ import AuthContext from "../../../../store/auth-contex";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
 import { useFileSize } from "../../../../hooks/useFileSize";
+import Button from "../../Button/Button";
 
 const generateBootstrapClasses = (columns) => {
     if (columns) {
@@ -760,6 +761,7 @@ export const AutocompleteTagsFilled = ({
  * @param {boolean} usePropName If api call should use prop name at the end of the path
  * @param {array} options Select options if there is no api call
  * @param {string} queryString Additional queryString for api call
+ * @param {boolean} selectAllEnabled Determines if select and deselect all buttons are displayed or not
  *
  * @return {JSX.Element}
  */
@@ -782,6 +784,7 @@ export const InputMultiSelect = ({
     styleMultiSelect,
     uiProp,
     limitTags,
+    selectAllEnabled = false,
 }) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
@@ -847,11 +850,37 @@ export const InputMultiSelect = ({
                     return display.join(", ");
                 }}
                 sx={{
+                    position: "relative",
                     "& legend": { display: "none" },
                     "& fieldset": { top: 0 },
                     "& .MuiSelect-select": { padding: "0.7rem", fontSize: "0.875rem" },
                 }}
             >
+                {selectAllEnabled && (
+                    <Box
+                        sx={{ display: "flex", gap: "0.7rem", padding: "0.7rem", position: "sticky", top: 0, background: "white", opacity: 1, zIndex: 20 }}
+                        onClick={(e) => {
+                            e.stopPropagation();
+                        }}
+                    >
+                        <Button
+                            label="Izaberi sve"
+                            variant="contained"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onChange({ target: { value: opt.map((item) => item.id), name } });
+                            }}
+                        />
+                        <Button
+                            label="Poništi sve"
+                            variant="contained"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                onChange({ target: { value: [], name } });
+                            }}
+                        />
+                    </Box>
+                )}
                 {(opt ?? []).map((item) => (
                     <MenuItem sx={{ fontSize: "0.875rem" }} key={item.id} value={item.id} selected={item.id === value} disabled={item?.disabled ?? false}>
                         <ListItemIcon>

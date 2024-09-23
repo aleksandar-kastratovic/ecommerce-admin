@@ -10,115 +10,128 @@ import ConditionsOne from "./panels/ConditionsOne/Conditions";
 import ConditionsTwo from "./panels/ConditionsTwo/Conditions";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../../helpers/functions";
 import AuthContext from "../../../../store/auth-contex";
+import { useAppContext } from "../../../../hooks/appContext";
 
 const PromotionsRecommendedDetails = () => {
-  const authCtx = useContext(AuthContext);
-  const { api } = authCtx;
-  const { rid } = useParams();
-  const apiPath = "admin/sell-strategies/recommended/basic-data";
-  const navigate = useNavigate();
-  const activeTab = getUrlQueryStringParam("tab") ?? 'basic';
+    const authCtx = useContext(AuthContext);
+    const { api } = authCtx;
 
-  const init = {
-    id: null,
-    calculation_type: null,
-    description: null,
-    slug: null,
-    name: null,
-    description: null,
-    from: null,
-    to: null,
-    order: null,
-    status: "on",
-    system: null,
-    id_country: null,
-  };
+    const { system } = useAppContext();
 
-  const [data, setData] = useState(init);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
+    const { rid } = useParams();
+    const apiPath = "admin/sell-strategies/recommended/basic-data";
+    const navigate = useNavigate();
+    const activeTab = getUrlQueryStringParam("tab") ?? "basic";
 
-  const [formFields, setFormFields] = useState(basic_data);
-  let newFields = deepClone(formFields);
-  let slugField = newFields.map((field) => {
-    if (field.prop_name === "system" && rid !== "new") {
-      return { ...field, disabled: true };
-    } else {
-      return field;
-    }
-  }).filter((field) => !(field.prop_name === "slug" && rid === "new"));
+    const init = {
+        id: null,
+        calculation_type: null,
+        description: null,
+        slug: null,
+        name: null,
+        description: null,
+        from: null,
+        to: null,
+        order: null,
+        status: "on",
+        system: system?.toLowerCase() ?? null,
+        id_country: null,
+    };
 
+    const [data, setData] = useState(init);
+    const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingOnSubmit, setIsLoadingOnSubmit] = useState(false);
 
-  const handleData = async () => {
-    setIsLoading(true);
-    api.get(`${apiPath}/${rid}`)
-      .then((response) => {
-        setData(response?.payload);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.warn(error);
-        setIsLoading(false);
-      });
-  };
+    const [formFields, setFormFields] = useState(basic_data);
+    let newFields = deepClone(formFields);
+    let slugField = newFields
+        .map((field) => {
+            if (field.prop_name === "system") {
+                return { ...field, disabled: true };
+            } else {
+                return field;
+            }
+        })
+        .filter((field) => !(field.prop_name === "slug" && rid === "new"));
 
-  const saveData = async (data) => {
-    setIsLoadingOnSubmit(true);
-    let oldId = data.id;
-    api.post(apiPath, data)
-      .then((response) => {
-        setData(response?.payload);
-        toast.success("Uspešno");
+    const handleData = async () => {
+        setIsLoading(true);
+        api.get(`${apiPath}/${rid}`)
+            .then((response) => {
+                setData(rid === "new" ? { ...response?.payload, system: system?.toLowerCase() } : response?.payload);
+                setIsLoading(false);
+            })
+            .catch((error) => {
+                console.warn(error);
+                setIsLoading(false);
+            });
+    };
 
-        if (oldId === null) {
-          let tId = response?.payload?.id;
-          navigate(`/promotions/promotions-recommended/${tId}`, { replace: true });
+    useEffect(() => {
+        if (rid === "new") {
+            setData((oldData) => {
+                return { ...oldData, system: system?.toLowerCase() };
+            });
         }
-        setIsLoadingOnSubmit(false);
-      })
-      .catch((error) => {
-        console.warn(error);
-        toast.warning("Greška");
-        setIsLoadingOnSubmit(false);
-      });
-  };
+    }, [system]);
 
-  useEffect(() => {
-    handleData();
-  }, []);
+    const saveData = async (data) => {
+        setIsLoadingOnSubmit(true);
+        let oldId = data.id;
+        api.post(apiPath, data)
+            .then((response) => {
+                setData(response?.payload);
+                toast.success("Uspešno");
 
-  const fields = [
-    {
-      id: "basic",
-      name: "Osnovno",
-      icon: IconList.inventory,
-      enabled: true,
-      component: <Form formFields={slugField} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
-    },
-    {
-      id: "conditionsOne",
-      name: "Primeni na proizvode",
-      icon: IconList.settings,
-      enabled: data?.id,
-      component: <ConditionsOne idSellStrategy={data?.id} />,
-    },
-    {
-      id: "conditionsTwo",
-      name: "Prikaži proizvode",
-      icon: IconList.settings,
-      enabled: data?.id,
-      component: <ConditionsTwo idSellStrategy={data?.id} />,
-    },
-  ];
+                if (oldId === null) {
+                    let tId = response?.payload?.id;
+                    navigate(`/promotions/promotions-recommended/${tId}`, { replace: true });
+                }
+                setIsLoadingOnSubmit(false);
+            })
+            .catch((error) => {
+                console.warn(error);
+                toast.warning("Greška");
+                setIsLoadingOnSubmit(false);
+            });
+    };
 
-  // Handle after click on tab panel
-  const panelHandleSelect = (field) => {
-    let queryString = setUrlQueryStringParam("tab", field.id);
-    const id = data.id == null ? "new" : data.id;
-    navigate(`/promotions/promotions-recommended/${id}?${queryString}`, { replace: true });
-  }
+    useEffect(() => {
+        handleData();
+    }, []);
 
-  return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[rid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
+    const fields = [
+        {
+            id: "basic",
+            name: "Osnovno",
+            icon: IconList.inventory,
+            enabled: true,
+            component: <Form formFields={slugField} initialData={data} onSubmit={saveData} isLoading={isLoadingOnSubmit} />,
+        },
+        {
+            id: "conditionsOne",
+            name: "Primeni na proizvode",
+            icon: IconList.settings,
+            enabled: data?.id,
+            component: <ConditionsOne idSellStrategy={data?.id} />,
+        },
+        {
+            id: "conditionsTwo",
+            name: "Prikaži proizvode",
+            icon: IconList.settings,
+            enabled: data?.id,
+            component: <ConditionsTwo idSellStrategy={data?.id} />,
+        },
+    ];
+
+    // Handle after click on tab panel
+    const panelHandleSelect = (field) => {
+        let queryString = setUrlQueryStringParam("tab", field.id);
+        const id = data.id == null ? "new" : data.id;
+        navigate(`/promotions/promotions-recommended/${id}?${queryString}`, { replace: true });
+    };
+
+    return <DetailsPage title={data?.id == null ? "Promocija" : data?.name} fields={fields} ready={[rid === "new" || data?.id]} selectedPanel={activeTab} panelHandleSelect={panelHandleSelect} />;
 };
 
 export default PromotionsRecommendedDetails;

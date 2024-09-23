@@ -364,6 +364,7 @@ const ProductDetailsVariation = ({ parentId, isParentDigital }) => {
                                                 onChangeSelectionMultiple(res, i);
                                             }}
                                             styleMultiSelect={{ "& label": { fontSize: "0.875rem" } }}
+                                            selectAllEnabled
                                         />
                                         <IconButton
                                             sx={{ marginTop: "1.2rem" }}

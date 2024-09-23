@@ -5,7 +5,7 @@
         "in_main_table": true,
         "in_details": true,
         "editable": true,
-        "disabled": false,
+        "disabled": true,
         "required": true,
         "description": "",
         "ui_prop": "xyz",
