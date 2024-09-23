@@ -9,7 +9,7 @@ const Seo = ({ pageId }) => {
     const [formFieldsTemp, setFormFieldsTemp] = useState(tblFields);
 
     const handleInformationImage = () => {
-        api.get(`admin/product-items/seo/options/upload`)
+        api.get(`admin/landing-pages-b2c/seo/options/upload`)
             .then((response) => {
                 formatFormFields(response?.payload);
             })
