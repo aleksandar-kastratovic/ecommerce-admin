@@ -131,14 +131,52 @@ const ProductVariation = ({ parentId, tblFields }) => {
         }
     };
 
-    const handleInformationImage = () => {
-        api.get(`admin/product-items/variants/gallery/options/upload`)
+    const formatFormFieldsSeo = (data) => {
+        if (data) {
+            const { allow_size, allow_format, image } = data;
+            let arr = formFieldsTemp.map((field) => {
+                if (field?.prop_name === "social_share_image") {
+                    const descripiton = `Veličina fajla ne sme biti veća od ${allow_size / (1024 * 1024).toFixed(2)}MB. Dozvoljeni formati fajla: ${allow_format
+                        .map((format) => format.name)
+                        .join(", ")}. ${field?.description}`;
+
+                    return {
+                        ...field,
+                        description: descripiton,
+                        validate: {
+                            imageUpload: data,
+                        },
+                        ui_prop: {
+                            fileUpload: data,
+                        },
+                        dimensions: { width: image?.width, height: image?.height },
+                    };
+                } else {
+                    return {
+                        ...field,
+                    };
+                }
+            });
+            setFormFieldsTemp([...arr]);
+        }
+    };
+
+    const handleInformationImage = async () => {
+        await api
+            .get(`admin/product-items/variants/gallery/options/upload`)
             .then((response) => {
                 setImageInfo(response.payload);
                 formatFormFields(response?.payload);
             })
             .catch((error) => console.warn(error));
+        await api
+            .get(`admin/product-items/variants/seo/options/upload`)
+            .then((response) => {
+                formatFormFieldsSeo(response?.payload);
+            })
+            .catch((error) => console.warn(error));
     };
+
     const handleSubmitWrapper = (parentId, selectedColumn) => {
         const { urls, row } = selectedColumn;
         const handleSubmit = (data, options = {}) => {

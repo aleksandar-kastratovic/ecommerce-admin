@@ -9,7 +9,7 @@ const Seo = ({ categoryId }) => {
     const [formFieldsTemp, setFormFieldsTemp] = useState(tblFields);
 
     const handleInformationImage = () => {
-        api.get(`admin/product-items/seo/options/upload`)
+        api.get(`admin/news-b2c/category/seo/options/upload`)
             .then((response) => {
                 formatFormFields(response?.payload);
             })

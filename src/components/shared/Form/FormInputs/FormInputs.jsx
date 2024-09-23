@@ -836,7 +836,7 @@ export const InputMultiSelect = ({
         <InputWrapper label={label} required={required} disabled={disabled} margin={margin} error={error} styleFormControl={styleMultiSelect} inputClasses={inputClasses}>
             <Select
                 name={name}
-                value={(opt ?? []).length === 0 ? "" : value}
+                value={(opt ?? []).length === 0 ? [] : value}
                 onChange={onChange}
                 disabled={disabled}
                 multiple={true}
