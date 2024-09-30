@@ -78,7 +78,7 @@
         "editable": true,
         "disabled": false,
         "required": false,
-        "description": "Naslov stranice koji će se prikazivati u pretraživačima i na kartici pretraživača.",
+        "description": "Naslov stranice koji će se prikazivati u pretraživačima i na kartici pretraživača. Optimalna dužina je do 60 karaktera.",
         "ui_prop": "xyz",
         "sortable": true,
         "input_type": "input"
@@ -104,7 +104,7 @@
         "editable": true,
         "disabled": false,
         "required": false,
-        "description": "Sažetak sadržaja stranice koji se prikazuje ispod naslova stranice u rezultatima pretraživača (optimalna dužina - 150 do 160 karaktera)",
+        "description": "Sažetak sadržaja stranice koji se prikazuje ispod naslova stranice u rezultatima pretraživača. Optimalna dužina je do 160 karaktera.",
         "ui_prop": "xyz",
         "sortable": true,
         "input_type": "textarea"
@@ -123,17 +123,86 @@
         "input_type": "input"
     },
     {
-        "field_name": "Meta robots",
-        "prop_name": "meta_robots",
-        "in_main_table": true,
+        "field_name": "Dozvoli search engine robotima da indeksiraju sadržaj? (Robot: index)",
+        "prop_name": "meta_robots_index",
+        "in_main_table": false,
         "in_details": true,
         "editable": true,
         "disabled": false,
         "required": false,
-        "description": "Pravila za indeksiranje i praćenje stranica od strane pretraživača.",
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "switch"
+    },
+    {
+        "field_name": "Da li search engine roboti da prate linkovani sadržaj? (Robot: follow)",
+        "prop_name": "meta_robots_follow",
+        "in_main_table": false,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "switch"
+    },
+    {
+        "field_name": "Naslov za društvene mreže",
+        "prop_name": "social_share_title",
+        "in_main_table": false,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "Naslov koji će se prikazati kada se sadržaj podeli na društvenim mrežama. Ukoliko je polje prazno uzima se vrednost iz polja Meta naslov. Optimalna dužina je između 60 i 90 karaktera. Ukoliko je duži opis maksimalno do 100 karaktera, Facebook prihvata maksimalno 88 karaktera.",
         "ui_prop": "xyz",
         "sortable": true,
         "input_type": "input"
+    },
+    {
+        "field_name": "Opis za društvene mreže",
+        "prop_name": "social_share_description",
+        "in_main_table": false,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "Opis koji će se prikazati kada se sadržaj podeli na društvenim mrežama. Ukoliko je polje prazno uzima se vrednost iz polja Meta opis. Optimalna dužina je do 200 karaktera.",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "textarea"
+    },
+    {
+        "field_name": "Slika za društvene mreže",
+        "prop_name": "social_share_image",
+        "validate": {
+            "imageUpload": null
+        },
+        "in_main_table": false,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "Slika koji će se prikazati kada se sadržaj podeli na društvenim mrežama. Ukoliko je polje prazno uzima definisanu sliku proizvoda.",
+        "ui_prop": {
+            "fileUpload": {
+                "fillFromApi": "admin/category-product/seo/options/upload",
+                "allow_format": [],
+                "allow_size": "",
+                "image": {
+                    "convert_use": null,
+                    "width": "1600",
+                    "height": "900"
+                },
+                "imageButton": {
+                    "apiPathCrop": "admin/category-product/seo/options/crop"
+                }
+            }
+        },
+        "sortable": true,
+        "input_type": "image_button"
     },
     {
         "field_name": "",

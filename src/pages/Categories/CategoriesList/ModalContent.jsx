@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import Checkbox from "@mui/material/Checkbox";
 import Select from "@mui/material/Select";
@@ -16,6 +16,7 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [checked, setChecked] = useState(true);
     const [checkedMainCheckbox, setCheckedMainCheckbox] = useState(true);
+    const [selected, setSelected] = useState("");
     const [selectedOptions, setSelectedOptions] = useState([]);
 
     // Popunjava niz odabranih opcija, ukoliko nema oldId dodaje u nize, ukoliko ima menja newId
@@ -46,26 +47,39 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
     // Provera da li su vrednosti za sve prikazane elemente odabrana zeljena akcija
     const AllOptionListFill = (allSelected) => {
         let all_fill = true;
-        dialogData?.products_list.map((list_item) => {
-            let find_items = allSelected.filter((item) => {
-                return item?.old_id === list_item?.old_id;
+        if (dialogData?.products_list) {
+            dialogData?.products_list.map((list_item) => {
+                let find_items = allSelected.filter((item) => {
+                    return item?.old_id === list_item?.old_id;
+                });
+
+                if (find_items.length === 0) {
+                    all_fill = false;
+                }
             });
+        }
 
-            if (find_items.length === 0) {
-                all_fill = false;
-            }
-        });
+        if (dialogData.inventory_list) {
+            dialogData?.inventory_list.map((list_item) => {
+                let find_items = allSelected.filter((item) => {
+                    return item?.old_id === list_item?.old_id;
+                });
 
+                if (find_items.length === 0) {
+                    all_fill = false;
+                }
+            });
+        }
         return all_fill;
     };
 
-    const onSelectionChange = (select, input) => {
+    const onSelectionChange = ({ target }, input) => {
         let oldId = input.props.oldId;
         let newId = input.props.value;
 
         let allSelected = AddSelected(oldId, newId);
         let allFill = AllOptionListFill(allSelected);
-
+        setSelected(target.value);
         setSelectedOptions(allSelected);
 
         handleDeleteModalData({
@@ -89,10 +103,9 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
                             // Lista povezanih vrednosti
                             connect: [],
                             // Mora biti sve povezano
-                            all_fill: true,
+                            all_fill: false,
                         });
                     }
-
                 })
                 .catch((error) => {
                     console.warn(error);
@@ -112,19 +125,49 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
                         <Typography variant="string">{dialogData.main_line}</Typography>
                         <FormControlLabel control={<Checkbox checked={checkedMainCheckbox} disabled />} label={dialogData.main_checkbox} />
                     </span>
-                    {dialogData.category_children !== false && (
+                    {dialogData.category_children && dialogData.category_children !== false && (
                         <span key="dialogData_category_children" style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
                             <Typography variant="string">{dialogData.category_children_line}</Typography>
                             <FormControlLabel control={<Checkbox checked={checked} disabled />} label={dialogData.category_children_checkbox} />
                         </span>
                     )}
-                    {dialogData.products !== false && (
+                    {dialogData.inventory && dialogData.inventory !== false && (
+                        <span key="dialogData_category_children" style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
+                            <Typography variant="string">{dialogData.inventory_line}</Typography>
+                            {dialogData.inventory_list?.map((item, index) => {
+                                return (
+                                    <React.Fragment key={index + "_select"}>
+                                        <Typography variant="string" sx={{ marginTop: "1rem" }}>
+                                            {item?.line}
+                                        </Typography>
+                                        <Select
+                                            key={index + "_select"}
+                                            onChange={onSelectionChange}
+                                            selected={selected}
+                                            sx={{
+                                                "& legend": { display: "none" },
+                                                "& fieldset": { top: 0 },
+                                                "& .MuiSelect-select": { padding: "0.7rem", fontSize: "0.875rem" },
+                                            }}
+                                        >
+                                            {(item?.options ?? []).map((option) => (
+                                                <MenuItem key={option.id} value={option?.id} valuename={option?.name} oldId={item?.old_id} sx={{ fontSize: "0.875rem" }}>
+                                                    {option?.name}
+                                                </MenuItem>
+                                            ))}
+                                        </Select>
+                                    </React.Fragment>
+                                );
+                            })}
+                        </span>
+                    )}
+                    {dialogData.products && dialogData.products !== false && (
                         <span key="dialogData_products" style={{ display: "flex", flexDirection: "column", marginTop: "2rem" }}>
                             <Typography variant="string">{dialogData.products_line}</Typography>
 
                             {dialogData?.products_list?.map((item, index) => {
                                 return (
-                                    <>
+                                    <React.Fragment key={index + "_select"}>
                                         <Typography variant="string" sx={{ marginTop: "1rem" }}>
                                             {item?.line}
                                         </Typography>
@@ -143,7 +186,7 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
                                                 </MenuItem>
                                             ))}
                                         </Select>
-                                    </>
+                                    </React.Fragment>
                                 );
                             })}
                         </span>

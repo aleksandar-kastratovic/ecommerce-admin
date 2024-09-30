@@ -439,7 +439,7 @@ export const AutocompleteInput = ({
                 .get(path)
                 .then((response) => {
                     if (isMounted) {
-                        setOpt(response?.payload);
+                        setOpt(response?.payload?.filter((item) => item !== null));
                     }
                 })
                 .catch((error) => {
@@ -489,7 +489,7 @@ export const AutocompleteInput = ({
                     }
                     onChange(name, newIval);
                 }}
-                options={opt.map((option) => option.name)}
+                options={opt.map((option) => option?.name)}
                 sx={{
                     "& legend": { display: "none" },
                     "& fieldset": { top: 0 },
