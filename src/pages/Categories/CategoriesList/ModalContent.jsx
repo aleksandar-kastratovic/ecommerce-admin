@@ -103,7 +103,7 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
                             // Lista povezanih vrednosti
                             connect: [],
                             // Mora biti sve povezano
-                            all_fill: false,
+                            all_fill: true,
                         });
                     }
                 })
