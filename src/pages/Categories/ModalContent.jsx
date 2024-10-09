@@ -80,14 +80,31 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
     const handleData = async () => {
       setIsLoading(true);
       api.get(apiPath)
-        .then((response) => {
-          setDialogData(response?.payload);
-          setIsLoading(false);
-        })
-        .catch((error) => {
-          console.warn(error);
-          setIsLoading(false);
-        });
+          .then((response) => {
+              setDialogData(response?.payload);
+              setIsLoading(false);
+
+              // Ukoliko ima proizvoda u kategorijama za prebacivanje moraju sve kategorije da se povezu, ako nema kategorije moze da se brise
+              if (response?.payload?.category_children) {
+                  handleDeleteModalData({
+                      // Lista povezanih vrednosti
+                      connect: [],
+                      // Mora biti sve povezano
+                      all_fill: false,
+                  });
+              } else {
+                  handleDeleteModalData({
+                      // Lista povezanih vrednosti
+                      connect: [],
+                      // Mora biti sve povezano
+                      all_fill: true,
+                  });
+              }
+          })
+          .catch((error) => {
+              console.warn(error);
+              setIsLoading(false);
+          });
     };
     handleData();
   }, []);

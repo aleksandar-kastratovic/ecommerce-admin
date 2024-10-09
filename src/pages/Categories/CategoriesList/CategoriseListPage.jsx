@@ -38,7 +38,6 @@ const CategoriesListPage = () => {
             deleteClickHandler: {
                 type: "dialog_delete",
                 fnc: (rowData, deleteModalData) => {
-                    console.log(deleteModalData, "deleteModalData");
                     if (deleteModalData.all_fill) {
                         api.delete(`admin/category-product/categories/confirm/${rowData.id}`, deleteModalData)
                             .then(() => toast.success("Zapis je uspešno obrisan"))
