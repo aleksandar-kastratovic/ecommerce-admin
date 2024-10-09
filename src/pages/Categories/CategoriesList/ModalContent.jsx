@@ -98,12 +98,20 @@ const ModalContent = ({ apiPath = null, handleDeleteModalData }) => {
                     setDialogData(response?.payload);
                     setIsLoading(false);
 
-                    if (!response?.payload?.products) {
+                    // Ukoliko ima proizvoda u potkategorijama za prebacivanje moraju sve potkategorije da se povezu, ako nema potkategorija moze da se brise
+                    if (response?.payload?.products) {
                         handleDeleteModalData({
                             // Lista povezanih vrednosti
                             connect: [],
                             // Mora biti sve povezano
                             all_fill: false,
+                        });
+                    } else {
+                        handleDeleteModalData({
+                            // Lista povezanih vrednosti
+                            connect: [],
+                            // Mora biti sve povezano
+                            all_fill: true,
                         });
                     }
                 })
