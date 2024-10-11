@@ -66,57 +66,15 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         order: 1,
     };
 
-    // Default delete URL is the same as the main URL
-    deleteUrl = deleteUrl ?? apiUrl;
-    storageName;
     const [modalData, setModalData] = useState({});
     const [openDeleteDialog, setOpenDeleteDialog] = useState({ show: false, id: null, mutate: null });
     const [addParent, setAddParent] = useState(init);
     const [addChild, setAddChild] = useState(init);
+    const [scrollPositionData, setScrollPositionData] = useState({});
+
     const handleDeleteModalData = (data) => {
         setDeleteModalData(data);
         return data;
-    };
-
-    const handleDeleteConfirm = async () => {
-        if (selectedActionButton?.deleteClickHandler) {
-            switch (selectedActionButton.deleteClickHandler.type) {
-                case "dialog_delete":
-                    let dialog_delete_opt = selectedActionButton.deleteClickHandler.fnc(selectedRowData, deleteModalData);
-                    if (dialog_delete_opt) {
-                        setOpenDeleteDialog(dialog_delete_opt);
-                    }
-                    break;
-                default:
-                    selectedActionButton.deleteClickHandler.fnc(selectedRowData);
-                    break;
-            }
-        } else {
-            let scrollPosition = getScrollPosition();
-            try {
-                const response = await deleteByPath({
-                    path: deleteUrl + openDeleteDialog.id,
-                    pathVariables: { id: openDeleteDialog.id },
-                    headers: defaultHeaders,
-                });
-                // condition response or response.status === 200 for example
-                if (response) {
-                    let tmp = JSON.parse(sessionStorage.getItem(storageName));
-                    let newArr = tmp ? removeTreeNode(tmp, openDeleteDialog.id) : null;
-                    sessionStorage.setItem(storageName, JSON.stringify(newArr));
-                }
-            } catch (error) {
-                console.warn(error);
-                // customize message for example
-                toast.warning("Greška nastala prilikom brisanja.");
-            } finally {
-                await reFetchTreeList();
-                setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
-                setScrollPosition(scrollPosition);
-            }
-
-            setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
-        }
     };
 
     useEffect(() => {
@@ -146,16 +104,94 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         asyncFetch();
     }, [isLoadingTreeList, treeList]);
 
+    // Triggered when treeList changes
+    useEffect(() => {
+        // Setovanje scroll pozicije za prikaz
+        setScrollPosition(scrollPositionData);
+        // resetovanje scroll podataka
+        setScrollPositionData({});
+    }, [treeList]);
+    
     const handleSearch = (value) => {
         setSearchString(value);
     };
 
-    const handleDelete = (id) => {
-        setOpenDeleteDialog({ show: true, id: id, mutate: null });
+    const handleDeleteButton = (node, action) => {
+        
+        setSelectedRowData(node);
+        defineScrollPositionData();
+
+        // Ukoliko je definisana custom action na delete dugme
+        if(action) {
+            setSelectedActionButton(action);
+        } else {
+            // Defualt akcija ukoliko je definisano deleteUrl je da prikaze deleteDialog
+            if(deleteUrl) {
+                setOpenDeleteDialog({ show: true, id: node?.id, mutate: null });
+            }
+        }
     };
 
-    const handleEdit = (id) => {
-        // TODO make a dynamic path
+    const handlerConfirmDeleteDialog = async () => {
+
+        // Provera da li postoji neka custom action za delete
+        if (selectedActionButton?.deleteClickHandler) {
+            switch (selectedActionButton.deleteClickHandler.type) {
+                case "dialog_delete":
+                    let dialog_delete_opt = await selectedActionButton.deleteClickHandler.fnc(selectedRowData, deleteModalData);
+                    if (dialog_delete_opt) {
+                        // Remove from array
+                        let tmp = JSON.parse(sessionStorage.getItem(storageName));
+                        let newArr = tmp ? removeTreeNode(tmp, dialog_delete_opt.id) : null;
+                        sessionStorage.setItem(storageName, JSON.stringify(newArr));
+
+                        await reFetchTreeList();
+                        setOpenDeleteDialog(dialog_delete_opt);
+                    }
+                    break;
+                default:
+                    selectedActionButton.deleteClickHandler.fnc(selectedRowData);
+                    break;
+            }
+        } else {
+            // Default action ukoliko je definisan deleteUrl
+            if(deleteUrl) {
+                try {
+                    const response = await deleteByPath({
+                        path: deleteUrl + openDeleteDialog.id,
+                        pathVariables: { id: openDeleteDialog.id },
+                        headers: defaultHeaders,
+                    });
+                    // condition response or response.status === 200 for example
+                    // TODO: proveriti detaljnije da li je ovo ispravno, nisam testirao
+                    if (response) {
+                        let tmp = JSON.parse(sessionStorage.getItem(storageName));
+                        let newArr = tmp ? removeTreeNode(tmp, openDeleteDialog.id) : null;
+                        sessionStorage.setItem(storageName, JSON.stringify(newArr));
+                    }
+                } catch (error) {
+                    console.warn(error);
+                    // customize message for example
+                    toast.warning("Greška nastala prilikom brisanja.");
+                } finally {
+                    await reFetchTreeList();
+                }
+                
+                // Zatvaranje deleteDialog
+                setOpenDeleteDialog({ show: false, id: null, mutate: 1 });
+            }
+        }
+    };
+
+    const handlerCancelDeleteDialog = () => {
+        setSelectedActionButton({});
+        setSelectedRowData({});
+        setOpenDeleteDialog({ show: false, id: null, mutate: null });
+        setScrollPositionData({});
+    };
+
+    const handleEditButton = (id) => {
+        // TODO: make a dynamic path
         navigate(`/product-categories/category/${gid}/${id}`);
     };
 
@@ -223,16 +259,47 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         return tree;
     };
 
-    const getScrollPosition = () => {
-        return parseInt(window.pageYOffset);
-    };
+    // Definisanje scroll vrednosti
+    const defineScrollPositionData = (position = null) => {
+        const element = document.querySelector(".rst__virtualScrollOverride") ?? null;
+        switch(position) {
+            case 'top':
+                setScrollPositionData({
+                    "window": parseInt(0),
+                    "holder": parseInt(0)
+                });
+                break;
+            case 'bottom':
+                setScrollPositionData({
+                    "window": parseInt(window.scrollHeight),
+                    "holder": parseInt(element?.scrollHeight)
+                });
+                break;
+            default:
+                setScrollPositionData({
+                    "window": parseInt(window.scrollY),
+                    "holder": parseInt(element?.scrollTop)
+                });
+                break;
+        }
+    }
 
-    const setScrollPosition = (top = 0) => {
-        top = window.innerHeight > top ? top : window.innerHeight;
+    const setScrollPosition = (positions) => {
+        
+        let window_top = typeof(positions.window) !== "undefined" ? positions.window : 0;
+
+        const element = document.querySelector(".rst__virtualScrollOverride") ?? null;
+        let holder_top = typeof(positions.holder) !== "undefined" ? positions.holder : 0;
+
         setTimeout(() => {
             window.scrollTo({
-                top: top,
-                behavior: "instant",
+                top: window_top, 
+                behavior: "auto",
+            });
+
+            element?.scrollTo({
+                top: holder_top, 
+                behavior: "auto",
             });
         }, 300);
     };
@@ -255,15 +322,18 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
     };
 
     const cancelParent = () => {
+        setScrollPositionData({});
         setAddParent(init);
     };
 
     const cancelChild = () => {
+        setScrollPositionData({});
         setOpenTextBox({ open: false, id: null });
         setAddChild(init);
     };
 
     const handleOpenTextBox = (id) => {
+        defineScrollPositionData();
         setOpenTextBox({ open: true, id: id });
     };
 
@@ -289,14 +359,13 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
         if (addParent.name === "") {
             return;
         }
-
+        defineScrollPositionData("bottom");
         saveData(addParent, "post");
         setAddParent({ ...addParent, name: "" });
     };
 
-    //Save data
+    // Save data
     const saveData = async (data, method) => {
-        let scrollPosition = getScrollPosition();
         try {
             const response = await postPutByPathAndData({
                 path: apiUrl,
@@ -316,7 +385,6 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             toast.warning(`Greška nastala prilikom ${method === "put" ? "izmene" : "dodavanja"} podataka`);
         } finally {
             await reFetchTreeList();
-            setScrollPosition(scrollPosition);
         }
     };
 
@@ -367,6 +435,7 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
             order: tOrder + 1,
         };
 
+        defineScrollPositionData();
         saveData(updateNode, "put");
     };
 
@@ -374,9 +443,11 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
 
     useEffect(() => {
         if (selectedRowData?.id) {
-            let dialog_delete_opt = customActions.delete.clickHandler.fnc(selectedRowData, handleDeleteModalData);
-            if (dialog_delete_opt) {
-                setOpenDeleteDialog(dialog_delete_opt);
+            if(customActions?.delete?.clickHandler) {
+                let dialog_delete_opt = customActions.delete.clickHandler?.fnc(selectedRowData, handleDeleteModalData);
+                if (dialog_delete_opt) {
+                    setOpenDeleteDialog(dialog_delete_opt);
+                }
             }
         }
     }, [selectedRowData]);
@@ -456,24 +527,15 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                                                 {node.name}
                                             </div>
 
-                                            <span className={scss.button} onClick={() => handleEdit(node.id)}>
+                                            <span className={scss.button} onClick={() => handleEditButton(node.id)}>
                                                 <Icon className={scss.button}>edit</Icon>
                                             </span>
-                                            <span
-                                                className={scss.button}
-                                                onClick={() => {
-                                                    setSelectedActionButton(customActions.delete);
-                                                    setSelectedRowData(node);
-                                                    setOpenDeleteDialog({
-                                                        show: true,
-                                                        id: node.id,
-                                                        mutate: null,
-                                                        children: customActions.delete?.clickHandler?.fnc(node, handleDeleteConfirm)?.children,
-                                                    });
-                                                }}
-                                            >
-                                                <Icon className={scss.button}>delete</Icon>
-                                            </span>
+
+                                            {(customActions?.delete || deleteUrl) && (
+                                                <span className={scss.button} onClick={() => handleDeleteButton(node, customActions?.delete)}>
+                                                    <Icon className={scss.button}>delete</Icon>
+                                                </span>
+                                            )}
 
                                             {openTextBox.open && openTextBox.id === node.id ? (
                                                 <TextBoxSingle
@@ -502,7 +564,14 @@ const TreeView = ({ apiUrl, deleteUrl, title, showDatePicker, modifyItems, addit
                     renderTreeSkeletons()
                 )}
             </PageWrapper>
-            <DeleteDialog handleConfirm={handleDeleteConfirm} openDeleteDialog={openDeleteDialog} setOpenDeleteDialog={setOpenDeleteDialog} selectedRowData={selectedRowData} />
+            <DeleteDialog 
+                handleConfirm={handlerConfirmDeleteDialog} 
+                openDeleteDialog={openDeleteDialog} 
+                setOpenDeleteDialog={setOpenDeleteDialog} 
+                selectedRowData={selectedRowData} 
+                handleCancelToken
+                handleCancel={handlerCancelDeleteDialog}
+            />
         </>
     );
 };

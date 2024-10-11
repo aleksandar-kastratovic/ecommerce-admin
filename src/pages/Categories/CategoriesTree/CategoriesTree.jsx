@@ -1,34 +1,19 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import TreeView from "../../../components/shared/TreeView/TreeView";
 import tblFields from "./tblFields.json";
 import ModalContent from "./ModalContent";
 import { toast } from "react-toastify";
 import useAPI from "../../../api/api";
-import { useState } from "react";
 
 const CategoriesTree = () => {
     const { gid } = useParams();
     const api = useAPI();
-    const navigate = useNavigate();
-
-    let buttons = [
-        {
-            id: 1,
-            label: "Grupe",
-            action: () => {
-                navigate("/product-categories");
-            },
-        },
-    ];
-
-    const [restartTree, setRestartTree] = useState(true);
 
     const customActions = {
         delete: {
             clickHandler: {
                 type: "dialog_delete",
-                fnc: (rowData, handleDeleteModalData) => {
-                    console.log("f1", rowData);
+                fnc: (rowData, handleDeleteModalData) => {                   
                     return {
                         show: true,
                         id: rowData.id,
@@ -39,18 +24,14 @@ const CategoriesTree = () => {
             },
             deleteClickHandler: {
                 type: "dialog_delete",
-                fnc: (rowData, deleteModalData) => {
-                    console.log(rowData);
-                    setRestartTree(false);
+                fnc: async (rowData, deleteModalData) => {
                     if (deleteModalData.all_fill) {
-                        api.delete(`/admin/category-product/tree/confirm/${rowData.id}`, deleteModalData)
+                        await api.delete(`/admin/category-product/tree/confirm/${rowData.id}`, deleteModalData)
                             .then(() => {
                                 toast.success("Zapis je uspešno obrisan");
-                                setRestartTree(true);
                             })
                             .catch(() => {
                                 toast.warning("Došlo je do greške prilikom brisanja");
-                                setRestartTree(true);
                             });
 
                         return {
@@ -69,9 +50,7 @@ const CategoriesTree = () => {
 
     return (
         <>
-            {restartTree && (
-                <TreeView customActions={customActions} apiUrl={`/admin/category-product/tree/`} title="Kategorije" columnFields={tblFields} filters={{ id_category_product_group: gid }} />
-            )}
+            {(<TreeView customActions={customActions} apiUrl={`/admin/category-product/tree/`} title="Kategorije" columnFields={tblFields} filters={{ id_category_product_group: gid }} /> )}
         </>
     );
 };
