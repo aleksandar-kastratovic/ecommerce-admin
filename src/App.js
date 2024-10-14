@@ -108,7 +108,6 @@ const App = () => {
             }
             //ako je time_left = 300, i isIdle = false, osvezava se token
             if (time_left <= 300 && !isIdle) {
-                authCtx?.setIsRefreshingToken(true);
                 authCtx.setShowModal(false);
                 if (authCtx?.api?.get) {
                     authCtx?.api
@@ -139,6 +138,42 @@ const App = () => {
 
         return () => clearInterval(interval);
     });
+
+    const refreshUserToken = () => {
+        if (authCtx?.api?.get) {
+            authCtx?.api
+                .get(`admin/profile/refresh-token`)
+                .then((response) => {
+                    const data = response?.payload;
+
+                    if (!data) {
+                        toast.warning("Greška!");
+                    }
+
+                    const expirationTime = new Date(new Date().getTime() + +data.expires_in * 1000);
+                    authCtx.login(
+                        {
+                            ...data,
+                            loggedAt: new Date().getTime(),
+                        },
+                        expirationTime
+                    );
+                    authCtx?.api?.userDataUpdate(data);
+                    authCtx.setShowModal(false);
+                    navigate(0);
+                })
+                .catch((error) => {
+                    console.warn(error);
+                });
+        }
+    };
+
+    useEffect(() => {
+        if (authCtx.isRefreshingToken) {
+            refreshUserToken();
+            authCtx.setIsRefreshingToken(false);
+        }
+    }, [authCtx.isRefreshingToken]);
 
     return (
         <QueryClientProvider client={queryClient}>
@@ -183,32 +218,7 @@ const App = () => {
                         deafultDeleteIcon={false}
                         description={`Vaša sesija ističe za 5 minuta. Da li želite da nastavite rad?`}
                         handleConfirm={() => {
-                            if (authCtx?.api?.get) {
-                                authCtx?.api
-                                    .get(`admin/profile/refresh-token`)
-                                    .then((response) => {
-                                        const data = response?.payload;
-
-                                        if (!data) {
-                                            toast.warning("Greška!");
-                                        }
-
-                                        const expirationTime = new Date(new Date().getTime() + +data.expires_in * 1000);
-                                        authCtx.login(
-                                            {
-                                                ...data,
-                                                loggedAt: new Date().getTime(),
-                                            },
-                                            expirationTime
-                                        );
-                                        authCtx?.api?.userDataUpdate(data);
-                                        authCtx.setShowModal(false);
-                                        authCtx?.setIsRefreshingToken(true);
-                                    })
-                                    .catch((error) => {
-                                        console.warn(error);
-                                    });
-                            }
+                            refreshUserToken();
                         }}
                         sx={{ backgroundColor: "#28a86e", "&:hover": { backgroundColor: "rgb(28, 117, 77)" } }}
                         handleCancel={async () => {

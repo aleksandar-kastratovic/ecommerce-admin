@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { toast } from "react-toastify";
 import { useIsIdle } from "../hooks/isIdle";
 import { useNavigate } from "react-router-dom";
+import useAPI from "../api/api";
 
 let logoutTimer;
 let refreshTokenTimer;
@@ -130,9 +131,8 @@ export const AuthContextProvider = (props) => {
         const storedLastHttp = localStorage.getItem("lastHttp");
         const storedLastHttpMs = new Date(storedLastHttp).getTime();
         const tokenExpiringTimeMs = new Date(storedExpirationDate).getTime();
-
-        if (3000000 >= tokenExpiringTimeMs - storedLastHttpMs) {
-            setRefreshingToken(true);
+        if (15 * 60 * 1000 >= remainingTime) {
+            setIsRefreshingToken(true);
         } else {
             if (refreshTokenTimer) {
                 clearTimeout(refreshTokenTimer);
@@ -157,7 +157,7 @@ export const AuthContextProvider = (props) => {
     useEffect(() => {
         let activityCheckTimer;
         let activityTime = 20 * 60 * 1000;
-        let refreshTimer = 20 * 60 * 1000;
+        let refreshTimer = 10 * 60 * 1000;
         const checkLastActivityTime = () => {
             const currentTime = new Date().getTime();
             if (currentTime - lastActivityTimeRef.current <= activityTime) {
@@ -166,7 +166,7 @@ export const AuthContextProvider = (props) => {
             activityCheckTimer = setTimeout(checkLastActivityTime, refreshTimer);
         };
 
-        activityCheckTimer = setTimeout(checkLastActivityTime, refreshTimer);
+        checkLastActivityTime();
 
         return () => {
             if (activityCheckTimer) {
