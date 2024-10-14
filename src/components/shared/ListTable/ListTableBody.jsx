@@ -296,10 +296,10 @@ const ListTableBody = ({
                                             clearTimeout(timer);
                                             if (event?.detail === 1) {
                                                 timer = setTimeout(() => {
-                                                    tableCellActionsObject?.click.handler(row, column, selected, setSelected);
+                                                    tableCellActionsObject?.click?.handler(row, column, selected, setSelected);
                                                 }, 200);
                                             } else if (event?.detail === 2) {
-                                                tableCellActionsObject?.doubleClick.handler(row, column, selected, setSelected);
+                                                tableCellActionsObject?.doubleClick?.handler(row, column, selected, setSelected);
                                             }
                                         }
                                     }}
