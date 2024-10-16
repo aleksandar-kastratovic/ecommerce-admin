@@ -80,24 +80,6 @@ pipelines:
           <<: *execute
           name: Maximon
           deployment: maximon
-
-    prod-ringzandtingz:
-      - step:
-          <<: *execute
-          name: RingzAndThingz
-          deployment: ringzandthingz
-
-    prod-mobs:
-      - step:
-          <<: *execute
-          name: Mobs
-          deployment: mobs
-
-    prod-ukusnoizdravo:
-      - step:
-          <<: *execute
-          name: Ukusnoizdravo
-          deployment: ukusnoizdravo
                     
     prod-tiffany:
       - step:
@@ -140,24 +122,12 @@ pipelines:
           <<: *execute
           name: HeklaniSvet
           deployment: heklanisvet
-          
-    prod-magnetic:
-      - step:
-          <<: *execute
-          name: Magnetic
-          deployment: magnetic
-          
+                    
     prod-karat:
       - step:
           <<: *execute
           name: Karat
           deployment: karat
-                    
-    prod-marela:
-      - step:
-          <<: *execute
-          name: Marela
-          deployment: marela
                     
     prod-whollywear:
       - step:
@@ -165,12 +135,6 @@ pipelines:
           name: WhollyWear
           deployment: whollywear
                               
-    prod-realmaverse:
-      - step:
-          <<: *execute
-          name: Realmaverse
-          deployment: realmaverse
-
     prod-adnetics:
       - step:
           <<: *execute
@@ -213,12 +177,6 @@ pipelines:
           name: RisticTrade
           deployment: ristictrade
                                      
-    prod-zutilist:
-      - step:
-          <<: *execute
-          name: ZutiList
-          deployment: zutilist
-                                     
     prod-raika:
       - step:
           <<: *execute
@@ -249,12 +207,6 @@ pipelines:
           name: Rover
           deployment: rover
                                                                              
-    prod-gojkovicmed:
-      - step:
-          <<: *execute
-          name: GojkovicMed
-          deployment: gojkovicmed
-                                                                             
     prod-zlataranova:
       - step:
           <<: *execute
@@ -267,29 +219,11 @@ pipelines:
           name: Absolem
           deployment: absolem
 
-    prod-pazarishop:
-      - step:
-          <<: *execute
-          name: PazariShop
-          deployment: pazarishop
-
-    prod-hunnybunny:
-      - step:
-          <<: *execute
-          name: HunnyBunny
-          deployment: hunnybunny
-
     prod-winea:
       - step:
           <<: *execute
           name: Winea
           deployment: winea
-
-    prod-aztech:
-      - step:
-          <<: *execute
-          name: Aztech
-          deployment: aztech
 
     prod-agscustom:
       - step:
@@ -320,12 +254,6 @@ pipelines:
           <<: *execute
           name: Croonus
           deployment: croonus
-
-    prod-asholding:
-      - step:
-          <<: *execute
-          name: ASHolding
-          deployment: asholding
 
     prod-alphamob:
       - step:
