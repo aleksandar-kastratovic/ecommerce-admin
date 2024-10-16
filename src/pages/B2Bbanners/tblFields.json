@@ -152,11 +152,11 @@
         "image_description_display": true,
         "options": [
             {
-                "id": "self",
+                "id": "_self",
                 "name": "Trenutna strana"
             },
             {
-                "id": "blank",
+                "id": "_blank",
                 "name": "Nova strana"
             }
         ]
