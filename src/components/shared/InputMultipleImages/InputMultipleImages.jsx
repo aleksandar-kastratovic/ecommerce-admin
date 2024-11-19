@@ -163,8 +163,8 @@ export const InputMultipleImages = ({
     const handleCloseImageDialog = (data) => {
         setOpenFullPageDialog(init);
     };
+
     const handleSaveImageDialog = (data) => {
-        if (uploadHandler === null) {
             const dataForServer = {
                 id: data?.id,
                 id_product: data?.id_product,
@@ -186,9 +186,7 @@ export const InputMultipleImages = ({
                     toast.warn("Greška");
                     console.warn(error);
                 });
-        } else {
-            setOpenFullPageDialog(init);
-        }
+
     };
 
     //IMAGE UPLOAD FROM MODAL
