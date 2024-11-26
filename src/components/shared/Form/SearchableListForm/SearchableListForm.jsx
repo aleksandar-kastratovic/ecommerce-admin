@@ -26,8 +26,8 @@ const SearchableListForm = ({ available = [], selected = [], onSubmit, selectAll
 
     const [showSelected, setShowSelected] = useState(false);
 
-    // Filter the availablee
-    available = available.filter((item) => search === "" || item.name.toLowerCase().includes(search.toLowerCase()));
+    // Filter the available
+    available = (available ?? [])?.filter((item) => search === "" || item?.name?.toLowerCase()?.includes(search?.toLowerCase()));
 
     const toggleSelectAll = (selected) => {
         if (!selected) {
