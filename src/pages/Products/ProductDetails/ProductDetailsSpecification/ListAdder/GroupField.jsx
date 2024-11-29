@@ -113,6 +113,7 @@ const GroupField = ({ name = "", slug = "", groupId, setId, nameSet, slugSet, on
         switch (attribute.field_type) {
           case 'input':
           case 'textarea':
+          case 'html_editor':
             clearTimeout(timer);
             timer = setTimeout(() => {
               onChange(data, attributes, attributeValues, field_change_id);
