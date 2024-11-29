@@ -54,6 +54,10 @@
       {
         "id": "textarea",
         "name": "Textarea"
+      },
+      {
+        "id": "html_editor",
+        "name": "Text editor"
       }
     ],
     "input_type": "select"
