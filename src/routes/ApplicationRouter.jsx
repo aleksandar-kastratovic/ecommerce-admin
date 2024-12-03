@@ -6,6 +6,7 @@ import { availableScreens } from "./routes";
 import { filterScreens, makeRoute } from "./utils";
 import { useAppContext } from "../hooks/appContext";
 
+import Reviews from "../pages/Reviews/Reviews";
 /**
  * The main application router that takes the configuration from routes.js.
  *
@@ -35,6 +36,7 @@ const ApplicationRouter = ({}) => {
             <Route key="" path="" exact element={<Navigate replace to={defaultPath} />} />
             <Route key="/" path="/" exact element={<Navigate replace to={defaultPath} />} />
             {authContext.userScreens?.map((userScreen) => makeRoute(screens[userScreen.screen_code]))}
+            <Route key="/reviews" path="/reviews" exact element={<Reviews />} />
         </>
     );
 

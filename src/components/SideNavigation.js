@@ -147,6 +147,20 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         }
     );
 
+    const { data: badgeNumberReviews } = useQuery(
+        "badgeNumberReviews",
+        async () => {
+            if (api?.user) {
+                const response = await api?.get(`admin/contact-form-b2c/badge-count`);
+                return response?.payload;
+            }
+        },
+        {
+            refetchInterval: 5000,
+            enabled: !!api?.user,
+        }
+    );
+
     const badgets = [
         {
             path: "/b2c-orders",
@@ -163,6 +177,11 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         {
             path: "/b2c-contactform",
             counts: badgeNumberContactB2C || [],
+        },
+
+        {
+            path: "/reviews",
+            counts: badgeNumberReviews || [],
         },
     ];
 
