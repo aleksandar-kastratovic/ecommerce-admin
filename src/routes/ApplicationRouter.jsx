@@ -36,7 +36,6 @@ const ApplicationRouter = ({}) => {
             <Route key="" path="" exact element={<Navigate replace to={defaultPath} />} />
             <Route key="/" path="/" exact element={<Navigate replace to={defaultPath} />} />
             {authContext.userScreens?.map((userScreen) => makeRoute(screens[userScreen.screen_code]))}
-            <Route key="/reviews" path="/reviews" exact element={<Reviews />} />
         </>
     );
 

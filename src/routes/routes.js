@@ -207,6 +207,7 @@ const screens = {
     ADMIN_SCRIPTS: ["/scripts", "Skripte", IconList.description, SETTINGS, Scripts],
     ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, SETTINGS, AdminForm, [[":formId", AdminFormDetails]]],
     PARAMS: ["/params", "Parametri", IconList.settings, SETTINGS, Params, [[":pid", DetailsParams]]],
+
     REVIEWS: [
         "/reviews",
         "Recenzije",
@@ -214,7 +215,7 @@ const screens = {
         SALE,
         Reviews,
         [
-            ["reviews-ratings/:nid", ReviewsRatings],
+            // ["reviews-ratings/:nid", ReviewsRatings],
             // ["promotions-cart-summary-campaigns/:nid", PromotionsCartSummaryDetails],
             // ["promotions-delivery-campaigns/:nid", PromotionsDeliveryCampaignsDetails],
             // ["promotions-recommended/:rid", PromotionsRecommendedDetails],

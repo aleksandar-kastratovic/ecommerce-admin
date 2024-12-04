@@ -1,44 +1,92 @@
-import { useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState, useContext } from "react";
 import ListPage from "../../../components/shared/ListPage/ListPage";
 import tblFields from "./tbFields.json";
-import BasicDataModal from "../components/BasicDataModal";
+import { PreviewDataModal, ReplyModal } from "../components";
+import IconList from "../../../helpers/icons";
+import AuthContext from "../../../store/auth-contex";
+import { toast } from "react-toastify";
 
 const ReviewsRatings = () => {
-    const { pathname } = useLocation();
-    const navigate = useNavigate();
-    const [activeModal, setActiveModal] = useState(null);
-    const [openModal, setOpenModal] = useState({ show: false, data: null });
+    const authCtx = useContext(AuthContext);
+    const { api } = authCtx;
+    const [openPreviewModal, setOpenPreviewModal] = useState({ show: false, data: null });
+    const [openReplyModal, setOpenReplyModal] = useState({ show: false, data: null });
 
     const customActions = {
         edit: {
             type: "custom",
             display: false,
         },
-        modal_form: {
-            type: "custom",
+
+        approve: {
+            type: "approve",
             display: true,
             position: 1,
             clickHandler: {
-                type: "navigate",
+                type: "",
                 fnc: (rowData) => {
-                    return setOpenModal({ show: true, userId: rowData.id });
+                    console.log("Odobri");
+
+                    api.post(`admin/reviews/product-items-b2c/marks/list/approve`, { id: rowData.id })
+                        .then(() => {
+                            toast.success("Uspešno odobrena recenzija!");
+                        })
+                        .catch((error) => {
+                            toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
+                        });
                 },
             },
+            icon: IconList.thumbUp,
+            title: "Odobri",
         },
+
+        refuse: {
+            type: "refuse",
+            display: true,
+            position: 1,
+            clickHandler: {
+                type: "",
+                fnc: (rowData) => {
+                    console.log("Odbij");
+                    api.post(`admin/reviews/product-items-b2c/marks/list/reject`, { id: rowData.id })
+                        .then(() => {
+                            toast.success("Uspešno odbijena recenzija!");
+                        })
+                        .catch((error) => {
+                            toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
+                        });
+                },
+            },
+            icon: IconList.thumbDown,
+            title: "Odbij",
+        },
+
+        reply: {
+            type: "reply",
+            display: true,
+            position: 2,
+            clickHandler: {
+                type: "",
+                fnc: (rowData) => {
+                    return setOpenReplyModal({ show: true, data: rowData });
+                },
+            },
+            icon: "reply",
+            title: "Odgovori",
+        },
+
         key: {
-            type: "custom",
+            type: "preview",
             display: true,
             position: 3,
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    setActiveModal("info");
-                    return setOpenModal({ show: true, data: rowData });
+                    return setOpenPreviewModal({ show: true, data: rowData });
                 },
             },
-            icon: "info",
-            title: "Osnovni podaci",
+            icon: "preview",
+            title: "Pregledaj",
         },
     };
 
@@ -47,15 +95,13 @@ const ReviewsRatings = () => {
             <ListPage
                 listPageId="reviewsRatings"
                 apiUrl="admin/reviews/product-items-b2c/marks/list"
-                deleteUrl="admin/reviews/product-items-b2c/marks/list"
-                title="Test"
+                deleteUrl={`admin/reviews/product-items-b2c/marks/list/confirm`}
                 showNewButton={false}
                 columnFields={tblFields}
-                // showNewButton={false}
                 customActions={customActions}
-                // customNewButtonPath={`${pathname}/reviews-ratings/new`}
             />
-            <BasicDataModal openModal={openModal} setOpenModal={setOpenModal} apiUrl="admin/reviews/product-items-b2c/marks/basic-data" />
+            <PreviewDataModal openModal={openPreviewModal} setOpenModal={setOpenPreviewModal} />
+            <ReplyModal openModal={openReplyModal} setOpenModal={setOpenReplyModal} />
         </>
     );
 };
