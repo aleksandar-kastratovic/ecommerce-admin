@@ -1,33 +1,17 @@
-import { useContext, useState, useEffect } from "react";
-import { toast } from "react-toastify";
 import ListPageModalWrapper from "../../../components/shared/Modal/ListPageModalWrapper";
-import AuthContext from "../../../store/auth-contex";
 import { Box } from "@mui/material";
-import PrintTextualInfo from "./PrintTextualInfo";
 import ChangeReviewStatusForm from "../forms/ChangeReviewStatusForm";
+import CircularProgress from "@mui/material/CircularProgress";
+import display_base_review_data from "./jsons/display_base_review_data.json";
+import SimpleDataViewer from "../../../components/shared/DataViewerFromJSON/SimpleDataViewer";
+import { updateDataForDataViewer } from "../utils/dataFiltering";
+import { useSingleMarkData } from "../hooks/marksData";
+import Alert from "@mui/material/Alert";
 
 const PreviewDataModal = ({ openModal, setOpenModal }) => {
-    console.log("openModal", openModal);
-
-    const authCtx = useContext(AuthContext);
-    const { api } = authCtx;
-
-    const [statusList, setStatusList] = useState();
-    const [currentStatus, setCurrentStatus] = useState();
-
-    const data = openModal?.data;
-    const { product_name = "", status = "", name = "", display_comment, images = [], videos = [], mark, id } = data ? data : {};
-    useEffect(() => {
-        if (status)
-            api.get("admin/reviews/product-items-b2c/marks/basic-data/ddl/review-status")
-                .then((response) => {
-                    setStatusList(response.payload);
-                    setCurrentStatus(response.payload.find((statusObj) => statusObj.name == status));
-                })
-                .catch((error) => {
-                    toast.error(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Something went wrong");
-                });
-    }, [status]);
+    const reviewID = openModal?.id;
+    const apiURL = `admin/reviews/product-items-b2c/marks/basic-data/${reviewID}`;
+    const { data, isLoading, error } = useSingleMarkData(apiURL, reviewID);
 
     return (
         <ListPageModalWrapper
@@ -37,9 +21,20 @@ const PreviewDataModal = ({ openModal, setOpenModal }) => {
             onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}
         >
             <Box sx={{ padding: "2rem" }}>
-                <PrintTextualInfo mainTitle="Osnovni podaci" product_name={product_name} author_name={name} comment={display_comment} mark={mark} images={images} videos={videos} />
-
-                <ChangeReviewStatusForm id={id} currentStatus={currentStatus} setCurrentStatus={setCurrentStatus} setOpenModal={setOpenModal} statusList={statusList} oldStatus={status} />
+                {isLoading ? (
+                    <CircularProgress size={`1.5rem`} />
+                ) : error ? (
+                    <Alert severity="error">{error.response?.data?.message ?? error?.response?.data?.payload?.message ?? "Something went wrong"}</Alert>
+                ) : (
+                    <>
+                        {data && (
+                            <>
+                                <SimpleDataViewer mainTitle="Osnovni podaci" data={updateDataForDataViewer(display_base_review_data, data)} />{" "}
+                                <ChangeReviewStatusForm id={data.id} setOpenModal={setOpenModal} initialStatus={data.status} />
+                            </>
+                        )}
+                    </>
+                )}
             </Box>
         </ListPageModalWrapper>
     );

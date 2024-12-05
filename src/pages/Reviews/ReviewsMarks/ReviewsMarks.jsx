@@ -6,7 +6,7 @@ import IconList from "../../../helpers/icons";
 import AuthContext from "../../../store/auth-contex";
 import { toast } from "react-toastify";
 
-const ReviewsRatings = () => {
+const ReviewsMarks = () => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
     const [openPreviewModal, setOpenPreviewModal] = useState({ show: false, data: null });
@@ -68,7 +68,7 @@ const ReviewsRatings = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    return setOpenReplyModal({ show: true, data: rowData });
+                    return setOpenReplyModal({ show: true, id: rowData.id });
                 },
             },
             icon: "reply",
@@ -82,7 +82,7 @@ const ReviewsRatings = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    return setOpenPreviewModal({ show: true, data: rowData });
+                    return setOpenPreviewModal({ show: true, id: rowData.id });
                 },
             },
             icon: "preview",
@@ -93,7 +93,7 @@ const ReviewsRatings = () => {
     return (
         <>
             <ListPage
-                listPageId="reviewsRatings"
+                listPageId="reviewsMarks"
                 apiUrl="admin/reviews/product-items-b2c/marks/list"
                 deleteUrl={`admin/reviews/product-items-b2c/marks/list/confirm`}
                 showNewButton={false}
@@ -106,4 +106,4 @@ const ReviewsRatings = () => {
     );
 };
 
-export default ReviewsRatings;
+export default ReviewsMarks;

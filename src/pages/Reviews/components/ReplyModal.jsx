@@ -1,13 +1,19 @@
 import ListPageModalWrapper from "../../../components/shared/Modal/ListPageModalWrapper";
 import { Box } from "@mui/material";
-import PrintTextualInfo from "./PrintTextualInfo";
 import ReplyToReviewForm from "../forms/ReplyToReviewForm";
+import SimpleDataViewer from "../../../components/shared/DataViewerFromJSON/SimpleDataViewer";
+import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+
+import { updateDataForDataViewer } from "../utils/dataFiltering";
+import { useSingleMarkData } from "../hooks/marksData";
+import display_base_review_data from "./jsons/display_reply_review_data.json";
 
 const ReplyModal = ({ openModal, setOpenModal }) => {
-    console.log("openModal", openModal);
-
-    const data = openModal?.data;
-    const { product_name = "", name = "", display_comment, mark, id } = data ? data : {};
+    const reviewID = openModal?.id;
+    console.log("reviewID", reviewID);
+    const apiURL = `admin/reviews/product-items-b2c/marks/reply/${reviewID}`;
+    const { data, isLoading, error } = useSingleMarkData(apiURL, reviewID);
 
     return (
         <ListPageModalWrapper
@@ -17,8 +23,20 @@ const ReplyModal = ({ openModal, setOpenModal }) => {
             onCloseButtonClick={() => setOpenModal({ ...openModal, show: false })}
         >
             <Box sx={{ padding: "2rem" }}>
-                <PrintTextualInfo mainTitle="Odgovor na recenziju" product_name={product_name} author_name={name} comment={display_comment} mark={mark} />
-                <ReplyToReviewForm id={id} setOpenModal={setOpenModal} />
+                {isLoading ? (
+                    <CircularProgress size={`1.5rem`} />
+                ) : error ? (
+                    <Alert severity="error">{error.response?.data?.message ?? error?.response?.data?.payload?.message ?? "Something went wrong"}</Alert>
+                ) : (
+                    <>
+                        {data && (
+                            <>
+                                <SimpleDataViewer mainTitle="Osnovni podaci" data={updateDataForDataViewer(display_base_review_data, data)} />{" "}
+                                <ReplyToReviewForm id={data.id} setOpenModal={setOpenModal} />{" "}
+                            </>
+                        )}
+                    </>
+                )}
             </Box>
         </ListPageModalWrapper>
     );

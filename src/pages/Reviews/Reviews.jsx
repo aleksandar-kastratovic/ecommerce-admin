@@ -3,7 +3,7 @@ import { useState } from "react";
 import IconList from "../../helpers/icons";
 import DetailsPage from "../../components/shared/ListPage/DetailsPage/DetailsPage";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../helpers/functions";
-import ReviewsRatings from "./ReviewsRatings/ReviewsRatings";
+import ReviewsMarks from "./ReviewsMarks/ReviewsMarks";
 
 const Reviews = () => {
     const activeTab = getUrlQueryStringParam("tab") ?? "ratings";
@@ -15,7 +15,7 @@ const Reviews = () => {
             name: "Ocene",
             icon: IconList.star,
             enabled: true,
-            component: <ReviewsRatings />,
+            component: <ReviewsMarks />,
             title: "Ocene",
         },
     ];
