@@ -199,67 +199,92 @@ const ProductDetailsVariation = ({ parentId, isParentDigital }) => {
 
     const onSaveClick = (array, fromDialog) => {
         let indexValidationArr = [];
-        let arr = [...variantsData];
+        let arr = [...variantsData];   
+        // Validate variants data
         arr.forEach((item, i) => {
             const { selectedAttr, checkedValues } = item;
-            if ((selectedAttr !== null && checkedValues.length === 0) || (selectedAttr === null && checkedValues.length === 0 && item.isVisible === true)) {
+            if ((selectedAttr !== null && checkedValues.length === 0) || 
+                (selectedAttr === null && checkedValues.length === 0 && item.isVisible === true)) {
                 indexValidationArr.push(-1);
             } else {
                 indexValidationArr.push(i);
             }
-        });
-
+        });  
+        // If validation fails
         if (indexValidationArr.includes(-1) && !fromDialog) {
             indexValidationArr.forEach((item, i) => {
-                if (item === -1) {
-                    arr[i].isValid = false;
-                } else {
-                    arr[i].isValid = true;
-                }
+                arr[i].isValid = item !== -1;
             });
             setVariantsData([...arr]);
+            toast.error("Some variants are missing required attributes or values.");
+            return; // Stop further processing
+        }   
+        // Proceed with saving
+        setLoading(true);
+        let allCheckedValues = [];
+        (array ? array : variantsData).forEach((item) => {
+            const { checkedValues } = item;
+            allCheckedValues = [...allCheckedValues, ...checkedValues];
+        });
+    
+        let saveArrData = [];
+        variants.forEach((item) => {
+            const { attr, values } = item;
+            let tempArr = [];
+            values.forEach((it) => {
+                if (allCheckedValues.includes(it.id)) {
+                    tempArr.push({
+                        id_product_parent: Number(parentId),
+                        id_attribute: attr.id,
+                        slug_attribute: attr.slug,
+                        name_attribute: attr.name,
+                        id_attribute_value: it.id,
+                        slug_attribute_value: it.slug,
+                        name_attribute_value: it.name,
+                    });
+                }
+            });
+            saveArrData = [...saveArrData, ...tempArr];
+        });
+    
+        const req = { data: [...saveArrData], values: { id_parent: Number(parentId) } };
+        api.post("admin/product-items/variants/main/save", req)
+    .then((response) => {
+        setLoading(false);
+
+        // Log API respons-a
+        console.log("API Response:", response);
+        const payload = response?.payload;
+        // za sada ostavljam clg zbog debug-a.
+        console.log("Payload:", response.payload);
+        console.log("Payload err:", response.payload.errors);
+
+        const errors = payload?.errors || [];
+        if (errors.length > 0) {
+            const errorMessages = payload.errors.map((err) =>
+                `za vrednost: ${err?.attributes_text}: ${err?.message}`
+            ).join("\n");           
+            // Show error toast with details
+            toast.error(`Greška:\n${errorMessages}`, {
+                autoClose: 8000,
+            });
+            // za sada ostavljam clg zbog debug-a.
+            console.error("Errors in payload:", payload?.errors); 
+            console.error("Error msg:", errorMessages); 
         } else {
-            setLoading(true);
-            let allCheckedValues = [];
-            (array ? array : variantsData).forEach((item) => {
-                const { checkedValues } = item;
-                allCheckedValues = [...allCheckedValues, ...checkedValues];
-            });
-
-            let saveArrData = [];
-            variants.map((item, i) => {
-                const { attr, values } = item;
-                let tempArr = [];
-                values.forEach((it) => {
-                    if (allCheckedValues.includes(it.id)) {
-                        tempArr.push({
-                            id_product_parent: Number(parentId),
-                            id_attribute: attr.id,
-                            slug_attribute: attr.slug,
-                            name_attribute: attr.name,
-                            id_attribute_value: it.id,
-                            slug_attribute_value: it.slug,
-                            name_attribute_value: it.name,
-                        });
-                    }
-                });
-                saveArrData = [...saveArrData, ...tempArr];
-            });
-
-            const req = { data: [...saveArrData], values: { id_parent: Number(parentId) } };
-            api.post("admin/product-items/variants/main/save", req)
-                .then((response) => {
-                    setLoading(false);
-                    toast.success(`Uspešno`);
-                    setTableLoading(true);
-                    getListVariants();
-                })
-                .catch((error) => {
-                    setLoading(false);
-                    console.warn(error);
-                });
+            // No errors, proceed with success
+            toast.success("Uspešno");
+            setTableLoading(true);
+            getListVariants();
         }
+    })
+    .catch((error) => {
+        setLoading(false);
+        toast.error("Došlo je do greške.");
+        console.warn('Network or API error:', error);
+    });
     };
+    
 
     const handleDeleteModalAction = (item) => {
         if (item) {
