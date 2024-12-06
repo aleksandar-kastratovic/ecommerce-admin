@@ -8,7 +8,7 @@ import { updateDataForDataViewer } from "../utils/dataFiltering";
 import { useSingleMarkData } from "../hooks/marksData";
 import Alert from "@mui/material/Alert";
 
-const PreviewDataModal = ({ openModal, setOpenModal }) => {
+const PreviewDataModal = ({ openModal, setOpenModal, setReloadList }) => {
     const reviewID = openModal?.id;
     const apiURL = `admin/reviews/product-items-b2c/marks/basic-data/${reviewID}`;
     const { data, isLoading, error } = useSingleMarkData(apiURL, reviewID);
@@ -30,7 +30,7 @@ const PreviewDataModal = ({ openModal, setOpenModal }) => {
                         {data && (
                             <>
                                 <SimpleDataViewer mainTitle="Osnovni podaci" data={updateDataForDataViewer(display_base_review_data, data)} />{" "}
-                                <ChangeReviewStatusForm id={data.id} setOpenModal={setOpenModal} initialStatus={data.status} />
+                                <ChangeReviewStatusForm id={data.id} setOpenModal={setOpenModal} initialStatus={data.status} setReloadList={setReloadList} />
                             </>
                         )}
                     </>

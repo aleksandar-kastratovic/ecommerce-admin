@@ -6,15 +6,15 @@
         "value": null
     },
     {
-        "id": "name",
+        "id": "display_name",
         "type": "text",
         "label": "Autor",
         "value": null
     },
     {
-        "id": "comment",
+        "id": "display_comment",
         "type": "html",
-        "label": "Proizvod",
+        "label": "Komentar",
         "value": null
     },
     {

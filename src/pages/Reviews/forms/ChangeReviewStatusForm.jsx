@@ -4,7 +4,7 @@ import AuthContext from "../../../store/auth-contex";
 import basic_data from "./jsons/review_status_form.json";
 import Form from "../../../components/shared/Form/Form";
 
-const ChangeReviewStatusForm = ({ id, setOpenModal, initialStatus }) => {
+const ChangeReviewStatusForm = ({ id, setOpenModal, initialStatus, setReloadList }) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
 
@@ -17,7 +17,7 @@ const ChangeReviewStatusForm = ({ id, setOpenModal, initialStatus }) => {
             .then(() => {
                 toast.success("Uspešno!");
                 setOpenModal({ show: false });
-
+                setReloadList((prev) => !prev);
                 setIsLoading(false);
             })
             .catch(() => {

@@ -101,6 +101,7 @@ const ListPage = ({
     defaultSort = [],
     isModalUploading = false,
     back,
+    reloadList 
 }) => {
     // // TODO Sorting is disabled as it does not work with pagination
     // columnFields = useMemo(() => {
@@ -162,8 +163,13 @@ const ListPage = ({
         data: response,
         isLoading,
         isError,
-    } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, sort, openModal.show, doesRefetch, apiUrl], () => api.list(apiUrl, { page, search, sort, ...filters }));
-    // Modify the data
+    } = useQuery(
+        ["listData", openDeleteDialog.mutate, search, page, sort, openModal.show, doesRefetch, apiUrl, reloadList], // Dodaj reloadList u zavisnosti
+        () => api.list(apiUrl, { page, search, sort, ...filters }),
+        {
+            keepPreviousData: true,
+        }
+    ); // Modify the data
     if (response?.payload && modifyItems) {
         response.payload.items = modifyItems(response.payload.items);
     }

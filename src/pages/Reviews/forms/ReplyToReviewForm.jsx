@@ -4,7 +4,7 @@ import AuthContext from "../../../store/auth-contex";
 import basic_data from "./jsons/reply_to_review_form.json";
 import Form from "../../../components/shared/Form/Form";
 
-const ReplyToReviewForm = ({ id, setOpenModal }) => {
+const ReplyToReviewForm = ({ id, setOpenModal, setReloadList }) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
 
@@ -17,7 +17,7 @@ const ReplyToReviewForm = ({ id, setOpenModal }) => {
             .then(() => {
                 toast.success("Uspešno!");
                 setOpenModal({ show: false });
-
+                setReloadList((prev) => !prev);
                 setIsLoading(false);
             })
             .catch(() => {
