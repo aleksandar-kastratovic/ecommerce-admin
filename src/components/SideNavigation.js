@@ -138,7 +138,6 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         async () => {
             if (api?.user) {
                 const response = await api?.get(`admin/contact-form-b2c/badge-count`);
-                console.log("badgeNumberContactB2C",response)
                 return response?.payload;
             }
         },
@@ -153,7 +152,6 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         async () => {
             if (api?.user) {
                 const response = await api?.get(`admin/reviews/product-items-b2c/marks/list/badge-count`);
-                console.log("badgeNumberReviews",response)
                 return response?.payload;
             }
         },

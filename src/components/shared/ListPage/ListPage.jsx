@@ -14,6 +14,7 @@ import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
 import AuthContext from "../../../store/auth-contex";
 import { queryKeys } from "../../../helpers/const";
 import { connectTemplateFields } from "../../../helpers/urlTemplate";
+import { useSelector } from "react-redux";
 
 /**
  * Show a standardized list.
@@ -101,12 +102,14 @@ const ListPage = ({
     defaultSort = [],
     isModalUploading = false,
     back,
-    reloadList 
 }) => {
     // // TODO Sorting is disabled as it does not work with pagination
     // columnFields = useMemo(() => {
     //     return columnFields.map((field) => ({ ...field, sortable: false }));
     // }, [columnFields]);
+
+    // This variable triggers a reload of this component when the data in the list changes.
+    const listPageReload = useSelector((state) => state.reloads.listPageReload);
 
     const showAddButtonRef = useRef(null);
 
@@ -163,13 +166,9 @@ const ListPage = ({
         data: response,
         isLoading,
         isError,
-    } = useQuery(
-        ["listData", openDeleteDialog.mutate, search, page, sort, openModal.show, doesRefetch, apiUrl, reloadList], // Dodaj reloadList u zavisnosti
-        () => api.list(apiUrl, { page, search, sort, ...filters }),
-        {
-            keepPreviousData: true,
-        }
-    ); // Modify the data
+    } = useQuery(["listData", openDeleteDialog.mutate, search, page, sort, openModal.show, doesRefetch, apiUrl, listPageReload], () => api.list(apiUrl, { page, search, sort, ...filters }), {
+        keepPreviousData: true,
+    }); // Modify the data
     if (response?.payload && modifyItems) {
         response.payload.items = modifyItems(response.payload.items);
     }

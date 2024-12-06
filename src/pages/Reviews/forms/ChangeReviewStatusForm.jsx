@@ -3,13 +3,15 @@ import { toast } from "react-toastify";
 import AuthContext from "../../../store/auth-contex";
 import basic_data from "./jsons/review_status_form.json";
 import Form from "../../../components/shared/Form/Form";
+import { useDispatch } from "react-redux";
+import { triggerListPageReload } from "../../../store/reloads/reloadsReducer";
 
-const ChangeReviewStatusForm = ({ id, setOpenModal, initialStatus, setReloadList }) => {
+const ChangeReviewStatusForm = ({ id, setOpenModal, initialStatus }) => {
+    const dispatch = useDispatch();
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
 
     const [isLoading, setIsLoading] = useState(false);
-
     const handlerSubmitForm = (data) => {
         setIsLoading(true);
 
@@ -17,7 +19,7 @@ const ChangeReviewStatusForm = ({ id, setOpenModal, initialStatus, setReloadList
             .then(() => {
                 toast.success("Uspešno!");
                 setOpenModal({ show: false });
-                setReloadList((prev) => !prev);
+                dispatch(triggerListPageReload());
                 setIsLoading(false);
             })
             .catch(() => {

@@ -24,7 +24,6 @@ export const updateDataForDataViewer = (customJsonData, dataFromResponse) => {
     return customJsonData.map((object) => {
         const payloadData = dataFromResponse[object.id];
 
-        console.log("payloadData", payloadData);
         if (!payloadData) return object;
 
         if (Array.isArray(payloadData)) {

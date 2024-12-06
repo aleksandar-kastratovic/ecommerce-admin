@@ -9,9 +9,8 @@ import { updateDataForDataViewer } from "../utils/dataFiltering";
 import { useSingleMarkData } from "../hooks/marksData";
 import display_base_review_data from "./jsons/display_reply_review_data.json";
 
-const ReplyModal = ({ openModal, setOpenModal, setReloadList }) => {
+const ReplyModal = ({ openModal, setOpenModal }) => {
     const reviewID = openModal?.id;
-    console.log("reviewID", reviewID);
     const apiURL = `admin/reviews/product-items-b2c/marks/reply/${reviewID}`;
     const { data, isLoading, error } = useSingleMarkData(apiURL, reviewID);
 
@@ -32,7 +31,7 @@ const ReplyModal = ({ openModal, setOpenModal, setReloadList }) => {
                         {data && (
                             <>
                                 <SimpleDataViewer mainTitle="Osnovni podaci" data={updateDataForDataViewer(display_base_review_data, data)} />{" "}
-                                <ReplyToReviewForm id={data.id} setOpenModal={setOpenModal} setReloadList={setReloadList} />
+                                <ReplyToReviewForm id={data.id} setOpenModal={setOpenModal} />
                             </>
                         )}
                     </>

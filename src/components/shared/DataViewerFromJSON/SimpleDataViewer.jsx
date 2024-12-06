@@ -5,7 +5,6 @@ import { StarRatingViewer, HTMLviewer, ImageViewer, TextViewer, VideoViewer, Dat
 const SimpleDataViewer = ({ data, mainTitle }) => {
     const renderComponentByType = (item) => {
         const { type, value, label, id } = item;
-        console.log("item",item)
 
         switch (type) {
             case "text":
