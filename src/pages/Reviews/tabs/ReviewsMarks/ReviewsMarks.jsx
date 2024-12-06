@@ -25,8 +25,6 @@ const ReviewsMarks = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    console.log("Odobri");
-
                     api.post(`admin/reviews/product-items-b2c/marks/list/approve`, { id: rowData.id })
                         .then(() => {
                             toast.success("Uspešno odobrena recenzija!");
@@ -38,7 +36,7 @@ const ReviewsMarks = () => {
                 },
             },
             icon: IconList.thumbUp,
-            title: "Odobri",
+            title: "Prihvati",
         },
 
         refuse: {
@@ -48,7 +46,6 @@ const ReviewsMarks = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    console.log("Odbij");
                     api.post(`admin/reviews/product-items-b2c/marks/list/reject`, { id: rowData.id })
                         .then(() => {
                             toast.success("Uspešno odbijena recenzija!");
