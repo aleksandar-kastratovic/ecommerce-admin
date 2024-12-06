@@ -30,6 +30,7 @@ class ApiService {
             })
                 .then((response) => resolve(response.data))
                 .catch((error) => reject(error));
+                
         });
     }
 

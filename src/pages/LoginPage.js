@@ -44,6 +44,7 @@ const LoginPage = () => {
 
     const submitHandler = async (data) => {
         setIsLoadingOnSubmit(true);
+        console.log('submitHandler apiPath:', localStorage.getItem("api") + apiPath);
         await api
             .post(apiPath, data)
             .then((response) => {
