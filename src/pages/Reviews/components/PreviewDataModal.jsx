@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ListPageModalWrapper from "../../../components/shared/Modal/ListPageModalWrapper";
 import { Box } from "@mui/material";
 import ChangeReviewStatusForm from "../forms/ChangeReviewStatusForm";
@@ -11,7 +12,13 @@ import Alert from "@mui/material/Alert";
 const PreviewDataModal = ({ openModal, setOpenModal }) => {
     const reviewID = openModal?.id;
     const apiURL = `admin/reviews/product-items-b2c/marks/basic-data/${reviewID}`;
-    const { data, isLoading, error } = useSingleMarkData(apiURL, reviewID);
+    const { data, isLoading, error, refetch } = useSingleMarkData(apiURL, reviewID);
+
+    useEffect(() => {
+        if (openModal.show) {
+            refetch();
+        }
+    }, [openModal.show, refetch]);
 
     return (
         <ListPageModalWrapper
@@ -30,7 +37,7 @@ const PreviewDataModal = ({ openModal, setOpenModal }) => {
                         {data && (
                             <>
                                 <SimpleDataViewer mainTitle="Osnovni podaci" data={updateDataForDataViewer(display_base_review_data, data)} />{" "}
-                                <ChangeReviewStatusForm id={data.id} setOpenModal={setOpenModal} initialStatus={data.status} />
+                                <ChangeReviewStatusForm id={data.id} setOpenModal={setOpenModal} initialStatus={data.status !== "new" ? data.status : {}} />
                             </>
                         )}
                     </>

@@ -1,7 +1,7 @@
 import { ImageList, ImageListItem, Typography } from "@mui/material";
 
 const ImageViewer = ({ label, value }) => {
-    if (!value) return <></>;
+    if (!value || value.length === 0) return <></>;
 
     return (
         <>

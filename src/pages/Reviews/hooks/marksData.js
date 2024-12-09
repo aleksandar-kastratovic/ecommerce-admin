@@ -6,7 +6,7 @@ export const useSingleMarkData = (apiURL, reviewID) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
 
-    const { data, isLoading, error } = useQuery(
+    const { data, isLoading, error, refetch } = useQuery(
         [apiURL, reviewID],
         () => {
             return api
@@ -21,5 +21,5 @@ export const useSingleMarkData = (apiURL, reviewID) => {
         }
     );
 
-    return { data, isLoading, error };
+    return { data, isLoading, error, refetch };
 };

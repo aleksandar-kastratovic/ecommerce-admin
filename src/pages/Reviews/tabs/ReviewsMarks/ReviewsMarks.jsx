@@ -23,7 +23,12 @@ const ReviewsMarks = () => {
 
         approve: {
             type: "approve",
-            display: true,
+            display: (rowData) => {
+                if (rowData?.status !== "Novo") {
+                    return false;
+                }
+                return true;
+            },
             position: 1,
             clickHandler: {
                 type: "",
@@ -45,8 +50,13 @@ const ReviewsMarks = () => {
 
         refuse: {
             type: "refuse",
-            display: true,
-            position: 1,
+            display: (rowData) => {
+                if (rowData?.status !== "Novo") {
+                    return false;
+                }
+                return true;
+            },
+            position: 2,
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
@@ -63,13 +73,34 @@ const ReviewsMarks = () => {
             },
             icon: IconList.thumbDown,
             title: "Odbij",
-            disabled: true
+            disabled: true,
         },
+
+
+        parentComment: {
+            type: "parentComment",
+            display: (rowData) => {
+                if (rowData?.id_parent !== null) {
+                    return true;
+                }
+                return false;
+            },
+            position: 3,
+            clickHandler: {
+                type: "",
+                fnc: (rowData) => {
+                    return setOpenPreviewModal({ show: true, id: rowData.id_parent });
+                },
+            },
+            icon: IconList.comment,
+            title: "Glavni komentar",
+        },
+
 
         reply: {
             type: "reply",
             display: true,
-            position: 2,
+            position: 4,
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
@@ -83,7 +114,7 @@ const ReviewsMarks = () => {
         key: {
             type: "preview",
             display: true,
-            position: 3,
+            position: 5,
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
@@ -105,6 +136,7 @@ const ReviewsMarks = () => {
                 columnFields={tblFields}
                 customActions={customActions}
             />
+
             <PreviewDataModal openModal={openPreviewModal} setOpenModal={setOpenPreviewModal} />
             <ReplyModal openModal={openReplyModal} setOpenModal={setOpenReplyModal} />
         </>

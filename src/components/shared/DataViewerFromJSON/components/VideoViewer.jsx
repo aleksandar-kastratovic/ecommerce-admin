@@ -1,7 +1,7 @@
 import { ImageList, Typography } from "@mui/material";
 
 const VideoViewer = ({ label, value }) => {
-    if (!value) return <></>;
+    if (!value || value.length === 0) return <></>;
     return (
         <>
             <Typography variant="body1" sx={{ mt: 2, mb: 1 }}>

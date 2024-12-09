@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import ListPageModalWrapper from "../../../components/shared/Modal/ListPageModalWrapper";
 import { Box } from "@mui/material";
 import ReplyToReviewForm from "../forms/ReplyToReviewForm";
@@ -12,7 +13,13 @@ import display_base_review_data from "./jsons/display_reply_review_data.json";
 const ReplyModal = ({ openModal, setOpenModal }) => {
     const reviewID = openModal?.id;
     const apiURL = `admin/reviews/product-items-b2c/marks/reply/${reviewID}`;
-    const { data, isLoading, error } = useSingleMarkData(apiURL, reviewID);
+    const { data, isLoading, error, refetch } = useSingleMarkData(apiURL, reviewID);
+
+    useEffect(() => {
+        if (openModal.show) {
+            refetch();
+        }
+    }, [openModal.show, refetch]);
 
     return (
         <ListPageModalWrapper
@@ -31,7 +38,7 @@ const ReplyModal = ({ openModal, setOpenModal }) => {
                         {data && (
                             <>
                                 <SimpleDataViewer mainTitle="Osnovni podaci" data={updateDataForDataViewer(display_base_review_data, data)} />{" "}
-                                <ReplyToReviewForm id={data.id} setOpenModal={setOpenModal} />
+                                <ReplyToReviewForm id={data.id} admin_name={data.admin_name} setOpenModal={setOpenModal} />
                             </>
                         )}
                     </>

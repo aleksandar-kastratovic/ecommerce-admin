@@ -1,4 +1,4 @@
-import { Alert, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
 import { StarRatingViewer, HTMLviewer, ImageViewer, TextViewer, VideoViewer, DateViewer } from "./components";
 

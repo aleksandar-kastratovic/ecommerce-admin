@@ -6,7 +6,7 @@ import Form from "../../../components/shared/Form/Form";
 import { useDispatch } from "react-redux";
 import { triggerListPageReload } from "../../../store/reloads/reloadsReducer";
 
-const ReplyToReviewForm = ({ id, setOpenModal }) => {
+const ReplyToReviewForm = ({ id, admin_name, setOpenModal }) => {
     const dispatch = useDispatch();
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
@@ -31,7 +31,7 @@ const ReplyToReviewForm = ({ id, setOpenModal }) => {
 
     return (
         <div style={{ marginTop: "32px" }}>
-            <Form formFields={basic_data} initialData={{}} onSubmit={handlerSubmitForm} isLoading={isLoading} />
+            <Form formFields={basic_data} initialData={{ admin_name }} onSubmit={handlerSubmitForm} isLoading={isLoading} />
         </div>
     );
 };

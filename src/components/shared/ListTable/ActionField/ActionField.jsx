@@ -62,7 +62,7 @@ const ActionField = ({ fieldType, systemRequired, handleOnClickActions, customAc
     };
 
     return (
-        <div className={scss.wrapper}>
+        <div className={scss.wrapper} style={{ justifyContent: "right" }}>
             <div className={scss.wrapper}>
                 {Object.entries(actions()).map((item) => {
                     let haveDisplayCondition = item[1].displayCondition !== undefined ? true : false;
