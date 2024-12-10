@@ -6,6 +6,7 @@ import { availableScreens } from "./routes";
 import { filterScreens, makeRoute } from "./utils";
 import { useAppContext } from "../hooks/appContext";
 
+import Reviews from "../pages/Reviews/Reviews";
 /**
  * The main application router that takes the configuration from routes.js.
  *

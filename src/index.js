@@ -17,9 +17,9 @@ const hamachi_zeljko = "http://25.59.211.111:4400/api/v1/";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 // Assert sure base URL for the API set
-if (process.env.REACT_APP_URL || dejan) {
-    localStorage.setItem("api", process.env.REACT_APP_URL || dejan);
-    console.log('local storage api:', localStorage.getItem("api"));
+if (process.env.REACT_APP_URL || staging) {
+    localStorage.setItem("api", process.env.REACT_APP_URL || staging);
+
     root.render(
         <BrowserRouter>
             <AuthContextProvider>

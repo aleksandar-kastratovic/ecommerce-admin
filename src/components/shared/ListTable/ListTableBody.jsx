@@ -49,7 +49,7 @@ const ListTableBody = ({
 }) => {
     const [clickTimeout, setClickTimeout] = useState(null);
     const [data, setData] = useState(null);
-    const actionButtons = () => {
+    const actionButtons = (row) => {
         let buttons = {};
 
         buttons.edit = {
@@ -84,7 +84,18 @@ const ListTableBody = ({
                         buttons[key] = Object.assign({}, buttons[key], { ...customActions[key] });
                         break;
                     default:
-                        buttons[key] = customActions[key];
+                        let updatedActions;
+
+                        if (typeof customActions[key].display === "function") {
+                            const displayValue = customActions[key].display(row);
+
+                            updatedActions = {
+                                ...customActions[key],
+                                display: displayValue,
+                            };
+                        }
+
+                        buttons[key] = updatedActions ? updatedActions : customActions[key];
                         break;
                 }
             });
@@ -240,7 +251,7 @@ const ListTableBody = ({
 
         default:
             content = (items ?? []).map((row) => {
-                let actionButtonsObject = actionButtons();
+                let actionButtonsObject = actionButtons(row);
                 let tableCellActionsObject = tableCellEvents();
 
                 return (

@@ -100,6 +100,20 @@ export const columnCell = (value, column, rowType, events) => {
             } else {
                 return value;
             }
+
+        case "html": {
+            return (
+                <span
+                    style={{
+                        wordBreak: "break-word",
+                    }}
+                    dangerouslySetInnerHTML={{
+                        __html: value,
+                    }}
+                />
+            );
+        }
+
         case "gallery":
             // varijacije tabela
             if (column === "gallery") {

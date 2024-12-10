@@ -92,6 +92,8 @@ import PromoCodesDetails from "../pages/Promotions/PromoCodes/PromoCodesDetails/
 import Codes from "../pages/Promotions/PromoCodes/PromoCodesDetails/Codes/Codes";
 import { Reports } from "../pages/Reports/reports";
 import PromotionReports from "../pages/PromotionsReports/PromotionReports";
+import Reviews from "../pages/Reviews/Reviews";
+
 // import B2CReclamations from "../pages/B2CReclamations/B2CReclamations";
 // import B2CReclamationsDetails from "../pages/B2CReclamations/B2CReclamationsDetails/B2CReclamationsDetails";
 
@@ -204,6 +206,24 @@ const screens = {
     ADMIN_SCRIPTS: ["/scripts", "Skripte", IconList.description, SETTINGS, Scripts],
     ADMIN_FORM: ["/admin-form", "Admin forme", IconList.list, SETTINGS, AdminForm, [[":formId", AdminFormDetails]]],
     PARAMS: ["/params", "Parametri", IconList.settings, SETTINGS, Params, [[":pid", DetailsParams]]],
+
+    REVIEWS: [
+        "/reviews",
+        "Recenzije",
+        IconList.reviews,
+        SALE,
+        Reviews,
+        [
+            // ["reviews-ratings/:nid", ReviewsMarks],
+            // ["promotions-cart-summary-campaigns/:nid", PromotionsCartSummaryDetails],
+            // ["promotions-delivery-campaigns/:nid", PromotionsDeliveryCampaignsDetails],
+            // ["promotions-recommended/:rid", PromotionsRecommendedDetails],
+            // ["promotions-cross-sells/:rid", PromotionsCrossSellsDetails],
+            // ["promotions-up-sells/:rid", PromotionsUpSellsDetails],
+            // ["promo-codes/:pid", PromoCodesDetails],
+            // ["promo-codes/:pId/new", Codes],
+        ],
+    ],
 };
 
 /**

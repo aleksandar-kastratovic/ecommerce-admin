@@ -14,6 +14,8 @@ import useAPI from "./api/api";
 import DeleteModal from "./components/shared/Dialogs/DeleteDialog";
 import { useIsIdle } from "./hooks/isIdle";
 import { AppContextProvider } from "./hooks/appContext";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 const App = () => {
     const api = useAPI();
@@ -177,68 +179,70 @@ const App = () => {
 
     return (
         <QueryClientProvider client={queryClient}>
-            <ThemeProvider theme={CroonusTheme}>
-                <AppContextProvider>
-                    <div className={routerClass}>
-                        {authCtx.isLoggedIn && (
-                            <>
-                                <SideNavigation
-                                    openSidenav={() => setSidenav(!sidenav)}
-                                    activeTheme={activeTheme}
-                                    userName={(authCtx.user.user.first_name ?? "") + " " + (authCtx.user.user.last_name ?? "")}
-                                />
-                                <Header
-                                    openSidenav={() => setSidenav(!sidenav)}
-                                    isSideNavOpen={sidenav}
-                                    activeTheme={activeTheme}
-                                    changeTheme={() => {
-                                        setActiveTheme(!activeTheme);
-                                        localStorage.setItem("theme", !activeTheme);
-                                    }}
-                                />
-                            </>
-                        )}
+            <Provider store={store}>
+                <ThemeProvider theme={CroonusTheme}>
+                    <AppContextProvider>
+                        <div className={routerClass}>
+                            {authCtx.isLoggedIn && (
+                                <>
+                                    <SideNavigation
+                                        openSidenav={() => setSidenav(!sidenav)}
+                                        activeTheme={activeTheme}
+                                        userName={(authCtx.user.user.first_name ?? "") + " " + (authCtx.user.user.last_name ?? "")}
+                                    />
+                                    <Header
+                                        openSidenav={() => setSidenav(!sidenav)}
+                                        isSideNavOpen={sidenav}
+                                        activeTheme={activeTheme}
+                                        changeTheme={() => {
+                                            setActiveTheme(!activeTheme);
+                                            localStorage.setItem("theme", !activeTheme);
+                                        }}
+                                    />
+                                </>
+                            )}
 
-                        {/* Main content */}
-                        <div className={authCtx.isLoggedIn ? "main-wrapper" : ""}>
-                            <ApplicationRouter />
+                            {/* Main content */}
+                            <div className={authCtx.isLoggedIn ? "main-wrapper" : ""}>
+                                <ApplicationRouter />
+                            </div>
+
+                            {/* Toast */}
+                            <ToastContainer position="top-center" theme="colored" transition={Flip} autoClose={800} newestOnTop={false} draggable={false} closeOnClick hideProgressBar pauseOnHover />
+
+                            {isLoading && <Loader size={50} />}
                         </div>
 
-                        {/* Toast */}
-                        <ToastContainer position="top-center" theme="colored" transition={Flip} autoClose={800} newestOnTop={false} draggable={false} closeOnClick hideProgressBar pauseOnHover />
-
-                        {isLoading && <Loader size={50} />}
-                    </div>
-
-                    <DeleteModal
-                        title="Obaveštenje"
-                        openDeleteDialog={{ show: authCtx.modal }}
-                        nameOfButtonCancel="Odjavite se"
-                        nameOfButton="Nastavite rad"
-                        deafultDeleteIcon={false}
-                        description={`Vaša sesija ističe za 5 minuta. Da li želite da nastavite rad?`}
-                        handleConfirm={() => {
-                            refreshUserToken();
-                        }}
-                        sx={{ backgroundColor: "#28a86e", "&:hover": { backgroundColor: "rgb(28, 117, 77)" } }}
-                        handleCancel={async () => {
-                            authCtx.setShowModal(false);
-                            await authCtx?.api
-                                .post("admin/profile/logout")
-                                .then((response) => {
-                                    toast.success("Uspešno ste se odjavili!");
-                                    navigate(`/`);
-                                    authCtx.logout();
-                                    authCtx?.api?.userDataUpdate(null);
-                                })
-                                .catch((error) => {
-                                    console.warn(error);
-                                });
-                        }}
-                        handleCancelToken={true}
-                    />
-                </AppContextProvider>
-            </ThemeProvider>
+                        <DeleteModal
+                            title="Obaveštenje"
+                            openDeleteDialog={{ show: authCtx.modal }}
+                            nameOfButtonCancel="Odjavite se"
+                            nameOfButton="Nastavite rad"
+                            deafultDeleteIcon={false}
+                            description={`Vaša sesija ističe za 5 minuta. Da li želite da nastavite rad?`}
+                            handleConfirm={() => {
+                                refreshUserToken();
+                            }}
+                            sx={{ backgroundColor: "#28a86e", "&:hover": { backgroundColor: "rgb(28, 117, 77)" } }}
+                            handleCancel={async () => {
+                                authCtx.setShowModal(false);
+                                await authCtx?.api
+                                    .post("admin/profile/logout")
+                                    .then((response) => {
+                                        toast.success("Uspešno ste se odjavili!");
+                                        navigate(`/`);
+                                        authCtx.logout();
+                                        authCtx?.api?.userDataUpdate(null);
+                                    })
+                                    .catch((error) => {
+                                        console.warn(error);
+                                    });
+                            }}
+                            handleCancelToken={true}
+                        />
+                    </AppContextProvider>
+                </ThemeProvider>
+            </Provider>
         </QueryClientProvider>
     );
 };

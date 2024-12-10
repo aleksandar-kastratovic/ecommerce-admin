@@ -14,6 +14,7 @@ import CustomTooltipRef from "../CustomTooltipRef/CustomTooltipRef";
 import AuthContext from "../../../store/auth-contex";
 import { queryKeys } from "../../../helpers/const";
 import { connectTemplateFields } from "../../../helpers/urlTemplate";
+import { useSelector } from "react-redux";
 
 /**
  * Show a standardized list.
@@ -107,6 +108,10 @@ const ListPage = ({
     //     return columnFields.map((field) => ({ ...field, sortable: false }));
     // }, [columnFields]);
 
+    // This variable triggers a reload of this component when the data in the list changes.
+    const reloadFlag = useSelector((state) => state.reloads.reloadFlags[listPageId]);
+
+
     const showAddButtonRef = useRef(null);
 
     const authCtx = useContext(AuthContext);
@@ -162,8 +167,9 @@ const ListPage = ({
         data: response,
         isLoading,
         isError,
-    } = useQuery(["openDeleteDialog.mutate", openDeleteDialog.mutate, search, page, sort, openModal.show, doesRefetch, apiUrl], () => api.list(apiUrl, { page, search, sort, ...filters }));
-    // Modify the data
+    } = useQuery(["listData", openDeleteDialog.mutate, search, page, sort, openModal.show, doesRefetch, apiUrl, reloadFlag], () => api.list(apiUrl, { page, search, sort, ...filters }), {
+        keepPreviousData: true,
+    }); // Modify the data
     if (response?.payload && modifyItems) {
         response.payload.items = modifyItems(response.payload.items);
     }
