@@ -109,7 +109,8 @@ const ListPage = ({
     // }, [columnFields]);
 
     // This variable triggers a reload of this component when the data in the list changes.
-    const listPageReload = useSelector((state) => state.reloads.listPageReload);
+    const reloadFlag = useSelector((state) => state.reloads.reloadFlags[listPageId]);
+
 
     const showAddButtonRef = useRef(null);
 
@@ -166,7 +167,7 @@ const ListPage = ({
         data: response,
         isLoading,
         isError,
-    } = useQuery(["listData", openDeleteDialog.mutate, search, page, sort, openModal.show, doesRefetch, apiUrl, listPageReload], () => api.list(apiUrl, { page, search, sort, ...filters }), {
+    } = useQuery(["listData", openDeleteDialog.mutate, search, page, sort, openModal.show, doesRefetch, apiUrl, reloadFlag], () => api.list(apiUrl, { page, search, sort, ...filters }), {
         keepPreviousData: true,
     }); // Modify the data
     if (response?.payload && modifyItems) {

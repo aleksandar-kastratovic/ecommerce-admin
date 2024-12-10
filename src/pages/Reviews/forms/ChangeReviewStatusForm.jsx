@@ -19,7 +19,7 @@ const ChangeReviewStatusForm = ({ id, setOpenModal, initialStatus }) => {
             .then(() => {
                 toast.success("Uspešno!");
                 setOpenModal({ show: false });
-                dispatch(triggerListPageReload());
+                dispatch(triggerListPageReload("reviewsMarks"));
                 setIsLoading(false);
             })
             .catch(() => {

@@ -5,7 +5,6 @@ import { PreviewDataModal, ReplyModal } from "../../components";
 import IconList from "../../../../helpers/icons";
 import AuthContext from "../../../../store/auth-contex";
 import { toast } from "react-toastify";
-
 import { useDispatch } from "react-redux";
 import { triggerListPageReload } from "../../../../store/reloads/reloadsReducer";
 
@@ -15,6 +14,7 @@ const ReviewsMarks = () => {
     const { api } = authCtx;
     const [openPreviewModal, setOpenPreviewModal] = useState({ show: false, data: null });
     const [openReplyModal, setOpenReplyModal] = useState({ show: false, data: null });
+
     const customActions = {
         edit: {
             type: "custom",
@@ -24,7 +24,7 @@ const ReviewsMarks = () => {
         approve: {
             type: "approve",
             display: (rowData) => {
-                if (rowData?.status !== "Novo") {
+                if (rowData?.approve_reject_required === true) {
                     return false;
                 }
                 return true;
@@ -33,15 +33,14 @@ const ReviewsMarks = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    if (rowData.status !== "Prihvaćeno")
-                        api.post(`admin/reviews/product-items-b2c/marks/list/approve`, { id: rowData.id })
-                            .then(() => {
-                                toast.success("Uspešno prihvaćena recenzija!");
-                                dispatch(triggerListPageReload());
-                            })
-                            .catch((error) => {
-                                toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
-                            });
+                    api.post(`admin/reviews/product-items-b2c/marks/list/approve`, { id: rowData.id })
+                        .then(() => {
+                            toast.success("Uspešno prihvaćena recenzija!");
+                            dispatch(triggerListPageReload("reviewsMarks"));
+                        })
+                        .catch((error) => {
+                            toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
+                        });
                 },
             },
             icon: IconList.thumbUp,
@@ -51,7 +50,7 @@ const ReviewsMarks = () => {
         refuse: {
             type: "refuse",
             display: (rowData) => {
-                if (rowData?.status !== "Novo") {
+                if (rowData?.approve_reject_required === true) {
                     return false;
                 }
                 return true;
@@ -60,22 +59,20 @@ const ReviewsMarks = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    if (rowData.status !== "Odbijeno")
-                        api.post(`admin/reviews/product-items-b2c/marks/list/reject`, { id: rowData.id })
-                            .then(() => {
-                                toast.success("Uspešno odbijena recenzija!");
-                                dispatch(triggerListPageReload());
-                            })
-                            .catch((error) => {
-                                toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
-                            });
+                    api.post(`admin/reviews/product-items-b2c/marks/list/reject`, { id: rowData.id })
+                        .then(() => {
+                            toast.success("Uspešno odbijena recenzija!");
+                            dispatch(triggerListPageReload("reviewsMarks"));
+                        })
+                        .catch((error) => {
+                            toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
+                        });
                 },
             },
             icon: IconList.thumbDown,
             title: "Odbij",
             disabled: true,
         },
-
 
         parentComment: {
             type: "parentComment",
@@ -95,7 +92,6 @@ const ReviewsMarks = () => {
             icon: IconList.comment,
             title: "Glavni komentar",
         },
-
 
         reply: {
             type: "reply",
@@ -118,6 +114,8 @@ const ReviewsMarks = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
+                    dispatch(triggerListPageReload("reviewsMarks"));
+
                     return setOpenPreviewModal({ show: true, id: rowData.id });
                 },
             },
@@ -136,7 +134,6 @@ const ReviewsMarks = () => {
                 columnFields={tblFields}
                 customActions={customActions}
             />
-
             <PreviewDataModal openModal={openPreviewModal} setOpenModal={setOpenPreviewModal} />
             <ReplyModal openModal={openReplyModal} setOpenModal={setOpenReplyModal} />
         </>

@@ -1,6 +1,6 @@
 import { Typography } from "@mui/material";
 
-import { StarRatingViewer, HTMLviewer, ImageViewer, TextViewer, VideoViewer, DateViewer } from "./components";
+import { HTMLviewer, ImageViewer, TextViewer, VideoViewer, DateViewer } from "./components";
 
 const SimpleDataViewer = ({ data, mainTitle }) => {
     const renderComponentByType = (item) => {
@@ -8,11 +8,10 @@ const SimpleDataViewer = ({ data, mainTitle }) => {
 
         switch (type) {
             case "text":
+            case "mark":
                 return <TextViewer key={id} label={label} value={value} />;
             case "html":
                 return <HTMLviewer key={id} label={label} value={value} />;
-            case "mark":
-                return value && value !== null && <StarRatingViewer key={id} mark={value} />;
             case "date":
                 return <DateViewer key={id} label={label} value={value} />;
             case "images":

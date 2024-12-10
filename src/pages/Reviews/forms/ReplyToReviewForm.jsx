@@ -19,7 +19,7 @@ const ReplyToReviewForm = ({ id, admin_name, setOpenModal }) => {
             .then(() => {
                 toast.success("Uspešno!");
                 setOpenModal({ show: false });
-                dispatch(triggerListPageReload());
+                dispatch(triggerListPageReload('reviewsMarks'));
                 setIsLoading(false);
             })
             .catch(() => {
