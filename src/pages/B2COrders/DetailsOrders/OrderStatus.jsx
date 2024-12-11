@@ -181,7 +181,7 @@ const OrderStatus = ({ orderId, status }) => {
                     label="Sačuvaj"
                     variant="contained"
                     onClick={formSubmitHandler}
-                    disabled={data.status === oldStatus}
+                    disabled={data.status === oldStatus || !done}
                     sx={{
                         "@media (max-width: 500px)": {
                             minWidth: "fit-content !important",
