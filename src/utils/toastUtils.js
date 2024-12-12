@@ -1,9 +1,17 @@
 /**
  * Custom wrapper for react-toastify to display toasts with dynamic durations.
- * Provides methods: success, warning, error, and info.
- * Usage example:
- * customToast.success("Message here");
- * customToast.warning("Message here", { position: "bottom-left" });
+ * Automatically calculates the toast's duration based on the message length.
+ * @method success - Displays a success toast.
+ * @method warning - Displays a warning toast.
+ * @method error - Displays an error toast.
+ * @method info - Displays an informational toast.
+ *
+ * @param {string} message - The message to display in the toast.
+ * @param {Object} [options={}] - Additional options for the toast (e.g., position, theme).
+ * @returns {void}
+ *
+ * @example
+ * customToast.success("Operation successful!");
  */
 
 import { toast } from "react-toastify";

@@ -151,7 +151,7 @@ const SideNavigation = ({ activeTheme, userName, openSidenav }) => {
         "badgeNumberReviews",
         async () => {
             if (api?.user) {
-                const response = await api?.get(`admin/reviews/product-items-b2c/marks/list/badge-count`);
+                const response = await api?.get(`admin/reviews/product-items-b2c/main/badge-count`);
                 return response?.payload;
             }
         },
