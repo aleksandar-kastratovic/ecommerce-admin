@@ -9,6 +9,7 @@ import basicData from "../../forms_variation/product_variant_basic.json";
 import ListPage from "../../../../../components/shared/ListPage/ListPage";
 import { toast } from "react-toastify";
 import AuthContext from "../../../../../store/auth-contex";
+import { getVisibleFields } from "../../../../../utils/localStorageUtils";
 
 const ProductVariation = ({ parentId, tblFields }) => {
     const authCtx = useContext(AuthContext);
@@ -19,10 +20,11 @@ const ProductVariation = ({ parentId, tblFields }) => {
     const [showSubmitModalButton, setShowSubmitModalButton] = useState(true);
     const [imageInfo, setImageInfo] = useState(null);
     const apiPathGallery = "admin/product-items/variants/gallery";
-    // const galleryFormFields = gallery;
     const [galleryFormFields, setGalleryFormFields] = useState(gallery);
 
-    const filterFields = (event, fieldBhavior, column) => {
+    const visibleFields = getVisibleFields("columnPickerState.ListVariants", formFieldsTemp);
+
+    const filterFields = (fieldBhavior, column) => {
         const { type } = fieldBhavior;
         switch (type) {
             case "click":
@@ -121,12 +123,13 @@ const ProductVariation = ({ parentId, tblFields }) => {
                         },
                     };
                 } else {
+                    let in_main_table = visibleFields[field.prop_name];
                     return {
                         ...field,
+                        in_main_table,
                     };
                 }
             });
-
             setFormFieldsTemp([...arr]);
         }
     };
@@ -152,8 +155,10 @@ const ProductVariation = ({ parentId, tblFields }) => {
                         dimensions: { width: image?.width, height: image?.height },
                     };
                 } else {
+                    let in_main_table = visibleFields[field.prop_name];
                     return {
                         ...field,
+                        in_main_table,
                     };
                 }
             });
@@ -302,6 +307,7 @@ const ProductVariation = ({ parentId, tblFields }) => {
                 return ret;
         }
     };
+
     return (
         <ListPage
             validateData={validateData}

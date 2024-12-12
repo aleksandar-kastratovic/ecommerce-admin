@@ -5,14 +5,16 @@ import Box from "@mui/material/Box";
 import FormControl from "@mui/material/FormControl";
 import Menu from "@mui/material/Menu";
 
-import { createPairs } from "../../../../helpers/data";
 import Button from "../../Button/Button";
 import Buttons from "../../Form/Buttons/Buttons";
 import { InputCheckbox } from "../../Form/FormInputs/FormInputs";
 
 import styles from "./ColumnsPicker.module.scss";
 
+import { getVisibleFields } from "../../../../utils/localStorageUtils";
+
 const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClose, listPageId }) => {
+    // console.log("PickerModal", tableFields);
     // Show errors on the list
     const [errorInput, setErrorInput] = useState(null);
     const errorMessage = "Bar jedna kolona mora ostati vidljiva";
@@ -23,19 +25,11 @@ const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClos
     let localStorageKey = listPageId ? "columnPickerState." + listPageId : "columnPickerState." + pathname;
 
     // Check if is localStorage empty
-    let visible = createPairs(tableFields, "prop_name", "in_main_table");
-
-    const inLocalStorage = JSON.parse(localStorage.getItem(localStorageKey));
-
-    if (inLocalStorage !== null && Object.keys(inLocalStorage).length > 0) {
-        visible = inLocalStorage;
-    } else {
-        localStorage.setItem(localStorageKey, JSON.stringify(visible));
-    }
+    const visible = getVisibleFields(localStorageKey, tableFields);
 
     // Not all columns can be hidden
     const [visibleColumns, setVisibleColumns] = useState(visible);
-
+    // console.log(visibleColumns)
     useEffect(() => {
         const timeout = setTimeout(() => {
             setVisibleColumns(visible);
@@ -73,7 +67,7 @@ const PickerMenu = ({ anchor = null, tableFields = [], handleConfirm, handleClos
     };
 
     // Check if the column is toggleable
-    const isColumnToggleable = (column: FieldSpec): boolean => column.field_name !== "";
+    const isColumnToggleable = (column) => column.field_name !== "";
 
     return (
         <Menu id="column-picker-menu" anchorEl={anchor} open={anchor !== null} onClose={handleClose}>
