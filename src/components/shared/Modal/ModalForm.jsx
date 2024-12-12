@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 
 import Form from "../Form/Form";
-import { toast } from "react-toastify";
 import FormWrapper from "../Layout/FormWrapper/FormWrapper";
 import ListPageModalWrapper from "./ListPageModalWrapper";
 import Typography from "@mui/material/Typography";
@@ -9,6 +8,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import Button from "../Button/Button";
 import AuthContext from "../../../store/auth-contex";
+import customToast from "../../../utils/toastUtils";
 
 /**
  * Modal.
@@ -139,14 +139,14 @@ const ModalForm = ({
             api[saveMethod](`${modalUrl !== null ? modalUrl["save"]?.url : apiPathFormModal}`, sendData)
                 .then((response) => {
                     setData(response?.payload);
-                    toast.success(`Uspešno`);
+                    customToast.success(`Uspešno`);
                     setOpenModal({ ...openModal, show: false });
                     setIsLoading(false);
                     setDoesRefetch(!doesRefetch);
                 })
                 .catch((error) => {
                     console.warn(error);
-                    toast.warning(error?.response?.data?.message ?? error?.response?.data?.payload?.message ?? "Greška");
+                    customToast.warning(error?.response?.data?.payload?.message ?? error?.response?.data?.message ?? "Greška");
                     setIsLoading(false);
                 });
         } else {
@@ -157,16 +157,15 @@ const ModalForm = ({
             {
                 !closeButtonModalForm &&
                     api[saveMethod](`${modalUrl !== null ? modalUrl["save"]?.url : apiPathFormModal}`, objectForServer)
-                        .then((response) => {
-                            toast.success(`Uspešno`);
+                        .then(() => {
+                            customToast.success(`Uspešno`);
                             setOpenModal({ ...openModal, show: false });
                             setIsLoading(false);
                             setDoesRefetch(!doesRefetch);
                         })
                         .catch((error) => {
                             console.warn(error);
-                            toast.warning(error?.response?.data?.message ?? error?.response?.data?.payload?.message ?? "Greška");
-
+                            customToast.warning(error?.response?.data?.payload?.message ?? error?.response?.data?.message ?? "Greška");
                             setIsLoading(false);
                         });
             }

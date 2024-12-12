@@ -208,7 +208,7 @@ const App = () => {
                             </div>
 
                             {/* Toast */}
-                            <ToastContainer position="top-center" theme="colored" transition={Flip} autoClose={800} newestOnTop={false} draggable={false} closeOnClick hideProgressBar pauseOnHover />
+                            <ToastContainer position="top-center" theme="colored" transition={Flip} autoClose={1500} newestOnTop={false} draggable={false} closeOnClick hideProgressBar pauseOnHover />
 
                             {isLoading && <Loader size={50} />}
                         </div>
