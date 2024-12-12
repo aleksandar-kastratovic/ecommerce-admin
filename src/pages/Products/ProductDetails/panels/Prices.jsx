@@ -6,148 +6,163 @@ import ListPage from "../../../../components/shared/ListPage/ListPage";
 import AuthContext from "../../../../store/auth-contex";
 
 const Prices = ({ productId }) => {
+    const navigate = useNavigate();
+    const authCtx = useContext(AuthContext);
+    const { api } = authCtx;
 
-  const navigate = useNavigate();
-  const authCtx = useContext(AuthContext);
-  const { api } = authCtx;
+    const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
 
-  const [formFieldsTemp, setFormFieldsTemp] = useState(formFields);
-
-  const additionalButtons = [
-    {
-      label: "Cenovnik",
-      action: () => {
-        navigate("/products/prices-groups");
-      },
-    },
-  ];
-
-
-  const filterFields = (fields, system) => {
-    let arr = formFields;
-
-    if (system === 'b2b') {
-      arr = fields?.map((item, i) => {
-        const { prop_name } = item;
-        if (prop_name === 'name') {
-          return {
-            ...item,
-            in_details: false
-          }
-        }
-        if (prop_name === 'exclude_from_rebates') {
-          return {
-            ...item,
-            in_details: true
-          }
-        }
-        return {
-          ...item
-        }
-      });
-    }
-    setFormFieldsTemp([...arr]);
-  }
-
-  const validateData = (data, field) => {
-    let ret = data;
-    switch (field) {
-      case "price_single_with_out_vat":
-      case "price_vat_procent":
-      case "price_quantity":
-        ret.price_with_out_vat = Math.round(ret.price_quantity * ret.price_single_with_out_vat * 100) / 100;
-        ret.price_with_vat = Math.round((ret.price_vat_procent / 100 + 1) * ret.price_with_out_vat * 100) / 100;
-        return ret;
-      case "price_with_out_vat":
-        ret.price_with_vat = Math.round((ret.price_vat_procent / 100 + 1) * ret.price_with_out_vat * 100) / 100;
-        ret.price_single_with_out_vat = Math.round((ret.price_with_out_vat / ret.price_quantity) * 100) / 100;
-        return ret;
-      case "price_with_vat":
-        ret.price_with_out_vat = Math.round((ret.price_with_vat / (ret.price_vat_procent / 100 + 1)) * 100) / 100;
-        ret.price_single_with_out_vat = Math.round((ret.price_with_out_vat / ret.price_quantity) * 100) / 100;
-        return ret;
-      case "id_price_structure":
-        let index = formFieldsTemp.findIndex((it) => { return it.prop_name === 'id_price_structure' });
-        let systemObject = formFieldsTemp[index];
-        let path = `${systemObject?.fillFromApi}/${systemObject?.prop_name}?id_price_structure=${ret?.id_price_structure}`;
-        api.get(path)
-          .then((response) => {
-            const systemArr = response?.payload;
-            const selectedSystemItem = systemArr.find((systemItem) => systemItem.id === ret.id_price_structure);
-            if (selectedSystemItem) {
-              filterFields(formFields, selectedSystemItem.system);
-            }
-
-          })
-          .catch((error) => console.log(error));
-        return ret;
-      default:
-        return ret;
-    }
-  };
-
-  const customActions = {
-    edit: {
-      clickHandler: {
-        type: 'modal_form',
-        fnc: (rowData) => {
-          filterFields(formFields, rowData?.system);
-          return {
-            show: true,
-            id: rowData.id
-          };
+    const additionalButtons = [
+        {
+            label: "Cenovnik",
+            action: () => {
+                navigate("/products/prices-groups");
+            },
         },
-      },
-    },
-    delete: {
-      clickHandler: {
-        type: 'dialog_delete',
-        fnc: (rowData) => {
-          return {
-            show: true,
-            id: rowData.id,
-            mutate: null,
-          };
-        },
-      },
-      deleteClickHandler: {
-        type: 'dialog_delete',
-        fnc: (rowData) => {
+    ];
 
-          api.delete(`admin/product-items/prices/${rowData.id}`)
-            .then(() => toast.success("Zapis je uspešno obrisan"))
-            .catch((err) => toast.warning(err?.response?.data?.message ?? err?.response?.data?.payload?.message ?? "Došlo je do greške prilikom brisanja"));
+    const filterFields = (fields, system) => {
+        let arr = formFieldsTemp;
 
-          return {
-            show: false,
-            id: rowData.id,
-            mutate: 1,
-          };
+        if (system === "b2b") {
+            arr = fields?.map((item, i) => {
+                const { prop_name } = item;
+                if (prop_name === "name") {
+                    return {
+                        ...item,
+                        in_details: false,
+                    };
+                }
+                if (prop_name === "exclude_from_rebates") {
+                    return {
+                        ...item,
+                        in_details: true,
+                    };
+                }
+                return {
+                    ...item,
+                };
+            });
         }
-      },
-    },
-  };
+        setFormFieldsTemp([...arr]);
+    };
 
-  return (
-    <>
-      <ListPage
-        validateData={validateData}
-        listPageId="Prices"
-        apiUrl={`admin/product-items/prices/${productId}`}
-        editUrl={`admin/product-items/prices`}
-        title=" "
-        columnFields={formFieldsTemp}
-        actionNewButton="modal"
-        initialData={{ id_product: productId }}
-        addFieldLabel="Dodajte novu cenu"
-        showAddButton={true}
-        additionalButtons={additionalButtons}
-        customActions={customActions}
-        useColumnFields={true}
+    const validateData = (data, field) => {
+        // reset formFields if is changed by 'price_vat_procent'
+        if (!field) {
+            const isPriceWithVatDisabled = formFieldsTemp.some((formField) => formField.prop_name === "price_with_vat" && formField.disabled === true);
+            if (isPriceWithVatDisabled) setFormFieldsTemp(formFields);
+        }
 
-      />
-    </>
-  );
-}
+        let ret = data;
+        switch (field) {
+            case "price_single_with_out_vat":
+            case "price_vat_procent":
+            case "price_quantity":
+                //disable field: price with VAT if VAT percentage === 0
+                if (field === "price_vat_procent") {
+                    let updateFormFieldsTemp;
+                    if (data.price_vat_procent === "0.00") {
+                        updateFormFieldsTemp = formFieldsTemp.map((formField) => (formField.prop_name === "price_with_vat" ? { ...formField, disabled: true, editable: false } : formField));
+                    } else {
+                        updateFormFieldsTemp = formFieldsTemp.map((formField) => (formField.prop_name === "price_with_vat" ? { ...formField, disabled: false, editable: true } : formField));
+                    }
+
+                    setFormFieldsTemp(updateFormFieldsTemp);
+                }
+
+                ret.price_with_out_vat = Math.round(ret.price_quantity * ret.price_single_with_out_vat * 100) / 100;
+                ret.price_with_vat = Math.round((ret.price_vat_procent / 100 + 1) * ret.price_with_out_vat * 100) / 100;
+                return ret;
+            case "price_with_out_vat":
+                ret.price_with_vat = Math.round((ret.price_vat_procent / 100 + 1) * ret.price_with_out_vat * 100) / 100;
+                ret.price_single_with_out_vat = Math.round((ret.price_with_out_vat / ret.price_quantity) * 100) / 100;
+                return ret;
+            case "price_with_vat":
+                ret.price_with_out_vat = Math.round((ret.price_with_vat / (ret.price_vat_procent / 100 + 1)) * 100) / 100;
+                ret.price_single_with_out_vat = Math.round((ret.price_with_out_vat / ret.price_quantity) * 100) / 100;
+                return ret;
+            case "id_price_structure":
+                let index = formFieldsTemp.findIndex((it) => {
+                    return it.prop_name === "id_price_structure";
+                });
+                let systemObject = formFieldsTemp[index];
+                let path = `${systemObject?.fillFromApi}/${systemObject?.prop_name}?id_price_structure=${ret?.id_price_structure}`;
+                api.get(path)
+                    .then((response) => {
+                        const systemArr = response?.payload;
+                        const selectedSystemItem = systemArr.find((systemItem) => systemItem.id === ret.id_price_structure);
+                        if (selectedSystemItem) {
+                            filterFields(formFieldsTemp, selectedSystemItem.system);
+                        }
+                    })
+                    .catch((error) => console.log(error));
+                return ret;
+            default:
+                return ret;
+        }
+    };
+
+    const customActions = {
+        edit: {
+            clickHandler: {
+                type: "modal_form",
+                fnc: (rowData) => {
+                    filterFields(formFieldsTemp, rowData?.system);
+                    return {
+                        show: true,
+                        id: rowData.id,
+                    };
+                },
+            },
+        },
+        delete: {
+            clickHandler: {
+                type: "dialog_delete",
+                fnc: (rowData) => {
+                    return {
+                        show: true,
+                        id: rowData.id,
+                        mutate: null,
+                    };
+                },
+            },
+            deleteClickHandler: {
+                type: "dialog_delete",
+                fnc: (rowData) => {
+                    api.delete(`admin/product-items/prices/${rowData.id}`)
+                        .then(() => toast.success("Zapis je uspešno obrisan"))
+                        .catch((err) => toast.warning(err?.response?.data?.message ?? err?.response?.data?.payload?.message ?? "Došlo je do greške prilikom brisanja"));
+
+                    return {
+                        show: false,
+                        id: rowData.id,
+                        mutate: 1,
+                    };
+                },
+            },
+        },
+    };
+
+    return (
+        <>
+            <ListPage
+                validateData={validateData}
+                listPageId="Prices"
+                apiUrl={`admin/product-items/prices/${productId}`}
+                editUrl={`admin/product-items/prices`}
+                title=" "
+                columnFields={formFieldsTemp}
+                actionNewButton="modal"
+                initialData={{ id_product: productId }}
+                addFieldLabel="Dodajte novu cenu"
+                showAddButton={true}
+                additionalButtons={additionalButtons}
+                customActions={customActions}
+                useColumnFields={true}
+            />
+        </>
+    );
+};
 
 export default Prices;
