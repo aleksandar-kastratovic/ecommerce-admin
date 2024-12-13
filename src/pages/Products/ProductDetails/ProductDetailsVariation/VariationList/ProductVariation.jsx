@@ -24,7 +24,7 @@ const ProductVariation = ({ parentId, tblFields }) => {
 
     const visibleFields = getVisibleFields("columnPickerState.ListVariants", formFieldsTemp);
 
-    const filterFields = (fieldBhavior, column) => {
+    const filterFields = (event, fieldBhavior, column) => {
         const { type } = fieldBhavior;
         switch (type) {
             case "click":
