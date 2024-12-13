@@ -81,7 +81,19 @@ const ProductVariation = ({ parentId, tblFields }) => {
                     let y = base64[base64.length - 2] === "=" ? 2 : 1;
                     const size = base64.length * (3 / 4) - y;
                     const dimensions = imageInfo?.image ?? {};
-                    return { id: item.id, name: item.file_filename, position: item.order, alt: item.file_filename, size: size, type: type, src: base64, path: item.file, dimensions: dimensions };
+                    return {
+                        id: item.id,
+                        name: item.file_filename,
+                        position: item.order,
+                        alt: item.file_filename,
+                        size: size,
+                        type: type,
+                        src: base64,
+                        path: item.file,
+                        dimensions: dimensions,
+                        file_height: item.file_height,
+                        file_width: item.file_width,
+                    };
                 });
         }
         return values;
@@ -307,7 +319,6 @@ const ProductVariation = ({ parentId, tblFields }) => {
                 return ret;
         }
     };
-
     return (
         <ListPage
             validateData={validateData}

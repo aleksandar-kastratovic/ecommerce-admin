@@ -111,7 +111,6 @@ const ListPage = ({
     // This variable triggers a reload of this component when the data in the list changes.
     const reloadFlag = useSelector((state) => state.reloads.reloadFlags[listPageId]);
 
-
     const showAddButtonRef = useRef(null);
 
     const authCtx = useContext(AuthContext);
@@ -446,6 +445,7 @@ const ListPage = ({
             </PageWrapper>
 
             <ModalForm
+                modalFormId={`${listPageId}ModalId`}
                 onDismissModal={() => {
                     onDismissModal();
                 }}

@@ -138,6 +138,8 @@ const ImageDialogFullPage = ({
         handleSaveImageDialog({ ...openFullPageDialog, alt: altText, title: "", subtitle: "", short_description: "", description: "", file_base64: null, order: null });
     };
 
+    const imageDateByImgList = imageList && imageList.length > 0 ? imageList.find((img) => img.id === openFullPageDialog.id) : null;
+
     return (
         <Dialog open={openFullPageDialog.show} fullScreen aria-labelledby="delete-dialog-title" aria-describedby="delete-dialog-description">
             <AppBar sx={{ position: "relative" }}>
@@ -204,14 +206,27 @@ const ImageDialogFullPage = ({
                                             <TextField fullWidth type="text" disabled label="Naziv slike" value={openFullPageDialog?.name} variant="outlined" />
                                             <TextField fullWidth type="text" label="Alt slike" value={altText} variant="outlined" onChange={handleAltTextChange} />
                                             <TextField fullWidth type="text" disabled label="Velicina slike" value={`${(openFullPageDialog?.size / (1024 * 1024))?.toFixed(2)}MB`} variant="outlined" />
+
+                                            {imageDateByImgList && (
+                                                <TextField
+                                                    fullWidth
+                                                    type="text"
+                                                    disabled
+                                                    label="Trenutna dimenzija slike (širina x visina)"
+                                                    value={imageDateByImgList ? `${imageDateByImgList?.file_width} x ${imageDateByImgList?.file_height} px` : ""}
+                                                    variant="outlined"
+                                                />
+                                            )}
+
                                             <TextField
                                                 fullWidth
                                                 type="text"
                                                 disabled
-                                                label="Dimenzija slike (širina x visina)"
+                                                label="Definisana dimenzija za obradu (širina x visina)"
                                                 value={`${openFullPageDialog?.dimensions?.width} x ${openFullPageDialog?.dimensions?.height} px`}
                                                 variant="outlined"
                                             />
+
                                             <TextField fullWidth type="text" disabled label="Tip slike" value={openFullPageDialog?.type} variant="outlined" />
                                             <TextField
                                                 fullWidth

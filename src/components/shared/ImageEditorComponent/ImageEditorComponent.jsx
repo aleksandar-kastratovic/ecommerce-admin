@@ -17,6 +17,8 @@ import { getCroppedImg } from "./util";
 import { InputNumber } from "../Form/FormInputs/FormInputs";
 import AuthContext from "../../../store/auth-contex";
 import { useImageFileType } from "../../../hooks/useFileType";
+import { triggerListPageReload } from "../../../store/reloads/reloadsReducer";
+import { useDispatch } from "react-redux";
 
 const ImageEditorComponent = ({
     handleCloseEditMode = () => {},
@@ -31,6 +33,7 @@ const ImageEditorComponent = ({
 }) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
+    const dispatch = useDispatch();
 
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [rotation, setRotation] = useState(0);
@@ -74,6 +77,9 @@ const ImageEditorComponent = ({
         handleSaveEditImage(imageName, base64Image);
         handleCloseEditMode();
         handleCloseImageDialog();
+        setTimeout(() => {
+            dispatch(triggerListPageReload("ListVariantsModalId"));
+        }, 3000);
     };
 
     const showCroppedImage = useCallback(async () => {

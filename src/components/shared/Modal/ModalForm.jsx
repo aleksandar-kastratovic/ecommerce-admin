@@ -9,6 +9,7 @@ import Box from "@mui/material/Box";
 import Button from "../Button/Button";
 import AuthContext from "../../../store/auth-contex";
 import customToast from "../../../utils/toastUtils";
+import { useSelector } from "react-redux";
 
 /**
  * Modal.
@@ -35,6 +36,7 @@ import customToast from "../../../utils/toastUtils";
  */
 
 const ModalForm = ({
+    modalFormId,
     anchor,
     setPropName,
     openModal,
@@ -81,6 +83,9 @@ const ModalForm = ({
     const { api } = authCtx;
     const [data, setData] = useState({});
     const [isLoading, setIsLoading] = useState(false);
+
+    // This variable triggers a reload of this component when the data in the list changes.
+    const reloadFlag = useSelector((state) => state.reloads.reloadFlags[modalFormId]);
 
     const handleData = async () => {
         setIsLoading(true);
@@ -182,12 +187,11 @@ const ModalForm = ({
             email: "",
         });
     };
-
     useEffect(() => {
         if (openModal.show) {
             handleData();
         }
-    }, [openModal.show]);
+    }, [openModal.show, reloadFlag]);
 
     return (
         <ListPageModalWrapper

@@ -136,6 +136,8 @@ const Gallery = ({ productId }) => {
                 path: item.file,
                 dimensions: dimensions,
                 id_product: item.id_product,
+                file_height: item.file_height,
+                file_width: item.file_width,
             };
         });
 
