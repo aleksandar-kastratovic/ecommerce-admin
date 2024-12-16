@@ -1,15 +1,13 @@
 import { useContext, useEffect, useState } from "react";
-
 import prices from "../../forms_variation/prices.json";
 import seo from "../../forms_variation/seo.json";
 import gallery from "../../forms_variation/gallery.json";
 import lagerData from "../../forms_variation/inventories.json";
 import basicData from "../../forms_variation/product_variant_basic.json";
-
 import ListPage from "../../../../../components/shared/ListPage/ListPage";
-import { toast } from "react-toastify";
 import AuthContext from "../../../../../store/auth-contex";
 import { getVisibleFields } from "../../../../../utils/localStorageUtils";
+import customToast from "../../../../../utils/toastUtils";
 
 const ProductVariation = ({ parentId, tblFields }) => {
     const authCtx = useContext(AuthContext);
@@ -204,7 +202,7 @@ const ProductVariation = ({ parentId, tblFields }) => {
 
             if (allowedFormats.length > 0 && allowedFormats.includes(fileExtension)) {
                 if (fileSizeInB > allowSize) {
-                    toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
+                    customToast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
                 } else {
                     let req = {
                         id: data.new ? null : data.id,
@@ -220,16 +218,16 @@ const ProductVariation = ({ parentId, tblFields }) => {
 
                     let postApi = options?.crop ? urls["save_crop"]?.url : urls["save"]?.url;
                     api.post(`${postApi}`, req)
-                        .then((response) => {
-                            toast.success("Uspešno");
+                        .then(() => {
+                            customToast.success("Uspešno postavljena slika");
                         })
                         .catch((error) => {
-                            toast.warn("Greška");
+                            customToast.warning(error?.response?.data?.payload?.message ?? error?.response?.data?.message ?? "Greška");
                             console.warn(error);
                         });
                 }
             } else {
-                toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
+                customToast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
             }
         };
         return handleSubmit;
@@ -237,22 +235,22 @@ const ProductVariation = ({ parentId, tblFields }) => {
 
     const handleDelete = (id) => {
         api.delete(`${apiPathGallery}/${id}`)
-            .then((response) => {
-                toast.success("Uspešno");
+            .then(() => {
+                customToast.success("Uspešno obrisana slika");
             })
             .catch((error) => {
-                toast.warn("Greška");
+                customToast.warning(error?.response?.data?.payload?.message ?? error?.response?.data?.message ?? "Greška");
                 console.warn(error);
             });
     };
 
     const handleReorder = (id, destination) => {
         api.put(`${apiPathGallery}/order`, { id: id, order: destination })
-            .then((response) => {
-                toast.success("Uspešno");
+            .then(() => {
+                customToast.success("Uspešno promenjen redosled slika");
             })
             .catch((error) => {
-                toast.warn("Greška");
+                customToast.warning("Greška");
                 console.warn(error);
             });
     };

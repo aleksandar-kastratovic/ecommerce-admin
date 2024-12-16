@@ -1,9 +1,9 @@
 import { useContext, useEffect, useState } from "react";
-import { toast } from "react-toastify";
 import InputMultipleImages from "../../../../components/shared/InputMultipleImages/InputMultipleImages";
 import GallerySkeleton from "../../../../components/shared/Loading/GallerySkeleton";
 import AuthContext from "../../../../store/auth-contex";
 import UploadLoading from "../../../../components/shared/Loading/UploadSkeleton";
+import customToast from "../../../../utils/toastUtils";
 
 const Gallery = ({ productId }) => {
     const authCtx = useContext(AuthContext);
@@ -51,11 +51,11 @@ const Gallery = ({ productId }) => {
         const fileSizeInB = Number(data.size);
 
         if (allowedFormats.length > 0 && !allowedFormats.includes(fileExtension)) {
-            toast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
+            customToast.error(`Nedozvoljeni format slike. Dozvoljeni formati su: ${allowedFormats.join(", ")}`);
             setImageUploadLoading(false);
             return false;
         } else if (fileSizeInB > allowSize) {
-            toast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
+            customToast.error(`Veličina slike je prevelika. Maksimalna dozvoljena veličina je ${allowSize / (1024 * 1024)} MB.`);
             setImageUploadLoading(false);
             return false;
         } else {
@@ -74,13 +74,13 @@ const Gallery = ({ productId }) => {
             let postApi = options?.crop ? apiPathCrop : apiPath;
             await api
                 .post(`${postApi}`, req)
-                .then((response) => {
-                    toast.success("Uspešno");
+                .then(() => {
+                    customToast.success("Uspešno postavljena slika");
                     handleData();
                     setImageUploadLoading(false);
                 })
                 .catch((error) => {
-                    toast.warn("Greška");
+                    customToast.warning(error?.response?.data?.payload?.message ?? error?.response?.data?.message ?? "Greška");
                     console.warn(error);
                     setImageUploadLoading(false);
                 });
@@ -91,11 +91,11 @@ const Gallery = ({ productId }) => {
     const handleDelete = (id) => {
         api.delete(`${apiPath}/${id}`)
             .then((response) => {
-                toast.success("Uspešno");
+                customToast.success("Uspešno obrisana slika");
                 handleData(false);
             })
             .catch((error) => {
-                toast.warn("Greška");
+                customToast.warning(error?.response?.data?.payload?.message ?? error?.response?.data?.message ?? "Greška");
                 console.warn(error);
             });
     };
@@ -103,11 +103,11 @@ const Gallery = ({ productId }) => {
     const handleReorder = (id, destination) => {
         api.put(`${apiPath}/order`, { id: id, order: destination })
             .then((response) => {
-                toast.success("Uspešno");
+                customToast.success("Uspešno");
                 handleData(false);
             })
             .catch((error) => {
-                toast.warn("Greška");
+                customToast.warn("Greška");
                 console.warn(error);
             });
     };

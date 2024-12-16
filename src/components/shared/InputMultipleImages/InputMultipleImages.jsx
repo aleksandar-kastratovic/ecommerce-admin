@@ -4,8 +4,8 @@ import ImageDialogFullPage from "../MultipleImages/ImageDialogFullPage/ImageDial
 import ImageListRow from "../MultipleImages/ImageListRow/ImageListRow";
 import MultipleImages from "../MultipleImages/MultipleImages";
 import DeleteDialog from "../Dialogs/DeleteDialog";
-import { toast } from "react-toastify";
 import AuthContext from "../../../store/auth-contex";
+import customToast from "../../../utils/toastUtils";
 
 const getLoadedFile = (file, i, len) => {
     return new Promise((resolve) => {
@@ -112,7 +112,7 @@ export const InputMultipleImages = ({
 
                     if (allowedFormatMime.includes(type)) {
                         if (size > allow_size) {
-                            toast.error(`Slika je prevelika (${obj.name}). Maksimalna dozvoljena veličina je ${convertToMB(allow_size)}MB.`);
+                            customToast.error(`Slika je prevelika (${obj.name}). Maksimalna dozvoljena veličina je ${convertToMB(allow_size)}MB.`);
                         } else {
                             if (typeof uploadHandler === "function") {
                                 await uploadHandler(obj);
@@ -120,7 +120,7 @@ export const InputMultipleImages = ({
                             newImagesArray.push(obj);
                         }
                     } else {
-                        toast.error(`Nedozvoljen format slike.`);
+                        customToast.error(`Nedozvoljen format slike.`);
                     }
                 } else {
                     if (typeof uploadHandler === "function") {
@@ -163,28 +163,27 @@ export const InputMultipleImages = ({
     };
 
     const handleSaveImageDialog = (data) => {
-            const dataForServer = {
-                id: data?.id,
-                id_product: data?.id_product,
-                title: data?.name,
-                subtitle: null,
-                short_description: data?.short_description,
-                description: data?.description,
-                alt: data?.alt,
-                file_base64: data?.image,
-                order: data?.position,
-            };
-            api.post(`/admin/product-items/gallery`, dataForServer)
-                .then((response) => {
-                    toast.success("Uspešno");
-                    setOpenFullPageDialog(init);
-                    handleChange();
-                })
-                .catch((error) => {
-                    toast.warn("Greška");
-                    console.warn(error);
-                });
-
+        const dataForServer = {
+            id: data?.id,
+            id_product: data?.id_product,
+            title: data?.name,
+            subtitle: null,
+            short_description: data?.short_description,
+            description: data?.description,
+            alt: data?.alt,
+            file_base64: data?.image,
+            order: data?.position,
+        };
+        api.post(`/admin/product-items/gallery`, dataForServer)
+            .then(() => {
+                customToast.success(`Uspešno sačuvana slika`);
+                setOpenFullPageDialog(init);
+                handleChange();
+            })
+            .catch((error) => {
+                customToast.warning(error?.response?.data?.payload?.message ?? error?.response?.data?.message ?? "Greška");
+                console.warn(error);
+            });
     };
 
     //IMAGE UPLOAD FROM MODAL
