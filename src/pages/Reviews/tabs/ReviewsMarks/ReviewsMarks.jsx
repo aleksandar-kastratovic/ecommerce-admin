@@ -6,7 +6,7 @@ import IconList from "../../../../helpers/icons";
 import AuthContext from "../../../../store/auth-contex";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
-import { triggerListPageReload } from "../../../../store/reloads/reloadsReducer";
+import { triggerComponentRerender } from "../../../../store/reloads/reloadsReducer";
 
 const ReviewsMarks = () => {
     const dispatch = useDispatch();
@@ -36,7 +36,7 @@ const ReviewsMarks = () => {
                     api.post(`admin/reviews/product-items-b2c/marks/list/approve`, { id: rowData.id })
                         .then(() => {
                             toast.success("Uspešno prihvaćena recenzija!");
-                            dispatch(triggerListPageReload("reviewsMarks"));
+                            dispatch(triggerComponentRerender("reviewsMarks"));
                         })
                         .catch((error) => {
                             toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
@@ -62,7 +62,7 @@ const ReviewsMarks = () => {
                     api.post(`admin/reviews/product-items-b2c/marks/list/reject`, { id: rowData.id })
                         .then(() => {
                             toast.success("Uspešno odbijena recenzija!");
-                            dispatch(triggerListPageReload("reviewsMarks"));
+                            dispatch(triggerComponentRerender("reviewsMarks"));
                         })
                         .catch((error) => {
                             toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
@@ -114,7 +114,7 @@ const ReviewsMarks = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    dispatch(triggerListPageReload("reviewsMarks"));
+                    dispatch(triggerComponentRerender("reviewsMarks"));
 
                     return setOpenPreviewModal({ show: true, id: rowData.id });
                 },

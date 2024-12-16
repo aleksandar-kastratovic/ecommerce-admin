@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import Button from "../Button/Button";
@@ -13,6 +12,7 @@ import { isEmpty } from "lodash";
 import { toast } from "react-toastify";
 
 const Form = ({
+    reloadComponentIDs,
     formFields = [],
     initialData = {},
     onSubmit = () => null,
@@ -279,6 +279,7 @@ const Form = ({
 
                         return (
                             <CreateForm
+                                reloadComponentIDs={reloadComponentIDs}
                                 data-test-id="admin-form"
                                 onChangeHandler={formItemChangeHandler}
                                 onChangeAutoHandler={formItemAutoCompleteChangeHandler}

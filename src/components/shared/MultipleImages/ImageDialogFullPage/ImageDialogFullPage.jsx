@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
@@ -7,12 +6,10 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
-import PhotoCamera from "@mui/icons-material/PhotoCamera";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import ImageEditorComponent from "../../ImageEditorComponent/ImageEditorComponent";
-import CircularProgress from "@mui/material/CircularProgress";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -33,7 +30,6 @@ const ImageDialogFullPage = ({
     title = "",
     setImageList,
     imageList = [],
-    onImageUpload = () => {},
     handleCloseImageDialog = () => {},
     handleSaveImageDialog = () => {},
     handleDeleteImage = () => {},
@@ -41,7 +37,6 @@ const ImageDialogFullPage = ({
     apiPathCrop,
 }) => {
     const [editMode, setEditMode] = useState(false);
-    const [loadingImage, setLoadingImage] = useState(false);
     const [bttnText, setBttnText] = useState("Kopirajte link");
     const [altText, setAltText] = useState(openFullPageDialog?.name);
     useEffect(() => {
@@ -58,15 +53,6 @@ const ImageDialogFullPage = ({
         setEditMode(true);
     };
 
-    const handleImageUpload = (e) => {
-        setLoadingImage(true);
-        onImageUpload(e);
-        const timeOutId = setTimeout(() => {
-            setLoadingImage(false);
-        }, 1000);
-        return () => clearTimeout(timeOutId);
-    };
-
     const handleSaveEdited = (imageName, base64Image) => {
         // TODO DEMO
         // set Image to parent component for example B2Bsetings in state
@@ -75,7 +61,6 @@ const ImageDialogFullPage = ({
         // please keep in mind that this is an array of images
 
         let base64 = base64Image;
-        const typeBase64 = base64.split(";")[0].split(":")[1];
         let y = base64[base64.length - 2] === "=" ? 2 : 1;
         const sizeBase64 = base64.length * (3 / 4) - y;
 
@@ -111,30 +96,12 @@ const ImageDialogFullPage = ({
         setImageList(newState);
     };
 
-    // const copyCode = () => {
-    //   navigator.clipboard
-    //     .writeText(openFullPageDialog?.path)
-    //     .then(() => {
-    //       setBttnText("Link je kopiran");
-    //       setTimeout(() => {
-    //         setBttnText("Kopirajte link");
-    //       }, 3000);
-    //     })
-    //     .catch((err) => {
-    //       console.log(err.message);
-    //     });
-    // };
-
     const { fileType } = useImageFileType(openFullPageDialog?.image ?? "");
     const handleAltTextChange = (event) => {
         setAltText(event.target.value);
     };
 
     const handleSaveImageDialogWithAlt = () => {
-        // setOpenFullPageDialog({
-        //     ...openFullPageDialog,
-        //     alt: altText,
-        // });
         handleSaveImageDialog({ ...openFullPageDialog, alt: altText, title: "", subtitle: "", short_description: "", description: "", file_base64: null, order: null });
     };
 
@@ -169,99 +136,93 @@ const ImageDialogFullPage = ({
                     </Box>
                 ) : (
                     <Box>
-                        {loadingImage ? (
-                            <div>
-                                <CircularProgress size={50} sx={{ ml: "45%", mt: "15%" }} disableShrink />
-                            </div>
-                        ) : (
-                            <Box sx={{ flexGrow: 1 }}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={8}>
-                                        <div className={styles.imageStyle}>
-                                            {openFullPageDialog.image &&
-                                                (fileType === "image" ? (
-                                                    <img
-                                                        style={{
-                                                            maxWidth: "90%",
-                                                            maxHeight: "calc(90vh - 64px)",
-                                                        }}
-                                                        src={openFullPageDialog?.image}
-                                                        alt={altText}
-                                                    />
-                                                ) : (
-                                                    <video
-                                                        style={{
-                                                            maxWidth: "90%",
-                                                            maxHeight: "calc(90vh - 64px)",
-                                                        }}
-                                                        autoPlay={true}
-                                                    >
-                                                        <source src={openFullPageDialog?.image} type="video/mp4" />
-                                                    </video>
-                                                ))}
-                                        </div>
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <form className={styles.formFieldsStyle}>
-                                            <TextField fullWidth type="text" disabled label="Naziv slike" value={openFullPageDialog?.name} variant="outlined" />
-                                            <TextField fullWidth type="text" label="Alt slike" value={altText} variant="outlined" onChange={handleAltTextChange} />
-                                            <TextField fullWidth type="text" disabled label="Velicina slike" value={`${(openFullPageDialog?.size / (1024 * 1024))?.toFixed(2)}MB`} variant="outlined" />
-
-                                            {imageDateByImgList && (
-                                                <TextField
-                                                    fullWidth
-                                                    type="text"
-                                                    disabled
-                                                    label="Trenutna dimenzija slike (širina x visina)"
-                                                    value={imageDateByImgList ? `${imageDateByImgList?.file_width} x ${imageDateByImgList?.file_height} px` : ""}
-                                                    variant="outlined"
+                        <Box sx={{ flexGrow: 1 }}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={8}>
+                                    <div className={styles.imageStyle}>
+                                        {openFullPageDialog.image &&
+                                            (fileType === "image" ? (
+                                                <img
+                                                    style={{
+                                                        maxWidth: "90%",
+                                                        maxHeight: "calc(90vh - 64px)",
+                                                    }}
+                                                    src={openFullPageDialog?.image}
+                                                    alt={altText}
                                                 />
-                                            )}
-
-                                            <TextField
-                                                fullWidth
-                                                type="text"
-                                                disabled
-                                                label="Definisana dimenzija za obradu (širina x visina)"
-                                                value={`${openFullPageDialog?.dimensions?.width} x ${openFullPageDialog?.dimensions?.height} px`}
-                                                variant="outlined"
-                                            />
-
-                                            <TextField fullWidth type="text" disabled label="Tip slike" value={openFullPageDialog?.type} variant="outlined" />
-                                            <TextField
-                                                fullWidth
-                                                type="text"
-                                                disabled
-                                                label="Link slike"
-                                                value={openFullPageDialog?.path}
-                                                variant="outlined"
-                                                InputProps={{
-                                                    endAdornment: (
-                                                        <InputAdornment position="end">
-                                                            <IconButton>
-                                                                <CopyToClipboard
-                                                                    text={openFullPageDialog?.path}
-                                                                    onCopy={() => {
-                                                                        setBttnText("Link je kopiran");
-                                                                        setTimeout(() => {
-                                                                            setBttnText("Kopirajte link");
-                                                                        }, 3000);
-                                                                    }}
-                                                                >
-                                                                    <Tooltip title={bttnText} placement="top" arrow>
-                                                                        <ContentCopyIcon sx={{ color: "rgba(0, 0, 0, 0.38)" }} />
-                                                                    </Tooltip>
-                                                                </CopyToClipboard>
-                                                            </IconButton>
-                                                        </InputAdornment>
-                                                    ),
-                                                }}
-                                            />
-                                        </form>
-                                    </Grid>
+                                            ) : (
+                                                <video
+                                                    style={{
+                                                        maxWidth: "90%",
+                                                        maxHeight: "calc(90vh - 64px)",
+                                                    }}
+                                                    autoPlay={true}
+                                                >
+                                                    <source src={openFullPageDialog?.image} type="video/mp4" />
+                                                </video>
+                                            ))}
+                                    </div>
                                 </Grid>
-                            </Box>
-                        )}
+                                <Grid item xs={4}>
+                                    <form className={styles.formFieldsStyle}>
+                                        <TextField fullWidth type="text" disabled label="Naziv slike" value={openFullPageDialog?.name} variant="outlined" />
+                                        <TextField fullWidth type="text" label="Alt slike" value={altText} variant="outlined" onChange={handleAltTextChange} />
+                                        <TextField fullWidth type="text" disabled label="Velicina slike" value={`${(openFullPageDialog?.size / (1024 * 1024))?.toFixed(2)}MB`} variant="outlined" />
+
+                                        {imageDateByImgList && (
+                                            <TextField
+                                                fullWidth
+                                                type="text"
+                                                disabled
+                                                label="Trenutna dimenzija slike (širina x visina)"
+                                                value={imageDateByImgList ? `${imageDateByImgList?.file_width} x ${imageDateByImgList?.file_height} px` : ""}
+                                                variant="outlined"
+                                            />
+                                        )}
+
+                                        <TextField
+                                            fullWidth
+                                            type="text"
+                                            disabled
+                                            label="Definisana dimenzija za obradu (širina x visina)"
+                                            value={`${openFullPageDialog?.dimensions?.width} x ${openFullPageDialog?.dimensions?.height} px`}
+                                            variant="outlined"
+                                        />
+
+                                        <TextField fullWidth type="text" disabled label="Tip slike" value={openFullPageDialog?.type} variant="outlined" />
+                                        <TextField
+                                            fullWidth
+                                            type="text"
+                                            disabled
+                                            label="Link slike"
+                                            value={openFullPageDialog?.path}
+                                            variant="outlined"
+                                            InputProps={{
+                                                endAdornment: (
+                                                    <InputAdornment position="end">
+                                                        <IconButton>
+                                                            <CopyToClipboard
+                                                                text={openFullPageDialog?.path}
+                                                                onCopy={() => {
+                                                                    setBttnText("Link je kopiran");
+                                                                    setTimeout(() => {
+                                                                        setBttnText("Kopirajte link");
+                                                                    }, 3000);
+                                                                }}
+                                                            >
+                                                                <Tooltip title={bttnText} placement="top" arrow>
+                                                                    <ContentCopyIcon sx={{ color: "rgba(0, 0, 0, 0.38)" }} />
+                                                                </Tooltip>
+                                                            </CopyToClipboard>
+                                                        </IconButton>
+                                                    </InputAdornment>
+                                                ),
+                                            }}
+                                        />
+                                    </form>
+                                </Grid>
+                            </Grid>
+                        </Box>
                     </Box>
                 )}
             </DialogContent>
@@ -273,10 +234,6 @@ const ImageDialogFullPage = ({
                         <Button variant="outlined" onClick={handleSaveImageDialogWithAlt} color="success" startIcon={<CheckIcon />}>
                             Sačuvaj
                         </Button>
-                        {/* <Button variant="outlined" component="label" startIcon={<PhotoCamera />}>
-              Nova slika
-              <InputInput name="image" inputProps={{ accept: "image/*" }} id={openFullPageDialog.name} onChange={(e) => handleImageUpload(e)} type="file" sx={{ display: "none" }} />
-            </Button> */}
                         {fileType === "image" && (
                             <Button variant="outlined" onClick={handleOpenEditMode} color="info" startIcon={<EditOutlinedIcon />}>
                                 Obradi sliku

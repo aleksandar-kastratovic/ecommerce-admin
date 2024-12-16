@@ -4,7 +4,7 @@ import AuthContext from "../../../store/auth-contex";
 import basic_data from "./jsons/review_status_form.json";
 import Form from "../../../components/shared/Form/Form";
 import { useDispatch } from "react-redux";
-import { triggerListPageReload } from "../../../store/reloads/reloadsReducer";
+import { triggerComponentRerender } from "../../../store/reloads/reloadsReducer";
 
 const ChangeReviewStatusForm = ({ id, setOpenModal, initialStatus }) => {
     const dispatch = useDispatch();
@@ -19,7 +19,7 @@ const ChangeReviewStatusForm = ({ id, setOpenModal, initialStatus }) => {
             .then(() => {
                 toast.success("Uspešno!");
                 setOpenModal({ show: false });
-                dispatch(triggerListPageReload("reviewsMarks"));
+                dispatch(triggerComponentRerender("reviewsMarks"));
                 setIsLoading(false);
             })
             .catch(() => {

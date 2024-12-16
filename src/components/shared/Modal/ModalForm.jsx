@@ -227,6 +227,7 @@ const ModalForm = ({
                                 />
                             )}
                             <Form
+                                reloadComponentIDs={modalFormId ? [modalFormId] : false}
                                 formFields={formFields}
                                 initialData={data}
                                 onSubmit={saveData}

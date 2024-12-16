@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 
 import ImageUpload from "../ImageUpload/ImageUpload";
 import ImageButton from "../ImageButton/ImageButton";
@@ -25,9 +25,9 @@ import FileButton from "../FileButton/FileButton";
 import InputMultipleFiles from "../InputMultipleFiles/InputMultipleFiles";
 import Slider from "../Slider/Slider";
 import InputMultipleImagesOne from "../InputMultipleImages/InputMultipleImagesOne";
-import ImageDialog from "../Dialogs/ImageDialog";
 
 const CreateForm = ({
+    reloadComponentIDs,
     item = {},
     onChangeHandler = () => {},
     onImageUpload = () => {},
@@ -332,6 +332,7 @@ const CreateForm = ({
                 case "multiple_images_one":
                     formItem = (
                         <InputMultipleImagesOne
+                            reloadComponentIDs={reloadComponentIDs}
                             label={item.field_name}
                             list={Array.isArray(value) ? value : []}
                             name={item.prop_name}

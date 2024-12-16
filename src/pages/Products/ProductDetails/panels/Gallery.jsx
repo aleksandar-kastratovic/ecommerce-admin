@@ -44,7 +44,6 @@ const Gallery = ({ productId }) => {
     };
 
     const handleSubmit = async (data, options = {}) => {
-        // setLoading(true);
         setImageUploadLoading(true);
         const allowedFormats = imageInfo ? imageInfo.allow_format.map((format) => format?.mime_type.toLowerCase()) : [];
         const allowSize = imageInfo ? Number(imageInfo.allow_size) : 0;

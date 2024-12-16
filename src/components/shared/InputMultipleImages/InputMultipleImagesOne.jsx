@@ -8,6 +8,8 @@ import MultipleImages from "../MultipleImages/MultipleImages";
 import DeleteDialog from "../Dialogs/DeleteDialog";
 import AuthContext from "../../../store/auth-contex";
 import { toast } from "react-toastify";
+import { triggerComponentRerender } from "../../../store/reloads/reloadsReducer";
+import { useDispatch } from "react-redux";
 
 const getLoadedFile = (file, i, len) => {
     return new Promise((resolve) => {
@@ -31,6 +33,7 @@ const getLoadedFile = (file, i, len) => {
 };
 
 export const InputMultipleImagesOne = ({
+    reloadComponentIDs,
     list = [],
     onChangeHandler = () => {},
     accept = "image/*",
@@ -44,6 +47,7 @@ export const InputMultipleImagesOne = ({
     ui_prop,
     allowedFileTypes,
 }) => {
+    const dispatch = useDispatch();
     const {
         fileUpload: {
             allow_format,
@@ -152,6 +156,13 @@ export const InputMultipleImagesOne = ({
                                 };
                                 newImagesArray.push(newObj);
                                 setImageList([...imageList, ...newImagesArray]);
+
+                                // if there are parent component IDs to render, render them
+                                if (reloadComponentIDs && reloadComponentIDs.length > 0) {
+                                    reloadComponentIDs.forEach((componentId) => {
+                                        dispatch(triggerComponentRerender(componentId));
+                                    });
+                                }
                             })
                             .catch((err) => {
                                 toast.warning(err.response.data.message ?? err?.response?.data?.payload?.message ?? "Greška");

@@ -1,7 +1,5 @@
 import { useCallback, useEffect, useState, useContext } from "react";
-
 import Grid from "@mui/material/Grid";
-
 import ImageDialogFullPage from "../MultipleImages/ImageDialogFullPage/ImageDialogFullPage";
 import ImageListRow from "../MultipleImages/ImageListRow/ImageListRow";
 import MultipleImages from "../MultipleImages/MultipleImages";
