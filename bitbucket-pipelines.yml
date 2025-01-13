@@ -320,3 +320,9 @@ pipelines:
               <<: *execute
               name: SovaPrintFactory
               deployment: sovaprintfactory
+
+    prod-promobi:
+        - step:
+              <<: *execute
+              name: ProMobi
+              deployment: promobi
