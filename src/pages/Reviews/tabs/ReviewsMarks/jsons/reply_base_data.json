@@ -1,0 +1,32 @@
+[
+    {
+        "id": "product_name",
+        "type": "text",
+        "label": "Proizvod",
+        "value": null
+    },
+    {
+        "id": "display_name",
+        "type": "text",
+        "label": "Autor",
+        "value": null
+    },
+    {
+        "id": "display_comment",
+        "type": "html",
+        "label": "Komentar",
+        "value": null
+    },
+    {
+        "id": "mark",
+        "type": "mark",
+        "label": "Ocena",
+        "value": null
+    },
+    {
+        "id": "created_at",
+        "type": "date",
+        "label": "Datum",
+        "value": null
+    }
+]

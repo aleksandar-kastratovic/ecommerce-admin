@@ -7,13 +7,14 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Alert from "@mui/material/Alert";
 
 import { updateDataForDataViewer } from "../utils/dataFiltering";
-import { useSingleMarkData } from "../hooks/marksData";
-import display_base_review_data from "./jsons/display_reply_review_data.json";
+import { useSingleDataByUrlAndID } from "../../../hooks/singleData";
 
-const ReplyModal = ({ openModal, setOpenModal }) => {
+const ReplyModal = ({ defaultURL, openModal, setOpenModal, immutableData }) => {
     const reviewID = openModal?.id;
-    const apiURL = `admin/reviews/product-items-b2c/marks/reply/${reviewID}`;
-    const { data, isLoading, error, refetch } = useSingleMarkData(apiURL, reviewID);
+    const { listPageComponentId, reply_base_data, reply_form_fields } = immutableData;
+
+    const apiURL = `${defaultURL}/reply/${reviewID}`;
+    const { data, isLoading, error, refetch } = useSingleDataByUrlAndID(apiURL, reviewID);
 
     useEffect(() => {
         if (openModal.show) {
@@ -37,8 +38,8 @@ const ReplyModal = ({ openModal, setOpenModal }) => {
                     <>
                         {data && (
                             <>
-                                <SimpleDataViewer mainTitle="Osnovni podaci" data={updateDataForDataViewer(display_base_review_data, data)} />{" "}
-                                <ReplyToReviewForm id={data.id} admin_name={data.admin_name} setOpenModal={setOpenModal} />
+                                <SimpleDataViewer mainTitle="Osnovni podaci" data={updateDataForDataViewer(reply_base_data, data)} />{" "}
+                                <ReplyToReviewForm formFields={reply_form_fields} defaultURL={defaultURL} id={data.id} admin_name={data.admin_name} setOpenModal={setOpenModal} listPageComponentId={listPageComponentId} />
                             </>
                         )}
                     </>

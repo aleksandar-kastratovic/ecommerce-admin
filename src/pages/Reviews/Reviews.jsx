@@ -4,19 +4,28 @@ import IconList from "../../helpers/icons";
 import DetailsPage from "../../components/shared/ListPage/DetailsPage/DetailsPage";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../helpers/functions";
 import ReviewsMarks from "./tabs/ReviewsMarks/ReviewsMarks";
+import ReviewsComments from "./tabs/ReviewsComments/ReviewsComments";
 
 const Reviews = () => {
-    const activeTab = getUrlQueryStringParam("tab") ?? "ratings";
+    const activeTab = getUrlQueryStringParam("tab") ?? "ratingsMarks";
     const navigate = useNavigate();
 
     const fields = [
         {
-            id: "ratings",
+            id: "ratingsMarks",
             name: "Ocene",
             icon: IconList.star,
             enabled: true,
             component: <ReviewsMarks />,
             title: "Ocene",
+        },
+        {
+            id: "ratingsComments",
+            name: "Komentari",
+            icon: IconList.comment,
+            enabled: true,
+            component: <ReviewsComments />,
+            title: "Komentari",
         },
     ];
 

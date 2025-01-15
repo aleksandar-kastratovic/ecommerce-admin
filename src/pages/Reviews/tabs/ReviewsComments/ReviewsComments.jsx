@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { triggerComponentRerender } from "../../../../store/reloads/reloadsReducer";
 
-const ReviewsMarks = () => {
+const ReviewsComments = () => {
     const dispatch = useDispatch();
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
@@ -37,10 +37,10 @@ const ReviewsMarks = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    api.post(`admin/reviews/product-items-b2c/marks/list/approve`, { id: rowData.id })
+                    api.post(`admin/reviews/product-items-b2c/comments/list/approve`, { id: rowData.id })
                         .then(() => {
                             toast.success("Uspešno prihvaćena recenzija!");
-                            dispatch(triggerComponentRerender("reviewsMarks"));
+                            dispatch(triggerComponentRerender("reviewsComments"));
                         })
                         .catch((error) => {
                             toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
@@ -63,10 +63,10 @@ const ReviewsMarks = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    api.post(`admin/reviews/product-items-b2c/marks/list/reject`, { id: rowData.id })
+                    api.post(`admin/reviews/product-items-b2c/comments/list/reject`, { id: rowData.id })
                         .then(() => {
                             toast.success("Uspešno odbijena recenzija!");
-                            dispatch(triggerComponentRerender("reviewsMarks"));
+                            dispatch(triggerComponentRerender("reviewsComments"));
                         })
                         .catch((error) => {
                             toast.warning(error.response.data.message ?? error?.response?.data?.payload?.message ?? "Greška");
@@ -118,7 +118,7 @@ const ReviewsMarks = () => {
             clickHandler: {
                 type: "",
                 fnc: (rowData) => {
-                    dispatch(triggerComponentRerender("reviewsMarks"));
+                    dispatch(triggerComponentRerender("reviewsComments"));
 
                     return setOpenPreviewModal({ show: true, id: rowData.id });
                 },
@@ -131,9 +131,9 @@ const ReviewsMarks = () => {
     return (
         <>
             <ListPage
-                listPageId="reviewsMarks"
-                apiUrl="admin/reviews/product-items-b2c/marks/list"
-                deleteUrl={`admin/reviews/product-items-b2c/marks/list/confirm`}
+                listPageId="reviewsComments"
+                apiUrl="admin/reviews/product-items-b2c/comments/list"
+                deleteUrl={`admin/reviews/product-items-b2c/comments/list/confirm`}
                 showNewButton={false}
                 columnFields={tblFields}
                 customActions={customActions}
@@ -141,19 +141,19 @@ const ReviewsMarks = () => {
             <PreviewDataModal
                 openModal={openPreviewModal}
                 setOpenModal={setOpenPreviewModal}
-                defaultURL={"admin/reviews/product-items-b2c/marks"}
+                defaultURL={"admin/reviews/product-items-b2c/comments"}
                 immutableData={{
-                    listPageComponentId: "reviewsMarks",
+                    listPageComponentId: "reviewsComments",
                     status_form_fields,
                     base_data,
                 }}
             />
             <ReplyModal
-                defaultURL={"admin/reviews/product-items-b2c/marks"}
+                defaultURL={"admin/reviews/product-items-b2c/comments"}
                 openModal={openReplyModal}
                 setOpenModal={setOpenReplyModal}
                 immutableData={{
-                    listPageComponentId: "reviewsMarks",
+                    listPageComponentId: "reviewsComments",
                     reply_base_data,
                     reply_form_fields
                 }}
@@ -162,4 +162,4 @@ const ReviewsMarks = () => {
     );
 };
 
-export default ReviewsMarks;
+export default ReviewsComments;

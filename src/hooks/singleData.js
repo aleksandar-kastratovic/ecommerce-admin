@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 import { useContext } from "react";
-import AuthContext from "../../../store/auth-contex";
+import AuthContext from "../store/auth-contex";
 
-export const useSingleMarkData = (apiURL, reviewID) => {
+export const useSingleDataByUrlAndID = (apiURL, reviewID) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
 

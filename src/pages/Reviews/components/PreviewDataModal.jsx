@@ -3,16 +3,15 @@ import ListPageModalWrapper from "../../../components/shared/Modal/ListPageModal
 import { Box } from "@mui/material";
 import ChangeReviewStatusForm from "../forms/ChangeReviewStatusForm";
 import CircularProgress from "@mui/material/CircularProgress";
-import display_base_review_data from "./jsons/display_base_review_data.json";
 import SimpleDataViewer from "../../../components/shared/DataViewerFromJSON/SimpleDataViewer";
 import { updateDataForDataViewer } from "../utils/dataFiltering";
-import { useSingleMarkData } from "../hooks/marksData";
+import { useSingleDataByUrlAndID } from "../../../hooks/singleData";
 import Alert from "@mui/material/Alert";
 
-const PreviewDataModal = ({ openModal, setOpenModal }) => {
+const PreviewDataModal = ({ openModal, setOpenModal, defaultURL, immutableData }) => {
     const reviewID = openModal?.id;
-    const apiURL = `admin/reviews/product-items-b2c/marks/basic-data/${reviewID}`;
-    const { data, isLoading, error, refetch } = useSingleMarkData(apiURL, reviewID);
+    const { listPageComponentId, status_form_fields, base_data } = immutableData;
+    const { data, isLoading, error, refetch } = useSingleDataByUrlAndID(`${defaultURL}/basic-data/${reviewID}`, reviewID);
 
     useEffect(() => {
         if (openModal.show) {
@@ -36,8 +35,15 @@ const PreviewDataModal = ({ openModal, setOpenModal }) => {
                     <>
                         {data && (
                             <>
-                                <SimpleDataViewer mainTitle="Osnovni podaci" data={updateDataForDataViewer(display_base_review_data, data)} />{" "}
-                                <ChangeReviewStatusForm id={data.id} setOpenModal={setOpenModal} initialStatus={data.status !== "new" ? data.status : {}} />
+                                <SimpleDataViewer mainTitle="Osnovni podaci" data={updateDataForDataViewer(base_data, data)} />{" "}
+                                <ChangeReviewStatusForm
+                                    formFields={status_form_fields}
+                                    defaultURL={defaultURL}
+                                    id={data.id}
+                                    setOpenModal={setOpenModal}
+                                    initialStatus={data.status !== "new" ? data.status : {}}
+                                    listPageComponentId={listPageComponentId}
+                                />
                             </>
                         )}
                     </>
