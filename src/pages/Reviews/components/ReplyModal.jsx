@@ -39,7 +39,14 @@ const ReplyModal = ({ defaultURL, openModal, setOpenModal, immutableData }) => {
                         {data && (
                             <>
                                 <SimpleDataViewer mainTitle="Osnovni podaci" data={updateDataForDataViewer(reply_base_data, data)} />{" "}
-                                <ReplyToReviewForm formFields={reply_form_fields} defaultURL={defaultURL} id={data.id} admin_name={data.admin_name} setOpenModal={setOpenModal} listPageComponentId={listPageComponentId} />
+                                <ReplyToReviewForm
+                                    formFields={reply_form_fields}
+                                    defaultURL={defaultURL}
+                                    id={data.id}
+                                    admin_name={data.admin_name}
+                                    setOpenModal={setOpenModal}
+                                    listPageComponentId={listPageComponentId}
+                                />
                             </>
                         )}
                     </>

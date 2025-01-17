@@ -23,9 +23,11 @@ const SimpleDataViewer = ({ data, mainTitle }) => {
 
     return (
         <>
-            <Typography variant="h5" sx={{ mb: 5 }}>
-                {mainTitle}
-            </Typography>
+            {mainTitle && (
+                <Typography variant="h5" sx={{ mb: 5 }}>
+                    {mainTitle}
+                </Typography>
+            )}
 
             {data.map((item) => (
                 <div key={item.id} style={{ marginBottom: "16px" }}>

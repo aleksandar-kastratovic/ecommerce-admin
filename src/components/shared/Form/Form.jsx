@@ -225,8 +225,11 @@ const Form = ({
     };
 
     useEffect(() => {
-        if (!inPlaceInput.enabled) {
-            setData(initialData);
+        if (!inPlaceInput.enabled && initialData) {
+            setData((prevData) => ({
+                ...prevData,
+                ...initialData,
+            }));
         }
     }, [initialData]);
 

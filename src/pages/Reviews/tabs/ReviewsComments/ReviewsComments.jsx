@@ -88,27 +88,13 @@ const ReviewsComments = () => {
             },
             position: 3,
             clickHandler: {
-                type: "",
+                type: "navigate",
                 fnc: (rowData) => {
-                    return setOpenPreviewModal({ show: true, id: rowData.id_parent });
+                    return `/reviews/comment-details/${rowData.id_parent}`;
                 },
             },
             icon: IconList.comment,
             title: "Glavni komentar",
-        },
-
-        reply: {
-            type: "reply",
-            display: true,
-            position: 4,
-            clickHandler: {
-                type: "",
-                fnc: (rowData) => {
-                    return setOpenReplyModal({ show: true, id: rowData.id });
-                },
-            },
-            icon: "reply",
-            title: "Odgovori",
         },
 
         key: {
@@ -116,13 +102,19 @@ const ReviewsComments = () => {
             display: true,
             position: 5,
             clickHandler: {
-                type: "",
+                type: "navigate",
                 fnc: (rowData) => {
-                    dispatch(triggerComponentRerender("reviewsComments"));
-
-                    return setOpenPreviewModal({ show: true, id: rowData.id });
+                    return `/reviews/comment-details/${rowData.id}?page=1`;
                 },
             },
+            // clickHandler: {
+            //     type: "",
+            //     fnc: (rowData) => {
+            //         dispatch(triggerComponentRerender("reviewsComments"));
+
+            //         return setOpenPreviewModal({ show: true, id: rowData.id });
+            //     },
+            // },
             icon: "preview",
             title: "Pregledaj",
         },
@@ -155,7 +147,7 @@ const ReviewsComments = () => {
                 immutableData={{
                     listPageComponentId: "reviewsComments",
                     reply_base_data,
-                    reply_form_fields
+                    reply_form_fields,
                 }}
             />
         </>

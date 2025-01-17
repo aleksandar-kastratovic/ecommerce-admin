@@ -4,7 +4,7 @@ import Form from "../../../components/shared/Form/Form";
 import { useDispatch } from "react-redux";
 import { handleReviewStatusSubmit } from "./handlers";
 
-const ChangeReviewStatusForm = ({ defaultURL, id, setOpenModal, initialStatus, formFields, listPageComponentId }) => {
+const ChangeReviewStatusForm = ({ defaultURL, id, setOpenModal = false, initialStatus, formFields, listPageComponentId }) => {
     const dispatch = useDispatch();
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;

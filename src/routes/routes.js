@@ -93,6 +93,8 @@ import Codes from "../pages/Promotions/PromoCodes/PromoCodesDetails/Codes/Codes"
 import { Reports } from "../pages/Reports/reports";
 import PromotionReports from "../pages/PromotionsReports/PromotionReports";
 import Reviews from "../pages/Reviews/Reviews";
+import ReviewsCommentDetails from "../pages/Reviews/tabs/ReviewsComments/ReviewsCommentDetails";
+import AddCommentReply from "../pages/Reviews/tabs/ReviewsComments/AddCommentReply";
 
 // import B2CReclamations from "../pages/B2CReclamations/B2CReclamations";
 // import B2CReclamationsDetails from "../pages/B2CReclamations/B2CReclamationsDetails/B2CReclamationsDetails";
@@ -214,6 +216,8 @@ const screens = {
         SALE,
         Reviews,
         [
+            ["comment-details/:nid", ReviewsCommentDetails],
+            ["comment-details/:nid/reply/new", AddCommentReply],
             // ["reviews-ratings/:nid", ReviewsMarks],
             // ["promotions-cart-summary-campaigns/:nid", PromotionsCartSummaryDetails],
             // ["promotions-delivery-campaigns/:nid", PromotionsDeliveryCampaignsDetails],
