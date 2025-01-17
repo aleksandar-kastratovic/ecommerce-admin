@@ -49,19 +49,22 @@ const ReviewsCommentDetails = () => {
                                 listPageComponentId={listPageComponentId}
                             />
 
-                            <Typography variant="h5" sx={{ mt: 6, mb: 6 }}>
-                                Odgovori na komentar
-                            </Typography>
-
-                            <ListPage
-                                listPageId="ReviewsCommentDetailsTable"
-                                apiUrl={`/admin/reviews/product-items-b2c/comments/replies/${reviewID}`}
-                                title=" "
-                                columnFields={tbFields}
-                                showNewButton={!commentData.id_parent ? true : false}
-                                customActions={customActions}
-                                customNewButtonPath={`${pathname}/reply/new`}
-                            />
+                            {commentData.id_parent === null && (
+                                <>
+                                    <Typography variant="h5" sx={{ mt: 6, mb: 6 }}>
+                                        Odgovori na komentar
+                                    </Typography>
+                                    <ListPage
+                                        listPageId="ReviewsCommentDetailsTable"
+                                        apiUrl={`/admin/reviews/product-items-b2c/comments/replies/${reviewID}`}
+                                        title=" "
+                                        columnFields={tbFields}
+                                        showNewButton={!commentData.id_parent ? true : false}
+                                        customActions={customActions}
+                                        customNewButtonPath={`${pathname}/reply/new`}
+                                    />
+                                </>
+                            )}
                         </>
                     )}
                 </>

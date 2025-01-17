@@ -1,18 +1,19 @@
 import { useState, useContext } from "react";
 import ListPage from "../../../../components/shared/ListPage/ListPage";
-import tblFields from "./jsons/tbFields.json";
-import status_form_fields from "./jsons/forms/status_form_fields.json";
-import reply_form_fields from "./jsons/forms/reply_form_fields.json";
-import reply_base_data from "./jsons/reply_base_data.json";
-import base_data from "./jsons/base_data.json";
-import { PreviewDataModal, ReplyModal } from "../../components";
+import tblFields from "../../../Reviews/tabs/ReviewsComments/jsons/tbFields.json";
+import status_form_fields from "../../../Reviews/tabs/ReviewsComments/jsons/forms/status_form_fields.json";
+import reply_form_fields from "../../../Reviews/tabs/ReviewsComments/jsons/forms/reply_form_fields.json";
+import reply_base_data from "../../../Reviews/tabs/ReviewsComments/jsons/reply_base_data.json";
+import base_data from "../../../Reviews/tabs/ReviewsComments/jsons/base_data.json";
+import { PreviewDataModal, ReplyModal } from "../../../Reviews/components";
 import IconList from "../../../../helpers/icons";
 import AuthContext from "../../../../store/auth-contex";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { triggerComponentRerender } from "../../../../store/reloads/reloadsReducer";
 
-const ReviewsComments = () => {
+const Comments = ({ productId }) => {
+
     const dispatch = useDispatch();
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
@@ -116,8 +117,8 @@ const ReviewsComments = () => {
         <>
             <ListPage
                 listPageId="reviewsComments"
-                apiUrl="admin/reviews/product-items-b2c/comments/list"
-                deleteUrl={`admin/reviews/product-items-b2c/comments/list/confirm`}
+                apiUrl={`admin/product-items/reviews/product-items-b2c/comments/list/${productId}`}
+                deleteUrl={`admin/product-items/reviews/product-items-b2c/comments/list/${productId}/confirm`}
                 showNewButton={false}
                 columnFields={tblFields}
                 customActions={customActions}
@@ -125,7 +126,7 @@ const ReviewsComments = () => {
             <PreviewDataModal
                 openModal={openPreviewModal}
                 setOpenModal={setOpenPreviewModal}
-                defaultURL={"admin/reviews/product-items-b2c/comments"}
+                defaultURL={`admin/product-items/reviews/product-items-b2c/comments/list/${productId}`}
                 immutableData={{
                     listPageComponentId: "reviewsComments",
                     status_form_fields,
@@ -133,7 +134,7 @@ const ReviewsComments = () => {
                 }}
             />
             <ReplyModal
-                defaultURL={"admin/reviews/product-items-b2c/comments"}
+                defaultURL={`admin/product-items/reviews/product-items-b2c/comments/list/${productId}`}
                 openModal={openReplyModal}
                 setOpenModal={setOpenReplyModal}
                 immutableData={{
@@ -146,4 +147,4 @@ const ReviewsComments = () => {
     );
 };
 
-export default ReviewsComments;
+export default Comments;
