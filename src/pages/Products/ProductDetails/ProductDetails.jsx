@@ -18,7 +18,7 @@ import Gallery from "./panels/Gallery";
 import Document from "./panels/Document";
 import DisplayIn from "./panels/DisplayIn";
 import Comments from "./panels/Comments";
-
+import Marks from "./panels/Marks";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 import AuthContext from "../../../store/auth-contex";
 import DigitalMaterial from "./panels/DigitalMaterial";
@@ -206,13 +206,19 @@ const ProductDetails = () => {
                     <ProductDetailsVariation parentId={data?.id} isParentDigital={data?.is_digital} />
                 ),
         },
-
         {
             id: "comments",
             name: "Komentari",
             icon: IconList.comment,
             enabled: data?.id,
             component: <Comments productId={prodId} />,
+        },
+        {
+            id: "marks",
+            name: "Ocene",
+            icon: IconList.star,
+            enabled: data?.id,
+            component: <Marks productId={prodId} />,
         },
     ];
 
