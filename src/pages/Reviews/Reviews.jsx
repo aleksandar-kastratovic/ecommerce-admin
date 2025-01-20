@@ -5,6 +5,7 @@ import DetailsPage from "../../components/shared/ListPage/DetailsPage/DetailsPag
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../helpers/functions";
 import ReviewsMarks from "./tabs/ReviewsMarks/ReviewsMarks";
 import ReviewsComments from "./tabs/ReviewsComments/ReviewsComments";
+import ReviewsQuestions from "./tabs/ReviewsQuestions/ReviewsQuestions";
 
 const Reviews = () => {
     const activeTab = getUrlQueryStringParam("tab") ?? "ratingsMarks";
@@ -26,6 +27,14 @@ const Reviews = () => {
             enabled: true,
             component: <ReviewsComments />,
             title: "Komentari",
+        },
+        {
+            id: "ratingsQuestions",
+            name: "Pitanja i odgovori",
+            icon: IconList.questionMark,
+            enabled: true,
+            component: <ReviewsQuestions />,
+            title: "Pitanja i odgovori",
         },
     ];
 

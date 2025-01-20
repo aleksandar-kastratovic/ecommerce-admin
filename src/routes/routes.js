@@ -95,6 +95,8 @@ import PromotionReports from "../pages/PromotionsReports/PromotionReports";
 import Reviews from "../pages/Reviews/Reviews";
 import ReviewsCommentDetails from "../pages/Reviews/tabs/ReviewsComments/ReviewsCommentDetails";
 import AddCommentReply from "../pages/Reviews/tabs/ReviewsComments/AddCommentReply";
+import ReviewsQuestionDetails from "../pages/Reviews/tabs/ReviewsQuestions/ReviewsQuestionDetails";
+import AddQuestionAnswers from "../pages/Reviews/tabs/ReviewsQuestions/AddQuestionAnswers";
 
 // import B2CReclamations from "../pages/B2CReclamations/B2CReclamations";
 // import B2CReclamationsDetails from "../pages/B2CReclamations/B2CReclamationsDetails/B2CReclamationsDetails";
@@ -218,6 +220,8 @@ const screens = {
         [
             ["comment-details/:nid", ReviewsCommentDetails],
             ["comment-details/:nid/reply/new", AddCommentReply],
+            ["question-details/:nid", ReviewsQuestionDetails],
+            ["question-details/:nid/answers/new", AddQuestionAnswers],
             // ["reviews-ratings/:nid", ReviewsMarks],
             // ["promotions-cart-summary-campaigns/:nid", PromotionsCartSummaryDetails],
             // ["promotions-delivery-campaigns/:nid", PromotionsDeliveryCampaignsDetails],

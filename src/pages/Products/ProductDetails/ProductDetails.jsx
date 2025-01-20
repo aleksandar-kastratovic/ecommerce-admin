@@ -19,6 +19,7 @@ import Document from "./panels/Document";
 import DisplayIn from "./panels/DisplayIn";
 import Comments from "./panels/Comments";
 import Marks from "./panels/Marks";
+import Questions from "./panels/Questions";
 import { getUrlQueryStringParam, setUrlQueryStringParam } from "../../../helpers/functions";
 import AuthContext from "../../../store/auth-contex";
 import DigitalMaterial from "./panels/DigitalMaterial";
@@ -219,6 +220,13 @@ const ProductDetails = () => {
             icon: IconList.star,
             enabled: data?.id,
             component: <Marks productId={prodId} />,
+        },
+        {
+            id: "questions-and-answers",
+            name: "Pitanja i odgovori",
+            icon: IconList.questionMark,
+            enabled: data?.id,
+            component: <Questions productId={prodId} />,
         },
     ];
 
