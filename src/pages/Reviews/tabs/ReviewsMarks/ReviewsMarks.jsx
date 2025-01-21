@@ -99,7 +99,12 @@ const ReviewsMarks = () => {
 
         reply: {
             type: "reply",
-            display: true,
+            display: (rowData) => {
+                if (rowData?.type === "Ocena") {
+                    return true;
+                }
+                return false;
+            },
             position: 4,
             clickHandler: {
                 type: "",
@@ -155,7 +160,7 @@ const ReviewsMarks = () => {
                 immutableData={{
                     listPageComponentId: "reviewsMarks",
                     reply_base_data,
-                    reply_form_fields
+                    reply_form_fields,
                 }}
             />
         </>
