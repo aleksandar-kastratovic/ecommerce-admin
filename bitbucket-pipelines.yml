@@ -326,3 +326,9 @@ pipelines:
               <<: *execute
               name: ProMobi
               deployment: promobi
+
+    prod-principal:
+        - step:
+              <<: *execute
+              name: Principal
+              deployment: principal
