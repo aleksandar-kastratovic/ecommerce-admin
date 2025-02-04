@@ -13,7 +13,7 @@ import Switch from "@mui/material/Switch";
 import TextField from "@mui/material/TextField";
 import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
 import Chip from "@mui/material/Chip";
-import Input, { inputClasses } from "@mui/material/Input";
+import Input from "@mui/material/Input";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -26,7 +26,6 @@ import { toast } from "react-toastify";
 import AuthContext from "../../../../store/auth-contex";
 import Box from "@mui/material/Box";
 import CloseIcon from "@mui/icons-material/Close";
-import { useFileSize } from "../../../../hooks/useFileSize";
 import Button from "../../Button/Button";
 
 const generateBootstrapClasses = (columns) => {
@@ -1147,38 +1146,13 @@ export const FilePicker = ({
     handleRemoveFile = () => {},
 }) => {
     const ref = useRef();
-    const [attachment, setAttachment] = useState(null);
     const [filename, setFilename] = useState("");
-
-    const { size, type } = useFileSize(selectedFile);
 
     const handleChange = (event) => {
         const files = Array.from(event.target.files);
         const [file] = files;
 
-        const fileExtension = file.name.split(".").pop().toLowerCase();
-        const supportedTypes = uiProp?.fileUpload?.allow_format?.map((format) => format?.mime_type);
-        const allowedSize = uiProp?.fileUpload?.allow_size;
-        if (type) {
-            if (!supportedTypes?.includes(type)) {
-                toast.error("Pogrešan tip fajla.");
-                return;
-            }
-        }
-        if (size) {
-            if (size > allowedSize) {
-                toast.error("Fajl je prevelik.");
-                return;
-            }
-        }
-
-        // blobToData(file).then((result) => {
-        //   let obj = {
-        //     base_64: result,
-        //     name: file?.name,
-        //     file: file
-        //   }
-        // });
+        blobToData(file);
 
         const reader = new FileReader();
         reader.onload = (e) => {
@@ -1193,7 +1167,22 @@ export const FilePicker = ({
             onFilePicked(obj);
         };
         reader.readAsDataURL(file);
-        setAttachment(file);
+    };
+
+    const getFileTypeLabel = (value) => {
+        if (!value.startsWith("data:")) return value;
+
+        const mimeType = value.split(";")[0].split(":")[1];
+
+        if (!mimeType) return "Base64 fajl";
+
+        if (mimeType.startsWith("video/")) return "Base64 video";
+        if (mimeType.startsWith("image/")) return "Base64 slika";
+        if (mimeType.startsWith("audio/")) return "Base64 audio";
+        if (mimeType === "application/pdf") return "Base64 PDF";
+        if (mimeType === "application/json") return "Base64 JSON";
+
+        return "Base64 fajl";
     };
 
     const renderSelectedFiles = () => {
@@ -1225,7 +1214,7 @@ export const FilePicker = ({
             );
         } else {
             return filename || value ? (
-                <span style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Izabrani fajl: {filename || value}</span>
+                <span style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Izabrani fajl: {filename || getFileTypeLabel(value)}</span>
             ) : (
                 <span style={{ fontSize: "0.9rem", WebkitTextFillColor: disabled ? "rgba(0, 0, 0, 0.38)" : "initial" }}>Kliknite ovde kako biste odabrali fajl.</span>
             );
