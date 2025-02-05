@@ -97,6 +97,7 @@ import ReviewsCommentDetails from "../pages/Reviews/tabs/ReviewsComments/Reviews
 import AddCommentReply from "../pages/Reviews/tabs/ReviewsComments/AddCommentReply";
 import ReviewsQuestionDetails from "../pages/Reviews/tabs/ReviewsQuestions/ReviewsQuestionDetails";
 import AddQuestionAnswers from "../pages/Reviews/tabs/ReviewsQuestions/AddQuestionAnswers";
+import SystemDocumentation from "../pages/SystemDocumentation/Swagger/Swagger";
 
 // import B2CReclamations from "../pages/B2CReclamations/B2CReclamations";
 // import B2CReclamationsDetails from "../pages/B2CReclamations/B2CReclamationsDetails/B2CReclamationsDetails";
@@ -205,6 +206,7 @@ const screens = {
     MANUFACTURERS: ["/manufacturers", "Proizvođači", IconList.factory, COMPANY_SETTINGS, Manufacturers],
 
     ADMINCFG: ["/admin-settings", "Admin podešavanja", IconList.settings, SETTINGS, AdminSettings, [[":AdminId", AdminSettingsDetails]]],
+    SYSTEM_DOCUMENTATION: ["/system-documentation", "Dokumentacija", IconList.settings, SETTINGS, SystemDocumentation],
     B2BCFG: ["/b2b-settings", "B2B podešavanja", IconList.settings, SETTINGS, B2Bsettings, [[":B2BId", B2BSettingsDetails]]],
     B2CCFG: ["/b2c-settings", "B2C podešavanja", IconList.settings, SETTINGS, B2CSettings, [[":B2CId", B2CSettingsDetails]]],
     ADMIN_SCRIPTS: ["/scripts", "Skripte", IconList.description, SETTINGS, Scripts],
