@@ -5,6 +5,7 @@ import useAPI from "../../../api/api";
 import { useQuery } from "react-query";
 
 const Swagger = () => {
+  const [selectedSpec, setSelectedSpec] = useState("");
   const [yamlFiles, setYamlFiles] = useState([]);
   const api = useAPI();
 
@@ -42,9 +43,18 @@ const Swagger = () => {
   if (error) return <p>Error loading Swagger documentation</p>;
 
   return (
+    <>
+    <h2>Select API Specification</h2>
+    <select onChange={(e) => setSelectedSpec(e.target.value)} value={selectedSpec}>
+      {yamlFiles.length > 0 && yamlFiles?.map((file, index) => (
+        <option key={index} value={file.url}>
+          {file.name}
+        </option>
+      ))}
+    </select>
+
     <SwaggerUI
-      url={yamlFiles.length > 0 ? yamlFiles[0].url : ""}
-      urls={yamlFiles}  
+      url={selectedSpec}
       supportedSubmitMethods={[
         "get",
         "post",
@@ -61,7 +71,6 @@ const Swagger = () => {
         request.headers["Authorization"] = `Bearer ${api.user?.access_token}`;
         return request;
       }}
-
       plugins={[
         function () {
           return {
@@ -80,12 +89,11 @@ const Swagger = () => {
           };
         },
       ]}
-      
-      docExpansion="none"
       deepLinking={true}
       persistAuthorization={true}
       displayRequestDuration={true}
     />
+    </>
   );
 };
 
