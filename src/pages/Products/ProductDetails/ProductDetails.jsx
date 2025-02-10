@@ -208,18 +208,18 @@ const ProductDetails = () => {
                 ),
         },
         {
-            id: "comments",
-            name: "Komentari",
-            icon: IconList.comment,
-            enabled: data?.id,
-            component: <Comments productId={prodId} />,
-        },
-        {
             id: "marks",
             name: "Ocene",
             icon: IconList.star,
             enabled: data?.id,
             component: <Marks productId={prodId} />,
+        },
+        {
+            id: "comments",
+            name: "Komentari",
+            icon: IconList.comment,
+            enabled: data?.id,
+            component: <Comments productId={prodId} />,
         },
         {
             id: "questions-and-answers",
