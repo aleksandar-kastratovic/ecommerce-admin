@@ -68,6 +68,19 @@
         "input_type": "input"
     },
     {
+        "field_name": "Ukupno odgovora",
+        "prop_name": "total_replies",
+        "in_main_table": false,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "",
+        "ui_prop": "xyz",
+        "sortable": true,
+        "input_type": "input"
+    },
+    {
         "field_name": "Lajkovi",
         "prop_name": "total_likes",
         "in_main_table": false,
