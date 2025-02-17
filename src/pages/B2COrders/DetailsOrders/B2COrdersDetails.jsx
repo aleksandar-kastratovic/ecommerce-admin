@@ -19,9 +19,9 @@ import styles from "./B2COrdersDetails.module.scss";
 import AuthContext from "../../../store/auth-contex";
 import Button from "../../../components/shared/Button/Button";
 import DeleteDialog from "../../../components/shared/Dialogs/DeleteDialog";
-import { toast } from "react-toastify";
 import { InputInput } from "../../../components/shared/Form/FormInputs/FormInputs";
 import BillMediaPrint from "./BillMediaPrint/BillMediaPrint";
+import customToast from "../../../utils/toastUtils";
 
 const B2COrdersDetails = () => {
     const navigate = useNavigate();
@@ -39,12 +39,23 @@ const B2COrdersDetails = () => {
 
     const apiPathNotes = "admin/orders-b2c/notes";
 
-    const { isLoading: isOrderLoading, data: orderData } = useQuery(["data"], () => api.get(`${apiPathOrderData}/${orderId}`).then((response) => response?.payload));
+    const {
+        isLoading: isOrderLoading,
+        data: orderData,
+        refetch: orderRefetch,
+    } = useQuery(["data"], () =>
+        api
+            .get(`${apiPathOrderData}/${orderId}`)
+            .then((response) => response?.payload)
+            .catch((error) => {
+                customToast.error(error?.response?.data?.message ?? error?.message ?? "Greska");
+                navigate("/b2c-orders");
+            })
+    );
     const { isLoading: isBillingLoading, data: billingData } = useQuery(["billing"], () => api.list(`${apiPathBilling}/${orderId}`).then((response) => response?.payload?.items[0]));
     const { isLoading: isShipingLoading, data: shippingData } = useQuery(["shipping"], () => api.list(`${apiPathShipping}/${orderId}`).then((response) => response?.payload?.items[0]));
     const { isLoading: isItemsLoading, data: orderItems } = useQuery(["items"], () => api.list(`${apiPathItems}/${orderId}`).then((response) => response?.payload?.items));
     const { isLoading: isNotesLoading, data: orderNotes, refetch } = useQuery(["notes"], () => api.list(`${apiPathNotes}/${orderId}`).then((response) => response?.payload?.items));
-    console.log(orderData);
     const handlePrint = () => {
         window.print();
     };
@@ -53,23 +64,22 @@ const B2COrdersDetails = () => {
         event.preventDefault();
         if (search.trim() !== "") {
             api.post(`admin/orders-b2c/notes`, { id: null, id_order: Number(orderId), description: search })
-                .then((response) => {
+                .then(() => {
                     setSearch("");
                     refetch();
-                    toast.success("Uspešno ste dodali napomenu!");
+                    customToast.success("Uspešno ste dodali napomenu!");
                 })
                 .catch((error) => {
-                    console.log(error);
-                    toast.warning("Greška!");
+                    customToast.error(error?.response?.data?.message ?? error?.message ?? "Greska");
                 });
         } else {
-            toast.warning("Unesite tekst napomene.");
+            customToast.warning("Unesite tekst napomene.");
         }
     };
 
     return (
         <PageWrapper
-            title={`Narudžbenica:  ${orderData?.order.slug}`}
+            title={`Narudžbenica:  ${orderData?.order.slug ?? ""}`}
             back={() => {
                 navigate(-1);
             }}
@@ -205,7 +215,7 @@ const B2COrdersDetails = () => {
                         },
                     }}
                 >
-                    <OrderStatus orderId={orderData?.order.id} status={orderData?.order.status} />
+                    <OrderStatus orderRefetch={orderRefetch} orderId={orderData?.order.id} status={orderData?.order.status} />
                 </OrderSection>
 
                 <OrderSection
@@ -344,11 +354,10 @@ const B2COrdersDetails = () => {
                     api.delete(`admin/orders-b2c/list/${orderId}`)
                         .then((response) => {
                             navigate(-1);
-                            toast.success("Uspešno!");
+                            customToast.success("Uspešno!");
                         })
                         .catch((error) => {
-                            console.log(error);
-                            toast.warning("Greška!");
+                            customToast.warning("Greška!");
                         });
                     setShowDialog(false);
                 }}
