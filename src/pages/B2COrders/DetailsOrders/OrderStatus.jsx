@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState, useCallback } from "react";
 import Box from "@mui/material/Box";
-import { toast } from "react-toastify";
 import Button from "../../../components/shared/Button/Button";
 import Buttons from "../../../components/shared/Form/Buttons/Buttons";
 import { InputCheckbox, InputHtml, InputSelect } from "../../../components/shared/Form/FormInputs/FormInputs";
@@ -9,8 +8,10 @@ import AuthContext from "../../../store/auth-contex";
 import { useQuery } from "react-query";
 import CircularProgress from "@mui/material/CircularProgress";
 import customToast from "../../../utils/toastUtils";
+import { useNavigate } from "react-router-dom";
 
 const OrderStatus = ({ orderId, status, orderRefetch }) => {
+    const navigate = useNavigate();
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
     const apiPath = "admin/orders-b2c/status";
@@ -43,8 +44,8 @@ const OrderStatus = ({ orderId, status, orderRefetch }) => {
                     send_to_customer: newData.send_mail === "1",
                 }));
             } catch (error) {
-                customToast.error(error.message);
-                setTimeout(() => navigate("/b2c-orders"), 3000);
+                customToast.error(error?.response?.data?.message ?? error.message ?? "Greska");
+                if (error.status === 404) navigate("/b2c-orders");
             }
         },
         [api, orderId]
