@@ -1,0 +1,41 @@
+.swagger-ui {
+    .wrapper {
+        padding: 0;
+    }
+    .information-container.wrapper {
+        padding: 0;
+        .info {
+            margin-bottom: 30px;
+        }
+    }
+    .scheme-container {
+        box-shadow: none;
+        padding: 0px;
+        margin-bottom: 30px;
+        .schemes.wrapper {
+            padding: 0;
+
+            .schemes-server-container {
+                display: block;
+                width: 100%;
+                .servers-title {
+                    color: rgba(0, 0, 0, 0.6);
+                    font-family: Montserrat, sans-serif;
+                    font-weight: 400;
+                    font-size: 14px;
+                    line-height: 1.4375em;
+                    padding: 0;
+                    position: relative;
+                }
+                select {
+                    padding: 14px 12px;
+                    border-color: #ccc;
+                    font-size: 14px;
+                    font-weight: 400;
+                    box-shadow: none;
+                    background-color: #fff;
+                }
+            }
+        }
+    }
+}
