@@ -1,5 +1,18 @@
 [
   {
+    "field_name": "ID",
+    "prop_name": "id",
+    "in_main_table": false,
+    "in_details": false,
+    "editable": true,
+    "disabled": false,
+    "required": false,
+    "description": "",
+    "ui_prop": "xyz",
+    "sortable": true,
+    "input_type": "input"
+  },
+  {
     "field_name": "Naziv",
     "prop_name": "name",
     "in_main_table": true,
