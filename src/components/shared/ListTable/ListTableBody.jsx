@@ -281,6 +281,9 @@ const ListTableBody = ({
 
                             let timer;
 
+                            console.log("TableBody row",row)
+                            console.log("TableBody column",column)
+
                             return (
                                 <TableCell
                                     onBlur={(e) => {

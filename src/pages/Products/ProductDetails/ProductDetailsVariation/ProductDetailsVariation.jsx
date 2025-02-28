@@ -35,15 +35,6 @@ const ProductDetailsVariation = ({ parentId, isParentDigital }) => {
     const authCtx = useContext(AuthContext);
     const { api } = authCtx;
 
-    const additionalButtons = [
-        {
-            label: "Dodavanje atributa",
-            action: () => {
-                navigate("/products/prices-groups");
-            },
-        },
-    ];
-
     const getVariants = () => {
         api.get(`admin/product-items/variants/main/product-attributes/${parentId}`)
             .then((response) => {
@@ -199,17 +190,16 @@ const ProductDetailsVariation = ({ parentId, isParentDigital }) => {
 
     const onSaveClick = (array, fromDialog) => {
         let indexValidationArr = [];
-        let arr = [...variantsData];   
+        let arr = [...variantsData];
         // Validate variants data
         arr.forEach((item, i) => {
             const { selectedAttr, checkedValues } = item;
-            if ((selectedAttr !== null && checkedValues.length === 0) || 
-                (selectedAttr === null && checkedValues.length === 0 && item.isVisible === true)) {
+            if ((selectedAttr !== null && checkedValues.length === 0) || (selectedAttr === null && checkedValues.length === 0 && item.isVisible === true)) {
                 indexValidationArr.push(-1);
             } else {
                 indexValidationArr.push(i);
             }
-        });  
+        });
         // If validation fails
         if (indexValidationArr.includes(-1) && !fromDialog) {
             indexValidationArr.forEach((item, i) => {
@@ -218,7 +208,7 @@ const ProductDetailsVariation = ({ parentId, isParentDigital }) => {
             setVariantsData([...arr]);
             toast.error("Some variants are missing required attributes or values.");
             return; // Stop further processing
-        }   
+        }
         // Proceed with saving
         setLoading(true);
         let allCheckedValues = [];
@@ -226,7 +216,7 @@ const ProductDetailsVariation = ({ parentId, isParentDigital }) => {
             const { checkedValues } = item;
             allCheckedValues = [...allCheckedValues, ...checkedValues];
         });
-    
+
         let saveArrData = [];
         variants.forEach((item) => {
             const { attr, values } = item;
@@ -246,45 +236,37 @@ const ProductDetailsVariation = ({ parentId, isParentDigital }) => {
             });
             saveArrData = [...saveArrData, ...tempArr];
         });
-    
+
         const req = { data: [...saveArrData], values: { id_parent: Number(parentId) } };
         api.post("admin/product-items/variants/main/save", req)
-    .then((response) => {
-        setLoading(false);
+            .then((response) => {
+                setLoading(false);
 
-        // Log API respons-a
-        console.log("API Response:", response);
-        const payload = response?.payload;
-        // za sada ostavljam clg zbog debug-a.
-        console.log("Payload:", response.payload);
-        console.log("Payload err:", response.payload.errors);
+                const payload = response?.payload;
 
-        const errors = payload?.errors || [];
-        if (errors.length > 0) {
-            const errorMessages = payload.errors.map((err) =>
-                `za vrednost: ${err?.attributes_text}: ${err?.message}`
-            ).join("\n");           
-            // Show error toast with details
-            toast.error(`Greška:\n${errorMessages}`, {
-                autoClose: 8000,
+                const errors = payload?.errors || [];
+                if (errors.length > 0) {
+                    const errorMessages = payload.errors.map((err) => `za vrednost: ${err?.attributes_text}: ${err?.message}`).join("\n");
+                    // Show error toast with details
+                    toast.error(`Greška:\n${errorMessages}`, {
+                        autoClose: 8000,
+                    });
+                    // za sada ostavljam clg zbog debug-a.
+                    console.error("Errors in payload:", payload?.errors);
+                    console.error("Error msg:", errorMessages);
+                } else {
+                    // No errors, proceed with success
+                    toast.success("Uspešno");
+                    setTableLoading(true);
+                    getListVariants();
+                }
+            })
+            .catch((error) => {
+                setLoading(false);
+                toast.error("Došlo je do greške.");
+                console.warn("Network or API error:", error);
             });
-            // za sada ostavljam clg zbog debug-a.
-            console.error("Errors in payload:", payload?.errors); 
-            console.error("Error msg:", errorMessages); 
-        } else {
-            // No errors, proceed with success
-            toast.success("Uspešno");
-            setTableLoading(true);
-            getListVariants();
-        }
-    })
-    .catch((error) => {
-        setLoading(false);
-        toast.error("Došlo je do greške.");
-        console.warn('Network or API error:', error);
-    });
     };
-    
 
     const handleDeleteModalAction = (item) => {
         if (item) {

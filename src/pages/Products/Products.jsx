@@ -17,6 +17,9 @@ const Products = () => {
     const [doesRefetch, setDoesRefetch] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+console.log(tblFields)
+
+
     const customActions = {
         contentCopy: {
             type: "custom",
@@ -128,6 +131,7 @@ const Products = () => {
                                 variantsAttributes: 1,
                                 gallery: 1,
                                 docs: 1,
+                                digital_material: 0,
                             }}
                             onSubmit={submitHandler}
                             styleCheckbox={{ padding: "0 0.563rem 0 0.563rem" }}

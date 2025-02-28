@@ -107,6 +107,51 @@
         "sortable": true,
         "input_type": "input"
     },
+
+    {
+        "field_name": "B2C količina za poručivanja artikla u korpi",
+        "prop_name": "b2c_cart_default_loop_quantity",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "Prilikom poručivanja artikla vrednost se koristi za računanje koliko se dodaje ili uklanja iz korpe.  Primer: ako je vrednost 50, svakim dodavanjem će vrednost da se povećava na 50, 100, 150, .... Ukoliko se vrednost unese ručno, vrednost se zaokružuje na prvi veći broj. Primer: ako je vrednost 61, vrednost u korpi za količinu će biti 100. Default value: NULL",
+        "ui_prop": {
+            "columns": {
+                "xs": 12,
+                "sm": 12,
+                "md": 12,
+                "lg": 6,
+                "xl": 6
+            }
+        },
+        "sortable": true,
+        "input_type": "input"
+    },
+
+    {
+        "field_name": "B2B količina za poručivanja artikla u korpi",
+        "prop_name": "b2b_cart_default_loop_quantity",
+        "in_main_table": true,
+        "in_details": true,
+        "editable": true,
+        "disabled": false,
+        "required": false,
+        "description": "Prilikom poručivanja artikla vrednost se koristi za računanje koliko se dodaje ili uklanja iz korpe.  Primer: ako je vrednost 50, svakim dodavanjem će vrednost da se povećava na 50, 100, 150, .... Ukoliko se vrednost unese ručno, vrednost se zaokružuje na prvi veći broj. Primer: ako je vrednost 61, vrednost u korpi za količinu će biti 100. Default value: NULL",
+        "ui_prop": {
+            "columns": {
+                "xs": 12,
+                "sm": 12,
+                "md": 12,
+                "lg": 6,
+                "xl": 6
+            }
+        },
+        "sortable": true,
+        "input_type": "input"
+    },
+
     {
         "field_name": "Prikaz artikla na B2B",
         "prop_name": "b2b_active",
