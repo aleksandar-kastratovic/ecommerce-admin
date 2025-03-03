@@ -17,9 +17,6 @@ const Products = () => {
     const [doesRefetch, setDoesRefetch] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-console.log(tblFields)
-
-
     const customActions = {
         contentCopy: {
             type: "custom",

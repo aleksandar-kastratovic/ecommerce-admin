@@ -39,9 +39,6 @@
         "input_type": "input"
     },
 
-
-
-
     {
         "field_name": "B2C količina za poručivanja artikla u korpi",
         "prop_name": "b2c_cart_default_loop_quantity",
@@ -69,13 +66,6 @@
         "sortable": true,
         "input_type": "input"
     },
-
-
-
-
-
-
-
 
     {
         "field_name": "B2B cena",
