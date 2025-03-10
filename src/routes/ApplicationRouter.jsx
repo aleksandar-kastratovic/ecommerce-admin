@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { Suspense, useContext } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import LoginPage from "../pages/LoginPage";
 import AuthContext from "../store/auth-contex";
@@ -39,7 +39,11 @@ const ApplicationRouter = ({}) => {
         </>
     );
 
-    return <Routes>{authContext?.isLoggedIn ? authorizedRoutes : unauthorizedRoutes}</Routes>;
+    return (
+        <Suspense fallback={<div></div>}>
+            <Routes>{authContext?.isLoggedIn ? authorizedRoutes : unauthorizedRoutes}</Routes>
+        </Suspense>
+    );
 };
 
 export default ApplicationRouter;
