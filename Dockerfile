@@ -30,7 +30,7 @@ RUN echo && \
     echo && \
     echo "Environment:" && cat /app/.env.production && \
     \
-	npm ci --only=production && \
+	npm ci --prefer-offline --no-audit --only=production && \
 	npm run build
 
 # Serve the build folder via nginx
